@@ -1,0 +1,42 @@
+diff -Naur ladspa_sdk-orig/src/load.c ladspa_sdk/src/load.c
+--- ladspa_sdk-orig/src/load.c	2001-07-21 18:04:23.000000000 +0200
++++ ladspa_sdk/src/load.c	2009-03-26 22:13:00.000000000 +0100
+@@ -54,6 +54,7 @@
+        to search. */
+ 
+     pcLADSPAPath = getenv("LADSPA_PATH");
++	if (!pcLADSPAPath) pcLADSPAPath = "/usr/lib/ladspa";
+     
+     if (pcLADSPAPath) {
+ 
+diff -Naur ladspa_sdk-orig/src/makefile ladspa_sdk/src/makefile
+--- ladspa_sdk-orig/src/makefile	2007-11-06 11:42:45.000000000 +0100
++++ ladspa_sdk/src/makefile	2009-03-26 22:11:29.000000000 +0100
+@@ -59,9 +59,9 @@
+ 	@echo Test complete.
+ 
+ install:	targets
+-	-mkdirhier $(INSTALL_PLUGINS_DIR)
+-	-mkdirhier $(INSTALL_INCLUDE_DIR)
+-	-mkdirhier $(INSTALL_BINARY_DIR)
++	-mkdir -p $(INSTALL_PLUGINS_DIR)
++	-mkdir -p $(INSTALL_INCLUDE_DIR)
++	-mkdir -p $(INSTALL_BINARY_DIR)
+ 	cp ../plugins/* $(INSTALL_PLUGINS_DIR)
+ 	cp ladspa.h $(INSTALL_INCLUDE_DIR)
+ 	cp ../bin/* $(INSTALL_BINARY_DIR)
+diff -Naur ladspa_sdk-orig/src/search.c ladspa_sdk/src/search.c
+--- ladspa_sdk-orig/src/search.c	2007-11-06 11:48:06.000000000 +0100
++++ ladspa_sdk/src/search.c	2009-03-26 22:14:10.000000000 +0100
+@@ -99,10 +99,7 @@
+ 
+   pcLADSPAPath = getenv("LADSPA_PATH");
+   if (!pcLADSPAPath) {
+-    fprintf(stderr,
+-	    "Warning: You do not have a LADSPA_PATH "
+-	    "environment variable set.\n");
+-    return;
++    pcLADSPAPath = "/usr/lib/ladspa";
+   }
+   
+   pcStart = pcLADSPAPath;

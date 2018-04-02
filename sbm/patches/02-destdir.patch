@@ -1,0 +1,41 @@
+diff -Naur btmgr-3.7-1.orig/installer/Makefile btmgr-3.7-1/installer/Makefile
+--- btmgr-3.7-1.orig/installer/Makefile	2001-02-08 21:04:57.000000000 +0100
++++ btmgr-3.7-1/installer/Makefile	2003-11-29 01:14:27.000000000 +0100
+@@ -109,9 +109,9 @@
+ 	$(CC) -DTHEME_DIR=\"$(THEME_DIR)\" -c $<
+ 
+ install: all
+-	-@mkdir -p $(BIN_DIR)
++	-@mkdir -p $(DESTDIR)$(BIN_DIR)
+ 	-@$(STRIP) $(SBMINST)
+-	-@$(INSTALL) $(SBMINST) ${INST_TARGET}
++	-@$(INSTALL) $(SBMINST) $(DESTDIR)${INST_TARGET}
+ 
+ uninstall:
+ 	-@rm -fr $(INST_TARGET) 
+diff -Naur btmgr-3.7-1.orig/Makefile btmgr-3.7-1/Makefile
+--- btmgr-3.7-1.orig/Makefile	2001-02-20 17:27:04.000000000 +0100
++++ btmgr-3.7-1/Makefile	2003-11-29 01:13:32.000000000 +0100
+@@ -102,7 +102,7 @@
+ 	@echo -e "\nComplete.\n"
+ 
+ install: all
+-	-@mkdir -p $(PREFIX)
++	-@mkdir -p $(DESTDIR)$(PREFIX)
+ 	@echo -e "\nInstalling\n"
+ 	@set -e; for i in $(SUBDIRS); do $(MAKE) install -C $$i ;done
+ 	@echo -e "\nComplete.\n"
+diff -Naur btmgr-3.7-1.orig/manager/themes/Makefile btmgr-3.7-1/manager/themes/Makefile
+--- btmgr-3.7-1.orig/manager/themes/Makefile	2000-12-17 18:42:11.000000000 +0100
++++ btmgr-3.7-1/manager/themes/Makefile	2003-11-29 01:13:56.000000000 +0100
+@@ -294,8 +294,8 @@
+ 
+ 
+ install: all
+-	-@mkdir -p $(THEME_DIR)
+-	-@cp -f $(TARGETS) $(THEME_DIR)
++	-@mkdir -p $(DESTDIR)$(THEME_DIR)
++	-@cp -f $(TARGETS) $(DESTDIR)$(THEME_DIR)
+ 
+ uninstall:
+ 	-@rm -fr $(THEME_DIR)

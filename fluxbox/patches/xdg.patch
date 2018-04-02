@@ -1,0 +1,12 @@
+diff -Naur orig/util/fluxbox-generate_menu.in mod/util/fluxbox-generate_menu.in
+--- orig/util/fluxbox-generate_menu.in	2013-02-13 11:04:05.000000000 +0100
++++ mod/util/fluxbox-generate_menu.in	2014-12-23 15:46:28.916726901 +0100
+@@ -1317,7 +1317,7 @@
+ if [ -n "$BACKUPOPTIONS" ]; then
+     FBGM_CMD="@pkgprefix@fluxbox-generate_menu@pkgsuffix@ $BACKUPOPTIONS"
+ else
+-    FBGM_CMD=@pkgprefix@fluxbox-generate_menu@pkgsuffix@
++    FBGM_CMD="@pkgprefix@fluxbox-xdg-menu@pkgsuffix@ --with-icons"
+ fi
+ # Get options.
+ while [ $# -gt 0 ]; do

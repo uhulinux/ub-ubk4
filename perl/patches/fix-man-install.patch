@@ -1,0 +1,14 @@
+diff -Naur perl-5.26.0-orig/hints/linux.sh perl-5.26.0/hints/linux.sh
+--- perl-5.26.0-orig/hints/linux.sh	2017-04-19 15:37:05.000000000 +0200
++++ perl-5.26.0/hints/linux.sh	2017-08-18 21:44:48.382285455 +0200
+@@ -73,6 +73,10 @@
+ '') usemallocwrap='define' ;;
+ esac
+ 
++man1dir=/usr/share/man/man1
++man3dir=/usr/share/man/man3
++man3ext=3pm
++
+ # The system malloc() is about as fast and as frugal as perl's.
+ # Since the system malloc() has been the default since at least
+ # 5.001, we might as well leave it that way.  --AD  10 Jan 2002

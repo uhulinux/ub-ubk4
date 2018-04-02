@@ -1,0 +1,21 @@
+diff -Naur orig/xineOsd.c mod/xineOsd.c
+--- orig/xineOsd.c	2011-03-15 21:00:18.000000000 +0100
++++ mod/xineOsd.c	2015-02-16 18:53:35.000000000 +0100
+@@ -480,7 +480,7 @@
+ }
+       }
+ 
+-      while (cPixmapMemory *pm = RenderPixmaps())
++      while (cPixmapMemory *pm = (dynamic_cast < cPixmapMemory * >(RenderPixmaps())))
+       {
+ if (!head)
+ {
+@@ -500,7 +500,7 @@
+ );
+ */
+         m_pRawOsd->Copy(pm, pm->DrawPort().Shifted(-pm->DrawPort().Point()), pm->ViewPort().Point());
+-        delete pm; 
++        DestroyPixmap (pm); 
+       }
+     }
+     else if (m_pRawOsd)

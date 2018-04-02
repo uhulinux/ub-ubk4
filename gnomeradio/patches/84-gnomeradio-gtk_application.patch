@@ -1,0 +1,308 @@
+Description: Use GtkApplication, which provides single-instance support.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1258429
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -96,7 +96,11 @@ static int bp_timeout_steps = 0;
+ static int volume_value_changed_id;
+ static gint mode;
+ 
+-static DBusGProxy      * connect_to_session	       (void);
++static gboolean do_scan;
++
++static DBusGProxy *proxy;
++
++static void connect_to_session (void);
+ 
+ static gboolean is_first_start(void)
+ {
+@@ -570,7 +574,7 @@ void exit_gnome_radio(void)
+ 
+ 	mixer->close_device();
+ 	save_settings();
+-	gtk_main_quit();
++	gtk_widget_destroy (GTK_WIDGET (app));
+ }
+ 
+ const char* get_preset(float freq, int *num)
+@@ -1020,9 +1024,8 @@ void toggle_mainwindow_visibility(GtkWid
+ 	}
+ }	
+ 	
+-GtkWidget* gnome_radio_gui(void)
++GtkWidget* gnome_radio_gui (void)
+ {
+-	GtkWidget *app;
+ 	GtkWidget *vbox;
+ 	GtkWidget *box;
+ 	GtkWidget *frame;
+@@ -1036,9 +1039,9 @@ GtkWidget* gnome_radio_gui(void)
+ 	GtkWidget *image;
+ 	gchar *text;
+ 	
+-	app = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+-	gtk_window_set_resizable(GTK_WINDOW(app), FALSE);
+-	gtk_window_set_wmclass(GTK_WINDOW(app), "gnomeradio", "Gnomeradio");
++	app = gtk_window_new (GTK_WINDOW_TOPLEVEL);
++	gtk_window_set_resizable (GTK_WINDOW(app), FALSE);
++	gtk_window_set_wmclass (GTK_WINDOW(app), "gnomeradio", "Gnomeradio");
+ 
+ 	gtk_widget_realize (app);
+ 	gtk_widget_get_window (app);
+@@ -1215,7 +1218,7 @@ session_die_cb(void)
+ 		radio_stop();
+ 
+ 	mixer->close_device();
+-	gtk_main_quit();
++	gtk_widget_destroy (GTK_WIDGET (app));
+ 	exit (0);
+ }
+ 
+@@ -1379,120 +1382,113 @@ option_version_cb (const gchar * opt,
+ 	exit (0);
+ }
+ 
+-int main(int argc, char* argv[])
++static void
++startup_cb (GApplication *application, gpointer user_data)
+ {
+ 	GList *l;
+-	DBusGProxy *proxy;
+-	GError *err = NULL;
+-	gboolean do_scan = FALSE;
+-	GOptionContext *ctx;
+-	const GOptionEntry entries[] = {
+-		{ "scan", '\0', 0, G_OPTION_ARG_NONE, &do_scan, N_("Scan for available stations"), NULL },
+-		{ "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
+-		{ NULL }
+-	};
+-
+-	bindtextdomain(PACKAGE, GNOMELOCALEDIR);  
+-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+-	textdomain(PACKAGE);
+ 
+-	g_set_application_name(_("Gnomeradio"));
+-	g_setenv("PULSE_PROP_media.role", "production", TRUE);
+-	
+-	ctx = g_option_context_new("- Listen to FM radio");
+-	g_option_context_add_main_entries(ctx, entries, GETTEXT_PACKAGE);
+-	g_option_context_add_group(ctx, alsa_get_option_group());
+-	g_option_context_add_group(ctx, gtk_get_option_group (TRUE));
+-	g_option_context_add_group(ctx, gst_init_get_option_group());
+-	if (g_option_context_parse(ctx, &argc, &argv, &err) == FALSE) {
+-		g_print(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
+-			  err->message, argv[0]);
+-		g_option_context_free(ctx);
+-		g_error_free(err);
+-		exit(1);
+-	}
+-	g_option_context_free(ctx);
+-
+-	gtk_init(&argc, &argv);
+-	gtk_window_set_default_icon_name("gnomeradio");
+-	/* Main app */
+ 	main_visible = FALSE;
+-	app = gnome_radio_gui();
+-
+-	/* Initizialize GStreamer */
+-	gst_init(&argc, &argv);
++	app = gnome_radio_gui ();
++	gtk_application_add_window (GTK_APPLICATION (application), GTK_WINDOW (app));
+ 
+-	rb_missing_plugins_init (GTK_WINDOW (app));
+-	
+ 	load_settings();
+ 
+-	start_radio(FALSE, app);
+-	start_mixer(FALSE, app);
++	start_radio (FALSE, app);
++	start_mixer (FALSE, app);
+ 	if (is_first_start() || do_scan) {
+ 		if (!radio_is_init()) {
+-			fprintf(stderr, "Could not scan. Radio is not initialized\n");
++			g_print ("Could not scan. Radio is not initialized\n");
+ 		} else {
+-			initial_frequency_scan(app);
+-			set_first_time_flag();
++			initial_frequency_scan (app);
++			set_first_time_flag ();
+ 		}
+ 	}
+-	create_tray_menu(app);
++
++	create_tray_menu (app);
+ 	
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(preset_combo), _("manual"));
++	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (preset_combo), _("manual"));
+ 	for (l = settings.presets; l; l = l->next) {
+ 		preset *ps = (preset*) l->data;
+-		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(preset_combo), ps->title);
++		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (preset_combo), ps->title);
+ 	}
+ 
+-	preset_combo_set_item(mom_ps);
+-
+-	gtk_widget_show_all(app);
++	gtk_widget_show_all (app);
+ 	main_visible = TRUE;
+ 	mode = PRESETS;
+ 
+-	/* Create an tray icon */
+-	create_tray_icon(app);
++	create_tray_icon (app);
+ 
+-	adj_value_changed_cb(NULL, (gpointer) app);
++	adj_value_changed_cb (NULL, (gpointer) app);
+ 	
+ #ifdef HAVE_LIRC
+ 	if(!my_lirc_init())
+-	{
+-/*		GtkWidget *dialog;
+-		dialog = gtk_message_dialog_new(NULL, DIALOG_FLAGS, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+-					_("Could not start lirc"));
+-		gtk_dialog_run (GTK_DIALOG (dialog));
+-		gtk_widget_destroy (dialog);
+-*/
+-		fprintf(stderr, "Could not start lirc\n");
+-	}
++		g_print ("Could not start lirc.\n");
+ 	else
+ 		start_lirc();
+ #endif
+ 
+-/* Connect the Session Management signals
+- */
++	connect_to_session ();
+ 
+-	proxy = connect_to_session ();
+-	g_signal_connect(G_OBJECT(app), "key-press-event",
+-						G_CALLBACK(key_press_event_cb), NULL);
+-
+-	/* Redraw the status window every 3 seconds
+-	 * Necessary, because the mono/stereo reception
+-	 * needs some time to be correctly detected
+-	 */
+-	g_timeout_add_seconds(3, (GSourceFunc)redraw_status_window, NULL);
++	g_signal_connect (G_OBJECT (app), "key-press-event", G_CALLBACK (key_press_event_cb), NULL);
+ 
+-	/* Checks if the volume has been changed by an 
+-	 * external app
+-	 */
+-	/*gtk_timeout_add(100, (GSourceFunc)poll_volume_change, NULL);*/
++	g_timeout_add_seconds (3, (GSourceFunc)redraw_status_window, NULL);
++}
+ 
+-	gtk_main();
+-		
+-#ifdef HAVE_LIRC	
+-	my_lirc_deinit();
+-#endif
++static void
++activate_cb (GApplication *application, gpointer user_data)
++{
++	gtk_window_present (GTK_WINDOW (app));
++}
++
++int main (int argc, char **argv)
++{
++	GtkApplication *application;
++	GError *error = NULL;
++	GOptionContext *ctx;
++	do_scan = FALSE;
++	const GOptionEntry entries[] = {
++		{ "scan", '\0', 0, G_OPTION_ARG_NONE, &do_scan, N_("Scan for available stations"), NULL },
++		{ "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
++		{ NULL }
++	};
++
++	guint status = 0;
++
++	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
++	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
++	textdomain (GETTEXT_PACKAGE);
++
++	g_set_application_name (_("Gnomeradio"));
++	g_setenv ("PULSE_PROP_media.role", "production", TRUE);
++
++	ctx = g_option_context_new (N_("- Listen to FM radio"));
++	g_option_context_add_main_entries (ctx, entries, GETTEXT_PACKAGE);
++	g_option_context_set_translation_domain(ctx, GETTEXT_PACKAGE);
++	g_option_context_add_group (ctx, gtk_get_option_group (TRUE));
++	g_option_context_add_group (ctx, gst_init_get_option_group ());
++	g_option_context_add_group(ctx, alsa_get_option_group());
++	g_option_context_set_ignore_unknown_options (ctx, TRUE);
++
++	g_option_context_parse (ctx, &argc, &argv, &error);
++	if (error != NULL) {
++		g_print(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
++			  error->message, argv[0]);
++		g_error_free (error);
++		exit (1);
++	}
++
++	g_option_context_free (ctx);
++
++	gtk_window_set_default_icon_name ("gnomeradio");
++
++	application = gtk_application_new ("org.gnome.gnomeradio", G_APPLICATION_FLAGS_NONE);
++
++	g_signal_connect (application, "startup", G_CALLBACK (startup_cb), NULL);
++	g_signal_connect (application, "activate", G_CALLBACK (activate_cb), NULL);
++
++	status = g_application_run (G_APPLICATION (application), argc, argv);
++
++	g_object_unref (application);
+ 
+ 	if (proxy) {
+ 		DBusGConnection *conn;
+@@ -1503,23 +1499,26 @@ int main(int argc, char* argv[])
+ 		g_object_unref (proxy);
+ 	}
+ 
+-	return 0;
++#ifdef HAVE_LIRC
++	my_lirc_deinit();
++#endif
++
++	return status;
+ }
+ 
+-static DBusGProxy * connect_to_session (void) 
++static void connect_to_session (void)
+ {
+ 	DBusGConnection *connection;
+-	DBusGProxy      *proxy;
+-	GError	  *error = NULL;
++	GError *error = NULL;
+ 
+ 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+ 
+ 	if (error) {
+ 		g_warning ("Could not connect to system bus: %s", error->message);
+ 		g_error_free(error);
+-		return NULL;
++		return;
+ 	}
+-	/* Get the current session object */
++
+ 	proxy = dbus_g_proxy_new_for_name (connection,
+ 					   "org.gnome.SessionManager",
+ 					   "/org/gnome/SessionManager",
+@@ -1528,14 +1527,13 @@ static DBusGProxy * connect_to_session (
+ 	if (!proxy) {
+ 		g_warning ("Unable to get the SessionManager.");
+ 		dbus_g_connection_unref (connection);
+-		return NULL;
++		return;
+ 	}
+ 
+ 	dbus_g_proxy_add_signal (proxy, "SessionOver", G_TYPE_INVALID, G_TYPE_INVALID);
+ 	dbus_g_proxy_connect_signal (proxy, "SessionOver", G_CALLBACK (session_die_cb), NULL, NULL);
+ 
+ 	g_object_set_data (G_OBJECT (proxy), "connection", connection);
+-	return proxy;
+ }
+ 
+ static void show_message(GtkMessageType type, const char* text, const char* details)

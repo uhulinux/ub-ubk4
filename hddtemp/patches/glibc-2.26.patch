@@ -1,0 +1,12 @@
+diff -Naur orig/src/backtrace.c patched/src/backtrace.c
+--- orig/src/backtrace.c	2006-04-19 04:38:14.134739579 +0200
++++ patched/src/backtrace.c	2017-09-21 01:27:42.984635398 +0200
+@@ -37,7 +37,7 @@
+ #define MAX_BTSIZE 64
+ 
+ void backtrace_handler(int n, siginfo_t *ist, void *extra) {
+-  static struct ucontext *puc;
++  static ucontext_t *puc;
+   static void *btinfo[MAX_BTSIZE];
+   static char **messages = NULL;
+   static size_t btsize = 0;

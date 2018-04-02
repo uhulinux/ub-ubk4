@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+export prefix="$UB_INSTALLDIR"/usr
+
+jam install
+
+# start wrapper miatt
+mv $UB_INSTALLDIR/usr/bin/lincity-ng $UB_INSTALLDIR/usr/bin/lincityng
+
+# remove duplicate docs
+rm -rf "$UB_INSTALLDIR"/usr/share/doc/lincity-ng-${UB_VERSION}/{COPYING*,CREDITS,README,RELNOTES,TODO}

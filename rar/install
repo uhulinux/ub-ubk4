@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+cd $UB_ARCH
+else
+cd i386
+fi
+patch -i $UB_SRCDIR/patches/01-destdir-support.patch.skip
+ub_install \
+	PREFIX=/usr
+
+rm "$UB_INSTALLDIR"/usr/bin/unrar
+cp license.txt order.htm rar.txt readme.txt technote.txt whatsnew.txt ../

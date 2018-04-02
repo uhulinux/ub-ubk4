@@ -1,0 +1,12 @@
+diff -Naur mdadm-3.3-orig/Makefile mdadm-3.3/Makefile
+--- mdadm-3.3-orig/Makefile	2013-09-14 20:34:27.038576753 +0200
++++ mdadm-3.3/Makefile	2013-09-14 21:13:53.005798093 +0200
+@@ -69,7 +69,7 @@
+ # pivotroot from early boot to late boot.
+ # /run is best, but for distros that don't support that.
+ # /dev can work, in which case you probably want /dev/.mdadm
+-RUN_DIR=/run/mdadm
++RUN_DIR=/var/run/mdadm
+ CHECK_RUN_DIR=1
+ MAP_DIR=$(RUN_DIR)
+ MAP_FILE = map

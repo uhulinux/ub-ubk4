@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+export UB_MAKE_PROCS=1
+ub_compile \
+	--with-gphoto2 \
+	--enable-avahi \
+	--enable-locking=no \
+	--enable-pthread \
+	--with-snmp

@@ -1,0 +1,12 @@
+diff -Naur fillets-ng-1.0.0-orig/configure fillets-ng-1.0.0/configure
+--- fillets-ng-1.0.0-orig/configure	2010-12-23 20:17:03.000000000 +0100
++++ fillets-ng-1.0.0/configure	2011-04-28 15:56:10.245949285 +0200
+@@ -5354,7 +5354,7 @@
+        CPPFLAGS="$OLD_CPPFLAGS"
+        if test "x$have_x11" = xyes; then
+            $as_echo "#define HAVE_X11 1" >>confdefs.h
+-
++	    LIBS="-lX11 $LIBS"
+            X_LIBS="-lX11"
+        fi
+    fi

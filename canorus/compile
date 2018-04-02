@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+export LDFLAGS="-lpthread -lz"
+
+cmake \
+	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX="$UB_INSTALLDIR"/usr \
+	-DDEFAULT_DATA_DIR=/usr/share/canorus \
+	-DNO_SWIG=ON \
+	.
+make

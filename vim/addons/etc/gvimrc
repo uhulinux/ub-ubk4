@@ -1,0 +1,23 @@
+" /etc/gvimrc: gvim konfigurációs fájl az UHU Linux disztribúcióhoz
+" a Debian /etc/vim/gvimrc fájljából kiindulva.
+
+" Configuration file for gvim
+" Written for Debian GNU/Linux by W.Akkerman <wakkerma@debian.org>
+
+" Make external commands work through a pipe instead of a pseudo-tty
+"set noguipty
+" Switch syntax highlighting on, when the terminal has colors
+
+" Make shift-insert work like in Xterm
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
+
+" Also switch on highlighting the last used search pattern.
+if has("syntax") && (&t_Co > 2 || has("gui_running"))
+  syntax on
+  set hlsearch
+endif
+
+" You can also specify a different font:
+set guifont=Fixed\ Bold\ 12
+

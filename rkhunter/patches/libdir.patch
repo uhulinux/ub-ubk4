@@ -1,0 +1,16 @@
+diff -Naur rkhunter-1.4.2-orig/installer.sh rkhunter-1.4.2/installer.sh
+--- rkhunter-1.4.2-orig/installer.sh	2014-02-24 03:37:15.000000000 +0100
++++ rkhunter-1.4.2/installer.sh	2017-05-30 19:03:47.241753074 +0200
+@@ -278,11 +278,7 @@
+ 			fi
+ 
+ 			if [ -z "${LIBDIR}" ]; then
+-				if [ "${UNAMEM}" = "x86_64" -o "${UNAMEM}" = "ppc64" ]; then
+-					LIBDIR="${PREFIX}/lib64"
+-				else
+-					LIBDIR="${PREFIX}/lib"
+-				fi
++				LIBDIR="${PREFIX}/lib"
+ 			fi
+ 
+ 			BINDIR="${PREFIX}/bin"

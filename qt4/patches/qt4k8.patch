@@ -1,0 +1,12 @@
+diff -Nur orig/mkspecs/linux-g++-64/qmake.conf mod/mkspecs/linux-g++-64/qmake.conf
+--- orig/mkspecs/linux-g++-64/qmake.conf	2015-05-07 16:14:41.000000000 +0200
++++ mod/mkspecs/linux-g++-64/qmake.conf	2017-06-15 08:23:35.999161821 +0200
+@@ -13,6 +13,8 @@
+ QMAKE_INCREMENTAL_STYLE = sublib
+ 
+ QMAKE_CFLAGS		= -m64
++QMAKE_CFLAGS		+= k8
++QMAKE_CFLAGS_RELEASE   += -O2
+ QMAKE_LFLAGS		= -m64
+ 
+ include(../common/linux.conf)

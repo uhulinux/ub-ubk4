@@ -1,0 +1,26 @@
+From: Sergio Durigan Junior <sergiodj@sergiodj.net>
+Date: Sun, 27 Dec 2015 01:07:54 -0500
+Subject: Update version of Chromium's User-Agent string
+
+We identify ourselves as Chromium to other websites, but the version
+we use in the User-Agent string is pretty old.  This commit updates it
+to a newer version (49.0.2571.2, from Nov 22 2015).  The positive
+side-effect from doing this is that Google does not bother the user
+asking her to upgrade to a "newer Chrome".
+---
+ midori/midori-websettings.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/midori/midori-websettings.c b/midori/midori-websettings.c
+index dbdb27f..fcec10f 100644
+--- a/midori/midori-websettings.c
++++ b/midori/midori-websettings.c
+@@ -837,7 +837,7 @@ generate_ident_string (MidoriWebSettings* web_settings,
+     case MIDORI_IDENT_MIDORI:
+     case MIDORI_IDENT_CHROME:
+         return g_strdup_printf ("Mozilla/5.0 (%s %s) AppleWebKit/%d.%d "
+-            "(KHTML, like Gecko) Chrome/18.0.1025.133 Safari/%d.%d %s",
++            "(KHTML, like Gecko) Chrome/46.0.2490.86 Safari/%d.%d %s",
+             platform, os, webcore_major, webcore_minor, webcore_major, webcore_minor, appname);
+     case MIDORI_IDENT_SAFARI:
+         return g_strdup_printf ("Mozilla/5.0 (Macintosh; U; Intel Mac OS X; %s) "

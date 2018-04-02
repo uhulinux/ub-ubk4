@@ -1,0 +1,70 @@
+Description: Avoid segfaulting on NULL values in the database
+Author: Gustavo Noronha Silva <kov@debian.org>
+Origin: other, http://bugs.debian.org/492414
+Bug: http://todo.xmoto.tuxfamily.org/index.php?do=details&task_id=799
+Forwarded: https://github.com/xmoto/xmoto/pull/15
+
+--- xmoto-0.5.9.orig/src/states/StateMainMenu.cpp
++++ xmoto-0.5.9/src/states/StateMainMenu.cpp
+@@ -899,6 +899,7 @@
+   int   v_nbDiffLevels    = 0;
+   std::string v_level_name= "";
+   xmDatabase* pDb = xmDatabase::instance("main");
++  char *tmpresult;
+   
+   if(v_window != NULL){
+     delete v_window;
+@@ -916,7 +917,8 @@
+     pDb->read_DB_free(v_result);
+     return;
+   }
+-  v_nbStarts        = atoi(pDb->getResult(v_result, 2, 0, 0));
++  tmpresult         =      pDb->getResult(v_result, 2, 0, 0);
++  v_nbStarts        =      tmpresult ? atoi(tmpresult) : 0;
+   v_since           =      pDb->getResult(v_result, 2, 0, 1);  
+   pDb->read_DB_free(v_result);
+ 
+@@ -932,11 +934,16 @@
+     pDb->read_DB_free(v_result);
+     return;
+   }
+-  v_totalPlayedTime = atoi(pDb->getResult(v_result, 5, 0, 0));
+-  v_nbPlayed        = atoi(pDb->getResult(v_result, 5, 0, 1));
+-  v_nbDied          = atoi(pDb->getResult(v_result, 5, 0, 2));
+-  v_nbCompleted     = atoi(pDb->getResult(v_result, 5, 0, 3));
+-  v_nbRestarted     = atoi(pDb->getResult(v_result, 5, 0, 4));
++  tmpresult = pDb->getResult(v_result, 5, 0, 0);
++  v_totalPlayedTime = tmpresult ? atoi(tmpresult) : 0;
++  tmpresult = pDb->getResult(v_result, 5, 0, 1);
++  v_nbPlayed        = tmpresult ? atoi(tmpresult) : 0;
++  tmpresult = pDb->getResult(v_result, 5, 0, 2);
++  v_nbDied          = tmpresult ? atoi(tmpresult) : 0;
++  tmpresult = pDb->getResult(v_result, 5, 0, 3);
++  v_nbCompleted     = tmpresult ? atoi(tmpresult) : 0;
++  tmpresult = pDb->getResult(v_result, 5, 0, 4);
++  v_nbRestarted     = tmpresult ? atoi(tmpresult) : 0;
+   pDb->read_DB_free(v_result);
+ 
+   v_result = pDb->readDB("SELECT COUNT(DISTINCT(id_level)) "
+@@ -999,11 +1006,16 @@
+     if(cy + 45 > nHeight) break; /* out of window */
+     
+     v_level_name      =      pDb->getResult(v_result, 6, i, 0);
+-    v_totalPlayedTime = atoi(pDb->getResult(v_result, 6, i, 5));
+-    v_nbDied          = atoi(pDb->getResult(v_result, 6, i, 2));
+-    v_nbPlayed        = atoi(pDb->getResult(v_result, 6, i, 1));
+-    v_nbCompleted     = atoi(pDb->getResult(v_result, 6, i, 3));
+-    v_nbRestarted     = atoi(pDb->getResult(v_result, 6, i, 4));
++    tmpresult = pDb->getResult(v_result, 6, i, 5);
++    v_totalPlayedTime = tmpresult ? atoi(tmpresult) : 0;
++    tmpresult = pDb->getResult(v_result, 6, i, 2);
++    v_nbDied          = tmpresult ? atoi(tmpresult) : 0;
++    tmpresult = pDb->getResult(v_result, 6, i, 1);
++    v_nbPlayed        = tmpresult ? atoi(tmpresult) : 0;
++    tmpresult = pDb->getResult(v_result, 6, i, 3);
++    v_nbCompleted     = tmpresult ? atoi(tmpresult) : 0;
++    tmpresult = pDb->getResult(v_result, 6, i, 4);
++    v_nbRestarted     = tmpresult ? atoi(tmpresult) : 0;
+     
+     snprintf(cBuf, 512, ("[%s] %s:\n   " + std::string(GAMETEXT_XMOTOLEVELSTATS_PLAYS(v_nbPlayed)       + std::string(", ") +
+ 						       GAMETEXT_XMOTOLEVELSTATS_DEATHS(v_nbDied)        + std::string(", ") +

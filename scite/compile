@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+find . -type f -print0 | xargs -0 chmod 644
+
+make \
+	-C scintilla/gtk \
+	GTK2=1
+
+make \
+	-C scite/gtk \
+	GTK2=1

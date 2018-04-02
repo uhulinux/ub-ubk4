@@ -1,0 +1,30 @@
+diff -Naurd a/interface/alsaseq_c.c b/interface/alsaseq_c.c
+--- a/interface/alsaseq_c.c	2004-07-10 07:07:00.000000000 +0200
++++ b/interface/alsaseq_c.c	2006-07-19 18:04:28.000000000 +0200
+@@ -317,6 +317,7 @@
+ 	signal(SIGPIPE, SIG_IGN);    /* Handle broken pipe */
+ #endif /* SIGPIPE */
+ 
++	if (ctl.verbosity >= VERB_NORMAL)
+ 	printf("TiMidity starting in ALSA server mode\n");
+ 
+ 	set_realtime_priority();
+@@ -337,6 +338,7 @@
+ 	else
+ 		alsactx.num_ports = opt_sequencer_ports;
+ 
++	if (ctl.verbosity >= VERB_NORMAL)
+ 	printf("Opening sequencer port:");
+ 	for (i = 0; i < alsactx.num_ports; i++) {
+ 		int port;
+@@ -345,8 +347,10 @@
+ 			return;
+ 		alsactx.port[i] = port;
+ 		alsa_set_timestamping(&alsactx, port);
++		if (ctl.verbosity >= VERB_NORMAL)
+ 		printf(" %d:%d", alsactx.client, alsactx.port[i]);
+ 	}
++	if (ctl.verbosity >= VERB_NORMAL)
+ 	printf("\n");
+ 
+ 	alsactx.used = 0;

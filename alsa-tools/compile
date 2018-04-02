@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+# hdsp{conf,mixer}: fltk kellene neki
+# mixartloader, hdsploader, vxloader: ezek mar nem kellenek az udev miatt
+for i in \
+	echomixer     \
+	envy24control \
+	ld10k1        \
+	rmedigicontrol\
+	sb16_csp      \
+	seq/sbiload   \
+	sscape_ctl    \
+	us428control  \
+	usx2yloader
+do
+	cd "$UB_COMPILEDIR/$i"
+	ub_compile
+done

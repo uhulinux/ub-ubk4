@@ -1,0 +1,15 @@
+diff -Naurd mod_auth_pam.orig/Makefile mod_auth_pam/Makefile
+--- mod_auth_pam.orig/Makefile	2002-08-24 15:33:12.000000000 +0200
++++ mod_auth_pam/Makefile	2003-11-24 00:09:53.000000000 +0100
+@@ -14,8 +14,9 @@
+ 	$(APXS) -c $< $(LIBS)
+ 
+ install: $(TARGETS)
+-	$(APXS) -i $(TARGETS)
+-	[ -d /etc/pam.d/ -a ! -f /etc/pam.d/httpd ] && install -m 644 -o root -g root samples/httpd /etc/pam.d/
++	$(APXS) -S LIBEXECDIR=$(DESTDIR)`$(APXS) -q LIBEXECDIR` -i $(TARGETS)
++	$(APXS) -S LIBEXECDIR=$(DESTDIR)`$(APXS) -q LIBEXECDIR` -i -n $(TARGETS)
++	[ -d $(DESTDIR)/etc/pam.d/ -a ! -f $(DESTDIR)/etc/pam.d/httpd ] && install -m 644 -o root -g root samples/httpd $(DESTDIR)/etc/pam.d/
+ 
+ clean:
+ 	-rm -f $(TARGETS) *~ $(SOURCES:.c=.slo) $(SOURCES:.c=.lo) $(SOURCES:.c=.so) $(SOURCES:.c=.o) 

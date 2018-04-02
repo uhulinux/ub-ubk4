@@ -1,0 +1,53 @@
+diff -Naur orig/contrib/sample.muttrc patched/contrib/sample.muttrc
+--- orig/contrib/sample.muttrc	2013-04-17 05:12:25.000000000 +0200
++++ patched/contrib/sample.muttrc	2013-06-20 23:11:56.646256965 +0200
+@@ -50,7 +50,7 @@
+ set include			# always include messages when replying
+ #set indent_string="> "		# how to quote replied text
+ #set locale="C"			# locale to use for printing time
+-#set mailcap_path="~/.mailcap:/usr/local/share/mailcap"
++#set mailcap_path="~/.mailcap:/usr/share/mailcap"
+ set nomark_old			# i don't care about whether a message is old
+ set mail_check=10		# how often to poll for new mail
+ set mbox=+mbox			# where to store read messages
+diff -Naur orig/doc/instdoc.sh.in patched/doc/instdoc.sh.in
+--- orig/doc/instdoc.sh.in	2013-04-17 05:12:25.000000000 +0200
++++ patched/doc/instdoc.sh.in	2013-06-20 23:11:56.646256965 +0200
+@@ -8,6 +8,9 @@
+ srcdir=@srcdir@
+ datarootdir=@datarootdir@
+ docdir=@docdir@
++datadir=@datadir@
++sysconfdir=@sysconfdir@
++libexecdir=@libexecdir@
+ includedir=@includedir@
+ top_srcdir=@top_srcdir@
+ top_builddir=..
+@@ -16,10 +19,11 @@
+ TARGET="$2"
+ 
+ 
+-rm -f "$TARGET"
+-
+ sed -e "s;/usr/local/bin/;$bindir/;g" 	 	\
++    -e "s;/usr/local/etc/;$sysconfdir/;g" 	\
++    -e "s;/usr/local/share/;$datadir/;g" 	\
++    -e "s;/usr/local/libexec/;$libexecdir/;g" 	\
+     -e "s;/usr/local/doc/mutt/;$docdir/;g" 	\
+-    "$SOURCE" > $TARGET
++    -i "$SOURCE"
+ 
+-chmod 644 "$TARGET"
++cp "$SOURCE" "$TARGET"
+diff -Naur orig/init.h patched/init.h
+--- orig/init.h	2013-04-17 05:12:25.000000000 +0200
++++ patched/init.h	2013-06-20 23:13:32.043137453 +0200
+@@ -3249,7 +3249,7 @@
+   ** instead of a raw socket. You may be able to use this to set up
+   ** preauthenticated connections to your IMAP/POP3/SMTP server. Example:
+   ** .ts
+-  ** set tunnel="ssh -q mailhost.net /usr/local/libexec/imapd"
++  ** set tunnel="ssh -q mailhost.net /usr/libexec/imapd"
+   ** .te
+   ** .pp
+   ** Note: For this example to work you must be able to log in to the remote

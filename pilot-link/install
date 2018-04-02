@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+sed -e 's/GROUP="dialout"/GROUP="media"/g' -i doc/60-libpisock.rules
+ub_install
+
+# install JAVA library manually :(
+mkdir -p "$UB_INSTALLDIR"/usr/lib/java/jre/lib/i386
+install -m755 bindings/Java/libjpisock.so "$UB_INSTALLDIR"/usr/lib/java/jre/lib/i386/

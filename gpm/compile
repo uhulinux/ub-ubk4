@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+./autogen.sh
+LIBS=-lm \
+export CFLAGS+="-fPIC"
+ub_compile \
+	--enable-static

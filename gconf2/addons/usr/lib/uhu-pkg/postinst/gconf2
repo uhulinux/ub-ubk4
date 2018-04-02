@@ -1,0 +1,27 @@
+#!/bin/sh
+
+shopt -s nullglob
+
+export GCONF_CONFIG_SOURCE=xml::/etc/gconf/gconf.xml.defaults
+
+run_chmod=0
+
+if [ "$1" = "gconf2" -o "$1" = "+" ]; then
+	for i in /etc/gconf/schemas/*.schemas; do
+		[ -z "${UHU_PKG_QUIET+x}" ] && echo "  Installing gconf schemas ..."
+		gconftool-2 -q --makefile-install-rule "$i" &>/dev/null
+		UHU_PKG_QUIET=yes
+		run_chmod=1
+	done
+else
+	for i in $(grep -x '/etc/gconf/schemas/.*\.schemas' /var/lib/dpkg/info/"$1".list); do
+		[ -z "${UHU_PKG_QUIET+x}" ] && echo "  Installing gconf schemas ..."
+		gconftool-2 -q --makefile-install-rule "$i" &>/dev/null
+		UHU_PKG_QUIET=yes
+		run_chmod=1
+	done
+fi
+
+if [ $run_chmod = 1 ]; then
+	chmod -R a+rX /etc/gconf
+fi

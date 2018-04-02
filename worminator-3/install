@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+datadir="$UB_INSTALLDIR"/usr/share/games/worminator
+mkdir -p "$datadir"
+install -m 755 worminator "$datadir"/
+install -m 644 wormdata.dat demo?.dem map??.map tutorial.map "$datadir"/

@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/etc/udev/rules.d
+mkdir -p "$UB_INSTALLDIR"/etc/modprobe.d
+mkdir -p "$UB_INSTALLDIR"/lib/firmware
+mkdir -p "$UB_INSTALLDIR"/usr/lib/hotplug/firmware
+
+(cd "$UB_COMPILEDIR"/drivers/dahdi/firmware/; for i in *.tar.gz; do
+	tar -xzvf "$i";
+done)
+
+for i in $(ls -1 /lib/modules); do
+	KVERS="$i" ARCH=${i##*.} ub_compile
+	KVERS="$i" ARCH=${i##*.} ub_install INSTALL_PREFIX="$UB_INSTALLDIR"
+done

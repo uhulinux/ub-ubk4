@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if [ ! -d /var/lib/mysql/mysql/ ]; then
+	install -g 42 -o 42 -m 755 -d /var/lib/mysql/{mysql,test}
+	su mysql -c "/usr/bin/mysql_install_db --basedir=/usr --datadir=/var/lib/mysql --rpm"
+fi

@@ -1,0 +1,16 @@
+Description: Use RbConfig instead of Config
+
+Author: Andreas Cadhalpun <Andreas.Cadhalpun@googlemail.com>
+Last-Update: <2015-07-15>
+
+--- a/.waf-1.6.7-b271784c448ab906d5606267fb7f92c0/waflib/Tools/ruby.py
++++ b/.waf-1.6.7-b271784c448ab906d5606267fb7f92c0/waflib/Tools/ruby.py
+@@ -45,7 +45,7 @@ def check_ruby_ext_devel(self):
+ 	def read_out(cmd):
+ 		return Utils.to_list(self.cmd_and_log([self.env.RUBY,'-rrbconfig','-e',cmd]))
+ 	def read_config(key):
+-		return read_out('puts Config::CONFIG[%r]'%key)
++		return read_out('puts RbConfig::CONFIG[%r]'%key)
+ 	ruby=self.env['RUBY']
+ 	archdir=read_config('archdir')
+ 	cpppath=archdir

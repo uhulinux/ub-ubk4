@@ -1,0 +1,19 @@
+#!/bin/sh -eux
+
+ub_install
+
+mv "$UB_INSTALLDIR"/bin/groups "$UB_INSTALLDIR"/usr/bin/
+
+ln -sf system-auth "$UB_INSTALLDIR"/etc/pam.d/chfn
+ln -sf system-auth "$UB_INSTALLDIR"/etc/pam.d/chsh
+ln -sf system-auth "$UB_INSTALLDIR"/etc/pam.d/login
+ln -sf system-auth "$UB_INSTALLDIR"/etc/pam.d/passwd
+
+# su comes from coreutils
+rm "$UB_INSTALLDIR"/bin/su
+rm "$UB_INSTALLDIR"/etc/pam.d/su
+find "$UB_INSTALLDIR"/usr/share/man -name su.1 | xargs rm
+find "$UB_INSTALLDIR"/usr/share/man -name suauth.5 | xargs rm
+
+# getspnam comes from man-pages
+find "$UB_INSTALLDIR"/usr/share/man -name getspnam.3 | xargs rm

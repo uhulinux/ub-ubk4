@@ -1,0 +1,153 @@
+#!/bin/bash
+
+tmp=`mktemp`
+cat <<END > $tmp
+af afrikai
+am amharic
+an aragonese
+ar arab
+as assamese
+ast asturian
+be belorusz
+bg bolgár
+bn bengáli
+bn-IN bengáli (indiai)
+bo tibeti
+br breton
+brx bodo (indiai)
+bs bosnyák
+ca katalán
+ca-XV katalán (valenciai)
+cs cseh
+cy velszi
+da dán
+de német
+dgo dogri
+dz dzongkha
+el görög
+en-GB angol (brit)
+en-US angol (amerikai) ?
+en-ZA angol
+eo eszperantó
+es spanyol
+et észt
+eu baszk
+fa perzsa
+fi finn
+fr francia
+ga ír
+gd Scottish Gaelic
+gl Galician
+gu gudzsarati
+he héber
+hi hindi
+hr horvát
+hu magyar
+id indonéz
+is izlandi
+it olasz
+ja japán
+ka grúz
+kk kazah
+kl grönlandi
+km khmer
+kn kannada
+ko koreai
+kok konkani
+ks kashmiri
+ku kurd
+ky kirgiz
+lb luxemburgi
+lo lao
+lt litván
+lv lett
+mai maithili
+mk macedón
+ml malayalam
+mn mongol
+mni manipuri
+mr marathi
+mt máltai
+my burmai
+nb norvég (bokmal)
+ne nepáli
+nl holland
+nn norvég (nynorsk)
+nr ndebele (déli)
+nso northern_sotho
+oc gall 
+om oromo
+or oriya
+pa-IN pandzsabi
+pl lengyel
+pt portugál
+pt-BR portugál (brazil)
+ro román
+ru orosz
+rw kinyarwanda
+sa-IN szanszkrit
+sat santali
+sd sindhi
+sh szerb (latin)
+si sinhala
+sid sidama
+sk szlovák
+sl szlovén
+sq albán
+sr szerb (cirill)
+ss swati
+st sotho, déli
+sv svéd
+sw-TZ szuahéli
+ta tamil
+te telugu
+tg tadzsik
+th thai
+tn tswana
+tr török
+ts tsonga
+tt tatár
+ug uyghur
+uk ukrán
+ur urdu
+uz üzbég
+ve venda
+vi vietnami
+xh xhosa
+zh-CN kínai (egyszerűsített)
+zh-TW kínai (tradícionális)
+zu zulu
+END
+
+cat $tmp | while read f; do
+	lang_code=`echo $f | cut -d " " -f 1`
+	lang=`echo $f | cut -d " " -f 2`
+
+	lc_lang=`echo $lang_code | tr '[A-Z]' '[a-z]'`
+
+	pkg_dir="packages/libreoffice-i18n-$lc_lang"
+
+	# short pkg name
+	pkg_dir=`echo $pkg_dir | sed \
+					-e 's/pa-IN/pa/i' `
+
+	mkdir -p "$pkg_dir"/summary
+	echo "&LibreOffice nyelvi csomag &$lang nyelvhez" > "$pkg_dir"/summary/hu
+	echo "Data" > "$pkg_dir"/section
+	echo "libreoffice" > "$pkg_dir"/depends
+
+	cat <<END | sort -u > "$pkg_dir"/files
+	/usr/lib/libreoffice/help/$lang_code
+	/usr/lib/libreoffice/program/resource/*$lang_code.res
+	/usr/lib/libreoffice/readmes/README_$lang_code
+	/usr/lib/libreoffice/share/autocorr/acor_$lang_code.dat
+	/usr/lib/libreoffice/share/autotext/$lang_code
+	/usr/lib/libreoffice/share/config/soffice.cfg/**/res/$lang_code
+	/usr/lib/libreoffice/share/registry/Langpack-$lang_code.xcd
+	/usr/lib/libreoffice/share/registry/res/fcfg_langpack_$lang_code.xcd
+	/usr/lib/libreoffice/share/registry/res/registry_$lang_code.xcd
+END
+done
+
+exit;
+

@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+# install headers & forgotten lib
+cp -r ${UB_COMPILEDIR}/libcuefile/include/cuetools ${UB_INSTALLDIR}/usr/include
+cp -r ${UB_COMPILEDIR}/libreplaygain/include/replaygain ${UB_INSTALLDIR}/usr/include
+cp ${UB_COMPILEDIR}/build/libmpcdec/libmpcdec.so ${UB_INSTALLDIR}/usr/lib
+
+# chmod 644 .h files
+find ${UB_INSTALLDIR}/usr/include -type f -exec chmod 644 {} \;

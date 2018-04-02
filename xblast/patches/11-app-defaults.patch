@@ -1,0 +1,45 @@
+diff -Naur XBlast-2.6-sound.orig/Legacy/defaults.h XBlast-2.6-sound/Legacy/defaults.h
+--- XBlast-2.6-sound.orig/Legacy/defaults.h	1999-05-14 23:01:38.000000000 +0200
++++ XBlast-2.6-sound/Legacy/defaults.h	2006-06-30 15:57:05.000000000 +0200
+@@ -46,7 +46,7 @@
+  * file for setups and defaults
+  */
+ #ifndef APPLOADDIR
+-static char *file_appl_def   ="/usr/lib/X11/app-defaults/XBlast";
++static char *file_appl_def   ="/usr/share/X11/app-defaults/XBlast";
+ #else
+ static char *file_appl_def   =APPLOADDIR "/XBlast";
+ #endif
+diff -Naur XBlast-2.6-sound.orig/Legacy/XBlast.ad XBlast-2.6-sound/Legacy/XBlast.ad
+--- XBlast-2.6-sound.orig/Legacy/XBlast.ad	1999-09-19 16:24:58.000000000 +0200
++++ XBlast-2.6-sound/Legacy/XBlast.ad	2006-06-30 15:57:05.000000000 +0200
+@@ -4,7 +4,7 @@
+ # file "XBlast.ad" (25/01/97)
+ #
+ # Applications default file for XBlast, if installed in
+-# /usr/X11/lib/app-defaults, it contents will override
++# /usr/share/lib/app-defaults, it contents will override
+ # internal xblast defaults.
+ #
+ # Please read the manpage for a detailed description of
+diff -Naur XBlast-2.6-sound.orig/Legacy/xblast.man XBlast-2.6-sound/Legacy/xblast.man
+--- XBlast-2.6-sound.orig/Legacy/xblast.man	1999-09-19 16:31:51.000000000 +0200
++++ XBlast-2.6-sound/Legacy/xblast.man	2006-06-30 15:57:05.000000000 +0200
+@@ -641,7 +641,7 @@
+ internal defaults
+ .TP
+ .B 2.
+-the file "/usr/lib/X11/app-defaults/XBlast"
++the file "/usr/share/X11/app-defaults/XBlast"
+ .TP
+ .B 3.
+ the server resources of the default display
+@@ -708,7 +708,7 @@
+ internal defaults
+ .TP
+ .B 2.
+-the file "/usr/lib/X11/app-defaults/XBlast"
++the file "/usr/share/X11/app-defaults/XBlast"
+ .TP
+ .B 3.
+ the server resources of the default display

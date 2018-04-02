@@ -1,0 +1,26 @@
+Description: Do not pass --as-needed
+ --as-needed was passed to gcc and produced a FTBFS with gcc 4.6
+Author: Evgeni Golov <evgeni@debian.org>
+
+--- fenix-0.92a.dfsg1.orig/fxi/src/Makefile.am
++++ fenix-0.92a.dfsg1/fxi/src/Makefile.am
+@@ -7,8 +7,6 @@ INCLUDES = $(COMMON_CFLAGS) $(SDL_CFLAGS
+ 
+ fxi_LDADD = $(SDL_LIBS) $(COMMON_LIBS) -lz -lpng -lSDL_mixer
+ 
+-fxi_LDFLAGS = --as-needed
+-
+ SOURCE_FILES = main.c dcbr.c instance.c strings.c \
+               i_main.c i_debug.c i_func.c \
+ 	          g_main.c g_maps.c g_blit.c g_texts.c g_pal.c g_draw.c \
+--- fenix-0.92a.dfsg1.orig/fxi/src/Makefile.in
++++ fenix-0.92a.dfsg1/fxi/src/Makefile.in
+@@ -147,8 +147,6 @@ INCLUDES = $(COMMON_CFLAGS) $(SDL_CFLAGS
+ 
+ fxi_LDADD = $(SDL_LIBS) $(COMMON_LIBS) -lz -lpng -lSDL_mixer
+ 
+-fxi_LDFLAGS = --as-needed
+-
+ SOURCE_FILES = main.c dcbr.c instance.c strings.c \
+               i_main.c i_debug.c i_func.c \
+ 	          g_main.c g_maps.c g_blit.c g_texts.c g_pal.c g_draw.c \

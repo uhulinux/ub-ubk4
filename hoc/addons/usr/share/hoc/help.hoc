@@ -1,0 +1,3038 @@
+### -*-hoc-*-
+### /export/home/0072/src/hoc/hoc-7.0.4.beta/help.hoc, Sat Jun 15 15:18:25 2002
+### Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+### /usr/local/src/hoc/hoc-7.0.1.beta/help.hoc, Fri Jan 11 07:35:41 2002
+### Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+
+### ====================================================================
+### NB: Each help function below must output either a horizontal rule,
+### or a final empty line, or else call another help_xxx() function,
+### which will supply that empty line.  This ensures uniform appearance
+### and better readability of the output of help_all().
+###
+### Unless it is a major sectional heading, help text must start with at
+### least one tab character, and no help line should be longer than 80
+### characters, after tab expansion (i.e., filling with spaces through
+### the next column that is a multiple of 8, counting from 1).
+###
+### The functions should be ordered alphabetically, unless they call
+### other functions, in which case they must come AFTER the called
+### functions (because hoc requires definition-before-reference).
+###
+### To improve readability, empty lines in output documentation should
+### be produced by \n\n in a print statement, and that statement should
+### itself be followed by an empty line in the procedure body.
+### ====================================================================
+
+### Help on miscellaneous functions
+
+proc help_author() \
+{
+	print "\tauthor() prints information about the program authors.\n"
+}
+
+proc help_news() \
+{
+	print "\tnews() prints news about recent program developments.\n"
+}
+
+proc help_now() \
+{
+	print "\tnow() returns the current date and time, in the standard UNIX form\n\n"
+
+	print "\t\t\"Wed Jul  4 14:57:51 2001\"\n\n"
+
+	print "\tIf the month day has only one digit, then it is preceded by an\n"
+	print "\textra space.\n\n"
+}
+
+### Help for predefined constants
+
+proc __internal_help_hrule() \
+{
+	print "------------------------------------------------------------------------\n"
+}
+
+proc help() \
+{
+	__internal_help_hrule()
+	print "\tAdditional help is available with the function help_NAME(),\n"
+	print "\twhere NAME is any named constant, or built-in function, or\n"
+	print "\tstatement, or topic:\n\n"
+
+	print "\tNamed constants:\n"
+	print "\t\tCATALAN, DEG, E, GAMMA, INF, Inf, Infinity, MAXNORMAL,\n"
+	print "\t\tMINNORMAL, MINSUBNORMAL, NAN, NaN, PHI, PI, QNAN,\n"
+	print "\t\tQNaN, SNAN, SNaN\n\n"
+
+	print "\tBuilt-in numeric functions:\n"
+	print "\t\tabs(), acos(), acosh(), asin(), asinh(), atan(),\n"
+	print "\t\tatanh(), cbrt(), ceil(), cos(), cosd(), cosh(),\n"
+	print "\t\tdouble(), erf(), erfc(), exp(), expm1(), factorial(),\n"
+	print "\t\tfloor(), gamma(), gcd(), hypot(), int(), J0(), J1(),\n"
+	print "\t\tJn(), lcm(), lgamma(), ln(), log(), log10(), log1p(),\n"
+	print "\t\tlog2(), logb(), macheps(), max(), min(), nint(), rand(),\n"
+	print "\t\trandint(), randl(), rint(), rsqrt(), second(),\n"
+	print "\t\tsetrand(), sin(), sind(), single(), sinh(), sqrt(),\n"
+	print "\t\tsystime(), tan(), tand(), tanh(), trunc(), Y0(), Y1(),\n"
+	print "\t\tYn()\n\n"
+
+	print "\tBuilt-in IEEE 754 test functions:\n"
+	print "\t\tcopysign(), fmod(), ilogb(), isfinite(), isinf(),\n"
+	print "\t\tisnan(), isnormal(), isqnan(), issnan(), issubnormal(),\n"
+	print "\t\tldexp(), nearest(), nextafter(), remainder(), scalb(),\n"
+	print "\t\tsignificand()\n\n"
+
+	print "\tString functions:\n"
+	print "\t\tchar(), getenv(), ichar(), index(), length(),\n"
+	print "\t\tprintenv(), putenv(), strftime(), substr(), tolower(),\n"
+	print "\t\ttoupper()\n\n"
+
+	print "\tOther functions:\n"
+	print "\t\tabort(), eval(), load(), logfile(), logon(), logoff(),\n"
+	print "\t\tnow(), save(), who(), msg_translate(), set_locale()\n\n"
+
+	print "\tStatements:\n"
+	print "\t\tassignment break continue expression for function if\n"
+	print "\t\toperator print printf proc read statement while\n\n"
+
+	print "\tTopics:\n"
+	print "\t\tconstants, environment, expressions, functions,\n"
+	print "\t\tieee_754, limits, locales, operators, random,\n"
+	print "\t\tstatements, string_functions, time\n\n"
+
+	print "\tType help_all() for complete details.\n"
+	__internal_help_hrule()
+}
+
+proc help__() \
+{
+	print "\t_ is the name of the last numeric result printed.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___BANNER__() \
+{
+	print "\t__BANNER__ is nonzero if welcome banners are to be printed,\n"
+	print "\tand zero if they are to be suppressed.\n\n"
+
+	print "\tIt can be reassigned at any time by user code, but of course\n"
+	print "\tonly has an effect at startup time.\n\n"
+}
+
+proc help___CPU_LIMIT__() \
+{
+	print "\t__CPU_LIMIT__ is set by cpulimit() to record the current limit\n"
+	print "\t(in seconds) on CPU time use.  If cpulimit() is never called,\n"
+	print "\tthis variable is never set.\n\n"
+}
+
+proc help___DATE__() \
+{
+	print "\t__DATE__ is the date of job start, in the form \"Dec  8 2001\".\n"
+	print "\tIf the month day has only one digit, then it is preceded by an\n"
+	print "\textra space, so that the format is uniformly \"MMM DD YYYY\".\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___FILE__() \
+{
+	print "\t__FILE__ is the name of the current input file.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___IEEE_754__() \
+{
+	print "\t__IEEE_754__ is 1 if the host supports IEEE 754 arithmetic,\n"
+	print "\talthough perhaps only partially, and 0 otherwise.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___LINE__() \
+{
+	print "\t__LINE__ is the line number in the current input file (see\n"
+	print "\thelp___FILE__()).  It is reset to 1 at the start of each new\n"
+	print "\tinput file.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___PACKAGE_BUGREPORT__() \
+{
+	print "\t__PACKAGE_BUGREPORT__ is the name and address for bug reports.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___PACKAGE_DATE__() \
+{
+	print "\t__PACKAGE_DATE__ is the package release date.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___PACKAGE_NAME__() \
+{
+	print "\t__PACKAGE_NAME__ is the official package name, which may\n"
+	print "\tdiffer from the name of the installed executable program.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___PACKAGE_STRING__() \
+{
+	print "\t__PACKAGE_STRING__ is the package name and version number.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___PACKAGE_VERSION__() \
+{
+	print "\t__PACKAGE_VERSION__ is the package version number.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___PROMPT__() \
+{
+	print "\t__PROMPT__ is the current prompt string, used when verbose mode\n"
+	print "\t(see help___VERBOSE__()) is in effect.\n\n"
+
+	print "\tIt can be reassigned at any time by user code.\n\n"
+
+	print "\tFor example,\n\n"
+
+	print "\t	__PROMPT__ = \"\\n\\E[7mInput:\\E[0m \"\n\n"
+
+	print "\twill produce a blank line followed by a prompt in inverse video\n"
+	print "\tin terminal emulators, such as xterm and DEC VT100, that follow\n"
+	print "\tthe ANSI X3.64-1979 or ISO 6429-1983 terminal standards.\n\n"
+}
+
+proc help___TIME__() \
+{
+	print "\t__TIME__ is the local time of job start, in the form \"HH:MM:SS\".\n"
+	print "\tIt is NOT updated during execution.  See help_now() instead.\n"
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___VERBOSE__() \
+{
+	print "\t__VERBOSE__ is 1 when input prompts are turned on, and 0 when\n"
+	print "\tthey are suppressed (e.g., by the --silent option).\n\n"
+
+	print "\tIt can be reassigned at any time by user code.\n\n"
+}
+
+proc help_msg_translate() \
+{
+	print "\tmsg_translate(msg) looks up the message string, msg, in hoc's\n"
+	print "\ttranslation tables, and if a nonempty translation exists,\n"
+	print "\treturns that translation; otherwise, it returns its argument,\n"
+	print "\tmsg.\n\n"
+
+	print "\tPlease use this function in your own hoc code to ensure that\n"
+	print "\tyour messages can be translated without any changes whatsoever\n"
+	print "\tto your code.\n\n"
+}
+
+proc help_set_locale() \
+{
+	print "\tset_locale(localecode) loads the locale files for the locale\n"
+	print "\tidentified by localecode.  This must correspond to a\n"
+	print "\tsubdirectory of the hoc system directory, which is\n\n"
+
+	print "\t\t", __SYSHOCDIR__, "\n\n"
+
+	print "\tin this installation.\n\n"
+
+	print "\tSince set_locale() is a long name, up to three shorthand\n"
+	print "\tprocedures are provided for each language: the two-letter\n"
+	print "\tcountry code, the native name for the language, and the English\n"
+	print "\tname for the language.  Thus, da(), dansk(), and danish() all\n"
+	print "\tswitch to the Danish locale, and en(), engelsk(), and english()\n"
+	print "\tswitch to the default English locale.\n\n"
+}
+
+proc help_BASE() \
+{
+	print "\tBASE is the base of the floating-point number system.\n\n"
+}
+
+proc help_CATALAN() \
+{
+	print "\tCATALAN is Catalan's constant,\n"
+	print "\tapproximately", CATALAN, ".\n"
+	print "\tCATALAN is sum(i=0...infinity)((-1)^i/(2*i+1)^2)\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help_CLASS_NEGINF() \
+{
+	print "\tCLASS_NEGINF is the return value of class(x) when x is negative\n"
+	print "\tinfinity.\n\n"
+}
+
+proc help_CLASS_NEGNORMAL() \
+{
+	print "\tCLASS_NEGNORMAL is the return value of class(x) when x is\n"
+	print "\tnegative normal.\n\n"
+}
+
+proc help_CLASS_NEGSUBNORMAL() \
+{
+	print "\tCLASS_NEGSUBNORMAL is the return value of class(x) when x is\n"
+	print "\tnegative subnormal.\n\n"
+}
+
+proc help_CLASS_NEGZERO() \
+{
+	print "\tCLASS_NEGZERO is the return value of class(x) when x is negative\n"
+	print "\tzero.\n\n"
+}
+
+proc help_CLASS_POSINF() \
+{
+	print "\tCLASS_POSINF is the return value of class(x) when x is positive\n"
+	print "\tinfinity.\n\n"
+}
+
+proc help_CLASS_POSNORMAL() \
+{
+	print "\tCLASS_POSNORMAL is the return value of class(x) when x is\n"
+	print "\tpositive normal.\n\n"
+}
+
+proc help_CLASS_POSSUBNORMAL() \
+{
+	print "\tCLASS_POSSUBNORMAL is the return value of class(x) when x is\n"
+	print "\tpositive subnormal.\n\n"
+}
+
+proc help_CLASS_POSZERO() \
+{
+	print "\tCLASS_POSZERO is the return value of class(x) when x is positive\n"
+	print "\tzero.\n\n"
+}
+
+proc help_CLASS_QNAN() \
+{
+	print "\tCLASS_QNAN is the return value of class(x) when x is a quiet\n"
+	print "\tNaN.\n\n"
+}
+
+proc help_CLASS_SNAN() \
+{
+	print "\tCLASS_SNAN is the return value of class(x) when x is a signaling\n"
+	print "\tNaN.\n\n"
+}
+
+proc help_CLASS_UNKNOWN() \
+{
+	print "\tCLASS_UNKNOWN is the return value of class(x) when x is\n"
+	print "\tunclassifiable.  This return value should never be seen: if it\n"
+	print "\tever occurs, then hoc contains an internal coding error which\n"
+	print "\tshould be reported to the maintainer.\n\n"
+}
+
+proc help_DEG() \
+{
+	print "\tDEG is degrees per radian, 180/PI,\n"
+	print "\tapproximately", DEG, ".\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help_E() \
+{
+	print "\tE is the base of the natural logarithm,\n"
+	print "\tapproximately", E, ".\n"
+	print "\tE is sum(k = 0...Infinity)(1/k!)\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help_EBIAS() \
+{
+	print "\tEBIAS is the floating-point exponent bias.\n\n"
+}
+
+proc help_EBITS() \
+{
+	print "\tEBITS is the number of bits in the floating-point exponent.\n\n"
+}
+
+proc help_EMAX() \
+{
+	print "\tEMAX is the unbiased exponent of the largest finite normal\n"
+	print "\tnumber.\n\n"
+}
+
+proc help_EMIN() \
+{
+	print "\tEMIN is the unbiased exponent of the smallest finite normal\n"
+	print "\tnumber.\n\n"
+}
+
+proc help_GAMMA() \
+{
+	print "\tGAMMA is the Euler-Mascheroni constant,\n"
+	print "\tapproximately", GAMMA, ".\n"
+	print "\tGAMMA is limit(sum(i = 1...n)(1/i) - ln(n), n -> infinity)\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help_Infinity() \
+{
+	print "\tInfinity is the IEEE-754 floating-point infinity.  It is\n"
+	print "\tproduced when a numeric result is too large to represent, such\n"
+	print "\tas from overflow, or from nonzero/zero.\n\n"
+
+	print "\tInfinity is a signed value.\n\n"
+
+	print "\tInfinity obeys the usual mathematical properties:\n"
+	print "\t\tfinite / Infinity -> 0\n"
+	print "\t\tfinite * Infinity -> Infinity\n"
+	print "\t\tInfinity / finitepositive -> Infinity\n"
+	print "\t\tInfinity / finitenegative -> -Infinity\n"
+	print "\t\tInfinity + Infinity -> Infinity\n"
+	print "\t\tInfinity * Infinity -> Infinity\n"
+	print "\t\tsqrt(Infinity) -> Infinity\n\n"
+
+	print "\tHowever:\n"
+	print "\t\tInfinity - Infinity -> NaN\n"
+	print "\t\tInfinity / Infinity -> NaN\n\n"
+
+	print "\tInfinity cannot be reassigned by user code.\n\n"
+}
+
+proc help_INF() \
+{
+	print "\tINF is a synonym for Infinity.\n\n"
+
+	help_Infinity()
+}
+
+proc help_Inf() \
+{
+	print "\tInf is a synonym for Infinity.\n\n"
+
+	help_Infinity()
+}
+
+proc help_NaN() \
+{
+	print "\tNaN is the IEEE-754 floating-point Not-a-Number.  It is produced\n"
+	print "\twhen a numeric result is not predictable, even in a limiting\n"
+	print "\tsense, such as from 0/0, sqrt(x) (when x < 0),\n"
+	print "\tInfinity - Infinity, or when NaN appears as the argument to any\n"
+	print "\tfunction, or as the operand of a binary operator.\n\n"
+
+	print "\tNaN may be optionally signed, but the sign does not reflect its\n"
+	print "\tcomputational history, and is not significant in computed NaN\n"
+	print "\tresults.\n\n"
+
+	print "\tNaN has the distinctive property that it is the ONLY IEEE-754\n"
+	print "\tfloating-point number that is not equal to anything, not even\n"
+	print "\titself!  Thus, (x != x) is true (1) if and only if x is a NaN.\n\n"
+
+	print "\tNaNs may in principle be further distinguished as signaling or\n"
+	print "\tquiet.  However, some floating-point architectures do not\n"
+	print "\tsupport signaling NaNs, and arithmetic operations produce only\n"
+	print "\tquiet NaNs.  Thus, we usually do not make a distinction between\n"
+	print "\tthem.\n\n"
+
+	print "\tA signaling NaN used in an arithmetic expression loses its\n"
+	print "\tsignaling property: the result is a quiet NaN.\n\n"
+
+	print "\tNaN cannot be reassigned by user code.\n\n"
+}
+
+proc help_NAN() \
+{
+	print "\tNAN is a synonym for NaN.\n\n"
+
+	help_NaN()
+}
+
+proc help_P() \
+{
+	print "\tP is the floating-point precision: the number of bits in the\n"
+	print "\tsignificand.\n\n"
+}
+
+proc help_PHI() \
+{
+	print "\tPHI is the golden ratio, (1 + sqrt(5))/2,\n"
+	print "\tapproximately", PHI, ".\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help_PI() \
+{
+	print "\tPI is the ratio of the circumference of a circle to its\n"
+	print "\tdiameter, approximately", PI, ".\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help_PREC() \
+{
+	print "\tPREC is the output precision, the number of digits to show in\n"
+	print "\toutput floating-point values (default: 17).\n\n"
+
+	print "\tIt can be reassigned at any time by user code.\n\n"
+}
+
+proc help_QNaN() \
+{
+	print "\tQNaN is a quiet NaN.\n\n"
+
+	help_NaN()
+}
+
+proc help_QNAN() \
+{
+	print "\tQNAN is a synonym for QNaN.\n\n"
+
+	help_QNaN()
+}
+
+proc help_SNaN() \
+{
+	print "\tSNaN is a signaling NaN, provided that the host floating-point\n"
+	print "\tarchitecture supports one. Some do not (e.g., Intel IA-32 and\n"
+	print "\tMIPS), so on those, SNaN is a quiet NaN, and isqnan(SNaN) and\n"
+	print "\tissnan(QNaN) will then be 1 (true).  Those function calls will\n"
+	print "\treturn 0 (false) on systems with both klnds of NaNs.\n\n"
+
+	if (isqnan(SNaN)) \
+		print "\tOn this system, isqnan(SNaN) reports:", isqnan(SNaN), "(only one kind of NaN).\n\n" \
+	else \
+		print "\tOn this system, isqnan(SNaN) reports:", isqnan(SNaN), "(two kinds of NaNs).\n\n"
+
+	help_NaN()
+}
+
+proc help_SNAN() \
+{
+	print "\tSNAN is a synonym for SNaN.\n\n"
+
+	help_SNaN()
+}
+
+### Help for built-in functions
+
+proc help_abort() \
+{
+	print "\tabort(message) prints message, then aborts evaluation of the\n"
+	print "\tcurrent expression, returning to top-level without further\n"
+	print "\tprocessing of the remainder of the current statement or\n"
+	print "\tfunction/procedure call chain.  The message should include the\n"
+	print "\tname of the function calling abort(), since there is currently\n"
+	print "\tno function call traceback, and end with a newline.\n\n"
+}
+
+proc help_abs() \
+{
+	print "\tabs(x) returns the absolute value of x.\n\n"
+}
+
+proc help_acos() \
+{
+	print "\tacos(x) returns the arc cosine of x.\n"
+	print "\tx must be in [-1...+1].\n\n"
+}
+
+proc help_acosh() \
+{
+	print "\tacosh(x) returns the inverse hyperbolic cosine of x.\n"
+	print "\tx must be outside the interval (-1.0...1.0).\n\n"
+}
+
+proc help_asin() \
+{
+	print "\tacos(x) returns the arc cosine of x.\n"
+	print "\tx must be in [-1...+1].\n\n"
+}
+
+proc help_asinh() \
+{
+	print "\tasinh(x) returns the inverse hyperbolic sine of x.\n\n"
+}
+
+proc help_atan() \
+{
+	print "\tatan(x) returns the arc tangent of x.\n\n"
+}
+
+proc help_atanh() \
+{
+	print "\tatanh(x) returns the inverse hyperbolic tangent of x.\n\n"
+}
+
+proc help_cbrt() \
+{
+	print "\tcbrt(x) returns the cube root of x.\n\n"
+}
+
+proc help_cd() \
+{
+	print "\tcd(s) changes the current working directory to that named by the\n"
+	print "\tstring s, updates the environment variable PWD to that name, and\n"
+	print "\treturns that name.\n\n"
+
+	print "\tSee also help_dirs(), help_popd(), help_pushd(), help_pwd(), and\n"
+	print "\thelp_xd().\n\n"
+}
+
+proc help_ceil() \
+{
+	print "\tceil(x) returns the smallest integer greater than or equal to x.\n\n"
+}
+
+proc help_class() \
+{
+	print "\tclass(x) returns a numeric value (available as a predefined\n"
+	print "\tconstant) indicating into which of these ten classes x falls:\n"
+	print "\t\n"
+	print "\t\tCLASS_NEGINF\t\tnegative infinity\n"
+	print "\t\tCLASS_NEGNORMAL\t\tnegative normal\n"
+	print "\t\tCLASS_NEGSUBNORMAL\tnegative subnormal\n"
+	print "\t\tCLASS_NEGZERO\t\tnegative zero\n"
+	print "\t\tCLASS_POSINF\t\tpositive infinity\n"
+	print "\t\tCLASS_POSNORMAL\t\tpositive normal\n"
+	print "\t\tCLASS_POSSUBNORMAL\tpositive subnormal\n"
+	print "\t\tCLASS_POSZERO\t\tpositive zero\n"
+	print "\t\tCLASS_QNAN\t\tquiet NaN\n"
+	print "\t\tCLASS_SNAN\t\tsignaling NaN\n"
+	print "\t\n"
+	print "\tAn eleventh value is reserved to flag classification failure:\n"
+	print "\t\n"
+	print "\t\tCLASS_UNKNOWN\t\tshould never happen\n\n"
+}
+
+proc help_copysign() \
+{
+	print "\tcopysign(x,y) returns a value with the magnitude of x, and the\n"
+	print "\tsign of y.\n\n"
+}
+
+proc help_cos() \
+{
+	print "\tcos(x) returns the cosine of x (x in radians).\n"
+	print "\tExpect severe accuracy loss for large |x|.\n\n"
+}
+
+proc help_cosd() \
+{
+	print "\tcosd(x) returns the cosine of x (x in degrees).\n"
+	print "\tExpect severe accuracy loss for large |x|.\n\n"
+}
+
+proc help_cosh() \
+{
+	print "\tcosh(x) returns the hyperbolic cosine of x.\n\n"
+}
+
+proc help_cpulimit() \
+{
+	## NB: Because this function is experimental, it is not
+	## currently mentioned anywhere else in this help file!
+
+	print "\tcpulimit(t) sets the CPU time limit from now to an additional t\n"
+	print "\tseconds, sets the system variable __CPU_LIMIT__ to t, and\n"
+	print "\treturns the current CPU time limit, which is always measured\n"
+	print "\tfrom the START of the job.\n\n"
+
+	print "\tIf the limit is exceeded, execution of the current expression is\n"
+	print "\taborted, control returns to the top-level interpreter, and the\n"
+	print "\ttime limit is incremented by the current value of __CPU_LIMIT__.\n\n"
+
+	print "\tAlthough t may be fractional, on most operating systems, the\n"
+	print "\ttime limit is an integer, so t will be rounded up internally to\n"
+	print "\tthe nearest integer before setting the time limit.\n\n"
+
+	print "\tIf resource usage and limits are not supported on the current\n"
+	print "\tplatform, this function has no effect, other than setting\n"
+	print "\t__CPU_LIMIT__, and returning Infinity.\n\n"
+
+	print "\tBy default, there is no time limit for the job (although some\n"
+	print "\toperating systems may impose such limits).\n\n"
+
+	print "\tNegative, zero, and NaN arguments are treated like Infinity.\n\n"
+
+	print "\tNB: This function is EXPERIMENTAL, and may be withdrawn in\n"
+	print "\tfuture versions.\n\n"
+}
+
+proc help_defined() \
+{
+	print "\tdefined(symbol) returns 1 if symbol is defined, and 0 if not.\n\n"
+
+	print "\tProgramming note: This function can be used in hoc libraries to\n"
+	print "\tprovide default values of variables, for example,\n\n"
+
+	print "\t\tif (!defined(seed)) seed = 123456789\n\n"
+}
+
+proc help_delete() \
+{
+	print "\tdelete(symbol) returns 1 if symbol was successfully deleted, and\n"
+	print "\t0 if not.  When a symbol is deleted, its value is no longer\n"
+	print "\tavailable, as if it had never been defined.\n\n"
+
+	print "\tMost user-defined symbols can be deleted, but hoc kernel\n"
+	print "\tsymbols, and user-defined immutable symbols, cannot.\n\n"
+}
+
+proc help_dirs() \
+{
+	print "\tdirs() prints the current directory stack, with the most recent\n"
+	print "\tdirectory first.\n\n"
+
+	print "\tSee also help_cd(), help_popd(), help_pushd(), help_pwd(), and\n"
+	print "\thelp_xd().\n\n"
+}
+
+proc help_double() \
+{
+	print "\tdouble() converts its numeric argument to double precision, and\n"
+	print "\tthen back to the hoc default precision.\n\n"
+
+	print "\tNB: double() can never increase precision of its argument, only\n"
+	print "\tpreserve or reduce it!\n\n"
+}
+
+proc help_endinput() \
+{
+	print "\t****************************************************************\n"
+	print "\tWARNING: A recent change to the implementation of the load()\n"
+	print "\tcommand has broken the endinput() function, so that it no longer\n"
+	print "\tworks as documented.  This will eventually be repaired.\n"
+	print "\t****************************************************************\n\n"
+
+	print "\tendinput() sets an internal flag that terminates reading of the\n"
+	print "\tcurrent file at the time the next input line is requested.\n\n"
+
+	print "\tThus, an input line containing\n\n"
+
+	print "\t\tendinput(); x = 3\n\n"
+
+	print "\twill complete the assignment to x, whereas the assignment would\n"
+	print "\tnot be reached with input like this:\n\n"
+
+	print "\t\tendinput()\n"
+	print "\t\tx = 3\n\n"
+
+	print "\tProgramming note: endinput() can be conveniently used to avoid\n"
+	print "\tloading the remainder of large packages if a flag has been set\n"
+	print "\tto show that the package has already been loaded:\n\n"
+
+	print "\t\tif (defined(foo_has_been_loaded)) endinput()\n"
+	print "\t\t... long package follows ...\n"
+	print "\t\tfoo_has_been_loaded = 1\n\n"
+}
+
+proc help_erf() \
+{
+	print "\terf(x) returns the error function of x.\n\n"
+}
+
+proc help_erfc() \
+{
+	print "\terfc(x) returns the complementary error function of x.\n\n"
+}
+
+proc help_errbits() \
+{
+	print "\terrbits(x,y), with y an approximation to x, returns the number\n"
+	print "\tof bits that y is in error by.\n\n"
+}
+
+proc help_eval() \
+{
+	print "\teval(string) pushes its argument string, which must contain\n"
+	print "\tvalid hoc code, onto the input stack so that it will be\n"
+	print "\tevaluated next.  The size of the input stack is limited only by\n\n"
+	print "\tavailable memory.\n\n"
+
+	print "\tThis function makes it possible for hoc programs to construct\n"
+	print "\tnew hoc code on-the-fly and then run it.\n\n"
+}
+
+proc help_exit() \
+{
+	print "\texit(s) prints the string s if it is not empty, and exits to the\n"
+	print "\toperating system with a success return code (on UNIX-like\n"
+	print "\tsystems, 0) if the string was empty, and with a failure code (on\n"
+	print "\tUNIX-like systems, 1) if the string was not empty.\n\n"
+}
+
+proc help_exp() \
+{
+	print "\texp(x) returns the exponential function of x, E^x.\n\n"
+}
+
+proc help_expm1() \
+{
+	print "\texpm1(x) returns the exponential function of x, less 1: E^x - 1.\n\n"
+
+	print "\tFor small x, exp(x) is approximately 1, so there is serious\n"
+	print "\tsubtraction loss in directly using exp(x) - 1; expm1(x) avoids\n"
+	print "\tthis loss.\n\n"
+
+	print "\tFrom Sun Solaris documentation: ``The expm1() and log1p()\n"
+	print "\tfunctions are useful for financial calculations of\n"
+	print "\t((1 + x)^n - 1) / x, namely:\n\n"
+
+	print "\t	expm1(n * log1p(x))/x\n\n"
+
+	print "\twhen x is very small (for example, when performing calculations\n"
+	print "\twith a small daily interest rate).  These functions also\n"
+	print "\tsimplify writing accurate inverse hyperbolic functions.''\n\n"
+}
+
+proc help_exponent() \
+{
+	print "\texponent(x) returns the base-2 exponent of x, such that\n\n"
+
+	print "\t\tx == significand(x) * 2^exponent(x)\n\n"
+
+	print "\twhere |significand(x)| is in [1...2).\n\n"
+
+	print "\tFor IEEE 754 arithmetic, normal numbers have exponent(x) in\n"
+	print "\t[-1022...1023] and subnormal numbers, if supported, have\n"
+	print "\texponent(x) in [-1074...1023].\n\n"
+
+	print "\tWARNING: The power 2^exponent(x) will underflow to zero for IEEE\n"
+	print "\t754 subnormal numbers, so for such numbers, the right-hand side\n"
+	print "\tmust be computed with suitable scaling, like this:\n\n"
+
+	print "\t\t(significand(x) * 2^(exponent(x) + 52)) * 2^(-52)\n\n"
+}
+
+proc help_factorial() \
+{
+	print "\tfactorial(n) returns n! = n*(n-1)*(n-2)*...*1, where\n"
+	print "\t1! == 0! == 1.   Negative arguments generate a call to abort().\n\n"
+}
+
+proc help_floor() \
+{
+	print "\tfloor(x) returns the greatest integer less than or equal to x.\n\n"
+}
+
+proc help_fmod() \
+{
+	print "\tfmod(x,y) returns the remainder of the division of x by y.\n\n"
+}
+
+proc help_ftoh() \
+{
+	print "\tftoh(x) returns a hexadecimal string containing the native\n"
+	print "\tfloating-point representation of x.\n\n"
+
+	print "\tFor readability, a separating underscore is inserted between\n"
+	print "\tgroups of eight hexadecimal digits.\n\n"
+
+	print "\tThis function is the inverse of htof().\n\n"
+}
+
+proc help_gamma() \
+{
+	print "\tgamma(x) returns the Gamma (generalized factorial) function\n"
+	print "\tof x.\n\n"
+}
+
+proc help_gcd() \
+{
+	print "\tgcd(x,y) returns the greatest common divisor of x and y.\n\n"
+}
+
+proc help_getenv() \
+{
+	print "\tgetenv(envvar) returns the string value of the environment\n"
+	print "\tvariable envvar, or an empty string if it is not defined.\n\n"
+}
+
+proc help_hexfp() \
+{
+	print "\thexfp(x) returns a string containing the hexadecimal\n"
+	print "\tfloating-point representation of x, in the form\n\n"
+
+	print "\t\t\"+0x1.hhhhh...p+ddddd\"\n\n"
+
+	print "\tTrailing zeros in the fraction, and leading zeros in the\n"
+	print "\texponent, are dropped, and the sign is always included.\n\n"
+
+	print "\tSee also help_hexint(), help_number(), and help_string().\n\n"
+}
+
+proc help_hexint() \
+{
+	print "\thexint(x) returns a string containing the hexadecimal integer\n"
+	print "\trepresentation of x, if that is possible, in the form\n\n"
+
+	print "\t\t\"+0xhhhhh...\"\n\n"
+
+	print "\tLeading zeros are dropped, and the sign is always included.\n\n"
+
+	print "\tIf x is too big to represent as an exact integer, then the\n"
+	print "\tfloating-point representation, hexfp(x), is returned instead.\n\n"
+
+	print "\tSee also help_hexfp(), help_number(), and help_string().\n\n"
+}
+
+proc help_htof() \
+{
+	print "\thtof(s) returns a floating-point number corresponding to the\n"
+	print "\tnative representation in the hexadecimal string s.\n\n"
+
+	print "\tNonhexadecimal digits in s are ignored.\n\n"
+
+	print "\tThis function is the inverse of ftoh().\n\n"
+}
+
+proc help_hypot() \
+{
+	print "\thypot(x,y) function computes the length of the hypotenuse of a\n"
+	print "\tright-angled triangle, sqrt(x^2 + y^2), but without accuracy\n"
+	print "\tloss or range limitation from premature overflow or underflow.\n\n"
+
+	print "\tThis function has possibly unexpected behavior for exceptional\n"
+	print "\targuments: when either argument is Infinity, then the result is\n"
+	print "\tInfinity, EVEN IF the other argument is a NaN!  The explanation\n"
+	print "\tis found on the 4.3BSD manual page:\n\n"
+
+	print "\t\t... programmers on machines other than a VAX (it has no\n"
+	print "\t\tinfinity) might be surprised at first to discover that\n"
+	print "\t\thypot(+infinity,NaN) = +infinity.  This is intentional;\n"
+	print "\t\tit happens because hypot(infinity,v) = +infinity for all\n"
+	print "\t\tv, finite or infinite.  Hence hypot(infinity,v) is\n"
+	print "\t\tindependent of v.  Unlike the reserved operand on a VAX,\n"
+	print "\t\tthe IEEE NaN is designed to disappear when it turns out\n"
+	print "\t\tto be irrelevant, as it does in hypot(infinity,NaN). ...\n\n"
+}
+
+proc help_ilogb() \
+{
+	print "\tilogb(x) returns the exponent part of x, that is, int(log2(x)).\n\n"
+}
+
+proc help_int() \
+{
+	print "\tint(x) returns the integer part (truncated toward zero) of x.\n\n"
+}
+
+proc help_index() \
+{
+	print "\tindex(s,t) returns the index of string t in string s, counting\n"
+	print "\tfrom 1, or 0 if t is not found in s.\n\n"
+}
+
+proc help_isfinite() \
+{
+	print "\tisfinite(x) returns 1 (true) if x is finite and otherwise,\n"
+	print "\t0 (false).\n\n"
+}
+
+proc help_isinf() \
+{
+	print "\tisinf(x) returns 1 (true) if x is Infinite, and otherwise,\n"
+	print "\t0 (false).\n\n"
+}
+
+proc help_isnan() \
+{
+	print "\tisnan(x) returns 1 (true) if x is a NaN, and otherwise,\n"
+	print "\t0 (false).\n\n"
+}
+
+proc help_isnormal() \
+{
+	print "\tisnormal(x) returns 1 (true) if x is finite and normalized and\n"
+	print "\tnot subnormal, and otherwise, 0 (false).\n\n"
+}
+
+proc help_isqnan() \
+{
+	print "\tisqnan(x) returns 1 (true) if x is a quiet NaN, and otherwise,\n"
+	print "\t0 (false).\n\n"
+
+	print "\tOn some architectures (e.g., Intel x86 and MIPS), there is\n"
+	print "\tonly one type of NaN.  isqnan(x) is then defined to return 1\n"
+	print "\t(true) if x is a NaN.\n\n"
+}
+
+proc help_issnan() \
+{
+	print "\tissnan(x) returns 1 (true) if x is a signaling NaN, and\n"
+	print "\totherwise, 0 (false).\n\n"
+
+	print "\tOn some architectures (e.g., Intel x86 and MIPS), there is\n"
+	print "\tonly one type of NaN.  issnan(x) is then defined to return 1\n"
+	print "\t(true) if x is a NaN.\n\n"
+
+	print "\tYou can test whether your system has both quiet and signaling\n"
+	print "\tNaNs like this: issnan(NaN).  The result is 0 (false) if\n"
+	print "\tdistinct NaN types are available, and 1 (true) if not.\n\n"
+}
+
+proc help_issubnormal() \
+{
+	print "\tissubnormal(x) returns 1 (true) if x is subnormal (formerly,\n"
+	print "\tdenormalized), and otherwise, 0 (false).\n\n"
+}
+
+proc help_J0() \
+{
+	print "\tJ0(x) returns the Bessel function of the first kind of order 0\n"
+	print "\tof x.\n\n"
+}
+
+proc help_J1() \
+{
+	print "\tJ1(x) returns the Bessel function of the first kind of order 1\n"
+	print "\tof x.\n\n"
+}
+
+proc help_Jn() \
+{
+	print "\tJn(n,x) returns the Bessel function of the first kind of\n"
+	print "\tintegral order n of x.\n\n"
+}
+
+proc help_lcm() \
+{
+	print "\tlcm(x,y) returns the least common multiple of int(x) and int(y).\n\n"
+}
+
+proc help_ldexp() \
+{
+	print "\tldexp(x,y) returns x * 2^(int(y)).\n\n"
+}
+
+proc help_length() \
+{
+	print "\tlength(s) returns the length of string s.\n\n"
+}
+
+proc help_lgamma() \
+{
+	print "\tlgamma(x) returns the natural logarithm of gamma(x).\n\n"
+
+	print "\tBecause gamma(x) has poles at zero and at negative integer\n"
+	print "\tvalues, and grows factorially with increasing x, it reaches the\n"
+	print "\tfloating-point overflow limit fairly quickly.  For 64-bit IEEE\n"
+	print "\t754 arithmetic, this happens at approximately x = 206.779.\n"
+	print "\tHowever, lgamma(x) is representable almost to the overflow\n"
+	print "\tlimit.  In 64-bit IEEE 754 arithmetic, this happens at\n"
+	print "\tapproximately x = 2.55e+306 (the overflow limit is 1.80e+308).\n\n"
+
+	print "\tUnfortunately, there is mathematically-unavoidable accuracy loss\n"
+	print "\twhen gamma(x) is computed from exp(lgamma(x)), so you should\n"
+	print "\tavoid the logarithmic form unless you really need large\n"
+	print "\targuments that would cause overflow.\n\n"
+}
+
+proc help_limits() \
+{
+	print "\tAll internal storage areas in hoc grow as needed.  There are no\n"
+	print "\tfixed limits on their size, other than the amount of available\n"
+	print "\tallocatable memory.\n\n"
+
+	print "\tThe size of each dynamic area is available as an immutable named\n"
+	print "\tconstant whose value may grow (but never shrink) during\n"
+	print "\texecution:\n\n"
+
+	print "\tProgram call stack size:           __MAX_FRAME__    =", __MAX_FRAME__, "\n"
+	print "\tLongest input line:                __MAX_LINE__     =", __MAX_LINE__, "\n"
+	print "\tLongest identifier name:           __MAX_NAME__     =", __MAX_NAME__, "\n"
+	print "\tVirtual machine code array size:   __MAX_PROG__     =", __MAX_PROG__, "\n"
+	print "\tInput pushback buffer size:        __MAX_PUSHBACK__ =", __MAX_PUSHBACK__, "\n"
+	print "\tParameter stack size:              __MAX_STACK__    =", __MAX_STACK__, "\n"
+	print "\tLongest quoted string:             __MAX_STRING__   =", __MAX_STRING__, "\n"
+	print "\tLongest numeric token:             __MAX_TOKEN__    =", __MAX_TOKEN__, "\n\n"
+}
+
+proc help_ln() \
+{
+	print "\tln(x) returns the natural (base-E) logarithm of x.\n\n"
+}
+
+proc help_load() \
+{
+	print "\tload(\"filename\") reads input from the specified file.  The\n"
+	print "\tfile can be prepared by hand, or by the save() command.\n\n"
+}
+
+proc help_locales() \
+{
+	print "\thoc supports multiple locales, or language environments.\n"
+	print "\tChanging the locale potentially changes all text strings that\n"
+	print "\thoc can display, although much translation work remains needs to\n"
+	print "\tbe done to complete the job.\n\n"
+
+	print "\tAt present, all hoc documentation is written in one of the\n"
+	print "\tISO8559-n 8-bit character set encodings.  In order to achieve\n"
+	print "\tcorrect character display, your terminal emulator must be using\n"
+	print "\tfonts in the corresponding encoding.  Few terminal emulators\n"
+	print "\tprovide dynamic changing of fonts, so you will like have to\n"
+	print "\tselect an appropriate font set when you start the terminal\n"
+	print "\tsession.\n\n"
+
+	print "\tThese locales, and expected encodings, are currently recognized:\n\n"
+
+	print "\t\tda\tDanish\t\tISO8859-1 (Latin 1)\n"
+	print "\t\tde\tGerman\t\tISO8859-1 (Latin 1)\n"
+	print "\t\ten\tEnglish\t\tISO8859-1 (Latin 1)\n"
+	print "\t\tes\tSpanish\t\tISO8859-1 (Latin 1)\n"
+	print "\t\tfr\tFrench\t\tISO8859-1 (Latin 1)\n"
+	print "\t\thr\tCroatian\tISO8859-2 (Latin 2)\n"
+	print "\t\tpt\tPortuguese\tISO8859-1 (Latin 1)\n"
+	print "\t\ttr\tTurkish\t\tISO8859-9 (Latin 5)\n\n"
+
+	print "\tFor demonstration purposes, the top-level welcome banner, the\n"
+	print "\thelp() function, and a small number of other functions are\n"
+	print "\tprovided in several languages.  For at least Danish and French,\n"
+	print "\tall of hoc's internal messages are also translated.\n\n"
+
+	print "\t****************************************************************\n"
+	print "\t****************************************************************\n"
+	print "\t** If you can help with new or improved translations for      **\n"
+	print "\t** existing languages, or for as-yet-unsupported languages,   **\n"
+	print "\t** please contact the program maintainer (help_author() for   **\n"
+	print "\t** details).  You do not need to be a computer programmer,    **\n"
+	print "\t** only skilled in English and one or more other languages.   **\n"
+	print "\t** hoc has been carefully designed to allow such work to be   **\n"
+	print "\t** done in small steps, with a fallback to the original       **\n"
+	print "\t** English text until a translation is available.             **\n"
+	print "\t****************************************************************\n"
+	print "\t****************************************************************\n\n"
+
+	print "\tA locale can be selected at startup time by defining one of the\n"
+	print "\tenvironment variables LC_ALL, LC_MESSAGES, or LANG to a locale\n"
+	print "\tcode, which is often the ISO two-letter country code.  In a\n"
+	print "\tUNIX-like system, this can be done in all shells just for the\n"
+	print "\tcurrent hoc session like this example for French:\n\n"
+
+	print "\t\tenv LANG=fr hoc\n\n"
+
+	print "\tYou can also permanently set locale variables in your shell\n"
+	print "\tstartup files, but this can have far-reaching consequences,\n"
+	print "\tsince many programs may then behave differently.\n\n"
+
+	print "\thoc also allows the locale to be changed dynamically with the\n"
+	print "\tset_locale() function.  Since that is a long name, up to three\n"
+	print "\tshorthand procedures are provided for each language: the\n"
+	print "\ttwo-letter country code, the native name for the language, and\n"
+	print "\tthe English name for the language.  Thus, da(), dansk(), and\n"
+	print "\tdanish() all switch to the Danish locale, and en(), engelsk(),\n"
+	print "\tand english() switch to the default English locale.\n\n"
+}
+
+proc help_log() \
+{
+	print "\tlog(x) returns the natural (base-E) logarithm of x.\n\n"
+}
+
+proc help_log1p() \
+{
+	print "\tlog1p(x) returns log(1 + x), but without accuracy loss for\n"
+	print "\tsmall |x|.  x must be in (-1.0,infinity].\n\n"
+}
+
+proc help_log2() \
+{
+	print "\tlog2(x) returns the logarithm to the base 2 of x.\n\n"
+}
+
+proc help_log10() \
+{
+	print "\tlog10(x) returns the logarithm to the base 10 of x.\n\n"
+}
+
+proc help_logb() \
+{
+	print "\t\nlogb(b,x) returns the logarithm to the base b of x.\n\n"
+}
+
+proc help_logfile() \
+{
+	print "\tlogfile(\"filename\") logs the session on the specified file,\n"
+	print "\twhich, for security reasons, MUST be a new file.  It is a normal\n"
+	print "\ttext that you can edit, print, and view.\n\n"
+
+	print "\tInput is recorded verbatim.  Output is recorded in comments.\n"
+	print "\tThis permits the logfile to be read by hoc later, allowing a\n"
+	print "\tsession to be replayed.\n\n"
+
+	print "\tIf a logfile is already opened, it is closed before opening\n"
+	print "\tthe new one.\n\n"
+
+	print "\tLogging may be turned on and off with logon() and logoff().\n\n"
+}
+
+proc help_logoff() \
+{
+	print "\tlogoff() suspends logging to any open log file.  It is NOT an\n"
+	print "\terror if there is no current log file.\n\n"
+}
+
+proc help_logon() \
+{
+	print "\tlogon() restores logging to any open log file.  It is NOT an\n"
+	print "\terror if there is no current log file.\n\n"
+}
+
+proc help_macheps() \
+{
+	print "\tmacheps(x) returns the generalized machine epsilon of x, the\n"
+	print "\tsmallest number which, when added to x, produces a sum that\n"
+	print "\tstill differs from x: (x + macheps(x)) != x.\n\n"
+
+	print "\tmacheps(1.0) is the normal machine epsilon.\n\n"
+
+	print "\tmacheps(-x) is macheps(x)/base, or equivalently, the smallest\n"
+	print "\tnumber that can be subtracted from x with the result still\n"
+	print "\tdifferent from x.\n\n"
+
+	print "\tmacheps(0.0) is the smallest representable floating-point\n"
+	print "\tnumber.  Depending on the host system, it may be a normal\n"
+	print "\tnumber, or a subnormal number (type help_subnormal() for\n"
+	print "\tdetails).\n\n"
+}
+
+proc help_matula() \
+{
+	print "\tmatula(nbits) is the number of decimal digits needed to ensure\n"
+	print "\tcorrect round-trip conversion between binary and decimal of\n"
+	print "\tfloating-point data with nbits significand bits.\n\n"
+
+	print "\tmatula(P) is that number for this implementation of hoc.\n\n"
+
+	print "\tSee David W. Matula, ``In-and-out conversions'', Comm. ACM\n"
+	print "\t11(1) 47--50, January 1960.  CODEN CACMA2.  ISSN 0001-0782.\n\n"
+}
+
+proc help_max() \
+{
+	print "\tmax(x,y) returns the larger of x and y.\n\n"
+
+	print "If either argument is a NaN, the result is a NaN.\n\n"
+}
+
+proc help_maxnormal() \
+{
+	print "\tmaxnormal() returns the maximum positive normal number.\n\n"
+}
+
+proc help_min() \
+{
+	print "\tmin(x,y) returns the smaller of x and y.\n\n"
+
+	print "If either argument is a NaN, the result is a NaN.\n\n"
+}
+
+proc help_minnormal() \
+{
+	print "\tminnormal() returns the minimum positive normal number.\n\n"
+}
+
+proc help_nearest() \
+{
+	print "\tnearest(x,y) returns the next different machine number nearest\n"
+	print "\tx, in the direction of the infinity with the same sign as y.\n\n"
+}
+
+proc help_nextafter() \
+{
+	print "\tnextafter(x,y) returns the machine number nearest x, in\n"
+	print "\tthe direction of the infinity with the same sign as y.\n\n"
+}
+
+proc help_nint() \
+{
+	print "\tnint(x) returns the nearest integer to x, rounding away from\n"
+	print "\tzero in case of a tie.\n\n"
+}
+
+proc help_rand() \
+{
+	print "\trand() returns a pseudo-random number uniformly distributed\n"
+	print "\ton (0...1).  Unless the seed is changed (see help_setrand()),\n"
+	print "\tsuccessive runs of the same program will generate the same\n"
+	print "\tsequence of pseudo-random numbers.\n\n"
+
+	print "\tSee help_randint() for uniformly-distributed integers in an\n"
+	print "\tinterval, and help_randl() for logarithmically-distributed\n"
+	print "\tpseudo-random numbers.\n\n"
+
+	print "\tThe pseudo-random generator algorithm is platform-independent,\n"
+	print "\tallowing reproduction of the same number sequence on any\n"
+	print "\tcomputer architecture.\n\n"
+}
+
+proc help_randint() \
+{
+	print "\trandint(x,y) returns a pseudo-random integer uniformly\n"
+	print "\tdistributed on [int(x)...int(y)].  Unless the seed is changed\n"
+	print "\t(see help_setrand()), successive runs of the same program will\n"
+	print "\tgenerate the same sequence of pseudo-random numbers.\n\n"
+
+	print "\tThe pseudo-random generator algorithm is platform-independent,\n"
+	print "\tallowing reproduction of the same number sequence on any\n"
+	print "\tcomputer architecture.\n\n"
+}
+
+proc help_randl() \
+{
+	print "\trandl(x) returns a pseudo-random number logarithmically\n"
+	print "\tdistributed on (1,exp(x)).  Unless the seed is changed\n"
+	print "\t(see help_setrand()), successive runs of the same program\n"
+	print "\twill generate the same sequence of pseudo-random numbers.\n\n"
+
+	print "\tThis function can be used to generate logarithmic distributions\n"
+	print "\ton any interval: a*randl(ln(b/a)) is logarithmically distributed\n"
+	print "\ton (a...b).\n\n"
+
+	print "\tThe pseudo-random generator algorithm is platform-independent,\n"
+	print "\tallowing reproduction of the same number sequence on any\n"
+	print "\tcomputer architecture.\n\n"
+}
+
+proc help_remainder() \
+{
+	print "\tremainder(x,y) returns the remainder r = x - n*y, where n is the\n"
+	print "\tintegral value nearest the exact value x/y.  When |n - x/y| =\n"
+	print "\t1/2, the value of n is chosen to be even.\n\n"
+}
+
+proc help_rint() \
+{
+	print "\trint(x) returns the integral value nearest x in the direction of\n"
+	print "\tthe current IEEE 754 rounding mode.\n\n"
+}
+
+proc help_rsqrt() \
+{
+	print "\trsqrt(x) returns the reciprocal square root, 1/sqrt(x).\n\n"
+}
+
+proc ___help_match() \
+{
+	print "\tMatching is similar to UNIX shell pattern matching: asterisk (*)\n"
+	print "\tmatches zero or more characters, and query (?) matches any\n"
+	print "\tsingle character.  A square-bracketed list of characters, and/or\n"
+	print "\thyphen-separated character ranges, matches any character in that\n"
+	print "\tlist.  A right bracket can be in the list only if it appears\n"
+	print "\tfirst. Thus, [A-Za-z0-9] matches an English letter or digit, and\n"
+	print "\t[][] matches a square bracket.\n\n"
+}
+
+proc help_save() \
+{
+	print "\tsave(\"filename\",\"pattern\") saves the state of the current\n"
+	print "\tsession in the specified file, which, for security reasons,\n"
+	print "\tMUST be a new file.\n\n"
+
+	print "\tOnly symbols whose names match pattern are saved.\n\n"
+
+	___help_match()
+
+	print "\tUse save(\"filename\",\"*\") to save all symbols, except as noted\n"
+	print "\tbelow.\n\n"
+
+	print "\tSymbols are output in strict lexicographic order.\n\n"
+
+	print "\tReserved symbol names (those beginning with two or more\n"
+	print "\tunderscores) are not saved.  Predefined immutable names are\n"
+	print "\talso excluded.\n\n"
+
+	print "\tThe saved file is a normal text file that can be later read by\n"
+	print "\thoc on any platform, and edited by humans.\n\n"
+
+	print "\t[NB: A temporary implementation restriction also excludes\n"
+	print "\tuser-defined immutable names, and all functions and\n"
+	print "\tprocedures.]\n\n"
+}
+
+proc help_scalb() \
+{
+	print "\tscalb(x,y) returns x * 2^(int(y)).\n\n"
+}
+
+proc help_second() \
+{
+	print "\tsecond() returns the job CPU time in seconds since some fixed\n"
+	print "\ttime in the past.  Take the difference of two bracketing calls\n"
+	print "\tto get the elapsed CPU time for a block of code.  For example,\n\n"
+
+	print "\t\tPREC = 3\n"
+	print "\t\tx = 1\n"
+	print "\t\tt = second()\n"
+	print "\t\tfor (k = 1; k < 1000000; ++k) x *= 1\n"
+	print "\t\tsecond() - t\n"
+	print "\t\t4.73\n\n"
+}
+
+proc help_setrand() \
+{
+	print "\tsetrand(x), where x should be a large integer, sets the seed of\n"
+	print "\tthe pseudo-random number generator to x, and returns the old\n"
+	print "\tseed.\n\n"
+
+	print "\tAs a special case, when x is zero, x is ignored, and a new seed\n"
+	print "\tis constructed from a random number multiplied by either the\n"
+	print "\tcalendar time (if available), or the process number (if\n"
+	print "\tavailable), or the next pseudo-random number.\n\n"
+
+	print "\tIf setrand(x) is never called, then rand(), randint(), and\n"
+	print "\trandl(x) will each return the same sequence of pseudo-random\n"
+	print "\tnumbers: see help_rand(), help_randint(), and help_randl().\n\n"
+
+	print "\tThe pseudo-random generator algorithm is platform-independent,\n"
+	print "\tallowing reproduction of the same number sequence on any\n"
+	print "\tcomputer architecture.\n\n"
+}
+
+proc help_significand() \
+{
+	print "\tsignificand(x) returns the significand of x, s, such that\n"
+	print "\tx = s * 2^n, with |s| in [1...2), and n an integer.\n\n"
+
+	print "\tSee help_exponent() for how to extract the exponent, n.\n\n"
+}
+
+proc help_sin() \
+{
+	print "\tsin(x) returns the sin of x (x in radians).\n"
+	print "\tExpect severe accuracy loss for large |x|.\n\n"
+}
+
+proc help_sind() \
+{
+	print "\tsind(x) returns the sin of x (x in degrees).\n"
+	print "\tExpect severe accuracy loss for large |x|.\n\n"
+}
+
+proc help_single() \
+{
+	print "\tsingle() converts its numeric argument to single precision, and\n"
+	print "\tthen back to the hoc default precision.\n\n"
+
+	print "\tNB: single() can never increase precision of its argument, only\n"
+	print "\tpreserve or reduce it!\n\n"
+}
+
+proc help_sinh() \
+{
+	print "\tsinh(x) returns the hyperbolic sin of x.\n\n"
+}
+
+proc help_snan() \
+{
+	print "\tsnan() returns a distinct signaling NaN on each call, up to some\n"
+	print "\tarchitectural limit, after which, the values cycle.  At least\n"
+	print "\t2^23 different values can be returned.  The only way to\n"
+	print "\tdistinguish between them is to examine their bit representations\n"
+	print "\twith ftoh().\n\n"
+
+	print "\tBy contrast, the predefined constants SNAN and SNaN have fixed\n"
+	print "\tbit patterns.\n\n"
+	
+	print "\tSee also help_ftoh(), help_htof(), help_NaN(), help_QNaN(), and\n"
+	print "\thelp_SNaN().\n\n"
+}
+
+
+proc help_unordered() \
+{
+	print "\tunordered(x,y) returns 1 (true) if x or y is unordered with\n"
+	print "\trespect to the other (that is, at least one of them is a NaN),\n"
+	print "\tand otherwise, 0 (false).\n\n"
+}
+
+proc help_minsubnormal() \
+{
+	print "\tminsubnormal() returns the minimum positive subnormal number.\n"
+	print "\tIf subnormals are not supported, then it returns the minimum\n"
+	print "\tnormal number instead.\n\n"
+}
+
+proc help_popd() \
+{
+	print "\tpopd() removes the top-most element from the current directory\n"
+	print "\tstack, makes it the current directory, and calls dirs() to print\n"
+	print "\tthe updated stack.\n\n"
+
+	print "\tSee also help_cd(), help_dirs(), help_pushd(), help_pwd() and\n"
+	print "\thelp_xd().\n\n"
+}
+
+proc help_printenv() \
+{
+	print "\tprintenv(pattern) prints the names and values of all environment\n"
+	print "\tvariables whose names match that pattern.\n\n"
+
+	___help_match()
+
+	print "\tUse printenv(\"*\") to match all names.\n\n"
+}
+
+proc help_protect() \
+{
+	print "\tprotect(s) returns a copy of the string s with all nonprintable\n"
+	print "\tcharacters represented as escape sequences.\n\n"
+}
+
+proc help_pushd() \
+{
+	print "\tpushd(s) tries to make the directory named by the string s the\n"
+	print "\tnew current working directory, and if that was successful, makes\n"
+	print "\tthat directory the new top of the current directory stack, and\n"
+	print "\tcalls dirs() to print the updated stack.\n\n"
+
+	print "\tSee also help_cd(), help_dirs(), help_popd(), help_pwd(), and\n"
+	print "\thelp_xd().\n\n"
+}
+
+proc help_putenv() \
+{
+	print "\tputenv(envvar,newval) replaces the current string value of the\n"
+	print "\tenvironment variable envvar with newval, and returns its old\n"
+	print "\tvalue.\n\n"
+
+	print "\tThis affects subsequent calls to getenv(), but does NOT affect\n"
+	print "\tthe environment of the parent process.\n\n"
+
+	print "\tYou can use this function to set locale environment variables\n"
+	print "\tthat control the output of dates and times, in order to get\n"
+	print "\tinternationalized output from strftime().\n\n"
+}
+
+proc help_pwd() \
+{
+	print "\tpwd() returns the name of the current working directory.  That\n"
+	print "\tname is also available in the environment as getenv(\"PWD\").\n\n"
+
+	print "\tSee also help_cd(), help_dirs(), help_popd(), help_pushd(), and\n"
+	print "\thelp_xd().\n\n"
+}
+
+proc help_sqrt() \
+{
+	print "\tsqrt(x) returns the square root of x.\n"
+	print "\tx must be in [-0...Infinity].\n\n"
+
+	print "\tSpecial case:\n"
+	print "\t\tsqrt(-0) -> -0\n\n"
+}
+
+proc help_strftime() \
+{
+	print "\tstrftime(format,time) converts a numeric time measured in\n"
+	print "\tseconds since the epoch (usually obtained from systime()) to a\n"
+	print "\tformatted string determined by one or more of these format\n"
+	print "\titems:\n\n"
+
+	print "\t\t%A\tthe locale's full weekday name.\n\n"
+
+	print "\t\t%a\tthe locale's abbreviated weekday name.\n\n"
+
+	print "\t\t%B\tthe locale's full month name.\n\n"
+
+	print "\t\t%b\tthe locale's abbreviated month name.\n\n"
+
+	print "\t\t%c\tthe locale's appropriate date and time\n"
+	print "\t\t\trepresentation.\n\n"
+
+	print "\t\t%d\tthe day of the month as a decimal number\n"
+	print "\t\t\t(01--31).\n\n"
+
+	print "\t\t%H\tthe hour (24-hour clock) as a decimal number\n"
+	print "\t\t\t(00--23).\n\n"
+
+	print "\t\t%I\tthe hour (12-hour clock) as a decimal number\n"
+	print "\t\t\t(01--12).\n\n"
+
+	print "\t\t%j\tthe day of the year as a decimal number\n"
+	print "\t\t\t(001--366).\n\n"
+
+	print "\t\t%M\tthe minute as a decimal number (00--59).\n\n"
+
+	print "\t\t%m\tthe month as a decimal number (01--12).\n\n"
+
+	print "\t\t%p\tthe locale's equivalent of either ``AM'' or\n"
+	print "\t\t\t``PM''.\n\n"
+
+	print "\t\t%S\tthe second as a decimal number (00--60).\n\n"
+
+	print "\t\t%U\tthe week number of the year (Sunday as the\n"
+	print "\t\t\tfirst day of the week) as a decimal number\n"
+	print "\t\t\t(00--53).\n\n"
+
+	print "\t\t%W\tthe week number of the year (Monday as the\n"
+	print "\t\t\tfirst day of the week) as a decimal number\n"
+	print "\t\t\t(00--53).\n\n"
+
+	print "\t\t%w\tthe weekday (Sunday as the first day of the\n"
+	print "\t\t\tweek) as a decimal number (0--6).\n\n"
+
+	print "\t\t%X\tthe locale's appropriate time representation.\n\n"
+
+	print "\t\t%x\tthe locale's appropriate date representation.\n\n"
+
+	print "\t\t%Y\tthe year with century as a decimal number.\n\n"
+
+	print "\t\t%y\tthe year without century as a decimal number\n"
+	print "\t\t\t(00--99).\n\n"
+
+	print "\t\t%Z\tthe time zone name.\n\n"
+
+	print "\t\t%%\t`%'.\n\n"
+}
+
+proc help_substr() \
+{
+	print "\tsubstr(s,start,len) returns a substring of string s beginning\n"
+	print "\tat character start (counting from 1), of length at most len.\n"
+	print "\tIf start is outside the string, it is moved to the nearest\n"
+	print "\tendpoint, WITHOUT adjusting len.  Fewer than len characters\n"
+	print "\twill be returned if the substring extends outside the original\n"
+	print "\tstring.\n\n"
+}
+
+proc help_symnum() \
+{
+	print "\tsymnum(s) converts the string s to a symbol naming a numeric\n"
+	print "\tvariable, which must exist.  It may then be used almost like any\n"
+	print "\tnumeric variable name, wherever its value is taken, but it\n"
+	print "\tcannot be used to define a symbol, such as on the left-hand side\n"
+	print "\tof an assignment statement.\n\n"
+}
+
+proc help_symstr() \
+{
+	print "\tsymstr(s) converts the string s to a symbol naming a string\n"
+	print "\tvariable, which must exist.  It may then be used almost like any\n"
+	print "\tstring variable name, wherever its value is taken, but it\n"
+	print "\tcannot be used to define a symbol, such as on the left-hand side\n"
+	print "\tof an assignment statement.\n\n"
+}
+
+proc help_systime() \
+{
+	print "\tsystime() returns the calendar time in seconds since the epoch.\n"
+	print "\tOn UNIX systems, the epoch starts on January 1, 1970 00:00:00\n"
+	print "\tUTC.  Other operating systems make different choices.  It can be\n"
+	print "\tconverted to a formatted time string with strftime().\n\n"
+}
+
+proc help_tan() \
+{
+	print "\ttan(x) returns the tangent of x (x in radians).\n"
+	print "\tExpect severe accuracy loss for large |x|.\n\n"
+}
+
+proc help_tand() \
+{
+	print "\ttand(x) returns the tangent of x (x in degrees).\n"
+	print "\tExpect severe accuracy loss for large |x|.\n\n"
+}
+
+proc help_tanh() \
+{
+	print "\ttanh(x) returns the hyperbolic tangent of x.\n\n"
+}
+
+proc help_tolower() \
+{
+	print "\ttolower(s) returns a copy of string s with uppercase letters\n"
+	print "\tconverted to lowercase, and all other characters unchanged.\n\n"
+
+	print "\tWhich characters are considered uppercase depends on the locale.\n"
+	print "\tOn UNIX, this is determined by the LC_CTYPE environment\n"
+	print "\tvariable.\n\n"
+}
+
+proc help_toupper() \
+{
+	print "\ttoupper(s) returns a copy of string s with lowercase letters\n"
+	print "\tconverted to uppercase, and all other characters unchanged.\n\n"
+
+	print "\tWhich characters are considered lowercase depends on the locale.\n"
+	print "\tOn UNIX, this is determined by the LC_CTYPE environment\n"
+	print "\tvariable.\n\n"
+}
+
+proc help_trunc() \
+{
+	print "\ttrunc(x) returns the integer part of x, with the fractional part\n"
+	print "\tdiscarded.\n\n"
+}
+
+proc help_who() \
+{
+	print "\twho(pattern) prints all symbols whose names match the pattern string,\n"
+	print "\tgrouped by symbol category.\n\n"
+
+	___help_match()
+
+	print "\tTo print all symbols, use who(\"*\").\n\n"
+}
+
+proc help_xd() \
+{
+	print "\txd() exchanges the top two entries in the current directory\n"
+	print "\tstack, making the new top entry the current working directory,\n"
+	print "\tand calls dirs() to print the updated stack.  xd() raises an\n"
+	print "\terror if there are not at least two directories in the stack.\n\n"
+
+	print "\tSee also help_cd() help_dirs(), help_popd(), help_pushd(), and\n"
+	print "\thelp_pwd().\n\n"
+}
+
+proc help_Y0() \
+{
+	print "\tY0(x) returns the Bessel function of the second kind of order 0\n"
+	print "\tof x, for x >= 0.  This function is also called Weber's\n"
+	print "\tfunction.\n\n"
+}
+
+proc help_Y1() \
+{
+	print "\tY1(x) returns the Bessel function of the second kind of order 1\n"
+	print "\tof x, for x >= 0.  This function is also called Weber's\n"
+	print "\tfunction.\n\n"
+}
+
+proc help_Yn() \
+{
+	print "\tYn(n,x) returns the Bessel function of the second kind of\n"
+	print "\tintegral order n of x, for x >= 0.  This function is also called\n"
+	print "\tWeber's function.\n\n"
+}
+
+### Help for statements
+
+proc help_assignment() \
+{
+	print "\tAssignment statement: assign an expression to a variable,\n"
+	print "\toverwriting any previous value.\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tvariable = expression\n"
+	print "\t\tvariable := expression\n\n"
+
+	print "\tExamples:\n"
+	print "\t\tx = 2.71828\n"
+	print "\t\ty = E\n"
+	print "\t\tz = log2(x - y)\n"
+	print "\t\tPi := 3.141592653589793238462643383279502884197\n\n"
+
+	print "\tThe := form defines an immutable named constant: such a name\n"
+	print "\tcannot be assigned to again in the same job.\n\n"
+}
+
+proc help_arithmetic() \
+{
+	print "\tAll hoc expressions are evaluated in double-precision\n"
+	print "\tarithmetic.\n\n"
+
+	print "\tOn most modern systems, this is 64-bit IEEE 754 arithmetic,\n"
+	print "\twith 53 bits for the significand (almost 16 decimal figures),\n"
+	print "\t11 bits for the exponent (giving a decimal range of about\n"
+	print "\t2.23e-308 ... 1.80e+308), and 1 bit for the sign.\n\n"
+
+	print "\tWhen subnormal (formerly, denormalized) numbers are supported,\n"
+	print "\tthe range is extended down to about 4.94e-324, with decreasing\n"
+	print "\tprecision.\n\n"
+
+	print "\tOn IEEE 754 systems, Not-a-Number (NaN) and Infinity are also\n"
+	print "\tavailable (type help_NaN() and help_Infinity() for details).\n\n"
+
+	print "\tOn some IEEE 754 systems, subnormal numbers are also supported\n"
+	print "\t(type help_subnormal() for details).\n\n"
+}
+
+proc help_expression() \
+{
+	help_arithmetic()
+	print "\tThe expression grammar is:\n\n"
+
+	print "\t\texpr:\t\tnumber\n"
+	print "\t\t\t\t|\tvariable\n"
+	print "\t\t\t\t|\t( expr )\n"
+	print "\t\t\t\t|\texpr binary-operator expr\n"
+	print "\t\t\t\t|\tunary-operator expr\n"
+	print "\t\t\t\t|\tfunction ( arguments )\n\n"
+
+	print "\tType help_operators() for help on operators\n\n"
+
+	print "\tSome common older floating-point architectures include:\n\n"
+
+	print "\t* Compaq/DEC VAX (64-bit arithmetic, 1-bit sign, with two\n"
+	print "\t  formats: D-floating (8-bit exponent, 56-bit significand, 1\n"
+	print "\t  hidden bit), and G-floating (11-bit exponent, 53-bit\n"
+	print "\t  significand, 1 hidden bit)).\n\n"
+
+	print "\t* Cray (64-bit arithmetic, 1-bit sign, 15-bit exponent, 48-bit\n"
+	print "\t  significand, no hidden bit).\n\n"
+
+	print "\t* IBM S/390 (64-bit arithmetic, 1-bit sign, 7-bit exponent,\n"
+	print "\t  56-bit significand with wobbling precision from base-16\n"
+	print "\t  (hexadecimal) normalization, no hidden bit).  [In 1999, IBM\n"
+	print "\t  introduced the G5 processors in the S/390 product line,\n"
+	print "\t  adding full support for IEEE 754 arithmetic as well.]\n\n"
+}
+
+proc help_break() \
+{
+	print "\tThe break statement exits from the body of a for or while loop,\n"
+	print "\tskipping evaluation of any post-body for-loop expression.\n"
+	print "\tExecution resumes with the statement that follows the loop body.\n\n"
+
+	print "\tThe break statement is not permitted outside a loop body.\n\n"
+}
+
+proc help_continue() \
+{
+	print "\tThe continue statement exits from the current iteration of the\n"
+	print "\tbody of a for or while loop.  Execution resumes with evaluation\n"
+	print "\tof any post-body for-loop expression, and the conditional test\n"
+	print "\tthat governs execution of the next iteration.\n\n"
+
+	print "\tThe continue statement is not permitted outside a loop body.\n\n"
+}
+
+proc help_for() \
+{
+	print "\tFor-loop statement: iterate with a loop variable while a\n"
+	print "\tcondition is true:\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tfor (assignment; conditional-expr; step-expr) statement\n\n"
+
+	print "\tThe initial assignment is done once.  The conditional-expr\n"
+	print "\texpression is tested for nonzero (true) before entering the\n"
+	print "\tloop.  The step-expr expression is executed at the end of the\n"
+	print "\tloop body, before starting the next iteration.\n\n"
+
+	print "\tThe loop body may contain break and/or continue statements.\n\n"
+
+	help_break()
+	help_continue()
+
+	print "\tExamples:\n"
+	print "\t\tfor (k = 0; k < 5; ++k) print k, \"\\n\"\n\n"
+	print "\t\tfor (k = 1; k < 10; ++k) {if (k == 8) break; println k}\n\n"
+	print "\t\tfor (k = 1; k < 10; ++k) {if (k % 2) continue; println k}\n\n"
+}
+
+proc help_func() \
+{
+	print "\tFunction statement: define a value-returning function:\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tfunc name () statement\n"
+	print "\t\tfunc name () { statements }\n\n"
+
+	print "\tArguments are not explicitly named in the parameter list, but\n"
+	print "\tappear in the body as $1, $2, ..., according to their position\n"
+	print "\tin the function call arguments. A return statement MUST\n"
+	print "\tterminate execution of the function body.\n\n"
+
+	print "\tArguments with string values must be named with two dollar\n"
+	print "\tsigns: use $$1 instead of $1, etc.\n\n"
+
+	print "\tFunctions may be recursive, but the recursion depth is limited\n"
+	print "\tto about a thousand.  The real limit is set not by hoc itself,\n"
+	print "\tbut rather by the host operating system's process stacksize\n"
+	print "\tlimit.  On UNIX-like systems, you can use the limit(1) or\n"
+	print "\tulimit(1) commands to adjust the stacksize limit.\n\n"
+
+	print "\tBuilt-in functions may NOT be redefined.  User-defined ones may.\n\n"
+
+	print "\tExample:\n\n"
+
+	print "\t\tfunc max() \\\n"
+	print "\t\t{\n"
+	print "\t\t\tif (isnan($1)) \\\n"
+	print "\t\t\t\treturn ($1)\n"
+	print "\t\t\tif (isnan($2)) \\\n"
+	print "\t\t\t\treturn ($2)\n"
+	print "\t\t\tif ($1 > $2) \\\n"
+	print "\t\t\t\treturn ($1) \\\n"
+	print "\t\t\telse \\\n"
+	print "\t\t\t\treturn ($2)\n"
+	print "\t\t}\n\n"
+
+	print "\tThis example shows the care that must usually be taken to deal\n"
+	print "\twith IEEE 754 special values.  The if-else statement available\n"
+	print "\tin most programming languages has only two outcomes, but in\n"
+	print "\tIEEE 754 arithmetic, there is a third possibility: unordered.\n"
+	print "\tThe code must therefore first handle that by the isnan()\n"
+	print "\ttests.\n\n"
+}
+
+proc help_if() \
+{
+	print "\tif statement: conditional statement.\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tif (expression) statement [else statement]\n"
+	print "\t\tif (expression) { statements } [else { statements }]\n\n"
+
+	print "\tExample:\n"
+	print "\t\tif (r < 3.14159) print \"smaller than PI\\n\" \\\n"
+	print "\t\telse print \"ERROR!\\n\"\n"
+	print "\t\tif (E < PI) print \"E is smaller than PI\\n\"\n\n"
+}
+
+proc help_help() \
+{
+	__internal_help_hrule()
+	print "\tHelp is available via these functions:\n\n"
+
+	print "\t\thelp(), help_BASE(), help_CATALAN(),\n"
+	print "\t\thelp_CLASS_NEGINF(), help_CLASS_NEGNORMAL(),\n"
+	print "\t\thelp_CLASS_NEGSUBNORMAL(), help_CLASS_NEGZERO(),\n"
+	print "\t\thelp_CLASS_POSINF(), help_CLASS_POSNORMAL(),\n"
+	print "\t\thelp_CLASS_POSSUBNORMAL(), help_CLASS_POSZERO(),\n"
+	print "\t\thelp_CLASS_QNAN(), help_CLASS_SNAN(),\n"
+	print "\t\thelp_CLASS_UNKNOWN(), help_DEG(), help_E(),\n"
+	print "\t\thelp_EBIAS(), help_EBITS(), help_EMAX(), help_EMIN(),\n"
+	print "\t\thelp_GAMMA(), help_INF(), help_Infinity(), help_J0(),\n"
+	print "\t\thelp_J1(), help_Jn(), help_NAN(), help_P(), help_PHI(),\n"
+	print "\t\thelp_PI(), help_PREC(), help_Y0(), help_Y1(), help_Yn(),\n"
+	print "\t\thelp__(), help___BANNER__(), help___DATE__(),\n"
+	print "\t\thelp___FILE__(), help___IEEE_754__(), help___LINE__(),\n"
+	print "\t\thelp___PACKAGE_BUGREPORT__(), help___PACKAGE_DATE__(),\n"
+	print "\t\thelp___PACKAGE_NAME__(), help___PACKAGE_STRING__(),\n"
+	print "\t\thelp___PACKAGE_VERSION__(), help___PROMPT__(),\n"
+	print "\t\thelp___TIME__(), help___VERBOSE__(). help_abort(),\n"
+	print "\t\thelp_abs(), help_acos(), help_acosh(), help_all(),\n"
+	print "\t\thelp_arithmetic(), help_asin(), help_asinh(),\n"
+	print "\t\thelp_assignment(), help_atan(), help_atanh(),\n"
+	print "\t\thelp_cbrt(), help_ceil(), help_class(), help_comments(),\n"
+	print "\t\thelp_constants(), help_copysign(), help_cos(),\n"
+	print "\t\thelp_cosd(), help_cosh(), help_double(), help_erf(),\n"
+	print "\t\thelp_erfc(), help_errbits(), help_eval(), help_exp(),\n"
+	print "\t\thelp_expm1(), help_exponent(), help_expression(),\n"
+	print "\t\thelp_expressions(), help_factorial(), help_floor(),\n"
+	print "\t\thelp_fmod(), help_for(), help_func(), help_functions(),\n"
+	print "\t\thelp_gcd(), help_getenv(), help_help(), help_hypot(),\n"
+	print "\t\thelp_ieee_754(), help_if(), help_ilogb(), help_index(),\n"
+	print "\t\thelp_int(), help_isfinite(), help_isinf(), help_isnan(),\n"
+	print "\t\thelp_isnormal(), help_isqnan(), help_issnan(),\n"
+	print "\t\thelp_issubnormal(), help_lcm(), help_ldexp(),\n"
+	print "\t\thelp_length(), help_lgamma(), help_ln(), help_load(),\n"
+	print "\t\thelp_log(), help_log10(), help_log1p(), help_log2(),\n"
+	print "\t\thelp_logb(), help_logfile(), help_logoff(),\n"
+	print "\t\thelp_logon(), help_macheps(), help_max(),\n"
+	print "\t\thelp_maxnormal(), help_min(), help_minnormal(),\n"
+	print "\t\thelp_minsubnormal(), help_nearest(), help_nextafter(),\n"
+	print "\t\thelp_nint(), help_now(), help_number(),\n"
+	print "\t\thelp_number_syntax(), help_numbers(), help_operators(),\n"
+	print "\t\thelp_print(), help_printenv(), help_printf(),\n"
+	print "\t\thelp_println(), help_proc(), help_protect(),\n"
+	print "\t\thelp_putenv(), help_rand(), help_randint(),\n"
+	print "\t\thelp_randl(), help_read(), help_remainder(),\n"
+	print "\t\thelp_rint(), help_rsqrt(), help_save(), help_scalb(),\n"
+	print "\t\thelp_second(), help_setrand(), help_significand(),\n"
+	print "\t\thelp_sin(), help_sind(), help_single(), help_sinh(),\n"
+	print "\t\thelp_snan(), help_sqrt(), help_statement(),\n"
+	print "\t\thelp_statements(), help_strftime(), help_string(),\n"
+	print "\t\thelp_string(), help_string_expressions(),\n"
+	print "\t\thelp_string_functions(), help_string_syntax(),\n"
+	print "\t\thelp_strings(), help_substr(), help_systime(),\n"
+	print "\t\thelp_tan(), help_tand(), help_tanh(), help_time(),\n"
+	print "\t\thelp_tolower(), help_toupper(), help_trunc(),\n"
+	print "\t\thelp_unordered(), help_variables(), help_while(),\n"
+	print "\t\thelp_who()\n\n"
+	__internal_help_hrule()
+}
+
+proc help_operators() \
+{
+	__internal_help_hrule()
+	print "Help on operators:\n\n"
+
+	print "\tThe operators are, in order of decreasing precedence:\n\n"
+
+	print "\t^  **\t\t\texponentiation, right associative\n\n"
+
+	print "\t++  --\t\t\tincrement, decrement (either prefix or\n"
+	print "\t\t\t\tpostfix)\n\n"
+
+	print "\t!  -\t\t\tunary logical and arithmetic negation\n\n"
+
+	print "\t*  /\t\t\tmultiplication, division\n\n"
+
+	print "\t+  -\t\t\taddition, subtraction\n\n"
+
+	print "\t>  >=  <  <=  ==  !=\trelational operators: greater, greater\n"
+	print "\t\t\t\tor equal, less, less or equal, equal,\n"
+	print "\t\t\t\tnot equal\n\n"
+
+	print "\t&&\t\t\tlogical AND (both operands always\n"
+	print "\t\t\t\tevaluated)\n\n"
+
+	print "\t||\t\t\tlogical OR (both operands always\n"
+	print "\t\t\t\tevaluated)\n\n"
+
+	print "\t=  :=\t\t\tassignment, permanent assignment (both\n"
+	print "\t\t\t\tright associative)\n\n"
+}
+
+proc help_print() \
+{
+	print "\tprint statement: print one or more items to stdout\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tprint item[, item]*\n\n"
+
+	print "\tItems are either strings, or numeric expressions. Newline (\\n)\n"
+	print "\tmust be supplied where needed: it is never supplied by default.\n\n"
+
+	print "\tExample:\n"
+	print "\t\tprint \"Pi is approximately \", PI, \"\\n\"\n\n"
+}
+
+proc help_printf() \
+{
+	print "\tprintf statement: print one or more items to stdout under format\n"
+	print "\tcontrol.\n\n"
+
+	print "\tSyntax:\n\n"
+
+	print "\t\tprintf \"format\", item[, item]*\n\n"
+
+	print "\tItems are either strings, or numeric expressions. Newline (\\n)\n"
+	print "\tmust be supplied where needed: it is never supplied by default.\n\n"
+
+	print "\tExample:\n"
+	print "\t\tprintf \"Pi is approximately %.4f\\n\", PI, \\\n"
+	print "\t\t\t\" (to five figures)\\n\"\n\n"
+
+	print "\tFormat items are the same as for the C-language printf()\n"
+	print "\tlibrary function, except that asterisks in field widths\n"
+	print "\tand precisions, and type modifiers, are not permitted.\n\n"
+}
+
+proc help_println() \
+{
+	print "\tprintln statement: print one or more items to stdout, with\n"
+	print "\tfollowing newline.\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tprintln item[, item]*\n\n"
+
+	print "\tItems are either strings, or numeric expressions.\n\n"
+
+	print "\tExample:\n"
+	print "\t\tprintln \"Pi is approximately \", PI, \".\"\n\n"
+}
+
+proc help_proc() \
+{
+	print "\tProcedure statement: define a non-value-returning procedure.\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tproc name () statement\n"
+	print "\t\tproc name () { statements }\n\n"
+
+	print "\tArguments are not explicitly named in the parameter list, but\n"
+	print "\tappear in the body as $1, $2, ..., according to their position\n"
+	print "\tin the procedure call arguments.  A procedure does not return a\n"
+	print "\tvalue.\n\n"
+
+	print "\tArguments with string values must be named with two dollar\n"
+	print "\tsigns: use $$1 instead of $1, etc.\n\n"
+
+	print "\tFunctions may be recursive, but the recursion depth is limited\n"
+	print "\tto about a thousand.  The real limit is set not by hoc itself,\n"
+	print "\tbut rather by the host operating system's process stacksize\n"
+	print "\tlimit.  On UNIX-like systems, you can use the limit(1) or\n"
+	print "\tulimit(1) commands to adjust the stacksize limit.\n\n"
+
+	print "\tExample:\n"
+	print "\t\tproc sample () \\\n"
+	print "\t\t{\n"
+	print "\t\t\tprint \"Your sample message goes here\\n\"\n"
+	print "\t\t}\n\n"
+}
+
+proc help_read() \
+{
+	print "\tread(x) attempts to read into the variable x a value from stdin.\n"
+	print "\tThe value must be either a number, or a quoted string, or an\n"
+	print "\texisting variable or named constant.\n\n"
+
+	print "\tThe return value is 1 on success, or 0 on end-of-file; the\n"
+	print "\tfunction aborts for any other error condition.\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\tread (variable)\n\n"
+
+	print "\tExample:\n"
+	print "\t\tread (x)\n\n"
+}
+
+proc help_statement() \
+{
+	print "\tStatements are terminated by a newline or semicolon.\n"
+	print "\tContinue long statements with backslash-newline.\n\n"
+
+	print "\tWherever a statement can appear, a braced statement block can\n"
+	print "\ttoo.\n\n"
+
+	print "\t\tfor (assignment; conditional-expr; expr) statement\n\n"
+
+	print "\t\tfunc name () statement\n"
+	print "\t\tif (expression) then statement [ else statement ]\n"
+	print "\t\tprint item [, item, [, item ...]]\n"
+	print "\t\tprintf \"format\" [, item [, item, [, item ...]]]\n"
+	print "\t\tprintln item [, item, [, item ...]]\n"
+	print "\t\tproc name () statement\n"
+	print "\t\tread (variable)\n"
+	print "\t\twhile (expression) statement\n\n"
+	print "\t\tbreak\n\n"
+	print "\t\tcontinue\n\n"
+
+	print "\tType help_expression() for help on expressions.\n\n"
+}
+
+proc help_while() \
+{
+	print "\twhile loop: iterate while a condition is true:\n\n"
+
+	print "\tSyntax:\n"
+	print "\t\twhile (conditional-expression) statement\n\n"
+
+	print "\tThe loop body may contain break and/or continue statements.\n\n"
+
+	help_break()
+	help_continue()
+
+	print "\tExamples:\n"
+	print "\t\twhile (read(x)) print x, x^2, x^3, \"\\n\"\n\n"
+	print "\t\tk = 10; while (k-- > 0) {if (k % 2) continue; println k}\n\n"
+	print "\t\tk = 10; while (k-- > 0) {if (k == 3) break; println k}\n\n"
+}
+
+### Help on general topics
+
+proc help_comments() \
+{
+	__internal_help_hrule()
+	print "Help on comments:\n\n"
+
+	print "\tComments start from # (sharp) and continue to end of line.\n"
+	print "\tBlank lines are treated like empty comments.\n\n"
+}
+
+proc help_constants() \
+{
+	__internal_help_hrule()
+	print "Help on constants:\n\n"
+
+	help_CATALAN()
+	help_DEG()
+	help_E()
+	help_GAMMA()
+	help_Infinity()
+	help_NaN()
+	help_PHI()
+	help_PI()
+	help_PREC()
+}
+
+proc help_environment() \
+{
+	__internal_help_hrule()
+	print "Help on environment:\n\n"
+
+	help_getenv()
+	help_printenv()
+	help_putenv()
+}
+
+proc help_expressions() \
+{
+	__internal_help_hrule()
+	print "Help on expressions:\n\n"
+
+	help_expression()
+}
+
+proc help_functions_non_ieee_754() \
+{
+	__internal_help_hrule()
+	print "Help on non-IEEE-754 functions:\n\n"
+
+	help_abort()	# this is a proc, not a function
+	help_abs()
+	help_acos()
+	help_acosh()
+	help_asin()
+	help_asinh()
+	help_atan()
+	help_atanh()
+	help_cbrt()
+	help_cd()
+	help_ceil()
+	help_cos()
+	help_cosd()
+	help_cosh()
+	help_defined()
+	help_delete()
+	help_dirs()
+	help_double()
+	help_endinput()
+	help_erf()
+	help_erfc()
+	help_errbits()
+	help_eval()
+	help_exit()
+	help_exp()
+	help_expm1()
+	help_factorial()
+	help_floor()
+	help_gamma()
+	help_gcd()
+	help_hypot()
+	help_int()
+	help_J0()
+	help_J1()
+	help_Jn()
+	help_lcm()
+	help_lgamma()
+	help_ln()
+	help_load()
+	help_log()
+	help_log10()
+	help_log1p()
+	help_log2()
+	help_logfile()
+	help_logoff()
+	help_logon()
+	help_macheps()
+	help_max()
+	help_maxnormal()
+	help_min()
+	help_minnormal()
+	help_nint()
+	help_now()
+	help_popd()
+	help_protect()
+	help_pushd()
+	help_rand()
+	help_randint()
+	help_randl()
+	help_remainder()
+	help_rint()
+	help_rsqrt()
+	help_save()
+	help_second()
+	help_setrand()
+	help_sin()
+	help_sind()
+	help_single()
+	help_sinh()
+	help_sqrt()
+	help_strftime()
+	help_symnum()
+	help_symstr()
+	help_systime()
+	help_tan()
+	help_tand()
+	help_tanh()
+	help_trunc()
+	help_xd()
+	help_Y0()
+	help_Y1()
+	help_Yn()
+}
+
+proc help_functions_ieee_754() \
+{
+	__internal_help_hrule()
+	print "Help on IEEE 754 functions:\n\n"
+
+	help_class()
+	help_copysign()
+	help_exponent()
+	help_fmod()
+	help_ilogb()
+	help_isfinite()
+	help_isinf()
+	help_isnan()
+	help_isnormal()
+	help_isqnan()
+	help_issnan()
+	help_issubnormal()
+	help_ldexp()
+	help_minsubnormal() # NB: help_maxnormal() and help_minnormal() are in help_functions_non_ieee_754()
+	help_nearest()
+	help_nextafter()
+	help_scalb()
+	help_significand()
+	help_snan()		
+	help_unordered()
+}
+
+proc help_functions() \
+{
+	help_functions_non_ieee_754()
+	help_functions_ieee_754()
+}
+
+proc help_random() \
+{
+	__internal_help_hrule()
+	print "Help on pseudo-random number:\n\n"
+
+	help_rand()
+	help_randint()
+	help_randl()
+	help_setrand()
+}
+
+proc help_subnormal() \
+{
+	print "\tThe IEEE 754 floating-point number format generally requires\n"
+	print "\tthat numbers be normalized, that is, nonzero significands are\n"
+	print "\trequired to start with a one bit.\n\n"
+
+	print "\tWhen subnormal (formerly, denormalized) numbers are supported,\n"
+	print "\tthis restriction is relaxed, and the numbers can become\n"
+	print "\tsmaller than the smallest normal number by acquiring leading\n"
+	print "\tzero bits, at the expense of precision loss.\n\n"
+
+	print "\tIn IEEE 754 double-precision arithmetic, the smallest normal\n"
+	print "\tnumber is 2^-1022 (approximately 2.23e-308), and subnormals\n"
+	print "\tallow representation of numbers down to 2^-1074 (approximately\n"
+	print "\t4.94e-324) before underflow to zero occurs.\n\n"
+
+	print "\tSome computers do not support subnormal numbers: check whether\n"
+	print "\tyours does by evaluating 2^-1023 in hoc.  This will be\n"
+	print "\tapproximately 1.11e-308 if subnormals are supported, and 0 if\n"
+	print "\tnot.\n\n"
+}
+
+proc help_ieee_754() \
+{
+	__internal_help_hrule()
+	print "Help on IEEE 754 floating-point arithmetic:\n\n"
+
+	help_Infinity()
+	help_NaN()
+	help_subnormal()
+	help_functions_ieee_754()
+}
+
+proc help_number() \
+{
+	print "\tnumber(s) converts the string s to a number and returns it.\n\n"
+
+	print "\ts should contain either a hexadecimal floating-point number, a\n"
+	print "\thexadecimal integer, a decimal floating-point number, a decimal\n"
+	print "\tinteger, or a representation of NaN or Infinity.\n\n"
+
+	print "\tIf s contains a number followed by unrecognizable text, the\n"
+	print "\tnumber is converted and returned, and the following text is\n"
+	print "\tsilently ignored.  Otherwise, the return value is 0, and the\n"
+	print "\ttext is silently ignored.  Thus, number(\"123abc\") returns 123,\n"
+	print "\tand number(\"abc\") returns 0.\n\n"
+
+	print "\tThis function is an inverse of hexfp(), hexint(), and string():\n\n"
+
+	print "\t\tnumber(hexfp(x))  == x	[for all numeric x]\n"
+	print "\t\tnumber(hexint(x)) == x	[for all numeric x]\n"
+	print "\t\tnumber(string(x)) == x	[for all numeric x]\n\n"
+
+	print "\tSee also help_hexint(), help_hexfp(), and help_string().\n\n"
+}
+
+proc help_number_syntax() \
+{
+	print "\tAll numbers in hoc are stored as double-precision floating-point\n"
+	print "\tvalues.\n\n"
+
+	print "\tOn systems with IEEE 754 arithmetic, such numbers are capable of\n"
+	print "\trepresenting integers of up to 53 bits exactly, excluding the\n"
+	print "\tsign bit.  This is an integer range of -(2^53) ...  2^53, or\n"
+	print "\t-9,007,199,254,740,992 ...  +9,007,199,254,740,992.\n\n"
+
+	print "\tSome systems may have hoc variants named hoc32, hoc64, hoc80, or\n"
+	print "\thoc128, in which case, hoc's default precision is indicated by\n"
+	print "\tthe program name: 32-bit, 64-bit, 80-bit, or 128-bit.  hoc and\n"
+	print "\thoc64 are identical on all systems with IEEE 754 arithmetic.\n\n"
+
+	print "\tFor hoc32, on systems with IEEE 754 arithmetic, numbers are\n"
+	print "\tcapable of representing integers up to 24 bits exactly,\n"
+	print "\texcluding the sign bit.  This is an integer range of\n"
+	print "\t-(2^24) ... 2^24, or -16,777,216 ... +16,777,216.\n\n"
+
+	print "\tFor hoc80, on systems with IEEE 754 arithmetic, numbers are\n"
+	print "\tcapable of representing integers up to 64 bits exactly,\n"
+	print "\texcluding the sign bit.  This is an integer range of\n"
+	print "\t-(2^64) ... 2^64, or\n"
+	print "\t-18,446,744,073,709,551,616 ... +18,446,744,073,709,551,616.\n\n"
+
+	print "\tFor hoc128, on systems with IEEE 754 arithmetic, numbers are\n"
+	print "\tcapable of representing integers up to 112 bits exactly,\n"
+	print "\texcluding the sign bit.  This is an integer range of\n"
+	print "\t-(2^112) ... 2^112, or\n"
+	print "\t-5,192,296,858,534,827,628,530,496,329,220,096 ...\n"
+	print "\t+5,192,296,858,534,827,628,530,496,329,220,096.\n\n"
+
+	print "\tNumbers may be signed, and may optionally contain a decimal\n"
+	print "\tpoint, a power-of-ten exponent, and a precision suffix.\n"
+	print "\tThe exponent consists of an exponent letter, one of d, D, e, E,\n"
+	print "\tq, or Q (supported by one or more of Ada, C, C++, Fortran, Java,\n"
+	print "\tand Pascal), followed by an optionally-signed integer.  The\n"
+	print "\tprecision suffix (used by C, C++, and Java) is one of f, F, l,\n"
+	print "\tor L.  The suffix does NOT affect the precision of the constant\n"
+	print "\tfor hoc: it is recognized only to simplify incorporation into\n"
+	print "\thoc programs of numbers from programs in other languages, and\n"
+	print "\ttheir output.\n\n"
+
+	print "\tA hexadecimal floating-point number format, introduced in the\n"
+	print "\tlatest ISO C Standard, ``ISO/IEC 9899:1999 (E) Programming\n"
+	print "\tlanguages --- C'', usually known by its short name, C99, is also\n"
+	print "\tsupported, and implemented by portable private code in hoc.\n"
+	print "\tThis format consists of an optional sign, then 0x or 0X,\n"
+	print "\tfollowed by one or more hexadecimal digits (0--9 A--F a--f)\n"
+	print "\tcontaining at most one hexadecimal point, optionally followed by\n"
+	print "\ta binary (power-of-two) exponent consisting of p or P followed\n"
+	print "\tby an optionally-signed decimal integer.  If present, the\n"
+	print "\texponent may optionally be followed by a precision suffix\n"
+	print "\tletter: one of f, F, l, or L.  Thus, -0x1.00000p8, -0x100,\n"
+	print "\t-0x100000p-12f, -0x10p+4L, -0x1p+8, -0x1p00008, and -0x1p8 all\n"
+	print "\trepresent the decimal number -256.  The suffix does NOT affect\n"
+	print "\tthe precision of the constant for hoc: it is recognized only for\n"
+	print "\tcompatibility with C99.\n\n"
+
+	print "\tThe hexadecimal format, while awkward for humans, has the\n"
+	print "\tadvantage of guaranteeing exact input/output conversions on all\n"
+	print "\tplatforms, and hoc consequently uses this format in files\n"
+	print "\tcreated by the save() command.\n\n"
+}
+
+proc help_numbers() \
+{
+	__internal_help_hrule()
+	print "Help on numbers:\n\n"
+
+	help_number()
+	help_number_syntax()
+	help_arithmetic()
+}
+
+proc help_statements() \
+{
+	__internal_help_hrule()
+	print "Help on statements:\n\n"
+
+	## preliminaries
+	help_statement()
+
+	### actual statements
+	help_assignment()
+	help_for()
+	help_func()
+	help_if()
+	help_print()
+	help_printf()
+	help_println()
+	help_proc()
+	help_read()
+	help_while()
+}
+
+proc help_string() \
+{
+	print "\tstring(x) returns a string containing the decimal representation\n"
+	print "\tof x, either in integer form (if x is exactly representable that\n"
+	print "\tway), or in floating-point form.\n\n"
+
+	print "\tSee also help_hexfp(), help_hexint(), and help_number().\n\n"
+}
+
+proc help_string_syntax() \
+{
+	print "\tCharacter strings are delimited by quotation marks: \"...\".\n\n"
+
+	print "\tWithin a string, characters occupy 8 bits, and all character\n"
+	print "\tvalues from 1 to 255 are legal.  Value 0 (NUL) is reserved for a\n"
+	print "\tstring terminator, as in the C and C++ programming languages.\n\n"
+
+	print "\tNonprintable characters in strings may be represented as escape\n"
+	print "\tsequences, as in Standard C and C++:\n\n"
+
+	print "\t\t\\a\talert (bell)\n"
+	print "\t\t\\b\tbackspace\n"
+	print "\t\t\\f\tformfeed\n"
+	print "\t\t\\n\tnewline (linefeed)\n"
+	print "\t\t\\r\tcarriage return\n"
+	print "\t\t\\t\thorizontal tab\n"
+	print "\t\t\\v\tvertical tab\n"
+	print "\t\t\\o\toctal character, value o (o = 0...7)\n"
+	print "\t\t\\oo\toctal character, value oo\n"
+	print "\t\t\\ooo\toctal character, value ooo\n"
+	print "\t\t\\xhh...\thexadecimal char, value hh... (0...9 a...f\n"
+	print "\t\t\tA...F)\n\n"
+
+	print "\tNotice that octal character values use at most three octal\n"
+	print "\tdigits, while hexadecimal values may use an unlimited number of\n"
+	print "\thexadecimal digits.\n\n"
+
+	print "\tOne convenient additional escape sequence is recognized:\n\n"
+
+	print "\t\t\\E	escape (\\033)\n\n"
+
+	print "\tOtherwise, a backslash removes any special interpretation of the\n"
+	print "\tfollowing character, so to get a literal backslash, use two: \\\\.\n\n"
+
+	print "\tStrings may normally not cross line breaks, unless they end with\n"
+	print "\tbackslash-newline.\n\n"
+}
+
+proc help_string_expressions() \
+{
+	help_string_syntax()
+
+	print "\tThe string expression grammar is:\n\n"
+
+	print "\tstrexpr:\tstringconstant\n"
+	print "\t\t|\tstringvariable\n"
+	print "\t\t|\tstrexpr strexpr\n\n"
+
+	print "\tThat is, string expressions are blank-separated lists of\n"
+	print "\tconstants and variables with string values, as in Standard C and\n"
+	print "\tC++.  The value of the expression is the concatenation of the\n"
+	print "\tlist elements: \"abc\" \"def\" \"...\" \"xyz\" evaluates to\n"
+	print "\t\"abcdef...xyz\".\n\n"
+
+	print "\tA variable becomes a stringvariable simply by being assigned\n"
+	print "\ta string expression.\n\n"
+}
+
+proc help_string_functions() \
+{
+	print "\tBuilt-in functions for string processing are:\n"
+	print "\t\tchar(), decrypt(), encrypt(), ftoh(), getenv(),\n"
+	print "\t\thtof(), index(), hexfp(), hexint(), ichar(), length(),\n"
+	print "\t\tnumber(), printenv(), protect(), putenv(), strftime(),\n"
+	print "\t\tstring(), substr(), symnum(), symstr(), tolower(),\n"
+	print "\t\ttoupper()\n\n"
+}
+
+proc help_strings() \
+{
+	__internal_help_hrule()
+	print "Help on strings:\n\n"
+
+	help_string_expressions()
+	help_string_functions()
+}
+
+proc help_time() \
+{
+	__internal_help_hrule()
+	print "Help on time:\n\n"
+
+	help_now()
+	help_second()
+	help_strftime()
+	help_systime()
+}
+
+proc help_variables() \
+{
+	__internal_help_hrule()
+	print "Help on variables:\n\n"
+
+	print "\tVariables consist of an initial letter or underscore, followed\n"
+	print "\tby zero or more letters, digits, or underscores.\n\n"
+
+	print "\tLetter case is significant in variable names.\n\n"
+
+	print "\tThe special variable _ holds the result of the last expression\n"
+	print "\tevaluated.  It may not be assigned to.  Its result will change\n"
+	print "\tat each subsequent expression.\n\n"
+
+	print "\tIt is an unenforced hoc convention that constants are spelled in\n"
+	print "\tUPPERCASE.\n\n"
+
+	print "\tAll variables are scalars: there are no array variables in hoc.\n\n"
+
+	print "\tAll variables, even those defined inside functions, are global.\n"
+	print "\tPlease follow the convention that variables that begin with two\n"
+	print "\tleading underscores are for implementation use inside library\n"
+	print "\tfunctions.\n\n"
+}
+
+proc help_all() \
+{
+	help_comments()
+	help_numbers()
+	help_strings()
+	help_constants()
+	help_variables()
+	help_expressions()
+	help_functions_non_ieee_754()
+	help_functions_ieee_754()
+	help_operators()
+	help_statements()
+	help_time()
+	__internal_help_hrule()
+}
+
+### Additional help functions created after comparing the output of who("*")
+### with a list of the existing help_xxx() procedures.
+
+proc help_MAXNORMAL() \
+{
+	print "\tMAXNORMAL is the largest positive finite floating-point number\n"
+	print "\tin this implementation of hoc.\n\n"
+}
+
+proc help_MAXSUBNORMAL() \
+{
+	print "\tMAXSUBNORMAL is the largest positive subnormal floating-point\n"
+	print "\tnumber in this implementation of hoc.\n\n"
+
+	print "\tIf this computer system does not support subnormal numbers, MAXSUBNORMAL\n"
+	print "\tis identical to MINNORMAL.\n\n"
+}
+
+proc help_MINNORMAL() \
+{
+	print "\tMINNORMAL is the smallest positive normalized floating-point\n"
+	print "\tnumber in this implementation of hoc.\n\n"
+
+	print "\tSystems with IEEE 754 arithmetic may support smaller magnitude\n"
+	print "\t`subnormal' numbers of decreasing precision that gradually\n"
+	print "\tunderflow to zero.\n\n"
+}
+
+proc help_MINSUBNORMAL() \
+{
+	print "\tMINSUBNORMAL is the smallest positive subnormal floating-point\n"
+	print "\tnumber in this implementation of hoc.\n\n"
+
+	print "\tIf this computer system does not support subnormal numbers, MINSUBNORMAL\n"
+	print "\tis identical to MINNORMAL.\n\n"
+}
+
+proc help___() \
+{
+	print "\t__ is the name of the last string result printed.\n\n"
+
+	print "\tIt cannot be reassigned by user code.\n\n"
+}
+
+proc help___GID__() \
+{
+	print "\t__GID__ is the group identifier number of the current process.  It is\n"
+	print "\tzero on operating systems that lack this concept.\n\n"
+}
+
+proc help___HOCRC__() \
+{
+	print "\t__HOCRC__ is the base name of the user's hoc initialization file.  It is\n"
+	print "\tlocated in the user's login directory (defined by the HOME environment\n"
+	print "\tvariable) on operating systems where that concept exists.\n\n"
+}
+
+proc help___INDENT__() \
+{
+	print "\t__INDENT__ is the string used to prefix hoc output.  It is normally\n"
+	print "\tempty, but can be reset to, e.g., spaces or tabs to better distinguish\n"
+	print "\tinput from output.\n\n"
+}
+
+proc help___LANG__() \
+{
+	print "\t__LANG__ is the string containing the current language locale, often a\n"
+	print "\ttwo-letter ISO country code.\n\n"
+}
+
+proc help___MAX_FRAME__() \
+{
+	print "\t__MAX_FRAME__ is the current size of the internal call frame stack.\n\n"
+}
+
+proc help___MAX_LINE__() \
+{
+	print "\t__MAX_LINE__ is the current size of the internal input line buffer.\n\n"
+}
+
+proc help___MAX_NAME__() \
+{
+	print "\t__MAX_NAME__ is the current size of the internal identifier name buffer.\n\n"
+}
+
+proc help___MAX_PROG__() \
+{
+	print "\t__MAX_PROG__ is the current size of the internal virtual machine code\n"
+	print "\tbuffer.  It is a temporary limitation in hoc that this buffer size is\n"
+	print "\tfixed at compile time.\n\n"
+}
+
+proc help___MAX_PUSHBACK__() \
+{
+	print "\t__MAX_PUSHBACK__ is the current size of the input pushback buffer.\n\n"
+}
+
+proc help___MAX_STACK__() \
+{
+	print "\t__MAX_STACK__ is the current size of the function/procedure argument\n"
+	print "\tstack.\n\n"
+}
+
+proc help___MAX_STRING__() \
+{
+	print "\t__MAX_STRING__ is the current size of the internal quoted string buffer.\n\n"
+}
+
+proc help___MAX_TOKEN__() \
+{
+	print "\t__MAX_TOKEN__ is the current size of the numeric token buffer.\n\n"
+}
+
+proc help___NATIVE_ACOSH__() \
+{
+	print "\t__NATIVE_ACOSH__ is nonzero if acosh() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_ASINH__() \
+{
+	print "\t__NATIVE_ASINH__ is nonzero if asinh() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_ATANH__() \
+{
+	print "\t__NATIVE_ATANH__ is nonzero if atanh() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_CBRT__() \
+{
+	print "\t__NATIVE_CBRT__ is nonzero if cbrt() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_CEIL__() \
+{
+	print "\t__NATIVE_CEIL__ is nonzero if ceil() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_COPYSIGN__() \
+{
+	print "\t__NATIVE_COPYSIGN__ is nonzero if copysign() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_ERFC__() \
+{
+	print "\t__NATIVE_ERFC__ is nonzero if erfc() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_ERF__() \
+{
+	print "\t__NATIVE_ERF__ is nonzero if erf() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_EXPM1__() \
+{
+	print "\t__NATIVE_EXPM1__ is nonzero if expm1() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_FLOOR__() \
+{
+	print "\t__NATIVE_FLOOR__ is nonzero if floor() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_FMOD__() \
+{
+	print "\t__NATIVE_FMOD__ is nonzero if fmod() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_GAMMA__() \
+{
+	print "\t__NATIVE_GAMMA__ is nonzero if gamma() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_GETGID__() \
+{
+	print "\t__NATIVE_GETGID__ is nonzero if getgid() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_GETPID__() \
+{
+	print "\t__NATIVE_GETPID__ is nonzero if getpid() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_GETUID__() \
+{
+	print "\t__NATIVE_GETUID__ is nonzero if getuid() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_HYPOT__() \
+{
+	print "\t__NATIVE_HYPOT__ is nonzero if hypot() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_ILOGB__() \
+{
+	print "\t__NATIVE_ILOGB__ is nonzero if ilogb() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_J0__() \
+{
+	print "\t__NATIVE_J0__ is nonzero if j0() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_J1__() \
+{
+	print "\t__NATIVE_J1__ is nonzero if j1() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_JN__() \
+{
+	print "\t__NATIVE_JN__ is nonzero if jn() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_LDEXP__() \
+{
+	print "\t__NATIVE_LDEXP__ is nonzero if ldexp() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_LGAMMA__() \
+{
+	print "\t__NATIVE_LGAMMA__ is nonzero if lgamma() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_LOG1P__() \
+{
+	print "\t__NATIVE_LOG1P__ is nonzero if log1p() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_NEAREST__() \
+{
+	print "\t__NATIVE_NEAREST__ is nonzero if nearest() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_NEXTAFTER__() \
+{
+	print "\t__NATIVE_NEXTAFTER__ is nonzero if nextafter() is from the native\n"
+	print "\truntime library.\n\n"
+}
+
+proc help___NATIVE_REMAINDER__() \
+{
+	print "\t__NATIVE_REMAINDER__ is nonzero if remainder() is from the native\n"
+	print "\truntime library.\n\n"
+}
+
+proc help___NATIVE_RINT__() \
+{
+	print "\t__NATIVE_RINT__ is nonzero if rint() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_RSQRT__() \
+{
+	print "\t__NATIVE_RSQRT__ is nonzero if rsqrt() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_SCALB__() \
+{
+	print "\t__NATIVE_SCALB__ is nonzero if scalb() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_SIGNIFICAND__() \
+{
+	print "\t__NATIVE_SIGNIFICAND__ is nonzero if significand() is from the native\n"
+	print "\truntime library.\n\n"
+}
+
+proc help___NATIVE_SNPRINTF__() \
+{
+	print "\t__NATIVE_SNPRINTF__ is nonzero if snprintf() is from the native runtime\n"
+	print "\tlibrary; otherwise, the potentially unsafe sprintf() function is used.\n\n"
+}
+
+proc help___NATIVE_STRFTIME__() \
+{
+	print "\t__NATIVE_STRFTIME__ is nonzero if strftime() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_STRTOLD__() \
+{
+	print "\t__NATIVE_STRTOLD__ is nonzero if strtold() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_TRUNC__() \
+{
+	print "\t__NATIVE_TRUNC__ is nonzero if trunc() is from the native runtime\n"
+	print "\tlibrary.\n\n"
+}
+
+proc help___NATIVE_Y0__() \
+{
+	print "\t__NATIVE_Y0__ is nonzero if y0() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_Y1__() \
+{
+	print "\t__NATIVE_Y1__ is nonzero if y1() is from the native runtime library.\n\n"
+}
+
+proc help___NATIVE_YN__() \
+{
+	print "\t__NATIVE_YN__ is nonzero if yn() is from the native runtime library.\n\n"
+}
+
+proc help___OFS__() \
+{
+	print "\t__OFS__ is the output field separator printed between items of print and\n"
+	print "\tprintln statement argument lists.  It is normally a single blank.\n\n"
+}
+
+proc help___PID__() \
+{
+	print "\t__PID__ is the process identifier number of the current process.  It is\n"
+	print "\tzero on operating systems that lack this concept.\n\n"
+}
+
+proc help___PPID__() \
+{
+	print "\t__PPID__ is the process identifier number of the parent process of the\n"
+	print "\tcurrent process.  It is zero on operating systems that lack this\n"
+	print "\tconcept.\n\n"
+}
+
+proc help___READLINE__() \
+{
+	print "\t__READLINE__ is nonzero if the GNU readline library is used in this\n"
+	print "\timplementation of hoc.\n\n"
+}
+
+proc help___SYSHOCDIR__() \
+{
+	print "\t__SYSHOCDIR__ is the system installation directory in, or under, which\n"
+	print "\thoc startup and library files are found.\n\n"
+}
+
+proc help___SYSHOCHLPBASE__() \
+{
+	print "\t__SYSHOCHLPBASE__ is the base name of the hoc system help file.\n\n"
+}
+
+proc help___SYSHOCHLP__() \
+{
+	print "\t__SYSHOCHLP__ is the full file name of the hoc system help file.\n\n"
+}
+
+proc help___SYSHOCPATH__() \
+{
+	print "\t__SYSHOCPATH__ is the colon-separated list of directories that hoc\n"
+	print "\tsearches for system files.\n\n"
+}
+
+proc help___SYSHOCRCBASE__() \
+{
+	print "\t__SYSHOCRCBASE__ is the base name of the hoc system startup file.\n\n"
+}
+
+proc help___SYSHOCRC__() \
+{
+	print "\t__SYSHOCRC__ is the full file name of the hoc system startup file.\n\n"
+}
+
+proc help___SYSHOCXLTBASE__() \
+{
+	print "\t__SYSHOCXLTBASE__ is the base name of the hoc message translation file.\n\n"
+}
+
+proc help___SYSHOCXLT__() \
+{
+	print "\t__SYSHOCXLT__ is the full file name of the hoc message translation file.\n\n"
+}
+
+proc help___UID__() \
+{
+	print "\t__UID__ is the user identifier number of the current process.  It is\n"
+	print "\tzero on operating systems that lack this concept.\n\n"
+}
+
+proc help_char() \
+{
+	print "\tchar(n) returns a one-character string containing the character\n"
+	print "\twhose ordinal value in the host character set is n.  Characters\n"
+	print "\tare always considered unsigned. Thus, in an ASCII or ISO 8859-n\n"
+	print "\tor Unicode character set, char(65) returns \"A\", and both\n"
+	print "\tchar(255) and char(-1) return \"\xff\".\n\n"
+
+	print "\thoc strings are internally terminated by a NUL character, so\n"
+	print "\tchar(0) is equivalent to an empty string, \"\", and (\"X\" char(0) \"Y\")\n"
+	print "\tevaluates to (\"X\" \"\" \"Y\"), which in turn reduces to \"XY\".\n\n"
+}
+
+proc help_ichar() \
+{
+	print "\tichar(s) returns the ordinal value of the first character in the\n"
+	print "\tstring s.  Characters are always considered unsigned. Thus, in\n"
+	print "\tan ASCII or ISO 8859-n or Unicode character set, ichar(\"ABC\")\n"
+	print "\treturns 65, and ichar(\"\exff\") returns 255.  ichar(\"\") returns\n"
+	print "\t0, because hoc strings are internally terminated by a NUL\n"
+	print "\t(zero-valued) character.\n\n"
+}
+
+proc help_decrypt() \
+{
+	print "\tdecrypt(key,ciphertext) decrypts the hexadecimal\n"
+	print "\trepresentation in ciphertext of a simple one-time-pad\n"
+	print "\tencryption produced by encrypt(key,plaintext) and\n"
+	print "\tprints the resulting plaintext message using key as\n"
+	print "\tthe starting value of a pseudo-random-number sequence.\n\n"
+}
+	
+proc help_encrypt() \
+{
+	print "\tencrypt(key,plaintext) prints a hexadecimal representation of a\n"
+	print "\tsimple one-time-pad encryption of plaintext using key as the\n"
+	print "\tstarting value of a pseudo-random-number sequence.\n\n"
+	
+	print "See help_decrypt() for the inverse operation, decryption.\n\n"
+}

@@ -1,0 +1,14 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2014-06-25 16:04:20.000000000 +0200
++++ patched/Makefile	2015-09-12 21:03:59.539604446 +0200
+@@ -53,8 +53,8 @@
+ install: all
+ 	install -d -o 0 -g 0 -m 755 $(PREFIX)/bin/
+ 	install -o 0 -g 0 -m 755 $(BIN) $(PREFIX)/bin/
+-	install -d -o 0 -g 0 -m 755 $(PREFIX)/man/man1/
+-	install -o 0 -g 0 -m 644 $(BIN).1 $(PREFIX)/man/man1/
++	install -d -o 0 -g 0 -m 755 $(PREFIX)/share/man/man1/
++	install -o 0 -g 0 -m 644 $(BIN).1 $(PREFIX)/share/man/man1/
+ 
+ clean:
+ 	-rm -Rf obj dep *.orig *.rej *~

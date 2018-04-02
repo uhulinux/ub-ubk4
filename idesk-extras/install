@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp idesktool $UB_INSTALLDIR/usr/bin/
+mkdir -p $UB_INSTALLDIR/usr/share/idesk
+cp -r icons $UB_INSTALLDIR/usr/share/idesk/
+cd $UB_INSTALLDIR/usr/share/idesk/icons/
+rm -rf 48x48/.xvpics 32x32/.xvpics

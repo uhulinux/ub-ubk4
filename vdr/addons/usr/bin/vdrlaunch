@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if ! [ -f /etc/vdr/vdrstart ]
+  then
+  cp /usr/share/vdr/vdrstart /etc/vdr/
+  chmod +x /etc/vdr/vdrstart
+  echo Az átszerkesztendő indító szkript a /etc/vdr/vdrstart.
+  echo Ez hiba esetén letörölhető, hiány esetén újraindítva az eredetire frissül.
+  echo Nyomj meg egy billentyűt a vdr első indításához!
+  read
+	/etc/vdr/vdrstart $*
+  else
+  /etc/vdr/vdrstart $*
+fi

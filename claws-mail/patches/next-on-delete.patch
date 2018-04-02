@@ -1,0 +1,12 @@
+diff -Naur orig/src/prefs_common.c patched/src/prefs_common.c
+--- orig/src/prefs_common.c	2017-12-17 14:05:29.420338840 +0100
++++ patched/src/prefs_common.c	2017-12-17 14:09:43.383380732 +0100
+@@ -450,7 +450,7 @@
+ 	{"msgview_date_format", "FALSE", &prefs_common.msgview_date_format, P_BOOL,
+ 	 NULL, NULL, NULL},
+ 
+-	{"next_on_delete", "FALSE", &prefs_common.next_on_delete, P_BOOL,
++	{"next_on_delete", "TRUE", &prefs_common.next_on_delete, P_BOOL,
+ 	 NULL, NULL, NULL},
+ 
+ 	 {"bold_unread", "TRUE", &prefs_common.bold_unread, P_BOOL,

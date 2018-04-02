@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+sed -i 's/@LEXLIB@//' src/*/Makefile.am
+autoreconf -vif
+ub_compile \
+	--with-unixodbc=/usr \
+	--enable-sql \
+	--mandir=/usr/share/man

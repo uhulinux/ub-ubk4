@@ -1,0 +1,33 @@
+#!/bin/sh -eux
+
+autoreconf -fi
+
+ub_compile \
+	--enable-texture-float \
+	--enable-gles1 \
+	--enable-gles2 \
+	--enable-xa \
+	--enable-xvmc \
+	--enable-vdpau \
+	--enable-gbm \
+	--enable-glx-tls \
+	--enable-dri \
+	--enable-glx \
+	--enable-gallium-llvm \
+	--enable-egl \
+	--with-platforms=x11,drm,wayland \
+	--enable-libglvnd \
+	--enable-llvm \
+	--enable-llvm-shared-libs \
+	--enable-shared-glapi \
+	--with-gallium-drivers=r300,r600,radeonsi,nouveau,svga,swrast,virgl,swr \
+	--with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
+	--with-vulkan-drivers=intel,radeon \
+	--enable-libunwind \
+	--enable-lmsensors \
+	--enable-gallium-osmesa \
+	--enable-gallium-extra-hud \
+	--enable-omx-bellagio \
+	--enable-nine \
+	--enable-opencl \
+	--enable-opencl-icd

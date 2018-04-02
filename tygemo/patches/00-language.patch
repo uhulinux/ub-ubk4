@@ -1,0 +1,130 @@
+diff -urN tygemo-0.2.0.orig/tygemo tygemo-0.2.0/tygemo
+--- tygemo-0.2.0.orig/tygemo	2002-04-10 05:22:32.000000000 +0200
++++ tygemo-0.2.0/tygemo	2004-02-13 10:50:55.000000000 +0100
+@@ -34,49 +34,49 @@
+ ########--- Top Menu ---#############
+ frame .topmenu -borderwidth 2
+ pack .topmenu -pady 1m
+-menubutton .topmenu.controls -text "Camera Controls" -menu .topmenu.controls.mnu -border 1 -width 16 -relief raised
++menubutton .topmenu.controls -text "Beállítások" -menu .topmenu.controls.mnu -border 1 -width 16 -relief raised
+ 	menu .topmenu.controls.mnu -tearoff 0
+ #	grid .topmenu.controls -row 0 -column 1
+-		.topmenu.controls.mnu add command -label OFF -command "turnoff"
+-		.topmenu.controls.mnu add cascade -label RESOLUTION -menu .topmenu.controls.mnu.res
++		.topmenu.controls.mnu add command -label Kikapcsolás -command "turnoff"
++		.topmenu.controls.mnu add cascade -label Felbontás -menu .topmenu.controls.mnu.res
+ 			menu .topmenu.controls.mnu.res -tearoff 0
+-				.topmenu.controls.mnu.res add command -label HI -command "hires"
+-				.topmenu.controls.mnu.res add command -label LOW -command "lowres"
+-				.topmenu.controls.mnu.res add command -label EXTENDED -command "extres"
+-		.topmenu.controls.mnu add cascade -label FLASH -menu .topmenu.controls.mnu.flash
++				.topmenu.controls.mnu.res add command -label Nagy -command "hires"
++				.topmenu.controls.mnu.res add command -label Kicsi -command "lowres"
++				.topmenu.controls.mnu.res add command -label Extranagy -command "extres"
++		.topmenu.controls.mnu add cascade -label Vaku -menu .topmenu.controls.mnu.flash
+ 			menu .topmenu.controls.mnu.flash -tearoff 0
+-				.topmenu.controls.mnu.flash add command -label AUTO -command "autoflash"
+-				.topmenu.controls.mnu.flash add command -label FORCE -command "forceflash"
+-				.topmenu.controls.mnu.flash add command -label OFF -command "offflash"
+-				.topmenu.controls.mnu.flash add command -label ANTI-RED-EYE -command "redflash"
+-				.topmenu.controls.mnu.flash add command -label SLOW-SYNC -command "slowflash"
+-		.topmenu.controls.mnu add cascade -label CONTRAST -menu .topmenu.controls.mnu.cont
++				.topmenu.controls.mnu.flash add command -label Automata -command "autoflash"
++				.topmenu.controls.mnu.flash add command -label Bekapcsolva -command "forceflash"
++				.topmenu.controls.mnu.flash add command -label Kikapcsolva -command "offflash"
++				.topmenu.controls.mnu.flash add command -label "Vörös szem effekt" -command "redflash"
++				.topmenu.controls.mnu.flash add command -label "Lassú szinkron" -command "slowflash"
++		.topmenu.controls.mnu add cascade -label Kontraszt -menu .topmenu.controls.mnu.cont
+ 			menu .topmenu.controls.mnu.cont -tearoff 0
+ 				.topmenu.controls.mnu.cont add command -label + -command "contplus"
+ 				.topmenu.controls.mnu.cont add command -label "-" -command "contneg"
+-				.topmenu.controls.mnu.cont add command -label RESET -command "contnorm"
+-		.topmenu.controls.mnu add cascade -label BRIGHTNESS -menu .topmenu.controls.mnu.bright
++				.topmenu.controls.mnu.cont add command -label Alapbeállítás -command "contnorm"
++		.topmenu.controls.mnu add cascade -label Fényerő -menu .topmenu.controls.mnu.bright
+ 			menu .topmenu.controls.mnu.bright -tearoff 0
+ 				.topmenu.controls.mnu.bright add command -label + -command "brightplus"
+ 				.topmenu.controls.mnu.bright add command -label "-" -command "brightneg"
+-				.topmenu.controls.mnu.bright add command -label RESET -command "contnorm"
+-		.topmenu.controls.mnu add cascade -label "WHITE BALANCE" -menu .topmenu.controls.mnu.white
++				.topmenu.controls.mnu.bright add command -label Alapbeállítás -command "contnorm"
++		.topmenu.controls.mnu add cascade -label "Fehér egyensúly" -menu .topmenu.controls.mnu.white
+ 			menu .topmenu.controls.mnu.white -tearoff 0
+-				.topmenu.controls.mnu.white add command -label SUNNY -command "whitesun"
++				.topmenu.controls.mnu.white add command -label Napos -command "whitesun"
+ 				.topmenu.controls.mnu.white add command -label INCANDESCENT -command "whitein"
+-				.topmenu.controls.mnu.white add command -label FLOURESCENT -command "whiteflour"
++				.topmenu.controls.mnu.white add command -label Neonfény -command "whiteflour"
+ 				.topmenu.controls.mnu.white add command -label FLASH -command "whiteflash"
+-				.topmenu.controls.mnu.white add command -label CLOUDY -command "whitecloud"
+-				.topmenu.controls.mnu.white add command -label RESET -command "whitereset"
+-button .topmenu.exit	-text "Exit" -border 1 -width 5 -command exit
+-button .topmenu.about	-text "About" -border 1	-command about
++				.topmenu.controls.mnu.white add command -label Felhős -command "whitecloud"
++				.topmenu.controls.mnu.white add command -label Alapbeállítás -command "whitereset"
++button .topmenu.exit	-text "Kilépés" -border 1 -width 5 -command exit
++button .topmenu.about	-text "Névjegy" -border 1	-command about
+ button .topmenu.null	-border 1 -width 15 -border 0 -state disabled
+ pack .topmenu.controls .topmenu.null .topmenu.about .topmenu.exit -side left -expand 1
+ 
+ #########--- Camera Ops ---##########
+ frame .filename -bd 2 -relief raised -border 0
+ pack .filename
+-label .filename.lab -text "Download pix here (full path):"
++label .filename.lab -text "Képek letöltése ide (teljes útvonal):"
+ entry .filename.data -width 30 -relief sunken -textvariable filename
+ pack .filename.lab -side left
+ pack .filename.data -side right
+@@ -84,29 +84,29 @@
+ frame .numpix -bd 2 -relief raised -border 0
+ pack .numpix
+ entry .numpix.data -relief sunken -width 5
+-button .numpix.num -border 1 -text "Current number of pix in camera" -command "numpic; menupix"
++button .numpix.num -border 1 -text "Képek száma" -command "numpic; menupix"
+ pack .numpix.data -side right
+ pack .filename .numpix.num -side top -fill x
+ 
+ #########--- bottom buttons ---##########
+ frame .buttons -borderwidth 1
+ pack .buttons -side bottom -fill x -pady 1m
+-menubutton .buttons.get -text "Get Pix from Camera" -menu .buttons.get.mnu -border 1 -height 2 -relief raised
++menubutton .buttons.get -text "Képek letöltése" -menu .buttons.get.mnu -border 1 -height 2 -relief raised
+ 	menu .buttons.get.mnu -tearoff 0
+ 	grid .buttons.get -row 0 -column 1
+-		.buttons.get.mnu add command -label ALL -command "getpixall"
++		.buttons.get.mnu add command -label Mindet -command "getpixall"
+ 
+-menubutton .buttons.erase -text "Erase Pix from Camera"	-menu .buttons.erase.mnu -border 1 -height 2 -relief raised
++menubutton .buttons.erase -text "Képek törlése a kameráról"	-menu .buttons.erase.mnu -border 1 -height 2 -relief raised
+ 	menu .buttons.erase.mnu -tearoff 0
+ 	grid .buttons.erase -row 0 -column 2
+-		.buttons.erase.mnu add command -label ALL -command "menupixall; erasePixall"
++		.buttons.erase.mnu add command -label Mindet -command "menupixall; erasePixall"
+ pack .buttons.get .buttons.erase -side left -expand 1
+ 
+ ##########################----RADIO BUTTONS-----############################
+ #--- Speed ---#
+ frame .rad2 -borderwidth 1 -relief raised
+ pack .rad2 -side left -fill y -pady 1m
+-label .rad2.speed   -text "Speed" 
++label .rad2.speed   -text "Sebesség" 
+ radiobutton .rad2.192 -text "19200" -variable speed -relief flat -value 19200
+ radiobutton .rad2.576 -text "57600" -variable speed -relief flat -value 57600
+ radiobutton .rad2.1152 -text "115200" -variable speed -relief flat -value 115200
+@@ -115,11 +115,11 @@
+ #--- Serial ports ---#
+ frame .rad3 -borderwidth 1 -relief raised
+ pack .rad3 -side left -fill y -pady 1m
+-label .rad3.port   -text "Serial Port" 
+-radiobutton .rad3.r0 -text "/dev/ttyS0" -variable port -relief flat -value /dev/ttyS0
+-radiobutton .rad3.r1 -text "/dev/ttyS1" -variable port -relief flat -value /dev/ttyS1
+-radiobutton .rad3.r2 -text "/dev/ttyS2" -variable port -relief flat -value /dev/ttyS2
+-radiobutton .rad3.r3 -text "/dev/ttyS3" -variable port -relief flat -value /dev/ttyS3
++label .rad3.port   -text "Soros port" 
++radiobutton .rad3.r0 -text "/dev/ttyS0 (COM 1)" -variable port -relief flat -value /dev/ttyS0
++radiobutton .rad3.r1 -text "/dev/ttyS1 (COM 2)" -variable port -relief flat -value /dev/ttyS1
++radiobutton .rad3.r2 -text "/dev/ttyS2 (COM 3)" -variable port -relief flat -value /dev/ttyS2
++radiobutton .rad3.r3 -text "/dev/ttyS3 (COM 4)" -variable port -relief flat -value /dev/ttyS3
+ pack .rad3.port .rad3.r0 .rad3.r1 .rad3.r2 .rad3.r3 -side top 
+ 
+ pack .rad2 .rad3 -side left -expand yes  -pady .1c -padx .1c 

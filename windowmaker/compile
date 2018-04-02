@@ -1,0 +1,20 @@
+#!/bin/sh -eux
+
+autoreconf -vfi -I m4
+export LINGUAS="be bg bs ca cs da de el es et fi fr fy gl hr hu hy it ms nl no pl pt ro ru sk sv tr uk zh_CN"
+ub_compile \
+	--enable-usermenu \
+	--localedir=/usr/share/locale \
+	--with-pixmapdir=/usr/share/pixmaps \
+	--with-x \
+	--enable-xpm \
+	--enable-png \
+	--enable-jpeg \
+	--enable-gif \
+	--enable-tiff \
+	--enable-xinerama \
+	--enable-modelock
+
+cd windowmaker-extra
+
+ub_compile

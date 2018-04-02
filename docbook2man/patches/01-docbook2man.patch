@@ -1,0 +1,52 @@
+diff -Naur orig/cmd/Makefile mod/cmd/Makefile
+--- orig/cmd/Makefile	1996-06-17 05:50:30.000000000 +0200
++++ mod/cmd/Makefile	2009-02-26 12:20:20.000000000 +0100
+@@ -36,7 +36,8 @@
+ #
+ #############################################################################
+ 
+-ROOT =	/usr/local
++DESTDIR=/usr
++ROOT =	$(DESTDIR)
+ BIN =	$(ROOT)/bin
+ 
+ 
+diff -Naur orig/Instant/Makefile mod/Instant/Makefile
+--- orig/Instant/Makefile	1996-06-17 05:50:29.000000000 +0200
++++ mod/Instant/Makefile	2009-02-26 12:18:36.000000000 +0100
+@@ -63,7 +63,8 @@
+ MAKE =	make
+ SHELL =	/bin/sh
+ 
+-ROOT		= /usr/local
++DESTDIR = /usr
++ROOT		= $(DESTDIR)
+ 
+ TPTLIB		= $(ROOT)/lib/tpt
+ REGEX_INC	= -Itptregexp
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	1996-06-17 05:50:30.000000000 +0200
++++ mod/Makefile	2009-02-26 12:14:12.000000000 +0100
+@@ -36,7 +36,8 @@
+ #
+ #############################################################################
+ 
+-ROOT =	/usr/local
++DESTDIR = /usr
++ROOT =	$(DESTDIR)
+ 
+ SHELL =	/bin/sh
+ MAKE =	make
+diff -Naur orig/Transpec/Makefile mod/Transpec/Makefile
+--- orig/Transpec/Makefile	1996-06-17 05:50:28.000000000 +0200
++++ mod/Transpec/Makefile	2009-02-26 12:19:27.000000000 +0100
+@@ -36,7 +36,8 @@
+ #
+ #############################################################################
+ 
+-ROOT =		/usr/local
++DESTDIR =   /usr
++ROOT =		$(DESTDIR)
+ TPTLIB =	$(ROOT)/lib/tpt
+ 
+ MAKE =		make

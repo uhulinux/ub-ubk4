@@ -1,0 +1,671 @@
+Description: Redesigned 'Gnomeradio recording status' window to show more recording information.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1019981
+Author: Pojar George <geoubuntu@gmail.com> 
+Index: gnomeradio-1.8/src/record.c
+===================================================================
+--- gnomeradio-1.8.orig/src/record.c
++++ gnomeradio-1.8/src/record.c
+@@ -32,9 +32,11 @@
+ #include "prefs.h"
+ 
+ static int timeout_id = -1;
+-static GtkWidget *file_lbl, *size_lbl;
++static GtkWidget *file_lbl, *type_lbl, *size_lbl, *length_lbl;
+ static GtkWidget *status_dialog;
+ 
++extern GtkWidget *level;
++
+ void close_status_window(void)
+ {
+ 	if (timeout_id >= 0)
+@@ -50,31 +52,158 @@ void close_status_window(void)
+ 	tray_icon_items_set_sensible(TRUE);
+ }
+ 
++static char *seconds_to_full_string (guint seconds)
++{
++	long days, hours, minutes;
++	char *time = NULL;
++	const char *minutefmt;
++	const char *hourfmt;
++	const char *secondfmt;
++
++	days    = seconds / (60 * 60 * 24);
++	hours   = (seconds / (60 * 60));
++	minutes = (seconds / 60) - ((days * 24 * 60) + (hours * 60));
++	seconds = seconds % 60;
++
++	minutefmt = ngettext ("%ld minute", "%ld minutes", minutes);
++	hourfmt = ngettext ("%ld hour", "%ld hours", hours);
++	secondfmt = ngettext ("%ld second", "%ld seconds", seconds);
++
++	if (hours > 0) {
++		if (minutes > 0)
++			if (seconds > 0) {
++				char *fmt;
++				/* Translators: the format is "X hours X minutes X seconds" */
++				fmt = g_strdup_printf (_("%s %s %s"), hourfmt, minutefmt, secondfmt);
++				time = g_strdup_printf (fmt, hours, minutes, seconds);
++				g_free (fmt);
++			} else {
++				char *fmt;
++				/* Translators: the format is "X hours X minutes" */
++				fmt = g_strdup_printf (_("%s %s"), hourfmt, minutefmt);
++				time = g_strdup_printf (fmt, hours, minutes);
++				g_free (fmt);
++			}
++		else
++			if (seconds > 0) {
++				char *fmt;
++				/* Translators: the format is "X minutes X seconds" */
++				fmt = g_strdup_printf (_("%s %s"), minutefmt, secondfmt);
++				time = g_strdup_printf (fmt, minutes, seconds);
++				g_free (fmt);
++			} else {
++				time = g_strdup_printf (minutefmt, minutes);
++			}
++	} else {
++		if (minutes > 0) {
++			if (seconds > 0) {
++				char *fmt;
++				/* Translators: the format is "X minutes X seconds" */
++				fmt = g_strdup_printf (_("%s %s"), minutefmt, secondfmt);
++				time = g_strdup_printf (fmt, minutes, seconds);
++				g_free (fmt);
++			} else {
++				time = g_strdup_printf (minutefmt, minutes);
++			}
++
++		} else {
++			time = g_strdup_printf (secondfmt, seconds);
++		}
++	}
++
++	return time;
++}
++
+ static gboolean timeout_cb(gpointer data)
+ {
+ 	Recording *recording = data;
+-	gint s;
+-	gchar *size=NULL;
++	GError *error = NULL;
++	GFile *file;
++	GFileInfo *info;
++
++	gchar *description, *name, *mime, *type, *size = NULL;
++	gchar *utf8_name = NULL;
++	const gchar *content_type;
++	guint64 s;
+ 
+ 	g_assert(recording);	
+ 	
+ 	if (!gtk_widget_get_visible(status_dialog))
+ 		gtk_widget_show_all(status_dialog);
+ 	
+-	s = get_file_size(recording->filename);
+-	if (s > 0) {
+-		if (s < 1024) size = g_strdup_printf(_("%i byte"), s);
+-		
+-		if ((s >= 1024) && (s < 1024*1024)) size = g_strdup_printf(_("%i kB"), s>>10);
+-		if (s >= 1024*1024) size = g_strdup_printf(_("%.2f MB"), (float)s/1024/1024);
++	/* name */
++	name = g_path_get_basename(recording->filename);
++	utf8_name = g_filename_to_utf8 (name, -1, NULL, NULL, NULL);
++	gtk_label_set_text(GTK_LABEL(file_lbl), utf8_name);
++	g_free (name);
++	g_free (utf8_name);
++
++	/* type */
++	file = g_file_new_for_path(recording->filename);
++	info = g_file_query_info(file,
++				 G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
++				 G_FILE_QUERY_INFO_NONE,
++				 NULL,
++				 &error);
++
++	if (error == NULL) {
++		content_type = g_file_info_get_content_type(info);
++		description = g_content_type_get_description(content_type);
++		mime = g_content_type_get_mime_type(content_type);
++		type = g_strdup_printf ("%s (%s)", description, mime);
++		gtk_label_set_text(GTK_LABEL(type_lbl), type);
++
++		g_object_unref(info);
++		g_free(description);
++		g_free(mime);
++		g_free(type);
++	} else  {
++		fprintf(stderr, "%s\n", error->message);
++		g_error_free(error);
++
++		return FALSE;
++	}
++
++	/* size */
++	info = g_file_query_info(file,
++			 	 G_FILE_ATTRIBUTE_STANDARD_SIZE,
++			 	 G_FILE_QUERY_INFO_NONE,
++			 	 NULL,
++			 	 &error);
++	if (error == NULL) {
++		s = g_file_info_get_attribute_uint64(info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
++		size = g_format_size_full(s, G_FORMAT_SIZE_LONG_FORMAT);
++		gtk_label_set_text(GTK_LABEL(size_lbl), size);
++
++		g_object_unref(info);
++		g_free(size);
+ 	} else {
+-		if (s)	size = g_strdup(_("Error"));
+-		else	size = g_strdup(_("0 byte"));
+-	}	
+-	
+-	gtk_label_set_text(GTK_LABEL(file_lbl), recording->filename);
+-	gtk_label_set_text(GTK_LABEL(size_lbl), size);
+-	g_free(size);
++		fprintf(stderr, "%s\n", error->message);
++		g_error_free(error);
++
++		close_status_window();
++		recording_stop(recording);
++
++		return FALSE;
++	}
++	g_object_unref(file);
++
++	/* length */
++	GstElement *pipeline;
++	GstFormat fmt = GST_FORMAT_TIME;
++	gint64 val = -1;
++	gint secs;
++
++	pipeline = recording->pipeline;
++
++	if (gst_element_query_position (pipeline, &fmt, &val) && val != -1) {
++		gchar* length;
++		secs = val / GST_SECOND;
++
++		length = seconds_to_full_string(secs);
++		gtk_label_set_text(GTK_LABEL(length_lbl), length);
++		g_free(length);
++	}
+ 	
+ 	return TRUE;
+ }	
+@@ -101,60 +230,87 @@ GtkWidget* record_status_window(Recordin
+ {
+ 	GtkWidget *btn_label, *btn_pixmap, *button;
+ 	GtkWidget *vbox, *btn_box, *hbox;
+-	GtkWidget *grid;
+-	GtkWidget *title, *f_lbl, *s_lbl;
++	GtkWidget *f_lbl, *t_lbl, *s_lbl, *l_lbl;
++	GtkWidget *grid, *r_grid;
++	GtkWidget *title;
++	GtkWidget *image;
++	GtkWidget *level_box;
++	GtkWidget *expander;
+ 	char *text, *str;
+ 
+ 	status_dialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+ 	gtk_window_set_title(GTK_WINDOW(status_dialog),_("Gnomeradio recording status"));
+-	/*gtk_window_set_resizable(GTK_WINDOW(status_dialog), FALSE);*/
+-	gtk_window_set_default_size(GTK_WINDOW(status_dialog), 400, -1);
++	gtk_window_set_resizable(GTK_WINDOW(status_dialog), FALSE);
+ 
+-	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+-	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
++	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);
++	gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
++
++ 	grid = gtk_grid_new();
++	gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
++	gtk_grid_set_column_spacing(GTK_GRID(grid), 15);
++	gtk_container_set_border_width(GTK_CONTAINER(grid), 5);
++
++	image = gtk_image_new_from_icon_name("gnomeradio", GTK_ICON_SIZE_DIALOG);
++	gtk_image_set_pixel_size(GTK_IMAGE(image), 42);
++	gtk_widget_set_valign(image, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(grid), image, 0, 0, 1, 3);
+ 
+-	grid = gtk_grid_new();
+-	gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+-	gtk_grid_set_column_spacing(GTK_GRID(grid), 12);
+-	gtk_container_set_border_width(GTK_CONTAINER(grid), 6);
+-	
+ 	str = g_strdup_printf(_("Recording from station %s"), recording->station);
+-	text = g_strdup_printf("<b><big>%s</big></b>", str);
++	text = g_strdup_printf("<big><b>%s</b></big>", str);
+ 	g_free(str);
+ 	title = gtk_label_new(text);
+ 	g_free(text);
++	gtk_widget_set_halign(title, GTK_ALIGN_START);
+ 	gtk_label_set_use_markup(GTK_LABEL(title), TRUE);
+-	
+-	text = g_strdup_printf("  <b>%s</b>", _("Destination:"));
+-	f_lbl = gtk_label_new(text);
+-	g_free(text);
+-	gtk_label_set_use_markup(GTK_LABEL(f_lbl), TRUE);
++	gtk_grid_attach(GTK_GRID(grid), title, 1, 0, 1, 1);
+ 
+-	text = g_strdup_printf("  <b>%s</b>", _("Filesize:"));
+-	s_lbl = gtk_label_new(text);
+-	g_free(text);
+-	gtk_label_set_use_markup(GTK_LABEL(s_lbl), TRUE);
+-	
+-	file_lbl = gtk_label_new("");
+-	gtk_label_set_ellipsize(GTK_LABEL(file_lbl), PANGO_ELLIPSIZE_START);
+-	gtk_widget_set_hexpand(file_lbl, TRUE);
+-	gtk_widget_set_halign(file_lbl, GTK_ALIGN_FILL);
+-	size_lbl = gtk_label_new("");
+-	gtk_widget_set_hexpand(size_lbl, TRUE);
+-	gtk_widget_set_halign(size_lbl, GTK_ALIGN_FILL);
+-	
+-	gtk_widget_set_halign(title, GTK_ALIGN_START);
++	level_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
++	level = gtk_progress_bar_new();
++	gtk_box_pack_start(GTK_BOX(level_box), level, FALSE, TRUE, 0);
++	gtk_grid_attach(GTK_GRID(grid), level_box, 1, 1, 1, 1);
++
++	expander = gtk_expander_new(_("Details"));
++	gtk_grid_attach(GTK_GRID(grid), expander, 1, 2, 1, 1);
++
++	r_grid = gtk_grid_new();
++	gtk_grid_set_row_spacing(GTK_GRID(r_grid), 5);
++	gtk_grid_set_column_spacing(GTK_GRID(r_grid), 15);
++	gtk_container_set_border_width(GTK_CONTAINER(r_grid), 5);
++
++	f_lbl = gtk_label_new(_("Name:"));
+ 	gtk_widget_set_halign(f_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), f_lbl, 0, 0, 1, 1);
++
++	t_lbl = gtk_label_new(_("Type:"));
++	gtk_widget_set_halign(t_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), t_lbl, 0, 1, 1, 1);
++
++	s_lbl = gtk_label_new(_("Size:"));
+ 	gtk_widget_set_halign(s_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), s_lbl, 0, 2, 1, 1);
++
++	l_lbl = gtk_label_new(_("Length:"));
++	gtk_widget_set_halign(l_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), l_lbl, 0, 3, 1, 1);
++
++	file_lbl = gtk_label_new(NULL);
++	gtk_label_set_ellipsize(GTK_LABEL(file_lbl), PANGO_ELLIPSIZE_START);
+ 	gtk_widget_set_halign(file_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), file_lbl, 1, 0, 1, 1);
++
++	type_lbl = gtk_label_new(NULL);
++	gtk_widget_set_halign(type_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), type_lbl, 1, 1, 1, 1);
++
++	size_lbl = gtk_label_new(NULL);
+ 	gtk_widget_set_halign(size_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), size_lbl, 1, 2, 1, 1);
+ 
+-	gtk_grid_attach(GTK_GRID(grid), title, 0, 0, 2, 1);
+-	gtk_grid_attach(GTK_GRID(grid), f_lbl, 0, 1, 1, 1);
+-	gtk_grid_attach(GTK_GRID(grid), s_lbl, 0, 2, 1, 1);
++	length_lbl = gtk_label_new(NULL);
++ 	gtk_widget_set_halign(length_lbl, GTK_ALIGN_START);
++	gtk_grid_attach(GTK_GRID(r_grid), length_lbl, 1, 3, 1, 1);
+ 
+-	gtk_grid_attach(GTK_GRID(grid), file_lbl, 1, 1, 1, 1);
+-	gtk_grid_attach(GTK_GRID(grid), size_lbl, 1, 2, 1, 1);
++	gtk_container_add(GTK_CONTAINER(expander), r_grid);
+ 
+ 	button = gtk_button_new();
+ 	btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+@@ -169,10 +325,11 @@ GtkWidget* record_status_window(Recordin
+ 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 	gtk_box_pack_end (GTK_BOX(hbox), button, TRUE, FALSE, 0);
+ 	
+-	gtk_box_pack_start (GTK_BOX(vbox), grid, TRUE, TRUE, 0);
++	gtk_box_pack_start(GTK_BOX(vbox), grid, TRUE, TRUE, 0);
+ 	gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+ 
+ 	gtk_container_add(GTK_CONTAINER(status_dialog), vbox);
++	gtk_widget_grab_focus (button);
+ 
+ 	g_signal_connect(G_OBJECT(status_dialog), "delete_event", G_CALLBACK(delete_event_cb), recording);
+ 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(button_clicked_cb), recording);
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -61,7 +61,6 @@ gboolean main_visible;
+ static GtkWidget *drawing_area;
+ static GdkPixbuf *digits, *signal_s, *stereo;
+ static GtkWidget *freq_scale;
+-static GtkWidget *rec_pixmap;
+ 
+ static int timeout_id, bp_timeout_id = -1, bp_timeout_steps = 0;
+ 
+@@ -760,12 +759,14 @@ static int start_recording(const gchar *
+ void rec_button_clicked_cb(GtkButton *button, gpointer app)
+ {
+ 	char *station;
+-	char time_str[100];
+-	time_t t;
++	gchar *time;
++	GDateTime *date;
+ 	
+-	t = time(NULL);
++	date = g_date_time_new_now_local ();
++	g_assert (date);
+ 	/* consult man strftime to translate this. This is a filename, so don't use "/" or ":", please */
+-	strftime(time_str, 100, _("%B-%d-%Y_%H-%M-%S"), localtime(&t));
++	time = g_date_time_format (date, _("%Y%m%d-%H%M%S"));
++	g_date_time_unref (date);
+ 	
+ 	if (mom_ps < 0) {
+ 		station = g_strdup_printf(_("%.2f MHz"), rint(gtk_adjustment_get_value(adj))/STEPS);
+@@ -784,8 +785,9 @@ void rec_button_clicked_cb(GtkButton *bu
+ 		gtk_dialog_run (GTK_DIALOG (errdialog));
+ 		gtk_widget_destroy (errdialog);
+ 	} else */
+-	start_recording(rec_settings.destination, station, time_str);
++	start_recording(rec_settings.destination, station, time);
+ 	g_free(station);
++	g_free(time);
+ }
+ 
+ void toggle_volume(void)
+@@ -931,7 +933,7 @@ GtkWidget* gnome_radio_gui(void)
+ 	GtkWidget *app;
+ 	GtkWidget *prefs_button, *quit_button, *scfw_button, *scbw_button;
+ 	GtkWidget *stfw_button, *stbw_button, *about_button, *rec_button;
+-	GtkWidget *prefs_pixmap, *quit_pixmap, *scfw_pixmap, *scbw_pixmap;
++	GtkWidget *prefs_pixmap, *rec_pixmap, *quit_pixmap, *scfw_pixmap, *scbw_pixmap;
+ 	GtkWidget *stfw_pixmap, *stbw_pixmap, *about_pixmap;
+ 	GtkWidget *freq_up_pixmap, *freq_down_pixmap;
+ 	GdkPixbuf *freq_up_pixbuf, *freq_down_pixbuf;
+@@ -1106,7 +1108,7 @@ GtkWidget* gnome_radio_gui(void)
+ 	gtk_widget_set_tooltip_text(stbw_button, _("0.05 MHz Backwards"));
+ 	gtk_widget_set_tooltip_text(stfw_button, _("0.05 MHz Forwards"));
+ 	gtk_widget_set_tooltip_text(about_button, _("About"));
+-	gtk_widget_set_tooltip_text(rec_button, _("Record radio as Wave, OGG or MP3"));
++	gtk_widget_set_tooltip_text(rec_button, _("Record radio as OGG, Flac, Wave or MP3"));
+ 	gtk_widget_set_tooltip_text(prefs_button, _("Edit your Preferences"));
+ 	gtk_widget_set_tooltip_text(mute_button, _("Adjust the Volume"));
+ 	gtk_widget_set_tooltip_text(quit_button, _("Quit"));
+Index: gnomeradio-1.8/src/rec_tech.c
+===================================================================
+--- gnomeradio-1.8.orig/src/rec_tech.c
++++ gnomeradio-1.8/src/rec_tech.c
+@@ -23,8 +23,64 @@
+ #include <sys/stat.h>
+ #include <unistd.h>
+ #include <fcntl.h>
++#include <math.h>
+ 
+-static void error_cb(GstBus *bus, GstMessage *message, gpointer user_data)
++GtkWidget *level;
++
++static void
++show_error_dialog (GtkWindow *win, const gchar *dbg, const gchar * format, ...)
++{
++	GtkWidget *dialog;
++	va_list args;
++	gchar *s;
++
++	va_start (args, format);
++	s = g_strdup_vprintf (format, args);
++	va_end (args);
++
++	dialog = gtk_message_dialog_new (win,
++					 GTK_DIALOG_DESTROY_WITH_PARENT,
++					 GTK_MESSAGE_ERROR,
++					 GTK_BUTTONS_CLOSE,
++					 "%s",
++					 s);
++
++	if (dbg != NULL) {
++		g_printerr ("ERROR: %s\nDEBUG MESSAGE: %s\n", s, dbg);
++	}
++
++	gtk_dialog_run (GTK_DIALOG (dialog));
++	gtk_widget_destroy (dialog);
++	g_free (s);
++}
++
++static void
++show_missing_known_element_error (GtkWindow *win, gchar *description,
++	gchar *element, gchar *plugin, gchar *module)
++{
++	show_error_dialog (win, NULL,
++		_("Could not create the GStreamer %s element.\n"
++		  "Please install the '%s' plugin from the '%s' module.\n"
++		  "Verify that the installation is correct by running\n"
++		  "    gst-inspect-0.10 %s\n"
++		  "and then restart gnomeradio."),
++		description, plugin, module, element);
++}
++
++static void
++show_profile_error (GtkWindow *win, gchar *debug, gchar *description,
++	const char *profile)
++{
++	gchar *first;
++
++	first = g_strdup_printf (description, profile);
++	show_error_dialog (win, debug, "%s%s", first,
++		_("Please verify its settings.\n"
++		  "You may be missing the necessary plugins."));
++	g_free (first);
++}
++
++static void pipeline_error_cb(GstBus *bus, GstMessage *message, gpointer user_data)
+ {
+ 	GError *error = NULL;
+ 	GstElement *pipeline = user_data;
+@@ -38,57 +94,140 @@ static void error_cb(GstBus *bus, GstMes
+ 	g_error_free(error);
+ }
+ 
++static gboolean
++level_message_handler_cb (GstBus *bus, GstMessage *message, gpointer user_data)
++{
++	if (message->type == GST_MESSAGE_ELEMENT) {
++		const GstStructure *s = gst_message_get_structure (message);
++		const gchar *name = gst_structure_get_name (s);
++
++		if (g_str_equal (name, "level")) {
++			gint channels;
++			gdouble peak_dB;
++			gdouble norm_peak;
++			const GValue *list;
++			const GValue *value;
++
++			gint i;
++			list = gst_structure_get_value (s, "rms");
++			channels = gst_value_list_get_size (list);
++
++			for (i = 0; i < channels; ++i) {
++				list = gst_structure_get_value (s, "peak");
++				value = gst_value_list_get_value (list, i);
++				peak_dB = g_value_get_double (value);
++				norm_peak = exp (peak_dB / 20);
++				if (norm_peak > 1.0)
++					norm_peak = 1.0;
++				gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(level), norm_peak);
++			}
++		}
++	}
++	return TRUE;
++}
++
+ Recording*
+ recording_start(const char* filename)
+ {
+ 	GMAudioProfile *profile;
+-	GstElement *pipeline, *source, *encoder, *filesink;
+-	pipeline = source = encoder = filesink = NULL;
+-	
+-	profile = gm_audio_profile_lookup(rec_settings.profile);
+-	g_assert(profile);
+-	
++	const gchar *profile_pipeline_desc;
++	GstElement *pipeline, *source, *encoder, *filesink, *level;
++	pipeline = source = encoder = filesink = level = NULL;
++	GError *err = NULL;
++	gchar *pipeline_desc;
++	const char *name;
++
++	source = gst_element_factory_make ("gconfaudiosrc", "gconfaudiosource");
++	if (source == NULL) {
++		show_missing_known_element_error (NULL,
++		    _("GConf audio recording"), "gconfaudiosrc",
++		      "gconfelements", "gst-plugins-good");
++		return FALSE;
++	}
++
++	if (!gst_element_set_state (source, GST_STATE_READY)) {
++		show_error_dialog (NULL, NULL,
++		    _("Your audio capture settings are invalid. "
++		      "Please correct them with the \"Sound Settings\" "
++		      "under the System Settings menu."));
++		return FALSE;
++	}
++
++	filesink = gst_element_factory_make ("filesink", "sink");
++	if (filesink == NULL)
++	{
++		show_missing_known_element_error (NULL,
++		    _("file output"), "filesink", "coreelements", "gstreamer");
++		gst_object_unref (source);
++		return NULL;
++	}
++
+ 	pipeline = gst_pipeline_new("gnomeradio-record-pipeline");
+-	if (!pipeline) {
+-		g_warning(_("Could not create GStreamer pipeline. Check your Gstreamer installation!\n"));
+-		goto error;
+-	}		
+-	
+-	source = gst_element_factory_make("autoaudiosrc", "audio_source");
+-	if (!source) {
+-		g_warning(_("Could not open Gstreamer AUDIO Source. Verify your Gstreamer AUDIO subsystem installation!\n"));
+-		goto error;
++
++	gst_bin_add (GST_BIN (pipeline), source);
++
++	level = gst_element_factory_make ("level", "level");
++	if (level == NULL)
++	{
++		show_missing_known_element_error (NULL,
++		    _("level"), "level", "level", "gstreamer");
++		gst_object_unref (source);
++		return NULL;
+ 	}
+-	
+-	GstBus *bus = gst_element_get_bus(pipeline);
+-	gst_bus_add_signal_watch(bus);
+-	g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(error_cb), pipeline);
++	gst_element_set_name (level, "level");
++
++	profile = gm_audio_profile_lookup(rec_settings.profile);
++	g_assert(profile);
++	if (profile == NULL)
++		return NULL;
++	profile_pipeline_desc = gm_audio_profile_get_pipeline (profile);
++	name = gm_audio_profile_get_name (profile);
++
++	GST_DEBUG ("encoder profile pipeline: '%s'", GST_STR_NULL (profile_pipeline_desc));
+ 
+-	char* pipeline_str = g_strdup_printf("audioconvert ! %s", gm_audio_profile_get_pipeline(profile));
+-	encoder = gst_parse_bin_from_description(pipeline_str, TRUE, NULL);
+-	g_free(pipeline_str);
+-	if (!encoder) {
+-		char *caption = g_strdup_printf(_("Could not create encoder \"%s\"."), gm_audio_profile_get_name (profile));
+-		g_warning(_("%s Verify your Gstreamer plugins installation!\n"), caption);
+-		g_free(caption);
+-		goto error;
++	pipeline_desc = g_strdup_printf ("audioconvert ! %s", profile_pipeline_desc);
++	GST_DEBUG ("making encoder bin from description '%s'", pipeline_desc);
++	encoder = gst_parse_bin_from_description (pipeline_desc, TRUE, &err);
++	g_free (pipeline_desc);
++	pipeline_desc = NULL;
++
++	if (err) {
++		show_profile_error (NULL, err->message,
++		    _("Could not parse the '%s' audio profile. "), name);
++		g_printerr ("Failed to create GStreamer encoder plugins [%s]: %s\n", profile_pipeline_desc, err->message);
++		g_error_free (err);
++		gst_object_unref (pipeline);
++		gst_object_unref (filesink);
++		g_free (pipeline);
++		return NULL;
+ 	}
+-	
+-	/* Write to disk */
+-	filesink = gst_element_factory_make("filesink", "file-sink");
+-	if (!filesink) {	
+-		g_warning(_("Could not create Gstreamer filesink. Check your Gstreamer installation!"));
+-		goto error;
++
++	gst_bin_add (GST_BIN (pipeline), level);
++	gst_bin_add (GST_BIN (pipeline), encoder);
++	gst_bin_add (GST_BIN (pipeline), filesink);
++
++	if (!(gst_element_link_many (source, level, encoder, NULL))) {
++		show_profile_error (NULL, NULL,
++		    _("Could not capture using the '%s' audio profile. "), name);
++		gst_object_unref (pipeline);
++		g_free (pipeline);
++		return NULL;
+ 	}
+-	
+-	/* Add the elements to the pipeline */
+-	gst_bin_add_many(GST_BIN(pipeline), source, encoder, filesink, NULL);
+-	
+-	/* Link it all together */
+-	if (!gst_element_link_many(source, encoder, filesink, NULL)) {
+-		g_warning("Could not link elements. This is bad!\n");
+-		goto error;
++
++	if (!gst_element_link (encoder, filesink)) {
++		show_profile_error (NULL, NULL,
++		    _("Could not write to a file using the '%s' audio profile. "), name);
++		gst_object_unref (pipeline);
++		g_free (pipeline);
++		return NULL;
+ 	}
++
++	GstBus *bus = gst_element_get_bus(pipeline);
++	gst_bus_add_signal_watch(bus);
++
++	g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(pipeline_error_cb), pipeline);
++	g_signal_connect (G_OBJECT(bus), "message::element", G_CALLBACK (level_message_handler_cb), pipeline);
++
+ 	char* path = g_strdup_printf("%s.%s", filename, gm_audio_profile_get_extension(profile));	
+ 	g_object_set(G_OBJECT(filesink), "location", path, NULL);
+ 	
+@@ -99,18 +238,6 @@ recording_start(const char* filename)
+ 	recording->pipeline = pipeline;
+ 	
+ 	return recording;
+-	
+-error:
+-	if (pipeline)
+-		gst_object_unref(GST_OBJECT(pipeline));
+-	if (source)
+-		gst_object_unref(GST_OBJECT(source));
+-	if (encoder)
+-		gst_object_unref(GST_OBJECT(encoder));
+-	if (filesink)
+-		gst_object_unref(GST_OBJECT(filesink));
+-	
+-	return NULL;
+ }		
+ 
+ void
+@@ -121,7 +248,7 @@ recording_stop(Recording *recording)
+ 	GstState state;
+ 	gst_element_get_state(recording->pipeline, &state, NULL, GST_CLOCK_TIME_NONE);
+ 	if (state != GST_STATE_PLAYING) {
+-    	g_print("Ups!\n");
++		GST_DEBUG ("pipeline in wrong state: %s", gst_element_state_get_name (state));
+ 	} else {
+ 		gst_element_set_state(recording->pipeline, GST_STATE_NULL);
+ 	}

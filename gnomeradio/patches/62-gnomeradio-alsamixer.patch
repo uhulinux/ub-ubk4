@@ -1,0 +1,2048 @@
+Description: Added support to use the ALSA mixer APIs.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/613809
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/mixer.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/mixer.c
+@@ -0,0 +1,125 @@
++/**
++ * Copyright (C) 2002, 2003 Doug Bell <drbell@users.sourceforge.net>
++ *
++ * Some mixer routines from mplayer, http://mplayer.sourceforge.net.
++ * Copyright (C) 2000-2002. by A'rpi/ESP-team & others
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software Foundation,
++ * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#include "mixer.h"
++
++/**
++ * Sets the mixer device and channel.
++ */
++static int null_set_device( const char *devname )
++{
++	return 0;
++}
++
++/**
++ * Sets the initial state of the mixer device.
++ */
++static void null_set_state( int is_muted, int unmute_volume )
++{
++}
++
++/**
++ * Returns the current volume setting.
++ */
++static int null_get_volume( void )
++{
++	return 0;
++}
++
++/**
++ * Returns the volume that would be used to restore the unmute state.
++ */
++static int null_get_unmute_volume( void )
++{
++	return 0;
++}
++
++/**
++ * Tunes the relative volume.
++ */
++static void null_set_volume( int value )
++{
++}
++
++/**
++ * Sets the mute state.
++ */
++static void null_mute( int mute )
++{
++}
++
++/**
++ * Returns true if the mixer is muted.
++ */
++static int null_is_muted( void )
++{
++	return 0;
++}
++
++/**
++ * Closes the mixer device if it is open.
++ */
++static void null_close_device( void )
++{
++}
++
++/* The null device, which always works. */
++static struct mixer null_mixer = {
++	.set_device = null_set_device,
++	.set_state = null_set_state,
++	.get_volume = null_get_volume,
++	.get_unmute_volume = null_get_unmute_volume,
++	.set_volume = null_set_volume,
++	.mute = null_mute,
++	.is_muted = null_is_muted,
++	.close_device = null_close_device,
++};
++
++/* List of all available access methods.
++ * Uses weak symbols: NULL is not linked in. */
++static struct mixer *mixers[] = {
++	&alsa_mixer,
++	&oss_mixer,
++	&null_mixer /* LAST */
++};
++/* The actual access method. */
++struct mixer *mixer = &null_mixer;
++
++/**
++ * Sets the mixer device and channel.
++ * Try each access method until one succeeds.
++ */
++int mixer_set_device( const char *devname )
++{
++	int i;
++	mixer->close_device();
++	for (i = 0; i < sizeof(mixers)/sizeof(mixers[0]); i++) {
++		mixer = mixers[i];
++		if (!mixer)
++			continue;
++		if (mixer->set_device (devname) == 0)
++			break;
++		else
++			return 0;
++	}
++
++	return 1;
++}
+Index: gnomeradio-1.8/src/mixer.h
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/mixer.h
+@@ -0,0 +1,88 @@
++/**
++ * Copyright (C) 2002, 2003 Doug Bell <drbell@users.sourceforge.net>
++ *
++ * Some mixer routines from mplayer, http://mplayer.sourceforge.net.
++ * Copyright (C) 2000-2002. by A'rpi/ESP-team & others
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software Foundation,
++ * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#ifndef MIXER_H_INCLUDED
++#define MIXER_H_INCLUDED
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
++
++/**
++ * Sets the mixer device and channel.
++ * All interfaces are scanned until one succeeds.
++ */
++int mixer_set_device( const char *devname );
++
++struct mixer {
++/**
++ * Sets the mixer device and channel.
++ */
++int (* set_device)( const char *devname );
++
++/**
++ * Sets the initial state of the mixer device.
++ */
++void (* set_state)( int is_muted, int unmute_volume );
++
++/**
++ * Returns the current volume setting.
++ */
++int (* get_volume)( void );
++
++/**
++ * Returns the volume that would be used to restore the unmute state.
++ */
++int (* get_unmute_volume)( void );
++
++/**
++ * Tunes the relative volume.
++ */
++void (* set_volume)( int value );
++
++/**
++ * Sets the mute state.
++ */
++void (* mute)( int mute );
++
++/**
++ * Returns true if the mixer is muted.
++ */
++int (* is_muted)( void );
++
++/**
++ * Closes the mixer device if it is open.
++ */
++void (* close_device)( void );
++};
++
++#pragma weak alsa_mixer
++extern struct mixer alsa_mixer;
++#pragma weak oss_mixer
++extern struct mixer oss_mixer;
++extern struct mixer *mixer;
++
++#ifdef __cplusplus
++};
++#endif
++#endif /* MIXER_H_INCLUDED */
+Index: gnomeradio-1.8/src/tech.c
+===================================================================
+--- gnomeradio-1.8.orig/src/tech.c
++++ /dev/null
+@@ -1,171 +0,0 @@
+-/*
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU Library General Public License for more details.
+- *
+- *  You should have received a copy of the GNU General Public License
+- *  along with this program; if not, write to the Free Software
+- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+- */
+-
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <unistd.h>
+-#include <string.h>
+-#include <math.h>
+-#include <fcntl.h>
+-#include <sys/ioctl.h>
+-#include <assert.h>
+-
+-#include <sys/soundcard.h>
+-
+-#include "tech.h"
+-
+-static int mixer_fd = -1, mixer_src = -1;
+-static char *devices[] = SOUND_DEVICE_NAMES;
+-
+-/*
+- * These functions handle the mixer device
+- */
+- 
+-int mixer_init(char *mixer_device, char *mixer_source)
+-{
+-	int i;
+-	
+-	mixer_src = -1;
+-	
+-	for (i=0;i<SOUND_MIXER_NRDEVICES;i++)
+-		if (strcmp(mixer_source, devices[i]) == 0) 
+-			mixer_src = i;
+-
+-	mixer_fd = open(mixer_device, O_RDWR);
+-
+-	if (mixer_src < 0)	
+-		return -1;
+-			
+-	if (mixer_fd < 0)
+-		return 0;
+-	return 1;
+-}
+-
+-char* mixer_get_sndcard_name(void)
+-{
+-	mixer_info info;
+-	char *result = NULL;
+-
+-	if (ioctl(mixer_fd, SOUND_MIXER_INFO, &info) == -1)
+-		return NULL;
+-
+-	result = strdup(info.name);	
+-	
+-	return result;
+-}
+-
+-char** mixer_get_rec_devices(void)
+-{
+-	int i, o, devmask, res;
+-	char** result;
+-	
+-	if ((ioctl(mixer_fd, SOUND_MIXER_READ_RECMASK, &devmask)) == -1)
+-		return NULL;
+-	else
+-	{
+-		result = malloc(sizeof(char*)*SOUND_MIXER_NRDEVICES);
+-		o = 0;
+-		for (i=0;i<SOUND_MIXER_NRDEVICES;i++)
+-			{
+-				res = (devmask >> i)%2;
+-				if (res)
+-				{
+-					result[o] = malloc(strlen(devices[i])+1);
+-					sprintf(result[o], "%s", devices[i]); 
+-					o++;
+-				}
+-				result[o] = NULL;	
+-			}
+-	}
+-	return result;
+-}
+-
+-int mixer_set_rec_device(void)
+-{
+-	int devmask, recmask;
+-
+-	if (mixer_fd <= 0)
+-		return 0;
+-
+-	if (mixer_src < 0)
+-		return 0;
+-
+-	if ((ioctl(mixer_fd, SOUND_MIXER_READ_RECMASK, &devmask)) == -1)
+-		return 0;
+-	
+-	recmask = 1 << mixer_src;
+-	if (!(recmask & devmask))
+-		return 0;
+-
+-	if ((ioctl(mixer_fd, SOUND_MIXER_WRITE_RECSRC, &recmask)) == -1)
+-		return 0;
+-
+-	return 1;
+-}			
+-
+-int mixer_close(void)
+-{
+-	if (mixer_fd > 0)
+-		close(mixer_fd);
+-	
+-	return 1;
+-}
+-		
+-int mixer_set_volume(int volume)
+-{
+-	int i_vol;
+-	if (mixer_fd<0)
+-		return -1;
+-
+-	assert(volume <= 100);
+-	assert(volume >= 0);
+-
+-
+-	if (mixer_src<0) 
+-		return -1;
+-	
+-	i_vol = volume;  
+-	i_vol += volume << 8;
+-
+-	/*printf("Setting %s to vol %i\n", devices[mixer_src], volume);*/
+-	if ((ioctl(mixer_fd, MIXER_WRITE(mixer_src), &i_vol)) < 0)
+-		return 0;
+-		
+-	return 1;
+-}
+-
+-int mixer_get_volume(void)
+-{
+-	int i_vol = 0, r, l, volume;
+-	
+-	if (mixer_fd<0)
+-		return -1;
+-
+-	if (mixer_src<0) 
+-		return -1;
+-	
+-	if ((ioctl(mixer_fd, MIXER_READ(mixer_src), &i_vol)) < 0)
+-		return 0;
+-
+-	r = i_vol >> 8;
+-	l = i_vol % (1 << 8);
+-	volume = (r + l)/2;
+-	/*printf("%d %d %d %d\n", r, l, volume, i_vol);*/
+-	
+-	assert((volume >= 0) && (volume <= 100));
+-	
+-	return volume;
+-}
+Index: gnomeradio-1.8/src/tech.h
+===================================================================
+--- gnomeradio-1.8.orig/src/tech.h
++++ /dev/null
+@@ -1,34 +0,0 @@
+-/*
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License as published by
+- *  the Free Software Foundation; either version 2 of the License, or
+- *  (at your option) any later version.
+- *
+- *  This program is distributed in the hope that it will be useful,
+- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *  GNU Library General Public License for more details.
+- *
+- *  You should have received a copy of the GNU General Public License
+- *  along with this program; if not, write to the Free Software
+- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+- */
+-
+-#ifndef _TECH_H
+-#define _TECH_H
+-
+-int mixer_init(char *mixer_device, char *mixer_source);
+-
+-char* mixer_get_sndcard_name(void);
+-
+-char** mixer_get_rec_devices(void);
+-
+-int mixer_close(void);
+-
+-int mixer_set_volume(int volume);
+-
+-int mixer_get_volume(void);
+-
+-int mixer_set_rec_device(void);
+-
+-#endif
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -30,7 +30,7 @@
+ #include <stdlib.h>
+ #include "gui.h"
+ #include "trayicon.h"
+-#include "tech.h"
++#include "mixer.h"
+ #include "radio.h"
+ #include "rec_tech.h"
+ #include "lirc.h"
+@@ -49,6 +49,8 @@
+ #define STEREO_WIDTH 35
+ #define SCAN_SPEED 20
+ 
++#define VOLUME_STEP 5
++
+ #define TRANSLATORS "TRANSLATORS"
+ 
+ /* Latency is not a big problem for radio (no video to sync with), and
+@@ -61,7 +63,7 @@ char *alsa_capture = NULL;
+ int alsa_latency = DEFAULT_LATENCY;
+ int alsa_debug = 0;
+ 
+-GtkWidget* mute_button, *preset_combo;
++GtkWidget* volume_button, *preset_combo;
+ GtkAdjustment *adj;
+ GtkWidget* app;
+ 
+@@ -78,6 +80,8 @@ static GtkWidget *rec_button;
+ static GtkWidget *prefs_button;
+ 
+ static int timeout_id, bp_timeout_id = -1, bp_timeout_steps = 0;
++static int volume_value_changed_id;
++static gint mode;
+ 
+ static DBusGProxy      * connect_to_session	       (void);
+ 
+@@ -241,43 +245,116 @@ static void initial_frequency_scan(GtkWi
+ 			}	
+ 		}
+ 	}	
+-}	
++}
++
++static gdouble
++get_volume (void)
++{
++	return gtk_scale_button_get_value (GTK_SCALE_BUTTON (volume_button)) * 100;
++}
++
++static void
++set_volume (gdouble volume)
++{
++	mixer->set_volume (volume);
++
++	g_signal_handler_block (G_OBJECT(volume_button), volume_value_changed_id);
++	gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), volume / 100);
++	g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
++
++	if (tray_menu) {
++		g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->is_muted());
++		g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++	}
++
++	if (radio_is_muted())
++		radio_unmute();
++
++	settings.unmute_volume = volume / 100;
++}
+ 
+-int gtk_volume_button_get_value (GtkWidget *button)
++void
++volume_up (void)
+ {
+-	return (int) (gtk_scale_button_get_value(GTK_SCALE_BUTTON(button)) * 100);
++	gdouble volume;
++
++	volume = get_volume ();
++	set_volume (volume > 95 ? 100 : volume + VOLUME_STEP);
++}
++
++void
++volume_down (void)
++{
++	gdouble volume;
++
++	volume = get_volume ();
++	set_volume (volume < 5 ? 0 : volume - VOLUME_STEP);
+ }
+ 
+-void gtk_volume_button_set_value (GtkWidget *button, int value)
++static void
++volume_value_changed_cb (GtkVolumeButton *button, gpointer user_data)
+ {
+-	gtk_scale_button_set_value(GTK_SCALE_BUTTON(button), (gdouble) value / 100);
++	set_volume (gtk_scale_button_get_value (GTK_SCALE_BUTTON (volume_button)) * 100);
++}
++
++void
++toggle_volume (void)
++{
++	gdouble volume;
++
++	if (radio_is_muted())
++		radio_unmute();
++	else
++		radio_mute();
++
++	if (mixer->is_muted()) {
++		mixer->mute(0);
++		settings.muted = FALSE;
++	} else {
++		mixer->mute(1);
++		settings.muted = TRUE;
++	}
++
++	volume = (gdouble) mixer->get_volume();
++	g_signal_handler_block (G_OBJECT(volume_button), volume_value_changed_id);
++	gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), volume / 100);
++	g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
++
++	if (tray_menu) {
++		g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->is_muted());
++		g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++	}
+ }
+ 
+ static void prefs_button_clicked_cb(GtkButton *button, gpointer app)
+ {
+ 	GtkWidget* dialog;
+ 	gint choise;
+-	
++
+ 	dialog = prefs_window(app);
+-	
++
+ 	/* Michael Jochum <e9725005@stud3.tuwien.ac.at> proposed to not use gnome_dialog_set_parent()
+ 	   but following instead. */
+ 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app));
+ 	gtk_window_set_position(GTK_WINDOW(dialog), GTK_WIN_POS_CENTER);
+-	
++
+ 	/*gnome_dialog_set_parent(GNOME_DIALOG(dialog), GTK_WINDOW(app));*/
+-	
++
++	action_mode (mode);
++
+ 	choise = GTK_RESPONSE_HELP;
+ 	while (choise == GTK_RESPONSE_HELP)
+ 	{
+-		choise = gtk_dialog_run(GTK_DIALOG(dialog)); 
++		choise = gtk_dialog_run(GTK_DIALOG(dialog));
+ 		switch (choise)
+ 		{
+ 			case GTK_RESPONSE_HELP:
+ 				display_help_cb("gnomeradio-settings");
+ 			break;
+ 			default:
+-				/* We need the hide signal to get the value of the device_entry */
++				/* We need the hide signal to get the value of the device[mixer]_entry */
+ 				gtk_widget_hide(dialog);
+ 				gtk_widget_destroy(dialog);
+ 		}
+@@ -286,81 +363,69 @@ static void prefs_button_clicked_cb(GtkB
+ 
+ void start_radio(gboolean restart, GtkWidget *app)
+ {
+-    DriverType driver = DRIVER_ANY;
++	DriverType driver = DRIVER_ANY;
+ 	if (restart)
+ 		radio_stop();
+-	
+-    if (settings.driver) {
+-        if (0 == strcmp(settings.driver, "v4l1"))
+-            driver = DRIVER_V4L1;
+-        if (0 == strcmp(settings.driver, "v4l2"))
+-            driver = DRIVER_V4L2;
+-    }
+ 
+-	if (!radio_init(settings.device, driver))
+-	{
+-		char *caption = g_strdup_printf(_("Could not open device \"%s\"!"), settings.device);
+-		char *detail = g_strdup_printf(_("Check your settings and make sure that no other\n"
+-				"program is using %s.\nAlso make sure that you have read-access to it."), settings.device);
++	if (settings.driver) {
++		if (0 == strcmp(settings.driver, "v4l1"))
++			driver = DRIVER_V4L1;
++		if (0 == strcmp(settings.driver, "v4l2"))
++			driver = DRIVER_V4L2;
++	}
++
++	if (!radio_init(settings.device, driver)) {
++		char *caption = g_strdup_printf(_("Could not open radio device \"%s\"!"), settings.device);
++		char *detail = g_strdup_printf(_("Check your settings and make sure that no other program is using %s.\n"
++						 "Also make sure that you have read access to it."), settings.device);
+ 		show_error_message(caption, detail);
+ 		g_free(caption);
+ 		g_free(detail);
+-		
+-		if (!restart)
++
++		if (!restart) {
++			mode = RADIO_DEVICE;
+ 			prefs_button_clicked_cb(NULL, app);
++			mode = PRESETS;
++		}
+ 	}
+ }
+ 
+ void start_mixer(gboolean restart, GtkWidget *app)
+ {
+-	gint res, vol;
+-	
+ 	if (restart)
+-		mixer_close();
+-	
+-	res = mixer_init(settings.mixer_dev, settings.mixer);
+-	if (res <1) 
+-	{
+-		char *buffer;
+-		
+-		if (res == -1)
+-			buffer = g_strdup_printf(_("Mixer source \"%s\" is not a valid source!"), settings.mixer);
+-		else 
+-			buffer = g_strdup_printf(_("Could not open \"%s\"!"), settings.mixer_dev);
+-		
+-		show_error_message(buffer, NULL);
+-		
+-		g_free(buffer);
+-	}		
+-	vol = mixer_get_volume();
+-	if (vol >= 0) {
+-		gtk_volume_button_set_value(mute_button, vol);
+-		/*gtk_adjustment_set_value(volume, (double)vol);*/
+-	}
+-}
++		mixer->close_device();
+ 
+-GList* get_mixer_recdev_list(void)
+-{
+-	int i;
+-	char **array, *dev;
+-	GList *result = NULL;
+-	
+-	array = mixer_get_rec_devices();
+-	if (!array)
+-		return NULL;
+-	
+-	i = 0;	
+-	dev = array[i];
+-	while (dev)
+-	{
+-		char *text = g_strdup(dev);
+-		result = g_list_append(result, text);
+-		free(dev);
+-		dev = array[++i];
+-	}			
+-	free(array);
+-	
+-	return result;
++	if (mixer_set_device(settings.mixer)) {
++		mixer->set_state (settings.muted, settings.unmute_volume);
++		g_signal_handler_block (G_OBJECT(volume_button), volume_value_changed_id);
++		gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), settings.unmute_volume);
++		g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
++
++		if (tray_menu) {
++			g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->is_muted());
++			g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++		}
++
++		gtk_widget_set_sensitive(volume_button, TRUE);
++	} else {
++		char *caption, *detail;
++
++		caption = g_strdup_printf(_("Could not open mixer device \"%s\"!"), settings.mixer);
++		detail = g_strdup_printf(_("You can use alsamixer to get information about the sound card.\n"
++					   "The format to set mixer to use: \"device/channel\" (e.g. hw:0/Line)."));
++		show_error_message(caption, detail);
++		g_free(caption);
++		g_free(detail);
++
++		gtk_widget_set_sensitive(volume_button, FALSE);
++
++		if (!restart) {
++			mode = MIXER_DEVICE;
++			prefs_button_clicked_cb(NULL, app);
++			mode = PRESETS;
++		}
++	}
+ }
+ 
+ static gboolean redraw_status_window(void)
+@@ -454,14 +519,14 @@ static gboolean draw_cb(GtkWidget *widge
+ {
+ 	redraw_status_window();
+ 	return TRUE;
+-}	
++}
+ 
+ void exit_gnome_radio(void)
+ {
+ 	if (settings.mute_on_exit)
+ 		radio_stop();
+ 
+-	mixer_close();
++	mixer->close_device();
+ 	save_settings();
+ 	gtk_main_quit();
+ }
+@@ -510,41 +575,6 @@ static void adj_value_changed_cb(GtkAdju
+ 	radio_set_freq(gtk_adjustment_get_value(adj)/STEPS);
+ }
+ 
+-static void volume_value_changed_cb(GtkVolumeButton *button, gpointer user_data)
+-{
+-	/* char *text; */
+-	int vol = (int)(gtk_volume_button_get_value(mute_button) + 0.5f);
+-	
+-	mixer_set_volume(vol);
+-	
+-/*	text = g_strdup_printf(_("Volume: %d%%"), vol);
+-	gtk_widget_set_tooltip_text(vol_scale, text);
+-	g_free(text);*/
+-	
+-    if (tray_menu) {
+-	    g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-	    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), vol == 0);
+-	    g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-    }
+-}
+-
+-#if 0
+-static gboolean poll_volume_change(gpointer data)
+-{
+-	int vol;
+-	if ((vol = mixer_get_volume()) < 0)
+-		return FALSE;
+-	
+-	if (vol != (int)volume->value)
+-	{
+-		g_print("external volume change detected\n");
+-		gtk_adjustment_set_value(volume, (double)vol);
+-	}
+-	
+-	return TRUE;
+-}
+-#endif
+-
+ static void change_frequency(gpointer data)
+ {
+ 	gboolean increase = (gboolean) GPOINTER_TO_INT (data);
+@@ -637,7 +667,7 @@ void scfw_button_clicked_cb(GtkButton *b
+ 		return;
+ 	}
+ 	radio_mute();
+-	timeout_id = g_timeout_add(1000/SCAN_SPEED, (GSourceFunc)scan_freq, (gpointer)1);	
++	timeout_id = g_timeout_add(1000/SCAN_SPEED, (GSourceFunc)scan_freq, (gpointer)1);
+ }
+ 
+ void scbw_button_clicked_cb(GtkButton *button, gpointer data)
+@@ -756,16 +786,6 @@ static int start_recording(const gchar *
+ 	Recording* recording;
+ 	char *filename;
+ 	
+-	if (!mixer_set_rec_device())
+-	{
+-		GtkWidget *dialog;
+-		dialog = gtk_message_dialog_new(NULL, DIALOG_FLAGS, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+-				"Could not set \"%s\" as recording Source", settings.mixer);
+-		gtk_dialog_run (GTK_DIALOG (dialog));
+-		gtk_widget_destroy (dialog);
+-		return -1;
+-	}
+-	
+ 	/* You can translate the filename for a recording:
+ 	 * args for this format are: path, station title, time 
+ 	 */ 
+@@ -823,45 +843,6 @@ void rec_button_clicked_cb(GtkButton *bu
+ 	g_free(time);
+ }
+ 
+-void toggle_volume(void)
+-{
+-	static int old_vol;
+-	int muted, vol
+-
+-	muted = radio_is_muted();
+-	vol = mixer_get_volume();
+-	
+-	if (vol) {
+-		old_vol = vol;
+-		vol = 0;
+-	} else {
+-		vol = old_vol;
+-	}
+-
+-	mixer_set_volume(vol);
+-	gtk_volume_button_set_value(mute_button, vol);
+-
+-	if (muted)
+-		radio_unmute();
+-	else
+-		radio_mute();
+-}	
+-
+-/*
+-static void mute_button_toggled_cb(GtkButton *button, gpointer data)
+-{
+-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mute_button)))
+-	{	
+-		gtk_widget_set_tooltip_text(mute_button, _("Unmute"));	
+-	}
+-	else
+-	{
+-		gtk_widget_set_tooltip_text(mute_button, _("Mute"));
+-	}
+-	toggle_volume();
+-}
+-*/
+-
+ static char *get_license_text (void)
+ {
+ 	const gchar *license[] = {
+@@ -1011,9 +992,10 @@ GtkWidget* gnome_radio_gui(void)
+ 	stfw_button = gtk_button_new();
+ 	stbw_button = gtk_button_new();
+ 	about_button = gtk_button_new();
+-	/*mute_button = gtk_toggle_button_new();*/
+-	mute_button = gtk_volume_button_new();
+-	gtk_button_set_relief(GTK_BUTTON(mute_button), GTK_RELIEF_NORMAL);
++	/*volume_button = gtk_toggle_button_new();*/
++	volume_button = gtk_volume_button_new();
++	gtk_button_set_relief(GTK_BUTTON(volume_button), GTK_RELIEF_NORMAL);
++	gtk_widget_set_sensitive(volume_button, FALSE);
+ 	rec_button = gtk_button_new();
+ 	/*help_button = gtk_button_new();*/
+ 
+@@ -1024,7 +1006,7 @@ GtkWidget* gnome_radio_gui(void)
+ 	gtk_container_add(GTK_CONTAINER(stfw_button), stfw_pixmap);
+ 	gtk_container_add(GTK_CONTAINER(stbw_button), stbw_pixmap);
+ 	gtk_container_add(GTK_CONTAINER(about_button), about_pixmap);
+-	/*gtk_container_add(GTK_CONTAINER(mute_button), mute_pixmap);*/
++	/*gtk_container_add(GTK_CONTAINER(volume_button), mute_pixmap);*/
+ 	gtk_container_add(GTK_CONTAINER(rec_button), rec_pixmap);
+ 	/*gtk_container_add(GTK_CONTAINER(help_button), help_pixmap);*/
+ 
+@@ -1078,7 +1060,7 @@ GtkWidget* gnome_radio_gui(void)
+ /*	gtk_scale_set_digits(GTK_SCALE(vol_scale), 0);
+ 	gtk_scale_set_draw_value(GTK_SCALE(vol_scale), FALSE);
+ 
+-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mute_button), mixer_get_volume() == 0);*/
++	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(volume_button), mixer->get_volume() == 0);*/
+ 
+ 	gtk_widget_set_size_request(drawing_area, DIGIT_WIDTH*6+10+SIGNAL_WIDTH+STEREO_WIDTH, DIGIT_HEIGTH+10);
+ 
+@@ -1089,7 +1071,7 @@ GtkWidget* gnome_radio_gui(void)
+ 	gtk_box_pack_start(GTK_BOX(hbox2), stfw_button, FALSE, FALSE, 2);
+ 	gtk_box_pack_start(GTK_BOX(hbox2), scfw_button, FALSE, FALSE, 2);
+ 	gtk_box_pack_start(GTK_BOX(hbox2), vseparator1, FALSE, FALSE, 2);
+-	gtk_box_pack_start(GTK_BOX(hbox2), mute_button, FALSE, FALSE, 2);
++	gtk_box_pack_start(GTK_BOX(hbox2), volume_button, FALSE, FALSE, 2);
+ 	/*gtk_box_pack_start(GTK_BOX(hbox2), vseparator2, TRUE, TRUE, 3);*/
+ 	gtk_box_pack_start(GTK_BOX(hbox2), rec_button, FALSE, FALSE, 2);
+ 	gtk_box_pack_start(GTK_BOX(hbox2), vseparator4, FALSE, FALSE, 2);
+@@ -1130,7 +1112,7 @@ GtkWidget* gnome_radio_gui(void)
+ 	g_signal_connect(G_OBJECT(app), "delete_event", G_CALLBACK(delete_event_cb), NULL);
+ 	g_signal_connect(G_OBJECT(quit_button), "clicked", G_CALLBACK(quit_button_clicked_cb), NULL);
+ 	g_signal_connect(G_OBJECT(adj), "value-changed", G_CALLBACK(adj_value_changed_cb), (gpointer) app);
+-	g_signal_connect(G_OBJECT(mute_button), "value-changed", G_CALLBACK(volume_value_changed_cb), NULL);
++	volume_value_changed_id = g_signal_connect(G_OBJECT(volume_button), "value-changed", G_CALLBACK(volume_value_changed_cb), NULL);
+ 	g_signal_connect(G_OBJECT(stfw_button), "pressed", G_CALLBACK(step_button_pressed_cb), (gpointer)TRUE);
+ 	g_signal_connect(G_OBJECT(stbw_button), "pressed", G_CALLBACK(step_button_pressed_cb), (gpointer)FALSE);
+ 	g_signal_connect(G_OBJECT(stfw_button), "clicked", G_CALLBACK(step_button_clicked_cb), (gpointer)TRUE);
+@@ -1151,7 +1133,7 @@ GtkWidget* gnome_radio_gui(void)
+ 	gtk_widget_set_tooltip_text(about_button, _("About"));
+ 	gtk_widget_set_tooltip_text(rec_button, _("Record radio as OGG, Flac, Wave or MP3"));
+ 	gtk_widget_set_tooltip_text(prefs_button, _("Edit your Preferences"));
+-	gtk_widget_set_tooltip_text(mute_button, _("Adjust the Volume"));
++	gtk_widget_set_tooltip_text(volume_button, _("Adjust the Volume"));
+ 	gtk_widget_set_tooltip_text(quit_button, _("Quit"));
+ 	text = g_strdup_printf(_("Frequency: %.2f MHz"), gtk_adjustment_get_value(adj)/STEPS);
+ 	gtk_widget_set_tooltip_text(freq_scale, text);
+@@ -1172,7 +1154,7 @@ session_die_cb(void)
+ 	if (settings.mute_on_exit)
+ 		radio_stop();
+ 
+-	mixer_close();
++	mixer->close_device();
+ 	gtk_main_quit();
+ 	exit (0);
+ }
+@@ -1196,8 +1178,6 @@ gconf_error_handler(GConfClient *client,
+ gboolean
+ key_press_event_cb(GtkWidget *app, GdkEventKey *event, gpointer data)
+ {
+-	int vol = (int)(gtk_volume_button_get_value(mute_button) + 0.5f);
+-	
+ 	switch (event->keyval)
+ 	{
+ 		case GDK_KEY_F1: display_help_cb(NULL);
+@@ -1228,13 +1208,11 @@ key_press_event_cb(GtkWidget *app, GdkEv
+ 				break;
+ 		case GDK_KEY_KP_Add:
+ 		case GDK_KEY_plus:	
+-				gtk_volume_button_set_value(mute_button, vol > 95 ? 100 : vol + 5);
+-				/*gtk_adjustment_set_value(volume, (volume->value > 95) ? 100 : volume->value+5);*/
++				volume_up();
+ 				break;
+ 		case GDK_KEY_minus:
+ 		case GDK_KEY_KP_Subtract: 
+-				gtk_volume_button_set_value(mute_button, vol < 5 ? 0 : vol - 5);
+-				/*gtk_adjustment_set_value(volume,(volume->value < 5) ? 0 : volume->value-5);*/
++				volume_down();
+ 				break;
+ 	}
+ 	return FALSE;
+@@ -1394,8 +1372,8 @@ int main(int argc, char* argv[])
+ 
+ 	load_settings();
+ 
+-	start_mixer(FALSE, app);
+ 	start_radio(FALSE, app);
++	start_mixer(FALSE, app);
+ 	if (is_first_start() || do_scan) {
+ 		if (!radio_is_init()) {
+ 			fprintf(stderr, "Could not scan. Radio is not initialized\n");
+@@ -1415,12 +1393,12 @@ int main(int argc, char* argv[])
+ 
+ 	gtk_widget_show_all(app);
+ 	main_visible = TRUE;
++	mode = PRESETS;
+ 
+ 	/* Create an tray icon */
+ 	create_tray_icon(app);
+ 
+ 	adj_value_changed_cb(NULL, (gpointer) app);
+-	/*volume_value_changed_cb(NULL, NULL);*/
+ 	
+ #ifdef HAVE_LIRC
+ 	if(!my_lirc_init())
+Index: gnomeradio-1.8/src/gui.h
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.h
++++ gnomeradio-1.8/src/gui.h
+@@ -30,10 +30,11 @@ typedef struct Preset preset;
+ struct Gnomeradio_Settings
+ {
+ 	gchar *device;
+-	gchar *mixer_dev;
+ 	gchar *mixer;
++	gboolean muted;
++	gfloat unmute_volume;
+ 	gboolean mute_on_exit;
+-    gchar *driver;
++	gchar *driver;
+ 	
+ 	GList *presets;
+ };
+@@ -48,8 +49,6 @@ void start_radio(gboolean restart, GtkWi
+ 
+ void start_mixer(gboolean restart, GtkWidget *app);
+ 
+-GList* get_mixer_recdev_list(void);
+-
+ void exit_gnome_radio(void);
+ 
+ void scfw_button_clicked_cb(GtkButton *button, gpointer data);
+@@ -58,9 +57,9 @@ void scbw_button_clicked_cb(GtkButton *b
+ 
+ void rec_button_clicked_cb(GtkButton *button, gpointer app);
+ 
+-int  gtk_volume_button_get_value (GtkWidget *button);
++void volume_up (void);
+ 
+-void gtk_volume_button_set_value (GtkWidget *button, int value);
++void volume_down (void);
+ 
+ void toggle_volume(void);
+ 
+Index: gnomeradio-1.8/src/prefs.c
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.c
++++ gnomeradio-1.8/src/prefs.c
+@@ -26,7 +26,7 @@
+ #include "gui.h"
+ #include "rec_tech.h"
+ 
+-extern GtkWidget* mute_button, *preset_combo;
++extern GtkWidget *preset_combo;
+ extern GtkAdjustment *adj;
+ 
+ extern int mom_ps;
+@@ -34,10 +34,9 @@ extern gnomeradio_settings settings;
+ 
+ extern gboolean main_visible;
+ 
+-static GtkWidget *device_entry;
+-static GtkWidget *mixer_combo;
++static GtkWidget *device_entry, *mixer_entry;
+ static GtkWidget *mute_on_exit_cb;
+-static GtkWidget *save_button, *move_up_button, *move_down_button, *remove_button;
++static GtkWidget *save_button, *move_up_button, *move_down_button, *add_button, *remove_button;
+ static GtkWidget *list_view;
+ static GtkListStore *list_store;
+ static GtkTreeSelection *selection;
+@@ -60,7 +59,8 @@ gboolean save_settings(void)
+ 	gconf_client_set_string(client, "/apps/gnomeradio/device", settings.device, NULL);
+ 	gconf_client_set_string(client, "/apps/gnomeradio/driver", settings.driver, NULL);
+ 	gconf_client_set_string(client, "/apps/gnomeradio/mixer", settings.mixer, NULL);
+-	gconf_client_set_string(client, "/apps/gnomeradio/mixer-device", settings.mixer_dev, NULL);
++	gconf_client_set_bool(client, "/apps/gnomeradio/muted", settings.muted, NULL);
++	gconf_client_set_float(client, "/apps/gnomeradio/unmute-volume", settings.unmute_volume, NULL);
+ 	gconf_client_set_bool(client, "/apps/gnomeradio/mute-on-exit", settings.mute_on_exit, NULL);
+ 	/*gconf_client_set_float(client, "/apps/gnomeradio/volume", volume->value, NULL);*/
+ 	gconf_client_set_float(client, "/apps/gnomeradio/last-freq", gtk_adjustment_get_value(adj)/STEPS, NULL);
+@@ -123,10 +123,9 @@ gboolean load_settings(void)
+ 		settings.driver = g_strdup("any");
+ 	settings.mixer = gconf_client_get_string(client, "/apps/gnomeradio/mixer", NULL);
+ 	if (!settings.mixer)
+-		settings.mixer = g_strdup("line");
+-	settings.mixer_dev = gconf_client_get_string(client, "/apps/gnomeradio/mixer-device", NULL);
+-	if (!settings.mixer_dev)
+-		settings.mixer_dev = g_strdup("/dev/mixer");
++		settings.mixer = g_strdup("hw:0/Line");
++	settings.muted = gconf_client_get_bool(client, "/apps/gnomeradio/muted", NULL);
++	settings.unmute_volume = gconf_client_get_float(client, "/apps/gnomeradio/unmute-volume", NULL);
+ 	settings.mute_on_exit = gconf_client_get_bool(client, "/apps/gnomeradio/mute-on-exit", NULL);
+ 	/*volume->value = gconf_client_get_float(client, "/apps/gnomeradio/volume", NULL);*/
+ 	freq = gconf_client_get_float(client, "/apps/gnomeradio/last-freq", NULL);
+@@ -194,11 +193,16 @@ static void mute_on_exit_toggled_cb(GtkW
+ 
+ static gboolean device_entry_activate_cb(GtkWidget *widget, gpointer data)
+ {
+-	const gchar *text = gtk_entry_get_text(GTK_ENTRY(device_entry));
++	const gchar *text;
+ 
+-	if (!strcmp(settings.device, text)) return FALSE;
++	text = gtk_entry_get_text(GTK_ENTRY(device_entry));
++
++	if (!strcmp(settings.device, text) || (text[0] == '\0'))
++		return FALSE;
+ 	
+-	if (settings.device) g_free(settings.device);
++	if (settings.device)
++		g_free(settings.device);
++
+ 	settings.device = g_strdup(text);
+ 	
+ 	start_radio(TRUE, data);
+@@ -206,28 +210,19 @@ static gboolean device_entry_activate_cb
+ 	return FALSE;
+ }
+ 
+-static gboolean mixer_combo_change_cb(GtkComboBox *combo, gpointer data)
++static gboolean mixer_entry_activate_cb(GtkWidget *widget, gpointer data)
+ {
+-	GList *mixer_devs;
+-	int active;
+-	gchar *mixer_dev, *tmp;
+-	
+-	g_assert(combo);
+-	mixer_devs = g_object_get_data(G_OBJECT(combo), "mixer_devs");
+-	active = gtk_combo_box_get_active(combo);
+-	g_assert(active > -1);
+-	
+-	mixer_dev = (gchar*)g_list_nth_data(mixer_devs, active);
+-	g_assert(mixer_dev);
+-	
+-	if (g_str_equal(mixer_dev, settings.mixer))
+-		return FALSE;
++	const gchar *text;
++
++	text = gtk_entry_get_text(GTK_ENTRY(mixer_entry));
+ 
+-	if (settings.mixer) g_free(settings.mixer);
+-	settings.mixer = g_strdup(mixer_dev);
++	if (!strcmp(settings.mixer, text) || (text[0] == '\0'))
++		return FALSE;
+ 	
+-	if ((tmp = strstr(settings.mixer, " (")))
+-		tmp[0] = '\0';
++	if (settings.mixer)
++		g_free(settings.mixer);
++
++	settings.mixer = g_strdup(text);
+ 	
+ 	start_mixer(TRUE, data);
+ 	
+@@ -695,11 +690,34 @@ static void list_view_selection_changed_
+ 	gtk_widget_set_sensitive(save_button, sel);
+ }
+ 
+-static void free_string_list(GList *list)
++static void list_view_scroll_to_active_preset_cb(GtkWidget *widget, gpointer data)
+ {
+-	if (!list) return;
+-	g_list_foreach(list, (GFunc)g_free, NULL);
+-	g_list_free(list);
++	GtkTreePath *path = NULL;
++	GtkTreeIter iter;
++	gint active;
++
++	if (settings.presets == NULL) {
++		gtk_widget_grab_focus(add_button);
++		return;
++	}
++
++	active = gtk_combo_box_get_active(GTK_COMBO_BOX(preset_combo)) - 1;
++
++	if (active < 0) {
++		gtk_widget_grab_focus(add_button);
++		return;
++	}
++
++	if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(list_store), &iter, NULL, active))
++		return;
++
++	path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);
++
++	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW (list_view), path, NULL, FALSE, 0, 0);
++	gtk_tree_view_set_cursor(GTK_TREE_VIEW (list_view), path, NULL, FALSE );
++	gtk_tree_path_free(path);
++
++	gtk_widget_grab_focus(list_view);
+ }
+ 
+ static void free_preset_list(gpointer data, gpointer user_data)
+@@ -1020,6 +1038,25 @@ static void load_from_file_cb(GtkWidget
+ 	gtk_widget_destroy(dialog);
+ }
+ 
++gboolean action_mode (gint mode)
++{
++	switch (mode) {
++		case RADIO_DEVICE:
++			gtk_widget_grab_focus (device_entry);
++			break;
++		case MIXER_DEVICE:
++			gtk_widget_grab_focus (mixer_entry);
++			break;
++		case PRESETS:
++			list_view_scroll_to_active_preset_cb(list_view, NULL);
++			break;
++		default:
++			break;
++	}
++
++	return TRUE;
++}
++
+ GtkWidget* prefs_window(GtkWidget *app)
+ {
+ 	GtkWidget *dialog;
+@@ -1030,15 +1067,14 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	GtkWidget *destination_label;
+ 	GtkWidget *destination_button;
+ 	GtkWidget *profile_combo;
+-	GtkWidget *mixer_eb, *profile_eb;
++	GtkWidget *profile_eb;
+ 	GtkWidget *device_label, *mixer_label;
+ 	GtkWidget *button_box;
+-	GtkWidget *open_button, *add_button;
++	GtkWidget *open_button;
+ 	GtkWidget *scrolled_window;
+ 	GtkCellRenderer *cellrenderer;
+ 	GtkTreeViewColumn *list_column;
+-	GList *mixer_devs, *ptr;
+-	gint i, active;
++	gint i;
+ 	char *settings_hdr, *presets_hdr, *record_hdr;
+ 	preset* ps;
+ 	
+@@ -1080,20 +1116,11 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 
+ 	mixer_label = gtk_label_new(_("Mixer Source:"));
+ 	gtk_widget_set_halign(mixer_label, GTK_ALIGN_START);
+-	mixer_eb = gtk_event_box_new();
+-	mixer_combo = gtk_combo_box_text_new();
+-	gtk_container_add(GTK_CONTAINER(mixer_eb), mixer_combo);
+-	ptr = mixer_devs = get_mixer_recdev_list();
+-	for (i = 0, active = 0; ptr; ptr = g_list_next(ptr)) {
+-		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mixer_combo), ptr->data);
+-		if (g_str_equal(ptr->data, settings.mixer)) active = i;
+-		++i;
+-	}
+-	gtk_combo_box_set_active(GTK_COMBO_BOX(mixer_combo), active);
+-	g_object_set_data_full(G_OBJECT(mixer_combo), "mixer_devs", mixer_devs, (GDestroyNotify)free_string_list);
++	mixer_entry = gtk_entry_new();
++	gtk_entry_set_text(GTK_ENTRY(mixer_entry), settings.mixer);
+ 	
+ 	gtk_grid_attach(GTK_GRID(grid), mixer_label, 1, 2, 1, 1);
+-	gtk_grid_attach(GTK_GRID(grid), mixer_eb, 2, 2, 1, 1);
++	gtk_grid_attach(GTK_GRID(grid), mixer_entry, 2, 2, 1, 1);
+ 
+ 	mute_on_exit_cb = gtk_check_button_new_with_label(_("Mute on exit"));
+ 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mute_on_exit_cb), settings.mute_on_exit);
+@@ -1102,13 +1129,13 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 
+ 	g_signal_connect(G_OBJECT(device_entry), "hide", G_CALLBACK(device_entry_activate_cb), app);
+ 	g_signal_connect(G_OBJECT(device_entry), "activate", G_CALLBACK(device_entry_activate_cb), NULL);
+-	g_signal_connect(G_OBJECT(mixer_combo), "changed", G_CALLBACK(mixer_combo_change_cb), app);
++	g_signal_connect(G_OBJECT(mixer_entry), "hide", G_CALLBACK(mixer_entry_activate_cb), app);
++	g_signal_connect(G_OBJECT(mixer_entry), "activate", G_CALLBACK(mixer_entry_activate_cb), NULL);
+ 	g_signal_connect(G_OBJECT(mute_on_exit_cb), "toggled", G_CALLBACK(mute_on_exit_toggled_cb), NULL);
+ 
+-	gtk_widget_set_tooltip_text(device_entry, _("Specify the radio-device (in most cases /dev/radio0)"));
+-	gtk_widget_set_tooltip_text(mixer_eb, 
+-	_("Choose the mixer source (line, line1, etc.) that is able to control the volume of your radio"));
+-	gtk_widget_set_tooltip_text(mute_on_exit_cb, _("If unchecked, gnomeradio won't mute after exiting"));
++	gtk_widget_set_tooltip_text(device_entry, _("The radio device to use (e.g. /dev/radio0)"));
++	gtk_widget_set_tooltip_text(mixer_entry, _("The mixer device and channel to use (e.g. hw:0/Line)"));
++	gtk_widget_set_tooltip_text(mute_on_exit_cb, _("Mute radio device on exit"));
+ 
+ 	/* The presets part */
+ 	presets_hdr = g_strconcat("<span weight=\"bold\">", _("Presets"), "</span>", NULL);
+@@ -1238,7 +1265,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_box_pack_end(GTK_BOX(button_box), save_button, FALSE, FALSE, 0);
+ 	gtk_box_pack_end(GTK_BOX(button_box), open_button, FALSE, FALSE, 0);
+ 
+-	gtk_grid_attach(GTK_GRID(grid), button_box, 1, 7, 2, 1);
++	gtk_grid_attach(GTK_GRID(grid), button_box, 2, 7, 1, 1);
+ 
+ 	/* The record settings part */
+ 	record_hdr = g_strconcat("<span weight=\"bold\">", _("Record Settings"), "</span>", NULL);
+Index: gnomeradio-1.8/src/trayicon.c
+===================================================================
+--- gnomeradio-1.8.orig/src/trayicon.c
++++ gnomeradio-1.8/src/trayicon.c
+@@ -23,7 +23,7 @@
+ #include <gtk/gtk.h>
+ #include "gui.h"
+ #include "trayicon.h"
+-#include "tech.h"
++#include "mixer.h"
+ 
+ extern GtkAdjustment *adj;
+ 
+@@ -83,7 +83,7 @@ void create_tray_menu(GtkWidget *app) {
+ 	gtk_menu_shell_append(GTK_MENU_SHELL(tray_menu), gtk_separator_menu_item_new());
+ 
+ 	mute_menuitem = gtk_check_menu_item_new_with_label(_("Muted"));
+-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer_get_volume() == 0);
++	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->get_volume() == 0);
+ 	gtk_menu_shell_append(GTK_MENU_SHELL(tray_menu), mute_menuitem);
+ 	mute_menuitem_toggled_cb_id = 
+ 	g_signal_connect(G_OBJECT(mute_menuitem), "toggled", (GCallback)mute_menuitem_toggled_cb, (gpointer)app);
+Index: gnomeradio-1.8/src/record.c
+===================================================================
+--- gnomeradio-1.8.orig/src/record.c
++++ gnomeradio-1.8/src/record.c
+@@ -27,7 +27,6 @@
+ #include <gtk/gtk.h>
+ #include <glib/gi18n.h>
+ #include "gui.h"
+-#include "tech.h"
+ #include "rec_tech.h"
+ #include "prefs.h"
+ 
+Index: gnomeradio-1.8/src/lirc.c
+===================================================================
+--- gnomeradio-1.8.orig/src/lirc.c
++++ gnomeradio-1.8/src/lirc.c
+@@ -27,7 +27,6 @@
+ #include "lirc.h"
+ #include "gui.h"
+ 
+-extern GtkWidget* mute_button;
+ extern GtkWidget *app;
+ 
+ static int fd = -1;
+@@ -47,7 +46,6 @@ static struct TV_LIST
+ static void execute_lirc_command (char *cmd)
+ {
+ 	printf("lirc command: %s\n", cmd);
+-	int vol = (int)(gtk_volume_button_get_value(mute_button) + 0.5f);
+ 
+ 	if (strcasecmp (cmd, "tune up") == 0) 
+ 	{
+@@ -59,13 +57,11 @@ static void execute_lirc_command (char *
+ 	}
+ 	else if (strcasecmp (cmd, "volume up") == 0) 
+ 	{
+-		gtk_volume_button_set_value(mute_button, vol > 95 ? 100 : vol + 5);
+-		/*gtk_adjustment_set_value(volume, (volume->value > 95) ? 100 : volume->value+5);*/
++		volume_up();
+ 	}
+ 	else if (strcasecmp (cmd, "volume down") == 0) 
+ 	{
+-		gtk_volume_button_set_value(mute_button, vol < 5 ? 0 : vol - 5);
+-		/*gtk_adjustment_set_value(volume,(volume->value < 5) ? 0 : volume->value-5);*/
++		volume_down();
+ 	}
+ 	else if (strcasecmp (cmd, "mute") == 0)
+ 	{
+Index: gnomeradio-1.8/data/gnomeradio.schemas.in
+===================================================================
+--- gnomeradio-1.8.orig/data/gnomeradio.schemas.in
++++ gnomeradio-1.8/data/gnomeradio.schemas.in
+@@ -8,7 +8,7 @@
+       <default>TRUE</default>
+       <locale name="C">
+ 	<short>Mute on exit</short>
+-	<long>If unchecked, gnomeradio won't mute after exiting</long>
++	<long>Mute radio device on exit</long>
+       </locale>
+     </schema>
+ 
+@@ -32,7 +32,7 @@
+       <default>/dev/radio0</default>
+       <locale name="C">
+ 	<short>Radio device</short>
+-	<long>Specify the radio-device (in most cases /dev/radio)</long>
++	<long>The radio device to use (e.g. /dev/radio0)</long>
+       </locale>
+     </schema>
+ 
+@@ -44,7 +44,7 @@
+       <default>any</default>
+       <locale name="C">
+ 	<short>Device driver</short>
+-	<long>Specify the device driver to use (any, v4l1 or v4l2)</long>
++	<long>The device driver to use (any, v4l1 or v4l2)</long>
+       </locale>
+     </schema>
+ 
+@@ -53,22 +53,34 @@
+       <applyto>/apps/gnomeradio/mixer</applyto>
+       <owner>gnomeradio</owner>
+       <type>string</type>
+-      <default>line</default>
++      <default>hw:0/Line</default>
+       <locale name="C">
+ 	<short>Mixer source</short>
+-	<long>Choose the mixer source (line, line1, etc.) that is able to control the volume of your radio</long>
++	<long>The mixer device and channel to use (e.g. hw:0/Line)</long>
+       </locale>
+     </schema>
+ 
+     <schema>
+-      <key>/schemas/apps/gnomeradio/mixer-device</key>
+-      <applyto>/apps/gnomeradio/mixer-device</applyto>
++      <key>/schemas/apps/gnomeradio/muted</key>
++      <applyto>/apps/gnomeradio/muted</applyto>
+       <owner>gnomeradio</owner>
+-      <type>string</type>
+-      <default>/dev/mixer</default>
++      <type>bool</type>
++      <default>FALSE</default>
++      <locale name="C">
++	<short>Muted</short>
++	<long>This setting saves whether or not gnomeradio was muted when it was last exited</long>
++      </locale>
++    </schema>
++
++    <schema>
++      <key>/schemas/apps/gnomeradio/unmute-volume</key>
++      <applyto>/apps/gnomeradio/unmute-volume</applyto>
++      <owner>gnomeradio</owner>
++      <type>float</type>
++      <default>-1</default>
+       <locale name="C">
+-	<short>Mixer Device</short>
+-	<long>The mixer device that gnomeradio should use. Only changeable via this key (no GUI option)</long>
++	<short>Unmute volume</short>
++	<long>This setting saves the volume before muting gnomeradio session</long>
+       </locale>
+     </schema>
+ 
+@@ -92,7 +104,7 @@
+       <default>-1</default>
+       <locale name="C">
+ 	<short>Last presets</short>
+-	<long>The preset that was enabled when gnomeradio was terminated. Range is 0 ... (# presets - 1). None is -1</long>
++	<long>The preset that was enabled when gnomeradio was terminated. Range is 0 ... (presets - 1). None is -1</long>
+       </locale>
+     </schema>
+ 	
+Index: gnomeradio-1.8/src/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/src/Makefile.am
++++ gnomeradio-1.8/src/Makefile.am
+@@ -15,24 +15,28 @@ gnomeradio_SOURCES =		\
+ 	get_media_devices.h	\
+ 	gui.h			\
+ 	lirc.h			\
++	mixer.h			\
+ 	prefs.h			\
+ 	radio.h			\
+ 	rec_tech.h		\
+ 	record.h		\
+-	tech.h			\
+ 	trayicon.h		\
++	utils.h			\
+ 	v4l1.h			\
+ 	v4l2.h			\
+ 	alsa_stream.c		\
+ 	get_media_devices.c	\
+ 	gui.c			\
+ 	lirc.c			\
++	mixer.c			\
++	mixer-alsa.c		\
++	mixer-oss.c		\
+ 	prefs.c			\
+ 	radio.c			\
+ 	rec_tech.c		\
+ 	record.c		\
+-	tech.c			\
+ 	trayicon.c		\
++	utils.c			\
+ 	v4l1.c			\
+ 	v4l2.c
+ 
+Index: gnomeradio-1.8/src/mixer-alsa.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/mixer-alsa.c
+@@ -0,0 +1,239 @@
++/**
++ * Copyright (C) 2006 Philipp Hahn <pmhahn@users.sourceforge.net>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software Foundation,
++ * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#include <stdio.h>
++#include <sys/types.h>
++#include <string.h>
++#include <math.h>
++#include <alsa/asoundlib.h>
++#include "mixer.h"
++
++static const char alsa_core_devnames[] = "default";
++static char *card, *channel;
++static int muted = 0;
++static int mutecount = 0;
++static snd_mixer_t *handle = NULL;
++static snd_mixer_elem_t *elem = NULL;
++
++static long alsa_min, alsa_max, alsa_vol;
++
++static void alsa_open_mixer( void )
++{
++	int err;
++	static snd_mixer_selem_id_t *sid = NULL;
++	if ((err = snd_mixer_open (&handle, 0)) < 0) {
++		fprintf(stderr, "mixer: open error: %s\n", snd_strerror(err));
++		return;
++	}
++	if ((err = snd_mixer_attach (handle, card)) < 0) {
++		fprintf(stderr, "mixer: attach error: %s\n", snd_strerror(err));
++		goto error;
++	}
++	if ((err = snd_mixer_selem_register (handle, NULL, NULL)) < 0) {
++		fprintf(stderr, "mixer: register error: %s\n", snd_strerror(err));
++		goto error;
++	}
++	if ((err = snd_mixer_load (handle)) < 0) {
++		fprintf(stderr, "mixer: load error: %s\n", snd_strerror(err));
++		goto error;
++	}
++	snd_mixer_selem_id_malloc(&sid);
++	if (sid == NULL)
++		goto error;
++	snd_mixer_selem_id_set_name(sid, channel);
++	if (!(elem = snd_mixer_find_selem(handle, sid))) {
++		fprintf(stderr, "mixer: find error: %s\n", snd_strerror(err));
++		goto error;
++	}
++	if (!snd_mixer_selem_has_playback_volume(elem)) {
++		fprintf(stderr, "mixer: no playback\n");
++		goto error;
++	}
++	snd_mixer_selem_get_playback_volume_range(elem, &alsa_min, &alsa_max);
++	if ((alsa_max - alsa_min) <= 0) {
++		fprintf(stderr, "mixer: no valid playback range\n");
++		goto error;
++	}
++	snd_mixer_selem_id_free(sid);
++
++	return;
++
++error:
++	if (sid != NULL) {
++		snd_mixer_selem_id_free(sid);
++		sid = NULL;
++	}
++	if (handle) {
++		snd_mixer_close(handle);
++		handle = NULL;
++	}
++
++	return;
++}
++
++/* Volume saved to file */
++static int alsa_get_unmute_volume( void )
++{
++	long value;
++	if (elem == NULL)
++		return -1;
++
++	if (snd_mixer_selem_is_playback_mono(elem)) {
++		snd_mixer_selem_get_playback_volume(elem, SND_MIXER_SCHN_MONO, &value);
++		return value;
++	} else {
++		int c, n = 0;
++		long sum = 0;
++		for (c = 0; c <= SND_MIXER_SCHN_LAST; c++) {
++			if (snd_mixer_selem_has_playback_channel(elem, c)) {
++				snd_mixer_selem_get_playback_volume(elem, SND_MIXER_SCHN_FRONT_LEFT, &value);
++				sum += value;
++				n++;
++			}
++		}
++		if (!n)
++			return 0;
++
++		value = sum / n;
++		sum = (long)((double)(alsa_vol * (alsa_max - alsa_min)) / 100. + 0.5);
++
++		if (sum != value)
++			alsa_vol = (long)(((value * 100.) / (alsa_max - alsa_min)) + 0.5);
++
++		return alsa_vol;
++	}
++}
++
++static int alsa_get_volume( void )
++{
++	if (muted)
++		return 0;
++	else
++		return alsa_get_unmute_volume();
++}
++
++static void alsa_set_volume( int value )
++{
++	long volume;
++
++	volume = (long)((value * (alsa_max - alsa_min) / 100.) + 0.5);
++	volume = CLAMP(volume, alsa_min, alsa_max);
++
++	snd_mixer_selem_set_playback_volume_all(elem, volume);
++	snd_mixer_selem_set_playback_switch_all(elem, 1);
++	muted = 0;
++	mutecount = 0;
++}
++
++static void alsa_mute( int mute )
++{
++	/**
++	 * Make sure that if multiple users mute the card,
++	 * we only honour the last one.
++	 */
++	if( !mute && mutecount )
++		mutecount--;
++	if( mutecount )
++		return;
++
++	if( mute ) {
++		mutecount++;
++		muted = 1;
++		if (snd_mixer_selem_has_playback_switch(elem))
++			snd_mixer_selem_set_playback_switch_all(elem, 0);
++		else
++			fprintf(stderr, "mixer: mute not implemented\n");
++	} else {
++		muted = 0;
++		if (snd_mixer_selem_has_playback_switch(elem))
++			snd_mixer_selem_set_playback_switch_all(elem, 1);
++		else
++			fprintf(stderr, "mixer: mute not implemented\n");
++	}
++}
++
++static int alsa_is_muted( void )
++{
++	return muted;
++}
++
++static int alsa_set_device( const char *devname )
++{
++	int i;
++
++	if (card)
++		free(card);
++	card = strdup( devname );
++	if( !card )
++		return -1;
++
++	i = strcspn( card, "/" );
++	if( i == strlen( card ) ) {
++		channel = "Line";
++	} else {
++		card[i] = 0;
++		channel = card + i + 1;
++	}
++	alsa_open_mixer();
++	if (!handle) {
++		fprintf( stderr, "mixer: Can't open mixer %s, "
++				 "mixer volume and mute unavailable.\n", card );
++		return -1;
++	}
++
++	return 0;
++}
++
++static void alsa_set_state( int is_muted, int unmute_volume )
++{
++	/**
++	 * 1. we come back unmuted: Don't touch anything
++	 * 2. we don't have a saved volume: Don't touch anything
++	 * 3. we come back muted and we have a saved volume:
++	 *    - if gnomeradio muted it, unmute to old volume
++	 *    - if user did it, remember that we're muted and old volume
++	 */
++	if( alsa_get_volume() == 0 && unmute_volume > 0 ) {
++		snd_mixer_selem_set_playback_volume_all(elem, unmute_volume);
++		muted = 1;
++
++		if( !is_muted )
++			alsa_mute( 0 );
++	}
++}
++
++static void alsa_close_device( void )
++{
++	elem = NULL;
++	if (handle)
++		snd_mixer_close(handle);
++	handle = NULL;
++	muted = 0;
++	mutecount = 0;
++}
++
++struct mixer alsa_mixer = {
++	.set_device = alsa_set_device,
++	.set_state = alsa_set_state,
++	.get_volume = alsa_get_volume,
++	.get_unmute_volume = alsa_get_unmute_volume,
++	.set_volume = alsa_set_volume,
++	.mute = alsa_mute,
++	.is_muted = alsa_is_muted,
++	.close_device = alsa_close_device,
++};
+Index: gnomeradio-1.8/src/mixer-oss.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/mixer-oss.c
+@@ -0,0 +1,257 @@
++/**
++ * Copyright (C) 2002, 2003 Doug Bell <drbell@users.sourceforge.net>
++ *
++ * Some mixer routines from mplayer, http://mplayer.sourceforge.net.
++ * Copyright (C) 2000-2002. by A'rpi/ESP-team & others
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2, or (at your option)
++ * any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software Foundation,
++ * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#include <stdio.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <sys/ioctl.h>
++#include <sys/soundcard.h>
++#include <sys/mman.h>
++#include <string.h>
++#include "utils.h"
++#include "mixer.h"
++
++static char *mixer_device = "/dev/mixer";
++static int saved_volume = (50 << 8 & 0xFF00) | (50 & 0x00FF);
++static int mixer_channel = SOUND_MIXER_LINE;
++static int mixer_dev_mask = 1 << SOUND_MIXER_LINE;
++static int muted = 0;
++static int mutecount = 0;
++static int fd = -1;
++
++static int oss_get_volume( void )
++{
++	int r, l, cmd, devs;
++	int volume = 0;
++
++	if( fd < 0 )
++		fd = open( mixer_device, O_RDONLY );
++	if( fd != -1 ) {
++		ioctl( fd, SOUND_MIXER_READ_DEVMASK, &devs );
++		if( devs & mixer_dev_mask )
++			cmd = MIXER_READ( mixer_channel );
++		else
++			return volume;
++
++		ioctl(fd, cmd, &volume);
++		r = (volume & 0xFF);
++		l = (volume & 0xFF00) >> 8;
++		volume = (r + l) / 2;
++		volume = CLAMP (volume, 0, 100);
++	}
++
++	return volume;
++}
++
++static int oss_get_unmute_volume( void )
++{
++	if( muted ) {
++		return saved_volume;
++	} else {
++		int volume, cmd, devs;
++
++		if( fd < 0 )
++			fd = open( mixer_device, O_RDONLY );
++		if( fd != -1 ) {
++			ioctl( fd, SOUND_MIXER_READ_DEVMASK, &devs );
++			if( devs & mixer_dev_mask )
++				cmd = MIXER_READ( mixer_channel );
++			else
++				return -1;
++
++			ioctl( fd, cmd, &volume );
++			volume = CLAMP (volume, 0, 100);
++			return volume;
++		}
++	}
++
++	return -1;
++}
++
++static void oss_set_volume( int value )
++{
++	int v, volume, cmd, devs;
++
++        volume = CLAMP (value, 0, 100);
++
++	if( fd < 0 )
++		fd = open( mixer_device, O_RDONLY );
++	if( fd != -1 ) {
++		ioctl( fd, SOUND_MIXER_READ_DEVMASK, &devs );
++		if( devs & mixer_dev_mask )
++			cmd = MIXER_WRITE( mixer_channel );
++		else
++			return;
++
++		v = (volume << 8) + volume;
++		ioctl( fd, cmd, &v );
++		muted = 0;
++		mutecount = 0;
++	}
++}
++
++static void oss_mute( int mute )
++{
++	int volume, cmd, devs;
++
++	/**
++	 * Make sure that if multiple users mute the card,
++	 * we only honour the last one.
++	 */
++	if( !mute && mutecount )
++		mutecount--;
++	if( mutecount )
++		return;
++
++	if( fd < 0 )
++		fd = open( mixer_device, O_RDONLY );
++
++	if( mute ) {
++		mutecount++;
++		if( fd != -1 ) {
++			/* Save volume */
++			ioctl( fd, SOUND_MIXER_READ_DEVMASK, &devs );
++			if( devs & mixer_dev_mask )
++				cmd = MIXER_READ( mixer_channel );
++			else
++				return;
++
++			ioctl( fd, cmd, &volume );
++			saved_volume = volume;
++
++			/* Now set volume to 0 */
++			ioctl( fd, SOUND_MIXER_READ_DEVMASK, &devs );
++			if( devs & mixer_dev_mask )
++				cmd = MIXER_WRITE( mixer_channel );
++			else
++				return;
++
++			volume = 0;
++			ioctl( fd, cmd, &volume );
++
++			muted = 1;
++			return;
++		}
++	} else {
++		if( fd != -1 ) {
++			ioctl( fd, SOUND_MIXER_READ_DEVMASK, &devs );
++			if( devs & mixer_dev_mask )
++				cmd = MIXER_WRITE( mixer_channel );
++			else
++				return;
++
++			volume = saved_volume;
++			ioctl( fd, cmd, &volume );
++			muted = 0;
++			return;
++		}
++	}
++}
++
++static int oss_is_muted( void )
++{
++	return muted;
++}
++
++static char *oss_core_devnames[] = SOUND_DEVICE_NAMES;
++
++static int oss_set_device( const char *devname )
++{
++	const char *channame;
++	int found = 0;
++	int i;
++
++	mixer_device = strdup( devname );
++	if( !mixer_device )
++		return -1;
++
++	i = strcspn( mixer_device, ":" );
++	if( i == strlen( mixer_device ) ) {
++		channame = "line";
++	} else {
++		mixer_device[ i ] = 0;
++		channame = mixer_device + i + 1;
++	}
++	if( !open_read( mixer_device ) ) {
++		fprintf( stderr, "mixer: Can't open device %s, "
++				 "mixer volume and mute unavailable.\n", mixer_device );
++		return -1;
++	}
++
++	mixer_channel = SOUND_MIXER_LINE;
++	for( i = 0; i < SOUND_MIXER_NRDEVICES; i++ ) {
++		if( !strcasecmp( channame, oss_core_devnames[ i ] ) ) {
++			mixer_channel = i;
++			found = 1;
++			break;
++		}
++	}
++	if( !found ) {
++		fprintf( stderr, "mixer: No such mixer channel '%s', using channel 'line'.\n", channame );
++		return -1;
++	}
++	mixer_dev_mask = 1 << mixer_channel;
++
++	return 0;
++}
++
++static void oss_set_state( int is_muted, int unmute_volume )
++{
++	/**
++	 * 1. we come back unmuted: Don't touch anything
++	 * 2. we don't have a saved volume: Don't touch anything
++	 * 3. we come back muted and we have a saved volume:
++	 *    - if gnomeradio muted it, unmute to old volume
++	 *    - if user did it, remember that we're muted and old volume
++	 */
++	if( oss_get_volume() == 0 && unmute_volume > 0 ) {
++		saved_volume = unmute_volume;
++		muted = 1;
++
++		if( !is_muted )
++			oss_mute( 0 );
++	}
++}
++
++static void oss_close_device( void )
++{
++	if( fd >= 0 )
++		close( fd );
++	saved_volume = (50 << 8 & 0xFF00) | (50 & 0x00FF);
++	mixer_channel = SOUND_MIXER_LINE;
++	mixer_dev_mask = 1 << SOUND_MIXER_LINE;
++	muted = 0;
++	mutecount = 0;
++	fd = -1;
++}
++
++struct mixer oss_mixer = {
++	.set_device = oss_set_device,
++	.set_state = oss_set_state,
++	.get_volume = oss_get_volume,
++	.get_unmute_volume = oss_get_unmute_volume,
++	.set_volume = oss_set_volume,
++	.mute = oss_mute,
++	.is_muted = oss_is_muted,
++	.close_device = oss_close_device,
++};
+Index: gnomeradio-1.8/src/prefs.h
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.h
++++ gnomeradio-1.8/src/prefs.h
+@@ -22,6 +22,15 @@
+ gboolean save_settings(void);
+ gboolean load_settings(void);
+ 
++enum
++{
++	RADIO_DEVICE,
++	MIXER_DEVICE,
++	PRESETS
++};
++
++gboolean action_mode (gint mode);
++
+ GtkWidget* prefs_window(GtkWidget *app);
+ 
+ #endif
+Index: gnomeradio-1.8/src/utils.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/utils.c
+@@ -0,0 +1,30 @@
++/*
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2 of the License, or
++ *  (at your option) any later version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU Library General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#include <fcntl.h>
++#include "utils.h"
++
++int open_read(const char *filename)
++{
++	int fd;
++	fd = open(filename, O_RDONLY);
++	if (fd < 0) {
++		return 0;
++	} else {
++		close(fd);
++		return 1;
++	}
++}
+Index: gnomeradio-1.8/src/utils.h
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/utils.h
+@@ -0,0 +1,22 @@
++/*
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2 of the License, or
++ *  (at your option) any later version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU Library General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++ */
++
++#ifndef _UTILS_H
++#define _UTILS_H
++
++int open_read(const char *filename);
++
++#endif

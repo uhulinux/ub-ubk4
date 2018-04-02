@@ -1,0 +1,21 @@
+diff -Naur rp-pppoe-3.8.orig/src/Makefile.in rp-pppoe-3.8/src/Makefile.in
+--- rp-pppoe-3.8.orig/src/Makefile.in	2006-04-02 16:29:42.000000000 +0200
++++ rp-pppoe-3.8/src/Makefile.in	2006-07-17 13:21:34.000000000 +0200
+@@ -22,7 +22,7 @@
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ mandir=@mandir@
+-docdir=@prefix@/share/doc/rp-pppoe-$(VERSION)
++docdir=@prefix@/share/doc/Packages/rp-pppoe
+ install=@INSTALL@
+ install_dir=@INSTALL@ -d
+ sbindir=@sbindir@
+@@ -244,7 +244,7 @@
+ 		cp ../configs/$$i ../rp-pppoe-$(VERSION)$(BETA)/configs || exit 1; \
+ 	done
+ 	mkdir ../rp-pppoe-$(VERSION)$(BETA)/doc
+-	for i in CHANGES KERNEL-MODE-PPPOE HOW-TO-CONNECT LICENSE PROBLEMS ; do \
++	for i in CHANGES KERNEL-MODE-PPPOE HOW-TO-CONNECT LICENSE ; do \
+ 		cp ../doc/$$i ../rp-pppoe-$(VERSION)$(BETA)/doc || exit 1; \
+ 	done
+ 	mkdir ../rp-pppoe-$(VERSION)$(BETA)/man

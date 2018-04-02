@@ -1,0 +1,67 @@
+diff -Naur orig/Makefile.in mod/Makefile.in
+--- orig/Makefile.in	2015-02-12 10:31:30.000000000 +0100
++++ mod/Makefile.in	2016-03-24 20:56:45.115248759 +0100
+@@ -207,12 +207,10 @@
+ ################################################################################
+ actual_xterm  = `echo xterm|        sed '$(transform)'`
+ actual_resize = `echo resize|       sed '$(transform)'`
+-actual_uxterm = `echo uxterm|       sed '$(transform)'`
+ actual_k8term = `echo koi8rxterm|   sed '$(transform)'`
+ 
+ binary_xterm  = $(actual_xterm)$x
+ binary_resize = $(actual_resize)$x
+-binary_uxterm = $(actual_uxterm)
+ binary_k8term = $(actual_k8term)
+ 
+ install \
+@@ -255,10 +253,6 @@
+ 	@$(SHELL) -c "source=\"resize\"; \
+ 		target=\"$(binary_resize)\"; \
+ 		$(InstallBinLink)"
+-	@$(SHELL) -c "source=\"uxterm\"; \
+-		target=\"$(binary_uxterm)\"; \
+-		$(InstallScript); \
+-		$(InstallBinLink)"
+ 	@$(SHELL) -c "source=\"koi8rxterm\"; \
+ 		target=\"$(binary_k8term)\"; \
+ 		$(InstallScript); \
+@@ -267,7 +261,7 @@
+ install \
+ install-man \
+ install-full :: $(MANDIR)
+-	@-$(SHELL) -c "for source in xterm resize uxterm koi8rxterm ; \
++	@-$(SHELL) -c "for source in xterm resize koi8rxterm ; \
+ 		do \
+ 			target=\`echo \"\$$source\" | sed '@program_transform_name@'\`; \
+ 			$(SHELL) ./minstall \"$(INSTALL_DATA)\" \
+@@ -290,7 +284,7 @@
+ 			) \
+ 		fi"
+ 
+-APP_NAMES = XTerm UXTerm KOI8RXTerm
++APP_NAMES = XTerm KOI8RXTerm
+ 
+ @no_appsdir@install \
+ @no_appsdir@install-app \
+@@ -486,7 +480,7 @@
+ @no_pixmapdir@	@echo "... removed icons"
+ ################################################################################
+ # Desktop-utils does not provide an uninstall, and is not uniformly available.
+-@desktop_utils@DESKTOP_FILES = $(srcdir)/xterm.desktop $(srcdir)/uxterm.desktop
++@desktop_utils@DESKTOP_FILES = $(srcdir)/xterm.desktop
+ @desktop_utils@DESKTOP_FLAGS = @DESKTOP_FLAGS@
+ @desktop_utils@install-desktop \
+ @desktop_utils@install-full ::
+@@ -548,12 +542,6 @@
+ xterm.ps : xterm.$(manext)
+ xterm.txt : xterm.$(manext)
+ ################################################################################
+-docs-uxterm \
+-docs ::  uxterm.txt @MAN2HTML_NOTE@ uxterm.html @GROFF_NOTE@ uxterm.pdf uxterm.ps
+-uxterm.html : uxterm.$(manext)
+-uxterm.pdf : uxterm.ps
+-uxterm.ps : uxterm.$(manext)
+-uxterm.txt : uxterm.$(manext)
+ ################################################################################
+ docs-koi8rxterm \
+ docs ::  koi8rxterm.txt @MAN2HTML_NOTE@ koi8rxterm.html @GROFF_NOTE@ koi8rxterm.pdf koi8rxterm.ps

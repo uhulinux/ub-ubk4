@@ -1,0 +1,2758 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxi/src/dcbr.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/dcbr.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/dcbr.c	2007-08-28 14:46:00.000000000 +0200
+@@ -45,6 +45,14 @@
+ #else
+ #include <direct.h>
+ #endif
++
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "dcb.h"
+ #include "dirs.h"
+@@ -140,7 +148,7 @@
+ 
+ 	fp = file_open (filename, "rb0") ;
+ 	if (!fp)
+-		gr_error ("Error al abrir %s\n", filename) ;
++		gr_error (_("'%s': Error opening file\n"), filename) ;
+ 
+ 	return dcb_load_from (fp, 0);
+ }
+Index: fenix-0.92a.dfsg1/fxi/src/fbm.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/fbm.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/fbm.c	2007-08-28 14:44:30.000000000 +0200
+@@ -34,6 +34,13 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "fbm.h"
+ 
+@@ -118,7 +125,7 @@
+ 	{
+ 		if (file_read (fp, &file_header, sizeof(FBM_FILE_HEADER)) != sizeof(FBM_FILE_HEADER))
+ 		{
+-			fbm_error = "Error de lectura";
++			fbm_error = "Read error";
+ 			return NULL;
+ 		}
+ 
+@@ -127,12 +134,12 @@
+ 
+ 		if (strcmp (file_header.magic, FBM_MAGIC) != 0)
+ 		{
+-			fbm_error = "El fichero no es un FBM válido";
++			fbm_error = _("Not a valid FBM file");
+ 			return NULL;
+ 		}
+ 		if ((file_header.version & 0xFF00) != 0x0100)
+ 		{
+-			fbm_error = "El fichero FBM es de una versión posterior incompatible";
++			fbm_error = _("FBM file is from a later incompatible version");
+ 			return NULL;
+ 		}
+ 	}
+@@ -145,7 +152,7 @@
+ 
+ 	if (file_read (fp, &header, sizeof(FBM_HEADER)) != sizeof(FBM_HEADER))
+ 	{
+-		fbm_error = "Error de lectura";
++		fbm_error = "Read error";
+ 		return NULL;
+ 	}
+ 
+@@ -163,12 +170,12 @@
+ 
+ 	if (!FBM_VALID_DEPTH(file_header.depth))
+ 	{
+-		fbm_error = "Fichero FBM corrupto";
++		fbm_error = _("FBM file is corrupt");
+ 		return NULL;
+ 	}
+ 	if (header.width > FBM_MAX_WIDTH || header.height > FBM_MAX_HEIGHT)
+ 	{
+-		fbm_error = "Fichero FBM corrupto";
++		fbm_error = "FBM file is corrupt";
+ 		return NULL;
+ 	}
+ 
+@@ -179,7 +186,7 @@
+ 
+ 	if (sequences == NULL || keyframes == NULL)
+ 	{
+-		fbm_error = "No hay memoria libre suficiente para cargar el FBM";
++		fbm_error = _("Not enough free memory to load FBM file");
+ 		error = 1;
+ 	}
+ 
+@@ -190,7 +197,7 @@
+ 		graph = bitmap_new (header.code, header.width, header.height, file_header.depth, header.max_frame+1);
+ 		if (graph == NULL)
+ 		{
+-			fbm_error = "Error al crear el gráfico en memoria";
++			fbm_error = _("Error creating graphic in memory");
+ 			error = 1;
+ 		}
+ 		else
+@@ -220,7 +227,7 @@
+ 				{
+ 					if (file_read(fp, color_palette, 768) != 768)
+ 					{
+-						fbm_error = "Fichero FBM truncado";
++						fbm_error = _("FBM file is truncated");
+ 						error = 1;
+ 					}
+ 					else
+@@ -249,7 +256,7 @@
+ 				size = sizeof(FBM_SEQUENCE) * (header.max_sequence+1);
+ 				if (file_read(fp, sequences, size) != size)
+ 				{
+-					fbm_error = "Fichero FBM truncado";
++					fbm_error = _("FBM file is truncated");
+ 					error = 1;
+ 				}
+ 				else
+@@ -263,7 +270,7 @@
+ 				size = sizeof(FBM_KEYFRAME) * (header.max_keyframe+1);
+ 				if (file_read(fp, keyframes, size) != size)
+ 				{
+-					fbm_error = "Fichero FBM truncado";
++					fbm_error = _("FBM file is truncated");
+ 					error = 1;
+ 				}
+ 				else
+@@ -278,7 +285,7 @@
+ 				{
+                     if (file_read(fp, &control_point, size) != size)
+ 					{
+-						fbm_error = "Fichero FBM truncado";
++						fbm_error = _("FBM file is truncated");
+ 						error = 1;
+ 					}
+ 					else
+@@ -304,7 +311,7 @@
+                 for (n = 0; n < h; n++) {
+     				if (file_read(fp, ((char *) graph->data_start) + n * graph->pitch, size) != size)
+     				{
+-    					fbm_error = "Fichero FBM truncado";
++    					fbm_error = _("FBM file is truncated");
+     					error = 1;
+     				}
+ 
+@@ -355,7 +362,7 @@
+ 
+ 	if (!fp)
+ 	{
+-		fbm_error = "Error al abrir fichero";
++		fbm_error = _("Error opening file");
+ 		return NULL;
+ 	}
+ 
+@@ -431,7 +438,7 @@
+ 
+ 	if (file_write (fp, &header, sizeof(FBM_HEADER)) != sizeof(FBM_HEADER))
+ 	{
+-		fbm_error = "Error escribiendo fichero FBM";
++		fbm_error = _("Error writing FBM file");
+ 		return 0;
+ 	}
+ 
+@@ -448,7 +455,7 @@
+ 
+ 		if (file_write (fp, &color_palette, 768) != 768)
+ 		{
+-			fbm_error = "Error escribiendo fichero FBM";
++			fbm_error = _("Error writing FBM file");
+ 			return 0;
+ 		}
+ 	}
+@@ -460,7 +467,7 @@
+ 	if (file_write (fp, map->sequences, size) != size)
+ 	{
+ 		arrange_sequences(map);
+-		fbm_error = "Error escribiendo fichero FBM";
++		fbm_error = _("Error writing FBM file");
+ 		return 0;
+ 	}
+ 	arrange_sequences(map);
+@@ -472,7 +479,7 @@
+ 	if (file_write (fp, map->keyframes, size) != size)
+ 	{
+ 		arrange_keyframes(map);
+-		fbm_error = "Error escribiendo fichero FBM";
++		fbm_error = _("Error writing FBM file");
+ 		return 0;
+ 	}
+ 	arrange_keyframes(map);
+@@ -495,7 +502,7 @@
+ 
+ 			if (file_write (fp, &cp, sizeof(cp)) != sizeof(cp))
+ 			{
+-				fbm_error = "Error escribiendo fichero FBM";
++				fbm_error = _("Error writing FBM file");
+ 				return 0;
+ 			}
+ 		}
+@@ -515,7 +522,7 @@
+ 
+ 		if (data_copy == NULL)
+ 		{
+-			fbm_error = "No hay memoria libre suficiente";
++			fbm_error = _("Out of memory");
+ 			return 0;
+ 		}
+ 	}
+@@ -535,7 +542,7 @@
+ 
+     	if (file_write(fp, data, size) != size)
+ 	    {
+-    		fbm_error = "Error escribiendo fichero FBM";
++    		fbm_error = _("Error writing FBM file");
+ 		    free (data_copy);
+ 		    return 0;
+ 	    }
+@@ -571,7 +578,7 @@
+ 	fp = file_open (filename, "wb9");
+ 	if (fp == NULL)
+ 	{
+-		fbm_error = "Error al crear fichero FBM";
++		fbm_error = _("Error creating FBM file");
+ 		return 0;
+ 	}
+ 
+@@ -586,7 +593,7 @@
+ 
+ 	if (file_write (fp, &file_header, sizeof(FBM_FILE_HEADER)) != sizeof(FBM_FILE_HEADER))
+ 	{
+-		fbm_error = "Error escribiendo en fichero FBM";
++		fbm_error = _("Error writing FBM file");
+ 		file_close (fp);
+ 		return 0;
+ 	}
+Index: fenix-0.92a.dfsg1/fxi/src/fgc.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/fgc.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/fgc.c	2007-08-28 14:44:30.000000000 +0200
+@@ -39,6 +39,13 @@
+ #include <assert.h>
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "fbm.h"
+ #include "fgc.h"
+@@ -75,13 +82,13 @@
+ 
+ 	if (!fp)
+ 	{
+-		fgc_error = "Error al abrir el fichero";
++		fgc_error = "Error opening file";
+ 		return -1;
+ 	}
+ 
+ 	if (file_read (fp, &header, sizeof(FGC_HEADER)) != sizeof(FGC_HEADER))
+ 	{
+-		fgc_error = "Fichero FGC corrupto o truncado";
++		fgc_error = "FGC file is corrupt or truncated";
+ 		file_close(fp);
+ 		return -1;
+ 	}
+@@ -93,7 +100,7 @@
+ 
+ 	if (strcmp (header.magic, FGC_MAGIC) != 0 || (header.version & 0xFF00) != 0x0100)
+ 	{
+-		fgc_error = "No es un fichero FGC o compatible";
++		fgc_error = _("Not an FGC file or compatible");
+ 		file_close(fp);
+ 		return -1;
+ 	}
+@@ -107,14 +114,14 @@
+ 
+ 	if (offsets == NULL)
+ 	{
+-		fgc_error = "No hay memoria libre suficiente";
++		fgc_error = _("Out of memory");
+ 		file_close(fp);
+ 		return -1;
+ 	}
+ 
+ 	if (file_read (fp, offsets, 4*header.count) != 4*(int)header.count)
+ 	{
+-		fgc_error = "Fichero FGC corrupto o truncado";
++		fgc_error = _("FGC file is corrupt or truncated");
+ 		free(offsets);
+ 		file_close(fp);
+ 		return -1;
+@@ -132,7 +139,7 @@
+ 
+ 		if (file_read(fp, color_palette, 768) != 768)
+ 		{
+-			fgc_error = "PALETA - Fichero FGC truncado";
++			fgc_error = _("PALETTE - FGC file is truncaded");
+ 			free(offsets);
+ 			file_close(fp);
+ 			return -1;
+@@ -198,7 +205,7 @@
+ 	lib = grlib_get(id);
+ 	if (lib == NULL || !lib->maps)
+ 	{
+-		fgc_error = "Número de librería incorrecta";
++		fgc_error = _("Incorrect library number");
+ 		return 0;
+ 	}
+ 
+@@ -227,7 +234,7 @@
+ 		}
+ 		if (header.depth != lib->maps[i]->depth)
+ 		{
+-			fgc_error = "La librería contiene mapas de diferente profundidad";
++			fgc_error = _("Library contains maps of different depth");
+ 			return 0;
+ 		}
+ 	}
+@@ -241,14 +248,14 @@
+ 	fp = file_open (filename, "wb9");
+ 	if (fp == NULL)
+ 	{
+-		fgc_error = "Error al crear fichero FGC";
++		fgc_error = _("Error creating FGC file");
+ 		return 0;
+ 	}
+ 
+ 	offsets = (Uint32 *)malloc(4*header.count + 4);
+ 	if (offsets == NULL)
+ 	{
+-		fgc_error = "No hay memoria libre suficiente";
++		fgc_error = _("Out of memory");
+ 		file_close(fp);
+ 		return -1;
+ 	}
+@@ -285,7 +292,7 @@
+ 
+ 	if (file_write(fp, &header, sizeof(FGC_HEADER)) != sizeof(FGC_HEADER))
+ 	{
+-		fgc_error = "Error escribiendo en fichero FGC";
++		fgc_error = _("Error writing FGC file");
+ 		file_close (fp);
+ 		return 0;
+ 	} 
+@@ -295,7 +302,7 @@
+ 	
+ 	if (file_write(fp, offsets, 4*header.count) != 4*(int)header.count)
+ 	{
+-		fgc_error = "Error escribiendo en fichero FGC";
++		fgc_error = _("Error writing FGC file");
+ 		file_close (fp);
+ 		return 0;
+ 	} 
+@@ -314,7 +321,7 @@
+ 		}
+ 		if (file_write(fp, color_palette, 768) != 768)
+ 		{
+-			fgc_error = "Error al escribir, FGC truncado";
++			fgc_error = _("Write error, FGC file is truncated");
+ 			free(offsets);
+ 			file_close(fp);
+ 			return -1;
+Index: fenix-0.92a.dfsg1/fxi/src/fnc_exports.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/fnc_exports.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/fnc_exports.c	2007-08-28 14:44:30.000000000 +0200
+@@ -35,6 +35,13 @@
+ 
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include <fxi.h>
+ #include <fnx_loadlib.h>
+ #include <fmath.h>
+@@ -683,7 +690,7 @@
+ 		while (ptr != NULL)
+ 		{
+ 			if (ptr->count == 0)
+-				gr_con_printf ("[FXI] Warning: '%s' not imported!", ptr->name);
++				gr_con_printf (_("[FXI] Warning: '%s' not imported!"), ptr->name);
+ 
+ 			bucket_use[n]++;
+ 			if (max_use < bucket_use[n])
+@@ -693,7 +700,7 @@
+ 		}
+ 	}
+ 
+-	gr_con_printf ("[FXI] %4d symbols imported by DLL", global_count);
++	gr_con_printf (_("[FXI] %4d symbols imported by DLL"), global_count);
+ 
+ 	/* Show information about hash table proficiency */
+ 
+@@ -706,12 +713,12 @@
+ 		}
+ 
+ 		if (count > 0)
+-			gr_con_printf ("[FXI] %4d buckets of size %d", count, n);
++			gr_con_printf (_("[FXI] %4d buckets of size %d"), count, n);
+ 	}
+ 
+ 	/* Not found symbols are reported by fnc_import */
+ 
+ 	if (global_notfound)
+-		gr_con_printf ("[FXI] %4d symbols not found", global_notfound);
++		gr_con_printf (_("[FXI] %4d symbols not found"), global_notfound);
+ }
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/fpl.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/fpl.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/fpl.c	2007-08-28 14:44:30.000000000 +0200
+@@ -34,6 +34,13 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "fpl.h"
+ 
+@@ -65,12 +72,12 @@
+ 	// Read the header and check the file type and version
+ 
+ 	if (file_read (fp, &header, sizeof(FPL_HEADER)) != sizeof(FPL_HEADER)) {
+-		fpl_error = "Error de lectura" ;
++		fpl_error = _("Read error") ;
+ 		return 0 ;
+ 	}
+ 
+     if (strncmp(header.magic, FPL_MAGIC, strlen(FPL_MAGIC)) == 0) {
+-		fpl_error = "Fichero FPL inválido" ;
++		fpl_error = _("Invalid FPL file") ;
+ 		return 0 ;
+     }
+ 
+@@ -78,17 +85,17 @@
+ 	ARRANGE_DWORD(&file_header.version);
+ 
+ 	if (!FPL_VALID_DEPTH(header.depth)) {
+-		fpl_error = "Profundidad de color no válida en el fichero FPL" ;
++		fpl_error = _("Invalid colour depth in the FPL file") ;
+ 		return 0 ;
+ 	}
+ 
+ 	if ((header.version & 0xFF00) != 0x0100) {
+-		fpl_error = "El fichero FPL es de una versión posterior incompatible";
++		fpl_error = _("FPL belongs to a later incompatible version");
+ 		return 0;
+ 	}
+ 
+ 	if (file_read(fp, color_palette, 768) != 768) {
+-		fpl_error = "Fichero FPL truncado";
++		fpl_error = _("Truncated FPL file");
+ 		return 0;
+ 	}
+ 
+@@ -135,7 +142,7 @@
+ 
+ 	if (file_write (fp, &color_palette, 768) != 768)
+ 	{
+-		fbm_error = "Error escribiendo fichero FPL";
++		fbm_error = _("Error writing FPL file");
+ 		return 0;
+ 	}
+ 
+@@ -166,7 +173,7 @@
+ 	fp = file_open (filename, "wb9");
+ 	if (fp == NULL)
+ 	{
+-		fpl_error = "Error al crear fichero FPL";
++		fpl_error = _("Error creating FPL file");
+ 		return 0;
+ 	}
+ 
+@@ -181,7 +188,7 @@
+ 
+ 	if (file_write (fp, &file_header, sizeof(FPL_HEADER)) != sizeof(FPL_HEADER))
+ 	{
+-		fpl_error = "Error escribiendo en fichero FPL";
++		fpl_error = _("Error writing FPL file");
+ 		file_close (fp);
+ 		return 0;
+ 	}
+@@ -216,7 +223,7 @@
+ 	fp = file_open (filename, "rb9");
+ 	if (fp == NULL)
+ 	{
+-		fpl_error = "Error al abrir fichero FPL";
++		fpl_error = _("Error opening FPL file");
+ 		return 0;
+ 	}
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/f_sort.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/f_sort.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/f_sort.c	2007-08-28 14:39:55.000000000 +0200
+@@ -32,6 +32,13 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ int keyoffset = 0;
+@@ -78,7 +85,7 @@
+ 	}
+ 	if (i >= MAX_TYPECHUNKS-1)
+ 	{
+-		gr_con_printf ("Tipo de dato demasiado complejo");
++		gr_con_printf (_("Data type too complex"));
+ 		return;
+ 	}
+ 	for (i = MAX_TYPECHUNKS-1 ; i > 0 ; i--)
+@@ -173,7 +180,7 @@
+ 			}
+ 			if (maxvar == NULL)
+ 			{
+-				gr_con_printf ("Estructura vacía");
++				gr_con_printf (_("Empty structure"));
+ 				return 0;
+ 			}
+ 
+@@ -181,7 +188,7 @@
+ 		}
+ 
+ 		default:
+-			gr_con_printf ("Tipo desconocido");
++			gr_con_printf (_("Unknown type"));
+ 			return 0;
+ 	}
+ }
+@@ -239,7 +246,7 @@
+ 			compare = compare_float;
+ 			break;
+ 		default:
+-			gr_con_printf ("Tipo de dato usado como clave de ordenación inválido");
++			gr_con_printf (_("Invalid data type used as sorting key"));
+ 			return 0;
+ 	}
+ 
+@@ -267,17 +274,17 @@
+ 
+ 	if (type->BaseType[0] != TYPE_ARRAY)
+ 	{
+-		gr_con_printf ("Sólo se permite ordenar un array de estructuras o valores");
++		gr_con_printf (_("Only arrays of structures or values can be sorted"));
+ 		return 0;
+ 	}
+ 	if (vars > 1)
+ 	{
+-		gr_con_printf ("Intento de ordenar una estructura con un sólo elemento");
++		gr_con_printf (_("Trying to sort a structure with just one element"));
+ 		return 0;
+ 	}
+ 	if (type->Count[0] < 2)
+ 	{
+-		gr_con_printf ("Intento de ordenar un array con un sólo elemento");
++		gr_con_printf (_("Trying to sort an array with just one element"));
+ 		return 0;
+ 	}
+ 
+@@ -326,17 +333,17 @@
+ 
+ 	if (type->BaseType[0] != TYPE_ARRAY)
+ 	{
+-		gr_con_printf ("Sólo se permite ordenar un array de estructuras o valores");
++		gr_con_printf (_("Only arrays of structures or values can be sorted"));
+ 		return 0;
+ 	}
+ 	if (vars > 1)
+ 	{
+-		gr_con_printf ("Intento de ordenar una estructura con un sólo elemento");
++		gr_con_printf (_("Trying to sort a structure with just one element"));
+ 		return 0;
+ 	}
+ 	if (type->Count[0] < 2)
+ 	{
+-		gr_con_printf ("Intento de ordenar un array con un sólo elemento");
++		gr_con_printf (_("Trying to sort an array with just one element"));
+ 		return 0;
+ 	}
+ 
+@@ -347,7 +354,7 @@
+ 
+ 	if ((Uint8 *)key_data > (Uint8*)data + element_size || key_data < data)
+ 	{
+-		gr_con_printf ("Intento de ordenar usando una clave externa al primer elemento");
++		gr_con_printf (_("Trying to sort using an key external to the first element"));
+ 		return 0;
+ 	}
+ 
+@@ -402,7 +409,7 @@
+ 	}
+ 	if (vars > 1)
+ 	{
+-		gr_con_printf ("Intento de ordenar una estructura con un sólo elemento");
++		gr_con_printf (_("Trying to sort a structure with just one element"));
+ 		return 0;
+ 	}
+ 
+@@ -467,7 +474,7 @@
+ 	}
+ 	if (vars > 1)
+ 	{
+-		gr_con_printf ("Intento de ordenar una estructura con un sólo elemento");
++		gr_con_printf (_("Trying to sort a structure with just one element"));
+ 		return 0;
+ 	}
+ 
+@@ -478,7 +485,7 @@
+ 
+ 	if ((Uint8 *)key_data > (Uint8*)data + element_size || key_data < data)
+ 	{
+-		gr_con_printf ("Intento de ordenar usando una clave externa al primer elemento");
++		gr_con_printf (_("Trying to sort using an key external to the first element"));
+ 		return 0;
+ 	}
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_blit.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_blit.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_blit.c	2007-08-28 14:44:30.000000000 +0200
+@@ -44,6 +44,13 @@
+ 
+ #include "fmath.h"
+ #include <math.h>
++
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
+ 
+ /* Define some constants and structs used by the blitter */
+ 
+@@ -1144,7 +1151,7 @@
+     else if (dest->depth == 16 && gr->depth == 1)
+         draw_span = draw_span_1to16;
+     else
+-        gr_error ("Profundidad de color no soportada\n(gr_rotated_blit)") ;
++        gr_error (_("Unsupported colour depth (gr_rotated_blit)\n")) ;
+ 
+     /* Fix por problemas de visualizacion */
+ 
+@@ -1509,7 +1516,7 @@
+     else if (dest->depth == 16 && gr->depth == 1)
+         draw_hspan = draw_hspan_1to16;
+     else
+-        gr_error ("Profundidad de color no soportada\n(gr_blit)") ;
++        gr_error (_("Unsupported colour depth (gr_blit)\n")) ;
+ 
+     /* Calculate the graphic center */
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_console.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_console.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_console.c	2007-08-28 14:44:30.000000000 +0200
+@@ -35,6 +35,13 @@
+ #include <string.h>
+ #include <ctype.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "dcb.h"
+ 
+@@ -50,7 +57,7 @@
+ #define CONSOLE_COLUMNS 52
+ #define COMMAND_HISTORY 64
+ 
+-#define HELPTXT \
++#define HELPTXT _( \
+             "¬02Process Info¬07\n"                                          \
+             "¬04INSTANCES      ¬07  List all running processes\n"           \
+             "¬04GLOBALS        ¬07  Show global vars with values\n"         \
+@@ -85,7 +92,7 @@
+             "\n"                                                            \
+             "You can evaluate free expressions in the console,\n"           \
+             "and you can see/change local, public and private vars\n"       \
+-            "using the '.' operator (pe: 65535.X, MAIN.X, etc.)\n"
++            "using the '.' operator (pe: 65535.X, MAIN.X, etc.)\n")
+ 
+ /* ---------------------------------------------------------------------- */
+ 
+@@ -956,7 +963,7 @@
+         }
+     }
+ 
+-    gr_con_printf ("Local or private or public variable not found") ;
++    gr_con_printf (_("Local or private or public variable not found")) ;
+     result.type = T_ERROR ;
+ }
+ 
+@@ -982,7 +989,7 @@
+ 
+     if (token.type != IDENTIFIER)
+     {
+-        gr_con_printf ("Not a valid expression") ;
++        gr_con_printf (_("Not a valid expression")) ;
+         result.type = T_ERROR ;
+         return ;
+     }
+@@ -993,7 +1000,7 @@
+         eval_subexpression() ;
+         if (token.name[0] != ')')
+         {
+-            gr_con_printf ("Unbalanced parens") ;
++            gr_con_printf (_("Unbalanced parens")) ;
+             result.type = T_ERROR ;
+             return ;
+         }
+@@ -1009,7 +1016,7 @@
+         if (result.type != T_CONSTANT)
+         {
+             result.type = T_ERROR ;
+-            gr_con_printf ("Operand is not a number\n") ;
++            gr_con_printf (_("Operand is not a number\n")) ;
+             return ;
+         }
+         result.value = -result.value ;
+@@ -1046,7 +1053,7 @@
+             }
+             if (!i)
+             {
+-                gr_con_printf ("No instance of process %s is active", token.name) ;
++                gr_con_printf (_("No instance of process %s is active"), token.name) ;
+                 result.type = T_ERROR ;
+                 return ;
+             }
+@@ -1055,7 +1062,7 @@
+             if (token.name[0] != '.')
+             {
+                 result.type = T_ERROR ;
+-                gr_con_printf ("Invalid use of a process name") ;
++                gr_con_printf (_("Invalid use of a process name")) ;
+                 return ;
+             }
+             get_token() ;
+@@ -1064,7 +1071,7 @@
+         }
+     }
+ 
+-    gr_con_printf ("Variable does not exist (%s)", token.name) ;
++    gr_con_printf (_("Variable does not exist (%s)"), token.name) ;
+     result.type = T_ERROR ;
+     return ;
+ }
+@@ -1090,7 +1097,7 @@
+                 if (!i)
+                 {
+                     result.type = T_ERROR ;
+-                    gr_con_printf ("No existe instancia %d\n", (int)result.value) ;
++                    gr_con_printf (_("Instance %d does not exist\n"), (int)result.value) ;
+                     return ;
+                 }
+                 get_token() ;
+@@ -1101,14 +1108,14 @@
+             if (result.type != T_VARIABLE
+                 || result.var.Type.BaseType[0] != TYPE_STRUCT)
+             {
+-                gr_con_printf ("%s is not an struct", result.name);
++                gr_con_printf (_("%s is not an struct"), result.name);
+                 result.type = T_ERROR ;
+                 return ;
+             }
+             get_token() ;
+             if (token.type != IDENTIFIER)
+             {
+-                gr_con_printf ("%s is not a member", token.name) ;
++                gr_con_printf (_("%s is not a member"), token.name) ;
+                 result.type = T_ERROR ;
+                 return ;
+             }
+@@ -1122,7 +1129,7 @@
+             }
+             if (n == v->NVars)
+             {
+-                gr_con_printf ("%s is not a member", token.name) ;
++                gr_con_printf (_("%s is not a member"), token.name) ;
+                 result.type = T_ERROR ;
+                 return ;
+             }
+@@ -1144,7 +1151,7 @@
+ 
+             if (result.type != T_VARIABLE || result.var.Type.BaseType[0] != TYPE_ARRAY)
+             {
+-                gr_con_printf ("%s is not an array", result.name) ;
++                gr_con_printf (_("%s is not an array"), result.name) ;
+                 result.type = T_ERROR ;
+                 return ;
+             }
+@@ -1158,19 +1165,19 @@
+ 
+             if (result.type != T_CONSTANT)
+             {
+-                gr_con_printf ("%s is not an integer", result.name) ;
++                gr_con_printf (_("%s is not an integer"), result.name) ;
+                 result.type = T_ERROR ;
+                 return ;
+             }
+             if (result.value < 0)
+             {
+-                gr_con_printf ("Index (%d) less than zero", result.value) ;
++                gr_con_printf (_("Index (%d) less than zero"), result.value) ;
+                 result.type = T_ERROR ;
+                 return ;
+             }
+             if (result.value >= i.Type.Count[0])
+             {
+-                gr_con_printf ("Index (%d) out of bounds", result.value) ;
++                gr_con_printf (_("Index (%d) out of bounds"), result.value) ;
+                 result.type = T_ERROR ;
+                 return ;
+             }
+@@ -1201,14 +1208,14 @@
+         if (result.type != T_CONSTANT)
+         {
+             result.type = T_ERROR ;
+-            gr_con_printf ("Operand is not a number\n") ;
++            gr_con_printf (_("Operand is not a number\n")) ;
+             return ;
+         }
+         if (!op) op = 1 ;
+         if (op > 1 && !result.value)
+         {
+             result.type = T_ERROR ;
+-            gr_con_printf ("Divide by zero\n") ;
++            gr_con_printf (_("Divide by zero\n")) ;
+             return ;
+         }
+         if (op == 1) base *= result.value ;
+@@ -1240,7 +1247,7 @@
+         if (result.type != T_CONSTANT)
+         {
+             result.type = T_ERROR ;
+-            gr_con_printf ("Operand is not a number\n") ;
++            gr_con_printf (_("Operand is not a number\n")) ;
+             return ;
+         }
+         if (!op) op = 1 ;
+@@ -1272,7 +1279,7 @@
+     {
+         if (result.type != T_ERROR)
+         {
+-            gr_con_printf ("Invalid expression");
++            gr_con_printf (_("Invalid expression"));
+             result.type = T_ERROR;
+         }
+         return 0;
+@@ -1298,7 +1305,7 @@
+         {
+             if (lvalue.type != T_VARIABLE)
+             {
+-                strcpy (buffer, "Not an lvalue") ;
++                strcpy (buffer, _("Not an lvalue")) ;
+                 if (interactive) gr_con_printf ("%s", buffer) ;
+                 return buffer ;
+             }
+@@ -1329,7 +1336,7 @@
+             }
+             else
+             {
+-                strcpy (buffer, "Invalid assignation") ;
++                strcpy (buffer, _("Invalid assignation")) ;
+                 if (interactive) gr_con_printf ("%s", buffer) ;
+                 return buffer ;
+             }
+@@ -1387,7 +1394,7 @@
+                 if (LOCDWORD(i, PROCESS_ID) == procno)
+                     break;
+             if (!i) {
+-                gr_con_printf ("Instance %d does not exist", procno);
++                gr_con_printf (_("Instance %d does not exist"), procno);
+                 return NULL;
+             }
+         }
+@@ -1406,14 +1413,14 @@
+                 if (dcb.proc[procno].data.ID == dcb.id[n].Code)
+                     break;
+             if (procno == (int)dcb.data.NProcs) {
+-                gr_con_printf ("Unknown process %s", action);
++                gr_con_printf (_("Unknown process %s"), action);
+                 return NULL;
+             }
+             for (i = last ? last->next : first_instance ; i ; i = i->next)
+                 if (i->proc->type == procno)
+                     break;
+             if (!i && !last) {
+-                gr_con_printf ("No instance of process %s created\n", action);
++                gr_con_printf (_("No instance of process %s created\n"), action);
+                 return NULL;
+             }
+         }
+@@ -1488,10 +1495,10 @@
+                     if (LOCDWORD(i, PROCESS_ID) == procno)
+                         break;
+                 if (!i) {
+-                    gr_con_printf ("Instance %d does not exist", procno);
++                    gr_con_printf (_("Instance %d does not exist"), procno);
+                 } else {
+                     i->breakpoint = 1;
+-                    gr_con_printf ("Ok");
++                    gr_con_printf (_("Ok"));
+                 }
+             }
+             else
+@@ -1505,10 +1512,10 @@
+                 if (*action) {
+                     p = procdef_get_by_name(action);
+                     if (!p) {
+-                        gr_con_printf ("Process type %d does not exist", procno);
++                        gr_con_printf (_("Process type %d does not exist"), procno);
+                     } else {
+                         p->breakpoint = 1;
+-                        gr_con_printf ("Ok");
++                        gr_con_printf (_("Ok"));
+                     }
+                 }
+             }
+@@ -1517,7 +1524,7 @@
+             for (n = 0 ; n < procdef_count; n++) {
+                 if (procs[n].breakpoint) {
+                     if (!f) {
+-                        gr_con_printf("¬02Process type breakpoints¬07\n");
++                        gr_con_printf(_("¬02Process type breakpoints¬07\n"));
+                         f = 1;
+                     }
+                     gr_con_printf("%s\n", procs[n].name);
+@@ -1530,7 +1537,7 @@
+             for (i = first_instance ; i ; i = i->next) {
+                 if (i->breakpoint) {
+                     if (!f) {
+-                            gr_con_printf("¬02Process breakpoints¬07\n");
++                            gr_con_printf(_("¬02Process breakpoints¬07\n"));
+                         f = 1;
+                     }
+                     gr_con_printf("%d\n", LOCDWORD(i, PROCESS_ID));
+@@ -1552,10 +1559,10 @@
+                     if (LOCDWORD(i, PROCESS_ID) == procno)
+                         break;
+                 if (!i) {
+-                    gr_con_printf ("Instance %d does not exist", procno);
++                    gr_con_printf (_("Instance %d does not exist"), procno);
+                 } else {
+                     i->breakpoint = 0;
+-                    gr_con_printf ("Ok");
++                    gr_con_printf (_("Ok"));
+                 }
+             }
+             else
+@@ -1568,10 +1575,10 @@
+ 
+                 p = procdef_get_by_name(action);
+                 if (!p) {
+-                    gr_con_printf ("Process type %d does not exist", procno);
++                    gr_con_printf (_("Process type %d does not exist"), procno);
+                 } else {
+                     p->breakpoint = 0;
+-                    gr_con_printf ("Ok");
++                    gr_con_printf (_("Ok"));
+                 }
+             }
+         }
+@@ -1617,7 +1624,7 @@
+             }
+         } else if (show_public) {
+             if (!i) {
+-                gr_con_printf ("Use: PUBLICS process");
++                gr_con_printf (_("Usage: PUBLICS process"));
+                 return;
+             }
+             for (var = 0 ; var < dcb.proc[i->proc->type].data.NPubVars ; var++)
+@@ -1632,7 +1639,7 @@
+             }
+         } else {
+             if (!i) {
+-                gr_con_printf ("Use: PRIVATES process");
++                gr_con_printf (_("Usage: PRIVATES process"));
+                 return;
+             }
+             for (var = 0 ; var < dcb.proc[i->proc->type].data.NPriVars ; var++)
+@@ -1724,7 +1731,7 @@
+                         			default:
+                                             freestrings(p, inst->pridata);
+                                             instance_destroy(inst);
+-                                            gr_con_printf("Invalid argument %d\n", i);
++                                            gr_con_printf(_("Invalid argument %d\n"), i);
+                                             return;
+                                 }
+                                 break;
+@@ -1738,13 +1745,13 @@
+                             default:
+                                 freestrings(p, inst->pridata);
+                                 instance_destroy(inst);
+-                                gr_con_printf("Invalid argument %d\n", i);
++                                gr_con_printf(_("Invalid argument %d\n"), i);
+                                 return;
+                         }
+                     }
+-                    gr_con_printf("Process %s is executed!\n", p->name );
++                    gr_con_printf(_("Process %s is executed!\n"), p->name );
+                 } else {
+-                    gr_con_printf("Process %s not found!\n", p->name );
++                    gr_con_printf(_("Process %s not found!\n"), p->name );
+                 }
+                 return;
+             }
+Index: fenix-0.92a.dfsg1/fxi/src/g_conversion.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_conversion.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_conversion.c	2007-08-28 14:44:30.000000000 +0200
+@@ -34,6 +34,13 @@
+ 
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ /* Conversion tables - used by 16 bits conversions - 256K */
+@@ -223,7 +230,7 @@
+ 	convertScreenTo565 = (Uint16 *) malloc(sizeof(Uint16) * 65536);
+ 	if (convert565ToScreen == NULL && convertScreenTo565 == NULL)
+ 	{
+-		gr_error ("init_conversion_tables: sin memoria");
++		gr_error (_("init_conversion_tables: out of memory"));
+ 		return;
+ 	}
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_draw.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_draw.c	2007-08-28 14:38:47.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_draw.c	2007-08-28 14:44:31.000000000 +0200
+@@ -34,6 +34,13 @@
+ #include <math.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ #include "files.h"
+@@ -178,7 +185,7 @@
+         case 1:
+             return (((Uint8 *)dest->data)[x/8 + dest->pitch*y] & (0x80 >> (x & 7))) ? 1:0;
+         default:
+-            gr_error ("gr_get_pixel: Profundidad de color no soportada");
++            gr_error (_("gr_get_pixel: Unsupported colour depth"));
+             return 0;
+     }
+ }
+@@ -221,7 +228,7 @@
+                 ((Uint8 *)dest->data)[x/8 + dest->pitch*y] &= ~(0x80 >> (x & 7)) ;
+             break;
+         default:
+-            gr_error ("gr_put_pixel: Profundidad de color no soportada");
++            gr_error (_("gr_put_pixel: Unsupported colour depth"));
+     }
+ }
+ 
+@@ -309,7 +316,7 @@
+                 memset ((Uint8 *)dest->data + dest->pitch * y, color ? 0xFF:0, dest->width/8) ;
+             break;
+         default:
+-            gr_error ("gr_clear_as: Profundidad de color no soportada");
++            gr_error (_("gr_clear_as: Unsupported colour depth"));
+     }
+ 
+     if (dest == background && !color)
+Index: fenix-0.92a.dfsg1/fxi/src/g_font.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_font.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_font.c	2007-08-28 14:44:31.000000000 +0200
+@@ -40,6 +40,13 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ FONT * fonts[256] = { 0 } ;
+@@ -66,12 +73,12 @@
+ 
+ 	if (f == NULL)
+ 	{
+-		gr_error ("gr_font_new: sin memoria");
++		gr_error (_("gr_font_new: out of memory"));
+ 		return -1;
+ 	}
+ 	if (font_count == 255)
+ 	{
+-		gr_error ("gr_font_new: demasiadas fuentes");
++		gr_error (_("gr_font_new: too many fonts"));
+ 		return -1;
+ 	}
+ 
+@@ -134,7 +141,7 @@
+ 		bitmap = bitmap_new (i, width, height, 1, 1);
+ 		if (bitmap == NULL)
+ 		{
+-			gr_error ("gr_font_newfrombitmap: sin memoria");
++			gr_error (_("gr_font_newfrombitmap: out of memory"));
+ 			return id;
+ 		}
+ 
+@@ -361,7 +368,7 @@
+ 	if (memcmp (header, "fnt\x1a\x0d\x0a", 7) != 0 &&
+ 		memcmp (header, "fnx\x1a\x0d\x0a", 7) != 0)
+ 	{
+-		gr_error ("gr_font_load: formato desconocido");
++		gr_error (_("gr_font_load: unknown format"));
+ 		return -1;
+ 	}
+ 
+@@ -517,7 +524,7 @@
+ 
+ 	if (fontid < 0 || fontid > 255 || !fonts[fontid])
+ 	{
+-		gr_error ("gr_font_save: fuente incorrecta");
++		gr_error (_("gr_font_save: invalid font"));
+ 		return 0;
+ 	}
+ 	font = fonts[fontid];
+@@ -537,7 +544,7 @@
+ 	file = gzopen (fullname, "wb");
+ 	if (!file)
+ 	{
+-		gr_error ("gr_font_save: no se pudo crear el fichero %s", fullname);
++		gr_error (_("gr_font_save: file '%s' could not be created"), fullname);
+ 		return 0;
+ 	}
+ 
+@@ -614,7 +621,7 @@
+ 
+ 			if (gr->depth != font->bpp)
+ 			{
+-				gr_error ("gr_font_save: fuente corrupta");
++				gr_error (_("gr_font_save: corrupt font"));
+ 				gzclose (file);
+ 				return 0;
+ 			}
+@@ -623,7 +630,7 @@
+ 			{
+ 				if ( (block = malloc(gr->widthb)) == NULL)
+ 				{
+-					gr_error ("gr_font_save: sin memoria");
++					gr_error (_("gr_font_save: out of memory"));
+ 					gzclose (file);
+ 					return 0;
+ 				}
+@@ -831,7 +838,7 @@
+ 
+ 	if (error)
+ 	{
+-		gr_error ("gr_load_bdf: incorrect BDF file");
++		gr_error (_("gr_load_bdf: incorrect BDF file"));
+ 		return -1;
+ 	}
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_fpg.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_fpg.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_fpg.c	2007-08-28 14:44:31.000000000 +0200
+@@ -38,6 +38,13 @@
+ #include <windows.h>
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ #define MAXLIBS 128
+@@ -78,7 +85,7 @@
+ 		}
+ 		if (i == lib_nextid)
+ 		{
+-			gr_error ("grlib_new: sin memoria");
++			gr_error (_("grlib_new: out of memory"));
+ 			return -1;
+ 		}
+ 		libs[i] = lib ;
+@@ -218,7 +225,7 @@
+ 	{
+ 		int new_reserved = (map->code & ~0x001F) + 32;
+ 		lib->maps = (GRAPH **) realloc (lib->maps, sizeof(GRAPH*) * new_reserved) ;
+-		if (!lib->maps) gr_error ("grlib_add_map: sin memoria\n") ;
++		if (!lib->maps) gr_error (_("grlib_add_map: out of memory\n")) ;
+ 		memset (lib->maps + lib->map_reserved, 0, (new_reserved - lib->map_reserved) * sizeof(GRAPH *));
+ 		lib->map_reserved = new_reserved;
+ 	}
+@@ -310,9 +317,9 @@
+ #ifdef WIN32
+ 		char buffer[2048];
+ 		GetCurrentDirectory(2048, buffer);
+-		gr_error ("Libreria %s no encontrada en %s\n", libname, buffer) ;
++		gr_error (_("'%s': Library not found in %s\n"), libname, buffer) ;
+ #else
+-		gr_error ("Libreria %s no encontrada\n", libname) ;
++		gr_error (_("'%s': Library not found\n"), libname) ;
+ #endif
+ 		return -1 ;
+ 	}
+Index: fenix-0.92a.dfsg1/fxi/src/g_main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_main.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_main.c	2007-08-28 14:44:31.000000000 +0200
+@@ -47,6 +47,13 @@
+ #include <assert.h>
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "dcb.h"
+ #include "grlib.h"
+@@ -734,7 +741,7 @@
+                             {
+                                 shot->info_flags |= GI_NOCOLORKEY;
+                                 gr_save_png (shot, name);
+-                                gr_con_printf ("[FXI] Screenshot %s grabado", name);
++                                gr_con_printf (_("[FXI] Screenshot %s saved"), name);
+                                 break;
+                             }
+                         }
+@@ -781,7 +788,7 @@
+                 k = sdl_equiv[e.key.keysym.sym];
+                 if (k == 0)
+                 {
+-                    gr_con_printf ("Warning: symbol %d not defined", e.key.keysym.sym);
++                    gr_con_printf (_("Warning: symbol %d not defined"), e.key.keysym.sym);
+                 }
+                 m = e.key.keysym.mod ;
+ 
+@@ -2288,7 +2295,7 @@
+ 
+     if (!screen)
+     {
+-        gr_con_printf ("Modo grafico %dx%d no disponible: %s\n", scr_width, scr_height, SDL_GetError()) ;
++        gr_con_printf (_("Graphic mode %dx%d not available: %s\n"), scr_width, scr_height, SDL_GetError()) ;
+         do_exit(1);
+     }
+ 
+@@ -2296,7 +2303,7 @@
+     {
+         if (screen->format->BytesPerPixel != 2)
+         {
+-            printf ("Profundidad de color de 16 bits no soportada\n") ;
++            printf (_("16 bit colour depth is not supported\n")) ;
+             do_exit(1) ;
+         }
+         for (n = 0 ; n < 65536 ; n++)
+@@ -2319,7 +2326,7 @@
+ 
+     if (!scr_initialized)   scr_initialized = 1 ;
+ 
+-    if (report_graphics)    gr_con_printf ("[GRAPH] Graphic mode started - %dx%d - %s\n", width, height, enable_16bits ? "16 bits":"8 bits") ;
++    if (report_graphics)    gr_con_printf (_("[GRAPH] Graphic mode started - %dx%d - %s\n"), width, height, enable_16bits ? "16 bits":"8 bits") ;
+ 
+     if (enable_16bits)
+     {
+@@ -2330,8 +2337,8 @@
+         for (m = screen->format->Bmask; m; m >>= 1) Bbits += (m&1) ;
+ 
+         if (report_graphics)
+-            gr_con_printf ( "[GRAPH] RGB %d%d%d: "
+-                            "Masks R=0x%04X G=0x%04X B=0x%04X\n",
++            gr_con_printf ( _("[GRAPH] RGB %d%d%d: "
++                            "Masks R=0x%04X G=0x%04X B=0x%04X\n"),
+                             Rbits, Gbits, Bbits,
+                             screen->format->Rmask,
+                             screen->format->Gmask,
+@@ -2339,7 +2346,7 @@
+     }
+ 
+     if (report_graphics && (screen->flags & SDL_DOUBLEBUF))
+-        gr_con_printf ("[GRAPH] Doble buffer activo\n") ;
++        gr_con_printf (_("[GRAPH] Double buffer active\n")) ;
+ 
+     SDL_ShowCursor (0) ;
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_maps.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_maps.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_maps.c	2007-08-28 14:44:31.000000000 +0200
+@@ -41,6 +41,13 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ extern SDL_Surface * screen ;
+@@ -77,7 +84,7 @@
+ 
+ 	if (depth != 8 && depth != 16 && depth != 1)
+ 	{
+-		gr_con_printf ("Profundidad de color no soportada (new bitmap)\n") ;
++		gr_con_printf (_("Unsupported colour depth (new bitmap)\n")) ;
+ 		return NULL;
+ 	}
+ 	if (frames < 1)
+@@ -98,7 +105,7 @@
+ 	gr = (GRAPH *) malloc (sizeof(GRAPH)) ;
+ 	if (!gr)
+ 	{
+-		gr_con_printf ("bitmap_new(%dx%dx%d): sin memoria", w, h, depth) ; ;
++		gr_con_printf (_("bitmap_new(%dx%dx%d): out of memory"), w, h, depth) ; ;
+ 		return NULL;
+ 	}
+ 
+@@ -135,7 +142,7 @@
+ 			free(gr->sequences);
+ 		free (gr);
+ 
+-		gr_con_printf ("bitmap_new: sin memoria en calloc(%d, %d)", h, gr->pitch) ; ;
++		gr_con_printf (_("bitmap_new: out of memory in calloc(%d, %d)"), h, gr->pitch) ; ;
+ 		return NULL;
+ 	}
+ 
+@@ -380,7 +387,7 @@
+ 
+ 	if (!fp)
+ 	{
+-		gr_con_printf ("Mapa %s no encontrado\n", mapname) ;
++		gr_con_printf (_("'%s': map does not exist\n"), mapname) ;
+ 		return -1 ;
+ 	}
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_pal.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_pal.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_pal.c	2007-08-28 14:44:31.000000000 +0200
+@@ -40,6 +40,13 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "fgc.h"
+ #include "fbm.h"
+@@ -365,7 +372,7 @@
+             file_seek (fp, 0, SEEK_SET) ;
+             if (file_read (fp, &fgcHeader, sizeof(FGC_HEADER)) != sizeof(FGC_HEADER))
+             {
+-                fgc_error = "Fichero FGC corrupto o truncado";
++                fgc_error = _("FGC file corrupt or truncated");
+                 file_close(fp);
+                 return -1;
+             }
+@@ -382,7 +389,7 @@
+ 
+ 
+                 if (file_read(fp, color_palette, 768) != 768) {
+-                    fgc_error = "PALETA - Fichero FGC truncado";
++                    fgc_error = _("PALETTE - FGC file is truncated");
+                     file_close(fp);
+                     return -1;
+                 }
+@@ -397,7 +404,7 @@
+                 palette_changed = 1 ;
+                 r = 1 ;
+             } else {
+-                fgc_error = "Fichero FGC no contiene información de paleta";
++                fgc_error = _("FGC file does not contain information about the colour palette");
+                 file_close(fp);
+                 return -1;
+             }
+@@ -410,7 +417,7 @@
+             file_seek (fp, 0, SEEK_SET) ;
+ 
+             if (file_read(fp,&fbmHeader,sizeof(FBM_FILE_HEADER)!=sizeof(FBM_FILE_HEADER))) {
+-                fbm_error = "Fichero FBM corrupto o truncado";
++                fbm_error = _("FBM file corrupt or truncated");
+                 file_close(fp);
+                 return -1;
+             }
+@@ -418,7 +425,7 @@
+             ARRANGE_DWORD(&fbmHeader.depth);
+ 
+             if (fbmHeader.depth!=8) {
+-                fbm_error = "Fichero FBM no contiene informarcion de paleta";
++                fbm_error = _("FBM file does not contain information about the colour palette");
+                 file_close(fp);
+                 return -1;
+             }
+@@ -427,7 +434,7 @@
+ 
+ 
+             if (file_read(fp, color_palette, 768) != 768) {
+-                fbm_error = "PALETA - Fichero FGC truncado";
++                fbm_error = _("PALETTE - FGC file is truncated");
+                 file_close(fp);
+                 return -1;
+             }
+@@ -713,7 +720,7 @@
+ 
+     if (report_graphics) {
+         ticks2 = SDL_GetTicks() ;
+-        gr_con_printf ("[GRAPH] Palette analysis done in %d ms\n", ticks2-ticks1) ;
++        gr_con_printf (_("[GRAPH] Colour palette analysis done in %d ms\n"), ticks2-ticks1) ;
+     }
+ }
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_profiler.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_profiler.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_profiler.c	2007-08-28 14:39:57.000000000 +0200
+@@ -42,6 +42,13 @@
+ #include <math.h>
+ #include <limits.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include <fxi.h>
+ 
+ typedef struct
+@@ -109,7 +116,7 @@
+ 
+ 	if (samples == NULL || history == NULL)
+ 	{
+-		gr_error ("gprof_allocate: sin memoria");
++		gr_error (_("gprof_allocate: out of memory"));
+ 		samples = NULL;
+ 		history = NULL;
+ 		return 0;
+@@ -268,7 +275,7 @@
+ 
+ 	if (samples == NULL || history == NULL)
+ 	{
+-		gr_error ("gprof_init: sin memoria");
++		gr_error (_("gprof_init: out of memory"));
+ 		return;
+ 	}
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_scroll.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_scroll.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_scroll.c	2007-08-28 14:44:31.000000000 +0200
+@@ -27,6 +27,13 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ #define MIN(a,b) ((a)<(b)?(a):(b))
+@@ -158,9 +165,9 @@
+ 		scrolls[n].back  = backid  ? bitmap_get (fileid, backid)  : 0 ;
+ 
+ 		if (!graphid || !scrolls[n].graph)
+-			gr_error ("El fondo de scroll %d:%d no existe\n", fileid, graphid) ;
++			gr_error (_("Background of scroll %d:%d does not exist\n"), fileid, graphid) ;
+ 		if ( backid && !scrolls[n].back )
+-			gr_error ("Grafico %d:%d no existe\n", fileid, backid) ;
++			gr_error (_("Graphic %d:%d does not exist\n"), fileid, backid) ;
+ 	}
+ }
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/g_texts.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_texts.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/g_texts.c	2007-08-28 14:44:31.000000000 +0200
+@@ -43,6 +43,13 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ #define MAX_TEXTS 512
+@@ -400,7 +407,7 @@
+ 			if (!texts[textid].on) break ;
+ 
+ 		if (textid == MAX_TEXTS)
+-			gr_error ("Demasiados textos en pantalla") ;
++			gr_error (_("Too many texts in screen")) ;
+ 	}
+ 	else text_nextid++ ;
+ 	text_count++ ;
+@@ -485,7 +492,7 @@
+ 	if (!text || !*text) return 0;
+ 
+ 	if (fontid < 0 || fontid > 255 || !fonts[fontid]) {
+-		gr_con_printf ("Tipo de letra incorrecto (%d)", fontid) ;
++		gr_con_printf (_("Invalid font type (%d)"), fontid) ;
+ 		return 0;
+ 	}
+ 
+@@ -516,7 +523,7 @@
+ 
+ 	if (fontid < 0 || fontid > 255 || !fonts[fontid])
+ 	{
+-		gr_con_printf ("Tipo de letra incorrecto (%d)", fontid) ;
++		gr_con_printf (_("Invalid font type (%d)"), fontid) ;
+ 		return 0;
+ 	}
+ 
+@@ -548,7 +555,7 @@
+ 
+ 	if (fontid < 0 || fontid > 255 || !fonts[fontid])
+ 	{
+-		gr_con_printf ("Tipo de letra incorrecto (%d)", fontid) ;
++		gr_con_printf (_("Invalid font type (%d)"), fontid) ;
+ 		return 0;
+ 	}
+ 
+@@ -593,7 +600,7 @@
+ 	int save16, save8;
+ 
+     if (fontid < 0 || fontid > 255 || !fonts[fontid]) {
+-        gr_con_printf ("Tipo de letra incorrecto (%d)", fontid) ;
++        gr_con_printf (_("Invalid font type (%d)"), fontid) ;
+         return 0;
+     }
+ 
+@@ -662,7 +669,7 @@
+ 	if (!text || !*text) return NULL;
+ 
+     if (fontid < 0 || fontid > 255 || !fonts[fontid]) {
+-       gr_con_printf ("Tipo de letra incorrecto (%d)", fontid) ;
++       gr_con_printf (_("Invalid font type (%d)"), fontid) ;
+        return NULL;
+     }
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/i_copy.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/i_copy.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/i_copy.c	2007-08-28 14:39:58.000000000 +0200
+@@ -43,6 +43,13 @@
+ #include <math.h>
+ #include <time.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ static int copytype (void * dst, void * src, DCB_TYPEDEF * var);
+@@ -183,7 +190,7 @@
+ 				}
+ 				break;
+ 			default:
+-				gr_error ("No es posible copiar esta estructura");
++				gr_error (_("Cannot copy this structure"));
+ 				break;
+ 		}
+ 		break;
+Index: fenix-0.92a.dfsg1/fxi/src/i_debug.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/i_debug.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/i_debug.c	2007-08-28 14:44:31.000000000 +0200
+@@ -35,6 +35,13 @@
+ 
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "dcb.h"
+ 
+@@ -315,7 +322,7 @@
+         {
+             next = instance_get (LOCDWORD(i, BIGBRO)) ;
+             if (!next)
+-                gr_con_printf ("[FXI] \12**PANIC**\7 BIGBRO %d does not exist\n", LOCDWORD(i, BIGBRO)) ;
++                gr_con_printf (_("[FXI] \12**PANIC**\7 BIGBRO %d does not exist\n"), LOCDWORD(i, BIGBRO)) ;
+             i = next ;
+         }
+         else
+Index: fenix-0.92a.dfsg1/fxi/src/i_func.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/i_func.c	2007-08-28 14:38:48.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/i_func.c	2007-08-28 14:45:44.000000000 +0200
+@@ -125,6 +125,13 @@
+ 
+ #include <fnx_loadlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "dcb.h"
+ 
+ fixed cos_table[90001] ;
+@@ -394,7 +401,7 @@
+                     break ;
+ 
+                 default:
+-                    gr_error ("Tipo de señal desconocida") ;
++                    gr_error (_("Unknown signal type")) ;
+             }
+ 
+             if (instance_visible(i))
+@@ -988,7 +995,7 @@
+ fxi_set_mode (INSTANCE * my, int * params)
+ {
+     if (params[0] < 3200200 || params[0] > 16001400)
+-        gr_error ("Modo gráfico no soportado") ;
++        gr_error (_("Unsupported graphic mode")) ;
+ 
+     gr_init(params[0]/10000, params[0]%10000) ;
+     return 1 ;
+@@ -998,7 +1005,7 @@
+ fxi_set_mode_2 (INSTANCE * my, int * params)
+ {
+     if (params[0]>1600 || params[1]>1400)
+-        gr_error ("Modo gráfico no soportado") ;
++        gr_error (_("Unsupported graphic mode")) ;
+ 
+     gr_init(params[0], params[1]) ;
+     return 1 ;
+@@ -1009,7 +1016,7 @@
+ {
+ 
+     if (params[0]>1600 || params[1]>1400)
+-        gr_error ("Modo gráfico no soportado");
++        gr_error (_("Unsupported graphic mode"));
+ 
+     GLODWORD(GRAPH_MODE) = ((GLODWORD(GRAPH_MODE) & 0xFF) | params[2]);
+     gr_init(params[0], params[1]) ;
+@@ -1021,7 +1028,7 @@
+ {
+ 
+     if (params[0]>1600 || params[1]>1400)
+-        gr_error ("Modo gráfico no soportado");
++        gr_error (_("Unsupported graphic mode"));
+ 
+     GLODWORD(GRAPH_MODE) = (params[2] | params[3]);
+     gr_init(params[0], params[1]) ;
+@@ -1185,7 +1192,7 @@
+     if (!map) return -1 ;
+     if (map->depth != 8)
+     {
+-        gr_error ("Intento de usar convert_palette con un gráfico de 16 bits") ;
++        gr_error (_("Trying to use convert_palette with a 16 bit graphic")) ;
+         return 0;
+     }
+ 
+@@ -1658,7 +1665,7 @@
+     int     x, y ;
+ 
+     if (!map) {
+-        gr_con_printf ("Mapa %d no disponible en el fichero %d", params[1], params[0]) ;
++        gr_con_printf (_("Map %d is not available in file %d"), params[1], params[0]) ;
+         return 0;
+     }
+ 
+@@ -1803,8 +1810,8 @@
+     GRAPH * dest = bitmap_get (params[0], params[1]) ;
+     GRAPH * orig = bitmap_get (params[0], params[2]) ;
+ 
+-    if (!dest) gr_error ("map_put: mapa de destino no válido") ;
+-    if (!orig) gr_error ("map_put: mapa de origen no válido") ;
++    if (!dest) gr_error (_("map_put: Invalid destination map")) ;
++    if (!orig) gr_error (_("map_put: Invalid source map")) ;
+ 
+     gr_blit (dest, 0, params[3], params[4], 0, orig) ;
+     return 1 ;
+@@ -1884,7 +1891,7 @@
+     if (map)
+         gr_put_pixel (map, params[2], params[3], params[4]) ;
+     else
+-        gr_error ("Mapa %d no disponible en el fichero %d", params[1], params[0]) ;
++        gr_error (_("Map %d is not available in file %d"), params[1], params[0]) ;
+     return 1 ;
+ }
+ 
+@@ -1897,7 +1904,7 @@
+     Uint32 x, y, w, h, dx, dy ;
+ 
+     if (!dest)
+-        gr_error ("Mapa %d no disponible en el fichero %d", params[1], params[0]) ;
++        gr_error (_("Map %d is not available in file %d"), params[1], params[0]) ;
+ 
+     if (!orig)
+     {
+@@ -1908,7 +1915,7 @@
+                 orig = background_8bits ;
+         }
+         else
+-            gr_error ("Mapa %d no disponible en el fichero %d",
++            gr_error (_("Map %d is not available in file %d"),
+             params[4], params[0]) ;
+     }
+ 
+@@ -2008,7 +2015,7 @@
+ static int fxi_path_find (INSTANCE * my, int * params)
+ {
+     GRAPH * dest = bitmap_get (params[0], params[1]) ;
+-    if (!dest) gr_error ("Mapa %d-%d no existe%d", params[0], params[1]) ;
++    if (!dest) gr_error (_("Map %d-%d does not exist"), params[0], params[1]) ;
+     return path_find (dest, params[2], params[3], params[4], params[5], params[6]) ;
+ }
+ 
+@@ -2232,7 +2239,7 @@
+             t = TEXT_INT;
+             break;
+         default:
+-            gr_error ("No es un tipo de dato válido");
++            gr_error (_("Not a valid data type"));
+             break ;
+     }
+     return gr_text_new_var (params[0], params[1], params[2], params[3], (void *)params[4], t) ;
+@@ -3503,12 +3510,12 @@
+ 
+     if(fv == 1)
+     {
+-        gr_con_printf ("Returning %d", meminf.freeram * meminf.mem_unit);
++        gr_con_printf (_("Returning %d"), meminf.freeram * meminf.mem_unit);
+         return meminf.freeram * meminf.mem_unit;
+     }
+     else
+     {
+-        gr_con_printf ("Returning %d", meminf.freeram);
++        gr_con_printf (_("Returning %d"), meminf.freeram);
+         return meminf.freeram;
+     }
+ 
+@@ -3590,14 +3597,14 @@
+ static int fxi_alloc (INSTANCE * my, int * params)
+ {
+     void * ptr = malloc (params[0]) ;
+-    if (!ptr) gr_error ("ALLOC: no hay memoria libre suficiente") ;
++    if (!ptr) gr_error (_("ALLOC: not enought free memory")) ;
+     return (int)ptr ;
+ }
+ 
+ static int fxi_realloc (INSTANCE * my, int * params)
+ {
+     void * ptr = realloc ((void *)params[0], params[1]) ;
+-    if (!ptr) gr_error ("REALLOC: no hay memoria libre suficiente") ;
++    if (!ptr) gr_error (_("REALLOC: not enought free memory")) ;
+     return (int)ptr ;
+ }
+ 
+@@ -3934,7 +3941,7 @@
+     if (!map) return 0;
+ 
+     if (map->depth != 16) {
+-        gr_con_printf ("Intento de usar filter con un gráfico de 8 bits") ;
++        gr_con_printf (_("Trying to use filter with an 8 bit graphic")) ;
+         return 0;
+     }
+ 
+@@ -4005,7 +4012,7 @@
+     if (!map) return 0;
+ 
+     if (map->depth != 16) {
+-        gr_con_printf ("Intento de usar blur con un gráfico de 8 bits") ;
++        gr_con_printf (_("Trying to use blur with an 8 bit graphic")) ;
+         return 0;
+     }
+ 
+@@ -4138,7 +4145,7 @@
+     if (!map) return -1 ;
+ 
+     if (map->depth != 16) {
+-        gr_con_printf ("Intento de usar grayscale con un gráfico de 8 bits") ;
++        gr_con_printf (_("Trying to use grayscale with an 8 bit graphic")) ;
+         return -1 ;
+     }
+ 
+@@ -4186,7 +4193,7 @@
+ 
+     if (!map) return -1 ;
+     if (map->depth != 16)
+-        gr_error ("Intento de usar rgbscale con un gráfico de 8 bits") ;
++        gr_error (_("Trying to use rgbscale with an 8 bit graphic")) ;
+ 
+     for(i=0;i<map->height;i++)
+         for(j=0;j<map->width;j++){
+@@ -4809,7 +4816,7 @@
+     }
+ 
+     stat (globd.gl_pathv[currentFile], &s);
+-    gr_con_printf ("%s (size %d) es un %s", globd.gl_pathv[currentFile], s.st_size, S_ISDIR(s.st_mode) ? "directorio":"fichero");
++    gr_con_printf (_("%s (size %d) is %s"), globd.gl_pathv[currentFile], s.st_size, S_ISDIR(s.st_mode) ? _("a directory"):_("a file"));
+ 
+     /* Store the file name and path */
+     if (GLODWORD(FILE_NAME))
+@@ -4892,7 +4899,7 @@
+     GRAPH * graph = fbm_load(filename);
+ 
+     if (graph == NULL)
+-        gr_error("Error al abrir \"%s\":\n%s", filename, fbm_error);
++        gr_error(_("'%s': error opening file: %s\n"), filename, fbm_error);
+     else
+     {
+         graph->code = bitmap_next_code();
+@@ -4917,12 +4924,12 @@
+ 
+     if (graph == NULL)
+     {
+-        gr_error("Intento de grabar un gráfico inexistente\n(Libraría %d, gráfico %d)", params[0], params[1]);
++        gr_error(_("Trying to save an unexistant graphic (library %d, graphic %d)"), params[0], params[1]);
+     }
+     else
+     {
+         if (!fbm_save (graph, string_get(params[2])))
+-            gr_error("Error al grabar \"%s\":\n%s", string_get(params[2]), fbm_error);
++            gr_error(_("'%s': error saving file: %s\n"), string_get(params[2]), fbm_error);
+     }
+     string_discard(params[2]);
+ 
+@@ -4941,7 +4948,7 @@
+     const char * filename = string_get(params[0]);
+     int result = fgc_load(filename);
+     if (result < 0)
+-        gr_error("Error al cargar \"%s\":\n%s", string_get(params[0]), fgc_error);
++        gr_error(_("'%s': error loading file: %s\n"), string_get(params[0]), fgc_error);
+     string_discard(params[0]);
+     return result;
+ }
+@@ -5005,7 +5012,7 @@
+     last++ ;
+     sysproc_count++ ;
+     if (sysproc_count == MAX_SYSPROCS)
+-        gr_error ("Demasiadas funciones del sistema") ;
++        gr_error (_("Too many system functions")) ;
+     last[1].func = 0 ;
+     return last->code ;
+ }
+@@ -5087,7 +5094,7 @@
+         if (!library) gr_error (dlerror()) ;
+ 
+         RegisterFunctions = dlsym (library, "RegisterFunctions") ;
+-        if (!RegisterFunctions) gr_error("Error in %s", filename) ;
++        if (!RegisterFunctions) gr_error(_("Error in %s"), filename) ;
+ 
+         (*RegisterFunctions)(fnc_import, sysproc_add) ;
+     }
+Index: fenix-0.92a.dfsg1/fxi/src/i_main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/i_main.c	2007-08-28 14:38:49.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/i_main.c	2007-08-28 14:44:31.000000000 +0200
+@@ -39,6 +39,13 @@
+ 
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "dcb.h"
+ 
+@@ -538,7 +545,7 @@
+                     int * old_data      = private_data;
+                     private_data = stack_ptr - proc->params;
+                     if (stack_ptr > stack + sizeof(stack)/4 - proc->private_size/4 - 128) // 128 = reservado
+-                        gr_error ("Stack overflow!");
++                        gr_error (_("Stack overflow!"));
+ 
+                     stack_ptr += ( proc->private_size/4 - proc->params ) ;
+ 
+@@ -558,7 +565,7 @@
+ 
+             case MN_SYSCALL:
+                 p = sysproc_get (ptr[1]) ;
+-                if (!p) gr_error ("Error: Función del sistema desconocida\n") ;
++                if (!p) gr_error (_("Error: unknown system function\n")) ;
+                 stack_ptr -= p->params ;
+                 *stack_ptr = (*p->func) (r, stack_ptr) ;
+                 stack_ptr++ ;
+@@ -567,7 +574,7 @@
+ 
+             case MN_SYSPROC:
+                 p = sysproc_get (ptr[1]) ;
+-                if (!p) gr_error ("Error: Procedimiento del sistema desconocido\n") ;
++                if (!p) gr_error (_("Error: unknown system procedure\n")) ;
+                 stack_ptr -= p->params ;
+                 (*p->func) (r, stack_ptr) ;
+                 ptr += 2 ;
+@@ -633,7 +640,7 @@
+             case MN_REMOTE | MN_FLOAT:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = (int) &LOCDWORD(i, ptr[1]) ;
+                 ptr += 2 ;
+@@ -649,7 +656,7 @@
+             case MN_REMOTE_PUBLIC | MN_FLOAT:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = (int) &PUBDWORD(i, ptr[1]) ;
+                 ptr += 2 ;
+@@ -690,7 +697,7 @@
+             case MN_GET_REMOTE | MN_UNSIGNED:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = LOCDWORD(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -701,7 +708,7 @@
+             case MN_GET_REMOTE_PUBLIC | MN_UNSIGNED:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = PUBDWORD(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -749,7 +756,7 @@
+             case MN_GET_REMOTE | MN_STRING:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = LOCDWORD(i,ptr[1]) ;
+                 string_use     ( stack_ptr[-1] ) ;
+@@ -759,7 +766,7 @@
+             case MN_GET_REMOTE_PUBLIC | MN_STRING:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = PUBDWORD(i,ptr[1]) ;
+                 string_use     ( stack_ptr[-1] ) ;
+@@ -824,7 +831,7 @@
+             case MN_WORD | MN_GET_REMOTE | MN_UNSIGNED:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = LOCWORD(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -834,7 +841,7 @@
+             case MN_WORD | MN_GET_REMOTE_PUBLIC | MN_UNSIGNED:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = PUBWORD(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -897,7 +904,7 @@
+             case MN_BYTE | MN_GET_REMOTE:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = (signed char) LOCBYTE(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -906,7 +913,7 @@
+             case MN_BYTE | MN_GET_REMOTE | MN_UNSIGNED:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = LOCBYTE(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -915,7 +922,7 @@
+             case MN_BYTE | MN_GET_REMOTE_PUBLIC:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = (signed char) PUBBYTE(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -924,7 +931,7 @@
+             case MN_BYTE | MN_GET_REMOTE_PUBLIC | MN_UNSIGNED:
+                 i = instance_get (stack_ptr[-1]) ;
+                 if (i == 0)
+-                    gr_error ("Error de ejecucion en proceso %s(%d):\nProcedimiento %d no activo\n", proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
++                    gr_error (_("Error executing process %s (%d): Inactive procedure %d\n"), proc->name, LOCDWORD(r,PROCESS_ID), stack_ptr[-1]) ;
+                 else
+                     stack_ptr[-1] = PUBBYTE(i,ptr[1]) ;
+                 ptr += 2 ;
+@@ -978,7 +985,7 @@
+ 
+             case MN_FLOAT | MN_DIV:
+                 if (*((float *)&stack_ptr[-1]) == 0.0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(float *)&stack_ptr[-2] /= *((float *)&stack_ptr[-1]) ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1052,7 +1059,7 @@
+             case MN_DIV | MN_BYTE:
+             case MN_DIV:
+                 if (stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 stack_ptr[-2] /= stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1062,7 +1069,7 @@
+             case MN_DIV | MN_BYTE | MN_UNSIGNED:
+             case MN_DIV | MN_UNSIGNED:
+                 if (stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 stack_ptr[-2] = (Uint32)stack_ptr[-2] / (Uint32)stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1072,7 +1079,7 @@
+             case MN_MOD | MN_BYTE:
+             case MN_MOD:
+                 if (stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 stack_ptr[-2] %= stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1082,7 +1089,7 @@
+             case MN_MOD | MN_BYTE | MN_UNSIGNED:
+             case MN_MOD | MN_UNSIGNED:
+                 if (stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 stack_ptr[-2] = (Uint32)stack_ptr[-2] % (Uint32)stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1602,7 +1609,7 @@
+             case MN_VARDIV:
+             case MN_VARDIV | MN_UNSIGNED:
+                 if (stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(Sint32 *)(stack_ptr[-2]) /= stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1611,7 +1618,7 @@
+             case MN_VARMOD:
+             case MN_VARMOD | MN_UNSIGNED:
+                 if (stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(Sint32 *)(stack_ptr[-2]) %= stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1728,7 +1735,7 @@
+             case MN_WORD | MN_VARDIV:
+             case MN_WORD | MN_VARDIV | MN_UNSIGNED:
+                 if ((Sint16)stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(Sint16 *)(stack_ptr[-2]) /= (Sint16)stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1737,7 +1744,7 @@
+             case MN_WORD | MN_VARMOD:
+             case MN_WORD | MN_VARMOD | MN_UNSIGNED:
+                 if ((Sint16)stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(Sint16 *)(stack_ptr[-2]) %= (Sint16)stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1854,7 +1861,7 @@
+             case MN_BYTE | MN_VARDIV:
+             case MN_BYTE | MN_VARDIV | MN_UNSIGNED:
+                 if ((Uint8)stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(Uint8 *)(stack_ptr[-2]) /= (Uint8)stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1863,7 +1870,7 @@
+             case MN_BYTE | MN_VARMOD:
+             case MN_BYTE | MN_VARMOD | MN_UNSIGNED:
+                 if ((Uint8)stack_ptr[-1] == 0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(Uint8 *)(stack_ptr[-2]) %= (Uint8)stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -1969,7 +1976,7 @@
+ 
+             case MN_FLOAT | MN_VARDIV:
+                 if (*(float *)&stack_ptr[-1] == 0.0)
+-                    gr_error ("Error: Division por cero\n") ;
++                    gr_error (_("Error: division by zero\n")) ;
+                 *(float *)(stack_ptr[-2]) /= *(float *)&stack_ptr[-1] ;
+                 stack_ptr-- ;
+                 ptr++ ;
+@@ -2079,7 +2086,7 @@
+                 {
+                 PROCDEF * proct = procdef_get (ptr[1]) ;
+                 if (!proct)
+-                    gr_error ("Error: Procedimiento desconocido\n") ;
++                    gr_error (_("Error: unknown procedure\n")) ;
+                 *stack_ptr++ = proct->type ;
+                 ptr += 2 ;
+                 break ;
+@@ -2183,7 +2190,7 @@
+                 break ;
+ 
+             default:
+-                gr_error ("Error: Mnemonico 0x%02X no implementado en %s\n", *ptr, proc->name) ;
++                gr_error (_("Error: unimplemented mnemonic 0x%02X in %s\n"), *ptr, proc->name) ;
+ 
+         }
+ 
+Index: fenix-0.92a.dfsg1/fxi/src/img_pcx.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/img_pcx.c	2007-08-28 14:38:49.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/img_pcx.c	2007-08-28 14:44:31.000000000 +0200
+@@ -45,6 +45,13 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ /*
+@@ -97,7 +104,7 @@
+ 	Uint8 *   ptr, ch ;
+ 
+ 	file = file_open (filename, "rb") ;
+-	if (!file) gr_error ("%s: Could not open the file\n", filename) ;
++	if (!file) gr_error (_("%s: Could not open the file\n"), filename) ;
+ 
+ 	file_read (file, &header, sizeof(header)) ;
+ 
+@@ -116,7 +123,7 @@
+ 	width  = header.Xmax - header.Xmin + 1 ;
+ 	height = header.Ymax - header.Ymin + 1 ;
+ 	bitmap = bitmap_new (0, width, height, header.BitsPerPixel == 8 ? 8:16, 1) ;
+-	if (!bitmap) gr_error ("%s: Could not allocate required memory\n", filename) ;
++	if (!bitmap) gr_error (_("%s: Could not allocate required memory\n"), filename) ;
+ 
+ 	assert (width <= header.BytesPerLine) ;
+ 
+@@ -126,7 +133,7 @@
+ 			ptr = (Uint8 *)bitmap->data + bitmap->pitch * y ;
+ 			for (x = 0 ; x < header.BytesPerLine ; ) {
+ 				if (file_read (file, &ch, 1) < 1)
+-					gr_error ("%s: Truncated file", filename) ;
++					gr_error (_("%s: Truncated file"), filename) ;
+ 				if ((ch & 0xC0) == 0xC0) {
+ 					count = (ch & 0x3F) ;
+ 					file_read (file, &ch, 1) ;
+@@ -141,7 +148,7 @@
+ 			}
+ 		}
+ 	} else {
+-		gr_error ("%s: Non supported color depth\n", filename) ;
++		gr_error (_("%s: unsupported color depth\n"), filename) ;
+ 	}
+ 
+ 	bitmap->modified = 1 ;
+Index: fenix-0.92a.dfsg1/fxi/src/img_png.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/img_png.c	2007-08-28 14:38:49.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/img_png.c	2007-08-28 14:44:32.000000000 +0200
+@@ -45,6 +45,13 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include <png.h>
+ #include "fxi.h"
+ 
+@@ -82,15 +89,15 @@
+     /* Abre el fichero y se asegura de que screen está inicializada */
+ 
+     png = file_open (filename, "rb") ;
+-    if (!png) gr_error ("No existe %s\n", filename) ;
++    if (!png) gr_error (_("'%s': file does not exist\n"), filename) ;
+ 
+     /* Prepara las estructuras internas */
+ 
+     png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, 0, 0, 0) ;
+-    if (!png_ptr) gr_error ("Error al cargar PNG") ;
++    if (!png_ptr) gr_error (_("Error loading PNG file")) ;
+     info_ptr = png_create_info_struct (png_ptr) ;
+     end_info = png_create_info_struct (png_ptr) ;
+-    if (!info_ptr || !end_info) gr_error ("Error al cargar PNG") ;
++    if (!info_ptr || !end_info) gr_error (_("Error loading PNG file")) ;
+ 
+     /* Rutina de error */
+ 
+@@ -138,7 +145,7 @@
+ 
+     rowbytes = png_get_rowbytes (png_ptr, info_ptr) ;
+     bitmap = bitmap_new (0, width, height, color == PNG_COLOR_TYPE_PALETTE ? 8 : 16, 1) ;
+-    if (!bitmap) gr_error ("Error al cargar PNG") ;
++    if (!bitmap) gr_error (_("Error loading PNG file")) ;
+     if (color == PNG_COLOR_TYPE_PALETTE)
+     {
+         /* Read the color palette */
+@@ -147,7 +154,7 @@
+         {
+             png_colorp png_palette = (png_colorp) png_malloc (png_ptr, 256*sizeof(png_color)) ;
+             if (!png_palette)
+-                gr_error ("Sin memoria") ;
++                gr_error (_("Out of memory")) ;
+             else
+             {
+                 png_get_PLTE (png_ptr, info_ptr, &png_palette, &n) ;
+Index: fenix-0.92a.dfsg1/fxi/src/i_saveload.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/i_saveload.c	2007-08-28 14:38:49.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/i_saveload.c	2007-08-28 14:39:59.000000000 +0200
+@@ -43,6 +43,13 @@
+ #include <math.h>
+ #include <time.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ static int savetype (file * fp, void * data, DCB_TYPEDEF * var);
+@@ -251,7 +258,7 @@
+ 				}
+ 				break;
+ 			default:
+-				gr_error ("No es posible grabar esta estructura");
++				gr_error (_("Cannot save this structure"));
+ 				break;
+ 		}
+ 		break;
+@@ -324,7 +331,7 @@
+ 				str = malloc(len+1);
+ 				if (str == 0)
+ 				{
+-					gr_error ("loadtype: Sin memoria");
++					gr_error (_("loadtype: out of memory"));
+ 				}
+ 				else
+ 				{
+@@ -352,7 +359,7 @@
+ 				}
+ 				break;
+ 			default:
+-				gr_error ("No es posible recuperar esta estructura");
++				gr_error (_("Cannot recover this structure"));
+ 				break;
+ 		}
+ 		break;
+Index: fenix-0.92a.dfsg1/fxi/src/main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/main.c	2007-08-28 14:38:49.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/main.c	2007-08-28 14:46:17.000000000 +0200
+@@ -47,6 +47,14 @@
+ #include <string.h>
+ #include <time.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ #include "font.h"
+ #include "dcb.h"
+@@ -153,6 +161,14 @@
+ 	}
+ 	dcb_signature;
+ 
++#ifdef USE_GETTEXT
++	setlocale (LC_MESSAGES, "");
++	setlocale (LC_CTYPE, "");
++	setlocale (LC_COLLATE, "");
++	textdomain ("fenix-fxi");
++	bindtextdomain ("fenix-fxi", NULL);
++#endif
++
+ 	/* Find out if we are calling fxi.exe or whatever.exe */
+ 
+  	ptr = argv[0] + strlen(argv[0]) ;
+@@ -168,7 +184,7 @@
+ 
+ 	if ( SDL_Init (SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_CDROM) < 0 )
+ 	{
+-		printf ("SDL Init Error: %s\n", SDL_GetError()) ;
++		printf (_("SDL Init Error: %s\n"), SDL_GetError()) ;
+ 		do_exit(1) ;
+ 	}
+ 
+@@ -246,7 +262,7 @@
+ 						if (argv[i][j+1] == 0)
+ 						{
+ 							if (i == argc-1)
+-								gr_error ("You must provide a directory") ;
++								gr_error (_("You must provide a directory")) ;
+ 							file_addp (argv[i+1]);
+ 							i++ ;
+ 							break ;
+@@ -273,7 +289,8 @@
+ 
+ 		if (!filename)
+ 		{
+-			gr_error ( FXI_VERSION "\nCopyright(C) 2002 Fenix Team\nCopyright (C)1999 Jose Luis Cebrian\n"
++			gr_error ( _("Fenix 0.92 FXI\nCopyright (C) 2002 Fenix Team\n"
++				"Copyright (C) 1999 Jose Luis Cebrian Pague\n"
+ 				"Fenix comes with ABSOLUTELY NO WARRANTY; see COPYING for details\n\n"
+ 				"Usage: %s [options] file.dcb\n\n"
+ 				"   -d       Activate DEBUG mode\n"
+@@ -282,7 +299,7 @@
+ 				"GNU General Public License published by Free Software Foundation.\n"
+ 				"Permission granted to distribute and/or modify as stated in the license\n"
+ 				"agreement (GNU GPL version 2 or later).\n"
+-				"See COPYING for license details.\n",
++				"See COPYING for license details.\n"),
+ 				argv[0]) ;
+ 			return 0 ;
+ 		}
+@@ -321,7 +338,7 @@
+ 
+ 				if (!dcb_load(dcbname))
+ 				{
+-					gr_error ("%s: no existe o no es un DCB version %d o compatible", filename, DCB_VERSION >> 8) ;
++					gr_error (_("'%s': file does not exist or it's not a DCB version %d file or compatible"), filename, DCB_VERSION >> 8) ;
+ 					return -1 ;
+ 				}
+ 			}
+Index: fenix-0.92a.dfsg1/fxi/src/sound.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/sound.c	2007-08-28 14:38:49.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/sound.c	2007-08-28 14:40:00.000000000 +0200
+@@ -40,6 +40,13 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxi.h"
+ 
+ 
+@@ -128,7 +135,7 @@
+ 		audio_initialized = 1;
+ 		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+ 		{
+-			gr_con_printf ("[SOUND] Sonido no disponible: %s", SDL_GetError()) ;
++			gr_con_printf (_("[SOUND] Sound not available: %s"), SDL_GetError()) ;
+ 			return;
+ 		}
+ 
+@@ -149,7 +156,7 @@
+ 
+     	/* Open the audio device */
+     	if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) < 0) {
+-    		gr_con_printf ("[SOUND] No se pudo inicializar el audio: %s\n",SDL_GetError()) ;
++    		gr_con_printf (_("[SOUND] Audio could not be initialized: %s\n"),SDL_GetError()) ;
+     		sound_active=0;
+     		return;
+     	} else {
+@@ -157,11 +164,11 @@
+     		Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
+     		audio_mix_channels = Mix_AllocateChannels(-1) ;
+     		GLODWORD(SOUND_CHANNELS) = audio_mix_channels ;
+-    		gr_con_printf ("Opened audio at %d Hz %d bit %s, %d bytes audio buffer\n", audio_rate,
++    		gr_con_printf (_("Opened audio at %d Hz %d bit %s, %d bytes audio buffer\n"), audio_rate,
+     			(audio_format&0xFF),
+     			(audio_channels > 1) ? "stereo" : "mono",
+     			audio_buffers );
+-    		gr_con_printf ("Allocated %i audio mixing channels\n", audio_mix_channels) ;
++    		gr_con_printf (_("Allocated %i audio mixing channels\n"), audio_mix_channels) ;
+     		// Set mixing channels
+ 
+     		sound_active=1;
+@@ -239,7 +246,7 @@
+ 
+ 	if ( music == NULL ) {
+ 	    file_close(fp);
+-		gr_con_printf("Couldn't load %s: %s\n",filename, SDL_GetError());
++		gr_con_printf(_("Could not load '%s': %s\n"),filename, SDL_GetError());
+ 		return(-1);
+ 	} else {
+ 		return ((int)music);
+@@ -271,7 +278,7 @@
+ 		sound_init();
+ 	if (sound_active==0)
+ 	{
+-		gr_error ("Sound is not active");
++		gr_error (_("Sound is not active"));
+ 		return (-1);
+ 	}
+ 
+@@ -282,7 +289,7 @@
+ 		}
+ 		return result;
+ 	} else {
+-		gr_error ("Play song called with invalid handle");
++		gr_error (_("Play song called with invalid handle"));
+ 		return(-1);
+ 	}
+ 
+@@ -575,7 +582,7 @@
+ 	music = Mix_LoadWAV_RW(SDL_RWFromFenixFP(fp),1);
+ 
+ 	if ( music == NULL ) {
+- 		gr_con_printf("Couldn't load %s: %s\n",filename, SDL_GetError());
++ 		gr_con_printf(_("Couldn't load %s: %s\n"),filename, SDL_GetError());
+ 		return(0);
+ 	} else {
+ 		return ((int)music);
+Index: fenix-0.92a.dfsg1/fxi/src/strings.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/strings.c	2007-08-28 14:38:49.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/strings.c	2007-08-28 14:40:00.000000000 +0200
+@@ -45,6 +45,12 @@
+ #include <assert.h>
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
+ 
+ #include "fxi.h"
+ #include "dcb.h"
+@@ -132,7 +138,7 @@
+     string_dontfree = (char *) realloc (string_dontfree, string_ptr_allocated * sizeof(char)) ;
+ 
+     if (!string_ptr || !string_uct || !string_dontfree)
+-        gr_error ("string_alloc: sin memoria\n") ;
++        gr_error (_("string_alloc: out of memory\n")) ;
+ }
+ 
+ /****************************************************************************/
+@@ -147,7 +153,7 @@
+     int i ;
+     int used=0;
+ 
+-    gr_con_printf ("[STRING] ---- Dumping MaxID=%d strings ----\n", string_count) ;
++    gr_con_printf (_("[STRING] ---- Dumping MaxID=%d strings ----\n"), string_count) ;
+ 
+     for (i = 0 ; i < string_count ; i++){
+         if (string_ptr[i]){
+@@ -162,9 +168,9 @@
+         } else {
+             continue ;
+         }
+-        gr_con_printf ("[STRING] %4d %1d [%4d]: {%s}\n", i, string_uct[i], string_dontfree[i], string_ptr[i]) ;
++        gr_con_printf (_("[STRING] %4d %1d [%4d]: {%s}\n"), i, string_uct[i], string_dontfree[i], string_ptr[i]) ;
+     }
+-    gr_con_printf ("[STRING] ---- Dumping Used=%d End ----\n", used) ;
++    gr_con_printf (_("[STRING] ---- Dumping Used=%d End ----\n"), used) ;
+ }
+ 
+ /****************************************************************************/
+@@ -180,7 +186,7 @@
+ {
+     assert (code < string_count && code >= 0) ;
+     if (report_string){
+-        gr_con_printf ("[STRING] string_get %d\n", code) ;
++        gr_con_printf (_("[STRING] string_get %d\n"), code) ;
+     }
+     return string_ptr[code] ;
+ }
+@@ -207,7 +213,7 @@
+     file_seek (fp, dcb.data.OStrings, SEEK_SET) ;
+     string_offset = (int *) malloc (4 * string_count) ;
+     if (!string_offset) {
+-        gr_error ("string_load: not enough memory\n") ;
++        gr_error (_("string_load: not enough memory\n")) ;
+     }
+     file_read (fp, string_offset, 4 * string_count) ;
+     if (string_used > string_allocated)
+@@ -248,7 +254,7 @@
+ {
+     string_uct[code]++ ;
+     if (report_string) {
+-        gr_con_printf ("[STRING] String %d used (count: %d)\n", code, string_uct[code]) ;
++        gr_con_printf (_("[STRING] String %d used (count: %d)\n"), code, string_uct[code]) ;
+     }
+ }
+ 
+@@ -273,7 +279,7 @@
+     if (string_uct[code] < 1)
+     {
+         if (report_string) {
+-            gr_con_printf ("[STRING] string_discard: String %d released but already discarted\n", code) ;
++            gr_con_printf (_("[STRING] string_discard: String %d released but already discarded\n"), code) ;
+         }
+         return ;
+     }
+@@ -281,13 +287,13 @@
+     string_uct[code]-- ;
+ 
+     if (report_string) {
+-        gr_con_printf ("[STRING] string_discard: String %d released (count: %d)\n", code, string_uct[code]) ;
++        gr_con_printf (_("[STRING] string_discard: String %d released (count: %d)\n"), code, string_uct[code]) ;
+     }
+ 
+     if ( string_uct[code] < 1 )
+     {
+         if (report_string) {
+-            gr_con_printf ("[STRING] string_discard: String %d released and discarted\n", code) ;
++            gr_con_printf (_("[STRING] string_discard: String %d released and discarded\n"), code) ;
+         }
+ 
+         if (!string_dontfree[code]) {
+@@ -298,9 +304,9 @@
+ 
+         if (report_string ) {
+             if ( string_dontfree[code]) {
+-                gr_con_printf ("[STRING] string_discard: (Memory don't freed - %d is special string, count: %d)\n", code, string_uct[code]) ;
++                gr_con_printf (_("[STRING] string_discard: (Memory could not be freed - %d is special string, count: %d)\n"), code, string_uct[code]) ;
+             } else {
+-                gr_con_printf ("[STRING] string_discard: String %d released and discarted (count: %d)\n", code, string_uct[code]) ;
++                gr_con_printf (_("[STRING] string_discard: String %d released and discarded (count: %d)\n"), code, string_uct[code]) ;
+             }
+         }
+     }
+@@ -357,7 +363,7 @@
+     }
+     // Incremento espacio
+     string_alloc (1024) ;
+-    gr_con_printf ("[STRING] ¬12*PANIC¬7 Too many strings, allocating more space") ;
++    gr_con_printf (_("[STRING] ¬12*PANIC¬7 Too many strings, allocating more space")) ;
+ 
+     // Devuelvo el string_count + 1, ya que ahora tengo 1024 mas que antes
+     return string_count++ ;
+@@ -379,7 +385,7 @@
+     id = string_getid() ;
+ 
+     if (report_string) {
+-        gr_con_printf ("[STRING] String %d created: \"%s\"\n", id, str) ;
++        gr_con_printf (_("[STRING] String %d created: \"%s\"\n"), id, str) ;
+     }
+ 
+     string_ptr[id] = str ;
+@@ -416,7 +422,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (newa) String %d created: \"%s\"\n", id, str) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "newa", id, str) ;
+     }
+ 
+     return id ;
+@@ -476,7 +482,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (add) String %d created: \"%s\"\n", id, str3) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "add", id, str3) ;
+     }
+ 
+     return id ;
+@@ -504,7 +510,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (ptoa) String %d created: \"%s\"\n", id, str) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "ptoa", id, str) ;
+     }
+ 
+     return id ;
+@@ -540,7 +546,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (ftoa) String %d created: \"%s\"\n", id, str) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "ftoa", id, str) ;
+     }
+ 
+     return id ;
+@@ -568,7 +574,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (itoa) String %d created: \"%s\"\n", id, str) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "itoa", id, str) ;
+     }
+ 
+     return id ;
+@@ -596,7 +602,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (uitoa) String %d created: \"%s\"\n", id, str) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "uitoa", id, str) ;
+     }
+ 
+     return id ;
+@@ -690,7 +696,7 @@
+     string_dontfree[n]  = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (substr) String %d created: \"%s\"\n", n, ptr) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "substr", n, ptr) ;
+     }
+ 
+     return n ;
+@@ -774,7 +780,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (ucase) String %d created: \"%s\"\n", id, bptr) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "ucase", id, bptr) ;
+     }
+ 
+     return id ;
+@@ -813,7 +819,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (lcase) String %d created: \"%s\"\n", id, bptr) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "lcase", id, bptr) ;
+     }
+ 
+     return id ;
+@@ -1006,7 +1012,7 @@
+     string_dontfree[id] = 0 ;
+ 
+     if (report_string){
+-        gr_con_printf ("[STRING] (pad) String %d created: \"%s\"\n", id, str) ;
++        gr_con_printf (_("[STRING] (%s) String %d created: \"%s\"\n"), "pad", id, str) ;
+     }
+ 
+     return id ;

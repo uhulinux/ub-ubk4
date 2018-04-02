@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_configure \
+	--sysconfdir=/etc/a2ps \
+	--enable-shared=yes \
+	--enable-static=yes \
+	--with-medium=A4 \
+	--with-encoding=latin2
+ub_make \
+	lispdir=/usr/share/emacs/site-lisp

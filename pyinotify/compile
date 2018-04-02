@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp -r pyinotify pyinotify3
+cd pyinotify
+python setup.py build
+cd ../pyinotify3
+python3 setup.py build

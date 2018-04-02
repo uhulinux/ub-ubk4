@@ -1,0 +1,30 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2017-02-28 18:25:51.000000000 +0100
++++ mod/configure.ac	2018-01-02 19:48:06.772282575 +0100
+@@ -96,8 +96,6 @@
+ dnl * GTK DOC
+ dnl ***
+ 
+-GTK_DOC_CHECK([1.14], [--flavour no-tmpl])
+-
+ dnl ****************************************************************************
+ dnl * --------------------------------------------------------------------------
+ dnl ****************************************************************************
+@@ -105,8 +103,6 @@
+ Makefile
+ libkeybinder/Makefile
+ libkeybinder/$PACKAGE_NAME.pc
+-docs/Makefile
+-docs/version.info
+ ])
+ 
+ echo
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2017-02-28 18:25:51.000000000 +0100
++++ mod/Makefile.am	2018-01-02 19:39:18.417190927 +0100
+@@ -1,4 +1,4 @@
+-SUBDIRS = libkeybinder docs
++SUBDIRS = libkeybinder
+ 
+ EXTRA_DIST = \
+ 	examples/Makefile  \

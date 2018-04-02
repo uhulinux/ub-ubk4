@@ -1,0 +1,80 @@
+diff -Naur findutils-4.6.0-orig/find/find.1 findutils-4.6.0/find/find.1
+--- findutils-4.6.0-orig/find/find.1	2015-12-28 22:10:23.000000000 +0100
++++ findutils-4.6.0/find/find.1	2016-02-13 17:27:31.929318197 +0100
+@@ -2088,8 +2088,8 @@
+ 
+ 
+ .SH "SEE ALSO"
+-\fBlocate\fP(1), \fBlocatedb\fP(5), \fBupdatedb\fP(1), \fBxargs\fP(1),
+-\fBchmod\fP(1), \fBfnmatch\fP(3), \fBregex\fP(7), \fBstat\fP(2),
++\fBfind\fP(1), \fBlocatedb\fP(5), \fBupdatedb\fP(8), \fBxargs\fP(1),
++\fBchmod\fP(8), \fBfnmatch\fP(3), \fBregex\fP(7), \fBstat\fP(2),
+ \fBlstat\fP(2), \fBls\fP(1), \fBprintf\fP(3), \fBstrftime\fP(3),
+ \fBctime\fP(3)
+ 
+@@ -2213,7 +2213,7 @@
+ The best way to report a bug is to use the form at
+ http://savannah.gnu.org/bugs/?group=findutils.
+ The reason for this is that you will then be able to track progress in
+-fixing the problem.   Other comments about \fBfind\fP(1) and about
++fixing the problem.   Other comments about \fBfind\fP(8) and about
+ the findutils package in general can be sent to the
+ .I bug\-findutils
+ mailing list.  To join the list, send email to
+diff -Naur findutils-4.6.0-orig/locate/locate.1 findutils-4.6.0/locate/locate.1
+--- findutils-4.6.0-orig/locate/locate.1	2015-12-28 22:10:23.000000000 +0100
++++ findutils-4.6.0/locate/locate.1	2016-02-13 17:30:10.961317756 +0100
+@@ -51,7 +51,7 @@
+ when the databases were last updated.  The system administrator can
+ choose the file name of the default database, the frequency with which
+ the databases are updated, and the directories for which they contain
+-entries; see \fBupdatedb\fP(1).
++entries; see \fBupdatedb\fP(8).
+ .P
+ If
+ .BR locate 's
+@@ -207,7 +207,7 @@
+ .BR locate .
+ 
+ .SH "SEE ALSO"
+-\fBfind\fP(1), \fBlocatedb\fP(5), \fBupdatedb\fP(1), \fBxargs\fP(1),
++\fBfind\fP(1), \fBlocatedb\fP(5), \fBupdatedb\fP(8), \fBxargs\fP(1),
+ \fBglob\fP(3)
+ 
+ The full documentation for
+diff -Naur findutils-4.6.0-orig/locate/locatedb.5 findutils-4.6.0/locate/locatedb.5
+--- findutils-4.6.0-orig/locate/locatedb.5	2015-12-28 22:10:23.000000000 +0100
++++ findutils-4.6.0/locate/locatedb.5	2016-02-13 17:31:14.725317580 +0100
+@@ -15,7 +15,7 @@
+ databases are updated, and the directories for which they contain
+ entries.  Normally, file name databases are updated by running the
+ \fBupdatedb\fP program periodically, typically nightly; see
+-\fBupdatedb\fP(1).
++\fBupdatedb\fP(8).
+ 
+ .SH GNU LOCATE02 database format
+ This is the default format of databases produced by
+diff -Naur findutils-4.6.0-orig/locate/updatedb.1 findutils-4.6.0/locate/updatedb.1
+--- findutils-4.6.0-orig/locate/updatedb.1	2015-12-28 22:10:23.000000000 +0100
++++ findutils-4.6.0/locate/updatedb.1	2016-02-13 17:32:10.389317426 +0100
+@@ -147,7 +147,7 @@
+ The best way to report a bug is to use the form at
+ http://savannah.gnu.org/bugs/?group=findutils.
+ The reason for this is that you will then be able to track progress in
+-fixing the problem.   Other comments about \fBupdatedb\fP(1) and about
++fixing the problem.   Other comments about \fBupdatedb\fP(8) and about
+ the findutils package in general can be sent to the
+ .I bug-findutils
+ mailing list.  To join the list, send email to
+diff -Naur findutils-4.6.0-orig/xargs/xargs.1 findutils-4.6.0/xargs/xargs.1
+--- findutils-4.6.0-orig/xargs/xargs.1	2015-12-28 22:10:23.000000000 +0100
++++ findutils-4.6.0/xargs/xargs.1	2016-02-13 17:33:08.397317265 +0100
+@@ -417,7 +417,7 @@
+ 
+ 
+ .SH "SEE ALSO"
+-\fBfind\fP(1), \fBlocate\fP(1), \fBlocatedb\fP(5), \fBupdatedb\fP(1),
++\fBfind\fP(1), \fBlocate\fP(1), \fBlocatedb\fP(5), \fBupdatedb\fP(8),
+ \fBfork\fP(2), \fBexecvp\fP(3),
+ \fBkill\fP(1), \fBsignal\fP(7),
+ 

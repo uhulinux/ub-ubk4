@@ -1,0 +1,45 @@
+--- a/plugins/keyboard/csd-keyboard-xkb.c
++++ b/plugins/keyboard/csd-keyboard-xkb.c
+@@ -506,6 +506,14 @@
+ 
+ 		settings_desktop = g_settings_new (GKBD_DESKTOP_SCHEMA);
+ 		settings_keyboard = g_settings_new (GKBD_KEYBOARD_SCHEMA);
++
++		gkbd_desktop_config_start_listen (&current_config,
++		                                  (GCallback) apply_desktop_settings,
++		                                  NULL);
++		gkbd_keyboard_config_start_listen (&current_kbd_config,
++		                                   (GCallback) apply_xkb_settings,
++		                                   NULL);
++
+ 		g_signal_connect (settings_desktop, "changed",
+ 				  (GCallback) apply_desktop_settings,
+ 				  NULL);
+--- a/plugins/xsettings/csd-xsettings-manager.c
++++ b/plugins/xsettings/csd-xsettings-manager.c
+@@ -934,6 +934,12 @@
+         g_hash_table_insert (manager->priv->settings,
+                              PRIVACY_SETTINGS_SCHEMA, g_settings_new (PRIVACY_SETTINGS_SCHEMA));
+ 
++        list = g_hash_table_get_values (manager->priv->settings);
++        for (l = list; l != NULL; l = l->next) {
++                g_signal_connect_object (G_OBJECT (l->data), "changed", G_CALLBACK (xsettings_callback), manager, 0);
++        }
++        g_list_free (list);
++
+         for (i = 0; i < G_N_ELEMENTS (translations); i++) {
+                 GVariant *val;
+                 GSettings *settings;
+@@ -951,12 +957,6 @@
+                 g_variant_unref (val);
+         }
+ 
+-        list = g_hash_table_get_values (manager->priv->settings);
+-        for (l = list; l != NULL; l = l->next) {
+-                g_signal_connect_object (G_OBJECT (l->data), "changed", G_CALLBACK (xsettings_callback), manager, 0);
+-        }
+-        g_list_free (list);
+-
+         /* Plugin settings (GTK modules and Xft) */
+         manager->priv->plugin_settings = g_settings_new (XSETTINGS_PLUGIN_SCHEMA);
+         g_signal_connect_object (manager->priv->plugin_settings, "changed", G_CALLBACK (plugin_callback), manager, 0);

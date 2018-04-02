@@ -1,0 +1,40 @@
+diff -Naur orig/src/cmake/libattica.pc.cmake patched/src/cmake/libattica.pc.cmake
+--- orig/src/cmake/libattica.pc.cmake	2016-02-06 10:27:29.000000000 +0100
++++ patched/src/cmake/libattica.pc.cmake	2016-02-28 12:36:01.659134529 +0100
+@@ -1,11 +1,11 @@
+ prefix=${CMAKE_INSTALL_PREFIX}
+ exec_prefix=${CMAKE_INSTALL_PREFIX}/bin
+-libdir=${LIB_INSTALL_DIR}
+-includedir=${INCLUDE_INSTALL_DIR}
++libdir=${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}
++includedir=${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}
+ 
+ Name: lib${ATTICA_LIB_SONAME}
+ Description: Qt library to access Open Collaboration Services
+ #Requires:
+-Version: ${CMAKE_LIBATTICA_VERSION_MAJOR}.${CMAKE_LIBATTICA_VERSION_MINOR}.${CMAKE_LIBATTICA_VERSION_PATCH}
+-Libs: -L${LIB_INSTALL_DIR} -l${ATTICA_LIB_SONAME}
+-Cflags: -I${INCLUDE_INSTALL_DIR}
++Version: ${ATTICA_VERSION_MAJOR}.${ATTICA_VERSION_MINOR}.${ATTICA_VERSION_PATCH}
++Libs: -L${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} -l${ATTICA_LIB_SONAME}
++Cflags: -I${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}
+diff -Naur orig/src/cmake/libKF5Attica.pc.cmake patched/src/cmake/libKF5Attica.pc.cmake
+--- orig/src/cmake/libKF5Attica.pc.cmake	2016-02-06 10:27:29.000000000 +0100
++++ patched/src/cmake/libKF5Attica.pc.cmake	2016-02-28 12:36:44.647347696 +0100
+@@ -1,11 +1,11 @@
+ prefix=${CMAKE_INSTALL_PREFIX}
+ exec_prefix=${CMAKE_INSTALL_PREFIX}/bin
+-libdir=${LIB_INSTALL_DIR}
+-includedir=${INCLUDE_INSTALL_DIR}/KF5Attica
++libdir=${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}
++includedir=${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/KF5Attica
+ 
+ Name: lib${ATTICA_LIB_SONAME}
+ Description: Qt library to access Open Collaboration Services
+ #Requires:
+-Version: ${CMAKE_LIBATTICA_VERSION_MAJOR}.${CMAKE_LIBATTICA_VERSION_MINOR}.${CMAKE_LIBATTICA_VERSION_PATCH}
+-Libs: -L${LIB_INSTALL_DIR} -l${ATTICA_LIB_SONAME}
+-Cflags: -I${INCLUDE_INSTALL_DIR}/KF5Attica
++Version: ${ATTICA_VERSION_MAJOR}.${ATTICA_VERSION_MINOR}.${ATTICA_VERSION_PATCH}
++Libs: -L${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} -l${ATTICA_LIB_SONAME}
++Cflags: -I${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/KF5Attica

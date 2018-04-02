@@ -1,0 +1,11 @@
+--- a/Imakefile
++++ b/Imakefile
+@@ -8,6 +8,8 @@
+ #include "./Local.config"
+ #include "./Local.xawdefs"
+ 
++EXTRA_INCLUDES = -I./xaw3dxft
++
+ DEFINES = $(ARCH_DEFINES) $(EXTRA_DEFINES) \
+           $(XAWLIB_DEFINES) $(XPM_INCLUDE) $(XFT_INCLUDE) \
+           "-DEDITOR=\"$(EDITOR)\"" \

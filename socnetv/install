@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp -a socnetv "$UB_INSTALLDIR"/usr/bin
+cp -a man/socnetv.1.gz "$UB_INSTALLDIR"/usr/share/man/man1
+cp -a src/images/socnetv.png "$UB_INSTALLDIR"/usr/share/pixmaps
+chmod 644 socnetv.desktop
+cp -a socnetv.desktop "$UB_INSTALLDIR"/usr/share/applications/socnetv.desktop

@@ -1,0 +1,33 @@
+diff -urN bsd-finger-0.17.orig/finger/lprint.c bsd-finger-0.17/finger/lprint.c
+--- bsd-finger-0.17.orig/finger/lprint.c	1999-09-14 12:51:11.000000000 +0200
++++ bsd-finger-0.17/finger/lprint.c	2002-10-19 16:20:50.000000000 +0200
+@@ -49,6 +49,7 @@
+ #include <sys/file.h>
+ #include <sys/stat.h>
+ #include <sys/time.h>
++#include <time.h>
+ #include "finger.h"
+ 
+ static void lprint(PERSON *pn);
+diff -urN bsd-finger-0.17.orig/finger/sprint.c bsd-finger-0.17/finger/sprint.c
+--- bsd-finger-0.17.orig/finger/sprint.c	1999-12-12 19:59:33.000000000 +0100
++++ bsd-finger-0.17/finger/sprint.c	2002-10-19 16:21:32.000000000 +0200
+@@ -41,6 +41,7 @@
+ 
+ #include <sys/types.h>
+ #include <sys/time.h>
++#include <time.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff -urN bsd-finger-0.17.orig/fingerd/fingerd.c bsd-finger-0.17/fingerd/fingerd.c
+--- bsd-finger-0.17.orig/fingerd/fingerd.c	1999-12-12 19:46:28.000000000 +0100
++++ bsd-finger-0.17/fingerd/fingerd.c	2002-10-19 16:22:05.000000000 +0200
+@@ -55,6 +55,7 @@
+ #include <netinet/in.h>
+ #include <sys/utsname.h>
+ #include <sys/wait.h>
++#include <sys/socket.h>
+ 
+ #include "pathnames.h"
+ #include "../version.h"

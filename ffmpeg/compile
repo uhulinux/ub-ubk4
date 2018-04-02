@@ -1,0 +1,65 @@
+#!/bin/sh -eux
+
+# --enable-frei0r kell?
+
+./configure \
+	--prefix=/usr \
+	--mandir=/usr/share/man \
+	--disable-debug \
+	--disable-static \
+	--enable-shared \
+	--enable-avfilter\
+	--enable-avisynth \
+	--enable-avresample \
+	--enable-fontconfig \
+	--enable-gmp \
+	--enable-gnutls \
+	--enable-gpl \
+	--enable-gray \
+	--enable-ladspa \
+	--enable-libass \
+	--enable-libbluray \
+	--enable-libcaca \
+	--enable-libcdio \
+	--enable-libcelt \
+	--enable-libdc1394 \
+	--enable-libfreetype \
+	--enable-libfribidi \
+	--enable-libgsm \
+	--enable-libmodplug \
+	--enable-libmp3lame \
+	--enable-libopencore-amrnb \
+	--enable-libopencore-amrwb \
+	--enable-libopenjpeg \
+ 	--enable-libopus \
+	--enable-libpulse \
+	--enable-libsoxr \
+	--enable-libspeex \
+	--enable-libtheora \
+	--enable-libv4l2 \
+	--enable-libvidstab \
+	--enable-libvorbis \
+	--enable-libvpx \
+	--enable-libwebp \
+	--enable-libx264 \
+	--enable-libx265 \
+	--enable-libxcb \
+	--enable-libxvid \
+	--enable-libzvbi \
+	--enable-nonfree \
+	--enable-openal \
+	--enable-opengl \
+	--enable-openssl \
+	--enable-pic \
+	--enable-pthreads \
+	--enable-postproc \
+	--enable-swresample \
+	--enable-swscale \
+	--enable-version3 \
+	--disable-libopencv
+ub_make
+
+extratools="aviocat graph2dot ismindex pktdumper qt-faststart trasher cws2fws"
+for i in $extratools; do
+	make "tools/$i"
+done

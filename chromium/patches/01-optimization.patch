@@ -1,0 +1,49 @@
+diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUILD.gn
+--- orig/build/config/compiler/BUILD.gn	2017-07-25 21:04:48.000000000 +0200
++++ patched/build/config/compiler/BUILD.gn	2017-07-30 20:07:13.079852364 +0200
+@@ -1843,7 +1843,7 @@
+     } else if (optimize_for_fuzzing) {
+       cflags = [ "-O1" ] + common_optimize_on_cflags
+     } else {
+-      cflags = [ "-O3" ] + common_optimize_on_cflags
++      cflags = [ "-O2" ] + common_optimize_on_cflags
+     }
+   }
+ }
+diff -Naur orig/v8/gypfiles/toolchain.gypi patched/v8/gypfiles/toolchain.gypi
+--- orig/v8/gypfiles/toolchain.gypi	2017-07-25 21:06:36.000000000 +0200
++++ patched/v8/gypfiles/toolchain.gypi	2017-07-30 20:08:37.701108212 +0200
+@@ -1195,8 +1195,8 @@
+               # Don't use -O3 with sanitizers.
+               ['asan==0 and msan==0 and lsan==0 \
+                 and tsan==0 and ubsan==0 and ubsan_vptr==0', {
+-                'cflags': ['-O3'],
+-                'cflags!': ['-O2'],
++                'cflags': ['-O2'],
++                'cflags!': ['-O3'],
+                 }, {
+                 'cflags': ['-O2'],
+                 'cflags!': ['-O3'],
+@@ -1311,8 +1311,8 @@
+               # Don't use -O3 with sanitizers.
+               ['asan==0 and msan==0 and lsan==0 \
+                 and tsan==0 and ubsan==0 and ubsan_vptr==0', {
+-                'cflags': ['-O3'],
+-                'cflags!': ['-O2'],
++                'cflags': ['-O2'],
++                'cflags!': ['-O3'],
+               }, {
+                 'cflags': ['-O2'],
+                 'cflags!': ['-O3'],
+diff -Naur orig/v8/tools/gcmole/Makefile patched/v8/tools/gcmole/Makefile
+--- orig/v8/tools/gcmole/Makefile	2017-07-25 21:06:37.000000000 +0200
++++ patched/v8/tools/gcmole/Makefile	2017-07-30 20:09:01.381465867 +0200
+@@ -33,7 +33,7 @@
+ libgcmole.so: gcmole.cc
+ 	$(CXX) -I$(LLVM_INCLUDE) -I$(CLANG_INCLUDE) -I. -D_DEBUG              \
+ 	-D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS         \
+-	-D__STDC_LIMIT_MACROS -O3 -fomit-frame-pointer -fno-exceptions        \
++	-D__STDC_LIMIT_MACROS -O2 -fomit-frame-pointer -fno-exceptions        \
+ 	-fno-rtti -fPIC -Woverloaded-virtual -Wcast-qual -fno-strict-aliasing \
+ 	-pedantic -Wno-long-long -Wall -W -Wno-unused-parameter               \
+ 	-Wwrite-strings -std=c++0x -shared -o libgcmole.so gcmole.cc

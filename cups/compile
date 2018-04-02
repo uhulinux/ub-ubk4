@@ -1,0 +1,24 @@
+#!/bin/sh -eux
+
+aclocal -I config-scripts
+autoconf -I config-scripts
+export CFLAGS='-fcond-mismatch'
+ub_compile \
+	--exec_prefix=/usr \
+	--disable-pam \
+	--enable-raw-printing \
+	--sysconfdir=/etc \
+	--localstatedir=/var \
+	--libdir=/usr/lib \
+	--with-logdir=/var/log/cups \
+	--with-docdir=/usr/share/cups/doc \
+	--enable-raw-printing \
+	--enable-ssl=yes \
+	--enable-threads \
+	--enable-avahi\
+	--enable-libpaper \
+	--enable-gnutls \
+	--enable-webif \
+	--with-cupsd-file-perm=0755 \
+	--with-log-file-perm=0600 \
+	--enable-relro \

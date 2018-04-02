@@ -1,0 +1,24 @@
+diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
+--- orig/misc/mc.ext.in	2011-07-26 14:55:53.000000000 +0200
++++ patched/misc/mc.ext.in	2011-07-29 16:43:43.000000000 +0200
+@@ -660,6 +660,20 @@
+ 	Open=xz -dc %f | %var{PAGER:more}
+ 	View=%view{ascii} xz -dc %f 2>/dev/null
+ 
++# checksum files
++regex/\.([sS][fF][vV])$
++	Open=cksfv -f %f
++
++regex/\.([mM][dD]5)$
++	Open=%view{ascii}md5sum -c %f
++
++
++regex/\.([dD][jJ][vV][uU])$
++	Open=(evince %f &)
++
++
++regex/\.([iI][cC][oO])$
++	Open=(gthumb %f &)
+ 
+ ### Default ###
+ 

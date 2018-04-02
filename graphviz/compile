@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+export LIBPOSTFIX=/
+export LUA=lua5.1
+./configure \
+    --prefix=/usr \
+	--enable-ocaml=no
+ub_make

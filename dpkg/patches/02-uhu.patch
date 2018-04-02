@@ -1,0 +1,47 @@
+diff -Naur orig/lib/dpkg/dpkg.h patched/lib/dpkg/dpkg.h
+--- orig/lib/dpkg/dpkg.h	2017-10-21 19:50:34.000000000 +0200
++++ patched/lib/dpkg/dpkg.h	2017-12-30 20:13:19.007343812 +0100
+@@ -52,7 +52,7 @@
+ #define MAXCONFFILENAME     1000
+ #define MAXDIVERTFILENAME   1024
+ #define MAXCONTROLFILENAME  100
+-#define DEBEXT             ".deb"
++#define DEBEXT             ".ubk.uhu"
+ #define REMOVECONFFEXTS    "~", ".bak", "%", \
+                            DPKGTEMPEXT, DPKGNEWEXT, DPKGOLDEXT, DPKGDISTEXT
+ 
+diff -Naur orig/po/hu.po patched/po/hu.po
+--- orig/po/hu.po	2017-10-22 23:47:08.000000000 +0200
++++ patched/po/hu.po	2017-12-30 20:19:43.568357387 +0100
+@@ -1904,8 +1904,8 @@
+ msgstr "--%s --recursive legalább 1 ösvény argumentumot vár"
+ 
+ #: src/archives.c
+-msgid "searched, but found no packages (files matching *.deb)"
+-msgstr "kerestem, de nem leltem csomagokat (*.deb fájlokat)"
++msgid "searched, but found no packages (files matching *.uhu)"
++msgstr "kerestem, de nem leltem csomagokat (*.uhu fájlokat)"
+ 
+ #: src/archives.c
+ #, c-format
+diff -Naur orig/src/archives.c patched/src/archives.c
+--- orig/src/archives.c	2017-10-22 04:07:45.000000000 +0200
++++ patched/src/archives.c	2017-12-30 20:11:07.333556963 +0100
+@@ -1475,7 +1475,7 @@
+ 
+         /* Check if it looks like a .deb file. */
+         nodename = treenode_get_pathname(node);
+-        if (strcmp(nodename + strlen(nodename) - 4, ".deb") != 0)
++        if (strcmp(nodename + strlen(nodename) - 4, ".uhu") != 0)
+           continue;
+ 
+         arglist = m_realloc(arglist, sizeof(char *) * (nfiles + 2));
+@@ -1486,7 +1486,7 @@
+     }
+ 
+     if (!nfiles)
+-      ohshit(_("searched, but found no packages (files matching *.deb)"));
++      ohshit(_("searched, but found no packages (files matching *.uhu)"));
+ 
+     arglist[nfiles] = NULL;
+     argp= arglist;

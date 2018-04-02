@@ -1,0 +1,12 @@
+diff -urN dd_rescue.orig/Makefile dd_rescue/Makefile
+--- dd_rescue.orig/Makefile	2014-03-06 13:05:15.000000000 +0100
++++ dd_rescue/Makefile	2014-04-25 14:15:08.665828539 +0200
+@@ -43,7 +43,7 @@
+ HAVE_AVX2 := $(shell echo "" | $(CC) -mavx2 -xc - 2>&1 | grep unrecognized || echo 1)
+ HAVE_SSE42 := $(shell echo "" | $(CC) -msse4.2 -xc - 2>&1 | grep unrecognized || echo 1)
+ 
+-MACH := $(shell uname -m | tr A-Z a-z | sed 's/i[3456]86/i386/')
++MACH := i386
+ 
+ ifeq ($(MACH),i386)
+ 	SSE = "-msse2"

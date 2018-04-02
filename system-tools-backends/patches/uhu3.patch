@@ -1,0 +1,79 @@
+diff -Naur orig/Network/Hosts.pm patched/Network/Hosts.pm
+--- orig/Network/Hosts.pm	2010-12-06 13:27:38.000000000 +0100
++++ patched/Network/Hosts.pm	2014-09-29 02:55:50.116672443 +0200
+@@ -53,6 +53,7 @@
+     "gentoo"          => "gentoo",
+     "freebsd-5"       => "freebsd-5",
+     "solaris-2.11"    => "solaris-2.11",
++    "uhu-3"    		  => "debian",
+ 	  );
+ 
+   return $dist_map{$Utils::Backend::tool{"platform"}};
+diff -Naur orig/Shares/SMB.pm patched/Shares/SMB.pm
+--- orig/Shares/SMB.pm	2010-12-06 13:27:38.000000000 +0100
++++ patched/Shares/SMB.pm	2014-09-29 02:39:19.203758743 +0200
+@@ -144,6 +144,7 @@
+    "pld-1.0"         => "pld-1.0",
+    "vine-3.0"        => "debian",
+    "freebsd-5"       => "freebsd-5",
++   "uhu-3"       	 => "debian",
+   );
+ 
+   my %dist_tables =
+diff -Naur orig/Time/NTP.pm patched/Time/NTP.pm
+--- orig/Time/NTP.pm	2010-12-06 18:32:52.000000000 +0100
++++ patched/Time/NTP.pm	2014-09-29 02:40:56.656242011 +0200
+@@ -43,6 +43,7 @@
+     "freebsd-5"       => "redhat-6.2",
+     "archlinux"       => "redhat-6.2",
+     "solaris-2.11"    => "solaris-2.11",
++    "uhu-3"       	  => "redhat-6.2",
+   );
+ 
+   my %dist_table =
+diff -Naur orig/Time/TimeDate.pm patched/Time/TimeDate.pm
+--- orig/Time/TimeDate.pm	2010-12-06 13:27:38.000000000 +0100
++++ patched/Time/TimeDate.pm	2014-09-29 02:43:12.240914331 +0200
+@@ -174,6 +174,7 @@
+    "vine-3.0"        => "redhat-6.2",
+    "freebsd-5"       => "redhat-6.2",
+    "solaris-2.11"    => "solaris-2.11",
++   "uhu-3"       	 => "redhat-6.2",
+    );
+ 
+   return $dist_map{$Utils::Backend::tool{"platform"}};
+diff -Naur orig/Users/Users.pm patched/Users/Users.pm
+--- orig/Users/Users.pm	2010-12-06 13:27:38.000000000 +0100
++++ patched/Users/Users.pm	2014-09-29 02:48:34.910514367 +0200
+@@ -236,6 +236,12 @@
+   'skel_dir' => '/etc/skel/',
+ };
+ 
++my $uhu_logindefs_defaults = {
++  'shell'    => '/bin/sh',
++  'group'    => 999,
++  'skel_dir' => '/etc/skel/',
++};
++
+ my $logindefs_dist_map = {
+   'redhat-6.2'      => $rh_logindefs_defaults,
+   'redhat-7.0'      => $rh_logindefs_defaults,
+@@ -254,6 +260,7 @@
+   'freebsd-5'       => $freebsd_logindefs_defaults,
+   'suse-9.0'        => $gentoo_logindefs_defaults,
+   'solaris-2.11'    => $gentoo_logindefs_defaults,
++  'uhu-3'    		=> $uhu_logindefs_defaults,
+ };
+ 
+ 
+diff -Naur orig/Utils/Platform.pm patched/Utils/Platform.pm
+--- orig/Utils/Platform.pm	2010-12-06 13:27:38.000000000 +0100
++++ patched/Utils/Platform.pm	2014-09-29 02:20:33.166175049 +0200
+@@ -92,6 +92,7 @@
+   "nexenta-1.0"     => [ "Nexenta GNU/Solaris", "1.0", "Ellate" ],
+   "yellowdog-4.1"   => [ "Yellow Dog Linux", "4.1", "Sagitta" ],
+   "guadalinex-v4"   => [ "Guadalinex", "v4", "Toro" ],
++  "uhu-3"   		=> [ "UHU-Linux", "3", "LTS" ],
+ };
+ 
+ sub get_platform_info

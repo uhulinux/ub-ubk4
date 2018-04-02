@@ -1,0 +1,1 @@
+urllist http://elinks.or.cz/download/ | splitver '^elinks-([0-9.pre]+).tar.gz$' | sort -V | tail -n 1 | sed s/pre/\.0~pre/

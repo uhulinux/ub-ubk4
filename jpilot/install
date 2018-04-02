@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/pixmaps
+cp icons/jpilot-icon3.xpm "$UB_INSTALLDIR"/usr/share/pixmaps/jpilot.xpm
+
+for DOC_FILES in AUTHORS BUGS COPYING ChangeLog INSTALL README TODO; do
+	rm -rf "$UB_INSTALLDIR"/usr/share/doc/jpilot/"$DOC_FILES"
+done

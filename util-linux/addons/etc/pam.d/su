@@ -1,0 +1,10 @@
+#%PAM-1.0
+
+auth		include		system-auth-rootok
+
+account		include		system-auth-rootok
+
+password	include		system-auth-rootok
+
+session		required	pam_permit.so
+session		optional	pam_xauth.so

@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_install
+
+cd xgnokii
+ub_install
+cd ..
+
+cp -a Docs/sample/gnokiirc "$UB_INSTALLDIR"/etc/
+rm -rf ${UB_INSTALLDIR}/usr/share/doc/{Packages/gnokii}

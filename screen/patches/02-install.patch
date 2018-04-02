@@ -1,0 +1,27 @@
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2016-10-15 01:08:42.157820373 +0200
++++ patched/Makefile.in	2016-10-15 01:15:52.458357218 +0200
+@@ -20,7 +20,7 @@
+ bindir  = $(exec_prefix)/bin
+ 
+ VERSION = @VERSION@
+-SCREEN = screen-$(VERSION)
++SCREEN = screen
+ 
+ GIT_REV = "`git describe --always 2>/dev/null`"
+ DEFS = @DEFS@ -DGIT_REV=\"$(GIT_REV)\"
+@@ -86,12 +86,9 @@
+ 	-if [ -f $(DESTDIR)$(bindir)/$(SCREEN) ] && [ ! -f $(DESTDIR)$(bindir)/$(SCREEN).old ]; \
+ 		then mv $(DESTDIR)$(bindir)/$(SCREEN) $(DESTDIR)$(bindir)/$(SCREEN).old; fi
+ 	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/$(SCREEN)
+-	-chown root $(DESTDIR)$(bindir)/$(SCREEN) && chmod 4755 $(DESTDIR)$(bindir)/$(SCREEN)
+-# This doesn't work if $(bindir)/screen is a symlink
+-	-if [ -f $(DESTDIR)$(bindir)/screen ] && [ ! -f $(DESTDIR)$(bindir)/screen.old ]; then mv $(DESTDIR)$(bindir)/screen $(DESTDIR)$(bindir)/screen.old; fi
+-	rm -f $(DESTDIR)$(bindir)/screen
+-	(cd $(DESTDIR)$(bindir) && ln -f -s $(SCREEN) screen)
++	-chown root $(DESTDIR)$(bindir)/$(SCREEN) && chmod 0755 $(DESTDIR)$(bindir)/$(SCREEN)
+ 	cp $(srcdir)/utf8encodings/?? $(DESTDIR)$(SCREENENCODINGS)
++	$(INSTALL_DATA) etc/screenrc $(DESTDIR)$(ETCSCREENRC)
+ 
+ ###############################################################################
+ install: installdirs install_bin

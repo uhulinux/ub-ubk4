@@ -1,0 +1,15 @@
+#!/bin/bash
+#vdr és kodi indító szkript kodi felülethez
+# szükséges pluginok
+if [ -f /etc/vdr/conf.avail/02-sc.conf ];then
+VDRPLUGINS=" -\"Psc\" -\"Pxvdr\""
+else
+VDRPLUGINS=" -\"Pxvdr\""
+fi
+VDRPRG="/usr/bin/vdr"
+VDRCMD="$VDRPRG $VDRPLUGINS $*"
+# vdr indítás, majd várakozás után a kodi indítása
+eval "$VDRCMD 2>&1" &
+sleep 5
+kodi
+killall -q -TERM vdr

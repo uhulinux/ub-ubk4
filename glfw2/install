@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+make PREFIX="$UB_INSTALLDIR"/usr x11-install
+cp lib/x11/libglfw.so "$UB_INSTALLDIR"/usr/lib/
+mkdir -p "$UB_INSTALLDIR"/usr/share/doc/glfw2
+cp -a docs/*.pdf "$UB_INSTALLDIR"/usr/share/doc/glfw2/

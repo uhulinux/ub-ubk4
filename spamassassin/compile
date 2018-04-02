@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ sed -i t/sa_compile.t \
+	  -e 's#^my $temp_binpath = $Config{sitebinexp};#my $temp_binpath = "/bin/site_perl/";#'
+ub_compile

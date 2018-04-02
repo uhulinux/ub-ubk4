@@ -1,0 +1,97 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH DDRESCUE 1 "April 16, 2003"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+dd_rescue \- copies data from one file (or block device) to another
+.SH SYNOPSIS
+.B dd_rescue
+.RI [ options ] " infile outfile"
+.SH DESCRIPTION
+This manual page documents briefly the
+.B dd_rescue command.
+This manual page was written for the Debian distribution
+because the original program does not have a manual page.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+\fBdd_rescue\fP is a program that copies data from one file or block
+device to another, it is a tool to help you to save data from crashed partition.
+It tries to read and if it fails it will go on with the next sectors,
+where tools like dd will fail. If the copying process is interrupted
+by the user it is possible to continue at any position later.
+It can copy backwards.
+
+.SH OPTIONS
+.TP
+.B \-s ipos
+start position in  input file (default=0)
+.TP
+.B \-S opos
+start position in output file (def=ipos)
+.TP
+.B \-b softbs
+block size for copy operation (def=16384)
+.TP
+.B \-B hardbs
+fallback block size in case of errs (def=512)
+.TP
+.B \-e maxerr
+exit after maxerr errors (def=0=infinite)
+.TP
+.B \-m maxxfer
+maximum amount of data to be transfered (def=0=inf)
+.TP
+.B \-l logfile
+name of a file to log errors and summary to (def="")
+.TP
+.B \-r
+reverse direction copy (def=forward)
+.TP
+.B \-t
+truncate output file (def=no)
+.TP
+.B \-w
+abort on Write errors (def=no)
+.TP
+.B \-a
+spArse file writing (def=no)
+.TP
+.B \-A
+Always write blocks, zeroed if err (def=no)
+.TP
+.B \-i
+interactive: ask before overwriting data (def=no)
+.TP
+.B \-f
+force: skip some sanity checks (def=no)
+.TP
+.B \-q
+quiet operation
+.TP
+.B \-v
+verbose operation
+.TP
+.B \-V
+display version and exit
+.TP
+.B \-h
+Show summary of options
+.br
+.SH AUTHOR
+This manual page was written by Ayman Negm <a.negm@hamburg.de>,
+for the Debian project (but may be used by others).

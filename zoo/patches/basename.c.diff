@@ -1,0 +1,11 @@
+--- zoo-2.10.orig/basename.c
++++ zoo-2.10/basename.c
+@@ -18,7 +18,7 @@
+ 
+ /* This function strips device/directory information from
+ a pathname and returns just the plain filename */
+-void basename (pathname, fname)
++void zoo_basename (pathname, fname)
+ char *pathname;
+ char fname[];
+ {

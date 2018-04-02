@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install \
+	install_i18n \
+	PREFIX="$UB_INSTALLDIR"/usr \
+	DOC_DIR="$UB_INSTALLDIR"/usr/share/doc/Packages/emelfm2
+mkdir -p "$UB_INSTALLDIR"/usr/share/pixmaps
+ln -s emelfm2/emelfm2_48.png "$UB_INSTALLDIR"/usr/share/pixmaps/emelfm2.png

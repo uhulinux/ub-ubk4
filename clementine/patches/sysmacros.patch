@@ -1,0 +1,12 @@
+diff -Nur orig/src/CMakeLists.txt mod/src/CMakeLists.txt
+--- orig/src/CMakeLists.txt	2014-04-23 12:16:44.000000000 +0200
++++ mod/src/CMakeLists.txt	2017-06-05 22:10:15.000898235 +0200
+@@ -1143,7 +1143,7 @@
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
+                ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+ 
+-qt4_wrap_cpp(MOC ${HEADERS})
++qt4_wrap_cpp(MOC ${HEADERS} OPTIONS "-D_SYS_SYSMACROS_H_OUTER")
+ qt4_wrap_ui(UIC ${UI})
+ qt4_add_resources(QRC ${RESOURCES})
+ 

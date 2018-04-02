@@ -1,0 +1,24 @@
+diff -Naur attr-2.4.16.orig/doc/Makefile attr-2.4.16/doc/Makefile
+--- attr-2.4.16.orig/doc/Makefile	2004-04-05 05:12:48.000000000 +0200
++++ attr-2.4.16/doc/Makefile	2004-09-07 19:48:13.528178120 +0200
+@@ -49,7 +49,7 @@
+ install: default
+ 	$(SUBDIRS_MAKERULE)
+ 	$(INSTALL) -m 755 -d $(PKG_DOC_DIR)
+-	$(INSTALL) -m 644 PORTING CHANGES.gz $(PKG_DOC_DIR)
++	$(INSTALL) -m 644 PORTING CHANGES $(PKG_DOC_DIR)
+ ifeq ($(PKG_DISTRIBUTION), debian)
+ 	$(INSTALL) -S CHANGES.gz $(PKG_DOC_DIR)/changelog.gz
+ else
+diff -Naur attr-2.4.16.orig/include/builddefs.in attr-2.4.16/include/builddefs.in
+--- attr-2.4.16.orig/include/builddefs.in	2004-04-05 05:12:48.000000000 +0200
++++ attr-2.4.16/include/builddefs.in	2004-09-07 19:48:52.206411761 +0200
+@@ -58,7 +58,7 @@
+ PKG_DEVLIB_DIR	= @libexecdir@
+ PKG_INC_DIR	= @includedir@/attr
+ PKG_MAN_DIR	= @mandir@
+-PKG_DOC_DIR	= @datadir@/doc/@pkg_name@
++PKG_DOC_DIR	= @datadir@/doc/Packages/@pkg_name@
+ PKG_LOCALE_DIR	= @datadir@/locale
+ 
+ CC		= @cc@

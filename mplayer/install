@@ -1,0 +1,19 @@
+#!/bin/sh -eux
+
+make \
+	prefix="$UB_INSTALLDIR"/usr \
+	BINDIR="$UB_INSTALLDIR"/usr/bin \
+	CONFDIR="$UB_INSTALLDIR"/etc/mplayer \
+	DATADIR="$UB_INSTALLDIR"/usr/share/mplayer \
+	MANDIR="$UB_INSTALLDIR"/usr/share/man \
+	LIBDIR="$UB_INSTALLDIR"/usr/lib \
+	install
+
+install -m 644 etc/codecs.conf etc/input.conf "$UB_INSTALLDIR"/etc/mplayer/
+
+mv DOCS/tech ${UB_INSTALLDIR}/usr/share/doc/mplayer
+
+rm -rf "$UB_INSTALLDIR"/usr/share/mplayer
+mkdir -p "$UB_INSTALLDIR"/usr/share/mplayer
+cp -al skins "$UB_INSTALLDIR"/usr/share/mplayer/
+ln -sf Blue "$UB_INSTALLDIR"/usr/share/mplayer/skins/default

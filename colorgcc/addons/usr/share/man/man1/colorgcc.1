@@ -1,0 +1,72 @@
+.TH COLORGCC 1 "Jan 15, 2003"
+
+.SH NAME
+colorgcc \- colorization wrapper for gcc
+
+.SH SYNOPSIS
+.B colorgcc
+[\fIOPTION\fP]...
+[\fIFILENAME\fP]...
+
+.SH DESCRIPTION
+.B colorgcc
+acts as a wrapper around
+.BR gcc (1)
+to ease reading its output by colorizing it.
+
+.SH OPTIONS
+Since
+.B colorgcc
+is a wrapper around
+.BR gcc (1),
+it has the same command line options as
+.BR gcc (1).
+
+.SH USAGE
+At your shell prompt, set your CC environment variable to 'colorgcc'.
+This may be done in several different ways, depending on what
+shell you use.
+.PP
+In a Bourne-compatible shell (bash, ash, zsh, pdksh), type:
+.br
+\fBexport CC="colorgcc"\fP
+.PP
+In a C shell variant (csh, tcsh), type:
+.br
+\fBsetenv CC "colorgcc"\fP
+.PP
+Refer to your shell's documentation for more information on setting
+environment variables.
+
+.SH FILES
+.TP
+.I /etc/colorgcc/colorgccrc
+System-wide configuration file for colorgccrc.
+.TP
+.I $HOME/.colorgccrc
+Personal configuration file for colorgccrc.
+
+.SH SEE ALSO
+.BR gcc (1),
+.BR colorgccrc (5)
+
+.SH HISTORY
+Jan 15 2003: Initial version of this manual-page.
+
+.SH REPORTING BUGS
+Report bugs to
+<\fIjmoyers@geeks.com\fP>
+
+.SH AUTHORS
+Jamie Moyers <\fIjmoyers@geeks.com\fP> is the author of colorgcc.
+.PP
+This manual page was written by Joe Wreschnig <\fIpiman@sacredchao.net\fP>,
+and modified by David Weinehall <\fItao@debian.org\fP>, for the
+Debian GNU/Linux system (but may be used by others).
+
+.SH COPYRIGHT
+Copyright \(co 2003 Jamie Moyers
+.br
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.

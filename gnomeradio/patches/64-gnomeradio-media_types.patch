@@ -1,0 +1,1845 @@
+Description: Replaced GnomeMediaProfile with GstEncodingProfile.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1154028
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/configure.in
+===================================================================
+--- gnomeradio-1.8.orig/configure.in
++++ gnomeradio-1.8/configure.in
+@@ -26,11 +26,11 @@ PKG_CHECK_MODULES(ALSA, alsa >= 1.0.25)
+ AC_SUBST(ALSA_CFLAGS)
+ AC_SUBST(ALSA_LIBS)
+ 
+-PKG_CHECK_MODULES(GNOME, dbus-glib-1 gconf-2.0 >= 2.12 gtk+-3.0 libgnome-media-profiles-3.0 >= 3.0)
++PKG_CHECK_MODULES(GNOME, dbus-glib-1 gconf-2.0 >= 2.12 gtk+-3.0)
+ AC_SUBST(GNOME_CFLAGS)
+ AC_SUBST(GNOME_LIBS)
+ 
+-PKG_CHECK_MODULES(GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0)
++PKG_CHECK_MODULES(GSTREAMER, gstreamer-1.0 >= 1.0.5 gstreamer-plugins-base-1.0 >= 1.0.5 gstreamer-pbutils-1.0 >= 1.0.5)
+ AC_SUBST(GSTREAMER_CFLAGS)
+ AC_SUBST(GSTREAMER_LIBS)
+ 
+Index: gnomeradio-1.8/data/gnomeradio.gep
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/data/gnomeradio.gep
+@@ -0,0 +1,62 @@
++[GStreamer Encoding Target]
++name = gnomeradio
++category = muh
++description = Common encoding profiles for Gnomeradio
++
++[profile-mp3]
++name = mp3
++description = MPEG Layer 3 Audio
++format = application/x-id3
++type = container
++
++[streamprofile-mp3-1]
++parent = mp3
++type = audio
++format = audio/mpeg, mpegversion=1, layer=3
++presence = 1
++
++
++[profile-oggvorbis]
++name = oggvorbis
++description = Ogg Vorbis
++format = application/ogg
++type = container
++
++[streamprofile-oggvorbis-1]
++parent = oggvorbis
++type = audio
++format = audio/x-vorbis
++presence = 1
++
++
++[profile-oggopus]
++name = oggopus
++description = Ogg Opus
++format = application/ogg
++type = container
++
++[streamprofile-oggopus-1]
++parent = oggopus
++type = audio
++format = audio/x-opus
++presence = 1
++
++
++[profile-flac]
++name = flac
++description = FLAC
++format = audio/x-flac
++type = audio
++
++
++[profile-m4a]
++name = m4a
++description = MPEG 4 Audio
++format = video/quicktime, variant=iso
++type = container
++
++[streamprofile-m4a-1]
++parent = m4a
++type = audio
++format = audio/mpeg, mpegversion=4, stream-format=raw
++presence = 1
+Index: gnomeradio-1.8/data/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/data/Makefile.am
++++ gnomeradio-1.8/data/Makefile.am
+@@ -5,6 +5,9 @@ applications_in_files = gnomeradio.deskt
+ applications_DATA = $(applications_in_files:.desktop.in=.desktop)
+ @INTLTOOL_DESKTOP_RULE@
+ 
++profilesdir = $(datadir)/gnomeradio
++profiles_DATA = gnomeradio.gep
++
+ schemadir = @GCONF_SCHEMA_FILE_DIR@
+ schema_in_files = gnomeradio.schemas.in
+ schema_DATA = $(schema_in_files:.schemas.in=.schemas)
+@@ -21,6 +24,7 @@ EXTRA_DIST = $(applications_DATA) \
+              $(applications_in_files) \
+              $(schema_DATA) \
+              $(schema_in_files) \
++             $(profiles_DATA) \
+              example.lircrc
+ 
+ CLEANFILES = $(schema_DATA) $(applications_DATA)
+Index: gnomeradio-1.8/src/rb_missing_plugins.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/rb_missing_plugins.c
+@@ -0,0 +1,253 @@
++/* rb_missing_plugins.c
++
++   Copyright (C) 2007 Tim-Philipp Müller <tim centricular net>
++   Copyright (C) 2007 Jonathan Matthew <jonathan@d14n.org>
++
++   The Gnome Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public License as
++   published by the Free Software Foundation; either version 2 of the
++   License, or (at your option) any later version.
++
++   The Gnome Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public
++   License along with the Gnome Library; see the file COPYING.LIB.  If not,
++   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++
++   Based on totem-missing-plugins.c, authored by Tim-Philipp Müller <tim centricular net>
++ */
++
++#include "config.h"
++
++#include "rb_missing_plugins.h"
++
++#include <gst/pbutils/pbutils.h>
++#include <gst/pbutils/install-plugins.h>
++
++#include <gst/gst.h> /* for gst_registry_update */
++
++#include <gtk/gtk.h>
++
++#ifdef GDK_WINDOWING_X11
++#include <gdk/gdkx.h>
++#endif
++
++#include <string.h>
++
++/* list of blacklisted detail strings */
++static GList *blacklisted_plugins = NULL;
++
++/* parent window for installer */
++static gpointer parent_window = NULL;
++
++typedef struct
++{
++	GClosure   *closure;
++	gchar     **details;
++} RBPluginInstallContext;
++
++static gboolean
++rb_plugin_install_plugin_is_blacklisted (const gchar * detail)
++{
++	GList *res;
++
++	res = g_list_find_custom (blacklisted_plugins,
++	                          detail,
++	                          (GCompareFunc) strcmp);
++
++	return (res != NULL);
++}
++
++static void
++rb_plugin_install_blacklist_plugin (const gchar * detail)
++{
++	if (!rb_plugin_install_plugin_is_blacklisted (detail)) {
++		blacklisted_plugins = g_list_prepend (blacklisted_plugins,
++		                                      g_strdup (detail));
++	}
++}
++
++static void
++rb_plugin_install_context_free (RBPluginInstallContext *ctx)
++{
++	fprintf(stderr, "cleaning up plugin install context %p\n", ctx);
++	g_strfreev (ctx->details);
++	g_closure_unref (ctx->closure);
++	g_free (ctx);
++}
++
++static void
++rb_plugin_install_done (RBPluginInstallContext *ctx, gboolean retry)
++{
++	GValue param[2] = { {0,}, {0,} };
++
++	fprintf(stderr, "invoking plugin install context %p callback: retry %d\n", ctx, retry);
++
++	g_value_init (&param[0], G_TYPE_POINTER);
++	g_value_set_pointer (&param[0], NULL);
++	g_value_init (&param[1], G_TYPE_BOOLEAN);
++	g_value_set_boolean (&param[1], retry);
++
++	g_closure_invoke (ctx->closure, NULL, 2, param, NULL);
++	g_value_unset (&param[0]);
++	g_value_unset (&param[1]);
++}
++
++static void
++on_plugin_installation_done (GstInstallPluginsReturn res, gpointer user_data)
++{
++	RBPluginInstallContext *ctx = (RBPluginInstallContext *) user_data;
++	gchar **p;
++	gboolean retry;
++
++	GST_INFO ("res = %d (%s)", res, gst_install_plugins_return_get_name (res));
++
++	switch (res)
++	{
++		/* treat partial success the same as success; in the worst case we'll
++		 * just do another round and get NOT_FOUND as result that time */
++		case GST_INSTALL_PLUGINS_PARTIAL_SUCCESS:
++		case GST_INSTALL_PLUGINS_SUCCESS:
++		{
++			/* blacklist installed plugins too, so that we don't get
++			 * into endless installer loops in case of inconsistencies */
++			for (p = ctx->details; p != NULL && *p != NULL; ++p) {
++				rb_plugin_install_blacklist_plugin (*p);
++			}
++
++			fprintf(stderr, "Missing plugins installed. Updating plugin registry ...\n");
++
++			/* force GStreamer to re-read its plugin registry */
++			retry = gst_update_registry ();
++
++			rb_plugin_install_done (ctx, retry);
++			break;
++		}
++
++		case GST_INSTALL_PLUGINS_NOT_FOUND:
++		{
++			fprintf(stderr, "No installation candidate for missing plugins found.\n");
++
++			/* NOT_FOUND should only be returned if not a single one of the
++			 * requested plugins was found; if we managed to play something
++			 * anyway, we should just continue playing what we have and
++			 * blacklist the requested plugins for this session; if we
++			 * could not play anything we should blacklist them as well,
++			 * so the install wizard isn't called again for nothing */
++			for (p = ctx->details; p != NULL && *p != NULL; ++p) {
++				rb_plugin_install_blacklist_plugin (*p);
++			}
++
++			rb_plugin_install_done (ctx, FALSE);
++			break;
++		}
++
++		case GST_INSTALL_PLUGINS_USER_ABORT:
++		{
++			/* blacklist on user abort, so we show an error next time (or
++			 * just play what we can) instead of calling the installer */
++			for (p = ctx->details; p != NULL && *p != NULL; ++p) {
++				rb_plugin_install_blacklist_plugin (*p);
++			}
++
++			rb_plugin_install_done (ctx, FALSE);
++			break;
++		}
++
++		case GST_INSTALL_PLUGINS_ERROR:
++		case GST_INSTALL_PLUGINS_CRASHED:
++		default:
++		{
++			fprintf(stderr, "Missing plugin installation failed: %s\n",
++				   gst_install_plugins_return_get_name (res));
++
++			rb_plugin_install_done (ctx, FALSE);
++			break;
++		}
++	}
++
++	rb_plugin_install_context_free (ctx);
++}
++
++gboolean
++rb_missing_plugins_install (const char **details, gboolean ignore_blacklist, GClosure *closure)
++{
++	RBPluginInstallContext *ctx;
++	GstInstallPluginsContext *install_ctx;
++	GstInstallPluginsReturn status;
++	int i, num;
++
++	num = g_strv_length ((char **)details);
++	g_return_val_if_fail (num > 0, FALSE);
++
++	ctx = g_new0 (RBPluginInstallContext, 1);
++	ctx->closure = g_closure_ref (closure);
++	ctx->details = g_strdupv ((char **)details);
++
++	num = g_strv_length (ctx->details);
++	for (i = 0; i < num; ++i) {
++		if (ignore_blacklist == FALSE && rb_plugin_install_plugin_is_blacklisted (ctx->details[i])) {
++			fprintf(stderr, "Missing plugin: %s (ignoring)\n", ctx->details[i]);
++			g_free (ctx->details[i]);
++			ctx->details[i] = ctx->details[num-1];
++			ctx->details[num-1] = NULL;
++			--num;
++			--i;
++		} else {
++			fprintf(stderr, "Missing plugin: %s\n", ctx->details[i]);
++		}
++	}
++
++	if (num == 0) {
++		fprintf(stderr, "All missing plugins are blacklisted, doing nothing\n");
++		rb_plugin_install_context_free (ctx);
++		return FALSE;
++	}
++
++	install_ctx = gst_install_plugins_context_new ();
++
++	if (parent_window != NULL && gtk_widget_get_realized (GTK_WIDGET (parent_window))) {
++#ifdef GDK_WINDOWING_X11
++		gulong xid = 0;
++		xid = gdk_x11_window_get_xid (gtk_widget_get_window (GTK_WIDGET (parent_window)));
++		gst_install_plugins_context_set_xid (install_ctx, xid);
++#endif
++	}
++
++	status = gst_install_plugins_async ((const gchar* const*) ctx->details, install_ctx,
++	                                    on_plugin_installation_done,
++	                                    ctx);
++
++	gst_install_plugins_context_free (install_ctx);
++
++	GST_INFO ("gst_install_plugins_async() result = %d", status);
++
++	if (status != GST_INSTALL_PLUGINS_STARTED_OK) {
++		if (status == GST_INSTALL_PLUGINS_HELPER_MISSING) {
++			fprintf(stderr, "Automatic missing codec installation not supported "
++			           "(helper script missing)\n");
++		} else {
++			fprintf(stderr, "Failed to start codec installation: %s\n",
++			           gst_install_plugins_return_get_name (status));
++		}
++		rb_plugin_install_context_free (ctx);
++		return FALSE;
++	}
++
++	return TRUE;
++}
++
++void
++rb_missing_plugins_init (GtkWindow *window)
++{
++	parent_window = window;
++	g_object_add_weak_pointer (G_OBJECT (parent_window), &parent_window);
++
++	gst_pb_utils_init ();
++
++	GST_INFO ("Set up support for automatic missing plugin installation");
++}
+Index: gnomeradio-1.8/src/rb_missing_plugins.h
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/rb_missing_plugins.h
+@@ -0,0 +1,33 @@
++/* rb_missing_plugins.h
++
++   Copyright (C) 2007 Tim-Philipp Müller <tim centricular net>
++   Copyright (C) 2007 Jonathan Matthew <jonathan@d14n.org>
++
++   The Gnome Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Library General Public License as
++   published by the Free Software Foundation; either version 2 of the
++   License, or (at your option) any later version.
++
++   The Gnome Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Library General Public License for more details.
++
++   You should have received a copy of the GNU Library General Public
++   License along with the Gnome Library; see the file COPYING.LIB.  If not,
++   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
++   Boston, MA 02111-1307, USA.
++
++   Author: Tim-Philipp Müller <tim centricular net>
++ */
++
++#ifndef RB_MISSING_PLUGINS_H
++#define RB_MISSING_PLUGINS_H
++
++#include <gtk/gtk.h>
++
++void rb_missing_plugins_init (GtkWindow *parent_window);
++
++gboolean rb_missing_plugins_install (const char **details, gboolean ignore_blacklist, GClosure *closure);
++
++#endif /* RB_MISSING_PLUGINS_H */
+Index: gnomeradio-1.8/src/rb_gst_media_types.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/rb_gst_media_types.c
+@@ -0,0 +1,340 @@
++/*
++ *  Copyright (C) 2010  Jonathan Matthew  <jonathan@d14n.org>
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2, or (at your option)
++ *  any later version.
++ *
++ *  The Rhythmbox authors hereby grant permission for non-GPL compatible
++ *  GStreamer plugins to be used and distributed together with GStreamer
++ *  and Rhythmbox. This permission is above and beyond the permissions granted
++ *  by the GPL license by which Rhythmbox is covered. If you modify this code
++ *  you may extend this exception to your version of the code, but you are not
++ *  obligated to do so. If you do not wish to do so, delete this exception
++ *  statement from your version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
++ *
++ */
++
++#include "config.h"
++
++#include <memory.h>
++
++#include <gst/pbutils/encoding-target.h>
++#include <gst/pbutils/missing-plugins.h>
++
++#include "rb_gst_media_types.h"
++
++#define SOURCE_ENCODING_TARGET_FILE "../data/gnomeradio.gep"
++#define INSTALLED_ENCODING_TARGET_FILE DATADIR"/gnomeradio/gnomeradio.gep"
++static GstEncodingTarget *default_target = NULL;
++
++char *
++rb_gst_caps_to_media_type (const GstCaps *caps)
++{
++	GstStructure *s;
++	const char *media_type;
++
++	/* the aim here is to reduce the caps to a single mimetype-like
++	 * string, describing the audio encoding (for audio files) or the
++	 * file type (for everything else).  raw media types are ignored.
++	 *
++	 * there are only a couple of special cases.
++	 */
++
++	if (gst_caps_get_size (caps) == 0)
++		return NULL;
++
++	s = gst_caps_get_structure (caps, 0);
++	media_type = gst_structure_get_name (s);
++	if (media_type == NULL) {
++		return NULL;
++	} else if (g_str_has_prefix (media_type, "audio/x-raw") ||
++	    g_str_has_prefix (media_type, "video/x-raw")) {
++		/* ignore raw types */
++		return NULL;
++	} else if (g_str_equal (media_type, "audio/mpeg")) {
++		/* need to distinguish between mpeg 1 layer 3 and
++		 * mpeg 2 or 4 here.
++		 */
++		int mpegversion = 0;
++		gst_structure_get_int (s, "mpegversion", &mpegversion);
++		switch (mpegversion) {
++		case 2:
++		case 4:
++			return g_strdup ("audio/x-aac");		/* hmm. */
++
++		case 1:
++		default:
++			return g_strdup ("audio/mpeg");
++		}
++	} else {
++		/* everything else is fine as-is */
++		return g_strdup (media_type);
++	}
++}
++
++GstCaps *
++rb_gst_media_type_to_caps (const char *media_type)
++{
++	/* special cases: */
++	if (strcmp (media_type, "audio/mpeg") == 0) {
++		return gst_caps_from_string ("audio/mpeg, mpegversion=(int)1");
++	} else if (strcmp (media_type, "audio/x-aac") == 0) {
++		return gst_caps_from_string ("audio/mpeg, mpegversion=(int){ 2, 4 }");
++	} else {
++		/* otherwise, the media type is enough */
++		return gst_caps_from_string (media_type);
++	}
++}
++
++const char *
++rb_gst_media_type_to_extension (const char *media_type)
++{
++	if (media_type == NULL) {
++		return NULL;
++	} else if (!strcmp (media_type, "audio/mpeg")) {
++		return "mp3";
++	} else if (!strcmp (media_type, "audio/x-vorbis") || !strcmp (media_type, "application/ogg") || !strcmp (media_type, "audio/ogg")) {
++		return "ogg";
++	} else if (!strcmp (media_type, "audio/x-opus")) {
++		return "opus";
++	} else if (!strcmp (media_type, "audio/x-flac") || !strcmp (media_type, "audio/flac")) {
++		return "flac";
++	} else if (!strcmp (media_type, "audio/x-aac") || !strcmp (media_type, "audio/aac") || !strcmp (media_type, "audio/x-alac")) {
++		return "m4a";
++	} else if (!strcmp (media_type, "audio/x-wavpack")) {
++		return "wv";
++	} else {
++		return NULL;
++	}
++}
++
++const char *
++rb_gst_mime_type_to_media_type (const char *mime_type)
++{
++	if (!strcmp (mime_type, "application/x-id3") || !strcmp (mime_type, "audio/mpeg")) {
++		return "audio/mpeg";
++	} else if (!strcmp (mime_type, "application/ogg") || !strcmp (mime_type, "audio/x-vorbis") || !strcmp (mime_type, "audio/ogg")) {
++		return "audio/x-vorbis";
++	} else if (!strcmp (mime_type, "audio/flac")) {
++		return "audio/x-flac";
++	} else if (!strcmp (mime_type, "audio/aac") || !strcmp (mime_type, "audio/mp4") || !strcmp (mime_type, "audio/m4a")) {
++		return "audio/x-aac";
++	}
++	return mime_type;
++}
++
++const char *
++rb_gst_media_type_to_mime_type (const char *media_type)
++{
++	if (!strcmp (media_type, "audio/x-vorbis")) {
++		return "application/ogg";
++	} else if (!strcmp (media_type, "audio/x-flac")) {
++		return "audio/flac";
++	} else if (!strcmp (media_type, "audio/x-aac")) {
++		return "audio/mp4";	/* probably */
++	} else {
++		return media_type;
++	}
++}
++
++gboolean
++rb_gst_media_type_matches_profile (GstEncodingProfile *profile, const char *media_type)
++{
++	const GstCaps *pcaps;
++	const GList *cl;
++	GstCaps *caps;
++	gboolean matches = FALSE;
++
++	caps = rb_gst_media_type_to_caps (media_type);
++	if (caps == NULL) {
++		return FALSE;
++	}
++
++	pcaps = gst_encoding_profile_get_format (profile);
++	if (gst_caps_can_intersect (caps, pcaps)) {
++		matches = TRUE;
++	}
++
++	if (matches == FALSE && GST_IS_ENCODING_CONTAINER_PROFILE (profile)) {
++		for (cl = gst_encoding_container_profile_get_profiles (GST_ENCODING_CONTAINER_PROFILE (profile)); cl != NULL; cl = cl->next) {
++			GstEncodingProfile *cp = cl->data;
++			pcaps = gst_encoding_profile_get_format (cp);
++			if (gst_caps_can_intersect (caps, pcaps)) {
++				matches = TRUE;
++				break;
++			}
++		}
++	}
++	gst_caps_unref (caps);
++
++	return matches;
++}
++
++char *
++rb_gst_encoding_profile_get_media_type (GstEncodingProfile *profile)
++{
++	if (GST_IS_ENCODING_CONTAINER_PROFILE (profile)) {
++		const GList *cl = gst_encoding_container_profile_get_profiles (GST_ENCODING_CONTAINER_PROFILE (profile));
++		for (; cl != NULL; cl = cl->next) {
++			GstEncodingProfile *p = cl->data;
++			if (GST_IS_ENCODING_AUDIO_PROFILE (p)) {
++				return rb_gst_caps_to_media_type (gst_encoding_profile_get_format (p));
++			}
++
++		}
++
++		/* now what? */
++		return NULL;
++	} else {
++		return rb_gst_caps_to_media_type (gst_encoding_profile_get_format (profile));
++	}
++}
++
++GstEncodingTarget *
++rb_gst_get_default_encoding_target (void)
++{
++	if (default_target == NULL) {
++		char *target_file;
++		GError *error = NULL;
++
++		if (g_file_test (SOURCE_ENCODING_TARGET_FILE,
++			         G_FILE_TEST_EXISTS) != FALSE) {
++			target_file = SOURCE_ENCODING_TARGET_FILE;
++		} else {
++			target_file = INSTALLED_ENCODING_TARGET_FILE;
++		}
++
++		default_target = gst_encoding_target_load_from_file (target_file, &error);
++		if (default_target == NULL) {
++			g_warning ("Unable to load encoding profiles from %s: %s", target_file, error ? error->message : "no error");
++			g_clear_error (&error);
++			return NULL;
++		}
++	}
++
++	return default_target;
++}
++
++GstEncodingProfile *
++rb_gst_get_encoding_profile (const char *media_type)
++{
++	const GList *l;
++	GstEncodingTarget *target;
++	target = rb_gst_get_default_encoding_target ();
++
++	for (l = gst_encoding_target_get_profiles (target); l != NULL; l = l->next) {
++		GstEncodingProfile *profile = l->data;
++		if (rb_gst_media_type_matches_profile (profile, media_type)) {
++			gst_encoding_profile_ref (profile);
++			return profile;
++		}
++	}
++
++	return NULL;
++}
++
++gboolean
++rb_gst_media_type_is_lossless (const char *media_type)
++{
++	int i;
++	const char *lossless_types[] = {
++		"audio/x-flac",
++		"audio/x-alac",
++		"audio/x-shorten",
++		"audio/x-wavpack"	/* not completely sure */
++	};
++
++	for (i = 0; i < G_N_ELEMENTS (lossless_types); i++) {
++		if (strcmp (media_type, lossless_types[i]) == 0) {
++			return TRUE;
++		}
++	}
++	return FALSE;
++}
++
++gboolean
++rb_gst_check_missing_plugins (GstEncodingProfile *profile,
++			      char ***details,
++			      char ***descriptions)
++{
++	GstElement *encodebin;
++	GstBus *bus;
++	GstPad *pad;
++	gboolean ret;
++
++	ret = FALSE;
++
++	encodebin = gst_element_factory_make ("encodebin", NULL);
++	if (encodebin == NULL) {
++		g_warning ("Unable to create encodebin");
++		return TRUE;
++	}
++
++	bus = gst_bus_new ();
++	gst_element_set_bus (encodebin, bus);
++	gst_bus_set_flushing (bus, FALSE);		/* necessary? */
++
++	g_object_set (encodebin, "profile", profile, NULL);
++	pad = gst_element_get_static_pad (encodebin, "audio_0");
++	if (pad == NULL) {
++		GstMessage *message;
++		GList *messages = NULL;
++		GList *m;
++		int i;
++
++		message = gst_bus_pop (bus);
++		while (message != NULL) {
++			if (gst_is_missing_plugin_message (message)) {
++				messages = g_list_append (messages, message);
++			} else {
++				gst_message_unref (message);
++			}
++			message = gst_bus_pop (bus);
++		}
++
++		if (messages != NULL) {
++			if (details != NULL) {
++				*details = g_new0(char *, g_list_length (messages)+1);
++			}
++			if (descriptions != NULL) {
++				*descriptions = g_new0(char *, g_list_length (messages)+1);
++			}
++			i = 0;
++			for (m = messages; m != NULL; m = m->next) {
++				char *str;
++				if (details != NULL) {
++					str = gst_missing_plugin_message_get_installer_detail (m->data);
++					(*details)[i] = str;
++				}
++				if (descriptions != NULL) {
++					str = gst_missing_plugin_message_get_description (m->data);
++					(*descriptions)[i] = str;
++				}
++				i++;
++			}
++
++			ret = TRUE;
++			g_list_foreach (messages, (GFunc)gst_message_unref, NULL);
++			g_list_free (messages);
++		}
++
++	} else {
++		gst_element_release_request_pad (encodebin, pad);
++		gst_object_unref (pad);
++	}
++
++	gst_object_unref (encodebin);
++	gst_object_unref (bus);
++	return ret;
++}
+Index: gnomeradio-1.8/src/rb_gst_media_types.h
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/rb_gst_media_types.h
+@@ -0,0 +1,76 @@
++/*
++ *  Copyright (C) 2010  Jonathan Matthew <jonathan@d14n.org>
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2, or (at your option)
++ *  any later version.
++ *
++ *  The Rhythmbox authors hereby grant permission for non-GPL compatible
++ *  GStreamer plugins to be used and distributed together with GStreamer
++ *  and Rhythmbox. This permission is above and beyond the permissions granted
++ *  by the GPL license by which Rhythmbox is covered. If you modify this code
++ *  you may extend this exception to your version of the code, but you are not
++ *  obligated to do so. If you do not wish to do so, delete this exception
++ *  statement from your version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
++ *
++ */
++
++#ifndef __MEDIA_TYPES_H
++#define __MEDIA_TYPES_H
++
++#include <gst/gst.h>
++#include <gst/pbutils/encoding-target.h>
++#include <gst/pbutils/encoding-profile.h>
++
++G_BEGIN_DECLS
++
++/* some common media types */
++#define MEDIA_TYPE_MP3		"audio/mpeg"
++#define MEDIA_TYPE_OGG_VORBIS 	"audio/x-vorbis"
++#define MEDIA_TYPE_FLAC		"audio/x-flac"
++#define MEDIA_TYPE_AAC 		"audio/x-aac"
++
++/* media type categories */
++typedef enum {
++	MEDIA_TYPE_NONE = 0,
++	MEDIA_TYPE_CONTAINER,
++	MEDIA_TYPE_AUDIO,
++	MEDIA_TYPE_VIDEO,
++	MEDIA_TYPE_OTHER
++} RBGstMediaType;
++
++char *		rb_gst_caps_to_media_type (const GstCaps *caps);
++GstCaps *	rb_gst_media_type_to_caps (const char *media_type);
++
++const char *	rb_gst_media_type_to_extension (const char *media_type);
++
++const char *	rb_gst_mime_type_to_media_type (const char *mime_type);
++
++const char *	rb_gst_media_type_to_mime_type (const char *media_type);
++
++GstEncodingTarget *rb_gst_get_default_encoding_target (void);
++
++GstEncodingProfile *rb_gst_get_encoding_profile (const char *media_type);
++
++gboolean	rb_gst_media_type_matches_profile (GstEncodingProfile *profile, const char *media_type);
++
++char *		rb_gst_encoding_profile_get_media_type (GstEncodingProfile *profile);
++
++gboolean	rb_gst_media_type_is_lossless (const char *media_type);
++gboolean	rb_gst_check_missing_plugins (GstEncodingProfile *profile,
++					      char ***details,
++					      char ***descriptions);
++
++G_END_DECLS
++
++#endif /* __MEDIA_TYPES_H */
+Index: gnomeradio-1.8/data/gnomeradio.schemas.in
+===================================================================
+--- gnomeradio-1.8.orig/data/gnomeradio.schemas.in
++++ gnomeradio-1.8/data/gnomeradio.schemas.in
+@@ -113,10 +113,10 @@
+       <applyto>/apps/gnomeradio/recording/profile</applyto>
+       <owner>gnomeradio</owner>
+       <type>string</type>
+-      <default>cdlossy</default>
++      <default>audio/x-vorbis</default>
+       <locale name="C">
+-	<short>GnomeMedia Profile</short>
+-	<long>Choose the GnomeMedia Profile that should be used for recording</long>
++	<short>Media format</short>
++	<long>Choose the format that should be used for recording</long>
+       </locale>
+     </schema>
+ 
+Index: gnomeradio-1.8/src/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/src/Makefile.am
++++ gnomeradio-1.8/src/Makefile.am
+@@ -18,6 +18,8 @@ gnomeradio_SOURCES =		\
+ 	mixer.h			\
+ 	prefs.h			\
+ 	radio.h			\
++	rb_gst_media_types.h	\
++	rb_missing_plugins.h	\
+ 	rec_tech.h		\
+ 	record.h		\
+ 	trayicon.h		\
+@@ -33,6 +35,8 @@ gnomeradio_SOURCES =		\
+ 	mixer-oss.c		\
+ 	prefs.c			\
+ 	radio.c			\
++	rb_gst_media_types.c	\
++	rb_missing_plugins.c	\
+ 	rec_tech.c		\
+ 	record.c		\
+ 	trayicon.c		\
+Index: gnomeradio-1.8/src/rec_tech.c
+===================================================================
+--- gnomeradio-1.8.orig/src/rec_tech.c
++++ gnomeradio-1.8/src/rec_tech.c
+@@ -18,17 +18,19 @@
+ #include "rec_tech.h"
+ #include <gtk/gtk.h>
+ #include <glib/gi18n.h>
+-#include <libgnome-media-profiles/audio-profile.h>
++#include <gst/gst.h>
++#include <gst/pbutils/encoding-profile.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <math.h>
+-
+-#define DECAY_STEP .15
++#include "rb_gst_media_types.h"
++#include "rb_missing_plugins.h"
+ 
+ GtkWidget *level;
+-static gdouble last_input_peak;
++
++static guint bus_watch_id;
+ 
+ static void
+ show_error_dialog (GtkWindow *win, const gchar *dbg, const gchar * format, ...)
+@@ -57,88 +59,67 @@ show_error_dialog (GtkWindow *win, const
+ 	g_free (s);
+ }
+ 
+-static void
+-show_missing_known_element_error (GtkWindow *win, gchar *description,
+-	gchar *element, gchar *plugin, gchar *module)
+-{
+-	show_error_dialog (win, NULL,
+-		_("Could not create the GStreamer %s element.\n"
+-		  "Please install the '%s' plugin from the '%s' module.\n"
+-		  "Verify that the installation is correct by running\n"
+-		  "		gst-inspect-1.0 %s\n"
+-		  "and then restart gnomeradio."),
+-		description, plugin, module, element);
+-}
+-
+-static void
+-show_profile_error (GtkWindow *win, gchar *debug, gchar *description,
+-	const char *profile)
+-{
+-	gchar *first;
+-
+-	first = g_strdup_printf (description, profile);
+-	show_error_dialog (win, debug, "%s%s", first,
+-		_("Please verify its settings.\n"
+-		  "You may be missing the necessary plugins."));
+-	g_free (first);
+-}
+-
+-static void pipeline_error_cb(GstBus *bus, GstMessage *message, gpointer user_data)
+-{
+-	GError *error = NULL;
+-	GstElement *pipeline = user_data;
+-	g_assert(pipeline);
+-	
+-	/* Make sure the pipeline is not running any more */
+-	gst_element_set_state (pipeline, GST_STATE_NULL);
+-	
+-	gst_message_parse_error(message, &error, NULL);
+-	g_warning(_("GStreamer runtime error: %s\n"), error->message);
+-	g_error_free(error);
+-}
+-
+ static gboolean
+-level_message_cb (GstBus *bus, GstMessage *message, gpointer user_data)
++bus_watch_cb (GstBus *bus, GstMessage *message, gpointer data)
+ {
+-	if (message->type == GST_MESSAGE_ELEMENT) {
+-		const GstStructure *s = gst_message_get_structure (message);
+-		const gchar *name = gst_structure_get_name (s);
+-
+-		if (g_strcmp0 (name, "level") == 0) {
+-			gint channels;
+-			gdouble peak_dB;
+-			gdouble peak;
+-			const GValue *array_val;
+-			const GValue *value;
+-
+-			GValueArray *rms_arr, *peak_arr;
+-			gint i;
+-
+-			array_val = gst_structure_get_value (s, "rms");
+-			rms_arr = (GValueArray *) g_value_get_boxed (array_val);
+-
+-			array_val = gst_structure_get_value (s, "peak");
+-			peak_arr = (GValueArray *) g_value_get_boxed (array_val);
+-
+-			channels = rms_arr->n_values;
++	GError *error = NULL;
++	gchar *debug = NULL;
+ 
+-			for (i = 0; i < channels; ++i) {
+-				value = peak_arr->values + i;
+-				peak_dB = g_value_get_double (value);
++	switch (GST_MESSAGE_TYPE (message))
++	{
++		case GST_MESSAGE_ERROR:
++			gst_message_parse_error (message, &error, &debug);
++			g_print ("ERROR: %s\nDEBUG MESSAGE: %s\n", error->message, debug);
++			g_error_free (error);
++			g_free (debug);
++			break;
++		case GST_MESSAGE_WARNING:
++			gst_message_parse_warning (message, &error, &debug);
++			g_print ("WARNING: %s\nDEBUG MESSAGE: %s\n", error->message, debug);
++			g_error_free (error);
++			g_free (debug);
++			break;
++		case GST_MESSAGE_EOS:
++			break;
++		case GST_MESSAGE_ELEMENT:
++		{
++			const GstStructure *structure;
++			const gchar *name;
++
++			structure = gst_message_get_structure (message);
++			name = gst_structure_get_name (structure);
++
++			if (g_strcmp0 (name, "level") == 0) {
++				gint channels;
++				gdouble peak_dB;
++				gdouble peak;
++				const GValue *array_val;
++				const GValue *value;
++
++				GValueArray *rms_arr, *peak_arr;
++				gint i;
++
++				array_val = gst_structure_get_value (structure, "rms");
++				rms_arr = (GValueArray *) g_value_get_boxed (array_val);
++
++				array_val = gst_structure_get_value (structure, "peak");
++				peak_arr = (GValueArray *) g_value_get_boxed (array_val);
++
++				channels = rms_arr->n_values;
++
++				for (i = 0; i < channels; ++i) {
++					value = peak_arr->values + i;
++					peak_dB = g_value_get_double (value);
+ 
+-				peak = pow (10, peak_dB / 20);
+-			}
++					peak = pow (10, peak_dB / 20);
+ 
+-			if (last_input_peak >= DECAY_STEP) {
+-				if (peak < last_input_peak - DECAY_STEP) {
+-					peak = last_input_peak - DECAY_STEP;
++					gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (level), peak);
+ 				}
+ 			}
+-
+-			last_input_peak = peak;
+-
+-			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (level), peak);
++			break;
+ 		}
++		default:
++			break;
+ 	}
+ 
+ 	return TRUE;
+@@ -147,112 +128,81 @@ level_message_cb (GstBus *bus, GstMessag
+ Recording*
+ recording_start(const char* filename)
+ {
+-	GMAudioProfile *profile;
+-	const gchar *profile_pipeline_desc;
+-	GstElement *pipeline, *source, *encoder, *filesink, *level;
+-	pipeline = source = encoder = filesink = level = NULL;
+-	GError *err = NULL;
+-	gchar *pipeline_desc;
+-	const char *name;
+-
+-	source = gst_element_factory_make ("autoaudiosrc", "autoaudiosource");
+-	if (source == NULL) {
+-		show_missing_known_element_error (NULL,
+-		    _("GConf audio recording"), "autoaudiosrc",
+-		      "gconfelements", "gst-plugins-good");
+-		return FALSE;
+-	}
+-
+-	if (!gst_element_set_state (source, GST_STATE_READY)) {
+-		show_error_dialog (NULL, NULL,
+-		    _("Your audio capture settings are invalid. "
+-		      "Please correct them with the \"Sound Settings\" "
+-		      "under the System Settings menu."));
+-		return FALSE;
+-	}
+-
+-	filesink = gst_element_factory_make ("filesink", "sink");
+-	if (filesink == NULL)
+-	{
+-		show_missing_known_element_error (NULL,
+-		    _("file output"), "filesink", "coreelements", "gstreamer");
++	GstElement *pipeline;
++	GstElement *source;
++	GstElement *level;
++	GstElement *encodebin;
++	GstElement *filesink;
++	GstBus *bus;
++	GstStateChangeReturn ret;
++	GstEncodingProfile *profile;
++	GFile *file;
++	const gchar *extension;
++	gchar *path;
++
++	pipeline = gst_pipeline_new("pipeline");
++	g_return_val_if_fail (pipeline != NULL, NULL);
++
++	if (bus_watch_id != 0) {
++		g_source_remove (bus_watch_id);
++		bus_watch_id = 0;
++	}
++
++	bus = gst_pipeline_get_bus (GST_PIPELINE (pipeline));
++	bus_watch_id = gst_bus_add_watch (bus, bus_watch_cb, pipeline);
++	g_object_unref (bus);
++
++	source = gst_element_factory_make ("autoaudiosrc", NULL);
++	g_return_val_if_fail (source != NULL, NULL);
++
++	ret = gst_element_set_state (source, GST_STATE_READY);
++	if (ret == GST_STATE_CHANGE_FAILURE) {
++		gst_element_set_state (source, GST_STATE_NULL);
+ 		gst_object_unref (source);
+ 		return NULL;
+ 	}
+ 
+-	pipeline = gst_pipeline_new("gnomeradio-record-pipeline");
++	level = gst_element_factory_make ("level", NULL);
++	g_return_val_if_fail (level != NULL, NULL);
++	g_object_set(G_OBJECT(level), "message", TRUE, NULL);
+ 
+-	gst_bin_add (GST_BIN (pipeline), source);
++	filesink = gst_element_factory_make ("filesink", NULL);
++	g_return_val_if_fail (filesink != NULL, NULL);
+ 
+-	level = gst_element_factory_make ("level", "level");
+-	if (level == NULL)
+-	{
+-		show_missing_known_element_error (NULL,
+-		    _("level"), "level", "level", "gstreamer");
+-		gst_object_unref (source);
+-		return NULL;
+-	}
+-	gst_element_set_name (level, "level");
++	profile = rb_gst_get_encoding_profile(rec_settings.profile);
++	encodebin = gst_element_factory_make ("encodebin", NULL);
++	g_return_val_if_fail (encodebin != NULL, NULL);
+ 
+-	profile = gm_audio_profile_lookup(rec_settings.profile);
+-	g_assert(profile);
+-	if (profile == NULL)
+-		return NULL;
+-	profile_pipeline_desc = gm_audio_profile_get_pipeline (profile);
+-	name = gm_audio_profile_get_name (profile);
++	g_object_set (G_OBJECT (encodebin),
++				"profile", profile,
++				"queue-time-max", 120 * GST_SECOND,
++				NULL);
+ 
+-	GST_DEBUG ("encoder profile pipeline: '%s'", GST_STR_NULL (profile_pipeline_desc));
++	gst_bin_add_many (GST_BIN (pipeline), source, level, encodebin, filesink, NULL);
+ 
+-	pipeline_desc = g_strdup_printf ("audioconvert ! %s", profile_pipeline_desc);
+-	GST_DEBUG ("making encoder bin from description '%s'", pipeline_desc);
+-	encoder = gst_parse_bin_from_description (pipeline_desc, TRUE, &err);
+-	g_free (pipeline_desc);
+-	pipeline_desc = NULL;
+-
+-	if (err) {
+-		show_profile_error (NULL, err->message,
+-		    _("Could not parse the '%s' audio profile. "), name);
+-		g_printerr ("Failed to create GStreamer encoder plugins [%s]: %s\n", profile_pipeline_desc, err->message);
+-		g_error_free (err);
++	if (!gst_element_link_many (source, level, encodebin, filesink, NULL)) {
+ 		gst_object_unref (pipeline);
+-		gst_object_unref (filesink);
+-		g_free (pipeline);
+ 		return NULL;
+ 	}
+ 
+-	gst_bin_add (GST_BIN (pipeline), level);
+-	gst_bin_add (GST_BIN (pipeline), encoder);
+-	gst_bin_add (GST_BIN (pipeline), filesink);
+-
+-	if (!(gst_element_link_many (source, level, encoder, NULL))) {
+-		show_profile_error (NULL, NULL,
+-		    _("Could not capture using the '%s' audio profile. "), name);
+-		gst_object_unref (pipeline);
+-		g_free (pipeline);
+-		return NULL;
+-	}
++	extension = rb_gst_media_type_to_extension(rec_settings.profile);
++	path = g_strdup_printf("%s.%s", filename, extension);
+ 
+-	if (!gst_element_link (encoder, filesink)) {
+-		show_profile_error (NULL, NULL,
+-		    _("Could not write to a file using the '%s' audio profile. "), name);
++	g_object_set (G_OBJECT(filesink), "location", path, NULL);
++
++	file = g_file_new_for_path (path);
++	g_free (path);
++
++	ret = gst_element_set_state (pipeline, GST_STATE_PLAYING);
++	if (ret == GST_STATE_CHANGE_FAILURE) {
++		gst_element_set_state (pipeline, GST_STATE_NULL);
+ 		gst_object_unref (pipeline);
+-		g_free (pipeline);
+ 		return NULL;
+ 	}
+-
+-	GstBus *bus = gst_element_get_bus(pipeline);
+-	gst_bus_add_signal_watch(bus);
+-
+-	g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(pipeline_error_cb), pipeline);
+-	g_signal_connect (G_OBJECT(bus), "message::element", G_CALLBACK (level_message_cb), pipeline);
+-
+-	char* path = g_strdup_printf("%s.%s", filename, gm_audio_profile_get_extension(profile));	
+-	g_object_set(G_OBJECT(filesink), "location", path, NULL);
+-	
+-	gst_element_set_state(pipeline, GST_STATE_PLAYING);
+ 	
+-	Recording *recording = g_malloc0(sizeof(Recording));
+-	recording->filename = path;
++	Recording *recording;
++	recording = g_malloc0 (sizeof (Recording));
++	recording->file = file;
+ 	recording->pipeline = pipeline;
+ 	
+ 	return recording;
+@@ -261,26 +211,33 @@ recording_start(const char* filename)
+ void
+ recording_stop(Recording *recording)
+ {
+-	g_assert(recording);
+-
+ 	GstState state;
+-	gst_element_get_state(recording->pipeline, &state, NULL, GST_CLOCK_TIME_NONE);
+-	if (state != GST_STATE_PLAYING) {
+-		GST_DEBUG ("pipeline in wrong state: %s", gst_element_state_get_name (state));
+-	} else {
+-		GstMessage *msg;
+-		GST_DEBUG ("Stopping recording source");
+-		gst_element_send_event (recording->pipeline, gst_event_new_eos ());
+-		/* wait for EOS message on the pipeline bus */
+-		msg = gst_bus_timed_pop_filtered (GST_ELEMENT_BUS (recording->pipeline), GST_SECOND, GST_MESSAGE_EOS | GST_MESSAGE_ERROR);
+-		gst_message_unref (msg);
+ 
+-		gst_element_set_state(recording->pipeline, GST_STATE_NULL);
++	if (recording) {
++
++		gst_element_get_state (recording->pipeline, &state, NULL, GST_CLOCK_TIME_NONE);
++
++		if (state == GST_STATE_PLAYING) {
++			GstMessage *msg;
++			gst_element_send_event (recording->pipeline, gst_event_new_eos ());
++			/* wait one second for EOS message on the pipeline bus */
++			msg = gst_bus_timed_pop_filtered (GST_ELEMENT_BUS (recording->pipeline),
++							  GST_SECOND,
++							  GST_MESSAGE_EOS | GST_MESSAGE_ERROR);
++			gst_message_unref (msg);
++			gst_element_set_state (recording->pipeline, GST_STATE_NULL);
++		}
++
++		if (bus_watch_id != 0) {
++			g_source_remove (bus_watch_id);
++			bus_watch_id = 0;
++		}
++
++		gst_object_unref (recording->pipeline);
++		g_object_unref (recording->file);
++		g_free (recording->station);
++		g_free (recording);
+ 	}
+-	gst_object_unref(GST_OBJECT(recording->pipeline));
+-	g_free(recording->filename);
+-	g_free(recording->station);
+-	g_free(recording);
+ }	
+ 
+ /*
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -22,7 +22,7 @@
+ 
+ #include <config.h>
+ #include <glib/gi18n.h>
+-#include <libgnome-media-profiles/gnome-media-profiles.h>
++#include <gtk/gtk.h>
+ #include <gconf/gconf-client.h>
+ #include <dbus/dbus-glib.h>
+ #include <dbus/dbus-glib-bindings.h>
+@@ -36,6 +36,8 @@
+ #include "lirc.h"
+ #include "prefs.h"
+ #include "record.h"
++#include "rb_gst_media_types.h"
++#include "rb_missing_plugins.h"
+ 
+ #include "../data/pixmaps/digits.xpm"
+ #include "../data/pixmaps/signal.xpm"
+@@ -784,27 +786,69 @@ void recording_set_sensible(gboolean sen
+ static int start_recording(const gchar *destination, const char* station, const char* time)
+ {
+ 	Recording* recording;
+-	char *filename;
+-	
++	GFile *file;
++	GFileInfo *info;
++	gchar *caption, *detail;
++
++	file = g_file_new_for_path (rec_settings.destination);
++	info = g_file_query_info (file,
++			 	  G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE,
++			 	  G_FILE_QUERY_INFO_NONE,
++			 	  NULL,
++			 	  NULL);
++
++	if (info != NULL) {
++		if (!g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE)) {
++			caption = g_strdup_printf (_("Could not write file to \"%s\" location!"), rec_settings.destination);
++			detail = g_strdup_printf (_("Check your settings and make sure that you have write access to it."));
++			show_error_message (caption, detail);
++
++			g_free (caption);
++			g_free (detail);
++
++			g_object_unref(info);
++			g_object_unref(file);
++
++			return -1;
++		}
++		g_object_unref(info);
++	}
++	g_object_unref(file);
++
++	if (rb_gst_check_missing_plugins (rb_gst_get_encoding_profile (rec_settings.profile), NULL, NULL)) {
++		gchar *extension, *format;
++
++		extension = g_utf8_strup (rb_gst_media_type_to_extension (rec_settings.profile), -1);
++		format = g_strdup_printf ("%s", extension);
++		caption = g_strdup_printf (_("Could not write file in \"%s\" format!"), format);
++		detail = g_strdup_printf (_("You need to install additional software required to use this format."));
++		show_error_message (caption, detail);
++
++		g_free (extension);
++		g_free (format);
++		g_free (caption);
++		g_free (detail);
++
++		return -1;
++	}
++
+ 	/* You can translate the filename for a recording:
+-	 * args for this format are: path, station title, time 
+-	 */ 
+-	filename = g_strdup_printf(_("%s/%s_%s"), 
+- 		destination, 
+- 		station, 
+- 		time);
+-	recording = recording_start(filename);
+-	g_free(filename);
++	 * args for this format are: path, station title, time
++	 */
++	char *filename = g_strdup_printf (_("%s/%s_%s"), destination, station, time);
++	recording = recording_start (filename);
++	g_free (filename);
++
+ 	if (!recording)
+ 		return -1;
+-	
+-	tray_icon_items_set_sensible(FALSE);
+-	recording_set_sensible(FALSE);
+-	
+-	recording->station = g_strdup(station);
+-	record_status_window(recording);
+-	
+-	run_status_window(recording);
++
++	tray_icon_items_set_sensible (FALSE);
++	recording_set_sensible (FALSE);
++
++	recording->station = g_strdup (station);
++	record_status_window (recording);
++
++	run_status_window (recording);
+ 
+ 	return 1;
+ }
+@@ -1131,8 +1175,8 @@ GtkWidget* gnome_radio_gui(void)
+ 	gtk_widget_set_tooltip_text(stbw_button, _("0.05 MHz Backwards"));
+ 	gtk_widget_set_tooltip_text(stfw_button, _("0.05 MHz Forwards"));
+ 	gtk_widget_set_tooltip_text(about_button, _("About"));
+-	gtk_widget_set_tooltip_text(rec_button, _("Record radio as OGG, Flac, Wave or MP3"));
+-	gtk_widget_set_tooltip_text(prefs_button, _("Edit your Preferences"));
++	gtk_widget_set_tooltip_text(rec_button, _("Record radio as MP3, OGG, FLAC or M4A"));
++	gtk_widget_set_tooltip_text(prefs_button, _("Preferences"));
+ 	gtk_widget_set_tooltip_text(volume_button, _("Adjust the Volume"));
+ 	gtk_widget_set_tooltip_text(quit_button, _("Quit"));
+ 	text = g_strdup_printf(_("Frequency: %.2f MHz"), gtk_adjustment_get_value(adj)/STEPS);
+@@ -1355,6 +1399,8 @@ int main(int argc, char* argv[])
+ 
+ 	/* Initizialize GStreamer */
+ 	gst_init(&argc, &argv);
++
++	rb_missing_plugins_init (GTK_WINDOW (app));
+ 	
+ 	/* Initizialize Gconf */
+ 	if (!gconf_init(argc, argv, &err)) {
+@@ -1367,7 +1413,6 @@ int main(int argc, char* argv[])
+ 	} else {
+ 		gconf_client_set_global_default_error_handler((GConfClientErrorHandlerFunc)gconf_error_handler);
+ 		gconf_client_set_error_handling(gconf_client_get_default(),  GCONF_CLIENT_HANDLE_ALL);
+-		gnome_media_profiles_init(gconf_client_get_default());
+ 	}
+ 
+ 	load_settings();
+Index: gnomeradio-1.8/src/prefs.c
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.c
++++ gnomeradio-1.8/src/prefs.c
+@@ -16,7 +16,9 @@
+ 
+ #include <gconf/gconf-client.h>
+ #include <glib/gi18n.h>
+-#include <libgnome-media-profiles/audio-profile-choose.h>
++#include <gtk/gtk.h>
++#include <gst/pbutils/pbutils.h>
++#include <gst/pbutils/install-plugins.h>
+ #include <libxml/xmlmemory.h>
+ #include <libxml/parser.h>
+ #include <string.h>
+@@ -25,6 +27,8 @@
+ #include "trayicon.h"
+ #include "gui.h"
+ #include "rec_tech.h"
++#include "rb_gst_media_types.h"
++#include "rb_missing_plugins.h"
+ 
+ extern GtkWidget *preset_combo;
+ extern GtkAdjustment *adj;
+@@ -37,6 +41,8 @@ extern gboolean main_visible;
+ static GtkWidget *device_entry, *mixer_entry;
+ static GtkWidget *mute_on_exit_cb;
+ static GtkWidget *save_button, *move_up_button, *move_down_button, *add_button, *remove_button;
++static GtkWidget *audio_profile_combo;
++static GtkWidget *install_plugins_button;
+ static GtkWidget *list_view;
+ static GtkListStore *list_store;
+ static GtkTreeSelection *selection;
+@@ -158,7 +164,7 @@ gboolean load_settings(void)
+ 		rec_settings.destination = g_strdup(g_get_home_dir());
+ 	rec_settings.profile = gconf_client_get_string(client, "/apps/gnomeradio/recording/profile", NULL);
+ 	if (!rec_settings.profile)
+-		rec_settings.profile = g_strdup("cdlossy");
++		rec_settings.profile = g_strdup("audio/x-vorbis");
+ 	
+ 	/* Load the presets */
+ 	count = gconf_client_get_int(client, "/apps/gnomeradio/presets/presets", NULL);
+@@ -274,15 +280,135 @@ static gboolean mixer_entry_activate_cb(
+ 	return FALSE;
+ }*/
+ 
+-static gboolean profile_combo_change_cb(GtkComboBox *combo, gpointer userdata)
++static void audio_profile_combo_change_cb(GtkWidget *widget, gpointer user_data)
+ {
+-	GMAudioProfile* profile = gm_audio_profile_choose_get_active(GTK_WIDGET(combo));
++	GtkTreeModel *model;
++	GtkTreeIter iter;
++	char *media_type = NULL;
++	GstEncodingProfile *profile;
+ 
+-	g_assert(rec_settings.profile);
+-	g_free(rec_settings.profile);
+-	rec_settings.profile = g_strdup(gm_audio_profile_get_id(profile));
++	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
++	/* get selected media type */
++	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter) == FALSE)
++		return;
++	gtk_tree_model_get (GTK_TREE_MODEL (model),
++			    &iter,
++			    0, &media_type,
++			    2, &profile,
++			    -1);
++
++	rec_settings.profile = g_strdup(media_type);
++
++	/* indicate whether additional plugins are required to encode in this format */
++	if (rb_gst_check_missing_plugins (profile, NULL, NULL)) {
++		gtk_widget_set_visible (install_plugins_button, TRUE);
+ 
+-	return FALSE;
++		gtk_widget_set_sensitive (install_plugins_button,
++					gst_install_plugins_supported ());
++	} else {
++		gtk_widget_set_visible (install_plugins_button, FALSE);
++	}
++	g_free (media_type);
++}
++
++static void
++audio_profile_chooser_set_active(GtkWidget *widget, const char *profile)
++{
++	GtkTreeIter iter;
++	GtkTreeModel *model;
++	gboolean done;
++
++	done = FALSE;
++	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
++	if (gtk_tree_model_get_iter_first(model, &iter)) {
++		do {
++			char *media_type;
++
++			gtk_tree_model_get(model, &iter, 0, &media_type, -1);
++			if (g_strcmp0(media_type, profile) == 0) {
++				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget), &iter);
++				done = TRUE;
++			}
++			g_free (media_type);
++		} while (done == FALSE && gtk_tree_model_iter_next(model, &iter));
++	}
++
++	if (done == FALSE) {
++		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget), NULL);
++	}
++}
++
++static GtkWidget *audio_profile_choose_new(void)
++{
++	GstEncodingTarget *target;
++	const GList *p;
++	GtkWidget *combo;
++	GtkCellRenderer *renderer;
++	GtkTreeModel *model;
++
++	model = GTK_TREE_MODEL(gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER));
++
++	target = rb_gst_get_default_encoding_target();
++	for (p = gst_encoding_target_get_profiles(target); p != NULL; p = p->next) {
++		GstEncodingProfile *profile = GST_ENCODING_PROFILE (p->data);
++		char *media_type;
++
++		media_type = rb_gst_encoding_profile_get_media_type(profile);
++		if (media_type == NULL) {
++			continue;
++		}
++		gtk_tree_store_insert_with_values(GTK_TREE_STORE(model),
++			          		  NULL, NULL, -1,
++			          		  0, media_type,
++			          		  1, gst_encoding_profile_get_description(profile),
++			          		  2, profile, -1);
++		g_free(media_type);
++	}
++
++	combo = gtk_combo_box_new_with_model(model);
++	renderer = gtk_cell_renderer_text_new();
++	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
++	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), renderer, "text", 1, NULL);
++
++	return GTK_WIDGET(combo);
++}
++
++static void
++audio_plugin_install_done_cb (gpointer inst, gboolean retry, gpointer user_data)
++{
++	audio_profile_combo_change_cb (audio_profile_combo, user_data);
++}
++
++static void
++audio_profile_install_plugins_cb (GtkWidget *widget, gpointer user_data)
++{
++	GstEncodingProfile *profile;
++	char **details;
++	GClosure *closure;
++
++	/* get profile */
++	profile = rb_gst_get_encoding_profile (rec_settings.profile);
++	if (profile == NULL) {
++		g_free (rec_settings.profile);
++		return;
++	}
++	g_free (rec_settings.profile);
++
++	/* get plugin details */
++	if (rb_gst_check_missing_plugins (profile, &details, NULL) == FALSE) {
++		return;
++	}
++
++	/* attempt installation */
++	closure = g_cclosure_new ((GCallback) audio_plugin_install_done_cb,
++				  g_object_ref (audio_profile_combo),
++				  (GClosureNotify) g_object_unref);
++	g_closure_set_marshal (closure, g_cclosure_marshal_VOID__BOOLEAN);
++
++	rb_missing_plugins_install ((const char **)details, TRUE, closure);
++
++	g_closure_sink (closure);
++	g_strfreev (details);
+ }
+ 
+ static void add_button_clicked_cb(GtkWidget *widget, gpointer data)
+@@ -1066,14 +1192,15 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	GtkWidget *s_indent_label, *p_indent_label, *r_indent_label;
+ 	GtkWidget *destination_label;
+ 	GtkWidget *destination_button;
+-	GtkWidget *profile_combo;
+-	GtkWidget *profile_eb;
++	GtkWidget *audio_profile_label;
+ 	GtkWidget *device_label, *mixer_label;
+ 	GtkWidget *button_box;
+ 	GtkWidget *open_button;
+ 	GtkWidget *scrolled_window;
+ 	GtkCellRenderer *cellrenderer;
+ 	GtkTreeViewColumn *list_column;
++
++	GstEncodingProfile *profile;
+ 	gint i;
+ 	char *settings_hdr, *presets_hdr, *record_hdr;
+ 	preset* ps;
+@@ -1285,22 +1412,35 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 		_("Select a folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+ 	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(destination_button), rec_settings.destination);
+ 	
+-	profile_eb = gtk_event_box_new();
+-	gtk_widget_set_hexpand(profile_eb, TRUE);
+-	gtk_widget_set_halign(profile_eb, GTK_ALIGN_FILL);
+-	profile_combo = gm_audio_profile_choose_new();
+-	gtk_container_add(GTK_CONTAINER(profile_eb), profile_combo);
+-	gm_audio_profile_choose_set_active(profile_combo, rec_settings.profile);
++	audio_profile_label = gtk_label_new(_("Format:"));
++	gtk_widget_set_halign(audio_profile_label, GTK_ALIGN_START);
++	audio_profile_combo = audio_profile_choose_new();
++	audio_profile_chooser_set_active(audio_profile_combo, rec_settings.profile);
++
++	install_plugins_button = gtk_button_new_with_label(_("Install additional software required to use this format\xE2\x80\xA6"));
++	gtk_widget_set_no_show_all (install_plugins_button, TRUE);
++
++	profile = rb_gst_get_encoding_profile (rec_settings.profile);
++	if (rb_gst_check_missing_plugins (profile, NULL, NULL)) {
++		gtk_widget_set_visible (install_plugins_button, TRUE);
++		gtk_widget_set_sensitive (install_plugins_button,
++					gst_install_plugins_supported ());
++	} else {
++		gtk_widget_set_visible (install_plugins_button, FALSE);
++	}
+ 
+ 	gtk_grid_attach(GTK_GRID(grid), destination_label, 1, 9, 1, 1);
+ 	gtk_grid_attach(GTK_GRID(grid), destination_button, 2, 9, 1, 1);
+-	gtk_grid_attach(GTK_GRID(grid), profile_eb, 1, 10, 2, 1);
++	gtk_grid_attach(GTK_GRID(grid), audio_profile_label, 1, 10, 1, 1);
++	gtk_grid_attach(GTK_GRID(grid), audio_profile_combo, 2, 10, 1, 1);
++	gtk_grid_attach(GTK_GRID(grid), install_plugins_button, 2, 11, 1, 1);
+ 
+ 	g_signal_connect(GTK_FILE_CHOOSER(destination_button), "selection-changed", G_CALLBACK(destination_button_clicked_cb), NULL);
+-	g_signal_connect(G_OBJECT(profile_combo), "changed", G_CALLBACK(profile_combo_change_cb), NULL);
++	g_signal_connect(G_OBJECT(audio_profile_combo), "changed", G_CALLBACK(audio_profile_combo_change_cb), NULL);
++	g_signal_connect(G_OBJECT(install_plugins_button), "clicked", G_CALLBACK(audio_profile_install_plugins_cb), NULL);
+ 
+-	gtk_widget_set_tooltip_text(destination_button, _("Choose a destination directory for recording file."));
+-	gtk_widget_set_tooltip_text(profile_eb, _("Choose the Media Profile that should be used to record."));
++	gtk_widget_set_tooltip_text(destination_button, _("Select a location where to save recorded file."));
++	gtk_widget_set_tooltip_text(audio_profile_combo, _("Choose the format that should be used for recording."));
+ 
+ 	gtk_widget_show_all(dialog);
+ 
+Index: gnomeradio-1.8/src/record.c
+===================================================================
+--- gnomeradio-1.8.orig/src/record.c
++++ gnomeradio-1.8/src/record.c
+@@ -30,17 +30,20 @@
+ #include "rec_tech.h"
+ #include "prefs.h"
+ 
+-static int timeout_id = -1;
+-static GtkWidget *file_lbl, *type_lbl, *size_lbl, *length_lbl;
++extern GtkWidget *level;
++
+ static GtkWidget *status_dialog;
++static GtkWidget *file_lbl;
++static GtkWidget *type_lbl;
++static GtkWidget *size_lbl;
++static GtkWidget *length_lbl;
+ 
+-extern GtkWidget *level;
++static int timeout_id = -1;
+ 
+ void close_status_window(void)
+ {
+-	if (timeout_id >= 0)
+-	{
+-		g_source_remove(timeout_id);
++	if (timeout_id >= 0) {
++		g_source_remove (timeout_id);
+ 		timeout_id = -1;
+ 	}
+ 
+@@ -114,94 +117,67 @@ static char *seconds_to_full_string (gui
+ 	return time;
+ }
+ 
+-static gboolean timeout_cb(gpointer data)
++static gboolean timeout_cb (gpointer data)
+ {
+ 	Recording *recording = data;
+-	GError *error = NULL;
+-	GFile *file;
+-	GFileInfo *info;
+ 
+-	gchar *description, *name, *mime, *type, *size = NULL;
+-	gchar *utf8_name = NULL;
+-	const gchar *content_type;
+-	guint64 s;
++	g_assert (recording);
+ 
+-	g_assert(recording);	
+-	
+-	if (!gtk_widget_get_visible(status_dialog))
+-		gtk_widget_show_all(status_dialog);
+-	
+-	/* name */
+-	name = g_path_get_basename(recording->filename);
+-	utf8_name = g_filename_to_utf8 (name, -1, NULL, NULL, NULL);
+-	gtk_label_set_text(GTK_LABEL(file_lbl), utf8_name);
+-	g_free (name);
+-	g_free (utf8_name);
+-
+-	/* type */
+-	file = g_file_new_for_path(recording->filename);
+-	info = g_file_query_info(file,
+-				 G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+-				 G_FILE_QUERY_INFO_NONE,
+-				 NULL,
+-				 &error);
+-
+-	if (error == NULL) {
+-		content_type = g_file_info_get_content_type(info);
+-		description = g_content_type_get_description(content_type);
+-		mime = g_content_type_get_mime_type(content_type);
++	if (!gtk_widget_get_visible (status_dialog))
++		gtk_widget_show_all (status_dialog);
++
++	GFileInfo *info;
++
++	info = g_file_query_info (recording->file,
++				  G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
++				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
++				  G_FILE_ATTRIBUTE_STANDARD_SIZE,
++				  G_FILE_QUERY_INFO_NONE,
++				  NULL,
++				  NULL);
++
++	if (info != NULL) {
++		const gchar *display_name, *content_type;
++		gchar *description, *mime, *type, *size;
++		gint64 file_size;
++
++		display_name = g_file_info_get_display_name (info);
++
++		gtk_label_set_text (GTK_LABEL (file_lbl), display_name);
++
++		content_type = g_file_info_get_content_type (info);
++		description = g_content_type_get_description (content_type);
++		mime = g_content_type_get_mime_type (content_type);
+ 		type = g_strdup_printf ("%s (%s)", description, mime);
+-		gtk_label_set_text(GTK_LABEL(type_lbl), type);
+ 
+-		g_object_unref(info);
+-		g_free(description);
+-		g_free(mime);
+-		g_free(type);
+-	} else  {
+-		fprintf(stderr, "%s\n", error->message);
+-		g_error_free(error);
++		gtk_label_set_text (GTK_LABEL (type_lbl), type);
+ 
+-		return FALSE;
+-	}
++		g_free (description);
++		g_free (mime);
++		g_free (type);
+ 
+-	/* size */
+-	info = g_file_query_info(file,
+-			 	 G_FILE_ATTRIBUTE_STANDARD_SIZE,
+-			 	 G_FILE_QUERY_INFO_NONE,
+-			 	 NULL,
+-			 	 &error);
+-	if (error == NULL) {
+-		s = g_file_info_get_attribute_uint64(info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
+-		size = g_format_size_full(s, G_FORMAT_SIZE_LONG_FORMAT);
+-		gtk_label_set_text(GTK_LABEL(size_lbl), size);
++		file_size = g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
+ 
+-		g_object_unref(info);
+-		g_free(size);
+-	} else {
+-		fprintf(stderr, "%s\n", error->message);
+-		g_error_free(error);
++		size = g_format_size_full (file_size, G_FORMAT_SIZE_LONG_FORMAT);
++		gtk_label_set_text (GTK_LABEL (size_lbl), size);
+ 
+-		close_status_window();
+-		recording_stop(recording);
++		g_free (size);
+ 
+-		return FALSE;
+-	}
+-	g_object_unref(file);
++		g_object_unref (info);
++
++		gint64 position;
+ 
+-	/* length */
+-	GstElement *pipeline;
+-	gint64 val = -1;
+-	gint secs;
+-
+-	pipeline = recording->pipeline;
+-
+-	if (gst_element_query_position (pipeline, GST_FORMAT_TIME, &val) && val != -1) {
+-		gchar* length;
+-		secs = val / GST_SECOND;
+-
+-		length = seconds_to_full_string(secs);
+-		gtk_label_set_text(GTK_LABEL(length_lbl), length);
+-		g_free(length);
++		if (gst_element_query_position (recording->pipeline, GST_FORMAT_TIME, &position)) {
++			gchar* length;
++			gint secs;
++
++			secs = position / GST_SECOND;
++			length = seconds_to_full_string (secs);
++
++			gtk_label_set_text (GTK_LABEL (length_lbl), length);
++
++			g_free (length);
++		}
+ 	}
+ 	
+ 	return TRUE;
+Index: gnomeradio-1.8/src/rec_tech.h
+===================================================================
+--- gnomeradio-1.8.orig/src/rec_tech.h
++++ gnomeradio-1.8/src/rec_tech.h
+@@ -16,6 +16,7 @@
+ 
+ #ifndef _REC_TECH_H
+ #define _REC_TECH_H
++#include <gio/gio.h>
+ #include <gst/gst.h>
+ 
+ typedef struct Recording_Settings recording_settings;
+@@ -36,7 +37,7 @@ recording_settings rec_settings;
+ 
+ typedef struct {
+ 	GstElement* pipeline;
+-	char* filename;
++	GFile* file;
+ 	char* station;
+ } Recording;
+ 

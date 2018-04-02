@@ -1,0 +1,4 @@
+Az automatikus bejelentkezés alapértelmezettben bármely felhasználó számára elérhető, aki az &users csoport tagja.
+Ennek korlátozásához a &lightdm által létrehozott &autologin csoport használható.
+Ilyenkor az adott felhasználót hozzá kell adni az &autologin csoporthoz, és az /etc/pam.d/lightdm-&autologin fájlban
+az " &user &ingroup &users " részt " &user &ingroup &autologin "-ra kell módosítani.

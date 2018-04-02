@@ -1,0 +1,94 @@
+diff -Naur orig/examples/example.cpp patched/examples/example.cpp
+--- orig/examples/example.cpp	2006-05-10 20:05:37.000000000 +0200
++++ patched/examples/example.cpp	2016-07-26 10:37:30.144078032 +0200
+@@ -7,6 +7,8 @@
+ 
+ -------------------------------------------------------------------*/
+ 
++#include <cstdio>
++#include <cstring>
+ #include "protocol.h"
+ 
+ AudioData* loadWaveFile(char *file);
+diff -Naur orig/examples/protocol.cpp patched/examples/protocol.cpp
+--- orig/examples/protocol.cpp	2006-05-10 20:05:42.000000000 +0200
++++ patched/examples/protocol.cpp	2016-07-26 10:37:30.148078089 +0200
+@@ -8,7 +8,7 @@
+ -------------------------------------------------------------------*/
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <string>
++#include <cstring>
+ #include <map>
+ #include <expat.h>
+ #include <curl/curl.h>
+diff -Naur orig/examples/uselame.cpp patched/examples/uselame.cpp
+--- orig/examples/uselame.cpp	2006-05-10 20:05:51.000000000 +0200
++++ patched/examples/uselame.cpp	2016-07-26 10:37:16.663859000 +0200
+@@ -12,6 +12,7 @@
+ #else
+ #include <sys/wait.h>
+ #endif
++#include <unistd.h>
+ 
+ AudioData *loadWaveFile(char *file);
+ 
+diff -Naur orig/examples/wavefile.cpp patched/examples/wavefile.cpp
+--- orig/examples/wavefile.cpp	2006-05-10 20:05:56.000000000 +0200
++++ patched/examples/wavefile.cpp	2016-07-26 10:37:16.663859000 +0200
+@@ -11,6 +11,7 @@
+ #include "io.h"
+ #endif
+ #include <fcntl.h>
++#include <unistd.h>
+ 
+ static bool readBytes(int fd, unsigned char *buf, int size) {
+     int ct = 0;
+diff -Naur orig/lib/JAMA/tnt_math_utils.h patched/lib/JAMA/tnt_math_utils.h
+--- orig/lib/JAMA/tnt_math_utils.h	2006-05-10 19:58:50.000000000 +0200
++++ patched/lib/JAMA/tnt_math_utils.h	2016-07-26 10:36:37.963230199 +0200
+@@ -19,6 +19,17 @@
+ 
+ namespace TNT
+ {
++
++/**
++    @returns the absolute value of a real (no-complex) scalar.
++*/
++
++template <class Real>
++Real abs(const Real &a)
++{
++        return  (a > 0 ? a : -a);
++}
++
+ /**
+ 	@returns hypotenuse of real (non-complex) scalars a and b by 
+ 	avoiding underflow/overflow
+@@ -56,15 +67,6 @@
+ }
+ */
+ 
+-/**
+-	@returns the absolute value of a real (no-complex) scalar.
+-*/
+-template <class Real>
+-Real abs(const Real &a)
+-{
+-	return  (a > 0 ? a : -a);
+-}
+-
+ }
+ #endif
+ /* MATH_UTILS_H */
+diff -Naur orig/lib/signal_op.cpp patched/lib/signal_op.cpp
+--- orig/lib/signal_op.cpp	2006-05-10 20:01:12.000000000 +0200
++++ patched/lib/signal_op.cpp	2016-07-26 10:37:30.148078089 +0200
+@@ -13,6 +13,7 @@
+ 
+ 
+ #include <math.h>
++#include <cstdlib>
+ #include "signal_op.h"
+ #include "AFLIB/aflibConverter.h"
+ #include "error_op.h"

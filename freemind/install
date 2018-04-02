@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/freemind
+mkdir -p "$UB_INSTALLDIR"/etc/freemind
+
+chmod 755 dist/freemind.sh
+
+cp -a dist/. "$UB_INSTALLDIR"/usr/share/freemind/
+cp -a patterns.xml "$UB_INSTALLDIR"/etc/freemind/
+
+ln -s ../share/freemind/freemind.sh "$UB_INSTALLDIR"/usr/bin/freemind
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/
+cp images/76812-freemind_v0.4.svg "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/freemind.svg

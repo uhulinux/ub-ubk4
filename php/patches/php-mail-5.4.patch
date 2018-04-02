@@ -1,0 +1,26 @@
+diff -urN php-5.5.9.orig/ext/standard/mail.c php-5.5.9/ext/standard/mail.c
+--- php-5.5.9.orig/ext/standard/mail.c	2014-02-05 11:00:36.000000000 +0100
++++ php-5.5.9/ext/standard/mail.c	2014-02-17 15:34:21.421983379 +0100
+@@ -21,6 +21,7 @@
+ #include <stdlib.h>
+ #include <ctype.h>
+ #include <stdio.h>
++#include <string.h>
+ #include <time.h>
+ #include "php.h"
+ #include "ext/standard/info.h"
+@@ -352,8 +353,12 @@
+ 			MAIL_RET(0);
+ 		}
+ #endif
+-		fprintf(sendmail, "To: %s\n", to);
+-		fprintf(sendmail, "Subject: %s\n", subject);
++		if ((to != NULL) && (strlen(to)!=0)) {
++			fprintf(sendmail, "To: %s\n", to);
++		}
++		if ((subject != NULL) && (strlen(subject)!=0)) {
++			fprintf(sendmail, "Subject: %s\n", subject);
++		}
+ 		if (hdr != NULL) {
+ 			fprintf(sendmail, "%s\n", hdr);
+ 		}

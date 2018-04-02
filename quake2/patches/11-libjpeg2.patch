@@ -1,0 +1,12 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2005-01-02 04:47:10.000000000 +0100
++++ mod/Makefile	2012-11-06 21:52:21.000000000 +0100
+@@ -339,7 +339,7 @@
+   $(warning Warning: SVGA not supported for $(ARCH))
+  endif
+ 
+- ifeq ($(strip $(BUILD_SOFTX)),YES)
++ ifeq ($(strip $(BUILD_X11)),YES)
+   $(warning Warning: Software X Renderer not supported for $(ARCH))
+  endif
+ 

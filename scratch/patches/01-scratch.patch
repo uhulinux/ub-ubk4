@@ -1,0 +1,45 @@
+diff -Naurd a/src/scratch b/src/scratch
+--- a/src/scratch	2011-07-02 00:21:32.000000000 +0200
++++ b/src/scratch	2012-11-12 20:50:25.000000000 +0100
+@@ -31,7 +31,17 @@
+     echo "       and args are passed to the Squeak image."
+ }
+ 
+-while [ -n "$1" ] ; do
++if [ $# -eq 1 ] ; then
++	case "$1" in
++	    /*) DOCUMENT="$1"
++		;;
++	    *) DOCUMENT="$PWD/$1"
++		;;
++	esac
++	shift
++else
++    while [ -n "$1" ] ; do
++
+ 	if [ -z "$2" ] ; then
+ 	        usage
+ 		exit -1
+@@ -76,7 +86,8 @@
+ 			;;
+ 	esac
+ 	shift
+-done
++    done
++fi
+ 
+ # do not crash on dbus errors
+ export DBUS_FATAL_WARNINGS=0
+diff -Naurd a/src/scratch.desktop b/src/scratch.desktop
+--- a/src/scratch.desktop	2010-04-09 00:22:36.000000000 +0200
++++ b/src/scratch.desktop	2014-05-06 20:17:43.000000000 +0200
+@@ -1,7 +1,8 @@
+ [Desktop Entry]
+ Name=Scratch
+ Comment= Programming system and content development tool
+-Exec=scratch
++Comment[hu]=Programnyelv gyerekeknek
++Exec=scratch %f
+ Terminal=false
+ Type=Application
+ Icon=scratch

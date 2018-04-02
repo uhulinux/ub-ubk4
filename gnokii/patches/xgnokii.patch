@@ -1,0 +1,12 @@
+diff -Naurd a/xgnokii/xgnokii.c b/xgnokii/xgnokii.c
+--- a/xgnokii/xgnokii.c	2006-08-28 00:36:54.000000000 +0200
++++ b/xgnokii/xgnokii.c	2007-04-12 17:27:50.000000000 +0200
+@@ -2181,7 +2181,7 @@
+ 	gtk_window_set_deafult_icon_name("phone");
+ #endif
+ 	GUI_MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+-/*  gtk_window_set_decorated (GTK_WINDOW (GUI_MainWindow), GTK_FALSE); */
++	gtk_window_set_decorated(GTK_WINDOW(GUI_MainWindow), 0);
+ 	gtk_widget_realize(GUI_MainWindow);
+ 
+ 	BackgroundPixmap =

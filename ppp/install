@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+make install INSTROOT="$UB_INSTALLDIR"
+
+install -D -m755 scripts/pon  "$UB_INSTALLDIR"/usr/bin/pon
+install -D -m755 scripts/poff "$UB_INSTALLDIR"/usr/bin/poff
+install -D -m755 scripts/plog "$UB_INSTALLDIR"/usr/bin/plog
+install -D -m644 scripts/pon.1 "$UB_INSTALLDIR"/usr/share/man/man1/pon.1
+install -D -m600 etc.ppp/pap-secrets  "$UB_INSTALLDIR"/etc/ppp/pap-secrets
+install -D -m600 etc.ppp/chap-secrets "$UB_INSTALLDIR"/etc/ppp/chap-secrets
+install -d -m755 "$UB_INSTALLDIR"/etc/ppp/peers
+
+# pppgetpass
+cd contrib/pppgetpass
+install -m755 pppgetpass.sh "$UB_INSTALLDIR"/usr/bin/pppgetpass
+install -m755 pppgetpass.vt "$UB_INSTALLDIR"/usr/bin/
+install -m755 pppgetpass.gtk "$UB_INSTALLDIR"/usr/bin/

@@ -1,0 +1,31 @@
+From 72650012558c6dd60e272efdd1c96fabf4483be4 Mon Sep 17 00:00:00 2001
+From: Ikey Doherty <ikey@solus-project.com>
+Date: Sat, 10 Dec 2016 12:07:50 +0000
+Subject: [PATCH] qapplication/x11: Detect the MATE desktop as GNOME
+
+With this change, Qt will automatically take on GNOME aspects under the
+MATE desktop, integrating theming & dialogs. Note this is automatic with
+Qt 5 so we'll need to keep this patch here.
+
+Signed-off-by: Ikey Doherty <ikey@solus-project.com>
+---
+ src/gui/kernel/qapplication_x11.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/gui/kernel/qapplication_x11.cpp b/src/gui/kernel/qapplication_x11.cpp
+index 400b99d..208cb2d 100644
+--- a/src/gui/kernel/qapplication_x11.cpp
++++ b/src/gui/kernel/qapplication_x11.cpp
+@@ -2334,6 +2334,10 @@ void qt_init(QApplicationPrivate *priv, int,
+                 break;
+             }
+ 
++            if (qgetenv("DESKTOP_SESSION") == "mate") {
++                X11->desktopEnvironment = DE_GNOME;
++            }
++
+             // GNOME_DESKTOP_SESSION_ID is deprecated for some reason, but still check it
+             if (!qgetenv("GNOME_DESKTOP_SESSION_ID").isEmpty()) {
+                 X11->desktopEnvironment = DE_GNOME;
+-- 
+2.11.0

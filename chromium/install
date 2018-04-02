@@ -1,0 +1,34 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium
+
+mv out/Release/chrome "$UB_INSTALLDIR"/usr/lib/chromium/
+mv out/Release/chromedriver "$UB_INSTALLDIR"/usr/lib/chromium/
+mv out/Release/chrome_sandbox "$UB_INSTALLDIR"/usr/lib/chromium/chrome-sandbox
+# mv out/Release/chrome.1 "$UB_INSTALLDIR"/usr/share/man/man1/chrome.1
+
+mv out/Release/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/
+mv out/Release/*.bin "$UB_INSTALLDIR"/usr/lib/chromium/
+
+if [ -f out/Release/icudtl.dat ]; then
+mv out/Release/icudtl.dat "$UB_INSTALLDIR"/usr/lib/chromium/
+fi
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/swiftshader
+mv out/Release/swiftshader/*.so "$UB_INSTALLDIR"/usr/lib/chromium/swiftshader/
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/locales
+mv out/Release/locales/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/locales/
+
+# mv out/Release/resources/ "$UB_INSTALLDIR"/usr/lib/chromium/
+
+for size in 16 22 24 32 48 64 128 256; do
+	mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/
+	case ${size} in
+	    16|32) iconpath="chrome/app/theme/default_100_percent/chromium" ;;
+	    *) iconpath="chrome/app/theme/chromium" ;;
+	esac
+	cp ${iconpath}/product_logo_$size.png ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png
+done
+
+ln -s /usr/lib/chromium/chromedriver "$UB_INSTALLDIR"/usr/bin/chromedriver

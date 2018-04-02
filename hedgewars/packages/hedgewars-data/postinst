@@ -1,0 +1,17 @@
+#/bin/sh
+
+version=ubversion
+echo downloading data...
+mkdir -p /usr/share/hedgewars/Data/Forts
+mkdir -p /tmp/install
+cd /tmp/install
+curl -o hedgewars-src-$version.tar.bz2 http://www.hedgewars.org/download/releases/hedgewars-src-$version.tar.bz2
+echo extracting...
+tar -xvf hedgewars-src-$version.tar.bz2 -C /usr/share/
+mv -f /usr/share/hedgewars-src-$version/share/hedgewars/Data/{Fonts,Graphics,Maps,Missions,Music,Names,Scripts,Sounds,Themes} /usr/share/hedgewars/Data/
+mv -f /usr/share/hedgewars-src-$version/share/hedgewars/Data/Forts/*L.png /usr/share/hedgewars/Data/Forts/
+
+find /usr/share/hedgewars/Data -name "CMakeLists.txt" -delete
+rm -rf /usr/share/hedgewars-src-$version
+cd -
+rm -rf /tmp/install

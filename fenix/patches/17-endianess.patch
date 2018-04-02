@@ -1,0 +1,18 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxi/src/fpl.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/fpl.c	2007-08-28 14:43:22.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/fpl.c	2007-08-28 14:43:53.000000000 +0200
+@@ -81,8 +81,8 @@
+ 		return 0 ;
+     }
+ 
+-	ARRANGE_DWORD(&file_header.depth);
+-	ARRANGE_DWORD(&file_header.version);
++	ARRANGE_DWORD(&header.depth);
++	ARRANGE_DWORD(&header.version);
+ 
+ 	if (!FPL_VALID_DEPTH(header.depth)) {
+ 		fpl_error = _("Invalid colour depth in the FPL file") ;

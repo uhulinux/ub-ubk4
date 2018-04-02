@@ -1,0 +1,2 @@
+pici=$(urllist http://www.gnokii.org/download/gnokii/| grep -E '^([0-9.]+)x$' | sort -V | tail -n 1)
+urllist http://www.gnokii.org/download/gnokii/"$pici" | splitver '^gnokii-([0-9.]+).tar.gz$' | sort -V | tail -n 1

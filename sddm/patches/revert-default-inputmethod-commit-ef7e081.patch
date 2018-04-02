@@ -1,0 +1,12 @@
+diff -Nur orig/src/common/Configuration.h mod/src/common/Configuration.h
+--- orig/src/common/Configuration.h	2017-12-05 17:00:16.000000000 +0100
++++ mod/src/common/Configuration.h	2018-01-25 11:30:52.850536245 +0100
+@@ -42,7 +42,7 @@
+         Entry(Numlock,             NumState,    NUM_NONE,                                       _S("Initial NumLock state. Can be on, off or none.\n"
+                                                                                                    "If property is set to none, numlock won't be changed\n"
+                                                                                                    "NOTE: Currently ignored if autologin is enabled."));
+-        Entry(InputMethod,         QString,     QStringLiteral("qtvirtualkeyboard"),                   _S("Input method module"));
++        Entry(InputMethod,         QString,     QStringLiteral(),                   _S("Input method module"));
+         //  Name   Entries (but it's a regular class again)
+         Section(Theme,
+             Entry(ThemeDir,            QString,     _S(DATA_INSTALL_DIR "/themes"),             _S("Theme directory path"));

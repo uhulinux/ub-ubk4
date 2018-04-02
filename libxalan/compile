@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+# A -O3 veszélyes
+ub_replace -O3 -O2 c/runConfigure
+
+export UB_MAKE_PROCS=1
+export XALANCROOT="$UB_COMPILEDIR"/c
+cd c
+./runConfigure \
+	-plinux \
+	-P/usr
+
+ub_make

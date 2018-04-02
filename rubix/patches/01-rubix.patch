@@ -1,0 +1,22 @@
+--- rubix-1.0.6.orig/Makefile	2008-11-19 22:18:15.000000000 +0100
++++ rubix-1.0.6/Makefile	2009-05-16 10:52:20.000000000 +0200
+@@ -11,7 +11,7 @@
+ # Customize to fit your needs (especially if it does not work for now).
+ 
+ LANGUAGE=ENGLISH
+-GAMESDIR=/usr/games
++GAMESDIR=/usr/bin
+ 
+ #architecture=-DPC_ARCHI
+ 
+@@ -36,8 +36,8 @@
+ #	strip rubix
+ 
+ install :
+-	mkdir -p $(GAMESDIR)
+-	install -c -s rubix $(GAMESDIR)
++	mkdir -p $(DESTDIR)$(GAMESDIR)
++	install -c -s rubix $(DESTDIR)$(GAMESDIR)
+ 
+ clean :
+ 	rm -f *.o *~ core *.bak *.dat gmon.out

@@ -1,0 +1,12 @@
+diff -urN openobex-1.7.1-Source.orig/udev/CMakeLists.txt openobex-1.7.1-Source/udev/CMakeLists.txt
+--- openobex-1.7.1-Source.orig/udev/CMakeLists.txt	2012-03-28 21:18:23.000000000 +0200
++++ openobex-1.7.1-Source/udev/CMakeLists.txt	2014-06-11 09:57:25.078146432 +0200
+@@ -12,7 +12,7 @@
+ 
+   # If there is a udev.pc pkg-config file in the system, use it.
+   if (NOT CMAKE_INSTALL_UDEVRULESDIR)
+-    set ( UDEVDIR /lib/udev )
++    set ( UDEVDIR /usr/lib/udev )
+     find_package ( PkgConfig )
+     if ( PKG_CONFIG_FOUND )
+       pkg_check_modules ( PKGCONFIG_UDEV udev )

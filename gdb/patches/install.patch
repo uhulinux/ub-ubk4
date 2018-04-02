@@ -1,0 +1,187 @@
+diff -Nur orig/bfd/doc/Makefile.in mod/bfd/doc/Makefile.in
+--- orig/bfd/doc/Makefile.in	2017-06-04 17:51:26.000000000 +0200
++++ mod/bfd/doc/Makefile.in	2017-09-18 17:07:31.019131867 +0200
+@@ -719,38 +719,6 @@
+ install-info: install-info-am
+ 
+ install-info-am: $(INFO_DEPS)
+-	@$(NORMAL_INSTALL)
+-	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
+-	list='$(INFO_DEPS)'; test -n "$(infodir)" || list=; \
+-	if test -n "$$list"; then \
+-	  echo " $(MKDIR_P) '$(DESTDIR)$(infodir)'"; \
+-	  $(MKDIR_P) "$(DESTDIR)$(infodir)" || exit 1; \
+-	fi; \
+-	for file in $$list; do \
+-	  case $$file in \
+-	    $(srcdir)/*) file=`echo "$$file" | sed "s|^$$srcdirstrip/||"`;; \
+-	  esac; \
+-	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
+-	  file_i=`echo "$$file" | sed 's|\.info$$||;s|$$|.i|'`; \
+-	  for ifile in $$d/$$file $$d/$$file-[0-9] $$d/$$file-[0-9][0-9] \
+-	               $$d/$$file_i[0-9] $$d/$$file_i[0-9][0-9] ; do \
+-	    if test -f $$ifile; then \
+-	      echo "$$ifile"; \
+-	    else : ; fi; \
+-	  done; \
+-	done | $(am__base_list) | \
+-	while read files; do \
+-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(infodir)'"; \
+-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(infodir)" || exit $$?; done
+-	@$(POST_INSTALL)
+-	@if $(am__can_run_installinfo); then \
+-	  list='$(INFO_DEPS)'; test -n "$(infodir)" || list=; \
+-	  for file in $$list; do \
+-	    relfile=`echo "$$file" | sed 's|^.*/||'`; \
+-	    echo " install-info --info-dir='$(DESTDIR)$(infodir)' '$(DESTDIR)$(infodir)/$$relfile'";\
+-	    install-info --info-dir="$(DESTDIR)$(infodir)" "$(DESTDIR)$(infodir)/$$relfile" || :;\
+-	  done; \
+-	else : ; fi
+ install-man:
+ 
+ install-pdf: install-pdf-am
+@@ -1058,7 +1026,7 @@
+ 
+ # We want install to imply install-info as per GNU standards, despite the
+ # cygnus option.
+-install: install-info
++install: install
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+diff -Nur orig/bfd/Makefile.in mod/bfd/Makefile.in
+--- orig/bfd/Makefile.in	2017-09-07 16:28:11.000000000 +0200
++++ mod/bfd/Makefile.in	2017-09-18 17:08:28.231383213 +0200
+@@ -1947,7 +1947,7 @@
+ 
+ install-html-am:
+ 
+-install-info: install-info-recursive
++install-info:
+ 
+ install-info-am:
+ 
+diff -Nur orig/bfd/po/Make-in mod/bfd/po/Make-in
+--- orig/bfd/po/Make-in	2017-06-04 17:51:26.000000000 +0200
++++ mod/bfd/po/Make-in	2017-09-18 17:09:30.611657263 +0200
+@@ -131,58 +131,6 @@
+ install-data: install-data-@USE_NLS@
+ install-data-no: all
+ install-data-yes: all
+-	if test -r $(MKINSTALLDIRS); then \
+-	  $(MKINSTALLDIRS) $(DESTDIR)$(datadir); \
+-	else \
+-	  $(top_srcdir)/mkinstalldirs $(DESTDIR)$(datadir); \
+-	fi
+-	@catalogs='$(CATALOGS)'; \
+-	for cat in $$catalogs; do \
+-	  cat=`basename $$cat`; \
+-	  case "$$cat" in \
+-	    *.gmo) destdir=$(gnulocaledir);; \
+-	    *)     destdir=$(localedir);; \
+-	  esac; \
+-	  lang=`echo $$cat | sed 's/\$(CATOBJEXT)$$//'`; \
+-	  dir=$(DESTDIR)$$destdir/$$lang/LC_MESSAGES; \
+-	  if test -r $(MKINSTALLDIRS); then \
+-	    $(MKINSTALLDIRS) $$dir; \
+-	  else \
+-	    $(top_srcdir)/mkinstalldirs $$dir; \
+-	  fi; \
+-	  if test -r $$cat; then \
+-	    $(INSTALL_DATA) $$cat $$dir/$(PACKAGE)$(INSTOBJEXT); \
+-	    echo "installing $$cat as $$dir/$(PACKAGE)$(INSTOBJEXT)"; \
+-	  else \
+-	    $(INSTALL_DATA) $(srcdir)/$$cat $$dir/$(PACKAGE)$(INSTOBJEXT); \
+-	    echo "installing $(srcdir)/$$cat as" \
+-		 "$$dir/$(PACKAGE)$(INSTOBJEXT)"; \
+-	  fi; \
+-	  if test -r $$cat.m; then \
+-	    $(INSTALL_DATA) $$cat.m $$dir/$(PACKAGE)$(INSTOBJEXT).m; \
+-	    echo "installing $$cat.m as $$dir/$(PACKAGE)$(INSTOBJEXT).m"; \
+-	  else \
+-	    if test -r $(srcdir)/$$cat.m ; then \
+-	      $(INSTALL_DATA) $(srcdir)/$$cat.m \
+-		$$dir/$(PACKAGE)$(INSTOBJEXT).m; \
+-	      echo "installing $(srcdir)/$$cat as" \
+-		   "$$dir/$(PACKAGE)$(INSTOBJEXT).m"; \
+-	    else \
+-	      true; \
+-	    fi; \
+-	  fi; \
+-	done
+-	if test "$(PACKAGE)" = "gettext"; then \
+-	  if test -r $(MKINSTALLDIRS); then \
+-	    $(MKINSTALLDIRS) $(DESTDIR)$(gettextsrcdir); \
+-	  else \
+-	    $(top_srcdir)/mkinstalldirs $(DESTDIR)$(gettextsrcdir); \
+-	  fi; \
+-	  $(INSTALL_DATA) $(srcdir)/Makefile.in.in \
+-			  $(DESTDIR)$(gettextsrcdir)/Makefile.in.in; \
+-	else \
+-	  : ; \
+-	fi
+ 
+ # Define this as empty until I found a useful application.
+ installcheck:
+diff -Nur orig/opcodes/po/Make-in mod/opcodes/po/Make-in
+--- orig/opcodes/po/Make-in	2017-06-04 17:51:27.000000000 +0200
++++ mod/opcodes/po/Make-in	2017-09-18 17:14:44.657037158 +0200
+@@ -117,58 +117,6 @@
+ install-data: install-data-@USE_NLS@
+ install-data-no: all
+ install-data-yes: all
+-	if test -r $(MKINSTALLDIRS); then \
+-	  $(MKINSTALLDIRS) $(DESTDIR)$(datadir); \
+-	else \
+-	  $(top_srcdir)/mkinstalldirs $(DESTDIR)$(datadir); \
+-	fi
+-	@catalogs='$(CATALOGS)'; \
+-	for cat in $$catalogs; do \
+-	  cat=`basename $$cat`; \
+-	  case "$$cat" in \
+-	    *.gmo) destdir=$(gnulocaledir);; \
+-	    *)     destdir=$(localedir);; \
+-	  esac; \
+-	  lang=`echo $$cat | sed 's/\$(CATOBJEXT)$$//'`; \
+-	  dir=$(DESTDIR)$$destdir/$$lang/LC_MESSAGES; \
+-	  if test -r $(MKINSTALLDIRS); then \
+-	    $(MKINSTALLDIRS) $$dir; \
+-	  else \
+-	    $(top_srcdir)/mkinstalldirs $$dir; \
+-	  fi; \
+-	  if test -r $$cat; then \
+-	    $(INSTALL_DATA) $$cat $$dir/$(PACKAGE)$(INSTOBJEXT); \
+-	    echo "installing $$cat as $$dir/$(PACKAGE)$(INSTOBJEXT)"; \
+-	  else \
+-	    $(INSTALL_DATA) $(srcdir)/$$cat $$dir/$(PACKAGE)$(INSTOBJEXT); \
+-	    echo "installing $(srcdir)/$$cat as" \
+-		 "$$dir/$(PACKAGE)$(INSTOBJEXT)"; \
+-	  fi; \
+-	  if test -r $$cat.m; then \
+-	    $(INSTALL_DATA) $$cat.m $$dir/$(PACKAGE)$(INSTOBJEXT).m; \
+-	    echo "installing $$cat.m as $$dir/$(PACKAGE)$(INSTOBJEXT).m"; \
+-	  else \
+-	    if test -r $(srcdir)/$$cat.m ; then \
+-	      $(INSTALL_DATA) $(srcdir)/$$cat.m \
+-		$$dir/$(PACKAGE)$(INSTOBJEXT).m; \
+-	      echo "installing $(srcdir)/$$cat as" \
+-		   "$$dir/$(PACKAGE)$(INSTOBJEXT).m"; \
+-	    else \
+-	      true; \
+-	    fi; \
+-	  fi; \
+-	done
+-	if test "$(PACKAGE)" = "gettext"; then \
+-	  if test -r $(MKINSTALLDIRS); then \
+-	    $(MKINSTALLDIRS) $(DESTDIR)$(gettextsrcdir); \
+-	  else \
+-	    $(top_srcdir)/mkinstalldirs $(DESTDIR)$(gettextsrcdir); \
+-	  fi; \
+-	  $(INSTALL_DATA) $(srcdir)/Makefile.in.in \
+-			  $(DESTDIR)$(gettextsrcdir)/Makefile.in.in; \
+-	else \
+-	  : ; \
+-	fi
+ 
+ # Define this as empty until I found a useful application.
+ installcheck:

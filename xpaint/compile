@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+# rm -f xaw_incdir
+
+# ln -s /usr/include/X11/Xaw3dxft xaw_incdir
+
+export UB_MAKE_PROCS=1
+export LIBTOOLFLAGS="--tag CC"
+
+ub_compile

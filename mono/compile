@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+UB_CONFIGURE_NO_DISABLE_STATIC=1
+
+ub_compile \
+	--enable-static \
+	--with-sgen=yes \
+	--with-libgdiplus=installed \
+	--with-jit=yes \
+	--with-ikvm-native=yes \
+	--with-mcs-docs=no \
+	--disable-system-aot

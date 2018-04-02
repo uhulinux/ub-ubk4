@@ -1,0 +1,38 @@
+diff -Naur postfix-2.2.10.orig/postfix-install postfix-2.2.10/postfix-install
+--- postfix-2.2.10.orig/postfix-install	2005-02-02 22:39:36.000000000 +0100
++++ postfix-2.2.10/postfix-install	2006-04-11 14:01:33.000000000 +0200
+@@ -617,22 +617,26 @@
+     # If installing from source code, apply special permissions or ownership.
+     # If building a package, don't apply special permissions or ownership.
+ 
+-    case $install_root in
+-    "") case $owner in
++	case $owner in
+ 	[$]*) eval owner=$owner;;
+ 	root) owner=;;
+ 	esac
+ 	case $group in
+ 	[$]*) eval group=$group;;
+ 	   -) group=;;
+-	esac;;
+-     *) case $mode in
+-	[1-7]755) mode=755;;
+ 	esac
+-	owner=
+-	group=;;
+-    esac
+ 
++	# Cheat... these are not yet present in /etc/{passwd,group} while
++	# uhubuild is running
++	if [ _$owner = _postfix ]; then
++	    owner=25
++	fi
++	if [ _$group = _postfix ]; then
++	    group=25
++	fi
++	if [ _$group = _postdrop ]; then
++	    group=26
++	fi
+ 
+     case $type in
+ 

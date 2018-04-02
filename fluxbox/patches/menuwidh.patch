@@ -1,0 +1,14 @@
+diff -Naur orig/src/FbTk/Menu.cc mod/src/FbTk/Menu.cc
+--- orig/src/FbTk/Menu.cc	2015-02-08 11:44:45.000000000 +0100
++++ mod/src/FbTk/Menu.cc	2015-03-14 23:54:17.000000000 +0100
+@@ -430,6 +430,10 @@
+         m_item_w = std::max(iw, m_item_w);
+     }
+ 
++    // set w to new menu width
++    if (w < m_item_w) {
++        w = m_item_w;
++    }
+ 
+     // calculate needed columns
+     m_columns = 0;

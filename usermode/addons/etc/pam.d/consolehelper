@@ -1,0 +1,12 @@
+#%PAM-1.0
+
+auth		sufficient	pam_rootok.so
+auth		required	pam_nologin.so
+auth		required	pam_unix.so shadow nullok
+
+account		required	pam_unix.so
+
+session		required	pam_unix.so
+session		required	pam_env.so
+session		required	pam_envfeed.so
+session		optional	pam_xauth.so

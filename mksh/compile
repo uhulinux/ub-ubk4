@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cd mksh
+sh Build.sh -r -c lto
+#./test.sh /dev/null
+gzip -n9 mksh.1

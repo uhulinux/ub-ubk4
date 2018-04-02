@@ -1,0 +1,30 @@
+#! /bin/bash
+
+export MAIN_DIALOG='
+ <vbox>
+  <frame Edit>
+    <edit>
+      <input file>gtk_edit</input>
+      <output file>new-file</output>
+      <variable>EDIT</variable>
+      <width>350</width><height>150</height>
+    </edit>
+    <hbox>
+      <button>
+        <label>Save as "new-file"</label>
+        <action>Save:EDIT</action>
+      </button>
+      <button help>
+      </button>
+    </hbox>
+  </frame>
+  <hbox>
+   <button ok></button>
+   <button cancel></button>
+  </hbox>
+ </vbox>
+'
+
+gtkdialog --program MAIN_DIALOG
+
+

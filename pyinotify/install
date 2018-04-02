@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cd pyinotify
+python setup.py install --root="$UB_INSTALLDIR"
+cd ../pyinotify3
+python3 setup.py install --root="$UB_INSTALLDIR"

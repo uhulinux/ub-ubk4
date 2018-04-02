@@ -1,0 +1,12 @@
+diff -urN scons-1.2.0.orig/setup.py scons-1.2.0/setup.py
+--- scons-1.2.0.orig/setup.py	2008-12-21 08:00:00.000000000 +0100
++++ scons-1.2.0/setup.py	2008-12-26 11:34:00.000000000 +0100
+@@ -353,7 +353,7 @@
+             if is_win32:
+                 dir = 'Doc'
+             else:
+-                dir = os.path.join('man', 'man1')
++                dir = os.path.join('share', 'man', 'man1')
+             self.data_files = [(dir, man_pages)]
+             man_dir = os.path.join(self.install_dir, dir)
+             msg = "Installed SCons man pages into %s" % man_dir

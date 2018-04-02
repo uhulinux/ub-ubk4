@@ -1,0 +1,13 @@
+diff -Nur orig/src/modules/mount/mount.conf mod/src/modules/mount/mount.conf
+--- orig/src/modules/mount/mount.conf	2017-11-14 16:18:58.000000000 +0100
++++ mod/src/modules/mount/mount.conf	2017-11-19 14:27:03.000000000 +0100
+@@ -15,6 +15,9 @@
+     - device: /run/udev
+       mountPoint: /run/udev
+       options: bind
++    - device: /dev/pts
++      fs: devpts
++      mountPoint: /dev/pts
+ 
+ extraMountsEfi:
+     - device: efivarfs

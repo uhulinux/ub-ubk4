@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+ub_install
+
+ln -sf graphic-login "$UB_INSTALLDIR"/etc/pam.d/gdm
+ln -sf graphic-login "$UB_INSTALLDIR"/etc/pam.d/gdm-welcome
+
+rm -f "$UB_INSTALLDIR"/etc/gdm/Init/Default
+ln -s ../../X11/xdm/Xsetup "$UB_INSTALLDIR"/etc/gdm/Init/Default
+
+ln -s system-auth "$UB_INSTALLDIR"/etc/pam.d/gdm-password
+
+cp -a data/gdm.service "$UB_INSTALLDIR"/usr/lib/systemd/system/

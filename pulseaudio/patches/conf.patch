@@ -1,0 +1,36 @@
+diff -Naur orig/src/daemon/daemon.conf.in patched/src/daemon/daemon.conf.in
+--- orig/src/daemon/daemon.conf.in	2016-06-01 12:50:54.000000000 +0200
++++ patched/src/daemon/daemon.conf.in	2017-01-31 02:47:13.620218098 +0100
+@@ -57,7 +57,7 @@
+ ; enable-lfe-remixing = no
+ ; lfe-crossover-freq = 0
+ 
+-; flat-volumes = yes
++flat-volumes = no
+ 
+ ifelse(@HAVE_SYS_RESOURCE_H@, 1, [dnl
+ ; rlimit-fsize = -1
+diff -Naur orig/src/daemon/start-pulseaudio-x11.in patched/src/daemon/start-pulseaudio-x11.in
+--- orig/src/daemon/start-pulseaudio-x11.in	2016-05-03 08:17:39.000000000 +0200
++++ patched/src/daemon/start-pulseaudio-x11.in	2017-01-31 02:45:09.322335468 +0100
+@@ -20,7 +20,7 @@
+ if [ x"$DISPLAY" != x ] ; then
+ 
+     @PACTL_BINARY@ load-module module-x11-publish "display=$DISPLAY" > /dev/null
+-    @PACTL_BINARY@ load-module module-x11-cork-request "display=$DISPLAY" > /dev/null
++#    @PACTL_BINARY@ load-module module-x11-cork-request "display=$DISPLAY" > /dev/null
+ 
+     if [ x"$KDE_FULL_SESSION" = x"true" ]; then
+        @PACTL_BINARY@ load-module module-device-manager "do_routing=1" > /dev/null
+diff -Naur orig/src/pulse/client.conf.in patched/src/pulse/client.conf.in
+--- orig/src/pulse/client.conf.in	2016-05-03 08:17:39.000000000 +0200
++++ patched/src/pulse/client.conf.in	2017-01-31 02:47:02.136048662 +0100
+@@ -22,7 +22,7 @@
+ ; default-server =
+ ; default-dbus-server =
+ 
+-; autospawn = yes
++autospawn = no
+ ; daemon-binary = @PA_BINARY@
+ ; extra-arguments = --log-target=syslog
+ 

@@ -1,0 +1,74 @@
+### -*-hoc-*-
+### ====================================================================
+###
+### [23-Jul-2002]
+### ====================================================================
+
+proc hrule() { println "------------------------------------------------------------------------" }
+
+load("encrypt")
+
+println "*******************************************************************************"
+println "*******************************************************************************"
+println "** Demonstration of a simple one-time pad symmetric-key encryption algorithm **"
+println "*******************************************************************************"
+println "*******************************************************************************"
+println ""
+
+hrule()
+println "The encryption does not reveal message length, although it DOES reveal"
+println "common plaintext prefixes:\n"
+println "encrypt(123,\"A\")"
+encrypt(123,"A")
+println ""
+println "encrypt(123,\"AB\")"
+encrypt(123,"AB")
+println ""
+println "encrypt(123,\"ABC\")"
+encrypt(123,"ABC")
+println ""
+println "encrypt(123,\"ABCD\")"
+encrypt(123,"ABCD")
+println ""
+
+hrule()
+println "The encryption does not reveal letter repetititions:\n"
+println "encrypt(123,\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\")"
+encrypt(123,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+println ""
+
+hrule()
+println "Now encrypt a famous message from American revolutionary history:\n"
+println "encrypt(123, \"One if by land, two if by sea: Paul Revere's Ride, 16 April 1775\")"
+println ""
+
+encrypt(123, "One if by land, two if by sea: Paul Revere's Ride, 16 April 1775")
+println ""
+
+load("decrypt")
+
+ciphertext = "\t3973974d 63a8ac49 af5cb3e8 da3efdbb f5b63ece\
+\t68a21434 19cca7e0 7730dc80 8e9c265c 5be7476c\
+\tc51605d1 af1a6d82 9114c057 620da15b 0670bb1d\
+\t3c95c30b ed"
+
+hrule()
+println "Attempt to decrypt the ciphertext with a nearby key.  Decryption DOES"
+println "reveal the message length, although that flaw could easily be fixed:\n"
+println "decrypt(122, ciphertext)"
+decrypt(122, ciphertext)
+println ""
+
+hrule()
+println "Attempt to decrypt the ciphertext with the correct key:\n"
+println "decrypt(123, ciphertext)"
+decrypt(123, ciphertext)
+println ""
+
+hrule()
+println "Attempt to decrypt the ciphertext with a nearby key:\n"
+println "decrypt(123, ciphertext)"
+decrypt(124, ciphertext)
+println ""
+
+hrule()

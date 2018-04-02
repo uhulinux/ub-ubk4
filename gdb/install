@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install install-gdb install-info-gdb
+
+# remove conflicting files
+rm -rf "$UB_INSTALLDIR"/usr/include
+rm -rf "$UB_INSTALLDIR"/usr/lib/lib{bfd*,opcodes*,iberty*,mmalloc*}
+rm -rf "$UB_INSTALLDIR"/usr/share/info/{configure,standards}.info

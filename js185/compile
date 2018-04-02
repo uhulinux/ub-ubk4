@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+rm -rf src/ctypes/libffi src/t src/tests/src/jstests.jar src/tracevis src/v8
+cd js/src
+ub_compile \
+	--with-system-nspr \
+	--enable-threadsafe

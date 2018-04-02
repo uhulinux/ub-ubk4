@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+ub_install \
+	bindir=/bin
+
+# Csinalunk egy /etc/sysless filet ami a "S" keyhez tartalmaz bindingot
+cd "$UB_INSTALLDIR"
+cat >"etc/sysless.in" <<EOF
+#command
+\e[1~ goto-line
+\e[4~ goto-end
+S repaint -^PS
+#end
+EOF
+
+bin/lesskey -o "etc/sysless" "etc/sysless.in"

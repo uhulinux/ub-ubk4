@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+make \
+    MYCFLAGS="-fPIC -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1" \
+    TO_BIN='lua5.3 luac5.3' \
+    TO_LIB="liblua5.3.a liblua5.3.so liblua5.3.so.5.3 liblua5.3.so.$UB_VERSION" \
+linux

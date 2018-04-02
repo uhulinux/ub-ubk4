@@ -1,0 +1,187 @@
+diff -Nur orig/src/modules/chrootcfg/main.py mod/src/modules/chrootcfg/main.py
+--- orig/src/modules/chrootcfg/main.py	1970-01-01 01:00:00.000000000 +0100
++++ mod/src/modules/chrootcfg/main.py	2018-01-29 21:18:16.135950022 +0100
+@@ -0,0 +1,183 @@
++#!/usr/bin/env python3
++# -*- coding: utf-8 -*-
++#
++# === This file is part of Calamares - <http://github.com/calamares> ===
++#
++#   Copyright 2016, Artoo <artoo@manjaro.org>
++#
++#   Calamares is free software: you can redistribute it and/or modify
++#   it under the terms of the GNU General Public License as published by
++#   the Free Software Foundation, either version 3 of the License, or
++#   (at your option) any later version.
++#
++#   Calamares is distributed in the hope that it will be useful,
++#   but WITHOUT ANY WARRANTY; without even the implied warranty of
++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++#   GNU General Public License for more details.
++#
++#   You should have received a copy of the GNU General Public License
++#   along with Calamares. If not, see <http://www.gnu.org/licenses/>.
++
++import os
++import shutil
++import subprocess
++import sys
++import re
++import libcalamares
++
++from libcalamares.utils import check_target_env_call, target_env_call, debug
++from os.path import join
++
++ON_POSIX = 'posix' in sys.builtin_module_names
++
++
++class ChrootController:
++    def __init__(self):
++        self.__root = libcalamares.globalstorage.value('rootMountPoint')
++        self.__requirements = \
++            libcalamares.job.configuration.get('requirements', [])
++        self.__emptyfiles = \
++            libcalamares.job.configuration.get('emptyfiles', [])
++
++    @property
++    def root(self):
++        return self.__root
++
++    @property
++    def requirements(self):
++        return self.__requirements
++
++    @property
++    def emptyfiles(self):
++        return self.__emptyfiles
++
++    def make_dirs(self):
++        for target in self.requirements:
++            dest = self.root + target["name"]
++            if not os.path.exists(dest):
++                debug("Create: {}".format(dest))
++                mod = int(target["mode"], 8)
++                debug("Mode: {}".format(oct(mod)))
++                os.makedirs(dest, mode=mod)
++
++    def make_emptyfiles(self):
++        for target in self.emptyfiles:
++            uresfile = self.root + target["name"]
++            open(uresfile, 'a').close()
++
++    def chrootinit(self):
++        global chrootdir, apt_options, dpkg_options, installcmd, chlist
++        chrootdir = self.root
++        minpkgs = "uhu-base apt dpkg diffutils findutils packagekit"
++        # Változók az apt működéséhez szükséges csomagok feltérképezéséhez
++        statusdir = "/var/lib/dpkg/status"
++        empty_statusdir = "/var/lib/dpkg-empty/status"
++        statedir = "/var/state/apt"
++        cachedir = "/var/cache/apt"
++        apt_statdir = " -o Dir::State::status=" + chrootdir
++        apt_statusdir = apt_statdir + statusdir
++        apt_empty_statusdir = apt_statdir + empty_statusdir
++        apt_chrootdir = " -o DPkg::Options::=--root=" + chrootdir
++        apt_statedir = " -o Dir::State=" + chrootdir + statedir
++        apt_cachedir = " -o Dir::Cache=" + chrootdir + cachedir
++        apt_noimmconf = " -o APT::Immediate-Configure=false"
++        apt_farok = apt_chrootdir + apt_statedir + apt_cachedir + apt_noimmconf
++        apt_empty_options = apt_empty_statusdir + apt_farok
++        apt_options = apt_statusdir + apt_farok
++        dpkg_options = " --root=" + chrootdir
++        apt_force = " --allow-downgrades --allow-remove-essential" \
++            " --allow-change-held-packages"
++        installcmd = "apt-get " + apt_options + apt_force + " --yes install "
++        # Igazi és üres dpkg adatbázis létrehozása
++        # Hibakezelés kell még!
++        os.system("apt-get " + apt_empty_options + " update")
++        # Mely csomagok kellenek? Kiíratás egy ideiglenes fájlba.
++        tmpcmd = "apt-get " + apt_empty_options + " --no-act install " \
++            + minpkgs + " | grep " + "'^Inst ' | cut -d' ' -f2 > /tmp/tmpfile"
++        os.system(tmpcmd)
++        # kiolvassuk a tmpfile tartalmát a chlist listaváltozóba.
++        chlist = [line.rstrip('\n') for line in open('/tmp/tmpfile')]
++        # Nem kell többé a tmpfile
++        os.system("rm -f /tmp/tmpfile")
++        # Na, most telepíthetünk és konfigurálhatunk mindenkit, aki kell.
++        # Hibakezelés kell még!
++        return chrootdir, apt_options, dpkg_options, installcmd, chlist
++    # chrootba installálja az alapvető csomagokat
++    def chrootinstall(self):
++        # a csapatok felsorolásának lelőhelye
++        cim = '/usr/share/calamares/'
++        # critical csapat
++        crlist = [line.rstrip('\n') for line in open(cim + 'critical')]
++        # hidden és selected csapat
++        hdlist = [line.rstrip('\n') for line in open(cim + 'hidden')]
++        # konsole és selected csapat
++        kolist = [line.rstrip('\n') for line in open(cim + 'konsole')]
++        # chroot csapat darabszáma
++        chlen = len(chlist)
++        # critical csapat darabszáma
++        crlen = len(crlist)
++        # hidden csapat darabszáma
++        hdlen = len(hdlist)
++        # konsole csapat darabszáma
++        kolen = len(kolist)
++#        crlen = len(crpkgs.split())
++        # összes darabszáma
++        total = crlen + chlen + hdlen + kolen
++        # lista konverzója space határolós stringbe
++        chstr = ' '.join(map(str, chlist))
++        crstr = ' '.join(map(str, crlist))
++        hdstr = ' '.join(map(str, hdlist))
++        kostr = ' '.join(map(str, kolist))
++        # chroot csapat telepítése
++        os.system(installcmd + chstr)
++        os.system("apt-get " + apt_options + " clean")
++        completed_packages = chlen
++        completed_ratio = completed_packages * 1.0 / total
++        libcalamares.job.setprogress(completed_ratio)
++        # critical csapat telepítése
++        os.system(installcmd + crstr)
++        os.system("apt-get " + apt_options + " clean")
++        completed_packages = chlen + crlen
++        completed_ratio = completed_packages * 1.0 / total
++        libcalamares.job.setprogress(completed_ratio)
++        # hidden csapat telepítése
++        os.system(installcmd + hdstr)
++        os.system("apt-get " + apt_options + " clean")
++        completed_packages = chlen + crlen + hdlen
++        completed_ratio = completed_packages * 1.0 / total
++        libcalamares.job.setprogress(completed_ratio)
++        # konsole csapat telepítése
++        os.system(installcmd + kostr)
++        completed_packages = total
++        completed_ratio = completed_packages * 1.0 / total
++        libcalamares.job.setprogress(completed_ratio)
++
++    def chroot_clean(self):
++        os.system("chroot " + chrootdir + " /sbin/uhu-pkg postinst +")
++        os.system("rm -rf " + chrootdir + "/var/lib/dpkg-empty")
++        os.system("dpkg " + dpkg_options + " --clear-avail")
++        os.system("apt-get " + apt_options + " autoclean")
++
++    def prepare(self):
++        cal_umask = os.umask(0)
++        self.make_dirs()
++        self.make_emptyfiles()
++        path = join(self.root, "run")
++        # debug("Fix permissions: {}".format(path))
++        os.chmod(path, 0o755)
++        os.umask(cal_umask)
++
++    def run(self):
++        self.prepare()           # Chroot alapozás
++        self.chrootinit()        # Chroot telepítési előkészületek
++        self.chrootinstall()     # Chroot telepítése
++        self.chroot_clean()      # Végső simítások
++        return None
++
++
++def run():
++    """ Installing base system """
++
++    targetRoot = ChrootController()
++
++    return targetRoot.run()

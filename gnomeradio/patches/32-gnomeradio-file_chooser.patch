@@ -1,0 +1,55 @@
+## Description: Switch from a GtkButton to a GtkFileChooserButton, instead of fidling around with the dialog.
+## Origin: upstream, no
+## Author: Pojar George 
+## Forwarded: no
+Index: gnomeradio-1.8/src/prefs.c
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.c	2013-05-29 16:41:32.179964469 +0000
++++ gnomeradio-1.8/src/prefs.c	2013-05-29 16:42:36.471962557 +0000
+@@ -379,21 +379,11 @@
+ 
+ static void destination_button_clicked_cb(GtkWidget *button, gpointer data)
+ {
+-	GtkWidget *dialog;
+-	
+-	dialog = gtk_file_chooser_dialog_new(_("Choose a destination folder"), NULL, 
+-					GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, 
+-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, 
+-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+-					NULL);
+-	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), rec_settings.destination);
+-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+-		if (rec_settings.destination) g_free(rec_settings.destination);
+-		rec_settings.destination = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+-		gtk_button_set_label(GTK_BUTTON(button), rec_settings.destination);
++	if (rec_settings.destination)
++	{
++		g_free(rec_settings.destination);
+ 	}
+-	
+-	gtk_widget_destroy (dialog);
++	rec_settings.destination = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(button));
+ }
+ 
+ static gboolean list_view_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+@@ -711,8 +701,9 @@
+ 	destination_label = gtk_label_new(_("Destination directory:"));
+ 	gtk_misc_set_alignment(GTK_MISC(destination_label), 0.0f, 0.5f);
+ 
+-	destination_button = gtk_button_new();
+-	gtk_button_set_label(GTK_BUTTON(destination_button), rec_settings.destination);
++	destination_button = gtk_file_chooser_button_new(
++		_("Select a folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
++	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(destination_button), rec_settings.destination);
+ 	
+ 	profile_eb = gtk_event_box_new();
+ 	profile_combo = gm_audio_profile_choose_new();
+@@ -723,7 +714,7 @@
+ 	gtk_table_attach_defaults(GTK_TABLE(record_table), destination_button, 1, 2, 0, 1);
+ 	gtk_table_attach_defaults(GTK_TABLE(record_table), profile_eb, 0, 2, 1, 2);
+ 
+-	g_signal_connect(G_OBJECT(destination_button), "clicked", G_CALLBACK(destination_button_clicked_cb), NULL);
++	g_signal_connect(GTK_FILE_CHOOSER(destination_button), "selection-changed", G_CALLBACK(destination_button_clicked_cb), NULL);
+ 	g_signal_connect(G_OBJECT(profile_combo), "changed", G_CALLBACK(profile_combo_change_cb), NULL);
+ 
+ 	gtk_widget_set_tooltip_text(profile_eb, _("Choose the Media Profile that should be used to record."));

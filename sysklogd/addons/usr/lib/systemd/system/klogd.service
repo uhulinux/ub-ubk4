@@ -1,0 +1,13 @@
+[Unit]
+Description=Kernel Logger Daemon
+Documentation=man:klogd(8)
+
+[Service]
+Type=forking
+ExecStart=/sbin/klogd
+StandardOutput=null
+Restart=on-failure
+PIDFile=/var/run/klogd.pid
+
+[Install]
+WantedBy=multi-user.target

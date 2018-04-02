@@ -1,0 +1,76 @@
+diff -Naur cksfv-1.3.14-orig/src/newsfv.c cksfv-1.3.14/src/newsfv.c
+--- cksfv-1.3.14-orig/src/newsfv.c	2009-04-12 18:04:10.000000000 +0200
++++ cksfv-1.3.14/src/newsfv.c	2009-11-01 10:12:12.000000000 +0100
+@@ -39,12 +39,16 @@
+     uint32_t val;
+     char *tmpname;
+     struct stat st;
++    int stdinput;
+ 
+     pnsfv_head();
+     pfileinfo(argv);
+ 
+     while (*argv) {
+ 	fn = *argv++;
++    stdinput = !strcmp(fn, "-");
++    if (stdinput) fd = 0;
++    else
+ 	if ((fd = open(fn, O_RDONLY | O_LARGEFILE | O_BINARY, 0)) < 0) {
+ 	    if (!TOTALLY_QUIET)
+ 		fprintf(stderr, "cksfv: %s: %s\n", fn, strerror(errno));
+@@ -82,6 +86,7 @@
+ 	    }
+ 	}
+       next:
++    if (!stdinput)
+ 	close(fd);
+     }
+ 
+diff -Naur cksfv-1.3.14-orig/src/print.c cksfv-1.3.14/src/print.c
+--- cksfv-1.3.14-orig/src/print.c	2009-04-12 18:04:10.000000000 +0200
++++ cksfv-1.3.14/src/print.c	2009-11-01 10:14:32.000000000 +0100
+@@ -57,12 +57,13 @@
+     struct tm *timeinfo;
+     char *tmpname;
+     char *fname;
+-
++    int stdinput;
+     printf(";\n");
+ 
+     while (*argv) {
+ 	fn = *argv++;
+-	if (!(stat(fn, &sb))) {
++    stdinput = !strcmp(fn, "-");
++    if ((!stdinput && !(stat(fn, &sb))) || (stdinput && !(fstat(0, &sb)))) {
+ 	    if (!S_ISDIR(sb.st_mode)) {
+ 
+ 		tmpname = NULL;
+diff -Naur cksfv-1.3.14-orig/src/readsfv.c cksfv-1.3.14/src/readsfv.c
+--- cksfv-1.3.14-orig/src/readsfv.c	2009-04-12 18:04:10.000000000 +0200
++++ cksfv-1.3.14/src/readsfv.c	2009-11-01 10:22:14.000000000 +0100
+@@ -74,6 +74,7 @@
+     int j;
+     int check;
+     struct stat st;
++    int stdinput;
+ 
+     if (!QUIET)
+ 	prsfv_head(fn);
+@@ -176,6 +177,9 @@
+ 	}
+ 
+ 	/* can we open the file */
++    stdinput = !strcmp(filename, "-");
++    if (stdinput) file = 0;
++    else
+ 	if ((file =
+ 	     open(filename, O_RDONLY | O_LARGEFILE | O_BINARY, 0)) < 0) {
+ 	    if (be_caseinsensitive == 1) {
+@@ -240,6 +244,7 @@
+ 	    }
+ 	}
+       next:
++     if (!stdinput)
+ 	close(file);
+     }
+ 

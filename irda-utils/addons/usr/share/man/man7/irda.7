@@ -1,0 +1,189 @@
+.\" Jean II - HPL - 03
+.\" irda.7
+.\"
+.TH IRDA 7 "2 May 2003" "irda-utils" "Linux-IrDA man pages"
+.\"
+.\" NAME part
+.\"
+.SH NAME
+irda \- The Linux-IrDA protocol stack
+.SH SYNOPSIS
+.B #include <linux/irda.h>
+.br
+
+.br
+.IB stream_s " = socket(PF_INET, SOCK_STREAM, 0);"
+.br
+.IB seqpkt_s " = socket(PF_INET, SOCK_SEQPACKET, 0);"
+.br
+.IB dgram_s " = socket(PF_INET, SOCK_DGRAM, IRDAPROTO_UNITDATA);"
+.br
+.IB ultra_s " = socket(PF_INET, SOCK_DGRAM, IRDAPROTO_ULTRA);"
+.\"
+.\" DESCRIPTION part
+.\"
+.SH DESCRIPTION
+.B Linux-IrDA
+is a complete implementation of the various
+.I IrDA protocols
+and
+.I IrDA drivers
+for Linux.
+.PP
+The configuration of the low level of the IrDA stack (IrDA ports) and
+the various IrDA drivers are described in
+.IR irattach (8).
+.PP
+The usage of the higher layers of the IrDA stack (IrCOMM, IrLPT,
+IrNET, IrLAN, OBEX...) are described in their respective man pages.
+.PP
+The core of the Linux-IrDA protocol stack is composed of the
+.IR IrLAP ", " IrLMP ", " IrTTP " and " IrIAS
+protocols and is implemented as a kernel module. The programmer's
+interface for the IrDA stack is socket based. For more information on
+sockets, see socket(7).
+.PP
+Note that higher level IrDA protocols may offer a different
+programmer's interface. For example
+.I IrCOMM
+offers a TTY based interface and
+.I OBEX
+is available through a user space library.
+.\"
+.\" SOCKETS TYPE part
+.\"
+.SH SOCKETS TYPE
+.PP
+The Linux-IrDA socket interface offers 4 types of sockets:
+.TP
+.B Stream socket - SOCK_STREAM, 0
+Stream sockets provides a reliable, stream oriented, full duplex
+connection between two sockets on top of
+.IR IrTTP ,
+similar to TCP sockets. IrTTP guarantees that the data arrives in
+order and manages flow contol, IrLAP retransmits lost packets.
+.br
+Stream sockets does not preserve record boundaries.
+.TP
+.B SeqPacket socket - SOCK_SEQPACKET, 0
+SeqPacket sockets provides a reliable, datagram oriented, full duplex
+connection between two sockets on top of
+.IR IrTTP .
+IrTTP guarantees that the data arrives in order and manages flow
+contol, IrLAP retransmits lost packets.
+.br
+SeqPacket sockets preserve record boundaries. Large datagrams will be
+fragmented as needed.
+.TP
+.B Datagram socket - SOCK_DGRAM, IRDAPROTO_UNITDATA
+SeqPacket sockets provides a reliable, datagram oriented, full duplex
+connection between two sockets on top of
+.IR IrLMP .
+There is no guarantees that the data arrives in order and there is no
+flow contol, however IrLAP retransmits lost packets.
+.br
+Datagram sockets preserve record boundaries. No fragmentation is
+provided, datagrams larger than the IrDA link MTU are truncated or
+discarded.
+.TP
+.B Ultra socket - SOCK_DGRAM, IRDAPROTO_ULTRA
+Ultra sockets provides a connectionless, unreliable datagram packet
+service on top of
+.IR IrLAP-Ultra .
+Ultra datagrams are sent and receive only when no IrLAP connection is
+established and otherwise discarded. They are always transmitted at
+9600 bauds. Datagrams may be lost, reordered, and there is no flow
+control.
+.br
+Ultra sockets preserve record boundaries. No fragmentation is
+provided, datagrams larger than the Ultra MTU (382 bytes) are
+truncated or discarded.
+.\"
+.\" ADDRESS FORMAT part
+.\"
+.SH ADDRESS FORMAT
+An 
+.B IrDA socket address
+is defined as a combination of an IrDA interface address and a
+.IR "service name" .
+Service names are automatically resolved to lsap through the
+.I IrIAP
+protocol.
+.nf
+
+    struct sockaddr_irda {
+        sa_family_t sir_family;   /* AF_IRDA */
+        __u8        sir_lsap_sel; /* LSAP selector */
+        __u32       sir_addr;     /* Device address */
+        char        sir_name[25]; /* Usually <service>:IrDA:TinyTP */
+    };
+.fi
+.PP
+.I sin_family
+is always set to AF_IRDA.
+.I sir_lsap_sel
+is usually not used.
+.I sir_addr
+is the address of the peer and optional (and that case the first peer
+discoverd will be used).
+.I sir_name
+is the service name of the socket.
+.\"
+.\" SOCKET OPTIONS part
+.\"
+.SH SOCKET OPTIONS
+IrDA sockets supports some protocol specific socket options that can
+be set with
+.IR setsockopt (2)
+and read with
+.IR getsockopt (2).
+The socket option level for IrDA is SOL_IRLMP.
+.PP
+Options that can be set:
+.TP
+.B IRLMP_IAS_SET
+Set an entry in the local IAS database.
+.TP
+.B IRLMP_IAS_DEL
+Delete an entry from the local IAS database.
+.TP
+.B IRLMP_MAX_SDU_SIZE
+Set maximum receive MTU for SeqPacket sockets.
+.TP
+.B IRLMP_HINTS_SET
+Set IrDA hint bits to be advertised to peers.
+.TP
+.B IRLMP_HINT_MASK_SET
+Set IrDA hint bits filter to be used when performing discovery.
+.PP
+Options that can be get:
+.TP
+.B IRLMP_ENUMDEVICES
+Perform link level discovery and return the content of the discovery
+log.
+.TP
+.B IRLMP_MAX_SDU_SIZE
+Get maximum receive MTU.
+.TP
+.B IRLMP_IAS_GET
+Get an entry from the local IAS database.
+.TP
+.B IRLMP_IAS_QUERY
+Query an entry in IAS database of a peer using IrIAP.
+.TP
+.B IRLMP_WAITDEVICE
+Block until a new device is discovered. Experimental feature, use with
+caution.
+.\"
+.\" AUTHOR part
+.\"
+.SH AUTHOR
+Jean Tourrilhes \- jt@hpl.hp.com
+.\"
+.\" SEE ALSO part
+.\"
+.SH SEE ALSO
+.BR irattach (8),
+.BR irdadump (8),
+.BR irnet (4),
+.BR irnetd (8).

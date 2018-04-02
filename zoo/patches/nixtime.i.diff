@@ -1,0 +1,26 @@
+--- zoo-2.10.orig/nixtime.i
++++ zoo-2.10/nixtime.i
+@@ -10,6 +10,9 @@
+ 
+                                     -- Rahul Dhesi  1986/12/31
+ */
++#include <sys/types.h>
++#include <time.h>
++#include <utime.h>
+ 
+ struct tm *localtime();
+ 
+@@ -51,9 +54,10 @@
+ {
+ 	long mstonix();
+ 	long gettz();
+-	long utimbuf[2];
+-	utimbuf[0] = utimbuf[1] = gettz() + mstonix (date, time);
+-	return (utime (path, utimbuf));
++        struct utimbuf utbf;
++
++	utbf.actime = utbf.modtime = gettz() + mstonix (date, time);
++	return (utime (path, &utbf));
+ }
+ 
+ /****************

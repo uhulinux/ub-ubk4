@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+export INC="`pkg-config --cflags-only-I openssl`"
+export LDFLAGS="`pkg-config --libs-only-L openssl`"
+ub_compile

@@ -1,0 +1,17 @@
+diff -Nur orig/deflektor.c mod/deflektor.c
+--- orig/deflektor.c	2008-06-09 00:16:38.000000000 +0200
++++ mod/deflektor.c	2018-03-05 20:09:23.616693306 +0100
+@@ -115,11 +115,11 @@
+  set_uformat(U_ASCII);
+  if(comprobar_dats()) return -1;
+  set_color_depth(16);
+- if(set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, RES_X, RES_Y, 0, 0))
++ if(set_gfx_mode(GFX_AUTODETECT_WINDOWED, RES_X, RES_Y, 0, 0))
+   {
+    modo_truecolor=1;
+    set_color_depth(32);
+-   if(set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, RES_X, RES_Y, 0, 0))
++   if(set_gfx_mode(GFX_AUTODETECT_WINDOWED, RES_X, RES_Y, 0, 0))
+     {
+      allegro_message("No se ha podido establecer ningún modo de video.\nCould not set any video mode.");
+      return -1;

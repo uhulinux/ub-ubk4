@@ -1,0 +1,12 @@
+diff -Naur Vc-1.3.3-orig/CMakeLists.txt Vc-1.3.3/CMakeLists.txt
+--- Vc-1.3.3-orig/CMakeLists.txt	2017-11-27 16:42:02.000000000 +0100
++++ Vc-1.3.3/CMakeLists.txt	2017-12-22 15:08:33.624349247 +0100
+@@ -21,7 +21,7 @@
+ 
+ vc_determine_compiler()
+ 
+-if("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "(x86|AMD64|amd64)")
++if("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "(x86|i686|AMD64|amd64)")
+    set(Vc_X86 TRUE)
+    find_package(MIC)
+ elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "(arm|aarch32|aarch64)")

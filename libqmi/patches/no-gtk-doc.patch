@@ -1,0 +1,52 @@
+diff -Naur orig/autogen.sh patched/autogen.sh
+--- orig/autogen.sh	2017-03-22 12:19:49.000000000 +0100
++++ patched/autogen.sh	2017-12-29 19:46:45.755294585 +0100
+@@ -14,7 +14,6 @@
+ }
+ 
+ (cd $srcdir;
+-    gtkdocize || exit 1
+     mkdir -p m4
+     touch ChangeLog
+     autoreconf --force --install --verbose
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2017-03-22 12:19:49.000000000 +0100
++++ patched/configure.ac	2017-12-29 19:58:31.075164726 +0100
+@@ -125,9 +125,6 @@
+         ;;
+ esac
+ 
+-dnl Documentation
+-GTK_DOC_CHECK(1.0)
+-
+ # QMI username
+ QMI_USERNAME="root"
+ AC_ARG_ENABLE(qmi-username,
+@@ -201,9 +198,6 @@
+                  src/qmi-firmware-update/test/Makefile
+                  utils/Makefile
+                  docs/Makefile
+-                 docs/reference/Makefile
+-                 docs/reference/libqmi-glib/Makefile
+-                 docs/reference/libqmi-glib/version.xml
+                  docs/man/Makefile])
+ 
+ if test "x$QMI_USERNAME_ENABLED" = "xyes"; then
+diff -Naur orig/docs/Makefile.am patched/docs/Makefile.am
+--- orig/docs/Makefile.am	2017-03-22 12:19:49.000000000 +0100
++++ patched/docs/Makefile.am	2017-12-29 19:48:16.708333547 +0100
+@@ -1 +1 @@
+-SUBDIRS = reference man
++SUBDIRS = man
+diff -Naur orig/docs/reference/libqmi-glib/Makefile.am patched/docs/reference/libqmi-glib/Makefile.am
+--- orig/docs/reference/libqmi-glib/Makefile.am	2017-03-22 12:19:49.000000000 +0100
++++ patched/docs/reference/libqmi-glib/Makefile.am	2017-12-29 19:53:46.224062532 +0100
+@@ -75,8 +75,6 @@
+ 
+ extra_files =
+ 
+-include $(top_srcdir)/gtk-doc.make
+-
+ EXTRA_DIST += \
+ 	libqmi-glib-common.sections \
+ 	$(DOC_MODULE)-sections.txt \

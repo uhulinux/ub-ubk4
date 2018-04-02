@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+export LIBDIR=/usr/lib
+echo $UB_VERSION >VERSION
+make -j2 shared

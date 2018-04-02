@@ -1,0 +1,37 @@
+diff -Nur orig/module-webif.c mod/module-webif.c
+--- orig/module-webif.c	2017-10-19 20:09:20.000000000 +0200
++++ mod/module-webif.c	2017-10-19 20:47:24.418172255 +0200
+@@ -1126,7 +1126,7 @@
+ 
+ #ifdef WITH_SSL
+ 	if(cfg.http_cert != NULL) { tpl_addVar(vars, TPLADD, "HTTPCERT", cfg.http_cert); }
+-	tpl_addVar(vars, TPLADD, "HTTPFORCESSLV3SELECT", (cfg.http_force_sslv3 == 1) ? "checked" : "");
++	tpl_addVar(vars, TPLADD, "HTTPFORCESSLV3SELECT", (cfg.http_force_sslv3 == 0) ? "checked" : "");
+ #endif
+ 
+ #ifndef WEBIF_JQUERY
+diff -Nur orig/module-webif-lib.c mod/module-webif-lib.c
+--- orig/module-webif-lib.c	2017-10-19 20:09:19.000000000 +0200
++++ mod/module-webif-lib.c	2017-10-19 20:51:06.641847180 +0200
+@@ -871,7 +871,6 @@
+ 
+ 	if(cfg.http_force_sslv3)
+ 	{
+-		ctx = SSL_CTX_new(SSLv3_server_method());
+ #ifdef SSL_CTX_clear_options
+ 		SSL_CTX_clear_options(ctx, SSL_OP_ALL); //we CLEAR all bug workarounds! This is for security reason
+ #else
+diff -Nur orig/reader-cryptoworks.c mod/reader-cryptoworks.c
+--- orig/reader-cryptoworks.c	2017-10-19 20:09:19.000000000 +0200
++++ mod/reader-cryptoworks.c	2017-10-19 20:33:40.411353163 +0200
+@@ -7,8 +7,8 @@
+ 
+ struct cryptoworks_data
+ {
+-	BIGNUM          exp;
+-	BIGNUM          ucpk;
++	BIGNUM          *exp;
++	BIGNUM          *ucpk;
+ 	int32_t         ucpk_valid;
+ };
+ 

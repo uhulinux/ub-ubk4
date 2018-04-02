@@ -1,0 +1,16 @@
+I guess it's a bug (or misfeature) in gcc 3.4 and 4.0... If that special
+attribute is not present, the resulting library will require _mmx_one as an
+external symbol (nm shows "U _mmx_one") which is clearly wrong.  --egmont
+
+diff -Naur libfame-0.9.1.orig/src/half_mmx.h libfame-0.9.1/src/half_mmx.h
+--- libfame-0.9.1.orig/src/half_mmx.h	2002-04-30 20:04:02.000000000 +0200
++++ libfame-0.9.1/src/half_mmx.h	2006-01-12 19:57:22.000000000 +0100
+@@ -18,7 +18,7 @@
+ */
+ /**************************** half-pixel interpolation ***********************/
+ 
+-static short const _mmx_one[] = { 1, 1, 1, 1 };
++static short const __attribute__((used)) _mmx_one[] = { 1, 1, 1, 1 };
+ 
+ static void inline mmx_interpolate(unsigned char **ref,
+ 				   int pitch,

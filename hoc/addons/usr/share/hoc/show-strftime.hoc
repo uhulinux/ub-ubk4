@@ -1,0 +1,40 @@
+### -*-hoc-*-
+### ====================================================================
+### Define the show_strftime_conversions() functions to test the output
+### of strftime() for each of its recognized format items.
+### [21-Dec-2001]
+### ====================================================================
+
+proc show_strftime_conversions(seconds_since_epoch) \
+{
+	println "seconds since epoch:                                                \t", seconds_since_epoch
+	println "locale's full weekday name:                                       %A\t", strftime("%A", seconds_since_epoch)
+	println "locale's abbreviated weekday name:                                %a\t", strftime("%a", seconds_since_epoch)
+	println "locale's full month name:                                         %B\t", strftime("%B", seconds_since_epoch)
+	println "locale's abbreviated month name:                                  %b\t", strftime("%b", seconds_since_epoch)
+	println "locale's appropriate date and time representation:                %c\t", strftime("%c", seconds_since_epoch)
+	println "day of month as decimal number (01--31):                          %d\t", strftime("%d", seconds_since_epoch)
+	println "hour (24-hour clock) as decimal number (00--23):                  %H\t", strftime("%H", seconds_since_epoch)
+	println "hour (12-hour clock) as decimal number (01--12):                  %I\t", strftime("%I", seconds_since_epoch)
+	println "day of year as decimal number (001--366):                         %j\t", strftime("%j", seconds_since_epoch)
+	println "minute as decimal number (00--59):                                %M\t", strftime("%M", seconds_since_epoch)
+	println "month as decimal number (01--12):                                 %m\t", strftime("%m", seconds_since_epoch)
+	println "locale's equivalent of either ``AM'' or ``PM'':                   %p\t", strftime("%p", seconds_since_epoch)
+	println "second as decimal number (00--60):                                %S\t", strftime("%S", seconds_since_epoch)
+	println "week number of year (Sunday == first) as decimal number (00--53): %U\t", strftime("%U", seconds_since_epoch)
+	println "week number of year (Monday == first) as decimal number (00--53): %W\t", strftime("%W", seconds_since_epoch)
+	println "weekday (Sunday == first) as decimal number (0--6):               %w\t", strftime("%w", seconds_since_epoch)
+	println "locale's appropriate time representation:                         %X\t", strftime("%X", seconds_since_epoch)
+	println "locale's appropriate date representation:                         %x\t", strftime("%x", seconds_since_epoch)
+	println "year with century as decimal number:                              %Y\t", strftime("%Y", seconds_since_epoch)
+	println "year without century as decimal number (00--99):                  %y\t", strftime("%y", seconds_since_epoch)
+	println "time zone name:                                                   %Z\t", strftime("%Z", seconds_since_epoch)
+	println "%%:                                                               %%\t", strftime("%%", seconds_since_epoch)
+	println ""
+}
+
+proc help_show_strftime_conversions() \
+{
+	print "\tshow_strftime_conversions() print a sample of each of\n"
+	print "\tstrftime()'s format conversions.\n\n"
+}

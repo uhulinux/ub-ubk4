@@ -1,0 +1,11 @@
+--- tcp_wrappers_7.6/hosts_access.5.docu	Tue Jun 11 21:05:44 2002
++++ tcp_wrappers_7.6/hosts_access.5	Tue Jun 11 21:06:25 2002
+@@ -340,7 +340,7 @@
+ /etc/hosts.deny:
+ .in +3
+ .nf
+-in.tftpd: ALL: (/some/where/safe_finger -l @%h | \\
++in.tftpd: ALL: spawn (/some/where/safe_finger -l @%h | \\
+ 	/usr/ucb/mail -s %d-%h root) &
+ .fi
+ .PP

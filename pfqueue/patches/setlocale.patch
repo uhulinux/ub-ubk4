@@ -1,0 +1,20 @@
+diff -Naur pfqueue-0.5.6-orig/fe_ncurses.c pfqueue-0.5.6/fe_ncurses.c
+--- pfqueue-0.5.6-orig/fe_ncurses.c	2007-02-04 19:42:14.000000000 +0100
++++ pfqueue-0.5.6/fe_ncurses.c	2009-12-04 22:30:47.000000000 +0100
+@@ -6,6 +6,7 @@
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <time.h>
++#include <locale.h>
+ 
+ #include "fe_ncurses.h"
+ #include "ncgui.h"
+@@ -980,7 +981,7 @@
+ int main ( int argc, char** argv ) {
+ 	int opt;
+ 	int mm;
+-
++	setlocale(LC_ALL, "");
+ 	if ( getuid()!=0 ) {
+ 		fprintf ( stderr, "You need to be root to use pfqueue, sorry\n" );
+ 		exit (-3);

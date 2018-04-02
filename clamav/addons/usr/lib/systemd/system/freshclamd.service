@@ -1,0 +1,9 @@
+[Unit]
+Description = clamav db updater daemon
+After = nss-lookup.target network.target
+
+[Service]
+ExecStart = /usr/bin/freshclam -d -p /var/run/clamav/freshclam.pid
+Restart = on-failure
+PrivateTmp = true
+PIDFile = /var/run/clamav/freshclam.pid

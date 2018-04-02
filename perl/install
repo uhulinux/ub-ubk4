@@ -1,0 +1,44 @@
+#!/bin/sh -eux
+
+ub_install
+
+ln -sf perl"$UB_VERSION" "$UB_INSTALLDIR"/usr/bin/perl
+ln -sf perl"$UB_VERSION" "$UB_INSTALLDIR"/usr/bin/perl5
+
+#ln -sf sperl"$UB_VERSION" "$UB_INSTALLDIR"/usr/bin/suidperl
+
+mv "$UB_INSTALLDIR"/usr/lib/{perl5/"$UB_VERSION"/*/CORE/libperl.so,}
+
+if [ "$UB_ARCH" == "amd64" ]; then
+	archdir="i386-linux-thread-multi-ld"
+else
+	archdir="i386-linux-thread-multi-64int-ld"
+fi
+
+# Generate .ph headers
+for i in \
+	asm/termios.h \
+	syscall.h \
+	syslimits.h \
+	syslog.h \
+	sys/ioctl.h \
+	sys/socket.h \
+	sys/time.h \
+	wait.h
+do
+	LD_LIBRARY_PATH="$UB_INSTALLDIR"/usr/lib \
+	"$UB_INSTALLDIR"/usr/bin/perl -Ilib "$UB_INSTALLDIR"/usr/bin/h2ph -a -d "$UB_INSTALLDIR"/usr/lib/perl5/"$UB_VERSION"/"$archdir" "$i"
+done
+
+# Fix up xsubpp
+ub_replace "^#!./miniperl" "#!/usr/bin/perl" "$UB_INSTALLDIR"/usr/bin/xsubpp
+
+# Fix the charset of manual pages
+for i in cn:GB2312 jp:EUC-JP ko:EUC-KR tw:BIG5; do
+	lang="${i%:*}"
+	charset="${i#*:}"
+	iconv -f $charset -t UTF-8 \
+	  <"$UB_INSTALLDIR"/usr/share/man/man1/perl$lang.1 \
+	  >"$UB_INSTALLDIR"/usr/share/man/man1/perl$lang.1.tmp
+	mv "$UB_INSTALLDIR"/usr/share/man/man1/perl$lang.1{.tmp,}
+done

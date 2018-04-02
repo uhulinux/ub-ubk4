@@ -1,0 +1,16 @@
+[Unit]
+Description=CLI Netfilter Manager
+DefaultDependencies=no
+After=systemd-sysctl.service
+Before=sysinit.target
+ConditionPathExists=|/etc/ufw/ufw.conf
+ConditionDirectoryNotEmpty=|/lib/ufw
+
+[Service]
+Type=oneshot
+ExecStart=/lib/ufw/ufw-init start
+ExecStop=/lib/ufw/ufw-init stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

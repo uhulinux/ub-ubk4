@@ -1,0 +1,14 @@
+diff -Naurd orig/Makefile mod/Makefile
+--- orig/Makefile	2009-10-12 07:11:41.000000000 +0200
++++ mod/Makefile	2009-11-27 16:42:10.000000000 +0100
+@@ -26,8 +26,8 @@
+ CFLAGS += -Wp,-MD,$(@D)/.$(@F).d
+ endif
+ 
+-DESTDIR=
+-PREFIX=$(HOME)
++#DESTDIR=
++PREFIX=/usr
+ BINDIR=$(PREFIX)/bin
+ LIBDIR=$(PREFIX)/lib
+ MANDIR=$(PREFIX)/share/man

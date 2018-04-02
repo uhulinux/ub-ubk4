@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp -r pyicu py3icu
+cd pyicu
+python setup.py build
+cd ../py3icu
+python3 setup.py build

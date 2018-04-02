@@ -1,0 +1,38 @@
+--- vte.orig/src/vte.c	2011-02-16 20:42:09.000000000 +0100
++++ vte/src/vte.c	2011-03-30 20:20:52.000000000 +0200
+@@ -5428,7 +5428,7 @@
+ 			break;
+ 		case GDK_KEY (KP_Page_Up):
+ 		case GDK_KEY (Page_Up):
+-			if (modifiers & GDK_SHIFT_MASK) {
++			if ((modifiers & GDK_SHIFT_MASK) && (terminal->pvt->screen != &terminal->pvt->alternate_screen) && !terminal->pvt->normal_screen.scrolling_restricted) {
+ 				vte_terminal_scroll_pages(terminal, -1);
+ 				scrolled = TRUE;
+ 				handled = TRUE;
+@@ -5437,7 +5437,7 @@
+ 			break;
+ 		case GDK_KEY (KP_Page_Down):
+ 		case GDK_KEY (Page_Down):
+-			if (modifiers & GDK_SHIFT_MASK) {
++			if ((modifiers & GDK_SHIFT_MASK) && (terminal->pvt->screen != &terminal->pvt->alternate_screen) && !terminal->pvt->normal_screen.scrolling_restricted) {
+ 				vte_terminal_scroll_pages(terminal, 1);
+ 				scrolled = TRUE;
+ 				handled = TRUE;
+@@ -5446,7 +5446,7 @@
+ 			break;
+ 		case GDK_KEY (KP_Home):
+ 		case GDK_KEY (Home):
+-			if (modifiers & GDK_SHIFT_MASK) {
++			if ((modifiers & GDK_SHIFT_MASK) && (terminal->pvt->screen != &terminal->pvt->alternate_screen) && !terminal->pvt->normal_screen.scrolling_restricted) {
+ 				vte_terminal_maybe_scroll_to_top(terminal);
+ 				scrolled = TRUE;
+ 				handled = TRUE;
+@@ -5454,7 +5454,7 @@
+ 			break;
+ 		case GDK_KEY (KP_End):
+ 		case GDK_KEY (End):
+-			if (modifiers & GDK_SHIFT_MASK) {
++			if ((modifiers & GDK_SHIFT_MASK) && (terminal->pvt->screen != &terminal->pvt->alternate_screen) && !terminal->pvt->normal_screen.scrolling_restricted) {
+ 				vte_terminal_maybe_scroll_to_bottom(terminal);
+ 				scrolled = TRUE;
+ 				handled = TRUE;

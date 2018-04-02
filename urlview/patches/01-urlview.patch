@@ -1,0 +1,32 @@
+diff -Naurd a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2000-07-04 12:16:37.000000000 +0200
++++ b/Makefile.in	2010-09-26 13:12:11.000000000 +0200
+@@ -318,7 +318,7 @@
+ 
+ 
+ install-data-local:
+-	$(INSTALL_DATA) urlview.man $(mandir)/man1/urlview.1
++	$(INSTALL_DATA) urlview.man $(DESTDIR)$(mandir)/man1/urlview.1
+ 
+ # how to create a target for uninstall-data-local???
+ 
+diff -Naurd a/urlview.c b/urlview.c
+--- a/urlview.c	2000-07-04 12:14:30.000000000 +0200
++++ b/urlview.c	2010-09-26 13:15:21.000000000 +0200
+@@ -39,6 +39,7 @@
+ #include <stdlib.h>
+ #include <fcntl.h>
+ #include <sys/stat.h>
++#include "quote.h"
+ 
+ #ifdef HAVE_REGEX_H
+ #include <regex.h>
+@@ -46,7 +47,7 @@
+ #include <rx/rxposix.h>
+ #endif
+ 
+-#define DEFAULT_REGEXP "(((https?|ftp|gopher)://|(mailto|file|news):)[^' \t<>\"]+|(www|web|w3)\\.[-a-z0-9.]+)[^' \t.,;<>\"\\):]"
++#define DEFAULT_REGEXP "(((https?|ftp|gopher)://|(mailto|file|news):)[^' \t<>\"]+|(www|web|w3)\\.[-a-z0-9.]+)[^' \n\t.,;<>\"\\):]"
+ #define DEFAULT_COMMAND "url_handler.sh %s"
+ #define SYSTEM_INITFILE "/etc/urlview.conf"
+ 

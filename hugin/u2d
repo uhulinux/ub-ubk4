@@ -1,0 +1,7 @@
+sflist hugin hugin | splitver '^hugin-([0-9.]+)$' | sort -Vr | while read dir; do
+	ver=$(sflist hugin hugin/hugin-$dir | splitver '^hugin-([0-9.]+)\.tar.(gz|bz2|xz)$' | sort -V | tail -n 1)
+	if [ -n "$ver" ]; then 
+		echo $ver
+		exit;
+	fi
+done

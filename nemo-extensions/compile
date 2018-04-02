@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+extensions="nemo-fileroller nemo-preview nemo-python nemo-seahorse nemo-share"
+for progs in ${extensions}; do
+cd $progs
+  rm -f autogen.sh
+  autoreconf -vif
+  ub_compile
+cd ..
+done

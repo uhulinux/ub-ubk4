@@ -1,0 +1,14 @@
+diff -Naur orig/src/v4l.c mod/src/v4l.c
+--- orig/src/v4l.c	2008-03-19 21:41:45.000000000 +0100
++++ mod/src/v4l.c	2016-03-27 12:22:13.638830160 +0200
+@@ -34,6 +34,10 @@
+ # define DEBUG(x)
+ #endif
+ 
++#ifndef VIDEO_INVERT_CLIPLIST
++#define VIDEO_INVERT_CLIPLIST 0x00000002
++#endif
++
+ static void     V4LIdentify(int flags);
+ static Bool     V4LProbe(DriverPtr drv, int flags);
+ static const OptionInfoRec * V4LAvailableOptions(int chipid, int busid);

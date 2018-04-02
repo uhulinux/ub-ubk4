@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+export QTDIR="/usr/lib/qt5"
+
+cd src
+ub_make IPEPREFIX=/usr LUA_PACKAGE=lua5.3
+
+cd ../ipepresenter
+make
+
+cd ../pdftoipe
+make
+
+cd ../figtoipe
+make
+
+cd ../ipe5toxml
+make

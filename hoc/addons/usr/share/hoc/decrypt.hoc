@@ -1,0 +1,41 @@
+### -*-hoc-*-
+### ====================================================================
+### Demonstrate a simple one-time-pad decryption based on a
+### pseudo-random number generator.
+### [23-Jul-2002]
+### ====================================================================
+
+### Usage: isprint(c)
+### Return 1 if c is printable, and 0 otherwise.
+func isprint(c) \
+{
+    return ((c == 9) || (c == 10) || ((32 <= c) && (c < 127)))
+}
+
+__hex_decrypt = "0123456789abcdef"
+
+### Usage: decrypt(key,ciphertext)
+### Return the decryption of ciphertext, which will be the original
+### plaintext message if the key is correct.
+func decrypt(key,ciphertext) \
+{
+    global __hex_decrypt
+    setrand(key)
+    plaintext = ""
+    for (k = 1; k < length(ciphertext); k++) \
+    {
+	n = index(__hex_decrypt,substr(ciphertext,k,1))
+	if (n > 0) \
+	{				# have hex digit: decode hex pair
+	    k++
+	    c = 16 * (n - 1) + index(__hex_decrypt,substr(ciphertext,k,1)) - 1
+	    n = int((c + 256 - randint(0,255)) % 256) # recover plaintext char
+	    if (n == 255) \
+		break;
+	    if (!isprint(n)) \
+		n = ichar("?")	# mask unprintable characters
+	    plaintext = plaintext char(n)
+	}
+    }
+    return (plaintext)
+}

@@ -1,0 +1,23 @@
+From: Sergio Durigan Junior <sergiodj@sergiodj.net>
+Date: Sat, 13 Aug 2016 12:51:50 -0400
+Subject: Passing non-NULL string (sourceURL) to JSEvaluateScript
+
+This fixes #834236, and is actually a regression introduced by the
+last webkitgtk update.
+---
+ midori/sokoke.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/midori/sokoke.c b/midori/sokoke.c
+index 2e31655..d0d34b0 100644
+--- a/midori/sokoke.c
++++ b/midori/sokoke.c
+@@ -73,7 +73,7 @@ sokoke_js_script_eval (JSContextRef js_context,
+ 
+     js_script = JSStringCreateWithUTF8CString (script);
+     js_value = JSEvaluateScript (js_context, js_script,
+-        JSContextGetGlobalObject (js_context), NULL, 0, &js_exception);
++        JSContextGetGlobalObject (js_context), JSStringCreateWithUTF8CString(""), 0, &js_exception);
+     JSStringRelease (js_script);
+ 
+     if (!js_value)

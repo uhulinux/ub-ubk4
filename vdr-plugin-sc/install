@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+make \
+  DESTDIR=$UB_INSTALLDIR \
+  INCDIR=/usr/include/vdr \
+  install
+
+confdir=${UB_INSTALLDIR}/etc/vdr/plugins/sc
+mkdir -p $confdir
+touch $confdir/SoftCam.Key
+touch $confdir/cardslot.conf
+touch $confdir/cardclient.conf
+touch $confdir/smartcard.conf
+touch $confdir/override.conf

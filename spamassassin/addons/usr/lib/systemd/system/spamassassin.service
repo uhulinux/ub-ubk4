@@ -1,0 +1,14 @@
+[Unit]
+Description=Spamassassin daemon
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/spamassassin
+ExecStartPre=/usr/bin/sa-update
+ExecStart=/usr/bin/spamd $SPAMDOPTIONS
+StandardOutput=syslog
+StandardError=syslog
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

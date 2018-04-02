@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+export USE_64=1
+fi
+
+export NSPR_INCLUDE_DIR=`/usr/bin/pkg-config --cflags-only-I nspr | sed 's/-I//'`
+
+# Respect LDFLAGS
+sed -i -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' coreconf/rules.mk
+
+# required for linking with system sqlite
+export NSS_USE_SYSTEM_SQLITE=1
+
+make nss_build_all

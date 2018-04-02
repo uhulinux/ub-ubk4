@@ -1,0 +1,20 @@
+#!/bin/sh -eux
+
+# ha még nincs menu-cache
+export BOOTSTRAP=0
+
+if [ $BOOTSTRAP = "1" ]; then
+
+ub_configure \
+	--with-extra-only
+
+else
+ub_configure \
+	--enable-udisks \
+	--with-gnu-ld \
+	--with-html-dir=/usr/share/doc/libfm/html \
+	--with-gtk=3
+
+fi
+
+ub_make

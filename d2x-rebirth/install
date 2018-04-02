@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/{applications,pixmaps,games/d2x-rebirth}
+rm d2shar10/*.{bat,exe,lst,386}
+mv d2x-rebirth "$UB_INSTALLDIR"/usr/bin/
+cp -a d2shar10/. "$UB_INSTALLDIR"/usr/share/games/d2x-rebirth/
+cp d2xr-sc55-music.dxa "$UB_INSTALLDIR"/usr/share/games/d2x-rebirth/
+cp d2x-rebirth.desktop $UB_INSTALLDIR/usr/share/applications/
+convert d2x-rebirth.bmp $UB_INSTALLDIR/usr/share/pixmaps/d2x-rebirth.png

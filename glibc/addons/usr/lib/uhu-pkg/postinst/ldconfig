@@ -1,0 +1,17 @@
+#!/bin/sh -e
+
+if [ -f /var/lib/uhu-pkg/ldconfig -a /var/lib/uhu-pkg/ldconfig -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "+" -o -f /var/lib/dpkg/info/"$1".shlibs ]; then
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Running ldconfig ..."
+	/sbin/ldconfig -X
+	true > /var/lib/uhu-pkg/ldconfig
+	while [ ! /var/lib/uhu-pkg/ldconfig -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/ldconfig -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/ldconfig
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+fi

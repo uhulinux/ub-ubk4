@@ -1,0 +1,12 @@
+diff -Nur orig/src/fcdir.c mod/src/fcdir.c
+--- orig/src/fcdir.c	2018-01-25 15:22:10.000000000 +0100
++++ mod/src/fcdir.c	2018-01-25 15:53:57.507307291 +0100
+@@ -176,7 +176,7 @@
+ static int
+ cmpstringp(const void *p1, const void *p2)
+ {
+-    return strcmp(* (char **) p1, * (char **) p2);
++    return -strcmp(* (char **) p1, * (char **) p2);
+ }
+ 
+ FcBool

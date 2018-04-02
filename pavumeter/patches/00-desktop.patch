@@ -1,0 +1,35 @@
+diff -Naur orig/src/pavumeter.desktop patched/src/pavumeter.desktop
+--- orig/src/pavumeter.desktop	2007-08-07 02:20:01.000000000 +0200
++++ patched/src/pavumeter.desktop	2016-02-19 03:31:53.307667862 +0100
+@@ -1,10 +1,11 @@
+ [Desktop Entry]
+ Encoding=UTF-8
+-Name=PulseAudio Volume Meter (Playback)
++Name=Name=Pavumeter
+ GenericName=Playback Volume Meter
+ Comment=Monitor the output volume
++Comment[hu]=A kimeneti hangerő mérése
+ Exec=pavumeter
+ Icon=audio-input-microphone
+ StartupNotify=true
+ Type=Application
+-Categories=Application;AudioVideo;Audio;
++Categories=AudioVideo;Audio;
+diff -Naur orig/src/pavumeter-record.desktop patched/src/pavumeter-record.desktop
+--- orig/src/pavumeter-record.desktop	2007-08-07 02:20:30.000000000 +0200
++++ patched/src/pavumeter-record.desktop	2016-02-19 03:32:33.731868314 +0100
+@@ -1,10 +1,12 @@
+ [Desktop Entry]
+ Encoding=UTF-8
+-Name=PulseAudio Volume Meter (Capture)
++Name=Pavumeter (Capture)
++Name[hu]=Pavumeter (Felvétel)
+ GenericName=Capture Volume Meter
+ Comment=Monitor the input volume
++Comment[hu]=A bemeneti hangerő mérése
+ Exec=pavumeter --record
+ Icon=audio-input-microphone
+ StartupNotify=true
+ Type=Application
+-Categories=Application;AudioVideo;Audio;
++Categories=AudioVideo;Audio;

@@ -1,0 +1,24 @@
+#!/bin/sh -e
+
+query_glibcompileschemas ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Compiling Glib schemas ..."
+	glib-compile-schemas --allow-any-name /usr/share/glib-2.0/schemas
+	true > /var/lib/uhu-pkg/glib-compile-schemas
+	while [ ! /var/lib/uhu-pkg/glib-compile-schemas -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/glib-compile-schemas -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/glib-compile-schemas
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ -f /var/lib/uhu-pkg/glib-compile-schemas -a /var/lib/uhu-pkg/glib-compile-schemas -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "glib" -o "$1" = "+" ]; then
+	query_glibcompileschemas
+elif grep -q '^/usr/share/glib-2.0/schemas/' /var/lib/dpkg/info/"$1".list; then
+	query_glibcompileschemas
+fi

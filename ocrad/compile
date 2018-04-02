@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+tar --lzip -xvf ocrad-${UB_VERSION}.tar.lz
+cp -r ocrad-${UB_VERSION}/* ${UB_COMPILEDIR}/
+rm -Rf ocrad-${UB_VERSION}
+
+ub_compile

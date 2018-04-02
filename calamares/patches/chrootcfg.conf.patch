@@ -1,0 +1,30 @@
+diff -Nur orig/src/modules/chrootcfg/chrootcfg.conf mod/src/modules/chrootcfg/chrootcfg.conf
+--- orig/src/modules/chrootcfg/chrootcfg.conf	1970-01-01 01:00:00.000000000 +0100
++++ mod/src/modules/chrootcfg/chrootcfg.conf	2017-11-22 09:52:44.000000000 +0100
+@@ -0,0 +1,26 @@
++---
++requirements:
++    - name: /tmp
++      mode: "0o755"
++    - name: /etc/apt
++      mode: "0o755"
++    - name: /var/lib/dpkg/info
++      mode: "0o755"
++    - name: /var/lib/dpkg-empty/info
++      mode: "0o755"
++    - name: /var/lib/dpkg/updates
++      mode: "0o755"
++    - name: /var/lib/dpkg-empty/updates
++      mode: "0o755"
++    - name: /var/state/apt/lists/partial
++      mode: "0o755"
++    - name: /var/cache/apt/archives/partial
++      mode: "0o755"
++emptyfiles:
++    - name: /var/lib/dpkg/available
++    - name: /var/lib/dpkg-empty/available
++    - name: /var/lib/dpkg/status
++    - name: /var/lib/dpkg-empty/status
++keyrings:
++#    - archlinux
++#    - manjaro

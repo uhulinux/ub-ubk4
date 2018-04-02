@@ -1,0 +1,49 @@
+diff -Naur orig/numlockx.1 patched/numlockx.1
+--- orig/numlockx.1	1970-01-01 01:00:00.000000000 +0100
++++ patched/numlockx.1	2014-08-11 12:08:41.000000000 +0200
+@@ -0,0 +1,45 @@
++.\"                                      Hey, EMACS: -*- nroff -*-
++.\" First parameter, NAME, should be all caps
++.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
++.\" other parameters are allowed: see man(7), man(1)
++.TH NUMLOCKX 1 "March 01, 2003" "X Version 11"
++.\" Please adjust this date whenever revising the manpage.
++.\"
++.\" Some roff macros, for reference:
++.\" .nh        disable hyphenation
++.\" .hy        enable hyphenation
++.\" .ad l      left justify
++.\" .ad b      justify to both left and right margins
++.\" .nf        disable filling
++.\" .fi        enable filling
++.\" .br        insert line break
++.\" .sp <n>    insert n+1 empty lines
++.\" for manpage-specific macros, see man(7)
++.SH NAME
++numlockx \- Control the state of NumLock
++.SH SYNOPSIS
++.B numlockx
++.RI [ on | off | toggle | status]
++.SH DESCRIPTION
++.BR numlockx
++is a program to control the NumLock key inside X11 session scripts.
++.SH OPTIONS
++.TP
++.B on
++Turn NumLock on
++.TP
++.B off
++Turn NumLock off
++.TP
++.B toggle
++Toggle NumLock to opposite status
++.TP
++.B status
++Gets the NumLock status
++.TP
++.B --help
++Display help
++.SH AUTHOR
++This manual page was written by Chris Jones <chris@black-sun.co.uk>
++and Michal Cihar <nijel@debian.org>
++for the Debian GNU/Linux system (but may be used by others).

@@ -1,0 +1,27 @@
+#!/bin/sh -eux
+
+for _exe in 'main/obj/pcl6' 'svg/obj/gsvg' 'language_switch/obj/pspcl6' 'xps/obj/gxps' 'bin/gpcl6' 'bin/gxps'; do
+    if [ -x "${_exe}" ]; then # pspcl6 and svg were dropped after 9.10
+      _exeb="$(basename "${_exe}")"
+      install -Dpm755 "${_exe}" "${UB_INSTALLDIR}/usr/share/ghostpcl/${_exeb}"
+      ln -sf "/usr/share/ghostpcl/${_exeb}" "${UB_INSTALLDIR}/usr/bin/"
+      if [ "${_exeb}" = 'gpcl6' ]; then
+        ln -sf "/usr/share/ghostpcl/${_exeb}" "${UB_INSTALLDIR}/usr/bin/pcl6" # for compatibility
+      fi
+    fi
+done
+for _exe in 'tools/pcl2pdf' 'tools/pcl2pdfwr'; do
+    ln -sf "/usr/share/ghostpcl/${_exe}" "${UB_INSTALLDIR}/usr/bin/"
+done
+
+if [ -d 'tools' ]; then
+    cp -pr 'tools' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+    cp -pr 'urwfonts' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+    #install -d "${UB_INSTALLDIR}/usr/share/ghostpcl/doc"
+    for _doc in 'README.txt' doc/ghost* 'doc/who_owns_what.txt'; do
+      install -Dpm644 "${_doc}" -t "${UB_INSTALLDIR}/usr/share/ghostpcl/doc/"
+    done
+  else # as of 9.18
+    cp -pr {xps,pcl}/'tools' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+    cp -pr 'pcl/urwfonts' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+fi

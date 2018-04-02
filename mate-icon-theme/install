@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+cd "$UB_INSTALLDIR"/usr/share/icons/mate
+for size in 16 22 24 32 48; do
+	ln -s ../../"$size"x"$size"/categories/applications-other.png "$size"x"$size"/apps/application-default-icon.png
+done

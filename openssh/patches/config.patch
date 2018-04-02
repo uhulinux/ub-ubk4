@@ -1,0 +1,54 @@
+diff -Naur orig/ssh_config patched/ssh_config
+--- orig/ssh_config	2015-08-11 10:57:29.000000000 +0200
++++ patched/ssh_config	2015-08-13 20:45:33.969633025 +0200
+@@ -19,7 +19,8 @@
+ 
+ # Host *
+ #   ForwardAgent no
+-#   ForwardX11 no
++    ForwardX11 yes
++    ForwardX11Trusted yes
+ #   RhostsRSAAuthentication no
+ #   RSAAuthentication yes
+ #   PasswordAuthentication yes
+@@ -30,7 +31,7 @@
+ #   CheckHostIP yes
+ #   AddressFamily any
+ #   ConnectTimeout 0
+-#   StrictHostKeyChecking ask
++    StrictHostKeyChecking no
+ #   IdentityFile ~/.ssh/identity
+ #   IdentityFile ~/.ssh/id_rsa
+ #   IdentityFile ~/.ssh/id_dsa
+diff -Naur orig/sshd_config patched/sshd_config
+--- orig/sshd_config	2015-08-11 10:57:29.000000000 +0200
++++ patched/sshd_config	2015-08-13 20:47:57.250343516 +0200
+@@ -82,7 +82,7 @@
+ #KerberosGetAFSToken no
+ 
+ # GSSAPI options
+-#GSSAPIAuthentication no
++GSSAPIAuthentication yes
+ #GSSAPICleanupCredentials yes
+ 
+ # Set this to 'yes' to enable PAM authentication, account processing,
+@@ -94,16 +94,16 @@
+ # If you just want the PAM account and session checks to run without
+ # PAM authentication, then enable this but set PasswordAuthentication
+ # and ChallengeResponseAuthentication to 'no'.
+-#UsePAM no
++UsePAM yes
+ 
+ #AllowAgentForwarding yes
+ #AllowTcpForwarding yes
+ #GatewayPorts no
+-#X11Forwarding no
++X11Forwarding yes
+ #X11DisplayOffset 10
+ #X11UseLocalhost yes
+ #PermitTTY yes
+-#PrintMotd yes
++PrintMotd no
+ #PrintLastLog yes
+ #TCPKeepAlive yes
+ #UseLogin no

@@ -1,0 +1,133 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2011-05-28 12:33:12.000000000 +0200
++++ mod/Makefile	2016-10-19 13:55:17.783610041 +0200
+@@ -7,7 +7,7 @@
+ # TBD: is this still true?
+ 
+ # External image lib to use: imagemagick, graphicsmagick, imlib2 or none
+-IMAGELIB = imagemagick
++IMAGELIB = graphicsmagick
+ 
+ 
+ # DO NOT EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU'RE DOING
+@@ -17,44 +17,39 @@
+ # The official name of this plugin.
+ # This name will be used in the '-P...' option of VDR to load the plugin.
+ # By default the main source file also carries this name.
+-# IMPORTANT: the presence of this macro is important for the Make.config
+-# file. So it must be defined, even if it is not used here!
+-#
++
+ PLUGIN = text2skin
+ 
+ ### The version number of this plugin (taken from the main source file):
+ 
+ VERSION = $(shell grep 'const char \*cText2SkinPlugin::VERSION *=' $(PLUGIN).c | awk '{ print $$5 }' | sed -e 's/[";]//g')
+ 
+-### The C++ compiler and options:
+-
+-CXX      ?= g++
+-CXXFLAGS ?= -fPIC -Wall -Woverloaded-virtual
+-
+ ### The directory environment:
+ 
+-VDRDIR = ../../..
+-LIBDIR = ../../lib
++# Use package data if installed...otherwise assume we're under the VDR source directory:
++PKGCFG = $(if $(VDRDIR),$(shell pkg-config --variable=$(1) $(VDRDIR)/vdr.pc),$(shell pkg-config --variable=$(1) vdr || pkg-config --variable=$(1) ../../../vdr.pc))
++LIBDIR = $(DESTDIR)$(call PKGCFG,libdir)
++LOCDIR = $(DESTDIR)$(call PKGCFG,locdir)
++#
+ TMPDIR = /tmp
+ 
+-### Make sure that necessary options are included (VDR >= 1.7.13):
+-
+--include $(VDRDIR)/Make.global
+-
+-### Allow user defined options to overwrite defaults:
++### The compiler options:
++export CFLAGS   = $(call PKGCFG,cflags)
++export CXXFLAGS = $(call PKGCFG,cxxflags)
+ 
+--include $(VDRDIR)/Make.config
++### The version number of VDR's plugin API:
+ 
+-### The version number of VDR's plugin API (taken from VDR's "config.h"):
+-
+-APIVERSION = $(shell sed -ne '/define APIVERSION/s/^.*"\(.*\)".*$$/\1/p' \
+-                         $(VDRDIR)/config.h)
++APIVERSION = $(call PKGCFG,apiversion)
+ 
+ ### The name of the distribution archive:
+ 
+ ARCHIVE = $(PLUGIN)-$(VERSION)
+ PACKAGE = vdr-$(ARCHIVE)
+ 
++### The name of the shared object file:
++
++SOFILE = libvdr-$(PLUGIN).so
++
+ ### The object files (add further files here):
+ 
+ OBJS = $(PLUGIN).o loader.o display.o render.o common.o bitmap.o \
+@@ -95,13 +90,13 @@
+ endif
+ endif
+ 
+-INCLUDES += -I$(VDRDIR)/include -I.
++INCLUDES +=
+ 
+-DEFINES += -D_GNU_SOURCE -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
++DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
+ 
+ ### The main target:
+ 
+-all: libvdr-$(PLUGIN).so i18n
++all: $(SOFILE) i18n
+ 
+ ### Implicit rules:
+ 
+@@ -120,15 +115,14 @@
+ ### Internationalization (I18N):
+ 
+ PODIR     = po
+-LOCALEDIR = $(VDRDIR)/locale
+ I18Npo    = $(notdir $(wildcard $(PODIR)/*.po))
+ I18Npot   = $(PODIR)/$(PLUGIN).pot
+ 
+ $(I18Npot): $(wildcard *.c)
+-	xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --package-name=vdr-$(PLUGIN) --package-version=$(VERSION) --msgid-bugs-address=http://projects.vdr-developer.org/projects/show/plg-text2skin -o $@ $^
++	xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --package-name=vdr-$(PLUGIN) --package-version=$(VERSION) --msgid-bugs-address='<see README>' -o $@ `ls $^`
+ 
+ %.po: $(I18Npot)
+-	msgmerge -U --no-wrap --no-location --backup=none -q $@ $<
++	msgmerge -U --no-wrap --no-location --backup=none -q -N $@ $<
+ 	@touch $@
+ 
+ $(LOCALEDIR)/%/LC_MESSAGES/vdr-$(PLUGIN).mo: $(PODIR)/%.po
+@@ -140,12 +134,13 @@
+ 
+ ### Targets:
+ 
+-libvdr-$(PLUGIN).so: $(OBJS)
++$(SOFILE): $(OBJS)
+ 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(LIBS) -o $@
+-	@cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)
+-ifndef DEBUG
+-	$(STRIP) $(LIBDIR)/$@.$(APIVERSION)
+-endif
++
++install-lib: $(SOFILE)
++	install -D $^ $(LIBDIR)/$^.$(APIVERSION)
++
++install: install-lib
+ 
+ dist: $(addprefix $(PODIR)/,$(I18Npo)) clean
+ 	@-rm -rf $(TMPDIR)/$(ARCHIVE)
+@@ -157,4 +152,5 @@
+ 	@echo Distribution package created as $(PACKAGE).tgz
+ 
+ clean:
+-	@-rm -f $(OBJS) $(DEPFILE) *.so $(I18Npot) *.tgz core* *~
++	@-rm -f $(PODIR)/*.mo $(PODIR)/*.pot
++	@-rm -f $(OBJS) $(DEPFILE) *.so *.tgz core* *~

@@ -1,0 +1,12 @@
+diff -Naur btmgr-3.7-1.orig/manager/helptool.h btmgr-3.7-1/manager/helptool.h
+--- btmgr-3.7-1.orig/manager/helptool.h	2000-09-02 17:21:51.000000000 +0200
++++ btmgr-3.7-1/manager/helptool.h	2003-11-29 00:49:54.000000000 +0100
+@@ -623,7 +623,7 @@
+ 
+ %macro endblock 0-1
+ 	%ifctx orblock
+-		cat_jmp %$ifnot,__level__
++		jmp %$$ifnot
+ 		%$iftrue:
+ 	%elifctx andblock
+ 	%else

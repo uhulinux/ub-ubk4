@@ -1,0 +1,12 @@
+diff -Naur orig/conf/main.cf patched/conf/main.cf
+--- orig/conf/main.cf	2011-11-17 19:23:48.000000000 +0100
++++ patched/conf/main.cf	2013-03-18 00:26:00.267902520 +0100
+@@ -460,7 +460,7 @@
+ #
+ # Cyrus IMAP over LMTP. Specify ``lmtpunix      cmd="lmtpd"
+ # listen="/var/imap/socket/lmtp" prefork=0'' in cyrus.conf.
+-#mailbox_transport = lmtp:unix:/var/imap/socket/lmtp
++#mailbox_transport = lmtp:unix:/var/lib/imap/socket/lmtp
+ #
+ # Cyrus IMAP via command line. Uncomment the "cyrus...pipe" and
+ # subsequent line in master.cf.

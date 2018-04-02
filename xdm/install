@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm -f "$UB_INSTALLDIR"/etc/X11/xdm/Xsetup_0
+ln -s Xsetup "$UB_INSTALLDIR"/etc/X11/xdm/Xsetup_0
+
+ln -s graphic-login "$UB_INSTALLDIR"/etc/pam.d/xdm

@@ -1,0 +1,25 @@
+diff -Naur orig/app.cpp patched/app.cpp
+--- orig/app.cpp	2014-09-10 00:51:39.000000000 +0200
++++ patched/app.cpp	2014-09-10 00:56:44.127643327 +0200
+@@ -543,11 +543,13 @@
+ 	maildir.append(pw->pw_name);
+ 	string xauthority = pw->pw_dir;
+ 	xauthority.append("/.Xauthority");
++	char* lang = getenv("LANG");
+ 
+ #ifdef USE_PAM
+ 	/* Setup the PAM environment */
+ 	try{
+ 		if(term) pam.setenv("TERM", term);
++		if(lang) pam.setenv("LANG", lang);
+ 		pam.setenv("HOME", pw->pw_dir);
+ 		pam.setenv("PWD", pw->pw_dir);
+ 		pam.setenv("SHELL", pw->pw_shell);
+@@ -607,6 +609,7 @@
+ 		char** child_env = static_cast<char**>(malloc(sizeof(char*)*Num_Of_Variables));
+ 		int n = 0;
+ 		if(term) child_env[n++]=StrConcat("TERM=", term);
++		if(lang) child_env[n++]=StrConcat("LANG=", lang);
+ 		child_env[n++]=StrConcat("HOME=", pw->pw_dir);
+ 		child_env[n++]=StrConcat("PWD=", pw->pw_dir);
+ 		child_env[n++]=StrConcat("SHELL=", pw->pw_shell);

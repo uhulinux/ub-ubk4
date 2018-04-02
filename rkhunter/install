@@ -1,0 +1,23 @@
+#!/bin/sh -eux
+
+./installer.sh \
+	--layout custom \
+	${UB_INSTALLDIR}/usr \
+	--striproot \
+	${UB_INSTALLDIR} \
+	--install
+cp ${UB_INSTALLDIR}/usr/etc/* ${UB_INSTALLDIR}/etc/
+rm -rf ${UB_INSTALLDIR}/usr/etc
+mv ${UB_INSTALLDIR}/usr/var ${UB_INSTALLDIR}/
+sed -i -e "s#/usr/etc/rkhunter.conf#/etc/rkhunter.conf#g" "${UB_INSTALLDIR}/usr/bin/rkhunter"
+sed -i -e "s#/usr/etc/rkhunter.conf#/etc/rkhunter.conf#g" "${UB_INSTALLDIR}/etc/rkhunter.conf"
+sed -i -e "s#/usr/var/lib/rkhunter/db#/var/lib/rkhunter/db#g" "${UB_INSTALLDIR}/etc/rkhunter.conf"
+sed -i -e "s#/usr/var/lib/rkhunter/tmp#/var/lib/rkhunter/tmp#g" "${UB_INSTALLDIR}/etc/rkhunter.conf"
+
+# cleanup
+rm -f "${UB_INSTALLDIR}/var/lib/rkhunter/tmp/"{group,passwd}
+
+# we trust in udev
+sed -i 's|^#ALLOWHIDDENDIR=/dev/.udev$|ALLOWHIDDENDIR=/dev/.udev|' \
+    "${UB_INSTALLDIR}/etc/rkhunter.conf"
+# ln -s ../../share/doc/Packages/rkhunter "$UB_INSTALLDIR"/usr/lib/rkhunter/docs

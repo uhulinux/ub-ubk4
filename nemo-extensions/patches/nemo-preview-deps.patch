@@ -1,0 +1,28 @@
+diff -Naur orig/nemo-preview/configure.ac patched/nemo-preview/configure.ac
+--- orig/nemo-preview/configure.ac	2017-10-24 13:00:07.000000000 +0200
++++ patched/nemo-preview/configure.ac	2017-12-30 14:18:56.208831943 +0100
+@@ -69,8 +69,8 @@
+                   gstreamer-pbutils-1.0
+                   gstreamer-tag-1.0
+                   libmusicbrainz5
+-                  xreader-document-1.5.0
+-                  xreader-view-1.5.0
++                  xreader-document-1.5
++                  xreader-view-1.5
+                   gtksourceview-3.0
+                   webkit2gtk-4.0)
+ 
+diff -Naur orig/nemo-preview/src/Makefile-nemo-preview.am patched/nemo-preview/src/Makefile-nemo-preview.am
+--- orig/nemo-preview/src/Makefile-nemo-preview.am	2017-10-24 13:00:07.000000000 +0200
++++ patched/nemo-preview/src/Makefile-nemo-preview.am	2017-12-30 14:27:54.517329767 +0100
+@@ -103,8 +103,8 @@
+     GstTag-1.0 \
+     GdkPixbuf-2.0 \
+     Gtk-3.0 \
+-    XreaderDocument-1.5.0 \
+-    XreaderView-1.5.0 \
++    XreaderDocument-1.5 \
++    XreaderView-1.5 \
+     GtkSource-3.0
+ 
+ NemoPreview_1_0_gir_FILES = \

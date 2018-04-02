@@ -1,0 +1,17 @@
+## Description: Fix obsolete g_thread_init().
+## Origin: upstream, no
+## Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1013383
+## Author: Pojar George <geoubuntu@gmail.com> 
+## Forwarded: no
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -1213,7 +1213,6 @@ int main(int argc, char* argv[])
+ 
+ 	g_set_application_name(_("Gnomeradio"));
+ 	
+-    if (!g_thread_supported ()) g_thread_init(NULL);
+ 	ctx = g_option_context_new("- Gnomeradio");
+ 	g_option_context_add_main_entries(ctx, entries, GETTEXT_PACKAGE);  
+ 	g_option_context_add_group(ctx, gst_init_get_option_group());

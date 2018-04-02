@@ -1,0 +1,925 @@
+Description: Fixed menu item not update conform new order when we use move up[down] swap. (LP: #1232931)
+	     Fixed conditional jump or move depends on uninitialized value.
+	     Added function to switch to preset in settings preset list when changed them from tray menu.
+	     Cleaned up the files relating to the tray icon. Neither gui.c, prefs.c nor record.c touch the internals of trayicon.c anymore.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1232931
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/trayicon.c
+===================================================================
+--- gnomeradio-1.8.orig/src/trayicon.c
++++ gnomeradio-1.8/src/trayicon.c
+@@ -25,12 +25,121 @@
+ #include "trayicon.h"
+ #include "mixer.h"
+ 
+-extern GtkAdjustment *adj;
+-
+-extern int mom_ps;
+ extern gnomeradio_settings settings;
+ 
++static GtkWidget *mute_menuitem;
+ static GtkWidget *showwindow_menuitem;
++static GtkWidget *tray_menu;
++static GObject *tray_icon;
++
++int mute_menuitem_toggled_cb_id;
++
++void tray_icon_set_title(gchar *title)
++{
++        if (tray_icon)
++                gtk_status_icon_set_tooltip_text(GTK_STATUS_ICON(tray_icon), title);
++}
++
++void tray_menu_items_set_sensible(gboolean sensible)
++{
++	GList* menuitems;
++	GtkWidget *menuitem;
++	int i, cnt = g_list_length(settings.presets);
++
++
++	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
++
++	g_assert(cnt + 6 == g_list_length(menuitems));
++
++	/* Disable the presets */
++	for (i = 0; i < cnt; i++) {
++		menuitem = g_list_nth_data(menuitems, i);
++		gtk_widget_set_sensitive(menuitem, sensible);
++	}
++
++	/* Disable the mute button (separator => +1) */
++	menuitem = g_list_nth_data(menuitems, cnt + 1);
++	gtk_widget_set_sensitive(menuitem, sensible);
++
++	/* Disable the record button */
++	menuitem = g_list_nth_data(menuitems, cnt + 2);
++	gtk_widget_set_sensitive(menuitem, sensible);
++
++	/* Disable the quit button */
++	menuitem = g_list_nth_data(menuitems, cnt + 5);
++	gtk_widget_set_sensitive(menuitem, sensible);
++}
++
++void tray_menu_enable_mute_button (gboolean enable)
++{
++	if (tray_menu) {
++		g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), enable);
++		g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++	}
++}
++
++void tray_menu_add_preset (preset* ps, gint index)
++{
++	GtkWidget *menuitem;
++
++	menuitem = gtk_menu_item_new_with_label(ps->title);
++
++	gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, index);
++	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index));
++	gtk_widget_show(menuitem);
++}
++
++void tray_menu_remove_preset (gint index)
++{
++	GList* menuitems;
++	GtkWidget *menuitem;
++
++	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
++	g_assert(index < g_list_length(menuitems));
++	menuitem = g_list_nth_data(menuitems, index);
++	gtk_widget_destroy(menuitem);
++}
++
++void tray_menu_move_up_preset (preset* ps, gint index)
++{
++	GList* menuitems;
++	GtkWidget *menuitem;
++
++	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
++	g_assert(index < g_list_length(menuitems));
++	menuitem = g_list_nth_data(menuitems, index);
++
++	gtk_menu_reorder_child (GTK_MENU(tray_menu), menuitem, GPOINTER_TO_INT (index + 1));
++	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index + 1));
++
++	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
++	menuitem = g_list_nth_data(menuitems, index);
++	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index));
++}
++
++void tray_menu_move_down_preset (preset* ps, gint index)
++{
++	GList* menuitems;
++	GtkWidget *menuitem;
++
++	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
++	g_assert(index < g_list_length(menuitems));
++	menuitem = g_list_nth_data(menuitems, index);
++
++	gtk_menu_reorder_child (GTK_MENU(tray_menu), menuitem, GPOINTER_TO_INT (index - 1));
++	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index - 1));
++
++	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
++	menuitem = g_list_nth_data(menuitems, index);
++	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index));
++}
++
++void tray_menu_update_preset (preset* ps, gint index)
++{
++	tray_menu_remove_preset (index);
++	tray_menu_add_preset (ps, index);
++}
+ 
+ static void mute_menuitem_toggled_cb(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+ {
+@@ -55,13 +164,7 @@ static void quit_menuitem_activate_cb(Gt
+ 
+ void preset_menuitem_activate_cb(GtkMenuItem *menuitem, gpointer user_data)
+ {
+-	preset* ps;
+-	mom_ps = GPOINTER_TO_INT (user_data);
+-	
+-	g_assert(mom_ps >= 0 &&	mom_ps < g_list_length(settings.presets));
+-	
+-	ps = (preset*)g_list_nth_data(settings.presets, mom_ps);
+-	gtk_adjustment_set_value(adj, ps->freq * STEPS);
++	gnomeradio_switch_to_preset(GPOINTER_TO_INT (user_data));
+ }
+ 
+ void create_tray_menu(GtkWidget *app) {
+@@ -71,8 +174,7 @@ void create_tray_menu(GtkWidget *app) {
+ 	
+ 	tray_menu = gtk_menu_new();
+ 
+-	for (i = 0; node; i++, node = node->next)
+-	{
++	for (i = 0; node; i++, node = node->next) {
+ 		preset *ps = (preset*)node->data;
+ 		menuitem = gtk_menu_item_new_with_label(ps->title);
+ 		
+@@ -86,8 +188,7 @@ void create_tray_menu(GtkWidget *app) {
+ 	mute_menuitem = gtk_check_menu_item_new_with_label(_("Muted"));
+ 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->get_volume() == 0);
+ 	gtk_menu_shell_append(GTK_MENU_SHELL(tray_menu), mute_menuitem);
+-	mute_menuitem_toggled_cb_id = 
+-	g_signal_connect(G_OBJECT(mute_menuitem), "toggled", (GCallback)mute_menuitem_toggled_cb, (gpointer)app);
++	mute_menuitem_toggled_cb_id = g_signal_connect(G_OBJECT(mute_menuitem), "toggled", (GCallback)mute_menuitem_toggled_cb, (gpointer)app);
+ 	gtk_widget_show(mute_menuitem);
+ 
+ 	menuitem = gtk_menu_item_new_with_mnemonic (_("_Record"));
+@@ -128,7 +229,6 @@ void create_tray_icon(GtkWidget *app)
+ {
+ 	GdkPixbuf *pixbuf;
+ 	GtkIconTheme *icontheme;
+-	char *text;
+ 	
+ 	icontheme = gtk_icon_theme_get_default();
+ 	pixbuf = gtk_icon_theme_load_icon(icontheme, "gnomeradio", 22, 0, NULL);
+@@ -138,8 +238,4 @@ void create_tray_icon(GtkWidget *app)
+ 
+ 	g_signal_connect (G_OBJECT(tray_icon), "activate", G_CALLBACK (tray_activate_cb), (gpointer)app);
+ 	g_signal_connect (G_OBJECT(tray_icon), "popup-menu", G_CALLBACK (tray_popup_menu), (gpointer)app);
+-	
+-	text = g_strdup_printf(_("Gnomeradio - %.2f MHz"), gtk_adjustment_get_value(adj)/STEPS);
+-        gtk_status_icon_set_tooltip_text(GTK_STATUS_ICON(tray_icon), text);
+-	g_free(text);
+ }
+Index: gnomeradio-1.8/src/prefs.c
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.c
++++ gnomeradio-1.8/src/prefs.c
+@@ -47,7 +47,7 @@ static GtkWidget *mixer_entry;
+ static GtkWidget *audio_box;
+ static GtkWidget *audio_switch;
+ static GtkWidget *mute_on_exit;
+-static GtkWidget *list_view;
++static GtkWidget *tree_view;
+ static GtkListStore *list_store;
+ static GtkTreeSelection *selection;
+ static GtkWidget *save_button;
+@@ -482,7 +482,6 @@ static void add_button_clicked_cb(GtkWid
+ 	GtkTreeIter iter = {0};
+ 	GtkAdjustment* v_scb;
+ 	GtkTreePath *path = NULL;
+-	GtkWidget *menuitem;
+ 	
+ 	ps = malloc(sizeof(preset));
+ 	ps->title = g_strdup(_("unnamed"));
+@@ -496,7 +495,7 @@ static void add_button_clicked_cb(GtkWid
+ 	g_free(buffer);
+ 	gtk_tree_selection_unselect_all(selection);
+ 	
+-	v_scb = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(list_view));
++	v_scb = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(tree_view));
+ 	gtk_adjustment_set_value(v_scb, gtk_adjustment_get_upper(v_scb));
+ 	
+ 	if (main_visible) {
+@@ -504,17 +503,13 @@ static void add_button_clicked_cb(GtkWid
+ 		mom_ps = g_list_length(settings.presets) - 1;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitem = gtk_menu_item_new_with_label(ps->title); 
+-			
+-		gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, mom_ps);		
+-		g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (mom_ps));
+-		gtk_widget_show(menuitem);
++		tray_menu_add_preset (ps, mom_ps);
+ 	}
+ 
+ 	buffer = g_strdup_printf("%d", g_list_length(settings.presets) - 1);
+ 	path = gtk_tree_path_new_from_string(buffer);
+ 	g_free(buffer);
+-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(list_view), path, NULL, FALSE);
++	gtk_tree_view_set_cursor(GTK_TREE_VIEW(tree_view), path, NULL, FALSE);
+ 	gtk_tree_path_free(path);
+ 
+ 	gtk_widget_set_sensitive(save_button, TRUE);
+@@ -527,10 +522,8 @@ static void remove_button_clicked_cb(Gtk
+ 	GtkTreeIter iter;
+ 	preset *ps;
+ 	int *row;
+-	GList* menuitems;
+-	GtkWidget *menuitem;
+ 	
+-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_view), &path, &focus_column);
++	gtk_tree_view_get_cursor(GTK_TREE_VIEW(tree_view), &path, &focus_column);
+ 	
+ 	if (path == NULL)
+ 		return;
+@@ -554,21 +547,17 @@ static void remove_button_clicked_cb(Gtk
+ 		if (settings.presets == NULL) mom_ps = -1;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+-		g_assert(*row < g_list_length(menuitems));
+-		menuitem = g_list_nth_data(menuitems, *row);
+-		gtk_widget_destroy(menuitem);
++		tray_menu_remove_preset (*row);
+ 	}
+ 	
+ 	gtk_tree_path_prev(path);
+-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(list_view), path, NULL, FALSE);
++	gtk_tree_view_set_cursor(GTK_TREE_VIEW(tree_view), path, NULL, FALSE);
+ 	gtk_tree_path_free(path);
+ 
+-	if (settings.presets == NULL) {
++	if (settings.presets == NULL)
+  		gtk_widget_set_sensitive(save_button, FALSE);
+-	} else {
++	else
+ 		gtk_widget_set_sensitive(save_button, TRUE);
+-	}
+ }
+ 
+ static void move_up_button_clicked_cb(GtkWidget * widget, gpointer data)
+@@ -578,10 +567,8 @@ static void move_up_button_clicked_cb(Gt
+ 	gint pos;
+ 	preset *ps;
+ 	int *row;
+-	GList* menuitems;
+-	GtkWidget *menuitem;
+ 
+-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list_view));
++	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+ 	gtk_tree_selection_get_selected(selection, NULL, &iter);
+ 	path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);
+ 
+@@ -611,25 +598,17 @@ static void move_up_button_clicked_cb(Gt
+ 		mom_ps = *row;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+-		g_assert(mom_ps < g_list_length(menuitems));
+-		menuitem = g_list_nth_data(menuitems, mom_ps);
+-		gtk_widget_destroy(menuitem);
+-		menuitem = gtk_menu_item_new_with_label(ps->title);
+-
+-		gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, *row + 1);
+-		g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (mom_ps));
+-		gtk_widget_show(menuitem);
++		tray_menu_move_up_preset (ps, mom_ps);
+ 	}
+ 
+-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(list_view), path, NULL, FALSE, 0, 0);
++	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree_view), path, NULL, FALSE, 0, 0);
+ 	gtk_tree_path_free(path);
+ 
+-	if (pos - 1 <= 0) {
++	if (pos - 1 <= 0)
+ 		gtk_widget_set_sensitive(move_up_button, FALSE);
+-	} else {
++	else
+ 		gtk_widget_set_sensitive(move_up_button, TRUE);
+-	}
++
+ 	gtk_widget_set_sensitive(move_down_button, TRUE);
+ }
+ 
+@@ -640,10 +619,8 @@ static void move_down_button_clicked_cb(
+ 	gint pos, count;
+ 	preset *ps;
+ 	int *row;
+-	GList* menuitems;
+-	GtkWidget *menuitem;
+ 
+-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list_view));
++	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+ 	gtk_tree_selection_get_selected(selection, NULL, &iter);
+ 	path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);
+ 
+@@ -677,38 +654,29 @@ static void move_down_button_clicked_cb(
+ 		mom_ps = *row;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+-		g_assert(mom_ps < g_list_length(menuitems));
+-		menuitem = g_list_nth_data(menuitems, mom_ps);
+-		gtk_widget_destroy(menuitem);
+-		menuitem = gtk_menu_item_new_with_label(ps->title);
+-
+-		gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, *row - 1);
+-		g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (mom_ps));
+-		gtk_widget_show(menuitem);
++		tray_menu_move_down_preset (ps, mom_ps);
+ 	}
+ 
+-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(list_view), path, NULL, FALSE, 0, 0);
++	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree_view), path, NULL, FALSE, 0, 0);
+ 	gtk_tree_path_free(path);
+ 
+-	if (pos + 2 == gtk_tree_model_iter_n_children(GTK_TREE_MODEL(list_store), NULL)) {
++	if (pos + 2 == gtk_tree_model_iter_n_children(GTK_TREE_MODEL(list_store), NULL))
+ 		gtk_widget_set_sensitive(move_down_button, FALSE);
+-	} else {
++	else
+ 		gtk_widget_set_sensitive(move_down_button, TRUE);
+-	}
++
+ 	gtk_widget_set_sensitive(move_up_button, TRUE);
+ }
+ 
+ static void destination_button_clicked_cb(GtkWidget *button, gpointer data)
+ {
+ 	if (rec_settings.destination)
+-	{
+ 		g_free(rec_settings.destination);
+-	}
++
+ 	rec_settings.destination = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(button));
+ }
+ 
+-static gboolean list_view_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
++static gboolean tree_view_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+ {
+ 	if (event->keyval == GDK_KEY_Delete)
+ 		remove_button_clicked_cb(widget, user_data);
+@@ -727,24 +695,22 @@ static gboolean button_release_cb(GtkWid
+ 
+ 	event_button = (GdkEventButton *) event;
+ 
+-	gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(list_view), event_button->x, event_button->y, &path, NULL, NULL, NULL);
++	gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(tree_view), event_button->x, event_button->y, &path, NULL, NULL, NULL);
+ 	if (path != NULL) {
+ 		buffer = gtk_tree_path_to_string(path);
+ 		pos = (gint) g_strtod(buffer, NULL);
+ 		g_free(buffer);
+ 		gtk_tree_path_free(path);
+ 
+-		if (pos == 0) {
++		if (pos == 0)
+ 			gtk_widget_set_sensitive(move_up_button, FALSE);
+-		} else {
++		else
+ 			gtk_widget_set_sensitive(move_up_button, TRUE);
+-		}
+ 
+-		if (pos + 1 == gtk_tree_model_iter_n_children(GTK_TREE_MODEL(list_store), NULL)) {
++		if (pos + 1 == gtk_tree_model_iter_n_children(GTK_TREE_MODEL(list_store), NULL))
+ 			gtk_widget_set_sensitive(move_down_button, FALSE);
+-		} else {
++		else
+ 			gtk_widget_set_sensitive(move_down_button, TRUE);
+-		}
+ 	}
+ 	return FALSE;
+ }
+@@ -755,8 +721,6 @@ static void name_cell_edited_cb(GtkCellR
+ 	GtkTreeIter iter;
+ 	preset *ps;
+ 	int *row;
+-	GList* menuitems;
+-	GtkWidget *menuitem;
+ 	
+ 	path = gtk_tree_path_new_from_string(path_str);
+ 
+@@ -775,15 +739,7 @@ static void name_cell_edited_cb(GtkCellR
+ 		mom_ps = *row;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+-		g_assert(mom_ps < g_list_length(menuitems));
+-		menuitem = g_list_nth_data(menuitems, mom_ps);
+-		gtk_widget_destroy(menuitem);
+-		menuitem = gtk_menu_item_new_with_label(ps->title); 
+-			
+-		gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, *row);		
+-		g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (mom_ps));
+-		gtk_widget_show(menuitem);
++		tray_menu_update_preset (ps, mom_ps);
+ 	}
+ 	
+ 	gtk_tree_model_get_iter(GTK_TREE_MODEL(list_store), &iter, path);
+@@ -828,7 +784,7 @@ static void freq_cell_edited_cb(GtkCellR
+ 	gtk_tree_path_free(path);	
+ }	
+ 
+-static void list_view_cursor_changed_cb(GtkWidget *widget, gpointer data)
++static void tree_view_cursor_changed_cb(GtkWidget *widget, gpointer data)
+ {
+ 	int *row;
+ 	preset *ps;
+@@ -839,7 +795,7 @@ static void list_view_cursor_changed_cb(
+ 	if (settings.presets == NULL)
+ 		return;
+ 
+-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_view), &path, &focus_column);
++	gtk_tree_view_get_cursor(GTK_TREE_VIEW(tree_view), &path, &focus_column);
+ 	
+ 	if (path == NULL)
+ 		return;
+@@ -855,22 +811,21 @@ static void list_view_cursor_changed_cb(
+ 
+ 	pos = g_list_index(settings.presets, (gpointer)ps);
+ 
+-	if (pos == 0) {
++	if (pos == 0)
+ 		gtk_widget_set_sensitive(move_up_button, FALSE);
+-	} else {
++	else
+ 		gtk_widget_set_sensitive(move_up_button, TRUE);
+-	}
+ 
+-	if (pos + 1 == gtk_tree_model_iter_n_children(GTK_TREE_MODEL(list_store), NULL)) {
++	if (pos + 1 == gtk_tree_model_iter_n_children(GTK_TREE_MODEL(list_store), NULL))
+ 		gtk_widget_set_sensitive(move_down_button, FALSE);
+-	} else {
++	else
+ 		gtk_widget_set_sensitive(move_down_button, TRUE);
+-	}
++
+ 	gtk_tree_path_free(path);
+ 	return;
+ }
+ 
+-static void list_view_selection_changed_cb(GtkWidget *widget, gpointer data)
++static void tree_view_selection_changed_cb(GtkWidget *widget, gpointer data)
+ {
+ 	gboolean sel;
+ 
+@@ -880,10 +835,25 @@ static void list_view_selection_changed_
+ 	gtk_widget_set_sensitive(save_button, sel);
+ }
+ 
+-static void list_view_scroll_to_active_preset_cb(GtkWidget *widget, gpointer data)
++void tree_view_switch_to_preset (gint active)
+ {
+ 	GtkTreePath *path = NULL;
+ 	GtkTreeIter iter;
++
++	if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(list_store), &iter, NULL, active))
++		return;
++
++	path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);
++
++	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW (tree_view), path, NULL, FALSE, 0, 0);
++	gtk_tree_view_set_cursor(GTK_TREE_VIEW (tree_view), path, NULL, FALSE );
++	gtk_tree_path_free(path);
++
++	gtk_widget_grab_focus(tree_view);
++}
++
++static void tree_view_scroll_to_active_preset_cb(GtkWidget *widget, gpointer data)
++{
+ 	gint active;
+ 
+ 	if (settings.presets == NULL) {
+@@ -898,16 +868,7 @@ static void list_view_scroll_to_active_p
+ 		return;
+ 	}
+ 
+-	if (!gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(list_store), &iter, NULL, active))
+-		return;
+-
+-	path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);
+-
+-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW (list_view), path, NULL, FALSE, 0, 0);
+-	gtk_tree_view_set_cursor(GTK_TREE_VIEW (list_view), path, NULL, FALSE );
+-	gtk_tree_path_free(path);
+-
+-	gtk_widget_grab_focus(list_view);
++	tree_view_switch_to_preset (active);
+ }
+ 
+ static void free_presets_list (gpointer data)
+@@ -958,7 +919,7 @@ static void save_to_file(gchar *filename
+ 	/* set it as the root element */
+ 	xmlDocSetRootElement(doc, root);
+ 	/* get the tree view's model... */
+-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_view));
++	model = gtk_tree_view_get_model(GTK_TREE_VIEW(tree_view));
+ 	/* ...and go through it with a foreach */
+ 	gtk_tree_model_foreach(model, (GtkTreeModelForeachFunc)save_to_file_foreach, (gpointer)root);
+ 	/* make sure the XML document will be indented */
+@@ -1073,8 +1034,6 @@ static void load_from_file(gchar *filena
+ 	GtkTreePath *path = NULL;
+ 	GtkTreeIter iter;
+ 	GtkAdjustment* v_scb;
+-	GList* menuitems;
+-	GtkWidget *menuitem;
+ 
+ 	/* load the file */
+ 	doc = xmlParseFile(filename);
+@@ -1099,15 +1058,9 @@ static void load_from_file(gchar *filena
+ 			gint i, count;
+ 
+ 			count = g_list_length (settings.presets);
+-			for (i = 0; i < count; i++)
++			for (i = 0; i < count; i++) {
+ 				gtk_combo_box_text_remove(GTK_COMBO_BOX_TEXT(preset_combo), 1);
+-
+-			menuitems = gtk_container_get_children (GTK_CONTAINER (tray_menu));
+-
+-			count = g_list_length (menuitems);
+-			for (i = 0; i < count - 6; i++) {
+-				menuitem = g_list_nth_data (menuitems, i);
+-				gtk_widget_destroy (menuitem);
++				tray_menu_remove_preset(0);
+ 			}
+        		}
+ 
+@@ -1118,7 +1071,7 @@ static void load_from_file(gchar *filena
+        	}
+ 
+ 	/* get the tree view's model */
+-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_view));
++	model = gtk_tree_view_get_model(GTK_TREE_VIEW(tree_view));
+ 
+ 	/* iterate through the root's children items */
+ 	current = current->xmlChildrenNode;
+@@ -1147,7 +1100,7 @@ static void load_from_file(gchar *filena
+ 
+ 					gtk_tree_selection_unselect_all(selection);
+ 
+-					v_scb = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(list_view));
++					v_scb = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(tree_view));
+ 					gtk_adjustment_set_value(v_scb, gtk_adjustment_get_upper(v_scb));
+ 
+ 					if (main_visible) {
+@@ -1155,13 +1108,7 @@ static void load_from_file(gchar *filena
+ 						mom_ps = g_list_length(settings.presets) - 1;
+ 						preset_combo_set_item(mom_ps);
+ 
+-						menuitem = gtk_menu_item_new_with_label(ps->title);
+-
+-						gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, mom_ps);
+-						g_signal_connect(G_OBJECT(menuitem), "activate",
+-								 (GCallback)preset_menuitem_activate_cb,
+-								 GINT_TO_POINTER (mom_ps));
+-						gtk_widget_show(menuitem);
++						tray_menu_add_preset (ps, mom_ps);
+ 					}
+ 				}
+ 				/* free the data */
+@@ -1180,12 +1127,12 @@ static void load_from_file(gchar *filena
+ 
+ 	path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_store), &iter);
+ 
+-	gtk_tree_view_set_cursor(GTK_TREE_VIEW (list_view), path, NULL, FALSE );
++	gtk_tree_view_set_cursor(GTK_TREE_VIEW (tree_view), path, NULL, FALSE );
+ 	gtk_tree_path_free(path);
+ 
+-	gtk_widget_grab_focus(list_view);
++	gtk_widget_grab_focus(tree_view);
+ 
+-	list_view_cursor_changed_cb(list_view, NULL);
++	tree_view_cursor_changed_cb(tree_view, NULL);
+ 	gtk_widget_set_sensitive(save_button, TRUE);
+ 	gtk_widget_set_sensitive(remove_button, TRUE);
+ }
+@@ -1236,7 +1183,7 @@ gboolean action_mode (gint mode)
+ 			gtk_widget_grab_focus (mixer_entry);
+ 			break;
+ 		case PRESETS:
+-			list_view_scroll_to_active_preset_cb(list_view, NULL);
++			tree_view_scroll_to_active_preset_cb(tree_view, NULL);
+ 			break;
+ 		default:
+ 			break;
+@@ -1389,22 +1336,22 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+ 
+ 	list_store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+-	list_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_store));
+-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(list_view), TRUE);
+-	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(list_view), FALSE);
++	tree_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_store));
++	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(tree_view), TRUE);
++	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree_view), FALSE);
+ 
+-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list_view));
++	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
+ 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+-	gtk_container_add(GTK_CONTAINER(scrolled_window), list_view);
++	gtk_container_add(GTK_CONTAINER(scrolled_window), tree_view);
+ 
+-	g_signal_connect(G_OBJECT(list_view), "button-release-event", G_CALLBACK(button_release_cb), NULL);
+-	g_signal_connect(G_OBJECT(list_view), "key-press-event", G_CALLBACK(list_view_key_press_event_cb), NULL);
+-	g_signal_connect(G_OBJECT(list_view), "cursor-changed", G_CALLBACK(list_view_cursor_changed_cb), NULL);
++	g_signal_connect(G_OBJECT(tree_view), "button-release-event", G_CALLBACK(button_release_cb), NULL);
++	g_signal_connect(G_OBJECT(tree_view), "key-press-event", G_CALLBACK(tree_view_key_press_event_cb), NULL);
++	g_signal_connect(G_OBJECT(tree_view), "cursor-changed", G_CALLBACK(tree_view_cursor_changed_cb), NULL);
+ 
+-	g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(list_view_selection_changed_cb), list_view);
++	g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(tree_view_selection_changed_cb), tree_view);
+ 
+ 	/*gtk_tree_selection_select_path(selection, gtk_tree_path_new_from_string("0"));
+-	gtk_tree_selection_set_select_function(selection, (GtkTreeSelectionFunc)list_view_select_cb, NULL, NULL);*/
++	gtk_tree_selection_set_select_function(selection, (GtkTreeSelectionFunc)tree_view_select_cb, NULL, NULL);*/
+ 	
+ 	cellrenderer = gtk_cell_renderer_text_new();
+ 	g_object_set(G_OBJECT(cellrenderer), "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
+@@ -1412,7 +1359,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	list_column = gtk_tree_view_column_new_with_attributes(NULL, cellrenderer, "text", 0, NULL);
+ 	gtk_tree_view_column_set_reorderable(list_column, TRUE);
+ 	gtk_tree_view_column_set_expand(list_column, TRUE);
+-	gtk_tree_view_append_column(GTK_TREE_VIEW(list_view), list_column);
++	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), list_column);
+ 
+ 	g_signal_connect(G_OBJECT(cellrenderer), "edited", G_CALLBACK(name_cell_edited_cb), NULL);
+ 
+@@ -1423,7 +1370,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	list_column = gtk_tree_view_column_new_with_attributes(NULL, cellrenderer, "text", 1, NULL);
+ 	gtk_tree_view_column_set_reorderable(list_column, TRUE);
+ 	gtk_tree_view_column_set_expand(list_column, FALSE);
+-	gtk_tree_view_append_column(GTK_TREE_VIEW(list_view), list_column);
++	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), list_column);
+ 
+ 	g_signal_connect(G_OBJECT(cellrenderer), "edited", G_CALLBACK(freq_cell_edited_cb), NULL);
+ 
+Index: gnomeradio-1.8/src/prefs.h
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.h
++++ gnomeradio-1.8/src/prefs.h
+@@ -34,6 +34,8 @@ enum
+ 
+ gboolean action_mode (gint mode);
+ 
++void tree_view_switch_to_preset (gint active);
++
+ GtkWidget* prefs_window(GtkWidget *app);
+ 
+ #endif
+Index: gnomeradio-1.8/src/trayicon.h
+===================================================================
+--- gnomeradio-1.8.orig/src/trayicon.h
++++ gnomeradio-1.8/src/trayicon.h
+@@ -16,14 +16,23 @@
+ 
+ #ifndef _TRAYICON_H
+ #define _TRAYICON_H
++#include "gui.h"
+ 
+-GtkWidget *tray_menu;
+-GObject *tray_icon;
+-GtkWidget *mute_menuitem;
++void tray_icon_set_title(gchar *title);
+ 
+-int mute_menuitem_toggled_cb_id;
++void tray_menu_items_set_sensible(gboolean sensible);
+ 
+-void tray_icon_items_set_sensible(gboolean sensible);
++void tray_menu_enable_mute_button (gboolean enable);
++
++void tray_menu_add_preset (preset* ps, gint index);
++
++void tray_menu_remove_preset (gint index);
++
++void tray_menu_move_up_preset (preset* ps, gint index);
++
++void tray_menu_move_down_preset (preset* ps, gint index);
++
++void tray_menu_update_preset (preset* ps, gint index);
+ 
+ void create_tray_icon(GtkWidget *app);
+ 
+Index: gnomeradio-1.8/src/record.c
+===================================================================
+--- gnomeradio-1.8.orig/src/record.c
++++ gnomeradio-1.8/src/record.c
+@@ -29,6 +29,7 @@
+ #include "gui.h"
+ #include "rec_tech.h"
+ #include "prefs.h"
++#include "trayicon.h"
+ 
+ extern GtkWidget *level;
+ 
+@@ -51,7 +52,7 @@ void close_status_window(void)
+ 		gtk_widget_destroy(GTK_WIDGET(status_dialog));
+ 	status_dialog = NULL;
+ 	
+-	tray_icon_items_set_sensible(TRUE);
++	tray_menu_items_set_sensible(TRUE);
+ 	recording_set_sensible(TRUE);
+ }
+ 
+Index: gnomeradio-1.8/src/gui.h
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.h
++++ gnomeradio-1.8/src/gui.h
+@@ -70,8 +70,6 @@ void preset_combo_set_item(gint i);
+ 
+ void preset_menuitem_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
+ 
+-void tray_icon_items_set_sensible(gboolean sensible);
+-
+ gboolean
+ key_press_event_cb(GtkWidget *app, GdkEventKey *event, gpointer data);
+ 
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -72,6 +72,7 @@ int mom_ps;
+ gnomeradio_settings settings;
+ 
+ gboolean main_visible;
++gboolean dialog_visible;
+ 
+ GtkWidget *app;
+ GtkWidget *preset_combo;
+@@ -289,11 +290,7 @@ set_volume (gdouble volume)
+ 	gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), volume / 100);
+ 	g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
+ 
+-	if (tray_menu) {
+-		g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->is_muted());
+-		g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-	}
++	tray_menu_enable_mute_button (mixer->is_muted());
+ 
+ 	if (radio_is_muted())
+ 		radio_unmute();
+@@ -348,11 +345,7 @@ toggle_volume (void)
+ 	gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), volume / 100);
+ 	g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
+ 
+-	if (tray_menu) {
+-		g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->is_muted());
+-		g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-	}
++	tray_menu_enable_mute_button (mixer->is_muted());
+ }
+ 
+ static void prefs_button_clicked_cb(GtkButton *button, gpointer app)
+@@ -360,6 +353,10 @@ static void prefs_button_clicked_cb(GtkB
+ 	GtkWidget* dialog;
+ 	gint choise;
+ 
++	if (dialog_visible)
++		return;
++
++	dialog_visible = TRUE;
+ 	dialog = prefs_window(app);
+ 
+ 	/* Michael Jochum <e9725005@stud3.tuwien.ac.at> proposed to not use gnome_dialog_set_parent()
+@@ -386,6 +383,8 @@ static void prefs_button_clicked_cb(GtkB
+ 				gtk_widget_destroy(dialog);
+ 		}
+ 	}
++
++	dialog_visible = FALSE;
+ }
+ 
+ void start_radio(gboolean restart, GtkWidget *app)
+@@ -453,11 +452,7 @@ void start_mixer(gboolean restart, GtkWi
+ 		gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), settings.unmute_volume);
+ 		g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
+ 
+-		if (tray_menu) {
+-			g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->is_muted());
+-			g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-		}
++		tray_menu_enable_mute_button (mixer->is_muted());
+ 
+ 		gtk_widget_set_sensitive(volume_button, TRUE);
+ 	} else {
+@@ -617,7 +612,7 @@ static void adj_value_changed_cb(GtkAdju
+ 	else
+ 		buffer = g_strdup_printf(_("Gnomeradio - %.2f MHz"), freq);
+ 	gtk_window_set_title(GTK_WINDOW(window), buffer);
+-	if (tray_icon) gtk_status_icon_set_tooltip_text(GTK_STATUS_ICON(tray_icon), buffer);
++	tray_icon_set_title(buffer);
+ 	g_free(buffer);
+ 	
+ 	buffer = g_strdup_printf(_("Frequency: %.2f MHz"), freq);
+@@ -736,8 +731,11 @@ void scbw_button_clicked_cb(GtkButton *b
+ 
+ void preset_combo_set_item(gint i)
+ {
+-	if (i < -1) return;
+-	if (preset_combo == NULL) return;
++	if (i < -1)
++		return;
++	if (preset_combo == NULL)
++		return;
++
+ 	gtk_combo_box_set_active(GTK_COMBO_BOX(preset_combo), i + 1);
+ }
+ 
+@@ -746,10 +744,14 @@ static void preset_combo_change_cb(GtkWi
+ 	preset* ps;
+ 	mom_ps = gtk_combo_box_get_active(GTK_COMBO_BOX(combo)) - 1;
+ 	
+-	if (mom_ps < 0) return;
++	if (mom_ps < 0)
++		return;
+ 	
+ 	ps = (preset*)g_list_nth_data(settings.presets, mom_ps);
+ 	gtk_adjustment_set_value(adj, ps->freq * STEPS);
++
++	if (dialog_visible)
++		tree_view_switch_to_preset (mom_ps);
+ }
+ 
+ void change_preset(gboolean next)
+@@ -767,6 +769,9 @@ void change_preset(gboolean next)
+ 	ps = g_list_nth_data(settings.presets, mom_ps);
+ 	gtk_adjustment_set_value(adj, ps->freq*STEPS);
+ 	preset_combo_set_item(mom_ps);
++
++	if (dialog_visible)
++		tree_view_switch_to_preset (mom_ps);
+ }
+ 
+ void gnomeradio_switch_to_preset (gint index)
+@@ -776,6 +781,9 @@ void gnomeradio_switch_to_preset (gint i
+ 		gtk_adjustment_set_value(adj, ps->freq*STEPS);
+ 		mom_ps = index;
+ 		preset_combo_set_item(mom_ps);
++
++		if (dialog_visible)
++			tree_view_switch_to_preset (mom_ps);
+ 	}
+ }
+ 
+@@ -784,36 +792,6 @@ static void quit_button_clicked_cb(GtkBu
+ 	exit_gnome_radio();
+ }
+ 
+-void tray_icon_items_set_sensible(gboolean sensible)
+-{
+-	GList* menuitems;
+-	GtkWidget *menuitem;
+-	int i, cnt = g_list_length(settings.presets);
+-	
+-	
+-	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+-	
+-	g_assert(cnt + 6 == g_list_length(menuitems));
+-	
+-	/* Disable the presets */
+-	for (i = 0; i < cnt; i++) {
+-		menuitem = g_list_nth_data(menuitems, i);
+-		gtk_widget_set_sensitive(menuitem, sensible);
+-	}	
+-	
+-	/* Disable the mute button (separator => +1) */
+-	menuitem = g_list_nth_data(menuitems, cnt + 1);
+-	gtk_widget_set_sensitive(menuitem, sensible);
+-
+-	/* Disable the record button */
+-	menuitem = g_list_nth_data(menuitems, cnt + 2);
+-	gtk_widget_set_sensitive(menuitem, sensible);
+-	
+-	/* Disable the quit button */
+-	menuitem = g_list_nth_data(menuitems, cnt + 5);
+-	gtk_widget_set_sensitive(menuitem, sensible);
+-}
+-
+ void recording_set_sensible(gboolean sensible)
+ {
+ 	/* Disable the presets */
+@@ -892,7 +870,7 @@ static int start_recording(const gchar *
+ 	if (!recording)
+ 		return -1;
+ 
+-	tray_icon_items_set_sensible (FALSE);
++	tray_menu_items_set_sensible (FALSE);
+ 	recording_set_sensible (FALSE);
+ 
+ 	recording->station = g_strdup (station);

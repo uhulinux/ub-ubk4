@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm "$UB_INSTALLDIR"/usr/bin/zcat
+rm "$UB_INSTALLDIR"/usr/bin/gunzip
+mv "$UB_INSTALLDIR"/usr/bin/gzip "$UB_INSTALLDIR"/bin/
+ln -sf gzip "$UB_INSTALLDIR"/bin/compress
+ln -sf gzip "$UB_INSTALLDIR"/bin/gunzip
+ln -sf gzip "$UB_INSTALLDIR"/bin/uncompress
+ln -sf gzip "$UB_INSTALLDIR"/bin/zcat
+ln -sf zcmp "$UB_INSTALLDIR"/usr/bin/zdiff
+ln -sf zgrep "$UB_INSTALLDIR"/usr/bin/zegrep
+ln -sf zgrep "$UB_INSTALLDIR"/usr/bin/zfgrep

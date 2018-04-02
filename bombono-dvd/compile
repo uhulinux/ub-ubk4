@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+#rm -rf debian libs/boost-lib src/mlib/tests libs/mpeg2dec
+scons PREFIX="/usr" DESTDIR="$UB_INSTALLDIR" CPPFLAGS="-std=c++14 -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_FILESYSTEM_NO_DEPRECATED -DBOOST_FILESYSTEM_VERSION=3" USE_EXT_BOOST=1

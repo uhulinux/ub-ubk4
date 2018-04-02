@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+UB_UPDATELIBTOOL=yes \
+ub_compile \
+	--enable-threads=yes \
+	--enable-drivers

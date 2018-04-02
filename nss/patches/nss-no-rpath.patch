@@ -1,0 +1,15 @@
+diff -Naur orig/cmd/platlibs.mk patched/cmd/platlibs.mk
+--- orig/cmd/platlibs.mk	2013-06-27 19:58:08.000000000 +0200
++++ patched/cmd/platlibs.mk	2013-07-26 17:20:39.161232037 +0200
+@@ -18,9 +18,9 @@
+ 
+ ifeq ($(OS_ARCH), Linux)
+ ifeq ($(USE_64), 1)
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:/opt/sun/private/lib64:$$ORIGIN/../lib'
++# EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:/opt/sun/private/lib64:$$ORIGIN/../lib'
+ else
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib:/opt/sun/private/lib'
++# EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib:/opt/sun/private/lib'
+ endif
+ endif
+ 

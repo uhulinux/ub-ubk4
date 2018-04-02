@@ -1,0 +1,31 @@
+diff -Naur glee-orig/configure glee/configure
+--- glee-orig/configure	2009-02-07 21:45:53.000000000 +0100
++++ glee/configure	2017-05-07 15:26:26.365201417 +0200
+@@ -1747,7 +1747,7 @@
+   CXXFLAGS=$ac_save_CXXFLAGS
+ elif test $ac_cv_prog_cxx_g = yes; then
+   if test "$GXX" = yes; then
+-    CXXFLAGS="-g -O2"
++    CXXFLAGS="-fPIC -g -O2"
+   else
+     CXXFLAGS="-g"
+   fi
+@@ -2549,15 +2549,15 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-fPIC -g -O2"
+   else
+     CFLAGS="-g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="-fPIC -O2"
+   else
+-    CFLAGS=
++    CFLAGS="-fPIC"
+   fi
+ fi
+ echo "$as_me:$LINENO: checking for $CC option to accept ANSI C" >&5

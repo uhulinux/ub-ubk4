@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+python3 setup.py install --root="$UB_INSTALLDIR"
+mv "${UB_INSTALLDIR}"/usr/bin/pyflakes "${UB_INSTALLDIR}"/usr/bin/pyflakes3
+
+python setup.py install --root="$UB_INSTALLDIR"

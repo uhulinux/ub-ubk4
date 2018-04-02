@@ -1,0 +1,9 @@
+diff -urN postfix-2.7.0.orig/conf/master.cf postfix-2.7.0/conf/master.cf
+--- postfix-2.7.0.orig/conf/master.cf	2010-02-03 22:01:27.000000000 +0100
++++ postfix-2.7.0/conf/master.cf	2010-02-25 13:16:53.064358235 +0100
+@@ -113,3 +113,5 @@
+ #policy  unix  -       n       n       -       -       spawn
+ #  user=nobody argv=/usr/bin/perl /usr/lib/postfix/greylist.pl
+ #
++dovecot   unix  -       n       n       -       -       pipe
++  flags=DRhu user=vmail:nogroup argv=/usr/libexec/dovecot/deliver -f ${sender} -d ${recipient}

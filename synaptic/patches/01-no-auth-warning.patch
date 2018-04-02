@@ -1,0 +1,14 @@
+diff -Naur orig/configure.in patched/configure.in
+--- orig/configure.in	2014-05-16 08:17:13.000000000 +0200
++++ patched/configure.in	2014-10-18 23:16:56.229228495 +0200
+@@ -129,10 +129,6 @@
+ AC_CHECK_HEADER(apt-pkg/configuration.h, [],
+  AC_ERROR([You need the apt-pkg headers installed to compile synaptic.]))
+ 
+-# if metaindex is there we use a apt with authentication support
+-AC_CHECK_HEADER(apt-pkg/metaindex.h,
+-        AC_DEFINE(WITH_APT_AUTH, 1, [build with apt auth support] )
+-)
+ # check if we have apts new-style cdrom.h
+ AC_CHECK_HEADER(apt-pkg/cdrom.h, 
+                 AC_DEFINE(HAVE_APTPKG_CDROM, 1, 

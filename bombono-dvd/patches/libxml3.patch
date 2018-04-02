@@ -1,0 +1,203 @@
+diff -Naur orig/SConstruct mod/SConstruct
+--- orig/SConstruct	2013-03-07 22:20:45.000000000 +0100
++++ mod/SConstruct	2016-04-29 08:38:29.000000000 +0200
+@@ -22,7 +22,7 @@
+ # Dependency libraries & Settings
+ 
+ # via pkg-config
+-RequiredLibs = ['glibmm-2.4', 'libxml++-2.6', 'gtkmm-2.4']
++RequiredLibs = ['glibmm-2.4', 'libxml++-3.0', 'gtkmm-2.4']
+ FFmpegLibs   = ['libavformat', 'libavcodec', 'libswscale', 'libavutil']
+ RequiredLibs += FFmpegLibs
+ 
+@@ -477,7 +477,7 @@
+ #
+ mbase_env = mlib_env.Clone()
+ mbase_env.AppendUnique(**GetDict('glibmm-2.4'))
+-mbase_env.AppendUnique(**GetDict('libxml++-2.6'))
++mbase_env.AppendUnique(**GetDict('libxml++-3.0'))
+ Export('mbase_env')
+ 
+ # 
+diff -Naur orig/src/mbase/project/archieve_base.h mod/src/mbase/project/archieve_base.h
+--- orig/src/mbase/project/archieve_base.h	2013-03-07 22:20:45.000000000 +0100
++++ mod/src/mbase/project/archieve_base.h	2016-05-01 15:58:25.000000000 +0200
+@@ -136,7 +136,7 @@
+              void  MakeChild(const char* name = 0) 
+                    { 
+                        const char* tmp = (name && *name) ? name : "_temp_"; 
+-                       AcceptNode(curNode->add_child(tmp));
++                       AcceptNode(curNode->add_child_element(tmp));
+                    }
+              void  CloseChild() 
+                    { 
+diff -Naur orig/src/mbase/project/archieve.cpp mod/src/mbase/project/archieve.cpp
+--- orig/src/mbase/project/archieve.cpp	2013-03-07 22:20:45.000000000 +0100
++++ mod/src/mbase/project/archieve.cpp	2016-05-01 16:39:01.436236959 +0200
+@@ -37,7 +37,7 @@
+         node->set_attribute(name, fnr());
+     else
+         // считаем, что неименованный параметр - только один
+-        node->set_child_text(fnr());
++        node->set_first_child_text(fnr());
+ }
+ 
+ void Serialization::LoadArchiever::SerializeStringableImpl(FromStringConverter fnr)
+@@ -46,7 +46,7 @@
+         fnr(GetValue(ar, name));
+     else
+         // считаем, что неименованный параметр - только один
+-        fnr(ar.OwnerNode()->get_child_text()->get_content());
++        fnr(ar.OwnerNode()->get_first_child_text()->get_content());
+ }
+ 
+ // // :TODO: в отладочном режиме посылаем более подробное исключение вместо
+diff -Naur orig/src/mgui/author/render.cpp mod/src/mgui/author/render.cpp
+--- orig/src/mgui/author/render.cpp	2013-03-07 22:20:45.000000000 +0100
++++ mod/src/mgui/author/render.cpp	2016-05-01 16:05:42.000000000 +0200
+@@ -200,7 +200,7 @@
+ {
+     if( !is_select )
+     {
+-        xmlpp::Element* btn_node = spu_node->add_child("button");
++        xmlpp::Element* btn_node = spu_node->add_child_element("button");
+         // :KLUDGE: должны быть четными
+         Rect rct(plc);
+         // для letterbox & 16:9
+@@ -376,7 +376,7 @@
+     
+     xmlpp::Document doc;
+     xmlpp::Element* root_node = doc.create_root_node("subpictures");
+-    xmlpp::Element* spu_node = root_node->add_child("stream")->add_child("spu");
++    xmlpp::Element* spu_node = root_node->add_child_element("stream")->add_child_element("spu");
+     spu_node->set_attribute("start", "00:00:00.0");
+     spu_node->set_attribute("end",   "00:00:00.0");
+     spu_node->set_attribute("highlight", highlight_fname);
+diff -Naur orig/src/mgui/author/script.cpp mod/src/mgui/author/script.cpp
+--- orig/src/mgui/author/script.cpp	2013-03-07 22:20:45.000000000 +0100
++++ mod/src/mgui/author/script.cpp	2016-05-01 16:12:35.000000000 +0200
+@@ -56,7 +56,7 @@
+ 
+ static xmlpp::Element* AddVideoTag(xmlpp::Element* node, bool is_4_3 = true)
+ {
+-    xmlpp::Element* vnode = node->add_child("video");
++    xmlpp::Element* vnode = node->add_child_element("video");
+     AddFormatAttr(vnode);
+     vnode->set_attribute("aspect", is_4_3 ? "4:3" : "16:9");
+     if( !is_4_3 )
+@@ -269,7 +269,7 @@
+ static void AddChildWithText(xmlpp::Element* node, const char* node_name,
+                              const std::string& body)
+ {
+-    node->add_child(node_name)->add_child_text(body);
++    node->add_child_element(node_name)->add_child_text(body);
+ }
+ 
+ static void AddPostCmd(xmlpp::Element* pgc_node, MediaItem mi)
+@@ -333,7 +333,7 @@
+ 
+ static bool ScriptMenu(xmlpp::Element* menus_node, Menu root_menu, Menu mn, int i)
+ {
+-    xmlpp::Element* pgc_node = menus_node->add_child("pgc");
++    xmlpp::Element* pgc_node = menus_node->add_child_element("pgc");
+     if( root_menu == mn )
+         pgc_node->set_attribute("entry", "root");
+ 
+@@ -345,7 +345,7 @@
+         AddChildWithText(pgc_node, "pre", loop_menus);
+     }
+ 
+-    xmlpp::Element* vob_node = pgc_node->add_child("vob");
++    xmlpp::Element* vob_node = pgc_node->add_child_element("vob");
+     // название меню
+     std::string m_dir = MenuAuthorDir(mn, i);
+     vob_node->set_attribute("file", AppendPath(m_dir, "MenuSub.mpg"));
+@@ -398,14 +398,14 @@
+ 
+ static bool ScriptTitle(xmlpp::Element* ts_node, VideoItem vi, const std::string& out_dir)
+ {
+-    xmlpp::Element* pgc_node = ts_node->add_child("pgc");
++    xmlpp::Element* pgc_node = ts_node->add_child_element("pgc");
+     if( IsToAddSubtitles(vi) )
+     {
+         int sub_num = vi->subDat.defShow ? 64 : 0 ;
+         AddChildWithText(pgc_node, "pre", boost::format("subtitle = %1%;") % sub_num % bf::stop);
+     }
+ 
+-    xmlpp::Element* vob_node = pgc_node->add_child("vob");
++    xmlpp::Element* vob_node = pgc_node->add_child_element("vob");
+     vob_node->set_attribute("file", DVDFilename(vi, out_dir));
+     // список глав
+     bool is_empty = true;
+@@ -498,7 +498,7 @@
+ 
+ static void AddSubpicStream(xmlpp::Element* sub_node, const char* id, const char* mode)
+ {
+-    xmlpp::Element* strm_node = sub_node->add_child("stream");
++    xmlpp::Element* strm_node = sub_node->add_child_element("stream");
+     strm_node->set_attribute("id", id);
+     strm_node->set_attribute("mode", mode);
+ }
+@@ -545,11 +545,11 @@
+     xmlpp::Element* root_node = doc.create_root_node("dvdauthor");
+     // глобальная секция
+     {
+-        xmlpp::Element* vmgm_node = root_node->add_child("vmgm");
++        xmlpp::Element* vmgm_node = root_node->add_child_element("vmgm");
+         vmgm_node->add_child_comment("First Play");
+         AddChildWithText(vmgm_node, "fpc", "jump menu entry title;");
+ 
+-        xmlpp::Element* node = vmgm_node->add_child("menus");
++        xmlpp::Element* node = vmgm_node->add_child_element("menus");
+         // из-за того, что в VMG мы не устанавливаем ни одно видео, то
+         // надо явно инициализировать атрибуты (см. функцию BuildAVInfo()
+         // в dvdauthor):
+@@ -561,11 +561,11 @@
+         AddVideoTag(node)->set_attribute("resolution", "720xfull");
+         // :KLUDGE: зачем нужно?
+         node->add_child_comment("copy-n-paste?");
+-        xmlpp::Element* sub_node = node->add_child("subpicture");
++        xmlpp::Element* sub_node = node->add_child_element("subpicture");
+         sub_node->set_attribute("lang", "EN");
+ 
+         // кнопка "Title" = кнопка "Menu"
+-        xmlpp::Element* title_entry = node->add_child("pgc");
++        xmlpp::Element* title_entry = node->add_child_element("pgc");
+         title_entry->set_attribute("entry", "title");
+         // g1 - номер текущего меню
+         // g2 - признак Play All
+@@ -577,21 +577,21 @@
+     }
+     // основная часть
+     {
+-        xmlpp::Element* tts_node   = root_node->add_child("titleset");
++        xmlpp::Element* tts_node   = root_node->add_child_element("titleset");
+         // * меню
+-        xmlpp::Element* menus_node = tts_node->add_child("menus");
++        xmlpp::Element* menus_node = tts_node->add_child_element("menus");
+         AddVideoTag(menus_node, IsMenuToBe4_3());
+         if( !IsMenuToBe4_3() )
+         {
+             // Jim Taylor, DVD Demustified - для нормального отображения меню 16:9
+             // нужны отдельные субтитры для widescreen и letterbox
+-            xmlpp::Element* sub_node  = menus_node->add_child("subpicture");
++            xmlpp::Element* sub_node  = menus_node->add_child_element("subpicture");
+             AddSubpicStream(sub_node, "0", "widescreen");
+             AddSubpicStream(sub_node, "1", "letterbox");
+         }
+         ForeachMenu(bb::bind(&ScriptMenu, menus_node, root_menu, _1, _2));
+         // * список разделов (titles)
+-        xmlpp::Element* ts_node = tts_node->add_child("titles");
++        xmlpp::Element* ts_node = tts_node->add_child_element("titles");
+         AddVideoTag(ts_node, Is4_3(first_vi));
+ 
+         ForeachVideo(bb::bind(&ScriptTitle, ts_node, _1, out_dir));
+@@ -1140,7 +1140,7 @@
+             if( IsVersionGE(FindVersion(help_str, spumux_version, "spumux"), TripleVersion(0, 7, 0)) )
+                 AddFormatAttr(sp);
+ 
+-            xmlpp::Element* ts = sp->add_child("stream")->add_child("textsub");
++            xmlpp::Element* ts = sp->add_child_element("stream")->add_child_element("textsub");
+ 
+             SubtitleData& dat = vi->subDat;
+             ts->set_attribute("filename", dat.pth);

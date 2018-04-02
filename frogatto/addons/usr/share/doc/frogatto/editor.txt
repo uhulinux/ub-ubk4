@@ -1,0 +1,88 @@
+#summary How to use the Frogatto editor.
+
+The frogatto editor is built-into the game, so in order to get at it, you first need to launch the game.  Once the game has loaded, simply press *ctrl-e* and the editor will activate.  The editor will automatically start editing the level you're on (although you can open any level in the game once inside it).
+
+Pressing esc will immediately quit the editor; and _it will not warn you about saving!_  You can save by pressing *ctrl-s*, so be sure to do this often.
+
+Once you've launched the editor, you'll see a row of menus at the upper-left corner of the window, and a sidebar on the right with tools - much like a basic graphics program like paint or photoshop.  Underneath the tools is an 'inspector' - it will show special options for the selected tool, or will show properties you can edit about the current item (such as how far a moving platform moves, or where a door goes to).
+
+
+===Things the Editor Can't Do===
+The editor can't write scripts that make events happen, and it can't make character dialogues/speech.  It also can't edit how monsters/objects/players work or change any of the core behaviour of the game.  No matter how much work we put into making a gui for these items, it wouldn't actually make creating them easier, because what we would end up creating would be isometric to the code that describes them.  There's a certain amount of complexity to them that can't be reduced.  We're saving time, and avoiding some really ugly program bloat, by deliberately not trying.
+
+
+===Editor Controls===
+Most of the controls are listed in the menus.  The big one that isn't is the control to move the screen around, which is the arrow keys. (You can hold 0 to scroll faster.) As you scroll around, you'll inevitably run into a large white rectangle which turns yellow when you mouse-over it - this both shows the bounds of the level, and lets you edit them by dragging an edge.
+
+Several things global to a level are set by going to the *Edit -> Level Properties* menu item. Backgrounds, and music are two of these, as well as the next and previous levels, which are the ones you get to by walking off the right/left edges.
+
+
+===Placing Tiles===
+The first tool we'll cover is the *tile rectangle* tool; partly because it's automatically selected for you when the editor starts up.  The tile rectangle tool lets you drag a rectangle on the game screen, and it will fill all the tiles inside that rectangle with the kind of tile you have selected.  If you click with the right mouse button instead of the left one, it will delete those tiles.
+
+There's a drop-down menu right below the tools which will be labelled something like 'plants' or 'rocks'.  This shows the different categories of tiles we have; you can use it to pick a different kind of tile, such as rocks, or grass, etc.
+
+Frogatto is very different from most games in that frogatto uses _pure_ autotiling.  Some games, like the original mario brothers, have no specially-drawn decorative transitions to show the edges of a chunk of tiles.  Many of the later games that did, had you place them by hand;  if you wanted a corner piece, you had to choose it and specifically place it.  Frogatto uses a thing called auto-tiling;  all of these special transitions are placed automatically.  If you're placing an edge, it can tell, and will use the appropriate edge decorations.  You don't have to specifically place these decorations; the only thing you have to specifically choose is the general kind of tile to place, such as 'grey stone'.
+
+Because of this, although most tiles will automatically arrange themselves to look nice when you place them, some tiles are designed to only be used horizontally or vertically (such as grass).  If you place two rows of grass right in tiles right next to each other, vertically, they'll look ugly.  You'll know this when you see it.
+
+   * *Tip:* When designing a level, always give plenty of room for the character to move around.  Frogatto player-characters are considered two tiles wide/tall; don't make any horizontal or vertical passage less than this, the player won't be able to enter them.  In fact, it's generally best to give plenty of head-room (4+ tiles) above the character, because cramped spaces cause claustrophobia and player frustration.
+
+The *rectangle-select* tool lets you select a rectangle of tiles, and drag them around, or delete them.
+
+The *pencil* tool lets you place one tile at a time.  Like the tile-rectangle tool, you can place tiles with the left mouse button, and delete them with the right mouse button.
+
+Frogatto has a concept of *layers* - right on the left edge of the sidebar, you'll see a column of checkboxes with numbers next to them.  Each of these refers to a specific 'depth' (into the screen).  You can imagine each one of these as being like a transparency slide (from those old grade-school projectors), all stacked on top of each other.  When you place tiles, they go into one of these layers.  Right now, each kind of tile is hard-coded to go into one specific layer (stone, for example, goes into layer 4); you're not able to choose which layer they go in.  You can hide individual layers, and they'll become almost (but not completely) invisible - when you do this, they're also immune to any changes, so you can use this to selectively edit certain layers without harming the work you've done in other layers.
+
+   * *Tip:* Frogatto's autotiling currently goofs up with two different kinds of tiles in the same layer (such as grey stone and forest-ground).  These tiles will start bugging-out if you place them near each other (within 2 tiles), so don't do that.
+
+Last but not least, there is a *Magic Wand* tool;  much like in a graphics program, this will select any contiguous shape of solid tiles, which helps in tight spaces where the rectangle-select tool might be selecting other tiles you don't want.
+
+
+===Placing Objects===
+Objects comprise the other half of stuff in the game, including the player, collectable items, monsters, and a number of bits of scenery that mesh with the tiles.
+
+There are two object tools, both of which have a 'cube' in their icon.  The one with a + in it, the *add object* tool, lets you place any kind of object.  The other tool is the *select object* tool, which lets you modify the properties of an object.  The editor will automatically switch between them based on what you click - if you click somewhere empty as if to place an object, it will switch-to the add-object tool, if you click on an object, it'll automatically select the object for you to change its properties, and switch to that tool.
+
+   * *Tip:* When you place an object, placement and dragging the position of the object around, is locked onto a grid.  You can temporarily turn this off to place the objects with more precision, by holding down *control* as you drag the object around.
+
+   * *Tip:* The keyboard shortcut to switch which direction the next object you place will face towards, is *f*.
+
+Frogatto himself is an object you can place.  His position won't normally matter, because you usually enter the level from a door or by walking onto it from the side, but his position determines where you'd start the level from if you open the level directly.
+
+Coins, hearts, and powerups are all placeable as items.  Placing monsters works the same way, in fact practically everything works under the simple system of selecting it, and plopping it down.
+
+   * *Tip:* By holding the mouse over an object, you can see a preview of what it will do when it 'comes to life'.  This is very useful for seeing if shots from an object will hit a certain spot, or how a monster will walk on a certain platform.
+
+
+===Advanced Object Settings:===
+Some items, like moving platforms, let you set how far up and down (or side to side) they travel, by clicking on the item.  Once you do, a rectangle of red lines will appear on the game screen which you can drag the edges of to set how far the object will travel.  Some monsters have similar boundaries.
+
+Some objects, like moving platforms (again), also have numerical values you can change over in the sidebar.  For the platform, this controls how fast it moves.
+
+There are a number of ingame effects that are created by placing a 'generator' object;  these objects are represented by a gear with a little icon superimposed on it (and are in the 'level' category of objects).  These effects include water, secret-passages which make normally solid tiles passthrough, currents that move frogatto around, and triggers that can be used to write scripts (scripts must be written by hand, outside of the editor).  You can select these, and drag around the red lines to change the area they affect.
+
+Doors are also done by objects, and you can click on placed doors to change where they connect to.  Doors use a special feature of frogatto to know about their targets.  Each object is given a unique label when you place it (usually a garble of random letters).  However, you can change this to something memorable, and you can refer to these labels in a number of places - one of which is doors.  Doors can target a specific level and labelled object, which is enough to pinpoint another level, and the door in that level which you're supposed to come out of.  (You can technically target anything with a label, but it's a little funny if you go through a door on one end and come out of a candle on the other.)
+
+Most scenery, such as bushes and trees are placed as objects.  Buildings are also placed as objects.  Some buildings require you to manually place a door on the front of them;  other buildings such as the side cliff-houses, themselves act as a door (we're probably going to transition all of them to this, when we can).  Interior doors also work this way. 
+
+
+===Important Tips===
+Place tiles in a visually pleasing way.  It's important to know that our tiling logic does _not_ cover all possible arrangements, and many possible arrangements will reveal tiling errors.  You simply will have to re-arrange tiles until they're in a supported configuration.  Besides that, though, "visually pleasing" is unfortunately like jazz; if you don't "get it", no amount of explaining will help.
+
+Be careful placing foreground scenery;  it covers up both the player-character and monsters.  This is a nice aesthetic effect, until it starts covering some of the action, whereupon it immediately becomes very frustrating to the player.  Never do it in a place where a monster can be mostly/completely hidden by the scenery.
+
+Be careful placing ceilings, especially over jumps.  Bumping your head is really aggravating, especially when it leads to player-death.
+
+Be careful placing springs; you should always leave the tiles directly above the spring open, so frogatto doesn't bump his head.
+
+We created both our monsters and objects in sets.  Specific monsters generally shouldn't be used outside of those sets;  much like 'castle' monsters were only meant to be used inside the gloomy 'castle' levels in super mario bros.
+
+Don't place sloppy piles of coins in a loot-pile.  The average size of a modestly-difficult-to-obtain loot-pile should be 10 coins, and we created larger denominations for precisely the purpose of avoiding messy piles of coins.  We'll have treasure chests for the same purpose, soon.
+
+Most levels should have a high degree of non-linearity. However, there should be one main track within a level which is the obvious way to progress.  Within this main track of the level, be extra careful to make gameplay forgiving.
+
+We're trying to avoid the design trap of making frogatto 'nintendo hard', which is to say we're trying to avoid making it so hard that it's completely inaccessible to people who weren't born-and-raised on the superhard platform titles of the 80s and early 90s.  This is actually surprisingly easy to fall into as a level-designer.  When you make a puzzle that's really hard to get past, you might pat yourself on the back and marvel at how clever you were for doing that.  *Don't.*  This is a bad way of thinking guaranteed to make a game so difficult that most 'normal people' will quit in disgust.  It's okay to use tricks like this in optional, side-areas of the game, but in the main track of the game, especially for the planned minisaga, we want it to be much easier, and much more forgiving on the player.  We want a seven-year-old kid to be able to play it, and beat it.
+
+Always try and think about how your level will feel to a person who doesn't have the knowledge that you have, as the creator of the level.  Many things will be completely non-obvious, and can be show-stoppingly confusing.
+

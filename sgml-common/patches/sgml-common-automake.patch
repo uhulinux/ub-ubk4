@@ -1,0 +1,17 @@
+--- sgml-common-0.6.3/doc/man/Makefile.am.automake	2001-01-30 14:42:22.000000000 +0000
++++ sgml-common-0.6.3/doc/man/Makefile.am	2007-05-15 18:14:45.000000000 +0100
+@@ -1,2 +1,1 @@
+-man8dir	  = $(mandir)/man8
+-man8_DATA = *.8
++man8_MANS = install-catalog.8
+--- sgml-common-0.6.3/doc/man/Makefile.in.automake	2007-05-15 18:14:36.000000000 +0100
++++ sgml-common-0.6.3/doc/man/Makefile.in	2007-05-15 18:14:52.000000000 +0100
+@@ -63,7 +63,6 @@
+ docdir = @docdir@
+ 
+-man8dir = $(mandir)/man8
+-man8_DATA = *.8
++man8_MANS = install-catalog.8
+ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+ CONFIG_CLEAN_FILES = 
+ DATA =  $(man8_DATA)

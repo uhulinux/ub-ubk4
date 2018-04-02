@@ -1,0 +1,103 @@
+### -*-hoc-*-
+### ====================================================================
+### Provide functions annuity(r,n) and compound(r,n) for financial
+### calculations, and mortgage(principal, percent, years) for preparing
+### a mortgage loan report.
+### [17-Jan-2002]
+### ====================================================================
+
+func annuity(r,n) \
+{
+	## annuity(r,n) == (1 - (1 + r)^(-n))/r		[r > -1]
+	t = n * log1p(r)
+	if (r > -1) \
+		return (exp(-t) * expm1(n * log1p(r)) / r) \
+	else \
+		return (NaN)
+}
+
+func compound(r,n) \
+{
+	## compound(r,n) == (1 + r)^n
+	if (r > -1) \
+		return exp(n * log1p(r)) \
+	else \
+		return (NaN)
+}
+
+proc mortgage(principal, percent, years) \
+{
+	## mortgage(principal, percent, years)
+	global PREC
+
+	months = 12 * years
+	rate = percent / 100
+
+	monthly_payment = principal / annuity(rate / 12, months)
+
+	old_prec = PREC
+	PREC = 6
+ 	printf "Loan principal:       %12.0f\n", principal
+	printf "Loan period:          %12.0f years (%d months)\n", years, months
+	printf "Annual interest rate: %12.2f%%\n", percent
+	printf "Monthly payment:      %14.2f\n", monthly_payment
+	printf "Total interest paid:  %14.2f\n", (months * monthly_payment) - principal
+	PREC = old_prec
+}
+
+proc help_annuity() \
+{
+	print "\tannuity(r,n) returns (1 - (1+r)^(-n))/r, the present value of\n"
+	print "\tannuity factor, taking care to avoid accuracy loss for small r.\n\n"
+
+	print "\tIf r <= -1, NaN is returned.\n\n"
+
+	print "\tFor example, a fixed-rate 30-year mortgage for an amount P\n"
+	print "\tat 10% annual interest would require weekly payments of\n\n"
+
+	print "\t\tpw = P / annuity(0.10 / 52, 30 * 52)\n\n"
+
+	print "\tor monthly payments of\n\n"
+
+	print "\t\tpm = P / annuity(0.10 / 12, 30 * 12)\n\n"
+
+	print "\tor quarterly payments of\n\n"
+
+	print "\t\tpq = P / annuity(0.10 / 4, 30 * 4)\n\n"
+
+	print "\tor annual payments of\n\n"
+
+	print "\t\tpa = P / annuity(0.10, 30)\n\n"
+}
+
+proc help_compound() \
+{
+	print "\tcompound(r,n) returns (1 + r)^n, taking care to avoid accuracy\n"
+	print "\tloss for small r.\n\n"
+
+	print "\tIf r <= -1, NaN is returned.\n\n"
+
+	print "\tFor example, a principal amount P invested at 5% annual interest\n"
+	print "\tand compounded weekly for 30 years would yield\n\n"
+
+	print "\t\tPw = P * compound(0.05 / 52, 30 * 52)\n\n"
+
+	print "\tThe yield with monthly compounding is\n\n"
+
+	print "\t\tPm = P * compound(0.05 / 12, 30 * 12)\n\n"
+
+	print "\tThe yield with quarterly compounding is\n\n"
+
+	print "\t\tPq = P * compound(0.05 / 4, 30 * 4)\n\n"
+
+	print "\tThe yield with annual compounding is\n\n"
+
+	print "\t\tPa = P * compound(0.05 , 30)\n\n"
+}
+
+proc help_mortgage() \
+{
+	print "\tmortgage(principal, percent, years) reports mortgage loan\n"
+	print "\tpayments for a loan with original amount, principal, at an\n"
+	print "\tannual percentage rate, percent, for a period of years.\n\n"
+}

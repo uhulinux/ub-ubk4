@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+./autogen.sh
+export UB_MAKE_PROCS=1
+ub_configure --prefix=/usr
+jam

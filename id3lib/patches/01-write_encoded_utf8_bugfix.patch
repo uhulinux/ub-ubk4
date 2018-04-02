@@ -1,0 +1,236 @@
+http://sourceforge.net/tracker/index.php?func=detail&aid=1015188&group_id=979&atid=300979
+
+and in the mean time it also fixes
+http://sourceforge.net/tracker/index.php?func=detail&aid=1016290&group_id=979&atid=300979
+
+diff -ru id3lib-3.8.3.orig/src/field.cpp id3lib-3.8.3/src/field.cpp
+--- id3lib-3.8.3.orig/src/field.cpp	Sun Mar  2 02:23:00 2003
++++ id3lib-3.8.3/src/field.cpp	Tue Aug 24 06:21:11 2004
+@@ -943,11 +943,11 @@
+       _text.erase();
+       if (_fixed_size > 0)
+       {
+-        if (this->GetEncoding() == ID3TE_UNICODE)
++        if (ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()))
+         {
+           _text.assign(_fixed_size * 2, '\0');
+         }
+-        else if (this->GetEncoding() == ID3TE_ASCII)
++        else if (ID3TE_IS_SINGLE_BYTE_ENC(this->GetEncoding()))
+         {
+           _text.assign(_fixed_size, '\0');
+         }
+@@ -999,7 +999,7 @@
+   if (_type == ID3FTY_TEXTSTRING)
+   {
+     ID3_TextEnc enc = this->GetEncoding();
+-    if (enc == ID3TE_UNICODE && size > 0)
++    if (ID3TE_IS_DOUBLE_BYTE_ENC(enc) && size > 0)
+     {
+       size++;
+     }
+@@ -1007,7 +1007,7 @@
+     {
+       size++;
+     }
+-    if (enc == ID3TE_UNICODE)
++    if (ID3TE_IS_DOUBLE_BYTE_ENC(enc))
+     {
+       size *= 2;
+     }
+diff -ru id3lib-3.8.3.orig/src/field_string_ascii.cpp id3lib-3.8.3/src/field_string_ascii.cpp
+--- id3lib-3.8.3.orig/src/field_string_ascii.cpp	Sun Mar  2 02:23:00 2003
++++ id3lib-3.8.3/src/field_string_ascii.cpp	Tue Aug 24 06:21:11 2004
+@@ -88,7 +88,7 @@
+ {
+   size_t size = 0;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_ASCII &&
++      ID3TE_IS_SINGLE_BYTE_ENC(this->GetEncoding()) &&
+       buffer != NULL && maxLength > 0)
+   {
+     String data = this->GetText();
+@@ -107,7 +107,7 @@
+ {
+   size_t size = 0;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_ASCII &&
++      ID3TE_IS_SINGLE_BYTE_ENC(this->GetEncoding()) &&
+       buf != NULL && maxLen > 0)
+   {
+     String data = this->GetTextItem(index);
+@@ -135,7 +135,7 @@
+ {
+   String data;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_ASCII)
++      ID3TE_IS_SINGLE_BYTE_ENC(this->GetEncoding()))
+   {
+     const char* raw = this->GetRawTextItem(index);
+     if (raw != NULL)
+@@ -225,7 +225,7 @@
+ 
+     // ASSERT(_fixed_size == 0)
+     _text += '\0';
+-    if (this->GetEncoding() == ID3TE_UNICODE)
++    if (ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()))
+     {
+       _text += '\0';
+     }
+@@ -262,7 +262,7 @@
+ {
+   const char* text = NULL;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_ASCII)
++      ID3TE_IS_SINGLE_BYTE_ENC(this->GetEncoding()))
+   {
+     text = _text.c_str();
+   }
+@@ -273,7 +273,7 @@
+ {
+   const char* text = NULL;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_ASCII &&
++      ID3TE_IS_SINGLE_BYTE_ENC(this->GetEncoding()) &&
+       index < this->GetNumTextItems())
+   {
+     text = _text.c_str();
+@@ -289,7 +289,7 @@
+ {
+   String readEncodedText(ID3_Reader& reader, size_t len, ID3_TextEnc enc)
+   {
+-    if (enc == ID3TE_ASCII)
++    if (ID3TE_IS_SINGLE_BYTE_ENC(enc))
+     {
+       return io::readText(reader, len);
+     }
+@@ -298,7 +298,7 @@
+ 
+   String readEncodedString(ID3_Reader& reader, ID3_TextEnc enc)
+   {
+-    if (enc == ID3TE_ASCII)
++    if (ID3TE_IS_SINGLE_BYTE_ENC(enc))
+     {
+       return io::readString(reader);
+     }
+@@ -307,20 +307,20 @@
+ 
+   size_t writeEncodedText(ID3_Writer& writer, String data, ID3_TextEnc enc)
+   {
+-    if (enc == ID3TE_ASCII)
++    if (ID3TE_IS_SINGLE_BYTE_ENC(enc))
+     {
+       return io::writeText(writer, data);
+     }
+-    return io::writeUnicodeText(writer, data);
++    return io::writeUnicodeText(writer, data, enc == ID3TE_UTF16);
+   }
+ 
+   size_t writeEncodedString(ID3_Writer& writer, String data, ID3_TextEnc enc)
+   {
+-    if (enc == ID3TE_ASCII)
++    if (ID3TE_IS_SINGLE_BYTE_ENC(enc))
+     {
+       return io::writeString(writer, data);
+     }
+-    return io::writeUnicodeString(writer, data);
++    return io::writeUnicodeString(writer, data, enc == ID3TE_UTF16);
+   }
+ }
+ 
+diff -ru id3lib-3.8.3.orig/src/field_string_unicode.cpp id3lib-3.8.3/src/field_string_unicode.cpp
+--- id3lib-3.8.3.orig/src/field_string_unicode.cpp	Sun Mar  2 02:23:00 2003
++++ id3lib-3.8.3/src/field_string_unicode.cpp	Tue Aug 24 06:21:11 2004
+@@ -50,7 +50,7 @@
+ {
+   size_t size = 0;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_UNICODE && data)
++      ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()) && data)
+   {
+     String text((const char*) data, ucslen(data) * 2);
+     size = this->SetText_i(text);
+@@ -62,7 +62,7 @@
+ {
+   size_t size = 0;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_UNICODE)
++      ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()))
+   {
+     String text((const char*) data, ucslen(data) * 2);
+     size = this->AddText_i(text);
+@@ -94,7 +94,7 @@
+ {
+   size_t length = 0;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_UNICODE &&
++      ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()) &&
+       buffer != NULL && maxLength > 0)
+   {
+     size_t size = this->Size();
+@@ -112,7 +112,7 @@
+ {
+   const unicode_t* text = NULL;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_UNICODE)
++      ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()))
+   {
+     text = (unicode_t *)_text.data();
+   }
+@@ -123,7 +123,7 @@
+ {
+   const unicode_t* text = NULL;
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_UNICODE &&
++      ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()) &&
+       index < this->GetNumTextItems())
+   {
+     String unicode = _text + '\0' + '\0';
+@@ -141,7 +141,7 @@
+   size_t length = 0;
+   size_t total_items = this->GetNumTextItems();
+   if (this->GetType() == ID3FTY_TEXTSTRING &&
+-      this->GetEncoding() == ID3TE_UNICODE &&
++      ID3TE_IS_DOUBLE_BYTE_ENC(this->GetEncoding()) &&
+       buffer != NULL && maxLength > 0 && itemNum < total_items)
+   {
+     const unicode_t* text = this->GetRawUnicodeTextItem(itemNum);
+diff -ru id3lib-3.8.3.orig/src/io_helpers.cpp id3lib-3.8.3/src/io_helpers.cpp
+--- id3lib-3.8.3.orig/src/io_helpers.cpp	Sun Mar  2 02:23:00 2003
++++ id3lib-3.8.3/src/io_helpers.cpp	Tue Aug 24 06:21:11 2004
+@@ -358,15 +358,27 @@
+   {
+     return 0;
+   }
+-  if (bom)
+-  {
++  int is_bom = isBOM(data[0],data[1]);
++  if (!is_bom && bom) {
+     // Write the BOM: 0xFEFF
+-    unicode_t BOM = 0xFEFF;
+-    writer.writeChars((const unsigned char*) &BOM, 2);
+-    for (size_t i = 0; i < size; i += 2)
+-    {
+-      unicode_t ch = (data[i] << 8) | data[i+1];
+-      writer.writeChars((const unsigned char*) &ch, 2);
++    const unsigned char BOMch1 = 0xFE;
++    const unsigned char BOMch2 = 0xFF;
++    writer.writeChars(&BOMch1, 1);
++    writer.writeChars(&BOMch2, 1);
++  }
++  for (size_t i = 0; i < size; i += 2)
++  {
++    if (!i && !bom && is_bom) {
++      // Skip unneeded leading BOM
++      continue;
++    }
++    if (is_bom >= 0) {
++      writer.writeChars(data.data()+i, 1);
++      writer.writeChars(data.data()+i+1, 1);
++    }
++    else {
++      writer.writeChars(data.data()+i+1, 1);
++      writer.writeChars(data.data()+i, 1);
+     }
+   }
+   return writer.getCur() - beg;

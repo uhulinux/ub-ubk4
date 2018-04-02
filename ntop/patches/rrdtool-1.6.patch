@@ -1,0 +1,29 @@
+diff -Naur orig/configure.in patched/configure.in
+--- orig/configure.in	2012-08-13 09:35:26.000000000 +0200
++++ patched/configure.in	2016-09-17 00:32:00.113733905 +0200
+@@ -892,19 +892,19 @@
+    fi
+ fi
+ 
+-RRD_LIB="-L${RRD_HOME}/lib -lrrd_th"
++RRD_LIB="-L${RRD_HOME}/lib -lrrd"
+ 
+-if test -f "$RRD_HOME/lib/librrd_th.so"; then
++if test -f "$RRD_HOME/lib/librrd.so"; then
+    AC_MSG_RESULT(checking for rrdtool... yes)
+ else
+-  if test -f "$RRD_HOME/lib/librrd_th.dylib"; then # OSX
++  if test -f "$RRD_HOME/lib/librrd.dylib"; then # OSX
+      AC_MSG_RESULT(checking for rrdtool... yes)
+   else
+-     if test -f "$RRD_HOME/lib/librrd_th.a"; then
++     if test -f "$RRD_HOME/lib/librrd.a"; then
+        AC_MSG_RESULT(checking for rrdtool... yes)
+      else
+-       AC_CHECK_LIB([rrd_th], [main])
+-       if test ".${ac_cv_lib_rrd_th_main}" != ".yes"; then
++       AC_CHECK_LIB([rrd], [main])
++       if test ".${ac_cv_lib_rrd_main}" != ".yes"; then
+          AC_MSG_ERROR(Unable to find RRD at $RRD_HOME: please use --with-rrd-home=DIR);
+ 	 AC_MSG_ERROR(RRD source can be downloaded from http://www.rrdtool.org/);
+        else

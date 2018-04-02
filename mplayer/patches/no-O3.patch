@@ -1,0 +1,12 @@
+diff -Nur orig/configure mod/configure
+--- orig/configure	2016-02-13 22:05:42.000000000 +0100
++++ mod/configure	2017-06-03 12:38:49.618798877 +0200
+@@ -2831,7 +2831,7 @@
+ fi
+ 
+ CFLAGS="-D_ISOC99_SOURCE -I. -Iffmpeg $CFLAGS"
+-HOSTCFLAGS="-D_ISOC99_SOURCE -I. -Iffmpeg -O3"
++HOSTCFLAGS="-D_ISOC99_SOURCE -I. -Iffmpeg -O2"
+ 
+ # On glibc, add some more CPPFLAGS for enabling required functionality.
+ cpp_condition_check features.h "defined __GLIBC__" &&

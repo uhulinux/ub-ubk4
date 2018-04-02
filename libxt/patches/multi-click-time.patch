@@ -1,0 +1,12 @@
+diff -Naur libXt-1.0.0.orig/src/Initialize.c libXt-1.0.0/src/Initialize.c
+--- libXt-1.0.0.orig/src/Initialize.c	2005-05-18 17:38:31.000000000 +0200
++++ libXt-1.0.0/src/Initialize.c	2006-05-19 14:37:35.000000000 +0200
+@@ -918,7 +918,7 @@
+ 	if (!_GetResource(dpy, search_list,
+ 			  "multiClickTime", "MultiClickTime",
+ 			  XtRInt, &value)) {
+-	    pd->multi_click_time = 200;
++	    pd->multi_click_time = 400;
+ 	}
+ 
+ 	value.size = sizeof(pd->appContext->selectionTimeout);

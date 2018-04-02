@@ -1,0 +1,39 @@
+### -*-hoc-*-
+### ====================================================================
+### Implement require() and provide() functions for avoiding unnecessary
+### reloading of library files.
+### [07-Jan-2002]
+### ====================================================================
+
+if (!defined(___provide_list)) \
+	___provide_list = ""
+
+proc provide(filename) \
+{
+	## Usage: provide("filename")
+	global ___provide_list
+
+	___provide_list = ___provide_list "<<" protect(filename) ">> "
+}
+
+proc require(filename) \
+{
+	## Usage: require("filename")
+	global ___provide_list
+
+	if (index(___provide_list, ("<<" protect(filename) ">>")) == 0) \
+		load(filename)
+}
+
+proc help_provide() \
+{
+	print "\tprovide(\"filename\") records that \"filename\" has already been\n"
+	print "\tloaded.  The companion require(\"filename\") function can then\n"
+	print "\tavoid reloading it unnecessarily.\n\n"
+}
+
+proc help_require() \
+{
+	print "\trequire(\"filename\") checks whether provide(\"filename\") has\n"
+	print "\talready been called, and if not, calls load(\"filename\").\n\n"
+}

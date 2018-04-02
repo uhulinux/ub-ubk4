@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp scripts/squid_redirect-nodata "$UB_INSTALLDIR"/usr/bin/adzapper
+cp scripts/{wrapzap,zapchain} "$UB_INSTALLDIR"/usr/bin/
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/adzapper
+cp -r zaps "$UB_INSTALLDIR"/usr/lib/adzapper/

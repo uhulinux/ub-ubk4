@@ -1,0 +1,16 @@
+diff -Naur orig/xdm/file.c patched/xdm/file.c
+--- orig/xdm/file.c	2011-09-25 09:35:47.000000000 +0200
++++ patched/xdm/file.c	2013-04-08 00:48:18.523094289 +0200
+@@ -165,6 +165,12 @@
+     type = args[1];
+     argv = args + 2;
+     /*
++     * Support kdm extended syntax to reserve a server for future use but do nothing
++     */
++    if (strcmp(argv[0], "reserve") == 0) {
++      return;
++    }
++    /*
+      * extended syntax; if the second argument doesn't
+      * exactly match a legal display type and the third
+      * argument does, use the second argument as the

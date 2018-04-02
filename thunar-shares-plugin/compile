@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+sed -i s/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/g configure.in
+xdt-autogen
+ub_compile

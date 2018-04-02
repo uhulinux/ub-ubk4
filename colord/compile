@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_compile \
+    -Denable-libcolordcompat=true \
+    -Denable-vala=true \
+    -Denable-print-profiles=true \
+    -Dwith-daemon-user=colord \
+    -Denable-argyllcms-sensor=true \
+    -Denable-man=false \
+    -Denable-docs=false

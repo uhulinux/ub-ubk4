@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+./configure \
+	--prefix=/usr \
+	--enable-ccache \
+	--enable-shared \
+	--enable-postproc \
+    --enable-pic \
+    --enable-vp8 \
+    --enable-vp9 \
+    --enable-vp9-highbitdepth \
+    --enable-spatial-svc \
+    --disable-install-docs \
+    --disable-install-srcs \
+    --disable-ssse3 \
+    --disable-optimizations
+ub_make

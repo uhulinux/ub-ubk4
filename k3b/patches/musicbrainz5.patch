@@ -1,0 +1,82 @@
+diff -Naur orig/cmake/modules/FindMusicBrainz5.cmake patched/cmake/modules/FindMusicBrainz5.cmake
+--- orig/cmake/modules/FindMusicBrainz5.cmake	1970-01-01 01:00:00.000000000 +0100
++++ patched/cmake/modules/FindMusicBrainz5.cmake	2016-03-17 14:53:21.000000000 +0100
+@@ -0,0 +1,30 @@
++# Module to find the musicbrainz-4 library
++#
++# It defines
++#  MUSICBRAINZ5_INCLUDE_DIR - the include dir
++#  MUSICBRAINZ5_LIBRARIES - the required libraries
++#  MUSICBRAINZ5_FOUND - true if both of the above have been found
++
++# Copyright (c) 2006,2007 Laurent Montel, <montel@kde.org>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
++
++if(MUSICBRAINZ5_INCLUDE_DIR AND MUSICBRAINZ5_LIBRARIES)
++    set(MUSICBRAINZ5_FIND_QUIETLY TRUE)
++endif()
++
++find_path(MUSICBRAINZ5_INCLUDE_DIR musicbrainz5/Disc.h)
++
++find_library(MUSICBRAINZ5_LIBRARIES NAMES musicbrainz5)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(MusicBrainz5 DEFAULT_MSG MUSICBRAINZ5_INCLUDE_DIR MUSICBRAINZ5_LIBRARIES)
++
++add_library(musicbrainz SHARED IMPORTED)
++set_target_properties(musicbrainz PROPERTIES
++    INTERFACE_INCLUDE_DIRECTORIES "${MUSICBRAINZ5_INCLUDE_DIR}"
++    IMPORTED_LOCATION "${MUSICBRAINZ5_LIBRARIES}"
++)
++
++mark_as_advanced(MUSICBRAINZ5_INCLUDE_DIR MUSICBRAINZ5_LIBRARIES)
+diff -Naur orig/cmake/modules/FindMusicBrainz.cmake patched/cmake/modules/FindMusicBrainz.cmake
+--- orig/cmake/modules/FindMusicBrainz.cmake	2016-03-17 15:09:17.000000000 +0100
++++ patched/cmake/modules/FindMusicBrainz.cmake	1970-01-01 01:00:00.000000000 +0100
+@@ -1,32 +0,0 @@
+-# Module to find the musicbrainz library
+-#
+-# It defines
+-#  MUSICBRAINZ_INCLUDE_DIR - the include dir 
+-#  MUSICBRAINZ_LIBRARIES - the required libraries
+-#  MUSICBRAINZ_FOUND - true if both of the above have been found
+-
+-# Copyright (c) 2006,2007 Laurent Montel, <montel@kde.org>
+-#
+-# Redistribution and use is allowed according to the terms of the BSD license.
+-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+-
+-if(MUSICBRAINZ_INCLUDE_DIR AND MUSICBRAINZ_LIBRARIES)
+-   set(MUSICBRAINZ_FIND_QUIETLY TRUE)
+-endif(MUSICBRAINZ_INCLUDE_DIR AND MUSICBRAINZ_LIBRARIES)
+-
+-FIND_PATH(MUSICBRAINZ_INCLUDE_DIR musicbrainz/musicbrainz.h)
+-
+-FIND_LIBRARY( MUSICBRAINZ_LIBRARIES NAMES musicbrainz)
+-
+-# We need version 2, version 3 is source-incompatible
+-FIND_PATH(MUSICBRAINZ3_INCLUDE_DIR musicbrainz3/musicbrainz.h)
+-if(MUSICBRAINZ3_INCLUDE_DIR AND NOT MUSICBRAINZ_INCLUDE_DIR)
+-   message(STATUS "\nIncompatible version 3.x of the musicbrainz includes detected. Version 2.x is needed.\n")
+-endif(MUSICBRAINZ3_INCLUDE_DIR AND NOT MUSICBRAINZ_INCLUDE_DIR)
+-
+-include(FindPackageHandleStandardArgs)
+-find_package_handle_standard_args( MusicBrainz DEFAULT_MSG
+-                                   MUSICBRAINZ_INCLUDE_DIR MUSICBRAINZ_LIBRARIES)
+-
+-MARK_AS_ADVANCED(MUSICBRAINZ_INCLUDE_DIR MUSICBRAINZ_LIBRARIES)
+-
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2016-03-17 15:09:17.000000000 +0100
++++ patched/CMakeLists.txt	2016-03-17 21:25:00.033513644 +0100
+@@ -88,7 +88,7 @@
+ endif()
+ 
+ if(K3B_ENABLE_MUSICBRAINZ)
+-    find_package(MusicBrainz)
++    find_package(MusicBrainz5)
+     set_package_properties(MusicBrainz PROPERTIES
+         DESCRIPTION "Provide information about the CD, about the artist or about related information"
+         URL "http://musicbrainz.org"

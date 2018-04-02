@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+export LDFLAGS+='-lX11'
+ub_compile \
+	--with-readline=gnu \
+	--with-lua

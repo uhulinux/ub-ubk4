@@ -1,0 +1,12 @@
+diff -Naur mdadm-3.3-orig/Makefile mdadm-3.3/Makefile
+--- mdadm-3.3-orig/Makefile	2013-09-14 21:21:05.400815948 +0200
++++ mdadm-3.3/Makefile	2013-09-14 21:24:43.288327373 +0200
+@@ -111,7 +111,7 @@
+ 
+ UDEVDIR := $(shell $(PKG_CONFIG) --variable=udevdir udev 2>/dev/null)
+ ifndef UDEVDIR
+- UDEVDIR = /lib/udev
++ UDEVDIR = /usr/lib/udev
+ endif
+ 
+ OBJS =  mdadm.o config.o policy.o mdstat.o  ReadMe.o util.o maps.o lib.o \

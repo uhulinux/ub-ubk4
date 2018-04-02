@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_compile \
+	--with-avahi-priv-access-group=avahi \
+	--with-autoipd-user=avahi \
+	--with-autoipd-group=avahi \
+	--with-distro=none \
+	--enable-compat-libdns_sd \
+	--enable-compat-howl \
+	--disable-mono \
+	--disable-monodoc \
+	--disable-qt3 \
+	--disable-qt4 \
+	--disable-python \
+	--disable-gtk

@@ -1,0 +1,171 @@
+diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
+--- chkrootkit-0.49-orig/chkrootkit	2009-07-30 16:10:54.000000000 +0200
++++ chkrootkit-0.49/chkrootkit	2009-11-01 09:28:25.000000000 +0100
+@@ -31,6 +31,9 @@
+ # Tools
+ TOOLS="aliens asp bindshell lkm rexedcs sniffer w55808 wted scalper slapper z2 chkutmp OSX_RSPLUG"
+ 
++# Path of supporting binaries.
++BIN=/usr/lib/chkrootkit
++
+ # Return Codes
+ INFECTED=0
+ NOT_INFECTED=1
+@@ -171,6 +174,7 @@
+ }
+ 
+ sniffer () {
++STATUS=${NOT_INFECTED}
+     if [ "${ROOTDIR}" != "/" ]; then
+       echo "not tested"
+       return ${NOT_TESTED}
+@@ -181,23 +185,23 @@
+     fi
+ 
+     if [ "${EXPERT}" = "t" ]; then
+-        expertmode_output "./ifpromisc" -v
++        expertmode_output "$BIN/ifpromisc" -v
+         return 5
+     fi
+     if [ ! -x ./ifpromisc ]; then
+-      echo "not tested: can't exec ./ifpromisc"
+-      return ${NOT_TESTED}
++     if [ ! -x "$BIN/ifpromisc" ]; then
++      echo "not tested: can't exec $BIN/ifpromisc"
+     else
+-      [ "${QUIET}" != "t" ] && ./ifpromisc -v || ./ifpromisc -q
++      [ "${QUIET}" != "t" ] && "$BIN/ifpromisc" -v || "$BIN/ifpromisc" -q
+     fi
+ }
+ 
+ chkutmp() {
+-    if [ ! -x ./chkutmp ]; then
+-      echo "not tested: can't exec ./chkutmp"
++    if [ ! -x "$BIN/chkutmp" ]; then
++      echo "not tested: can't exec $BIN/chkutmp"
+       return ${NOT_TESTED}
+     fi
+-    if ./chkutmp
++    if "$BIN/chkutmp"
+     then
+       if [ "${QUIET}" != "t" ]; then echo "chkutmp: nothing deleted"; fi
+     fi
+@@ -205,8 +209,8 @@
+ }
+ 
+ z2 () {
+-    if [ ! -x ./chklastlog ]; then
+-      echo "not tested: can't exec ./chklastlog"
++     if [ ! -x "$BIN/chklastlog" ]; then
++      echo "not tested: can't exec $BIN/chklastlog"
+       return ${NOT_TESTED}
+     fi
+ 
+@@ -219,32 +223,32 @@
+     fi
+ 
+     if [ "${EXPERT}" = "t" ]; then
+-        expertmode_output "./chklastlog -f ${WTMP} -l ${LASTLOG}"
++        expertmode_output "$BIN/chklastlog -f ${WTMP} -l ${LASTLOG}"
+         return 5
+     fi
+ 
+-    if ./chklastlog -f ${WTMP} -l ${LASTLOG}
++    if "$BIN/chklastlog" -f ${WTMP} -l ${LASTLOG}
+     then
+       if [ "${QUIET}" != "t" ]; then echo "chklastlog: nothing deleted"; fi
+     fi
+ }
+ 
+ wted () {
+-    if [ ! -x ./chkwtmp ]; then
+-      echo "not tested: can't exec ./chkwtmp"
++    if [ ! -x "$BIN/chkwtmp" ]; then
++      echo "not tested: can't exec $BIN/chkwtmp"
+       return ${NOT_TESTED}
+     fi
+ 
+    if [ "$SYSTEM" = "SunOS" ]; then
+-       if [ ! -x ./check_wtmpx ]; then
+-          echo "not tested: can't exec ./check_wtmpx"
++       if [ ! -x "$BIN/check_wtmpx" ]; then
++          echo "not tested: can't exec $BIN/check_wtmpx"
+        else
+           if [ "${EXPERT}" = "t" ]; then
+-             expertmode_output "./check_wtmpx"
++             expertmode_output "$BIN/check_wtmpx"
+               return 5
+           fi
+ 	  if [ -f ${ROOTDIR}var/adm/wtmp ]; then
+-             if ./check_wtmpx
++              if "$BIN/check_wtmpx"
+                 then
+                 if [ "${QUIET}" != "t" ]; then \
+                    echo "check_wtmpx: nothing deleted in /var/adm/wtmpx"; fi
+@@ -255,12 +259,12 @@
+        WTMP=`loc wtmp wtmp "${ROOTDIR}var/log ${ROOTDIR}var/adm"`
+ 
+        if [ "${EXPERT}" = "t" ]; then
+-          expertmode_output "./chkwtmp -f ${WTMP}"
++          expertmode_output "$BIN/chkwtmp -f ${WTMP}"
+           return 5
+        fi
+     fi
+ 
+-    if ./chkwtmp -f ${WTMP}
++    if $BIN/chkwtmp -f ${WTMP}
+     then
+       if [ "${QUIET}" != "t" ]; then echo "chkwtmp: nothing deleted"; fi
+     fi
+@@ -298,8 +302,8 @@
+     prog=""
+     if [  \( "${SYSTEM}" = "Linux"  -o \( "${SYSTEM}" = "FreeBSD" -a \
+        `echo ${V} | ${awk} '{ if ($1 > 4.3 || $1 < 6.0) print 1; else print 0 }'` -eq 1 \) \) -a "${ROOTDIR}" = "/" ]; then
+-      [  -x ./chkproc -a "`find /proc | wc -l`" -gt 1 ] && prog="./chkproc"
+-      [  -x ./chkdirs ] && prog="$prog ./chkdirs"
++      [ ! -x $BIN/chkproc ] && prog="$BIN/chkproc"
++      [ ! -x $BIN/chkdirs ] && prog="$prog $BIN/chkdirs"
+       if [ "$prog" = "" ]; then
+          echo "not tested: can't exec $prog"
+          return ${NOT_TESTED}
+@@ -311,7 +315,7 @@
+          PV=`$ps -V 2>/dev/null| $cut -d " " -f 3 |${awk} -F . '{ print $1 "." $2 $3 }' | ${awk} '{ if ($0 > 3.19) print 3; else if ($0 < 2.015) print 1; else print 2 }'`
+          [ "$PV" = "" ] &&  PV=2
+          [ "${SYSTEM}" = "SunOS" ] && PV=0
+-         expertmode_output "./chkproc -v -v -p $PV"
++         expertmode_output "$BIN/chkproc -v -v -p $PV"
+          return 5
+       fi
+ 
+@@ -338,7 +342,7 @@
+       if [ "${DEBUG}" = "t" ]; then
+            ${echo} "*** PV=$PV ***"
+       fi
+-      if ./chkproc -p ${PV}; then
++      if $BIN/chkproc -p ${PV}; then
+          if [ "${QUIET}" != "t" ]; then echo "chkproc: nothing detected"; fi
+       else
+          echo "chkproc: Warning: Possible LKM Trojan installed"
+@@ -1718,18 +1722,18 @@
+ 
+    if [ "${SYSTEM}" = "Linux" ]
+    then
+-      if [ ! -x ./strings-static ]; then
+-        printn "can't exec ./strings-static, "
++      if [ ! -x $BIN/strings-static ]; then
++        printn "can't exec $BIN/strings-static, "
+         return ${NOT_TESTED}
+       fi
+ 
+       if [ "${EXPERT}" = "t" ]; then
+-          expertmode_output "./strings-static -a ${CMD}"
++          expertmode_output "$BIN/strings-static -a ${CMD}"
+           return 5
+       fi
+ 
+       ### strings must be a statically linked binary.
+-      if ./strings-static -a ${CMD} > /dev/null 2>&1
++      if $BIN/strings-static -a ${CMD} > /dev/null 2>&1
+       then
+          STATUS=${INFECTED}
+       fi

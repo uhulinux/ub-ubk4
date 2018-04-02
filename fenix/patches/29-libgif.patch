@@ -1,0 +1,135 @@
+Description: Link against libgif
+Author: Thibaut Gridel <tgridel@free.fr>
+Bug-Debian: http://bugs.debian.org/732787
+Forwarded: no
+Last-Update: 2013-12-18
+
+--- fenix-0.92a.dfsg1.orig/configure.in
++++ fenix-0.92a.dfsg1/configure.in
+@@ -115,7 +115,7 @@ fi
+ 
+ dnl para map
+ if test "$map" = yes; then
+-	AC_CHECK_LIB(ungif,DGifOpenFileName,LIBS="$LIBS",AC_MSG_ERROR(lungif library not found))
++	AC_CHECK_LIB(gif,DGifOpenFileName,LIBS="$LIBS",AC_MSG_ERROR(libgif library not found))
+ fi
+ 
+ dnl make these visible to all Makefiles
+
+--- fenix-0.92a.dfsg1.orig/configure
++++ fenix-0.92a.dfsg1/configure
+@@ -4454,13 +4454,13 @@ fi
+ fi
+ 
+ if test "$map" = yes; then
+-	echo "$as_me:$LINENO: checking for DGifOpenFileName in -lungif" >&5
+-echo $ECHO_N "checking for DGifOpenFileName in -lungif... $ECHO_C" >&6
+-if test "${ac_cv_lib_ungif_DGifOpenFileName+set}" = set; then
++	echo "$as_me:$LINENO: checking for DGifOpenFileName in -lgif" >&5
++echo $ECHO_N "checking for DGifOpenFileName in -lgif... $ECHO_C" >&6
++if test "${ac_cv_lib_gif_DGifOpenFileName+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lungif  $LIBS"
++LIBS="-lgif  $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ #line $LINENO "configure"
+ /* confdefs.h.  */
+@@ -4496,23 +4496,23 @@ if { (eval echo "$as_me:$LINENO: \"$ac_l
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+-  ac_cv_lib_ungif_DGifOpenFileName=yes
++  ac_cv_lib_gif_DGifOpenFileName=yes
+ else
+   echo "$as_me: failed program was:" >&5
+ sed 's/^/| /' conftest.$ac_ext >&5
+ 
+-ac_cv_lib_ungif_DGifOpenFileName=no
++ac_cv_lib_gif_DGifOpenFileName=no
+ fi
+ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+ fi
+-echo "$as_me:$LINENO: result: $ac_cv_lib_ungif_DGifOpenFileName" >&5
+-echo "${ECHO_T}$ac_cv_lib_ungif_DGifOpenFileName" >&6
+-if test $ac_cv_lib_ungif_DGifOpenFileName = yes; then
++echo "$as_me:$LINENO: result: $ac_cv_lib_gif_DGifOpenFileName" >&5
++echo "${ECHO_T}$ac_cv_lib_gif_DGifOpenFileName" >&6
++if test $ac_cv_lib_gif_DGifOpenFileName = yes; then
+   LIBS="$LIBS"
+ else
+-  { { echo "$as_me:$LINENO: error: lungif library not found" >&5
+-echo "$as_me: error: lungif library not found" >&2;}
++  { { echo "$as_me:$LINENO: error: lgif library not found" >&5
++echo "$as_me: error: lgif library not found" >&2;}
+    { (exit 1); exit 1; }; }
+ fi
+ 
+--- fenix-0.92a.dfsg1.orig/fpg/Makefile.am
++++ fenix-0.92a.dfsg1/fpg/Makefile.am
+@@ -5,7 +5,7 @@ bin_PROGRAMS=fpg
+ 
+ INCLUDES = $(COMMON_CFLAGS)
+ 
+-fpg_LDADD=$(COMMON_LIBS) -lz  -lungif -lpng
++fpg_LDADD=$(COMMON_LIBS) -lz  -lgif -lpng
+ 
+ SOURCE_FILES=fpg.c
+ 
+--- fenix-0.92a.dfsg1.orig/map/Makefile.am
++++ fenix-0.92a.dfsg1/map/Makefile.am
+@@ -5,7 +5,7 @@ bin_PROGRAMS=map
+ 
+ INCLUDES = $(COMMON_CFLAGS)
+ 
+-map_LDADD=$(COMMON_LIBS) -lz  -lungif -lpng
++map_LDADD=$(COMMON_LIBS) -lz  -lgif -lpng
+ 
+ SOURCE_FILES=map.c
+ 
+--- fenix-0.92a.dfsg1.orig/fpg/Makefile
++++ fenix-0.92a.dfsg1/fpg/Makefile
+@@ -145,7 +145,7 @@ bin_PROGRAMS = fpg
+ 
+ INCLUDES = $(COMMON_CFLAGS)
+ 
+-fpg_LDADD = $(COMMON_LIBS) -lz  -lungif -lpng
++fpg_LDADD = $(COMMON_LIBS) -lz  -lgif -lpng
+ 
+ SOURCE_FILES = fpg.c
+ 
+--- fenix-0.92a.dfsg1.orig/fpg/Makefile.in
++++ fenix-0.92a.dfsg1/fpg/Makefile.in
+@@ -145,7 +145,7 @@ bin_PROGRAMS = fpg
+ 
+ INCLUDES = $(COMMON_CFLAGS)
+ 
+-fpg_LDADD = $(COMMON_LIBS) -lz  -lungif -lpng
++fpg_LDADD = $(COMMON_LIBS) -lz  -lgif -lpng
+ 
+ SOURCE_FILES = fpg.c
+ 
+--- fenix-0.92a.dfsg1.orig/map/Makefile
++++ fenix-0.92a.dfsg1/map/Makefile
+@@ -145,7 +145,7 @@ bin_PROGRAMS = map
+ 
+ INCLUDES = $(COMMON_CFLAGS)
+ 
+-map_LDADD = $(COMMON_LIBS) -lz  -lungif -lpng
++map_LDADD = $(COMMON_LIBS) -lz  -lgif -lpng
+ 
+ SOURCE_FILES = map.c
+ 
+--- fenix-0.92a.dfsg1.orig/map/Makefile.in
++++ fenix-0.92a.dfsg1/map/Makefile.in
+@@ -145,7 +145,7 @@ bin_PROGRAMS = map
+ 
+ INCLUDES = $(COMMON_CFLAGS)
+ 
+-map_LDADD = $(COMMON_LIBS) -lz  -lungif -lpng
++map_LDADD = $(COMMON_LIBS) -lz  -lgif -lpng
+ 
+ SOURCE_FILES = map.c
+ 

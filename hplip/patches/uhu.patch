@@ -1,0 +1,181 @@
+diff -Naur orig/base/password.py patched/base/password.py
+--- orig/base/password.py	2017-11-23 13:10:20.000000000 +0100
++++ patched/base/password.py	2018-03-19 03:58:04.881091369 +0100
+@@ -55,6 +55,7 @@
+              'gos':'sudo',
+              'boss':'su',
+              'lfs':'su',
++             'uhu-linux':'su',
+              }
+ 
+ 
+diff -Naur orig/installer/distros.dat patched/installer/distros.dat
+--- orig/installer/distros.dat	2017-11-23 13:10:13.000000000 +0100
++++ patched/installer/distros.dat	2018-03-19 04:04:27.464643414 +0100
+@@ -92,7 +92,7 @@
+ # ****************************************
+ 
+ [distros]
+-distros=unknown,mepis,debian,suse,mandriva,fedora,redhat,rhel,slackware,gentoo,redflag,ubuntu,xandros,freebsd,linspire,ark,pclinuxos,centos,igos,linuxmint,linpus,gos,boss,lfs
++distros=unknown,mepis,debian,suse,mandriva,fedora,redhat,rhel,slackware,gentoo,redflag,ubuntu,xandros,freebsd,linspire,ark,pclinuxos,centos,igos,linuxmint,linpus,gos,boss,lfs,uhu-linux
+ 
+ # ****************************************
+ 
+@@ -10117,3 +10117,157 @@
+ [lfs:6:epm]
+ packages=epm
+ 
++
++# ****************************************
++[uhu-linux]
++index=60
++versions=UBK1,UBK2
++display_name=UHU-Linux
++alt_names=
++display=1
++notes=
++package_mgrs=dpkg,apt-get,synaptic
++package_mgr_cmd=su -c "apt-get install --force-yes -y $packages_to_install"
++pre_depend_cmd=su -c "dpkg --configure -a",su -c "apt-get install -f",su -c "apt-get update"
++post_depend_cmd=
++hplip_remove_cmd=su -c "apt-get remove --yes hplip hpijs hplip-doc libsane-hpaio"
++su_sudo=su
++ppd_install=ppd
++udev_mode_fix=1
++ppd_dir=/usr/share/ppd/HP
++fix_ppd_symlink=0
++drv_dir=/usr/share/cups/drv/hp
++
++# ********************
++[uhu-linux:UBK1]
++code_name=RIA
++supported=1
++scan_supported=1
++fax_supported=1
++pcard_supported=1
++network_supported=1
++parallel_supported=1
++usb_supported=1
++packaged_version=
++release_date=
++notes=
++ppd_install=drv
++udev_mode_fix=1
++ppd_dir=/usr/share/ppd/HP
++fix_ppd_symlink=0
++drv_dir=/usr/share/cups/drv/hp
++ui_toolkit=qt4
++native_cups=1
++policykit=1
++
++
++[uhu-linux:UBK1:cups]
++packages=cups
++
++[uhu-linux:UBK1:cups-devel]
++packages=cups-dev
++
++[uhu-linux:UBK1:gcc]
++packages=gcc
++
++[uhu-linux:UBK1:gs]
++packages=ghostscript
++
++[uhu-linux:UBK1:libcrypto]
++packages=openssl-dev
++
++[uhu-linux:UBK1:libjpeg]
++packages=libjpeg-turbo-dev
++
++[uhu-linux:UBK1:libnetsnmp-devel]
++packages=libnetsnmp-dev
++
++[uhu-linux:UBK1:libpthread]
++packages=glibc
++
++[uhu-linux:UBK1:libtool]
++packages=libtool
++
++[uhu-linux:UBK1:libusb]
++packages=libusb-dev
++
++[uhu-linux:UBK1:make]
++packages=make
++
++[uhu-linux:UBK1:pil]
++packages=python-pillow
++
++[uhu-linux:UBK1:ppdev]
++packages=
++commands=su -c "modprobe ppdev",su -c cp -f /etc/modules /etc/modules.hplip,echo ppdev | su -c tee -a /etc/modules
++
++[uhu-linux:UBK1:python-devel]
++packages=python-dev
++
++[uhu-linux:UBK1:pyqt]
++packages=
++
++[uhu-linux:UBK1:pyqt4]
++packages=pyqt4
++
++[uhu-linux:UBK1:pyqt4-dbus]
++packages=pyqt4
++
++[uhu-linux:UBK1:python23]
++packages=python
++
++[uhu-linux:UBK1:python2x]
++packages=python
++
++[uhu-linux:UBK1:reportlab]
++packages=reportlab
++
++[uhu-linux:UBK1:sane]
++packages=sane
++
++[uhu-linux:UBK1:sane-devel]
++packages=sane-dev
++
++[uhu-linux:UBK1:scanimage]
++packages=sane-backends
++
++[uhu-linux:UBK1:xsane]
++packages=xsane
++
++[uhu-linux:UBK1:cups-ddk]
++packages=
++
++[uhu-linux:UBK1:python-dbus]
++packages=dbus-python,pygobject
++
++[uhu-linux:UBK1:dbus]
++packages=dbus-dev
++
++[uhu-linux:UBK1:python-ctypes]
++packages=
++
++[uhu-linux:UBK1:cups-image]
++packages=cups,cups-dev
++
++[uhu-linux:UBK1:policykit]
++packages=policykit,policykit-gnome
++
++[uhu-linux:UBK1:python-notify]
++packages=python-notify
++
++[uhu-linux:UBK1:network]
++packages=wget
++
++[uhu-linux:UBK1:avahi-utils]
++packages=avahi
++
++
++# ****************************************
++
++[uhu-linux:UBK2]
++code_name=RIA
++supported=1
++packaged_version=
++release_date=
++same_as_version=UBK1
++

@@ -1,0 +1,174 @@
+diff -Nur orig/MenuMaker/__init__.py mod/MenuMaker/__init__.py
+--- orig/MenuMaker/__init__.py	2017-01-09 12:25:03.000000000 +0100
++++ mod/MenuMaker/__init__.py	2017-10-07 19:40:45.000000000 +0200
+@@ -1,3 +1,4 @@
++# -*- coding: utf-8 -*-
+ import sys
+ 
+ if not (
+@@ -219,7 +220,7 @@
+ 
+ 
+ class DevApps(Menu):
+-    name = "Development"
++    name = "Fejlesztés"
+     keywords = KwS(Development, Building, Debugger, IDE, GUIDesigner,
+                    Profiling, RevisionControl, Translation, WebDevelopment)
+ 
+@@ -229,26 +230,26 @@
+ 
+ 
+ class Editors(Menu):
+-    name = "Editors"
++    name = "Editorok"
+     keywords = KwS(TextEditor)
+ 
+ 
+ class Misc(Menu):
+ 
+     """Menu that contains the entries that didn't fit elsewhere"""
+-    name = "Other"
++    name = "Egyéb"
+ 
+     def suitable(self, app):
+         return True
+ 
+ 
+ class Shells(Menu):
+-    name = "Shells"
++    name = "Héjak"
+     keywords = KwS(Shell, TerminalEmulator, FileManager, Emulator)
+ 
+ 
+ class Utils(Menu):
+-    name = "Utilities"
++    name = "Eszközök"
+     keywords = KwS(
+         Utility, Accessibility, Calculator, Clock, Applet, Archiving, TrayIcon)
+ 
+@@ -313,7 +314,7 @@
+ 
+ 
+ class SystemSettings(Menu):
+-    name = "Settings"
++    name = "Beállítások"
+     keywords = KwS(Settings, DesktopSettings, HardwareSettings, Screensaver)
+ 
+     def __init__(self, subs):
+@@ -322,7 +323,7 @@
+ 
+ 
+ class SystemApps(Menu):
+-    name = "System"
++    name = "Rendszer"
+     keywords = KwS(System, Filesystem, Monitor, Security, PackageManager)
+ 
+     def __init__(self, subs):
+@@ -331,63 +332,63 @@
+ 
+ 
+ class ScienceApps(Menu):
+-    name = "Science"
++    name = "Tudomány"
+     keywords = KwS(Electronics, Engineering, Science, Astronomy,
+                    Biology, Chemistry, Geology, Math, MedicalSoftware, Physics)
+ 
+ 
+ class Edutainment(Menu):
+-    name = "Education"
++    name = "Oktatás"
+     keywords = KwS(Education, Art, Construction, Music, Languages, Teaching)
+ 
+ 
+ class AdventureGames(Menu):
+-    name = "Adventure"
++    name = "Kaland"
+     keywords = KwS(AdventureGame, RolePlaying)
+ 
+ 
+ class ArcadeGames(Menu):
+-    name = "Arcade"
++    name = "Ügyességi"
+     keywords = KwS(ArcadeGame, ActionGame)
+ 
+ 
+ class BoardGames(Menu):
+-    name = "Board"
++    name = "Táblás"
+     keywords = KwS(BoardGame)
+ 
+ 
+ class CardGames(Menu):
+-    name = "Card"
++    name = "Kártya"
+     keywords = KwS(CardGame)
+ 
+ 
+ class PuzzleGames(Menu):
+-    name = "Puzzle"
++    name = "Blokk"
+     keywords = KwS(LogicGame, BlocksGame)
+ 
+ 
+ class SimGames(Menu):
+-    name = "Simulation"
++    name = "Szimuláció"
+     keywords = KwS(Simulation)
+ 
+ 
+ class SportsGames(Menu):
+-    name = "Sports"
++    name = "Sport"
+     keywords = KwS(SportsGame)
+ 
+ 
+ class StrategyGames(Menu):
+-    name = "Strategy"
++    name = "Stratégia"
+     keywords = KwS(StrategyGame)
+ 
+ 
+ class ToyGames(Menu):
+-    name = "Amusement"
++    name = "Gyermek"
+     keywords = KwS(Amusement, KidsGame)
+ 
+ 
+ class Games(Menu):
+-    name = "Games"
++    name = "Játék"
+     keywords = KwS(
+         Amusement,
+         Game,
+@@ -413,13 +414,13 @@
+ 
+ 
+ class Multimedia(Menu):
+-    name = "Multimedia"
++    name = "Multimédia"
+     keywords = KwS(AudioVideo, Audio, Midi, Mixer, Sequencer, Tuner,
+                    Video, TV, AudioVideoEditing, Player, Recorder, DiscBurning)
+ 
+ 
+ class NetApps(Menu):
+-    name = "Network"
++    name = "Hálózat"
+     keywords = KwS(
+         Network,
+         Dialup,
+@@ -436,13 +437,13 @@
+ 
+ 
+ class GraphicApps(Menu):
+-    name = "Graphics"
++    name = "Grafika"
+     keywords = KwS(Graphics, x2DGraphics, x3DGraphics, VectorGraphics,
+                    RasterGraphics, Scanning, OCR, Photograph, Viewer)
+ 
+ 
+ class OfficeApps(Menu):
+-    name = "Office"
++    name = "Iroda"
+     keywords = KwS(
+         Office,
+         Calendar,

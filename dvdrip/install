@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+mkdir -p "$UB_INSTALLDIR"/usr/share/{applications,pixmaps}
+convert dvdrip-icon-hq.svg "$UB_INSTALLDIR"/usr/share/pixmaps/dvdrip.png
+cp dvdrip.desktop "$UB_INSTALLDIR"/usr/share/applications/

@@ -1,0 +1,12 @@
+diff -Naurd a/Makefile b/Makefile
+--- a/Makefile	2008-09-04 17:03:10.000000000 +0200
++++ b/Makefile	2008-09-04 17:05:56.000000000 +0200
+@@ -185,7 +185,7 @@
+ 
+ # How could you live without those manapages ?
+ install-man::
+-	for lang in . cs fr.*; do \
++	for lang in . cs fr; do \
+ 	    install -m 755 -d $(INSTALL_MAN)/$$lang/man8/; \
+ 	    install -m 644 $$lang/$(MANPAGES8) $(INSTALL_MAN)/$$lang/man8/; \
+ 	    install -m 755 -d $(INSTALL_MAN)/$$lang/man7/; \

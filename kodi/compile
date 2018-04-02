@@ -1,0 +1,36 @@
+#!/bin/sh -eux
+
+# texturepacker cannot build statically
+sed '/--enable-static/d' -i tools/depends/native/TexturePacker/Makefile
+# build new dependency
+make -C tools/depends/target/crossguid PREFIX="$UB_COMPILEDIR"/tools/depends/target/crossguid
+export CPPFLAGS="-I$UB_COMPILEDIR/tools/depends/target/crossguid/include"
+export LDFLAGS="-L$UB_COMPILEDIR/tools/depends/target/crossguid/lib"
+
+export JAVA=/usr/lib/java/jre/bin/java
+
+./bootstrap
+export JAVA_EXE=/usr/lib/java/jre/bin/java
+export ac_cv_path_LATEX=no
+export ac_cv_lib_avcodec_ff_vdpau_vc1_decode_picture=yes
+ub_compile \
+	--enable-libbluray \
+	--enable-pulse \
+	--enable-gl \
+	--enable-udev \
+	--enable-vaapi \
+	--enable-vdpau \
+	--disable-debug \
+	--enable-texturepacker \
+	--enable-joystick \
+	--enable-x11 \
+	--enable-samba \
+	--enable-nfs \
+	--enable-airplay \
+	--enable-dvdcss \
+	--enable-avahi \
+	--enable-webserver \
+	--enable-optical-drive \
+	--with-ffmpeg=shared \
+	--with-lirc-device=/var/run/lirc/lircd
+#	--enable-libusb - udev esetén nem kell, így mindenképp letiltja

@@ -1,0 +1,1938 @@
+Description: Added support for looping back audio through alsa devices.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1154029
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/alsa_stream.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/alsa_stream.c
+@@ -0,0 +1,642 @@
++/*
++ *  ALSA streaming support
++ *
++ *  Originally written by:
++ *	  Copyright (c) by Devin Heitmueller <dheitmueller@kernellabs.com>
++ *	for usage at tvtime
++ *  Derived from the alsa-driver test tool latency.c:
++ *	Copyright (c) by Jaroslav Kysela <perex@perex.cz>
++ *
++ *  Copyright (c) 2011 - Mauro Carvalho Chehab <mchehab@redhat.com>
++ *	Ported to xawtv, with bug fixes and improvements
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2 of the License, or
++ *  (at your option) any later version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++ *
++ */
++
++#include "config.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sched.h>
++#include <errno.h>
++#include <getopt.h>
++#include <pthread.h>
++#include <alsa/asoundlib.h>
++#include <sys/time.h>
++#include <math.h>
++#include "alsa_stream.h"
++
++#define ARRAY_SIZE(a) (sizeof(a)/sizeof(*(a)))
++
++/* Private vars to control alsa thread status */
++static int stop_alsa = 0;
++
++/* Error handlers */
++snd_output_t *output = NULL;
++FILE *error_fp;
++int verbose = 0;
++
++struct final_params {
++	int bufsize;
++	int rate;
++	int latency;
++	int channels;
++};
++
++static int setparams_stream(snd_pcm_t *handle,
++			    snd_pcm_hw_params_t *params,
++			    snd_pcm_format_t format,
++			    int *channels,
++			    const char *id)
++{
++	int err;
++
++	err = snd_pcm_hw_params_any(handle, params);
++	if (err < 0) {
++		fprintf(error_fp,
++			"alsa: Broken configuration for %s PCM: no configurations available: %s\n",
++			snd_strerror(err), id);
++		return err;
++	}
++
++	err = snd_pcm_hw_params_set_access(handle, params,
++					   SND_PCM_ACCESS_RW_INTERLEAVED);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Access type not available for %s: %s\n", id,
++			snd_strerror(err));
++		return err;
++	}
++
++	err = snd_pcm_hw_params_set_format(handle, params, format);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Sample format not available for %s: %s\n", id,
++		   	snd_strerror(err));
++		return err;
++	}
++
++retry:
++	err = snd_pcm_hw_params_set_channels(handle, params, *channels);
++	if (err < 0) {
++		if (strcmp(id, "capture") == 0 && *channels == 2) {
++			*channels = 1;
++			goto retry; /* Retry with mono capture */
++		}
++		fprintf(error_fp, "alsa: Channels count (%i) not available for %s: %s\n",
++			*channels, id, snd_strerror(err));
++		return err;
++	}
++
++	return 0;
++}
++
++static void getparams_periods(snd_pcm_t *handle,
++			      snd_pcm_hw_params_t *params,
++			      unsigned int *usecs,
++			      unsigned int *count,
++			      const char *id)
++{
++	unsigned min = 0, max = 0;
++
++	snd_pcm_hw_params_get_periods_min(params, &min, 0);
++	snd_pcm_hw_params_get_periods_max(params, &max, 0);
++	if (min && max) {
++		if (verbose)
++			fprintf(error_fp, "alsa: %s periods range between %u and %u. Want: %u\n",
++				id, min, max, *count);
++		if (*count < min)
++			*count = min;
++		if (*count > max)
++			*count = max;
++	}
++
++	min = max = 0;
++	snd_pcm_hw_params_get_period_time_min(params, &min, 0);
++	snd_pcm_hw_params_get_period_time_max(params, &max, 0);
++	if (min && max) {
++		if (verbose)
++			fprintf(error_fp, "alsa: %s period time range between %u and %u. Want: %u\n",
++				id, min, max, *usecs);
++		if (*usecs < min)
++			*usecs = min;
++		if (*usecs > max)
++			*usecs = max;
++	}
++}
++
++static int setparams_periods(snd_pcm_t *handle,
++			     snd_pcm_hw_params_t *params,
++			     unsigned int *usecs,
++			     unsigned int *count,
++			     const char *id)
++{
++	int err;
++
++	err = snd_pcm_hw_params_set_period_time_near(handle, params, usecs, 0);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Unable to set period time %u for %s: %s\n",
++			*usecs, id, snd_strerror(err));
++		return err;
++	}
++
++	err = snd_pcm_hw_params_set_periods_near(handle, params, count, 0);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Unable to set %u periods for %s: %s\n",
++			*count, id, snd_strerror(err));
++		return err;
++	}
++
++	if (verbose)
++		fprintf(error_fp, "alsa: %s period set to %u periods of %u time\n",
++			id, *count, *usecs);
++
++	return 0;
++}
++
++static int setparams_set(snd_pcm_t *handle,
++			 snd_pcm_hw_params_t *params,
++			 snd_pcm_sw_params_t *swparams,
++			 snd_pcm_uframes_t start_treshold,
++			 const char *id)
++{
++	int err;
++
++	err = snd_pcm_hw_params(handle, params);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Unable to set hw params for %s: %s\n",
++			id, snd_strerror(err));
++		return err;
++	}
++	err = snd_pcm_sw_params_current(handle, swparams);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Unable to determine current swparams for %s: %s\n",
++			id, snd_strerror(err));
++		return err;
++	}
++	err = snd_pcm_sw_params_set_start_threshold(handle, swparams,
++						start_treshold);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Unable to set start threshold mode for %s: %s\n",
++			id, snd_strerror(err));
++		return err;
++	}
++
++	err = snd_pcm_sw_params_set_avail_min(handle, swparams, 4);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Unable to set avail min for %s: %s\n",
++			id, snd_strerror(err));
++		return err;
++	}
++	err = snd_pcm_sw_params(handle, swparams);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Unable to set sw params for %s: %s\n",
++			id, snd_strerror(err));
++		return err;
++	}
++	return 0;
++}
++
++static int alsa_try_rate(snd_pcm_t *phandle, snd_pcm_t *chandle,
++			 snd_pcm_hw_params_t *p_hwparams,
++			 snd_pcm_hw_params_t *c_hwparams,
++			 int allow_resample, unsigned *ratep, unsigned *ratec)
++{
++	int err;
++
++	err = snd_pcm_hw_params_set_rate_near(chandle, c_hwparams, ratec, 0);
++	if (err)
++		return err;
++
++	*ratep = *ratec;
++	err = snd_pcm_hw_params_set_rate_near(phandle, p_hwparams, ratep, 0);
++	if (err)
++		return err;
++
++	if (*ratep == *ratec)
++		return 0;
++
++	if (verbose)
++		fprintf(error_fp,
++			"alsa_try_rate: capture wanted %u, playback wanted %u%s\n",
++			*ratec, *ratep, allow_resample ? " with resample enabled": "");
++
++	return 1; /* No error, but also no match */
++}
++
++static int setparams(snd_pcm_t *phandle, snd_pcm_t *chandle,
++		     snd_pcm_format_t format,
++		     int latency, int allow_resample,
++		     struct final_params *negotiated)
++{
++	int i;
++	unsigned ratep, ratec = 0;
++	unsigned ratemin = 32000, ratemax = 96000, val;
++	int err, channels = 2;
++	snd_pcm_hw_params_t *p_hwparams, *c_hwparams;
++	snd_pcm_sw_params_t *p_swparams, *c_swparams;
++	snd_pcm_uframes_t c_size, p_psize, c_psize;
++	/* Our latency is 2 periods (in usecs) */
++	unsigned int c_periods = 2, p_periods;
++	unsigned int c_periodtime, p_periodtime;
++	const unsigned int prefered_rates[] = { 44100, 48000, 32000 };
++
++	snd_pcm_hw_params_alloca(&p_hwparams);
++	snd_pcm_hw_params_alloca(&c_hwparams);
++	snd_pcm_sw_params_alloca(&p_swparams);
++	snd_pcm_sw_params_alloca(&c_swparams);
++
++	if (setparams_stream(chandle, c_hwparams, format, &channels, "capture"))
++		return 1;
++
++	if (setparams_stream(phandle, p_hwparams, format, &channels, "playback"))
++		return 1;
++
++	if (allow_resample) {
++		err = snd_pcm_hw_params_set_rate_resample(chandle, c_hwparams, 1);
++		if (err < 0) {
++			fprintf(error_fp, "alsa: Resample setup failed: %s\n", snd_strerror(err));
++			return 1;
++		} else if (verbose) {
++	   		fprintf(error_fp, "alsa: Resample enabled.\n");
++		}
++	}
++
++	err = snd_pcm_hw_params_get_rate_min(c_hwparams, &ratemin, 0);
++	if (err >= 0 && verbose)
++		fprintf(error_fp, "alsa: Capture min rate is %u\n", ratemin);
++	err = snd_pcm_hw_params_get_rate_max(c_hwparams, &ratemax, 0);
++	if (err >= 0 && verbose)
++		fprintf(error_fp, "alsa: Capture max rate is %u\n", ratemax);
++	err = snd_pcm_hw_params_get_rate_min(p_hwparams, &val, 0);
++	if (err >= 0) {
++		if (verbose)
++			fprintf(error_fp, "alsa: Playback min rate is %u\n", val);
++		if (val > ratemin)
++			ratemin = val;
++	}
++	err = snd_pcm_hw_params_get_rate_max(p_hwparams, &val, 0);
++	if (err >= 0) {
++		if (verbose)
++			fprintf(error_fp, "alsa: Playback max rate is %u\n", val);
++		if (val < ratemax)
++			ratemax = val;
++	}
++
++	if (verbose)
++	fprintf(error_fp,
++		"alsa: Will search a common rate between %u and %u\n",
++		ratemin, ratemax);
++
++	/* First try a set of common rates */
++	err = -1;
++	for (i = 0; i < ARRAY_SIZE(prefered_rates); i++) {
++		if (prefered_rates[i] < ratemin || prefered_rates[i] > ratemax)
++			continue;
++		ratep = ratec = prefered_rates[i];
++		err = alsa_try_rate(phandle, chandle, p_hwparams, c_hwparams,
++				    allow_resample, &ratep, &ratec);
++		if (err == 0)
++			break;
++	}
++
++	if (err != 0) {
++		if (ratemin >= 44100) {
++			for (i = ratemin; i <= ratemax; i += 100) {
++				ratep = ratec = i;
++				err = alsa_try_rate(phandle, chandle, p_hwparams, c_hwparams,
++						    allow_resample, &ratep, &ratec);
++				if (err == 0)
++					break;
++			}
++		} else {
++			for (i = ratemax; i >= ratemin; i -= 100) {
++				ratep = ratec = i;
++				err = alsa_try_rate(phandle, chandle, p_hwparams, c_hwparams,
++						    allow_resample, &ratep, &ratec);
++				if (err == 0)
++					break;
++			}
++		}
++	}
++
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Failed to set a supported rate: %s\n",
++			snd_strerror(err));
++	return 1;
++	}
++	if (ratep != ratec) {
++		if (verbose || allow_resample)
++			fprintf(error_fp,
++				"alsa: Couldn't find a rate that it is supported by both playback and capture\n");
++		return 2;
++	}
++	if (verbose)
++		fprintf(error_fp, "alsa: Using Rate %u\n", ratec);
++
++	/* Negotiate period parameters */
++
++	c_periodtime = latency * 1000 / c_periods;
++	getparams_periods(chandle, c_hwparams, &c_periodtime, &c_periods, "capture");
++	p_periods = c_periods * 2;
++	p_periodtime = c_periodtime;
++	getparams_periods(phandle, p_hwparams, &p_periodtime, &p_periods, "playback");
++	c_periods = p_periods / 2;
++
++	/*
++	 * Some playback devices support a very limited periodtime range. If the user needs to
++	 * use a higher latency to avoid overrun/underrun, use an alternate algorithm of incresing
++	 * the number of periods, to archive the needed latency
++	 */
++	if (p_periodtime < c_periodtime) {
++		c_periodtime = p_periodtime;
++		c_periods = round (latency * 1000.0 / c_periodtime + 0.5);
++		getparams_periods(chandle, c_hwparams, &c_periodtime, &c_periods, "capture");
++		p_periods = c_periods * 2;
++		p_periodtime = c_periodtime;
++		getparams_periods(phandle, p_hwparams, &p_periodtime, &p_periods, "playback");
++		c_periods = p_periods / 2;
++	}
++
++	if (setparams_periods(chandle, c_hwparams, &c_periodtime, &c_periods, "capture"))
++		return 1;
++
++	/* Note we use twice as much periods for the playback buffer, since we
++	   will get a period size near the requested time and we don't want it to
++	   end up smaller then the capture buffer as then we could end up blocking
++	   on writing to it. Note we will configure the playback dev to start
++	   playing as soon as it has 2 capture periods worth of data, so this
++	   won't influence latency */
++	if (setparams_periods(phandle, p_hwparams, &p_periodtime, &p_periods, "playback"))
++		return 1;
++
++	snd_pcm_hw_params_get_period_size(p_hwparams, &p_psize, NULL);
++	snd_pcm_hw_params_get_period_size(c_hwparams, &c_psize, NULL);
++	snd_pcm_hw_params_get_buffer_size(c_hwparams, &c_size);
++
++	latency = c_periods * c_psize;
++	if (setparams_set(phandle, p_hwparams, p_swparams, latency, "playback"))
++		return 1;
++
++	if (setparams_set(chandle, c_hwparams, c_swparams, c_psize, "capture"))
++		return 1;
++
++	if ((err = snd_pcm_prepare(phandle)) < 0) {
++		fprintf(error_fp, "alsa: Prepare error: %s\n", snd_strerror(err));
++		return 1;
++	}
++
++	if (verbose) {
++		fprintf(error_fp, "alsa: Negociated configuration:\n");
++		snd_pcm_dump_setup(phandle, output);
++		snd_pcm_dump_setup(chandle, output);
++		fprintf(error_fp, "alsa: Parameters are %uHz, %s, %i channels\n",
++			ratep, snd_pcm_format_name(format), channels);
++		fprintf(error_fp, "alsa: Set bitrate to %u%s, buffer size is %u\n", ratec,
++			allow_resample ? " with resample enabled at playback": "",
++			(unsigned int)c_size);
++	}
++
++	negotiated->bufsize = c_size;
++	negotiated->rate = ratep;
++	negotiated->channels = channels;
++	negotiated->latency = latency;
++	return 0;
++}
++
++/* Read up to len frames */
++static snd_pcm_sframes_t readbuf(snd_pcm_t *handle, char *buf, long len)
++{
++	snd_pcm_sframes_t r;
++
++	r = snd_pcm_readi(handle, buf, len);
++	if (r < 0 && r != -EAGAIN) {
++		r = snd_pcm_recover(handle, r, 0);
++		if (r < 0)
++			fprintf(error_fp, "alsa: overrun recover error: %s\n", snd_strerror(r));
++	}
++	return r;
++}
++
++/* Write len frames (note not up to len, but all of len!) */
++static snd_pcm_sframes_t writebuf(snd_pcm_t *handle, char *buf, long len)
++{
++	snd_pcm_sframes_t r;
++
++	while (1) {
++		r = snd_pcm_writei(handle, buf, len);
++		if (r == len)
++			return 0;
++		if (r < 0) {
++			r = snd_pcm_recover(handle, r, 0);
++			if (r < 0) {
++				fprintf(error_fp, "alsa: underrun recover error: %s\n",
++					snd_strerror(r));
++				return r;
++			}
++		}
++		buf += r * 4;
++		len -= r;
++		snd_pcm_wait(handle, 100);
++	}
++}
++
++static int alsa_stream(const char *pdevice, const char *cdevice, int latency)
++{
++	snd_pcm_t *phandle, *chandle;
++	char *buffer;
++	int err;
++	ssize_t r;
++	struct final_params negotiated;
++	snd_pcm_format_t format = SND_PCM_FORMAT_S16_LE;
++	char pdevice_new[32];
++
++	err = snd_output_stdio_attach(&output, error_fp, 0);
++	if (err < 0) {
++		fprintf(error_fp, "alsa: Output failed: %s\n", snd_strerror(err));
++		return 0;
++	}
++
++	/* Open the devices */
++	if ((err = snd_pcm_open(&phandle, pdevice, SND_PCM_STREAM_PLAYBACK,
++				0)) < 0) {
++		fprintf(error_fp, "alsa: Cannot open playback device %s: %s\n",
++			pdevice, snd_strerror(err));
++		return 0;
++	}
++	if ((err = snd_pcm_open(&chandle, cdevice, SND_PCM_STREAM_CAPTURE,
++				SND_PCM_NONBLOCK)) < 0) {
++		fprintf(error_fp, "alsa: Cannot open capture device %s: %s\n",
++			cdevice, snd_strerror(err));
++		snd_pcm_close(phandle);
++		return 0;
++	}
++
++	err = setparams(phandle, chandle, format, latency, 0, &negotiated);
++
++	/* Try to use plughw instead, as it allows emulating speed */
++	if (err == 2 && strncmp(pdevice, "hw", 2) == 0) {
++
++		snd_pcm_close(phandle);
++
++		sprintf(pdevice_new, "plug%s", pdevice);
++		pdevice = pdevice_new;
++		if (verbose)
++			fprintf(error_fp, "alsa: Trying %s for playback\n", pdevice);
++		if ((err = snd_pcm_open(&phandle, pdevice, SND_PCM_STREAM_PLAYBACK,
++					0)) < 0) {
++			fprintf(error_fp, "alsa: Cannot open playback device %s: %s\n",
++				pdevice, snd_strerror(err));
++			snd_pcm_close(chandle);
++			return 0;
++		}
++
++		err = setparams(phandle, chandle, format, latency, 1, &negotiated);
++	}
++
++	if (err != 0) {
++		fprintf(error_fp, "alsa: setparams failed\n");
++		snd_pcm_close(phandle);
++		snd_pcm_close(chandle);
++		return 1;
++	}
++
++	buffer = malloc((negotiated.bufsize * snd_pcm_format_width(format) / 8)
++			* negotiated.channels);
++	if (buffer == NULL) {
++		fprintf(error_fp, "alsa: Failed allocating buffer for audio\n");
++		snd_pcm_close(phandle);
++		snd_pcm_close(chandle);
++		return 0;
++	}
++
++	if (verbose)
++		fprintf(error_fp,
++			"alsa: stream started from %s to %s (%i Hz, buffer delay = %.2f ms)\n",
++			cdevice, pdevice, negotiated.rate,
++			negotiated.latency * 1000.0 / negotiated.rate);
++
++	while (!stop_alsa) {
++		/* We start with a read and not a wait to auto(re)start the capture */
++		r = readbuf(chandle, buffer, negotiated.bufsize);
++		if (r == 0)   /* Succesfully recovered from an overrun? */
++			continue; /* Force restart of capture stream */
++		if (r > 0)
++			writebuf(phandle, buffer, r);
++		/* use poll to wait for next event */
++		while (!stop_alsa && !snd_pcm_wait(chandle, 50))
++			;
++	}
++
++	snd_pcm_drop(chandle);
++	snd_pcm_drop(phandle);
++
++	snd_pcm_unlink(chandle);
++	snd_pcm_hw_free(phandle);
++	snd_pcm_hw_free(chandle);
++
++	snd_pcm_close(phandle);
++	snd_pcm_close(chandle);
++
++	free(buffer);
++
++	return 0;
++}
++
++struct input_params {
++	char *pdevice;
++	char *cdevice;
++	int latency;
++};
++
++static void *alsa_thread_entry(void *whatever)
++{
++	struct input_params *inputs = (struct input_params *) whatever;
++
++	if (verbose)
++		fprintf(error_fp, "alsa: starting copying alsa stream from %s to %s\n",
++			inputs->cdevice, inputs->pdevice);
++	alsa_stream(inputs->pdevice, inputs->cdevice, inputs->latency);
++	if (verbose)
++		fprintf(error_fp, "alsa: stream stopped\n");
++
++	free(inputs->pdevice);
++	free(inputs->cdevice);
++	free(inputs);
++
++	return NULL;
++}
++
++/*************************************************************************
++ Public functions
++ *************************************************************************/
++
++static int alsa_is_running = 0;
++static pthread_t alsa_thread;
++
++int alsa_thread_startup(const char *pdevice, const char *cdevice, int latency,
++			FILE *__error_fp, int __verbose)
++{
++	int ret;
++	struct input_params *inputs;
++
++	if ((strcasecmp(pdevice, "disabled") == 0) ||
++	    (strcasecmp(cdevice, "disabled") == 0))
++		return 0;
++
++	if (__error_fp)
++		error_fp = __error_fp;
++	else
++		error_fp = stderr;
++
++	verbose = __verbose;
++
++	if (alsa_is_running) {
++		fprintf(error_fp, "alsa: Already running\n");
++		return EBUSY;
++	}
++
++	inputs = malloc(sizeof(struct input_params));
++	if (inputs == NULL) {
++		fprintf(error_fp, "alsa: failed allocating memory for inputs\n");
++		return ENOMEM;
++	}
++
++	inputs->pdevice = strdup(pdevice);
++	inputs->cdevice = strdup(cdevice);
++	inputs->latency = latency;
++
++	stop_alsa = 0;
++	ret = pthread_create(&alsa_thread, NULL,
++			 &alsa_thread_entry, (void *) inputs);
++	if (ret == 0)
++		alsa_is_running = 1;
++
++	return ret;
++}
++
++void alsa_thread_stop(void)
++{
++	if (!alsa_is_running)
++		return;
++
++	stop_alsa = 1;
++	pthread_join(alsa_thread, NULL);
++	alsa_is_running = 0;
++}
++
++int alsa_thread_is_running(void)
++{
++	return alsa_is_running;
++}
+Index: gnomeradio-1.8/src/alsa_stream.h
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/alsa_stream.h
+@@ -0,0 +1,34 @@
++
++/*
++ *  ALSA streaming support
++ *
++ *  Originally written by:
++ *	  Copyright (c) by Devin Heitmueller <dheitmueller@kernellabs.com>
++ *	for usage at tvtime
++ *  Derived from the alsa-driver test tool latency.c:
++ *	Copyright (c) by Jaroslav Kysela <perex@perex.cz>
++ *
++ *  Copyright (c) 2011 - Mauro Carvalho Chehab <mchehab@redhat.com>
++ *	Ported to xawtv, with bug fixes and improvements
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2 of the License, or
++ *  (at your option) any later version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++ *
++ */
++
++int alsa_thread_startup(const char *pdevice, const char *cdevice, int latency,
++			FILE *__error_fp,
++			int __verbose);
++void alsa_thread_stop(void);
++int alsa_thread_is_running(void);
+Index: gnomeradio-1.8/src/get_media_devices.c
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/get_media_devices.c
+@@ -0,0 +1,600 @@
++/*
++   Copyright © 2011 by Mauro Carvalho Chehab <mchehab@redhat.com>
++
++   The get_media_devices is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The libv4l2util Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the libv4l2util Library; if not, write to the Free
++   Software Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA
++   02110-1335 USA.
++ */
++
++#include <stdio.h>
++#include <unistd.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <string.h>
++#include <stdlib.h>
++#include <dirent.h>
++#include <stddef.h>
++#include <limits.h>
++#include "get_media_devices.h"
++
++#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
++
++/**
++ * struct media_device_entry - Describes one device entry got via sysfs
++ *
++ * @device:		sysfs name for a device.
++ *			PCI devices are like: pci0000:00/0000:00:1b.0
++ *			USB devices are like: pci0000:00/0000:00:1d.7/usb1/1-8
++ * @node:		Device node, in sysfs or alsa hw identifier
++ * @device_type:	Type of the device (V4L_*, DVB_*, SND_*)
++ */
++struct media_device_entry {
++	char *device;
++	char *node;
++	enum device_type type;
++	enum bus_type bus;
++	unsigned major, minor;		/* Device major/minor */
++};
++
++/**
++ * struct media_devices - Describes all devices found
++ *
++ * @device:		sysfs name for a device.
++ *			PCI devices are like: pci0000:00/0000:00:1b.0
++ *			USB devices are like: pci0000:00/0000:00:1d.7/usb1/1-8
++ * @node:		Device node, in sysfs or alsa hw identifier
++ * @device_type:	Type of the device (V4L_*, DVB_*, SND_*)
++ */
++struct media_devices {
++	struct media_device_entry *md_entry;
++	unsigned int md_size;
++};
++
++typedef int (*fill_data_t)(struct media_device_entry *md);
++
++#define DEVICE_STR "devices"
++
++static void get_uevent_info(struct media_device_entry *md_ptr, char *dname)
++{
++	FILE *fd;
++	char file[PATH_MAX], *name, *p;
++	char s[1024];
++	char *s_ptr;
++
++	snprintf(file, PATH_MAX, "%s/%s/uevent", dname, md_ptr->node);
++	fd = fopen(file, "r");
++	if (!fd)
++		return;
++	while (fgets(s, sizeof(s), fd)) {
++		p = strtok_r(s, "=", &s_ptr);
++		if (!p)
++			continue;
++		name = p;
++		p = strtok_r(NULL, "\n", &s_ptr);
++		if (!p)
++			continue;
++		if (!strcmp(name, "MAJOR"))
++			md_ptr->major = atol(p);
++		else if (!strcmp(name, "MINOR"))
++			md_ptr->minor = atol(p);
++	}
++
++	fclose(fd);
++}
++
++static enum bus_type get_bus(char *device)
++{
++	char file[PATH_MAX];
++	char s[1024];
++	FILE *f;
++
++	if (!strcmp(device, "/sys/devices/virtual"))
++		return MEDIA_BUS_VIRTUAL;
++
++	snprintf(file, PATH_MAX, "%s/modalias", device);
++	f = fopen(file, "r");
++	if (!f)
++		return MEDIA_BUS_UNKNOWN;
++	if (!fgets(s, sizeof(s), f)) {
++		fclose(f);
++		return MEDIA_BUS_UNKNOWN;
++	}
++	fclose(f);
++
++	if (!strncmp(s, "pci", 3))
++		return MEDIA_BUS_PCI;
++	if (!strncmp(s, "usb", 3))
++		return MEDIA_BUS_USB;
++
++	return MEDIA_BUS_UNKNOWN;
++}
++
++static int get_class(char *class,
++		     struct media_device_entry **md,
++		     unsigned int *md_size,
++		     fill_data_t fill)
++{
++	DIR		*dir;
++	struct dirent	entbuf, *entry;
++	char		dname[PATH_MAX];
++	char		fname[PATH_MAX];
++	char		link[PATH_MAX];
++	char		virt_dev[60];
++	int		err = -2;
++	struct		media_device_entry *md_ptr = NULL;
++	char		*p, *device;
++	enum bus_type	bus;
++	static int	virtual = 0;
++
++	snprintf(dname, PATH_MAX, "/sys/class/%s", class);
++	dir = opendir(dname);
++	if (!dir) {
++		return 0;
++	}
++
++	while (!readdir_r(dir, &entbuf, &entry)) {
++                if ( !entry )
++			break;
++		/* Skip . and .. */
++		if (entry->d_name[0] == '.')
++			continue;
++		/* Canonicalize the device name */
++		snprintf(fname, PATH_MAX, "%s/%s", dname, entry->d_name);
++		if (realpath(fname, link)) {
++			device = link;
++
++			/* Remove the subsystem/class_name from the string */
++			p = strstr(device, class);
++			if (!p)
++				continue;
++			*(p - 1) = '\0';
++
++			bus = get_bus(device);
++
++			/* remove the /sys/devices/ from the name */
++			device += 13;
++
++			switch (bus) {
++			case MEDIA_BUS_PCI:
++				/* Remove the device function nr */
++				p = strrchr(device, '.');
++				if (!p)
++					continue;
++				*p = '\0';
++				break;
++			case MEDIA_BUS_USB:
++				/* Remove USB interface from the path */
++				p = strrchr(device, '/');
++				if (!p)
++					continue;
++				/* In case we have a device where the driver
++				   attaches directly to the usb device rather
++				   then to an interface */
++				if (!strchr(p, ':'))
++					break;
++				*p = '\0';
++				break;
++			case MEDIA_BUS_VIRTUAL:
++				/* Don't group virtual devices */
++				sprintf(virt_dev, "virtual%d", virtual++);
++				device = virt_dev;
++				break;
++			case MEDIA_BUS_UNKNOWN:
++				break;
++			}
++
++			/* Add one more element to the devices struct */
++			*md = realloc(*md, (*md_size + 1) * sizeof(*md_ptr));
++			if (!*md)
++				goto error;
++			md_ptr = (*md) + *md_size;
++			(*md_size)++;
++
++			/* Cleans previous data and fills it with device/node */
++			memset(md_ptr, 0, sizeof(*md_ptr));
++			md_ptr->type = UNKNOWN;
++			md_ptr->device = strdup(device);
++			md_ptr->node = strdup(entry->d_name);
++
++			/* Retrieve major and minor information */
++			get_uevent_info(md_ptr, dname);
++
++			/* Used to identify the type of node */
++			fill(md_ptr);
++		}
++	}
++	err = 0;
++error:
++	closedir(dir);
++	return err;
++}
++
++static int add_v4l_class(struct media_device_entry *md)
++{
++	if (strstr(md->node, "video"))
++		md->type = MEDIA_V4L_VIDEO;
++	else if (strstr(md->node, "vbi"))
++		md->type = MEDIA_V4L_VBI;
++	else if (strstr(md->node, "radio"))
++		md->type = MEDIA_V4L_RADIO;
++	else if (strstr(md->node, "v4l-subdev"))
++		md->type = MEDIA_V4L_SUBDEV;
++
++	return 0;
++}
++
++static int add_snd_class(struct media_device_entry *md)
++{
++	unsigned c = 65535, d = 65535;
++	char node[64];
++
++	if (strstr(md->node, "timer")) {
++		md->type = MEDIA_SND_TIMER;
++		return 0;
++	} else if (strstr(md->node, "seq")) {
++		md->type = MEDIA_SND_SEQ;
++		return 0;
++	} if (strstr(md->node, "card")) {
++		sscanf(md->node, "card%u", &c);
++		md->type = MEDIA_SND_CARD;
++	} else if (strstr(md->node, "hw")) {
++		sscanf(md->node, "hwC%uD%u", &c, &d);
++		md->type = MEDIA_SND_HW;
++	} else if (strstr(md->node, "control")) {
++		sscanf(md->node, "controlC%u", &c);
++		md->type = MEDIA_SND_CONTROL;
++	} else if (strstr(md->node, "pcm")) {
++		sscanf(md->node, "pcmC%uD%u", &c, &d);
++		if (md->node[strlen(md->node) - 1] == 'p')
++			md->type = MEDIA_SND_OUT;
++		else if (md->node[strlen(md->node) - 1] == 'c')
++			md->type = MEDIA_SND_CAP;
++	}
++
++	if (c == 65535)
++		return 0;
++
++	/* Reformat device to be useful for alsa userspace library */
++	if (d == 65535)
++		snprintf(node, sizeof(node), "hw:%u", c);
++	else
++		snprintf(node, sizeof(node), "hw:%u,%u", c, d);
++
++	free(md->node);
++	md->node = strdup(node);
++
++	return 0;
++}
++
++static int add_dvb_class(struct media_device_entry *md)
++{
++	if (strstr(md->node, "video"))
++		md->type = MEDIA_DVB_VIDEO;
++	if (strstr(md->node, "audio"))
++		md->type = MEDIA_DVB_AUDIO;
++	if (strstr(md->node, "sec"))
++		md->type = MEDIA_DVB_SEC;
++	if (strstr(md->node, "frontend"))
++		md->type = MEDIA_DVB_FRONTEND;
++	else if (strstr(md->node, "demux"))
++		md->type = MEDIA_DVB_DEMUX;
++	else if (strstr(md->node, "dvr"))
++		md->type = MEDIA_DVB_DVR;
++	else if (strstr(md->node, "net"))
++		md->type = MEDIA_DVB_NET;
++	else if (strstr(md->node, "ca"))
++		md->type = MEDIA_DVB_CA;
++	else if (strstr(md->node, "osd"))
++		md->type = MEDIA_DVB_OSD;
++
++	return 0;
++}
++
++static int sort_media_device_entry(const void *a, const void *b)
++{
++	const struct media_device_entry *md_a = a;
++	const struct media_device_entry *md_b = b;
++	int cmp;
++
++	cmp = strcmp(md_a->device, md_b->device);
++	if (cmp)
++		return cmp;
++	cmp = (int)md_a->type - (int)md_b->type;
++	if (cmp)
++		return cmp;
++
++	return strcmp(md_a->node, md_b->node);
++}
++
++
++/* Public functions */
++
++void free_media_devices(void *opaque)
++{
++	struct media_devices *md = opaque;
++	struct media_device_entry *md_ptr = md->md_entry;
++	int i;
++	for (i = 0; i < md->md_size; i++) {
++		free(md_ptr->node);
++		free(md_ptr->device);
++		md_ptr++;
++	}
++	free(md->md_entry);
++	free(md);
++}
++
++void *discover_media_devices(void)
++{
++	struct media_devices *md = NULL;
++	struct media_device_entry *md_entry = NULL;
++
++	md = calloc(1, sizeof(*md));
++	if (!md)
++		return NULL;
++
++	md->md_size = 0;
++	if (get_class("video4linux", &md_entry, &md->md_size, add_v4l_class))
++		goto error;
++	if (get_class("sound", &md_entry, &md->md_size, add_snd_class))
++		goto error;
++	if (get_class("dvb", &md_entry, &md->md_size, add_dvb_class))
++		goto error;
++
++	/* There's no media device */
++	if (!md_entry)
++		goto error;
++
++	qsort(md_entry, md->md_size, sizeof(*md_entry), sort_media_device_entry);
++
++	md->md_entry = md_entry;
++
++	return md;
++
++error:
++	free_media_devices(md);
++	return NULL;
++}
++
++const char *media_device_type(enum device_type type)
++{
++	switch(type) {
++		/* V4L nodes */
++	case MEDIA_V4L_VIDEO:
++		return  "video";
++	case MEDIA_V4L_VBI:
++		return  "vbi";
++	case MEDIA_V4L_RADIO:
++		return "radio";
++	case MEDIA_V4L_SUBDEV:
++		return "v4l subdevice";
++
++		/* DVB nodes */
++	case MEDIA_DVB_VIDEO:
++		return  "dvb video";
++	case MEDIA_DVB_AUDIO:
++		return  "dvb audio";
++	case MEDIA_DVB_SEC:
++		return  "dvb sec";
++	case MEDIA_DVB_FRONTEND:
++		return  "dvb frontend";
++	case MEDIA_DVB_DEMUX:
++		return  "dvb demux";
++	case MEDIA_DVB_DVR:
++		return  "dvb dvr";
++	case MEDIA_DVB_NET:
++		return  "dvb net";
++	case MEDIA_DVB_CA:
++		return  "dvb conditional access";
++	case MEDIA_DVB_OSD:
++		return  "dvb OSD";
++
++		/* Alsa nodes */
++	case MEDIA_SND_CARD:
++		return  "sound card";
++	case MEDIA_SND_CAP:
++		return  "pcm capture";
++	case MEDIA_SND_OUT:
++		return  "pcm output";
++	case MEDIA_SND_CONTROL:
++		return  "mixer";
++	case MEDIA_SND_HW:
++		return  "sound hardware";
++	case MEDIA_SND_TIMER:
++		return  "sound timer";
++	case MEDIA_SND_SEQ:
++		return  "sound sequencer";
++
++	default:
++		return "unknown";
++	};
++}
++
++void display_media_devices(void *opaque)
++{
++	struct media_devices *md = opaque;
++	struct media_device_entry *md_ptr = md->md_entry;
++	int i;
++	char *prev = "";
++
++	for (i = 0; i < md->md_size; i++) {
++		if (strcmp(prev, md_ptr->device)) {
++			printf("\nDevice %s:\n\t", md_ptr->device);
++			prev = md_ptr->device;
++		}
++		printf("%s(%s, dev %i:%i) ", md_ptr->node,
++		       media_device_type(md_ptr->type),
++		       md_ptr->major, md_ptr->minor);
++		md_ptr++;
++	}
++	printf("\n");
++}
++
++const char *get_associated_device(void *opaque,
++				  const char *last_seek,
++				  const enum device_type desired_type,
++				  const char *seek_device,
++				  const enum device_type seek_type)
++{
++	struct media_devices *md = opaque;
++	struct media_device_entry *md_ptr = md->md_entry;
++	int i, found = 0;
++	char *prev, *p;
++
++	if (seek_type != NONE && seek_device[0]) {
++		/* Get just the device name */
++		p = strrchr(seek_device, '/');
++		if (p)
++			seek_device = p + 1;
++
++		/* Step 1: Find the seek node */
++		for (i = 0; i < md->md_size; i++, md_ptr++) {
++			if (last_seek && md_ptr->type == seek_type &&
++			    !strcmp(md_ptr->node, last_seek)) {
++				found = 1;
++				continue;
++			}
++			if (last_seek && !found)
++				continue;
++			if (md_ptr->type == seek_type &&
++			    !strcmp(seek_device, md_ptr->node))
++				break;
++		}
++		if (i == md->md_size)
++			return NULL;
++		i++;
++		prev = md_ptr->device;
++		md_ptr++;
++		/* Step 2: find the associated node */
++		for (; i < md->md_size && !strcmp(prev, md_ptr->device); i++, md_ptr++) {
++			if (last_seek && md_ptr->type == seek_type &&
++			    !strcmp(md_ptr->node, last_seek)) {
++				found = 1;
++				continue;
++			}
++			if (last_seek && !found)
++				continue;
++			if (md_ptr->type == desired_type)
++				return md_ptr->node;
++		}
++	} else {
++		for (i = 0; i < md->md_size; i++, md_ptr++) {
++			if (last_seek && !strcmp(md_ptr->node, last_seek)) {
++				found = 1;
++				continue;
++			}
++			if (last_seek && !found)
++				continue;
++			if (md_ptr->type == desired_type)
++				return md_ptr->node;
++		}
++	}
++
++	return NULL;
++}
++
++const char *fget_associated_device(void *opaque,
++				   const char *last_seek,
++				   const enum device_type desired_type,
++				   const int fd_seek_device,
++				   const enum device_type seek_type)
++{
++	struct media_devices *md = opaque;
++	struct media_device_entry *md_ptr = md->md_entry;
++	struct stat f_status;
++	unsigned int dev_major, dev_minor;
++	int i, found = 0;
++	char *prev;
++
++	if (fstat(fd_seek_device, &f_status)) {
++		perror("Can't get file status");
++		return NULL;
++	}
++	if (!S_ISCHR(f_status.st_mode)) {
++		fprintf(stderr, "File descriptor is not a char device\n");
++		return NULL;
++	}
++	dev_major = major(f_status.st_rdev);
++	dev_minor = minor(f_status.st_rdev);
++
++	/* Step 1: Find the seek node */
++	for (i = 0; i < md->md_size; i++, md_ptr++) {
++		if (last_seek && md_ptr->type == seek_type
++		    && md_ptr->major == dev_major
++		    && md_ptr->minor == dev_minor) {
++			found = 1;
++			continue;
++		}
++		if (last_seek && !found)
++			continue;
++		if (md_ptr->type == seek_type
++		    && md_ptr->major == dev_major
++		    && md_ptr->minor == dev_minor)
++			break;
++	}
++	if (i == md->md_size)
++		return NULL;
++	i++;
++	prev = md_ptr->device;
++	md_ptr++;
++	/* Step 2: find the associated node */
++	for (; i < md->md_size && !strcmp(prev, md_ptr->device); i++, md_ptr++) {
++		if (last_seek && md_ptr->type == seek_type
++		    && md_ptr->major == dev_major
++		    && md_ptr->minor == dev_minor) {
++			found = 1;
++			continue;
++		}
++		if (last_seek && !found)
++			continue;
++		if (md_ptr->type == desired_type)
++			return md_ptr->node;
++	}
++	return NULL;
++}
++
++const char *get_not_associated_device(void *opaque,
++				      const char *last_seek,
++				      const enum device_type desired_type,
++				      const enum device_type not_desired_type)
++{
++	struct media_devices *md = opaque;
++	struct media_device_entry *md_ptr = md->md_entry;
++	int i, skip = 0, found = 0;
++	char *prev = "", *result = NULL;
++
++	/* Step 1: Find a device without seek_type node */
++	for (i = 0; i < md->md_size; i++, md_ptr++) {
++		if (last_seek && !strcmp(md_ptr->node, last_seek)) {
++			found = 1;
++			continue;
++		}
++		if (last_seek && !found)
++			continue;
++		if (strcmp(prev, md_ptr->device)) {
++			if (!skip && result)
++				break;
++			prev = md_ptr->device;
++			skip = 0;
++			result = NULL;
++		}
++		if (md_ptr->type == not_desired_type)
++			skip = 1;
++		else if (!skip && !result && md_ptr->type == desired_type)
++			result = md_ptr->node;
++	}
++	if (skip)
++		result = NULL;
++
++	return result;
++}
+Index: gnomeradio-1.8/src/get_media_devices.h
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/src/get_media_devices.h
+@@ -0,0 +1,168 @@
++/*
++   Copyright © 2011 by Mauro Carvalho Chehab <mchehab@redhat.com>
++
++   The get_media_devices is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The libv4l2util Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the libv4l2util Library; if not, write to the Free
++   Software Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA
++   02110-1335 USA.
++ */
++
++/*
++ * Version of the API
++ */
++#define GET_MEDIA_DEVICES_VERSION	0x0105
++
++/**
++ * enum device_type - Enumerates the type for each device
++ *
++ * The device_type is used to sort the media devices array.
++ * So, the order is relevant. The first device should be
++ * MEDIA_V4L_VIDEO.
++ */
++enum device_type {
++	UNKNOWN = 65535,
++	NONE    = 65534,
++	MEDIA_V4L_VIDEO = 0,
++	MEDIA_V4L_VBI,
++	MEDIA_V4L_RADIO,
++	MEDIA_V4L_SUBDEV,
++
++	MEDIA_DVB_VIDEO = 100,
++	MEDIA_DVB_AUDIO,
++	MEDIA_DVB_SEC,
++	MEDIA_DVB_FRONTEND,
++	MEDIA_DVB_DEMUX,
++	MEDIA_DVB_DVR,
++	MEDIA_DVB_CA,
++	MEDIA_DVB_NET,
++	MEDIA_DVB_OSD,
++
++	MEDIA_SND_CARD = 200,
++	MEDIA_SND_CAP,
++	MEDIA_SND_OUT,
++	MEDIA_SND_CONTROL,
++	MEDIA_SND_HW,
++	MEDIA_SND_TIMER,
++	MEDIA_SND_SEQ,
++	/*
++	 * FIXME: not all alsa devices were mapped. missing things like
++	 *	midi, midiC%iD%i and timer interfaces
++	 */
++};
++
++enum bus_type {
++	MEDIA_BUS_UNKNOWN,
++	MEDIA_BUS_VIRTUAL,
++	MEDIA_BUS_PCI,
++	MEDIA_BUS_USB,
++};
++
++/**
++ * discover_media_devices() - Returns a list of the media devices
++ * @md_size:	Returns the size of the media devices found
++ *
++ * This function reads the /sys/class nodes for V4L, DVB and sound,
++ * and returns an opaque desciptor that keeps a list of the devices.
++ * The fields on this list is opaque, as they can be changed on newer
++ * releases of this library. So, all access to it should be done via
++ * a function provided by the API. The devices are ordered by device,
++ * type and node. At return, md_size is updated.
++ */
++void *discover_media_devices(void);
++
++/**
++ * free_media_devices() - Frees the media devices array
++ *
++ * @opaque:	media devices opaque descriptor
++ *
++ * As discover_media_devices() dynamically allocate space for the
++ * strings, feeing the list requires also to free those data. So,
++ * the safest and recommended way is to call this function.
++ */
++void free_media_devices(void *opaque);
++
++/**
++ * media_device_type() - returns a string with the name of a given type
++ *
++ * @type:	media device type
++ */
++const char *media_device_type(const enum device_type type);
++
++/**
++ * display_media_devices() - prints a list of media devices
++ *
++ * @opaque:	media devices opaque descriptor
++ */
++void display_media_devices(void *opaque);
++
++/**
++ * get_associated_device() - Return the next device associated with another one
++ *
++ * @opaque:		media devices opaque descriptor
++ * @last_seek:		last seek result. Use NULL to get the first result
++ * @desired_type:	type of the desired device
++ * @seek_device:	name of the device with you want to get an association.
++ *@ seek_type:		type of the seek device. Using NONE produces the same
++ *			result of using NULL for the seek_device.
++ *
++ * This function seeks inside the media_devices struct for the next device
++ * that it is associated with a seek parameter.
++ * It can be used to get an alsa device associated with a video device. If
++ * the seek_device is NULL or seek_type is NONE, it will just search for
++ * devices of the desired_type.
++ */
++const char *get_associated_device(void *opaque,
++				  const char *last_seek,
++				  const enum device_type desired_type,
++				  const char *seek_device,
++				  const enum device_type seek_type);
++
++/**
++ * fget_associated_device() - Return the next device associated with another one
++ *
++ * @opaque:		media devices opaque descriptor
++ * @last_seek:		last seek result. Use NULL to get the first result
++ * @desired_type:	type of the desired device
++ * @fd_seek_device:	file handler for the device where the association will
++			be made
++ *@ seek_type:		type of the seek device. Using NONE produces the same
++ *			result of using NULL for the seek_device.
++ *
++ * This function seeks inside the media_devices struct for the next device
++ * that it is associated with a seek parameter.
++ * It can be used to get an alsa device associated with an open file descriptor
++ */
++const char *fget_associated_device(void *opaque,
++				   const char *last_seek,
++				   const enum device_type desired_type,
++				   const int fd_seek_device,
++				   const enum device_type seek_type);
++
++/**
++ * get_not_associated_device() - Return the next device not associated with
++ *			     an specific device type.
++ *
++ * @opaque:		media devices opaque descriptor
++ * @last_seek:		last seek result. Use NULL to get the first result
++ * @desired_type:	type of the desired device
++ * @not_desired_type:	type of the seek device
++ *
++ * This function seeks inside the media_devices struct for the next physical
++ * device that doesn't support a non_desired type.
++ * This method is useful for example to return the audio devices that are
++ * provided by the motherboard.
++ */
++const char *get_not_associated_device(void *opaque,
++				      const char *last_seek,
++				      const enum device_type desired_type,
++				      const enum device_type not_desired_type);
+Index: gnomeradio-1.8/configure.in
+===================================================================
+--- gnomeradio-1.8.orig/configure.in
++++ gnomeradio-1.8/configure.in
+@@ -5,7 +5,7 @@ AC_CONFIG_SRCDIR(src/gui.c)
+ AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+ 
+ AM_MAINTAINER_MODE
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS([config.h])
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_PROG_INTLTOOL([0.21])
+ 
+@@ -22,11 +22,13 @@ GETTEXT_PACKAGE=gnomeradio
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", GETTEXT_PACKAGE)
+ 
++PKG_CHECK_MODULES(ALSA, alsa >= 1.0.25)
++AC_SUBST(ALSA_CFLAGS)
++AC_SUBST(ALSA_LIBS)
+ 
+ PKG_CHECK_MODULES(GNOME, dbus-glib-1 gconf-2.0 >= 2.12 gtk+-3.0 libgnome-media-profiles-3.0 >= 3.0)
+ AC_SUBST(GNOME_CFLAGS)
+ AC_SUBST(GNOME_LIBS)
+-AC_SUBST(LIRC)
+ 
+ PKG_CHECK_MODULES(GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0)
+ AC_SUBST(GSTREAMER_CFLAGS)
+@@ -46,6 +48,7 @@ fi
+ 
+ AM_GCONF_SOURCE_2
+ 
++AC_SUBST(LIRC)
+ LIRC=""
+ if test "$enable_lirc" != "no"; then
+   AC_CHECK_LIB(lirc_client, lirc_init,
+@@ -58,7 +61,7 @@ AC_ARG_ENABLE(install_schemas,
+        [  --disable-install-schemas        Disable installation of the gconf schemas])
+ AM_CONDITIONAL(INSTALL_SCHEMAS, test x$enable_install_schemas != xno)
+ 
+-AC_OUTPUT([
++AC_CONFIG_FILES([
+ gnomeradio.spec
+ Makefile
+ src/Makefile
+@@ -74,3 +77,5 @@ data/icons/48x48/Makefile
+ data/icons/scalable/Makefile
+ help/Makefile
+ ])
++
++AC_OUTPUT
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -36,6 +36,7 @@
+ #include "lirc.h"
+ #include "prefs.h"
+ #include "record.h"
++
+ #include "../data/pixmaps/digits.xpm"
+ #include "../data/pixmaps/signal.xpm"
+ #include "../data/pixmaps/stereo.xpm"
+@@ -50,6 +51,16 @@
+ 
+ #define TRANSLATORS "TRANSLATORS"
+ 
++/* Latency is not a big problem for radio (no video to sync with), and
++   USB radio devices benefit from a larger default latency */
++#define DEFAULT_LATENCY 500
++
++int alsa_loopback = 1;
++char *alsa_playback = NULL;
++char *alsa_capture = NULL;
++int alsa_latency = DEFAULT_LATENCY;
++int alsa_debug = 0;
++
+ GtkWidget* mute_button, *preset_combo;
+ GtkAdjustment *adj;
+ GtkWidget* app;
+@@ -68,7 +79,7 @@ static GtkWidget *prefs_button;
+ 
+ static int timeout_id, bp_timeout_id = -1, bp_timeout_steps = 0;
+ 
+-static DBusGProxy      * connect_to_session               (void);
++static DBusGProxy      * connect_to_session	       (void);
+ 
+ static gboolean is_first_start(void)
+ {
+@@ -121,7 +132,7 @@ static gboolean initial_frequency_scan_c
+ 		gtk_label_set_text(GTK_LABEL(fsd->label), text);
+ 		g_free(text);
+ 		
+-		g_print("%.2f is a station\n", freq);
++		g_print("Found a station at %.2f MHz\n", freq);
+ 		
+ 		*f = freq;
+ 		fsd->stations = g_list_append(fsd->stations, f);
+@@ -815,17 +826,25 @@ void rec_button_clicked_cb(GtkButton *bu
+ void toggle_volume(void)
+ {
+ 	static int old_vol;
+-	int vol = mixer_get_volume();
++	int muted, vol
++
++	muted = radio_is_muted();
++	vol = mixer_get_volume();
+ 	
+ 	if (vol) {
+ 		old_vol = vol;
+ 		vol = 0;
+ 	} else {
+ 		vol = old_vol;
+-	}	
++	}
++
+ 	mixer_set_volume(vol);
+ 	gtk_volume_button_set_value(mute_button, vol);
+-	/*gtk_adjustment_set_value(volume, vol);*/
++
++	if (muted)
++		radio_unmute();
++	else
++		radio_mute();
+ }	
+ 
+ /*
+@@ -1221,6 +1240,97 @@ key_press_event_cb(GtkWidget *app, GdkEv
+ 	return FALSE;
+ }
+ 
++enum
++{
++	ARG_ALSA_LOOPBACK,
++	ARG_NO_ALSA_LOOPBACK,
++	ARG_ALSA_CAPTURE,
++	ARG_ALSA_PLAYBACK,
++	ARG_ALSA_LATENCY,
++	ARG_ALSA_DEBUG
++};
++
++static gboolean
++parse_one_option (gint opt, const gchar * arg, GError ** err)
++{
++	switch (opt) {
++		case ARG_ALSA_LOOPBACK:
++			alsa_loopback = 1;
++			break;
++		case ARG_NO_ALSA_LOOPBACK:
++			alsa_loopback = 0;
++			break;
++		case ARG_ALSA_CAPTURE:
++			if (!strncmp(arg, "hw:", 3) && isdigit(arg[3]) && arg[4] == ',' && isdigit(arg[5])) {
++				alsa_capture = g_strdup (arg);
++				break;
++			} else {
++				g_set_error(err, G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
++					    _("invalid argument name '%s', must be e.g. 'hw:1,0'"), arg);
++				return FALSE;
++			}
++		case ARG_ALSA_PLAYBACK:
++			if (!strncmp(arg, "hw:", 3) && isdigit(arg[3]) && arg[4] == ',' && isdigit(arg[5])) {
++				alsa_playback = g_strdup (arg);
++				break;
++			} else {
++				g_set_error(err, G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
++					    _("invalid argument name '%s', must be e.g. 'hw:0,0'"), arg);
++				return FALSE;
++			}
++		case ARG_ALSA_LATENCY:
++			alsa_latency = atoi (arg);
++			break;
++		case ARG_ALSA_DEBUG:
++			alsa_debug = 1;
++			break;
++		default:
++			g_set_error (err, G_OPTION_ERROR, G_OPTION_ERROR_UNKNOWN_OPTION,
++					_("Unknown option"));
++			return FALSE;
++	}
++
++	return TRUE;
++}
++
++static gboolean
++option_alsa_cb (const gchar * opt,
++		   const gchar * arg, gpointer data, GError ** err)
++{
++	static const struct
++	{
++		const gchar *opt;
++		int val;
++	} options[] = {
++		{
++		"--alsa-loopback", ARG_ALSA_LOOPBACK}, {
++		"--no-alsa-loopback", ARG_NO_ALSA_LOOPBACK}, {
++		"--alsa-capture", ARG_ALSA_CAPTURE}, {
++		"--alsa-playback", ARG_ALSA_PLAYBACK}, {
++		"--alsa-latency", ARG_ALSA_LATENCY}, {
++		"--alsa-debug", ARG_ALSA_DEBUG}, {
++		NULL}
++	};
++	gint val = 0, n;
++
++	for (n = 0; options[n].opt; n++) {
++		if (!strcmp (opt, options[n].opt)) {
++			val = options[n].val;
++			break;
++		}
++	}
++
++	return parse_one_option (val, arg, err);
++}
++
++G_GNUC_NORETURN static gboolean
++option_version_cb (const gchar * opt,
++		   const gchar * arg, gpointer data, GError ** err)
++{
++	g_print ("%s %s\n", PACKAGE, VERSION);
++	exit (0);
++}
++
+ int main(int argc, char* argv[])
+ {
+ 	GList *ptr;
+@@ -1229,23 +1339,38 @@ int main(int argc, char* argv[])
+ 	gboolean do_scan = FALSE;
+ 	GOptionContext *ctx;
+ 	const GOptionEntry entries[] = {
+-		{ "scan", 0, 0, G_OPTION_ARG_NONE, &do_scan, N_("Scan for stations"), NULL },
++		{ "alsa-loopback", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Enable loopback digital audio from radio device (default: enable)"), NULL },
++		{ "no-alsa-loopback", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Disable loopback digital audio from radio device"), NULL },
++		{ "alsa-capture", 0, 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set capture device for loopback digital audio (default: auto)"), N_("DEVICE") },
++		{ "alsa-playback", 0, 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set playback device for loopback digital audio (default: default)"), N_("DEVICE") },
++		{ "alsa-latency", 0, 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set latency for loopback digital audio in ms (default: 500)"), N_("TIME") },
++		{ "alsa-debug", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Enable debug output for loopback digital audio"), NULL },
++		{ "scan", '\0', 0, G_OPTION_ARG_NONE, &do_scan, N_("Scan for stations"), NULL },
++		{ "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
+ 		{ NULL }
+ 	};
++
+ 	bindtextdomain(PACKAGE, GNOMELOCALEDIR);  
+ 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+ 	textdomain(PACKAGE);
+ 
+ 	g_set_application_name(_("Gnomeradio"));
++	g_setenv("PULSE_PROP_media.role", "production", TRUE);
+ 	
+-	ctx = g_option_context_new("- Gnomeradio");
+-	g_option_context_add_main_entries(ctx, entries, GETTEXT_PACKAGE);  
++	ctx = g_option_context_new("- Listen to FM radio");
++	g_option_context_add_main_entries(ctx, entries, GETTEXT_PACKAGE);
++	g_option_context_add_group(ctx, gtk_get_option_group (TRUE));
+ 	g_option_context_add_group(ctx, gst_init_get_option_group());
+-	g_option_context_set_ignore_unknown_options(ctx, TRUE);	
++	if (g_option_context_parse(ctx, &argc, &argv, &err) == FALSE) {
++		g_print(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
++			  err->message, argv[0]);
++		g_error_free(err);
++		exit(1);
++	}
++	g_option_context_free(ctx);
+ 
+ 	gtk_init(&argc, &argv);
+ 	gtk_window_set_default_icon_name("gnomeradio");
+-	g_setenv("PULSE_PROP_media.role", "production", TRUE);
+ 	/* Main app */
+ 	main_visible = FALSE;
+ 	app = gnome_radio_gui();
+@@ -1268,11 +1393,12 @@ int main(int argc, char* argv[])
+ 	}
+ 
+ 	load_settings();
++
+ 	start_mixer(FALSE, app);
+ 	start_radio(FALSE, app);
+ 	if (is_first_start() || do_scan) {
+ 		if (!radio_is_init()) {
+-			g_message(_("Could not scan. Radio is not initialized."));
++			fprintf(stderr, "Could not scan. Radio is not initialized\n");
+ 		} else {
+ 			initial_frequency_scan(app);
+ 			set_first_time_flag();
+@@ -1305,12 +1431,12 @@ int main(int argc, char* argv[])
+ 		gtk_dialog_run (GTK_DIALOG (dialog));
+ 		gtk_widget_destroy (dialog);
+ */
+-		g_message(_("Could not start lirc!"));
++		fprintf(stderr, "Could not start lirc\n");
+ 	}
+ 	else
+ 		start_lirc();
+ #endif
+-	
++
+ /* Connect the Session Management signals
+  */
+ 
+@@ -1351,7 +1477,7 @@ static DBusGProxy * connect_to_session (
+ {
+ 	DBusGConnection *connection;
+ 	DBusGProxy      *proxy;
+-	GError          *error = NULL;
++	GError	  *error = NULL;
+ 
+ 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+ 
+Index: gnomeradio-1.8/src/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/src/Makefile.am
++++ gnomeradio-1.8/src/Makefile.am
+@@ -1,35 +1,39 @@
+-INCLUDES = -I$(top_srcdir) -I$(includedir) \
+-           $(GNOME_CFLAGS) $(GSTREAMER_CFLAGS) $(XML_CFLAGS)\
+-           -DG_LOG_DOMAIN=\"gnomeradio\" \
+-           -DGNOMELOCALEDIR=\""$(datadir)/locale"\" \
+-           -DDATADIR=\""$(datadir)/"\" \
+-           -DPREFIX=\""$(prefix)/"\" \
+-           -DLIBDIR=\""$(libdir)/"\" \
+-           -DSYSCONFDIR=\""$(sysconfdir)/"\"
+-
++INCLUDES =									\
++	-I$(top_srcdir) -I$(includedir)						\
++	$(ALSA_CFLAGS) $(GNOME_CFLAGS) $(GSTREAMER_CFLAGS) $(XML_CFLAGS)	\
++	-DG_LOG_DOMAIN=\"gnomeradio\"						\
++	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"				\
++	-DDATADIR=\""$(datadir)/"\"						\
++	-DPREFIX=\""$(prefix)/"\"						\
++	-DLIBDIR=\""$(libdir)/"\"						\
++	-DSYSCONFDIR=\""$(sysconfdir)/"\"
+ 
+ bin_PROGRAMS = gnomeradio
+ 
+-gnomeradio_SOURCES = \
+-            gui.h \
+-            lirc.h \
+-            prefs.h \
+-            radio.h \
+-            rec_tech.h \
+-            record.h \
+-            tech.h \
+-            trayicon.h \
+-            v4l1.h \
+-            v4l2.h \
+-            gui.c \
+-            lirc.c \
+-            prefs.c \
+-            radio.c \
+-            rec_tech.c \
+-            record.c \
+-            tech.c \
+-            trayicon.c \
+-            v4l1.c \
+-            v4l2.c
++gnomeradio_SOURCES =		\
++	alsa_stream.h		\
++	get_media_devices.h	\
++	gui.h			\
++	lirc.h			\
++	prefs.h			\
++	radio.h			\
++	rec_tech.h		\
++	record.h		\
++	tech.h			\
++	trayicon.h		\
++	v4l1.h			\
++	v4l2.h			\
++	alsa_stream.c		\
++	get_media_devices.c	\
++	gui.c			\
++	lirc.c			\
++	prefs.c			\
++	radio.c			\
++	rec_tech.c		\
++	record.c		\
++	tech.c			\
++	trayicon.c		\
++	v4l1.c			\
++	v4l2.c
+ 
+-gnomeradio_LDADD = $(GNOME_LIBS) $(GSTREAMER_LIBS) $(XML_LIBS) $(LIRC)
++gnomeradio_LDADD = $(ALSA_LIBS) $(GNOME_LIBS) $(GSTREAMER_LIBS) $(XML_LIBS) $(LIRC)
+Index: gnomeradio-1.8/src/radio.c
+===================================================================
+--- gnomeradio-1.8.orig/src/radio.c
++++ gnomeradio-1.8/src/radio.c
+@@ -26,6 +26,14 @@
+ #include "radio.h"
+ #include "v4l1.h"
+ #include "v4l2.h"
++#include "alsa_stream.h"
++#include "get_media_devices.h"
++
++extern int alsa_loopback;
++extern char *alsa_playback;
++extern char *alsa_capture;
++extern int alsa_latency;
++extern int alsa_debug;
+ 
+ static RadioDev *dev;
+ 
+@@ -53,6 +61,8 @@ try_v4l1:
+         fprintf(stderr, "Initializing v4l1 failed\n");
+ 		dev->finalize (dev);
+ 		dev = NULL;
++		if (alsa_loopback)
++			alsa_loopback = 0;
+ 		if (driver != DRIVER_ANY)
+ 			goto failure;
+ 	} else {
+@@ -66,6 +76,8 @@ try_v4l2:
+         fprintf(stderr, "Initializing v4l2 failed\n");
+ 		dev->finalize (dev);
+ 		dev = NULL;
++		if (alsa_loopback)
++			alsa_loopback = 0;
+ 		if (driver != DRIVER_ANY)
+ 			goto failure;
+ 	} else {
+@@ -73,6 +85,33 @@ try_v4l2:
+ 	}
+ 
+ success:
++	if (alsa_loopback) {
++		if (alsa_capture == NULL) {
++			void *md = discover_media_devices();
++			const char *p = strrchr(device, '/');
++			if (p)
++				p++;
++			else
++				p = device;
++
++			p = get_associated_device(md, NULL, MEDIA_SND_CAP, p, MEDIA_V4L_RADIO);
++			if (p)
++				alsa_capture = strdup(p);
++			else
++				alsa_loopback = 0;
++
++			free_media_devices(md);
++		}
++
++		if (alsa_loopback) {
++			if (alsa_playback == NULL)
++				alsa_playback = "default";
++
++			fprintf(stderr, "alsa: Using audio loopback device from %s (%s) to %s\n",
++				alsa_capture, device, alsa_playback);
++		}
++	}
++
+ 	radio_unmute();
+ failure:
+ 
+@@ -113,12 +152,17 @@ void radio_unmute(void)
+ {
+ 	if (dev)
+ 		dev->mute (dev, 0);
++	if (alsa_loopback)
++		alsa_thread_startup(alsa_playback, alsa_capture,
++				    alsa_latency, stderr, alsa_debug);
+ }
+ 
+ void radio_mute(void)
+ {
+ 	if (dev)
+ 		dev->mute (dev, 1);
++	if (alsa_loopback)
++		alsa_thread_stop();
+ }
+ 
+ int radio_is_muted(void)

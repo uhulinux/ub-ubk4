@@ -1,0 +1,165 @@
+.TH aaphoto "1"
+
+.SH NAME
+aaphoto 
+
+.SH SYNOPSYS
+aaphoto [option[s]] [source file[s]]
+
+.SH DESCRIPTION
+Az Auto Adjust Photo egy kicsi parancssori képmanipuláló eszköz, amely 
+a fotók könnyű korrekcióját teszi lehetővé. 
+Megpróbálja javítani a kép kinézetét.
+.br
+A program ezt a megadott kép elemzésével teszi, és beállítja a legoptimálisabb
+kontraszt, gamma, színegyensúly és szaturáció értéket a képen.
+További részletek a http://log69.com/ oldalon találhatók.
+.br
+A következő képformátumok támogatottak (JasPer, JPEG és PNG segítségével):
+.br
+mif, pnm / pgm / ppm, bmp, ras, jp2, jpc, jpg, png
+.br
+A minőség beállítások csak jp2, jpc, jpg formátumok esetén alkalmazhatók.
+.br
+
+.SH OPTIONS
+Használható kapcsolók (a * jellel jelölteknél fájl megadása kötelező):
+.TP
+\fB\-h\fR   \fB\-\-help\fR
+Kiírja a súgót
+.TP
+\fB\-v\fR   \fB\-\-version\fR
+Kiírja a verzió információt
+.TP
+\fB\-a\fR   \fB\-\-autoadjust\fR
+*A kép színeinek automatikus igazítása
+.TP
+\fB\-o\fR   \fB\-\-output\fR
+*A kimeneti könyvtár megadása
+.TP
+	\fB\-\-overwrite\fR
+*Felülírja az eredeti képet
+.TP
+	\fB\-\-jpg\fR
+*JPG formátumban menti a képet
+.TP
+	\fB\-\-jp2\fR
+*JPEG 2000 formátumban menti a képet
+.TP
+	\fB\-\-png\fR
+*PNG formátumban menti a képet, alfa csatorna támogatással
+.TP
+	\fB\-\-bmp\fR
+*BMP formátumban menti a képet
+.TP
+\fB\-r\fR   \fB\-\-resize\fR
+*Kép átméretezése a hosszabb oldal figyelembevételével (% vagy pixel)
+.TP
+	\fB\-\-rotate90\fR
+*Kép elforgatása 90 fokkal
+.TP
+	\fB\-\-rotate180\fR
+*Kép elforgatása 180 fokkal
+.TP
+	\fB\-\-rotate270\fR
+*Kép elforgatása 270 fokkal (90 fokkal balra)
+.TP
+	\fB\-\-flipx\fR
+*Kép tükrözése vízszintesen
+.TP
+	\fB\-\-flipy\fR
+*Kép tükrözése függőlegesen
+.TP
+	\fB\-\-noexif\fR
+EXIF információk nélkül menti a képet
+.TP
+\fB\-q\fR   \fB\-\-quality\fR
+*Kép minősége 1 és 100 között
+.TP
+\fB\-t\fR   \fB\-\-threads\fR
+A használt thread-ek száma (alapértelmezés: automatikus)
+.TP
+\fB\-s\fR   \fB\-\-silent\fR
+Csendes mód, semmilyen információt nem ír ki a feldolgozás közben
+.TP
+	\fB\-\-quiet\fR
+ugyanaz, mint a \-s, \-\-silent
+.TP
+\fB\-V\fR   \fB\-\-verbose\fR
+Részletes információk a feldolgozásról
+.TP
+	\fB\-\-speed\fR
+Extra sebesség információ
+.TP
+	\fB\-\-test\fR
+*Részletes teszt információkat ír a képbe
+
+.SH EXAMPLES
+aaphoto folders
+.br
+aaphoto image.jpg
+.br
+aaphoto \fB\-a \-r600 \-q85\fR *.jpg
+.br
+aaphoto mydir
+.br
+aaphoto \fB\-V \-\-resize70%\fR image.png
+.br
+aaphoto \fB\-\-quality60\fR image.jp2
+.br
+aaphoto image.jp2
+
+.SH REMARKS
+.br
+\- az auto adjust paraméter lesz az alapértelmezett, ha semmilyen más opció nincs megadva
+.br
+\- az új képfájl neve _new kiegészítést kap, ha az \fB\-\-overwrite\fR paraméter nincs megadva
+.br
+\- könyvtár megadásakor a könyvtár összes fájlja feldolgozásra kerül, de nem rekurzívan (a könyvtár alkönyvtárait nem dolgozza fel)
+.br
+\- a paraméterek sorrendje tetszőleges
+.br
+\- az átméretezés mértéke százalékban is megadható
+.br
+\- az átméretezés mértéke kisebb, vagy egyenlő lehet, mint az eredeti kép mérete
+.br
+\- az átméretezés a legjobb (és leglassabb) resampling eljárást használja
+.br
+\- az alapértelmezett jpeg minőség 95%
+.br
+\- alapértelmezésben az EXIF információk mentésre kerülnek a jpeg képekben
+
+.SH AUTHORS
+*** Auto Adjust PHOTO ***
+.br
+Copyright 2006\-2013 Andras Horvath
+.br
+E\-mail: mail@log69.com \- bármilyen javaslatot és visszajelzést szívesen fogadok
+.br
+URL: http://log69.com/ \- a hivatalos weboldal
+.br
+aaPhoto (command\-line) verzió \- v0.43
+.br
+aaRGB (színjavító motor) verzió \- v0.65
+.br
+man oldal: Rezso Pader (rezso@rezso.net) 
+.PP
+A program a következő függvénykönyvtárakat használja:
+.br
+libjpeg - IJG JPEG software, http://www.ijg.org/
+.br
+libjasper - JasPer software, http://www.ece.uvic.ca/~mdadams/jasper/
+.br
+libpng - PNG software, http://www.libpng.org/
+.br
+libz - Compression library, http://www.zlib.net/
+
+.SH LICENSE
+Ez a program szabad szoftver; terjeszthető illetve módosítható a Free Software Foundation által kiadott GNU General Public License dokumentumában leírtak; akár a licenc 3-as, akár (tetszőleges) későbbi változata szerint.
+.br
+Ez a program abban a reményben kerül közreadásra, hogy hasznos lesz, de minden egyéb GARANCIA NÉLKÜL, az ELADHATÓSÁGRA vagy VALAMELY CÉLRA VALÓ ALKALMAZHATÓSÁGRA való származtatott garanciát is beleértve. További részleteket a GNU General Public License tartalmaz.
+.br
+A programmal együtt meg kellett kapnod a GNU General Public License egy pédányát. Amennyiben nem így történt, lásd <http://www.gnu.org/licenses/>.
+
+.SH "SEE ALSO"
+Az \fBaaphoto\fR teljes dokumentációja megtalálható a \fBhttp://log69.com/\fR weboldalon.

@@ -1,0 +1,292 @@
+Description: Use current keycode mapping in default lirc keyname.
+	     Added a lirc command "toggle visible".
+             Added a new function, so that lirc.c doesn't touch the internals of gui.c anymore.
+             Autodetect supported TV applications.
+Author: POJAR GEORGE <geoubuntu@gmail.com> 
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c	2013-09-24 18:06:14.320930000 +0000
++++ gnomeradio-1.8/src/gui.c	2013-09-24 18:12:13.000000000 +0000
+@@ -51,6 +51,7 @@
+ 
+ GtkWidget* mute_button, *preset_combo;
+ GtkAdjustment *adj;
++GtkWidget* app;
+ 
+ int mom_ps;
+ gnomeradio_settings settings;
+@@ -641,6 +642,16 @@
+ 	preset_combo_set_item(mom_ps);
+ }
+ 
++void gnomeradio_switch_to_preset (gint index)
++{
++	if (0 <= index && index < g_list_length(settings.presets)) {
++		preset *ps = g_list_nth_data(settings.presets, index);
++		gtk_adjustment_set_value(adj, ps->freq*STEPS);
++		mom_ps = index;
++		preset_combo_set_item(mom_ps);
++	}
++}
++
+ static void quit_button_clicked_cb(GtkButton *button, gpointer data)
+ {
+ 	exit_gnome_radio();
+@@ -1140,7 +1151,6 @@
+ 
+ int main(int argc, char* argv[])
+ {
+-	GtkWidget* app;
+ 	GList *ptr;
+ 	DBusGProxy *proxy;
+ 	GError *err = NULL;
+Index: gnomeradio-1.8/src/lirc.c
+===================================================================
+--- gnomeradio-1.8.orig/src/lirc.c	2013-09-24 18:06:14.320930000 +0000
++++ gnomeradio-1.8/src/lirc.c	2013-09-24 18:11:59.000000000 +0000
+@@ -22,25 +22,28 @@
+ #include <fcntl.h>
+ #include <stdlib.h>
+ #include <gtk/gtk.h>
+-
+-#ifdef HAVE_LIRC
+-
+ #include <lirc/lirc_client.h>
+ 
+-#endif
+-
+ #include "lirc.h"
+ #include "gui.h"
+ 
+-extern GtkWidget* mute_button, *preset_combo;
+-extern GtkAdjustment *adj;
+-
+-extern int mom_ps;
+-extern gnomeradio_settings settings;
++extern GtkWidget* mute_button;
++extern GtkWidget *app;
+ 
+ static int fd = -1;
+ static struct lirc_config *config = NULL;
+ 
++static struct TV_LIST
++{
++	const char *name;
++} tv_list[] = {
++	{ "tvtime" },
++	{ "xawtv" },
++	{ "zapping" }
++};
++
++#define TV_COUNT (sizeof(tv_list)/sizeof(struct TV_LIST))
++
+ static void execute_lirc_command (char *cmd)
+ {
+ 	printf("lirc command: %s\n", cmd);
+@@ -70,12 +73,16 @@
+ 	}
+ 	else if (strcasecmp (cmd, "tv") == 0)
+ 	{
+-		gchar **argv;
++		int i;
+ 		exit_gnome_radio();
+-		g_shell_parse_argv ("xawtv", NULL, &argv, NULL);
+-		g_spawn_async (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
+-		g_strfreev (argv);
+-		/* gnome_execute_shell(NULL, "xawtv"); */
++		for (i = 0; i < TV_COUNT; i++) {
++			gchar **argv;
++
++			g_shell_parse_argv (tv_list[i].name, NULL, &argv, NULL);
++			if (g_spawn_async (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
++				break;
++			g_strfreev (argv);
++		}
+ 	}
+ 	else if (strcasecmp (cmd, "quit") == 0)
+ 	{
+@@ -89,17 +96,15 @@
+ 	{
+ 		change_preset(FALSE);
+ 	}
++	else if (strcasecmp (cmd, "toggle visible") == 0)
++	{
++		toggle_mainwindow_visibility(app);
++	}
+ 	else if (strncasecmp (cmd, "preset ", 7) == 0) 
+ 	{
+-		int tmp = 0, ret;
+-		ret = sscanf(cmd, "preset %i", &tmp);
+-		if (ret && (tmp < g_list_length(settings.presets)))
+-		{
+-			preset *ps;
+-			ps = g_list_nth_data(settings.presets, tmp);
+-			gtk_adjustment_set_value(adj, ps->freq*STEPS);
+-			mom_ps = tmp;
+-			preset_combo_set_item(mom_ps);
++		int tmp = 0;
++		if (sscanf(cmd, "preset %i", &tmp)) {
++			gnomeradio_switch_to_preset(tmp);
+ 		}
+ 	}
+ 	else
+@@ -120,20 +125,28 @@
+ 		return NULL;
+ 	}
+ 	
+-	if (!strcasecmp("VOL+", event))
+-		return (char*)strdup("volume up");
+-	else if (!strcasecmp("VOL-", event))
+-		return (char*)strdup("volume down");
+-	else if (!repeat && !strcasecmp("CH+", event))
++	if (!repeat && !strcasecmp("KEY_KPPLUS", event))
+ 		return (char*)strdup("tune up");
+-	else if (!repeat && !strcasecmp("CH-", event))
++	else if (!repeat && !strcasecmp("KEY_KPMINUS", event))
+ 		return (char*)strdup("tune down");
+-	else if (!repeat && !strcasecmp("MUTE", event))
++	else if (!strcasecmp("KEY_VOLUMEUP", event))
++		return (char*)strdup("volume up");
++	else if (!strcasecmp("KEY_VOLUMEDOWN", event))
++		return (char*)strdup("volume down");
++	else if (!repeat && !strcasecmp("KEY_MUTE", event))
+ 		return (char*)strdup("mute");
+-	else if (!repeat && !strcasecmp("MINIMIZE", event))
++	else if (!repeat && !strcasecmp("KEY_TUNER", event))
++		return (char*)strdup("tv");
++	else if (!repeat && !strcasecmp("KEY_POWER", event))
+ 		return (char*)strdup("quit");
++	else if (!repeat && !strcasecmp("KEY_CHANNELUP", event))
++		return (char*)strdup("preset up");
++	else if (!repeat && !strcasecmp("KEY_CHANNELDOWN", event))
++		return (char*)strdup("preset down");
++	else if (!repeat && !strcasecmp("KEY_TEXT", event))
++		return (char*)strdup("toggle visible");
+ 	
+-	if (sscanf(event, "%d", &key) == 1)
++	if (sscanf(event, "KEY_%d", &key) == 1)
+ 	{
+ 		char *ret;
+ 		if (repeat || (key < 0) || (key > 9))
+@@ -158,12 +171,12 @@
+ 	if (lirc_readconfig (NULL, &config, NULL) != 0) 
+ 	{
+ 		perror("lirc_readconfig");
+-    	config = NULL;
++		config = NULL;
+ 		/*lirc_deinit ();
+     	fd = -1;
+     	return 0;*/
+ 		printf("The lirc configfile (~/.lircrc) could not be opened.\n"
+-				"Using default config.\n");
++		       "Using default config.\n");
+ 	}
+   
+ 	fcntl (fd, F_SETFL, O_NONBLOCK);
+Index: gnomeradio-1.8/help/C/gnomeradio.xml
+===================================================================
+--- gnomeradio-1.8.orig/help/C/gnomeradio.xml	2013-09-24 18:06:14.320930000 +0000
++++ gnomeradio-1.8/help/C/gnomeradio.xml	2013-09-24 18:14:07.395126281 +0000
+@@ -726,7 +726,7 @@
+ 			<command>tune up</command>
+ 		</entry>
+         <entry>
+-			Scan forward.
++			Scan forward
+ 		</entry>
+ 	  </row>
+ 	  <row rowsep="0">
+@@ -734,7 +734,7 @@
+ 			<command>tune down</command>
+ 		</entry>
+         <entry>
+-			Scan backwards.
++			Scan backwards
+ 		</entry>
+ 	  </row>
+ 	  <row rowsep="0">
+@@ -742,7 +742,7 @@
+ 			<command>preset up</command>
+ 		</entry>
+         <entry>
+-			Select next preset.
++			Select next preset
+ 		</entry>
+ 	  </row>
+ 	  <row rowsep="0">
+@@ -750,7 +750,7 @@
+ 			<command>preset down</command>
+ 		</entry>
+         <entry>
+-			Select previous preset.
++			Select previous preset
+ 		</entry>
+ 	  </row>
+ 	  <row rowsep="0">
+@@ -758,7 +758,7 @@
+ 			<command>volume up</command>
+ 		</entry>
+         <entry>
+-			Increase the volume.
++			Increase the volume
+ 		</entry>
+ 	  </row>
+ 	  <row rowsep="0">
+@@ -766,7 +766,7 @@
+ 			<command>volume down</command>
+ 		</entry>
+         <entry>
+-			Decrease the volume.
++			Decrease the volume
+ 		</entry>
+ 	  </row>
+ 	  <row rowsep="0">
+@@ -774,7 +774,15 @@
+ 			<command>mute</command>
+ 		</entry>
+         <entry>
+-			Mute/unmute the volume.
++			Mute/unmute the volume
++		</entry>
++	  </row>
++	  <row rowsep="0">
++        <entry>
++			<command>tv</command>
++		</entry>
++        <entry>
++			Select TV mode (supported TV applications: tvtime, xawtv, zapping)
+ 		</entry>
+ 	  </row>
+ 	  <row rowsep="0">
+@@ -782,9 +790,18 @@
+ 			<command>quit</command>
+ 		</entry>
+         <entry>
+-			Terminate &app;.
++			Terminate &app;
++		</entry>
++	  </row>
++	  <row rowsep="0">
++	<entry>
++			<command>toggle visible</command>
++	</entry>
++	<entry>
++			Show/hide &app; window
+ 		</entry>
+ 	  </row>
++
+ 	  <row rowsep="0">
+         <entry>
+ 			<command>preset x</command>
+Index: gnomeradio-1.8/src/gui.h
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.h	2013-09-24 18:06:14.320930000 +0000
++++ gnomeradio-1.8/src/gui.h	2013-09-24 18:12:06.000000000 +0000
+@@ -76,6 +76,7 @@
+ 
+ void change_preset(gboolean next);
+ 
++void gnomeradio_switch_to_preset (gint index);
+ 
+ void show_error_message(const char* error, const char* details);
+ void show_warning_message(const char* warning, const char* details);

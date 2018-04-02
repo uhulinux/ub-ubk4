@@ -1,0 +1,33 @@
+diff -Naurdp a/disk-utils/blockdev.c b/disk-utils/blockdev.c
+--- a/disk-utils/blockdev.c	2012-02-02 12:48:35.562822631 +0100
++++ b/disk-utils/blockdev.c	2012-05-18 18:29:36.820608567 +0200
+@@ -217,6 +217,7 @@ static void report_all_devices(void);
+ int main(int argc, char **argv)
+ {
+ 	int fd, d, j, k;
++	int ndelay = 0;
+ 
+ 	setlocale(LC_ALL, "");
+ 	bindtextdomain(PACKAGE, LOCALEDIR);
+@@ -246,6 +247,12 @@ int main(int argc, char **argv)
+ 		return EXIT_SUCCESS;
+ 	}
+ 
++	if (!strcmp(argv[1], "-n")) {
++		ndelay = O_NDELAY;
++		argv++;
++		argc--;
++	}
++
+ 	/* do each of the commands on each of the devices */
+ 	/* devices start after last command */
+ 	for (d = 1; d < argc; d++) {
+@@ -269,7 +276,7 @@ int main(int argc, char **argv)
+ 		usage(stderr);
+ 
+ 	for (k = d; k < argc; k++) {
+-		fd = open(argv[k], O_RDONLY, 0);
++		fd = open(argv[k], O_RDONLY | ndelay, 0);
+ 		if (fd < 0)
+ 			err(EXIT_FAILURE, _("cannot open %s"), argv[k]);
+ 		do_commands(fd, argv, d);

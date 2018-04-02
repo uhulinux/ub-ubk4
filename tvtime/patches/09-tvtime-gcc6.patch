@@ -1,0 +1,16 @@
+diff -Naur tvtime-1.0.2-orig/plugins/tomsmocomp/SearchLoopOddAH.inc tvtime-1.0.2/plugins/tomsmocomp/SearchLoopOddAH.inc
+--- tvtime-1.0.2-orig/plugins/tomsmocomp/SearchLoopOddAH.inc	2004-08-29 19:03:19.000000000 +0200
++++ tvtime-1.0.2/plugins/tomsmocomp/SearchLoopOddAH.inc	2016-11-21 23:17:14.041601922 +0100
+@@ -3,8 +3,8 @@
+ // pixel addresses. Any chroma match will not be used. (YUY2)
+ 		__asm
+ 		{
+-        MERGE4PIXavgH("XDI"-2, "XDI"+"XCX"-2, "XSI"+"XCX"+2, "XSI"+2*"XCX"+2)  // up left, down right
+-        MERGE4PIXavgH("XDI"+2, "XDI"+"XCX"+2, "XSI"+"XCX"-2, "XSI"+2*"XCX"-2)   // up right, down left
+-        MERGE4PIXavgH("XDI"+2*"XCX"-2, "XDI"+"XCX"-2, "XSI"+"XCX"+2, "XSI"+2)   // down left, up right
+-        MERGE4PIXavgH("XDI"+2*"XCX"+2, "XDI"+"XCX"+2, "XSI"+"XCX"-2, "XSI"-2)   // down right, up left   
++        MERGE4PIXavgH(" XDI "-2, " XDI "+" XCX "-2, " XSI "+" XCX "+2, " XSI "+2*" XCX "+2)  // up left, down right
++        MERGE4PIXavgH(" XDI "+2, " XDI "+" XCX "+2, " XSI "+" XCX "-2, " XSI "+2*" XCX "-2)   // up right, down left
++        MERGE4PIXavgH(" XDI "+2*" XCX "-2, " XDI "+" XCX "-2, " XSI "+" XCX "+2, " XSI "+2)   // down left, up right
++        MERGE4PIXavgH(" XDI "+2*" XCX "+2, " XDI "+" XCX "+2, " XSI "+" XCX "-2, " XSI "-2)   // down right, up left   
+ 		}

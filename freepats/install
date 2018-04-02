@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR/usr/share/freepats"
+find . -type f -name '*.pat' -print0 | \
+  xargs -0 -r \
+  cp -p --parents --target-directory="$UB_INSTALLDIR/usr/share/freepats"
+
+{ echo 'dir /usr/share/freepats'; echo; cat freepats.cfg; } \
+  >"$UB_INSTALLDIR/usr/share/freepats/freepats.cfg"

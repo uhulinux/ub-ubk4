@@ -1,0 +1,148 @@
+### -*-hoc-*-
+### /usr/local/src/hoc/hoc-7.0.0.beta/log1pc.hoc, Sat Dec  8 14:51:02 2001
+### Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+### ====================================================================
+### Provide an implementation of, and test package for, Logp1(x).  This
+### is the third trial implementation, using a continued fraction
+### expansion for ln(1+x).
+### [08-Dec-2001]
+### ====================================================================
+
+func Log1p(x) \
+{
+	### Compute Log1p(x) = ln(1 + x) accurately.  The cutoffs at
+	### which at least one bit is lost in substraction were
+	### accurately determined in Maple with this code:
+	###
+	###	Digits := 50;
+	###	g := proc(x) return (evalf(log(1 + x))); end proc;
+	###	plot(g(x), x = -0.5..0.5);
+	###	fsolve(g(x) = -0.5, x, -0.5..0);
+	###		-.39346934028736657639620046500881954655808186451281
+	###	fsolve(g(x) = 0.5, x, 0..1);
+	###		.64872127070012814684865078781416357165377610071015
+	###
+	### For small values between the cutoffs, we use the Taylor
+	### series expansion, adding terms until they are small enough
+	### to be ignored.
+	###
+	### The ___test_log1p() function produces output that looks like
+	### this (on a Sun Solaris 2.7 system, using the vendor's native
+	### expm1() function for comparison):
+	###
+	###     x               # terms         error in Log1p(x)       Ulps
+	###	...???...
+	###
+	### Thus, we need from ?? (x near 0) to ?? (x near cutoffs)
+	### terms of the Taylor series.  A polynomial appoximation
+	### would be faster, and more efficient, but this code is
+	### simple and acceptable for now.
+
+	global k, xcutneg, xcutpos
+	k = 0
+
+	### Give names to the cutoff values:
+	xcutneg = -0.39346934028736657639620046500881954655808186451281
+	xcutpos = +0.64872127070012814684865078781416357165377610071015
+
+	### Handle easy special cases first:
+	if (isnan(x)) \
+		return (x) \
+	else if (x == 0) \
+		return (0) \
+	else if (x >= xcutpos) \
+		return (log(1 + x)) \
+	else if (x <= xcutneg) \
+		return (log(1 + x)) \
+
+	### Use continued expansion (Abramowitz and Stegun, NBS#55, 4.1.39) for
+	### ln(1+x) = x/(1 + x/(2 + x/(3 + 4x/(4 + 4x/(5 + 9x/6 + ...)))))
+	### I cannot see the general form of the coefficients:  in Maple, I find
+	###
+	### convert(log(1+x),confrac,x,15);
+	###
+	###                                        x
+	###       -------------------------------------------------------------------
+	###                                          x
+	###       1 + ---------------------------------------------------------------
+	###                                            x
+	###           2 + -----------------------------------------------------------
+	###                                              x
+	###               3 + -------------------------------------------------------
+	###                                                x
+	###                   1 + ---------------------------------------------------
+	###                                                  x
+	###                       5 + -----------------------------------------------
+	###                                                     x
+	###                           2/3 + -----------------------------------------
+	###                                                       x
+	###                                 7 + -------------------------------------
+	###                                                          x
+	###                                     1/2 + -------------------------------
+	###                                                            x
+	###                                           9 + ---------------------------
+	###                                                               x
+	###                                               2/5 + ---------------------
+	###                                                                  x
+	###                                                     11 + ----------------
+	###                                                                     x
+	###                                                          1/3 + ----------
+	###                                                                13 + 7/2 x
+	### From Press et al, Numerical Recipes, pp. 135--136, the
+	### evaluation of a continued fraction is best done by
+	### recursion, using the ratio of terms derived from this
+	### sequence:
+	###
+	### Given f(x) = b[0] + a[1]/(b[1] + a[2]/(b[2] + a[3]/(b[3] + ...)))
+	###
+	### where the a[*] and b[*] are functions of x.
+	###
+	### Then the n-th partial sum is f[n] = A[n]/B[n], where the
+	### A[*] and B[*] coefficients are determined by the three-term
+	### recursion:
+	###
+	###	A[-1] = 1	B[-1] = 0
+	###	A[0] = b[0]	B[0] = 1
+	###	A[j] = b[j]*A[j-1] + a[j]*A[j-2]
+	###	B[j] = b[j]*B[j-1] + a[j]*B[j-2]
+	###
+	abort("Code for continued fraction expansion of log(1+x) is incomplete\n")
+	return (___sum)
+}
+
+func ___log1p_err() return (Log1p($1) - log1p($1))
+
+proc ___test_log1p_print() \
+{
+	global xx, k, e, epsilon
+	printf "%7.2e\t%7d\t%15.2e\t%15.2f\n", xx, k, e, e/epsilon
+}
+
+proc ___test_log1p() \
+{
+	global xx, k, e, epsilon
+	k = 0
+	epsilon = macheps(1)
+	PREC = 3
+	print "x\t\t# terms\t\terror in Log1p(x)\tUlps\n"
+	last_k = -1
+	for (xx = -0.4; xx < 0.7; xx += 0.05) \
+	{
+		e = ___log1p_err(xx)
+		if (k != last_k) ___test_log1p_print()
+		last_k = k
+	}
+	xx = xcutneg + epsilon
+	e = ___log1p_err(xx)
+	___test_log1p_print()
+
+	xx = xcutpos - epsilon
+	e = ___log1p_err(xx)
+	___test_log1p_print()
+}
+
+proc help_Log1p() \
+{
+	print "\tLog1p(x) returns log(1 + x), but without accuracy loss for\n"
+	print "\tsmall |x|.  x must be in (-1.0,infinity].\n\n"
+}

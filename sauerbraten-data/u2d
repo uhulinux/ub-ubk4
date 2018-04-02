@@ -1,0 +1,2 @@
+dir=$(sflist sauerbraten sauerbraten | sort -V | tail -n 1 ) #| sed s/_/\./g)
+sflist sauerbraten sauerbraten/$dir | grep tar | sed s/_coll.*//g | sort -V | tail -n 1 | sed s/sauerbraten_// | sed s/_/\./g

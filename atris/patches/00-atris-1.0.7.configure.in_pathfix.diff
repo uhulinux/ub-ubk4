@@ -1,0 +1,43 @@
+--- a/configure.in	2003-07-14 19:21:05.000000000 -0400
++++ b/configure.in	2004-09-12 15:07:23.000000000 -0400
+@@ -52,16 +52,19 @@
+ case "$target" in
+     *-*-mingw32*)
+ 	GAME_INSTALLDIR="C:/Program\\ Files/$PACKAGE"
++	STATE_INSTALLDIR="C:/Program\\ Files/$PACKAGE"
+ 	CFLAGS="$CFLAGS -s"
+ 	;;
+     *)
+-	GAME_INSTALLDIR="\$(prefix)/games/$PACKAGE"
++	GAME_INSTALLDIR="\$(datadir)/games/$PACKAGE"
++	STATE_INSTALLDIR="\$(localstatedir)/games/$PACKAGE"
+ 	;;
+ esac
+ 
+ 
+ 
+ AC_SUBST(GAME_INSTALLDIR)
++AC_SUBST(STATE_INSTALLDIR)
+ 
+ dnl Check for SDL
+ SDL_VERSION=1.1.6
+@@ -69,7 +72,7 @@
+             :,
+ 	    AC_MSG_ERROR([*** SDL version $SDL_VERSION not found! Get it from http://www.libsdl.org ])
+ )
+-CFLAGS="$CFLAGS -Wall -Wimplicit -Wsign-compare -Wpointer-arith $SDL_CFLAGS -DATRIS_LIBDIR=\\\"$GAME_INSTALLDIR\\\""
++CFLAGS="$CFLAGS -Wall -Wimplicit -Wsign-compare -Wpointer-arith $SDL_CFLAGS -DATRIS_LIBDIR=\\\"$GAME_INSTALLDIR\\\" -DATRIS_STATEDIR=\\\"$STATE_INSTALLDIR\\\""
+ LIBS="$LIBS $SDL_LIBS"
+ 
+ # Finally create all the generated files
+@@ -92,7 +95,10 @@
+  Host System Type:     ${host}
+  Libraries:            ${LIBS}
+  Install path:         ${prefix}
++ Data Install path:    ${datadir}
++ Binary Install path:  ${bindir}
+  Game files:           ${GAME_INSTALLDIR}
++ Game state files:     ${STATE_INSTALLDIR}
+ 
+  Now type 'make' to build $PACKAGE $VERSION.
+ "

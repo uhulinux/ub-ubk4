@@ -1,0 +1,1 @@
+urllist 'http://yate.null.ro/tarballs/yate'"$(urllist 'http://yate.null.ro/tarballs/' | splitver '^yate([0-9]+)$' | sort -V | tail -n 1)" | splitver '^yate-([0-9]+\.[0-9]+\.[0-9]+-[0-9])\.tar\..*' | sort -V | tail -n 1 | sed s/-/~/

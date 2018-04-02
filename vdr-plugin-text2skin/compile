@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_replace -O3 -O2 Makefile
+make	PREFIX=/usr \
+	CONFDIR=/etc/vdr/ \
+	VIDEODIR=/var/vdr/video \
+	DESTDIR=/usr \
+	LOCALEDIR=$UB_INSTALLDIR/usr/share/locale

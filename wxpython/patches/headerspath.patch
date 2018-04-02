@@ -1,0 +1,12 @@
+diff -Naur orig/wxPython/config.py mod/wxPython/config.py
+--- orig/wxPython/config.py	2014-10-14 00:37:51.000000000 +0200
++++ mod/wxPython/config.py	2016-02-27 20:27:31.663141890 +0100
+@@ -521,7 +521,7 @@
+         for header, location in headers:
+             install_dir = os.path.normpath(root +
+                                            WXPREFIX +
+-                                           '/include/wx-%d.%d/wx' % (VER_MAJOR, VER_MINOR) +
++                                           '/usr/include/wx-%d.%d/wx' % (VER_MAJOR, VER_MINOR) +
+                                            location)
+             self.mkpath(install_dir)
+             (out, _) = self.copy_file(header, install_dir)

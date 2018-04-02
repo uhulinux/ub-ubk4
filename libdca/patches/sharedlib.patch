@@ -1,0 +1,25 @@
+diff -Naur orig/libdca/Makefile.am patched/libdca/Makefile.am
+--- orig/libdca/Makefile.am	2007-04-08 10:32:01.000000000 +0200
++++ patched/libdca/Makefile.am	2016-02-24 02:49:54.318003357 +0100
+@@ -14,7 +14,5 @@
+ EXTRA_DIST = configure.incl
+ 
+ install-exec-hook:
+-	ln -sf "$(libdir)/libdca.a" "$(DESTDIR)$(libdir)/libdts.a"
+ 
+ uninstall-hook:
+-	unlink "$(DESTDIR)$(libdir)/libdts.a"
+diff -Naur orig/libdca/Makefile.in patched/libdca/Makefile.in
+--- orig/libdca/Makefile.in	2007-04-10 14:31:23.000000000 +0200
++++ patched/libdca/Makefile.in	2016-02-24 02:49:38.561925227 +0100
+@@ -504,10 +504,8 @@
+ 
+ 
+ install-exec-hook:
+-	ln -sf "$(libdir)/libdca.a" "$(DESTDIR)$(libdir)/libdts.a"
+ 
+ uninstall-hook:
+-	unlink "$(DESTDIR)$(libdir)/libdts.a"
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:

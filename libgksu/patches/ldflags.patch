@@ -1,0 +1,47 @@
+diff -Naur orig/libgksu/Makefile.am patched/libgksu/Makefile.am
+--- orig/libgksu/Makefile.am	2008-05-09 19:39:55.000000000 +0200
++++ patched/libgksu/Makefile.am	2017-12-30 15:26:19.110758493 +0100
+@@ -30,6 +30,6 @@
+ noinst_PROGRAMS = test-gksu
+ test_gksu_SOURCES = test-gksu.c
+ test_gksu_LDADD = libgksu2.la
+-test_gksu_LDFLAGS = `pkg-config --libs glib-2.0`
++test_gksu_LDFLAGS = `pkg-config --libs glib-2.0 gtk+-x11-2.0 x11`
+ 
+ EXTRA_DIST = libgksu.ver
+diff -Naur orig/libgksu/Makefile.in patched/libgksu/Makefile.in
+--- orig/libgksu/Makefile.in	2009-06-29 19:55:56.000000000 +0200
++++ patched/libgksu/Makefile.in	2017-12-30 15:26:57.919311436 +0100
+@@ -268,7 +268,7 @@
+ gksu_run_helper_SOURCES = gksu-run-helper.c
+ test_gksu_SOURCES = test-gksu.c
+ test_gksu_LDADD = libgksu2.la
+-test_gksu_LDFLAGS = `pkg-config --libs glib-2.0`
++test_gksu_LDFLAGS = `pkg-config --libs glib-2.0 gtk+-x11-2.0 x11`
+ EXTRA_DIST = libgksu.ver
+ all: all-am
+ 
+diff -Naur orig/libgksuui/Makefile.am patched/libgksuui/Makefile.am
+--- orig/libgksuui/Makefile.am	2008-05-09 19:39:54.000000000 +0200
++++ patched/libgksuui/Makefile.am	2017-12-30 15:27:43.399963775 +0100
+@@ -4,7 +4,7 @@
+ 
+ noinst_LTLIBRARIES = libgksuui1.0.la
+ libgksuui1_0_la_SOURCES = gksuui-dialog.c
+-libgksuui1_0_la_LDFLAGS = -Wl,-O1 `pkg-config --libs gtk+-2.0 gconf-2.0`
++libgksuui1_0_la_LDFLAGS = -Wl,-O1 `pkg-config --libs gtk+-x11-2.0 gconf-2.0 x11`
+ 
+ noinst_HEADERS = defines.h gksuui.h gksuui-dialog.h
+ includedir = ${prefix}/include/$(PACKAGE)
+diff -Naur orig/libgksuui/Makefile.in patched/libgksuui/Makefile.in
+--- orig/libgksuui/Makefile.in	2009-06-29 19:55:57.000000000 +0200
++++ patched/libgksuui/Makefile.in	2017-12-30 15:27:56.824157160 +0100
+@@ -228,7 +228,7 @@
+ AM_CPPFLAGS = -DLOCALEDIR=\"$(datadir)/locale\" -DDATA_DIR=\"$(datadir)\" -DPREFIX=\"$(prefix)\"
+ noinst_LTLIBRARIES = libgksuui1.0.la
+ libgksuui1_0_la_SOURCES = gksuui-dialog.c
+-libgksuui1_0_la_LDFLAGS = -Wl,-O1 `pkg-config --libs gtk+-2.0 gconf-2.0`
++libgksuui1_0_la_LDFLAGS = -Wl,-O1 `pkg-config --libs gtk+-x11-2.0 gconf-2.0 x11`
+ noinst_HEADERS = defines.h gksuui.h gksuui-dialog.h
+ test_gksuui_SOURCES = test-gksuui.c
+ test_gksuui_LDADD = libgksuui1.0.la

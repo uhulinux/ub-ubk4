@@ -1,0 +1,48 @@
+#!/bin/bash -eux
+
+# mkdir -p ${UB_INSTALLDIR}/lib/firmware
+
+# cp -a linux-firmware/* ${UB_INSTALLDIR}/lib/firmware/
+
+make -C linux-firmware DESTDIR=${UB_INSTALLDIR} install
+
+cp -r nouveau ${UB_INSTALLDIR}/lib/firmware/
+
+cp -a dvb-firmware/* ${UB_INSTALLDIR}/lib/firmware
+
+rm -Rf ${UB_INSTALLDIR}/lib/firmware/.git
+
+docdir=${UB_INSTALLDIR}/usr/share/doc/Packages/linux-firmware
+mkdir -p ${docdir}
+mv ${UB_INSTALLDIR}/lib/firmware/GPL-* ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/LICENCE* ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/LICENSE* ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/README* ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/WHENCE ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/license-*.txt ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/dvb-*.fw.license.txt ${docdir}/
+
+rm -Rf ${UB_INSTALLDIR}/lib/firmware/{Makefile,configure,README*,*.txt,*.py}
+
+# ütközések törlése
+# az if [ -f $i ] kell, mert a dpkg -L listázza a "/."-t is, ami hibát okoz
+for i in $(dpkg -L alsa-firmware bluez-firmware kernel microcodectl); do
+	if [ -f $i ]; then
+		rm -rf ${UB_INSTALLDIR}/$i
+	fi
+done
+
+for i in $(dpkg -L acx-fw broadcom-fw ipw2100-fw ipw2200-fw nouveau-vdpau-fw zd1211-fw); do
+	if [ -f $i ]; then
+		rm -rf ${UB_INSTALLDIR}/$i
+	fi
+done
+# ez mégis bennmaradt
+rm -rf ${UB_INSTALLDIR}/yamaha
+# üres könyvtárak törlése
+find ${UB_INSTALLDIR} -type d -empty -delete
+
+# Trigger a microcode reload for configurations not using early updates
+install -d "${UB_INSTALLDIR}/usr/lib/tmpfiles.d"
+echo 'w /sys/devices/system/cpu/microcode/reload - - - - 1' \
+	>"${UB_INSTALLDIR}/usr/lib/tmpfiles.d/linux-firmware.conf"

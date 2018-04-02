@@ -1,0 +1,78 @@
+#!/bin/sh -eux
+
+mkdir -p "${UB_INSTALLDIR}/usr/lib/uhubuild"
+cp -a src/. "${UB_INSTALLDIR}/usr/lib/uhubuild/"
+
+mv "${UB_INSTALLDIR}"/usr/lib/uhubuild/helpers/* "${UB_INSTALLDIR}"/usr/bin/
+rmdir "${UB_INSTALLDIR}"/usr/lib/uhubuild/helpers
+
+mv "${UB_INSTALLDIR}"/usr/lib/uhubuild/build/* "${UB_INSTALLDIR}"/usr/bin/
+rmdir "${UB_INSTALLDIR}"/usr/lib/uhubuild/build
+
+mkdir -p "${UB_INSTALLDIR}/usr/share/uhubuild"
+cp -a config words "${UB_INSTALLDIR}/usr/share/uhubuild/"
+
+# build
+mkdir -p "${UB_INSTALLDIR}/etc/apt"
+cp -a apt/. "${UB_INSTALLDIR}/etc/apt/"
+mkdir -p "${UB_INSTALLDIR}/usr/share/bash-completion"
+cp -a bash-completion/completions "${UB_INSTALLDIR}/usr/share/bash-completion/"
+
+# symlinks
+cd "${UB_INSTALLDIR}/usr/bin"
+ln -sf "../lib/uhubuild/uhubuild-build"
+ln -sf "../lib/uhubuild/uhubuild-check"
+ln -sf "../lib/uhubuild/uhubuild-chrootbuild"
+ln -sf "../lib/uhubuild/uhubuild-expand"
+ln -sf "../lib/uhubuild/uhubuild-extract"
+ln -sf "../lib/uhubuild/uhubuild-pack"
+ln -sf "../lib/uhubuild/uhubuild-u2d"
+
+# perms
+cd "${UB_INSTALLDIR}"
+for i in build check chrootbuild depends expand extract pack prepare-chroot; do
+	chmod 755 "usr/lib/uhubuild/uhubuild-$i"
+done
+
+chmod 644 usr/lib/uhubuild/common
+chmod 644 usr/lib/uhubuild/uhubuild-common
+chmod 644 usr/lib/uhubuild/uhubuild-commonenvironment
+chmod 755 usr/lib/uhubuild/steps/*
+
+chmod 755 usr/bin/ub_*
+
+# build
+
+for dist in UBK1 UBK2; do
+	for arch in i386 amd64; do
+		for a in 1 2 3 ; do
+			mkdir -p "$UB_INSTALLDIR"/var/uhubuild/"$dist"/"$arch"/chroot${a}
+		done
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/UB-"$dist"
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/extrarelease/"$arch"
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/failed/"$arch"
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/compile/"$arch"
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/install/"$arch"
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/logpack/"$arch"
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/tmp/"$arch"
+		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
+		cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
+		uhu-scanpkgs
+		echo "Label: UHU Linux" > Release
+		echo "Origin: UHU Linux Baráti Kör" >> Release
+		echo "Version: $dist" >> Release
+	done # arch
+
+	ln -s "$UB_INSTALLDIR"/usr/bin/build-clean \
+		"$UB_INSTALLDIR"/usr/bin/build-clean-"$dist"
+
+	ln -s "$UB_INSTALLDIR"/usr/bin/build \
+		"$UB_INSTALLDIR"/usr/bin/build-"$dist"
+done
+
+ln -s "$UB_INSTALLDIR"/usr/bin/build \
+	"$UB_INSTALLDIR"/usr/bin/build-ubk1
+ln -s "$UB_INSTALLDIR"/usr/bin/build \
+	"$UB_INSTALLDIR"/usr/bin/build-ubk2
+# mkdir -p "$UB_INSTALLDIR"/usr/share/doc/Packages
+# cp "$UB_SRCDIR"/changelog "$UB_INSTALLDIR"/usr/share/doc/Packages

@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+sed -i 's|win32/syslinux.exe||g' Makefile
+export LDFLAGS='-N'
+ub_make bios

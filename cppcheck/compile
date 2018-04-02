@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+ub_make HAVE_RULES=yes CFGDIR=/usr/share/cppcheck/cfg
+
+ub_make DB2MAN=/usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl man
+
+export QTDIR="/usr/lib/qt5"
+if [ $UB_ARCH == "i386" ]; then
+qmake -set QMAKE_XSPEC linux-g++-32
+fi
+
+cd gui
+lrelease gui.pro
+qmake HAVE_RULES=yes CFGDIR=/usr/share/cppcheck/cfg
+ub_make HAVE_RULES=yes CFGDIR=/usr/share/cppcheck/cfg

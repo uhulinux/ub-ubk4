@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--libexecdir=/usr/lib/nagios \
+	--enable-perl-modules \
+	--enable-extra-opts \
+	--with-cgiurl=/cgi-bin/nagios
+
+cd perlmods
+tar -xvzf Nagios-Plugin-0.36.tar.gz
+cd Nagios-Plugin-0.36
+ub_compile

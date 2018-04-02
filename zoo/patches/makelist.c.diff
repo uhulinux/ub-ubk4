@@ -1,0 +1,11 @@
+--- zoo-2.10.orig/makelist.c
++++ zoo-2.10/makelist.c
+@@ -21,6 +21,8 @@
+ 
+ char *nameptr PARMS((char *));
+ void modpath PARMS((char *));
++int isadir PARMS((ZOOFILE));
++int isfdir PARMS((char *));
+ 
+ /*******************/
+ /*

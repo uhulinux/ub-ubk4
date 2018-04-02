@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+arch=x86_64
+else
+arch=i386
+fi
+mkdir -p "$UB_INSTALLDIR"/usr/share/games/smokinguns/
+install -Dm 755 "build/release-linux-${arch}/smokinguns.${arch}" "$UB_INSTALLDIR/usr/bin/smokinguns"
+install -Dm 755 "build/release-linux-${arch}/smokinguns_dedicated.${arch}" "$UB_INSTALLDIR/usr/bin/smokinguns_dedicated"
+cp build/release-linux-${arch}/renderer_* "$UB_INSTALLDIR"/usr/share/games/smokinguns/
+
+install -Dm 644 "misc/smokinguns.png" "$UB_INSTALLDIR/usr/share/pixmaps/smokinguns.png"

@@ -1,0 +1,12 @@
+diff -Nur orig/pages/multischedule.ecpp mod/pages/multischedule.ecpp
+--- orig/pages/multischedule.ecpp	2017-10-19 21:03:47.000000000 +0200
++++ mod/pages/multischedule.ecpp	2017-10-19 21:06:52.676785115 +0200
+@@ -299,7 +299,7 @@
+ 		cChannel* Channel = Channels.GetByNumber( chan );
+ 		if ( ! Channel )
+ 			continue;
+-		if ( Channel->GroupSep() || Channel->Name() == '\0' )
++		if ( Channel->GroupSep() || Channel->Name() == NULL )
+ 			continue;
+ 		channel_names[ j ] = Channel->Name();
+ 		channel_IDs[ j ] = Channel->GetChannelID();

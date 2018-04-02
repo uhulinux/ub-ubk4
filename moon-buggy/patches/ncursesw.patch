@@ -1,0 +1,29 @@
+diff -Naur moon-buggy-1.0.orig/configure moon-buggy-1.0/configure
+--- moon-buggy-1.0.orig/configure	2004-12-27 17:15:54.000000000 +0100
++++ moon-buggy-1.0/configure	2005-10-13 13:56:04.000000000 +0200
+@@ -3740,13 +3740,13 @@
+ 
+ fi;
+   if test -z "$CURSES_LIBS"; then
+-    echo "$as_me:$LINENO: checking for initscr in -lcurses" >&5
+-echo $ECHO_N "checking for initscr in -lcurses... $ECHO_C" >&6
++    echo "$as_me:$LINENO: checking for initscr in -lncursesw" >&5
++echo $ECHO_N "checking for initscr in -lncursesw... $ECHO_C" >&6
+ if test "${ac_cv_lib_curses_initscr+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lcurses  $LIBS"
++LIBS="-lncursesw  $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+@@ -3804,7 +3804,7 @@
+ echo "$as_me:$LINENO: result: $ac_cv_lib_curses_initscr" >&5
+ echo "${ECHO_T}$ac_cv_lib_curses_initscr" >&6
+ if test $ac_cv_lib_curses_initscr = yes; then
+-  CURSES_LIBS=-lcurses
++  CURSES_LIBS=-lncursesw
+ fi
+ 
+     if test -z "$CURSES_LIBS"; then

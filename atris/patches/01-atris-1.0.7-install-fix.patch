@@ -1,0 +1,27 @@
+--- a/Makefile.am	2003-07-14 17:28:54.000000000 -0600
++++ b/Makefile.am	2005-07-29 10:32:21.000000000 -0600
+@@ -54,18 +54,18 @@
+ 	make install_gamedata target=@GAME_INSTALLDIR@
+ 
+ install_gamedata:
+-	sh mkinstalldirs $(target)/
++	sh mkinstalldirs $(DESTDIR)$(target)/
+ 	cp -rv graphics \
+                styles \
+ 	       Atris.Players \
+ 	       Atris.Scores \
+-               $(target)/
+-	chmod 666 $(target)/Atris.Players
+-	chmod 666 $(target)/Atris.Scores
++               $(DESTDIR)$(target)/
++	chmod 666 $(DESTDIR)$(target)/Atris.Players
++	chmod 666 $(DESTDIR)$(target)/Atris.Scores
+ 
+ install_gamedocs:
+-	sh mkinstalldirs $(target)/
+-	cp -rv README* COPYING* Docs*   $(target)/
++	sh mkinstalldirs $(DESTDIR)$(target)/
++	cp -rv README* COPYING* Docs*   $(DESTDIR)$(target)/
+ 
+ # Rule to build tar-gzipped distribution package
+ $(PACKAGE)-$(VERSION).tar.gz: distribution

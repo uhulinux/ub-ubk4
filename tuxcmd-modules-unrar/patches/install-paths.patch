@@ -1,0 +1,12 @@
+diff -Naur orig/unrar/Makefile mod/unrar/Makefile
+--- orig/unrar/Makefile	2009-11-15 17:00:40.000000000 +0100
++++ mod/unrar/Makefile	2013-08-15 23:11:17.000000000 +0200
+@@ -59,7 +59,7 @@
+ rarlog.o: rarlog.cpp rarlog.hpp
+ 
+ install::
+-	$(INSTALL) ./libunrar_plugin.so $(DESTDIR)/lib$(LIB_SUFFIX)/tuxcmd/
++	$(INSTALL) -D ./libunrar_plugin.so $(DESTDIR)/lib/tuxcmd/./libunrar_plugin.so
+ 
+ clean: 
+ 	( cd $(DIR_UNRAR) && make -f ../Makefile.unrar clean ) || exit 1

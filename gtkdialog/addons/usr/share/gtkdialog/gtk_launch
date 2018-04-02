@@ -1,0 +1,48 @@
+#! /bin/bash
+
+export MESSAGE_DIALOG='
+  <vbox>
+    <hbox>
+      <pixmap>
+        <input file>help.png</input>
+      </pixmap>
+      <text>
+        <label>This is a window.</label>
+      </text>
+    </hbox>
+    <button>
+      <label>Dismiss</label>
+      <action>closewindow:MESSAGE_DIALOG</action>
+    </button>
+  </vbox>
+'
+
+export OTHER_DIALOG='
+  <vbox>
+    <text>
+     <label>"Another window."</label>
+    </text>
+    <button>
+      <label>Dismiss</label>
+      <action>closewindow:OTHER_DIALOG</action>
+    </button>
+  </vbox>
+'
+
+export MAIN_DIALOG='
+ <vbox>
+   <button>
+     <label>Launch window</label>
+     <action launchwindow>MESSAGE_DIALOG</action>
+   </button>
+   <button>
+     <label>Launch other window</label>
+     <action launchwindow>OTHER_DIALOG</action>
+   </button>
+   <button ok></button>
+ </vbox>
+'
+
+gtkdialog --program MAIN_DIALOG
+
+

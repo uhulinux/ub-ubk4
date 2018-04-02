@@ -1,0 +1,53 @@
+diff -Naur fbgetty-0.1.698.orig/src/prompt.c fbgetty-0.1.698/src/prompt.c
+--- fbgetty-0.1.698.orig/src/prompt.c	2001-12-27 18:23:22.000000000 +0100
++++ fbgetty-0.1.698/src/prompt.c	2006-08-09 19:54:38.000000000 +0200
+@@ -79,6 +79,8 @@
+  */
+ static volatile int in_refresh = FALSE;
+ 
++int exiting = 0;
++
+ /* indicates the refresh screen is finished */
+ void
+ refresh_screen_yield(void)
+@@ -107,7 +109,7 @@
+ refresh_screen_check(void)
+ {
+ #ifdef USE_VT_SWITCHING
+-  if (vt_isactive() != TRUE) /* check if vt is active */
++  if (vt_isactive() != TRUE && !exiting) /* check if vt is active */
+     return FALSE;
+ #endif
+ 
+diff -Naur fbgetty-0.1.698.orig/src/signal.c fbgetty-0.1.698/src/signal.c
+--- fbgetty-0.1.698.orig/src/signal.c	2001-07-07 17:52:21.000000000 +0200
++++ fbgetty-0.1.698/src/signal.c	2006-08-09 19:54:59.000000000 +0200
+@@ -28,6 +28,7 @@
+ #include <unistd.h>
+ #include <signal.h>
+ #include <syslog.h>
++#include <stdio.h>
+ 
+ #include <string.h>
+ #include <errno.h>
+@@ -37,9 +38,20 @@
+ #include <fbgetty/errors.h>
+ 
+ 
++extern int only_jump_home;
++extern int exiting;
++
++
+ static RETSIGTYPE 
+ leave (int sig)
+ {
++  exiting = 1;
++  only_jump_home = 1;
++  printf("\e[s");
++  refresh_screen();
++  printf("\e[u");
++  fflush(stdout);
++  only_jump_home = 0;
+   /* close file, free memory, restore signal */
+   fgexit (EXIT_FAILURE);
+ }

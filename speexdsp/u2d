@@ -1,0 +1,1 @@
+urllist http://downloads.xiph.org/releases/speex/ | grep -E '^speexdsp-([0-9.]+)' | grep tar.gz | sed s/.*-//g | sed s/\.tar.*//g | sort -V | tail -n 1 | sed s/b/~b/ | sed s/r/~r/

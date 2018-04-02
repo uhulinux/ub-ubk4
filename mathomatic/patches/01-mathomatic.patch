@@ -1,0 +1,47 @@
+diff -Naurd a/icons/mathomatic.desktop b/icons/mathomatic.desktop
+--- a/icons/mathomatic.desktop	2011-04-29 03:54:40.000000000 +0200
++++ b/icons/mathomatic.desktop	2014-05-06 20:05:45.000000000 +0200
+@@ -2,6 +2,7 @@
+ Name=Mathomatic
+ GenericName=Computer Algebra System
+ Comment=Do symbolic mathematics and quick calculations
++Comment[hu]=parancssori algebra rendszer
+ Exec=mathomatic
+ Icon=mathomatic
+ Terminal=true
+diff -Naurd a/lib/makefile b/lib/makefile
+--- a/lib/makefile	2012-09-21 01:47:56.000000000 +0200
++++ b/lib/makefile	2014-05-06 20:06:19.000000000 +0200
+@@ -14,7 +14,7 @@
+ LDLIBS		+= -lm # system libraries to link
+ 
+ # Install directories follow; installs everything in $(DESTDIR)/usr/local by default.
+-prefix		?= /usr/local
++prefix		?= /usr
+ mandir		?= $(prefix)/share/man
+ libdir		?= $(prefix)/lib
+ includedir	?= $(prefix)/include
+diff -Naurd a/makefile b/makefile
+--- a/makefile	2012-10-16 02:11:40.000000000 +0200
++++ b/makefile	2014-05-06 20:06:50.000000000 +0200
+@@ -86,7 +86,7 @@
+ # Note that support for the DESTDIR variable was added in version 15.2.1.
+ # DESTDIR is used by package maintainers, who should remove all DESTDIR patches,
+ # because DESTDIR is handled properly (according to GNU standards) by this makefile now.
+-prefix		?= /usr/local
++prefix		?= /usr
+ bindir		?= $(prefix)/bin
+ datadir		?= $(prefix)/share
+ mandir		?= $(prefix)/share/man
+diff -Naurd a/primes/makefile b/primes/makefile
+--- a/primes/makefile	2012-09-21 01:45:50.000000000 +0200
++++ b/primes/makefile	2014-05-06 20:06:30.000000000 +0200
+@@ -21,7 +21,7 @@
+ LDLIBS		+= -lm
+ 
+ # Install directories follow, installs everything in $(DESTDIR)/usr/local by default.
+-prefix		?= /usr/local
++prefix		?= /usr
+ bindir		?= $(prefix)/bin
+ mandir		?= $(prefix)/share/man
+ 

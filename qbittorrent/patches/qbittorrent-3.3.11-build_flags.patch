@@ -1,0 +1,14 @@
+diff -ur qBittorrent-release-3.3.11.orig/unixconf.pri qBittorrent-release-3.3.11/unixconf.pri
+--- qBittorrent-release-3.3.11.orig/unixconf.pri	2017-03-06 18:09:01.475294685 +0000
++++ qBittorrent-release-3.3.11/unixconf.pri	2017-03-06 18:09:40.379254637 +0000
+@@ -15,8 +15,8 @@
+ # COMPILATION SPECIFIC
+ !nogui:dbus: QT += dbus
+ 
+-QMAKE_CXXFLAGS += -Wformat -Wformat-security
+-!haiku: QMAKE_LFLAGS_APP += -rdynamic
++QMAKE_CXXFLAGS += -fPIE -Wformat -Wformat-security
++!haiku: QMAKE_LFLAGS_APP += -Wl,-z,now -pie -rdynamic
+ 
+ # Man page
+ nogui {

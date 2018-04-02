@@ -1,0 +1,48 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2012-12-08 23:36:13.000000000 +0100
++++ patched/Makefile	2015-12-09 14:36:09.132943491 +0100
+@@ -46,7 +46,7 @@
+ include Makefile.common
+ 
+ %.o : src/%.cpp
+-	$(CCACHE) $(CXX) \
++	$(CXX) \
+ 		$(BASE_CXXFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(INC) -DIMPLEMENT_SAVE_PNG \
+ 		-c $<
+ 	$(CXX) $(BASE_CXXFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(INC) -DIMPLEMENT_SAVE_PNG -MM $< > $*.d
+@@ -57,19 +57,19 @@
+ 	@rm -f $*.d.tmp
+ 
+ game: $(objects)
+-	$(CCACHE) $(CXX) \
++	$(CXX) \
+ 		$(BASE_CXXFLAGS) $(LDFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(INC) \
+ 		$(objects) -o game \
+-		$(LIBS) -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
++		$(LIBS) -lboost_regex -lboost_system -lpthread -fthreadsafe-statics
+ 
+ # pull in dependency info for *existing* .o files
+ -include $(objects:.o=.d)
+ 
+ server: $(server_objects)
+-	$(CCACHE) $(CXX) \
++	$(CXX) \
+ 		$(BASE_CXXFLAGS) $(LDFLAGS) $(CXXFLAGS) $(CPPFLAGS) \
+ 		$(server_objects) -o server \
+-		$(LIBS) -lboost_regex-mt -lboost_system-mt -lboost_thread-mt -lboost_iostreams-mt
++		$(LIBS) -lboost_regex -lboost_system -lboost_thread -lboost_iostreams
+ 
+ clean:
+ 	rm -f *.o *.d game
+diff -Naur orig/src/server.cpp patched/src/server.cpp
+--- orig/src/server.cpp	2015-12-09 14:37:04.157216341 +0100
++++ patched/src/server.cpp	2012-12-08 23:36:13.000000000 +0100
+@@ -174,7 +174,7 @@
+ 
+ 	void handle_udp_receive(udp_endpoint_ptr endpoint, const boost::system::error_code& error, size_t len)
+ 	{
+-		fprintf(stderr, "RECEIVED UDP PACKET: %lu\n", len);
++		fprintf(stderr, "RECEIVED UDP PACKET: %zu\n", len);
+ 		if(len >= 5) {
+ 			uint32_t id;
+ 			memcpy(&id, &udp_buf_[1], 4);

@@ -1,0 +1,1 @@
+urllist http://www.imagemagick.org/download/releases/ | splitver '^ImageMagick-([0-9.-]+).tar.(gz|bz2|xz)$' | sort -V | sed -r 's/-/./' | tail -n 1

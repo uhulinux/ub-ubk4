@@ -1,0 +1,36 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+--- a/include/fxdll.h
++++ b/include/fxdll.h
+@@ -29,21 +29,17 @@
+ 
+ #define FNXDLL
+ 
+-#ifdef TARGET_MAC
+-#include <SDL/SDL.h>
+-#else
+ #include <SDL.h>
+-#endif
+ 
+-#include <instance_st.h>
+-#include <grlib_st.h>
+-#include <files_st.h>
+-#include <typedef_st.h>
+-#include <xctype_st.h>
+-#include <flic_st.h>
+-#include <i_procdef_st.h>
+-#include <offsets.h>
+-#include <pslang.h>
++#include "instance_st.h"
++#include "grlib_st.h"
++#include "files_st.h"
++#include "typedef_st.h"
++#include "xctype_st.h"
++#include "flic_st.h"
++#include "i_procdef_st.h"
++#include "offsets.h"
++#include "pslang.h"
+ 
+ #ifdef __cplusplus
+ extern "C" {

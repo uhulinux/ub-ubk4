@@ -1,0 +1,12 @@
+diff -Naur orig/autogen.sh patched/autogen.sh
+--- orig/autogen.sh	2016-12-21 12:11:07.000000000 +0100
++++ patched/autogen.sh	2017-02-25 21:39:22.969312633 +0100
+@@ -25,7 +25,7 @@
+ # This script is needed to setup build environment from checked out
+ # source tree.
+ #
+-SUBMODULES="lib/ivykis modules/afmongodb/mongo-c-driver/src/libbson modules/afmongodb/mongo-c-driver modules/afamqp/rabbitmq-c lib/jsonc"
++SUBMODULES="lib/ivykis modules/afamqp/rabbitmq-c"
+ GIT=`which git`
+ 
+ autogen_submodules()

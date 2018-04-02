@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+make -C po all adduser.pot
+
+sed -i "s/VERSION/$UB_VERSION/g" adduser
+sed -i "s/VERSION/$UB_VERSION/g" deluser
+sed -i "s/VERSION/$UB_VERSION/g" AdduserCommon.pm

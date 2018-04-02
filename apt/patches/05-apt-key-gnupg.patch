@@ -1,0 +1,30 @@
+diff -Naur orig/cmdline/apt-key.in patched/cmdline/apt-key.in
+--- orig/cmdline/apt-key.in	2017-07-13 23:45:39.134739579 +0200
++++ patched/cmdline/apt-key.in	2017-08-13 18:21:22.594279198 +0200
+@@ -628,10 +628,10 @@
+     # well as the script hopefully uses apt-key optionally then like e.g.
+     # debian-archive-keyring for (upgrade) cleanup did
+     if [ -n "$DPKG_MAINTSCRIPT_PACKAGE" ] && [ -z "$APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE" ]; then
+-	if ! dpkg-query --show --showformat '${Pre-Depends}${Depends}${Recommends}\n' "$DPKG_MAINTSCRIPT_PACKAGE" 2>/dev/null | grep -q gnupg; then
++	if ! dpkg-query --show --showformat '${Pre-Depends}${Depends}${Recommends}\n' "$DPKG_MAINTSCRIPT_PACKAGE" 2>/dev/null | grep -q gpg; then
+ 	    cat >&2 <<EOF
+ Warning: The $DPKG_MAINTSCRIPT_NAME maintainerscript of the package $DPKG_MAINTSCRIPT_PACKAGE
+-Warning: seems to use apt-key (provided by apt) without depending on gnupg or gnupg2.
++Warning: seems to use apt-key (provided by apt) without depending on gpg or gpg2.
+ Warning: This will BREAK in the future and should be fixed by the package maintainer(s).
+ Note: Check first if apt-key functionality is needed at all - it probably isn't!
+ EOF
+@@ -695,9 +695,10 @@
+ 	return
+     fi
+     # (Maintainer) scripts should not be using apt-key
+-    if [ -n "$DPKG_MAINTSCRIPT_PACKAGE" ]; then
+-	echo >&2 "Warning: apt-key should not be used in scripts (called from $DPKG_MAINTSCRIPT_NAME maintainerscript of the package ${DPKG_MAINTSCRIPT_PACKAGE})"
+-    elif [ ! -t 1 ]; then
++    # if [ -n "$DPKG_MAINTSCRIPT_PACKAGE" ]; then
++	# echo >&2 "Warning: apt-key should not be used in scripts (called from $DPKG_MAINTSCRIPT_NAME maintainerscript of the package ${DPKG_MAINTSCRIPT_PACKAGE})"
++    # elif [ ! -t 1 ]; then
++    if [ ! -t 1 ]; then
+ 	echo >&2 "Warning: apt-key output should not be parsed (stdout is not a terminal)"
+     fi
+ }

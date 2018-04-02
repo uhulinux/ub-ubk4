@@ -1,0 +1,16 @@
+diff -Naur glibc-2.23-orig/elf/ldconfig.c glibc-2.23/elf/ldconfig.c
+--- glibc-2.23-orig/elf/ldconfig.c	2016-02-18 18:54:00.000000000 +0100
++++ glibc-2.23/elf/ldconfig.c	2016-04-10 21:30:53.485719235 +0200
+@@ -1390,9 +1390,9 @@
+       parse_conf (config_file, true);
+ 
+       /* Always add the standard search paths.  */
+-      add_system_dir (SLIBDIR);
+-      if (strcmp (SLIBDIR, LIBDIR))
+-	add_system_dir (LIBDIR);
++      add_system_dir ("/usr/local/lib");
++      add_system_dir (SLIBDIR); /* /lib */
++      add_system_dir (LIBDIR); /* /usr/lib */
+     }
+ 
+   const char *aux_cache_file = _PATH_LDCONFIG_AUX_CACHE;

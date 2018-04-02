@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+cd xpfe/components/
+cp Makefile.in Makefile.in_backup
+cat Makefile.in_backup | grep -v build2 > Makefile.in
+cd ../..
+ub_install
+pluszok="$UB_INSTALLDIR"/usr/lib/kompozer/defaults/profile/extensions
+pixmapok="$UB_INSTALLDIR/usr/share/pixmaps/"
+mkdir -p "$pixmapok" "$pluszok"/{langpack-hu@kompozer.net,hu@dictionaries.addons.mozilla.org}
+cp "$UB_INSTALLDIR/usr/lib/kompozer/icons/mozicon256.png" "$pixmapok/kompozer.png"
+cp "$UB_INSTALLDIR/usr/lib/kompozer/icons/mozicon50.xpm" "$pixmapok/kompozer.xpm"
+cp -aR langpack-hu/. "$pluszok"/langpack-hu@kompozer.net/
+cp -aR myspell-hu/. "$pluszok"/hu@dictionaries.addons.mozilla.org/
+rm -rf "${UB_INSTALLDIR}/usr/share/aclocal"

@@ -1,0 +1,24 @@
+diff -Naur orig/device-hd.c mod/device-hd.c
+--- orig/device-hd.c	2012-07-21 20:51:33.000000000 +0200
++++ mod/device-hd.c	2015-02-12 09:50:42.131971762 +0100
+@@ -40,7 +40,7 @@
+ 
+ // -- cScDvbHdFfDevice ---------------------------------------------------------
+ 
+-#include "../dvbhddevice/dvbhdffdevice.h"
++#include <vdr/PLUGINS/dvbhddevice/dvbhdffdevice.h>
+ #define SCDEVICE cScDvbHdFfDevice
+ #define DVBDEVICE cDvbHdFfDevice
+ #define OWN_SETCA
+diff -Naur orig/device-sd.c mod/device-sd.c
+--- orig/device-sd.c	2012-07-21 20:51:33.000000000 +0200
++++ mod/device-sd.c	2015-02-12 09:50:07.876084559 +0100
+@@ -40,7 +40,7 @@
+ 
+ // -- cScDvbSdFfDevice ---------------------------------------------------------
+ 
+-#include "../dvbsddevice/dvbsdffdevice.h"
++#include <vdr/PLUGINS/dvbsddevice/dvbsdffdevice.h>
+ #define SCDEVICE cScDvbSdFfDevice
+ #define DVBDEVICE cDvbSdFfDevice
+ #define OWN_FULLTS

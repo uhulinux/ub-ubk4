@@ -1,0 +1,46 @@
+diff -Naurdp cdrdao-1.2.3.orig/dao/sg_err.cc cdrdao-1.2.3/dao/sg_err.cc
+--- cdrdao-1.2.3.orig/dao/sg_err.cc	2009-09-28 12:12:03.000000000 +0200
++++ cdrdao-1.2.3/dao/sg_err.cc	2009-11-24 16:32:34.000000000 +0100
+@@ -23,10 +23,10 @@
+ */
+ 
+ 
+-static const unsigned char scsi_command_size[8] = { 6, 10, 10, 12,
++static const unsigned char _scsi_command_size[8] = { 6, 10, 10, 12,
+                                                    12, 12, 10, 10 };
+ 
+-#define COMMAND_SIZE(opcode) scsi_command_size[((opcode) >> 5) & 7]
++#define _COMMAND_SIZE(opcode) _scsi_command_size[((opcode) >> 5) & 7]
+ 
+ static const char unknown[] = "UNKNOWN";
+ 
+@@ -126,7 +126,7 @@ static void print_opcode(int opcode) {
+ void sg_print_command (const unsigned char * command) {
+     int i,s;
+     print_opcode(command[0]);
+-    for ( i = 1, s = COMMAND_SIZE(command[0]); i < s; ++i) 
++    for ( i = 1, s = _COMMAND_SIZE(command[0]); i < s; ++i) 
+         log_message(0, "%02x ", command[i]);
+     log_message(0, "");
+ }
+@@ -658,7 +658,7 @@ int sg_err_category(int target_status, i
+     return SG_ERR_CAT_OTHER;
+ }
+ 
+-int sg_get_command_size(unsigned char opcode)
++int _sg_get_command_size(unsigned char opcode)
+ {
+-    return COMMAND_SIZE(opcode);
++    return _COMMAND_SIZE(opcode);
+ }
+diff -Naurdp cdrdao-1.2.3.orig/dao/sg_err.h cdrdao-1.2.3/dao/sg_err.h
+--- cdrdao-1.2.3.orig/dao/sg_err.h	2009-09-28 12:12:03.000000000 +0200
++++ cdrdao-1.2.3/dao/sg_err.h	2009-11-24 16:33:01.000000000 +0100
+@@ -95,6 +95,6 @@ extern int sg_err_category(int target_st
+ 
+ 
+ /* Returns length of SCSI command given the opcode (first byte) */
+-int sg_get_command_size(unsigned char opcode);
++int _sg_get_command_size(unsigned char opcode);
+ 
+ #endif

@@ -1,0 +1,38 @@
+--- a/share/charset.c
++++ a/share/charset.c
+@@ -27,6 +27,10 @@
+  * 8-bit char, 16-bit short and 32-bit int.
+  */
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #ifndef HAVE_ICONV /* should be ifdef USE_CHARSET_CONVERT */
+ 
+ #include <stdlib.h>
+--- a/share/iconvert.c
++++ a/share/iconvert.c
+@@ -16,6 +16,10 @@
+  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #ifdef HAVE_ICONV
+ 
+ #include <assert.h>
+--- a/share/utf8.c
++++ a/share/utf8.c
+@@ -24,6 +24,9 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
+ #include "utf8.h"
+ 
+ 

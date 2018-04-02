@@ -1,0 +1,92 @@
+diff -Naurdp perl-5.14.2/cpan/CPAN/lib/CPAN/Distribution.pm perl-5.14.2.links/cpan/CPAN/lib/CPAN/Distribution.pm
+--- perl-5.14.2/cpan/CPAN/lib/CPAN/Distribution.pm	2011-09-26 11:44:34.000000000 +0200
++++ perl-5.14.2.links/cpan/CPAN/lib/CPAN/Distribution.pm	2012-03-21 14:45:12.624438572 +0100
+@@ -3717,14 +3717,14 @@ sub _display_url {
+     # should we define it in the config instead?
+     my $html_converter = "html2text.pl";
+ 
+-    my $web_browser = $CPAN::Config->{'lynx'} || undef;
++    my $web_browser = $CPAN::Config->{'elinks'} || $CPAN::Config->{'lynx'} || $CPAN::Config->{'links'} || undef;
+     my $web_browser_out = $web_browser
+         ? CPAN::Distribution->_check_binary($self,$web_browser)
+         : undef;
+ 
+     if ($web_browser_out) {
+         # web browser found, run the action
+-        my $browser = CPAN::HandleConfig->safe_quote($CPAN::Config->{'lynx'});
++        my $browser = CPAN::HandleConfig->safe_quote($web_browser);
+         $CPAN::Frontend->myprint(qq{system[$browser $url]})
+             if $CPAN::DEBUG;
+         $CPAN::Frontend->myprint(qq{
+diff -Naurdp perl-5.14.2/cpan/CPAN/lib/CPAN/FirstTime.pm perl-5.14.2.links/cpan/CPAN/lib/CPAN/FirstTime.pm
+--- perl-5.14.2/cpan/CPAN/lib/CPAN/FirstTime.pm	2011-09-26 11:44:34.000000000 +0200
++++ perl-5.14.2.links/cpan/CPAN/lib/CPAN/FirstTime.pm	2012-03-21 14:46:15.608712724 +0100
+@@ -926,7 +926,7 @@ sub init {
+       });
+     _init_external_progs($matcher, {
+         path => \@path,
+-        progs => [ qw/wget curl lynx ncftpget ncftp ftp/ ],
++        progs => [ qw/wget curl elinks links lynx ncftpget ncftp ftp/ ],
+         shortcut => 1
+       });
+ 
+diff -Naurdp perl-5.14.2/cpan/CPAN/lib/CPAN/FTP.pm perl-5.14.2.links/cpan/CPAN/lib/CPAN/FTP.pm
+--- perl-5.14.2/cpan/CPAN/lib/CPAN/FTP.pm	2011-09-26 11:44:34.000000000 +0200
++++ perl-5.14.2.links/cpan/CPAN/lib/CPAN/FTP.pm	2012-03-21 14:48:11.928607039 +0100
+@@ -779,7 +779,7 @@ sub hostdlhard {
+         # Try the most capable first and leave ncftp* for last as it only
+         # does FTP.
+         my $proxy_vars = $self->_proxy_vars($ro_url);
+-      DLPRG: for my $f (qw(curl wget lynx ncftpget ncftp)) {
++      DLPRG: for my $f (qw(curl wget lynx elinks links ncftpget ncftp)) {
+             my $funkyftp = CPAN::HandleConfig->safe_quote($CPAN::Config->{$f});
+             next DLPRG unless defined $funkyftp;
+             next DLPRG if $funkyftp =~ /^\s*$/;
+@@ -787,7 +787,7 @@ sub hostdlhard {
+             my($src_switch) = "";
+             my($chdir) = "";
+             my($stdout_redir) = " > \"$aslocal\"";
+-            if ($f eq "lynx") {
++            if (($f eq "lynx") or ($f eq "links") or ($f eq "elinks")) {
+                 $src_switch = " -source";
+             } elsif ($f eq "ncftp") {
+                 next DLPRG unless $url =~ m{\Aftp://};
+@@ -816,7 +816,7 @@ to get
+                 "$chdir$funkyftp$src_switch \"$url\" $devnull$stdout_redir";
+             $self->debug("system[$system]") if $CPAN::DEBUG;
+             my($wstatus) = system($system);
+-            if ($f eq "lynx") {
++            if (($f eq "lynx") or ($f eq "links") or ($f eq "elinks")) {
+                 # lynx returns 0 when it fails somewhere
+                 if (-s $aslocal) {
+                     my $content = do { local *FH;
+@@ -825,7 +825,7 @@ to get
+                                        <FH> };
+                     if ($content =~ /^<.*(<title>[45]|Error [45])/si) {
+                         $CPAN::Frontend->mywarn(qq{
+-No success, the file that lynx has downloaded looks like an error message:
++No success, the file that $f has downloaded looks like an error message:
+ $content
+ });
+                         $CPAN::Frontend->mysleep(1);
+@@ -834,7 +834,7 @@ $content
+                     $some_dl_success++;
+                 } else {
+                     $CPAN::Frontend->myprint(qq{
+-No success, the file that lynx has downloaded is an empty file.
++No success, the file that $f has downloaded is an empty file.
+ });
+                     next DLPRG;
+                 }
+diff -Naurdp perl-5.14.2/cpan/CPAN/lib/CPAN/HandleConfig.pm perl-5.14.2.links/cpan/CPAN/lib/CPAN/HandleConfig.pm
+--- perl-5.14.2/cpan/CPAN/lib/CPAN/HandleConfig.pm	2011-09-26 11:44:34.000000000 +0200
++++ perl-5.14.2.links/cpan/CPAN/lib/CPAN/HandleConfig.pm	2012-03-21 14:45:12.828452416 +0100
+@@ -63,6 +63,8 @@ $VERSION = "5.5003"; # see also CPAN::Co
+      "index_expire",
+      "inhibit_startup_message",
+      "keep_source_where",
++     "links",
++     "elinks",
+      "load_module_verbosity",
+      "lynx",
+      "make",

@@ -1,0 +1,23 @@
+#!/bin/sh -e
+
+add_suid_wrapper ()
+{
+	# TODO: /usr/sbin/toconsole-t ki kéne vágni, és ide berakni inline.
+	/usr/sbin/toconsole "$1"
+}
+
+shopt -s nullglob
+
+if [ "$1" = "usermode" -o "$1" = "+" ]; then
+	for i in /var/lib/dpkg/info/*.suid_wrapper; do
+		for j in $(cat "$i"); do
+			add_suid_wrapper "$j"
+		done
+	done
+else
+	if [ -f /var/lib/dpkg/info/"$1".suid_wrapper ]; then
+		for j in $(cat /var/lib/dpkg/info/"$1".suid_wrapper); do
+			add_suid_wrapper "$j"
+		done
+	fi
+fi

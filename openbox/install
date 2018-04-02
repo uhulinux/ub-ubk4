@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+ub_install
+rm -r "${UB_INSTALLDIR}"/usr/bin/{gdm-control,gnome-panel-control,openbox-gnome-session} \
+	"${UB_INSTALLDIR}"/usr/share/gnome{,-session} \
+	"${UB_INSTALLDIR}"/usr/share/man/man1/openbox-gnome-session.1 \
+	"${UB_INSTALLDIR}"/usr/share/xsessions/openbox-gnome.desktop

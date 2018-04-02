@@ -1,0 +1,267 @@
+Description: Fix build with Automake 1.13.
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+
+Index: gnomeradio-1.8/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/Makefile.am
++++ gnomeradio-1.8/Makefile.am
+@@ -1,4 +1,4 @@
+-distuninstallcheck_listfiles = find . -type f -print | grep -v '^\./var/scrollkeeper'
++ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ 
+ SUBDIRS = help data po src
+ 
+Index: gnomeradio-1.8/configure.ac
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/configure.ac
+@@ -0,0 +1,95 @@
++AC_PREREQ([2.69])
++
++AC_INIT([gnomeradio],[1.8],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnomeradio],[gnomeradio],[http://projects.gnome.org/gnomeradio/])
++
++AM_MAINTAINER_MODE([enable])
++AC_CONFIG_SRCDIR([src/gui.c])
++AC_CONFIG_HEADERS([config.h])
++AC_CONFIG_MACRO_DIR([m4])
++
++AM_INIT_AUTOMAKE([1.11 dist-xz tar-ustar no-dist-gzip check-news])
++
++AM_SILENT_RULES([yes])
++
++GETTEXT_PACKAGE=gnomeradio
++AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define to the Gettext package name])
++AC_SUBST(GETTEXT_PACKAGE)
++IT_PROG_INTLTOOL([0.40.0])
++
++YELP_HELP_INIT
++
++AC_PROG_CXX
++AC_PROG_CC
++AC_PROG_CPP
++AC_PROG_INSTALL
++AC_PROG_LN_S
++AC_PROG_MAKE_SET
++
++LT_PREREQ([2.2])
++LT_INIT
++
++AC_CHECK_HEADERS([fcntl.h limits.h memory.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h])
++
++AC_TYPE_SSIZE_T
++AC_CHECK_MEMBERS([struct stat.st_rdev])
++
++AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
++AC_HEADER_MAJOR
++AC_FUNC_MALLOC
++AC_FUNC_REALLOC
++AC_CHECK_FUNCS([memset realpath rint strcasecmp strchr strcspn strdup strncasecmp strrchr strstr])
++
++PKG_CHECK_MODULES(ALSA, alsa >= 1.0.25)
++AC_SUBST(ALSA_CFLAGS)
++AC_SUBST(ALSA_LIBS)
++
++PKG_CHECK_MODULES(GNOME, dbus-glib-1 gconf-2.0 >= 2.12 gtk+-3.0)
++AC_SUBST(GNOME_CFLAGS)
++AC_SUBST(GNOME_LIBS)
++
++PKG_CHECK_MODULES(GSTREAMER, gstreamer-1.0 >= 1.0.5 gstreamer-plugins-base-1.0 >= 1.0.5 gstreamer-pbutils-1.0 >= 1.0.5)
++AC_SUBST(GSTREAMER_CFLAGS)
++AC_SUBST(GSTREAMER_LIBS)
++
++PKG_CHECK_MODULES(XML, libxml-2.0 >= 2.4)
++AC_SUBST(XML_CFLAGS)
++AC_SUBST(XML_LIBS)
++
++AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
++
++if test x"$GCONFTOOL" = xno; then
++  AC_MSG_ERROR([gconftool-2 executable not found in your path - should be installed with GConf])
++fi
++
++AM_GCONF_SOURCE_2
++
++AC_SUBST(LIRC)
++LIRC=""
++if test "$enable_lirc" != "no"; then
++  AC_CHECK_LIB(lirc_client, lirc_init,
++    AC_DEFINE(HAVE_LIRC, 1, "Is LIRC installed") LIRC="-llirc_client",,)
++else
++  echo "*** lirc disabled"
++fi
++
++AC_ARG_ENABLE(install_schemas,
++       [  --disable-install-schemas        Disable installation of the gconf schemas])
++AM_CONDITIONAL(INSTALL_SCHEMAS, test x$enable_install_schemas != xno)
++
++AC_CONFIG_FILES([gnomeradio.spec
++                 Makefile
++                 data/Makefile
++                 data/icons/16x16/Makefile
++                 data/icons/22x22/Makefile
++                 data/icons/24x24/Makefile
++                 data/icons/32x32/Makefile
++                 data/icons/48x48/Makefile
++                 data/icons/Makefile
++                 data/icons/scalable/Makefile
++                 data/pixmaps/Makefile
++                 help/Makefile
++                 po/Makefile.in
++                 src/Makefile])
++
++AC_OUTPUT
++
+Index: gnomeradio-1.8/configure.in
+===================================================================
+--- gnomeradio-1.8.orig/configure.in
++++ /dev/null
+@@ -1,83 +0,0 @@
+-AC_PREREQ(2.52)
+-
+-AC_INIT(gnomeradio, 1.8, http://mfcn.ilo.de/gnomeradio)
+-AC_CONFIG_SRCDIR(src/gui.c)
+-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+-
+-AM_MAINTAINER_MODE
+-AC_CONFIG_HEADERS([config.h])
+-AC_CONFIG_MACRO_DIR([m4])
+-AC_PROG_INTLTOOL([0.21])
+-
+-AM_PROG_LIBTOOL
+-AC_ISC_POSIX
+-AC_PROG_CC
+-AC_PROG_INSTALL
+-AC_PROG_MAKE_SET
+-
+-
+-ALL_LINGUAS="ar am az be bg ca cs da de dz en_CA en_GB es eu fi fr he hr hu it ja lv mk ml mn ms nb nl oc pa pl pt pt_BR ru rw sk sr sr@Latn sv tr uk vi zh_CN zh_TW"
+-AM_GLIB_GNU_GETTEXT
+-GETTEXT_PACKAGE=gnomeradio
+-AC_SUBST(GETTEXT_PACKAGE)
+-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", GETTEXT_PACKAGE)
+-
+-PKG_CHECK_MODULES(ALSA, alsa >= 1.0.25)
+-AC_SUBST(ALSA_CFLAGS)
+-AC_SUBST(ALSA_LIBS)
+-
+-PKG_CHECK_MODULES(GNOME, dbus-glib-1 gconf-2.0 >= 2.12 gtk+-3.0)
+-AC_SUBST(GNOME_CFLAGS)
+-AC_SUBST(GNOME_LIBS)
+-
+-PKG_CHECK_MODULES(GSTREAMER, gstreamer-1.0 >= 1.0.5 gstreamer-plugins-base-1.0 >= 1.0.5 gstreamer-pbutils-1.0 >= 1.0.5)
+-AC_SUBST(GSTREAMER_CFLAGS)
+-AC_SUBST(GSTREAMER_LIBS)
+-
+-PKG_CHECK_MODULES(XML, libxml-2.0 >= 2.4)
+-AC_SUBST(XML_CFLAGS)
+-AC_SUBST(XML_LIBS)
+-
+-AM_SILENT_RULES([yes])
+-
+-YELP_HELP_INIT
+-
+-AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
+-
+-if test x"$GCONFTOOL" = xno; then
+-  AC_MSG_ERROR([gconftool-2 executable not found in your path - should be installed with GConf])
+-fi
+-
+-AM_GCONF_SOURCE_2
+-
+-AC_SUBST(LIRC)
+-LIRC=""
+-if test "$enable_lirc" != "no"; then
+-  AC_CHECK_LIB(lirc_client, lirc_init,
+-    AC_DEFINE(HAVE_LIRC, 1, "Is LIRC installed") LIRC="-llirc_client",,)
+-else
+-  echo "*** lirc disabled"
+-fi
+-
+-AC_ARG_ENABLE(install_schemas,
+-       [  --disable-install-schemas        Disable installation of the gconf schemas])
+-AM_CONDITIONAL(INSTALL_SCHEMAS, test x$enable_install_schemas != xno)
+-
+-AC_CONFIG_FILES([
+-gnomeradio.spec
+-Makefile
+-src/Makefile
+-po/Makefile.in
+-data/Makefile
+-data/pixmaps/Makefile
+-data/icons/Makefile
+-data/icons/16x16/Makefile
+-data/icons/22x22/Makefile
+-data/icons/24x24/Makefile
+-data/icons/32x32/Makefile
+-data/icons/48x48/Makefile
+-data/icons/scalable/Makefile
+-help/Makefile
+-])
+-
+-AC_OUTPUT
+Index: gnomeradio-1.8/po/LINGUAS
+===================================================================
+--- /dev/null
++++ gnomeradio-1.8/po/LINGUAS
+@@ -0,0 +1,45 @@
++ar
++am
++az
++be
++bg
++ca
++cs
++da
++de
++dz
++en_CA
++en_GB
++es
++eu
++fi
++fr
++he
++hr
++hu
++it
++ja
++lv
++mk
++ml
++mn
++ms
++nb
++nl
++oc
++pa
++pl
++pt
++pt_BR
++ru
++rw
++sk
++sr
++sr@Latn
++sv
++tr
++uk
++vi
++zh_CN
++zh_TW
++
+Index: gnomeradio-1.8/src/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/src/Makefile.am
++++ gnomeradio-1.8/src/Makefile.am
+@@ -1,4 +1,4 @@
+-INCLUDES =									\
++AM_CPPFLAGS =									\
+ 	-I$(top_srcdir) -I$(includedir)						\
+ 	$(ALSA_CFLAGS) $(GNOME_CFLAGS) $(GSTREAMER_CFLAGS) $(XML_CFLAGS)	\
+ 	-DG_LOG_DOMAIN=\"gnomeradio\"						\
+@@ -44,4 +44,4 @@ gnomeradio_SOURCES =		\
+ 	v4l1.c			\
+ 	v4l2.c
+ 
+-gnomeradio_LDADD = $(ALSA_LIBS) $(GNOME_LIBS) $(GSTREAMER_LIBS) $(XML_LIBS) $(LIRC)
++gnomeradio_LDADD = $(ALSA_LIBS) $(GNOME_LIBS) $(GSTREAMER_LIBS) $(XML_LIBS) $(LIRC) -lpthread

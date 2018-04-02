@@ -1,0 +1,34 @@
+#! /bin/bash
+
+export MAIN_DIALOG='
+ <vbox>
+  <frame List>
+    <list>
+      <variable>LIST</variable>
+      <input>ls</input>
+      <item>First item</item>
+      <item>Second item</item>
+      <item>Third item</item>
+      <action>echo You selected $LIST</action>
+    </list>
+    <hbox>
+      <button>
+        <action removeselected>LIST</action>
+        <label>removeselected</label>
+      </button>
+      <button>
+        <action clear>LIST</action>
+        <label>clear</label>
+      </button>
+    </hbox>
+  </frame>
+  <hbox>
+   <button ok></button>
+   <button cancel></button>
+  </hbox>
+ </vbox>
+'
+
+gtkdialog --program MAIN_DIALOG
+
+

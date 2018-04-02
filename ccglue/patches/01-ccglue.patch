@@ -1,0 +1,14 @@
+diff -Naurd a/configure.in b/configure.in
+--- a/configure.in	2012-05-24 00:41:47.000000000 +0200
++++ b/configure.in	2012-06-13 06:51:01.000000000 +0200
+@@ -19,10 +19,7 @@
+                      [want_debug="$enableval"], [want_debug=no])
+ 
+ if test "x$want_debug" = "xyes"; then
+-    CXXFLAGS="$CXXFLAGS -O0 -ggdb"
+     AC_DEFINE([DEBUG], 1, [Define for debugging])
+-else
+-    CXXFLAGS="$CXXFLAGS -O2"
+ fi
+ 
+ AC_CXX_HAVE_SSTREAM

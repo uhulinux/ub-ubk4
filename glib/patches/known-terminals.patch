@@ -1,0 +1,22 @@
+diff -Naur orig/gio/gdesktopappinfo.c patched/gio/gdesktopappinfo.c
+--- orig/gio/gdesktopappinfo.c	2017-09-04 14:42:30.134739579 +0200
++++ patched/gio/gdesktopappinfo.c	2017-09-12 02:15:39.457473990 +0200
+@@ -2483,6 +2483,18 @@
+     }
+   else
+     {
++	  if (check == NULL)
++		check = g_find_program_in_path ("mate-terminal");
++	  if (check == NULL)
++		check = g_find_program_in_path ("xfce4-terminal");
++	  if (check == NULL)
++		check = g_find_program_in_path ("lxterminal");
++	  if (check == NULL)
++		check = g_find_program_in_path ("eterm");
++	  if (check == NULL)
++		check = g_find_program_in_path ("roxterm");
++	  if (check == NULL)
++		check = g_find_program_in_path ("sakura");
+       if (check == NULL)
+         check = g_find_program_in_path ("nxterm");
+       if (check == NULL)

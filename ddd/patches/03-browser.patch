@@ -1,0 +1,25 @@
+diff -Naurdp ddd-3.3.12.orig/ddd/Ddd.in ddd-3.3.12/ddd/Ddd.in
+--- ddd-3.3.12.orig/ddd/Ddd.in	2009-02-11 18:25:34.000000000 +0100
++++ ddd-3.3.12/ddd/Ddd.in	2009-09-11 19:45:02.000000000 +0200
+@@ -335,7 +335,8 @@ ${XEDITOR-false} +@LINE@ @FILE@ \
+ ! letting all these commands fail may take some time...
+ 
+ @Ddd@*wwwCommand: \
+-   firefox -remote 'openURL(@URL@)' \
++   browser '@URL@' \
++|| firefox -remote 'openURL(@URL@)' \
+ || mozilla -remote 'openURL(@URL@)' \
+ || opera -remote 'openURL(@URL@)' \
+ || ${WWWBROWSER-false} '@URL@' \
+diff -urN ddd-3.3.7.orig/ddd/resources.C ddd-3.3.7/ddd/resources.C
+--- ddd-3.3.7.orig/ddd/resources.C	2003-05-24 17:27:11.000000000 +0200
++++ ddd-3.3.7/ddd/resources.C	2003-08-04 12:38:02.000000000 +0200
+@@ -1074,7 +1074,7 @@
+ 	sizeof(String),
+ 	XtOffsetOf(AppData, www_command),
+ 	XtRString,
+-	XtPointer("netscape @URL@")
++	XtPointer("browser @URL@")
+     },
+ 
+     {

@@ -1,0 +1,13 @@
+diff -Naur orig/simmain.cc patched/simmain.cc
+--- orig/simmain.cc	2016-01-09 22:36:24.000000000 +0100
++++ patched/simmain.cc	2016-07-23 00:29:05.226784641 +0200
+@@ -486,8 +486,7 @@
+ 		strcat( env_t::program_dir, path_sep );
+ 	}
+ 	else {
+-		strcpy( env_t::program_dir, argv[0] );
+-		*(strrchr( env_t::program_dir, path_sep[0] )+1) = 0;
++		strcpy( env_t::program_dir, "/usr/share/games/simutrans/" );
+ 
+ #ifdef __APPLE__
+ 		// change working directory from binary dir to bundle dir

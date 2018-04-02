@@ -1,0 +1,66 @@
+diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
+--- orig/browser/app/profile/firefox.js	2018-03-15 23:12:05.000000000 +0100
++++ patched/browser/app/profile/firefox.js	2018-03-20 01:32:33.461502169 +0100
+@@ -21,6 +21,13 @@
+ #endif
+ #endif
+ 
++pref("intl.locale.matchOS", true);
++pref("intl.locale.requested", "");
++pref("shell.checkDefaultApps", 0);
++
++// google NS_ERROR_NET_INADEQUATE_SECURITY
++pref("network.http.spdy.enabled.http2", false);
++
+ pref("browser.chromeURL","chrome://browser/content/");
+ pref("browser.hiddenWindowChromeURL", "chrome://browser/content/hiddenWindow.xul");
+ 
+@@ -62,7 +69,8 @@
+ 
+ // Disable add-ons that are not installed by the user in all scopes by default.
+ // See the SCOPE constants in AddonManager.jsm for values to use here.
+-pref("extensions.autoDisableScopes", 15);
++pref("extensions.autoDisableScopes", 0);
++pref("extensions.shownSelectionUI", true);
+ // Scopes to scan for changes at startup.
+ pref("extensions.startupScanScopes", 0);
+ 
+@@ -155,7 +163,7 @@
+ // If set to true, the Update Service will automatically download updates when
+ // app updates are enabled per the app.update.enabled preference and if the user
+ // can apply updates.
+-pref("app.update.auto", true);
++pref("app.update.auto", false);
+ 
+ // If set to true, the Update Service will present no UI for any event.
+ pref("app.update.silent", false);
+@@ -294,7 +302,7 @@
+ #endif
+ 
+ // Control autoFill behavior
+-pref("browser.urlbar.autoFill", true);
++pref("browser.urlbar.autoFill", false);
+ pref("browser.urlbar.autoFill.typed", true);
+ pref("browser.urlbar.speculativeConnect.enabled", true);
+ 
+@@ -336,7 +344,7 @@
+ pref("browser.urlbar.suggest.history.onlyTyped",    false);
+ 
+ pref("browser.urlbar.formatting.enabled", true);
+-pref("browser.urlbar.trimURLs", true);
++pref("browser.urlbar.trimURLs", false);
+ 
+ pref("browser.urlbar.oneOffSearches", true);
+ 
+@@ -751,11 +759,7 @@
+ // 0 goes Back/Forward
+ // 1 act like PgUp/PgDown
+ // 2 and other values, nothing
+-#ifdef UNIX_BUT_NOT_MAC
+-pref("browser.backspace_action", 2);
+-#else
+ pref("browser.backspace_action", 0);
+-#endif
+ 
+ // this will automatically enable inline spellchecking (if it is available) for
+ // editable elements in HTML

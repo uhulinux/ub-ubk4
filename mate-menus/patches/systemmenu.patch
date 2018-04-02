@@ -1,0 +1,41 @@
+diff -Naur orig/layout/mate-settings.menu patched/layout/mate-settings.menu
+--- orig/layout/mate-settings.menu	2014-01-19 22:20:59.000000000 +0100
++++ patched/layout/mate-settings.menu	2014-10-01 00:46:17.212242503 +0200
+@@ -28,8 +28,36 @@
+         <Category>Settings</Category>
+         <Not>
+           <Or>
+-            <Category>System</Category>
++			<Category>System</Category>
++			<!-- a Rendszer/Beállítások menüből kiszedjük mindazt, ami
++            a Vezérlőközpontban elérhető, nem kellenek duplán -->
++            <!-- mate control center -->
+             <Filename>matecc.desktop</Filename>
++            <Filename>mate-about-me.desktop</Filename>
++			<Filename>mate-appearance-properties.desktop</Filename>
++			<Filename>mate-at-properties.desktop</Filename>
++			<Filename>mate-default-applications-properties.desktop</Filename>
++			<Filename>mate-display-properties.desktop</Filename>
++			<Filename>mate-font-viewer.desktop</Filename>
++			<Filename>mate-keybinding.desktop</Filename>
++			<Filename>mate-keyboard.desktop</Filename>
++			<Filename>mate-network-properties.desktop</Filename>
++			<Filename>mate-settings-mouse.desktop</Filename>
++			<Filename>mate-theme-installer.desktop</Filename>
++			<!-- caja -->
++			<Filename>caja-file-management-properties.desktop</Filename>
++			<!-- mate-notification-daemon -->
++			<Filename>mate-notification-properties.desktop</Filename>
++			<!-- mate-power-manager -->
++			<Filename>mate-power-preferences.desktop</Filename>
++			<!-- mate-screensaver -->
++			<Filename>mate-screensaver-preferences.desktop</Filename>
++			<!-- mate-session-manager -->
++			<Filename>mate-session-properties.desktop</Filename>
++			<!-- mate-user-share -->
++			<Filename>mate-user-share-properties.desktop</Filename>
++			<!-- mozo, főmenü szerkesztő -->
++			<Filename>mozo.desktop</Filename>
+           </Or>
+         </Not>
+       </And>

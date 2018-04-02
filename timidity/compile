@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+sed -i -e 's/tcl8.5/tcl8.6 tcl8.5/' -e 's/tk8.5/tk8.6 tk8.5/' configure
+sed -i 's/my_interp->result/(char *) Tcl_GetObjResult(my_interp)/' interface/tk_c.c
+ub_compile \
+	--enable-audio=alsa,oss,esd,vorbis,flac,jack \
+	--with-default-output=alsa \
+	--enable-interface=ncurses,gtk,alsaseq,server,network \
+	--enable-dynamic=ncurses,tcltk,vt100,xaw,gtk \
+	--enable-network \
+	--enable-spectogram \
+	--enable-server \
+	--enable-alsaseq \
+	--enable-xft \
+	--with-default-path=/etc

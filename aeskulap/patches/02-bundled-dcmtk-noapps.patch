@@ -1,0 +1,219 @@
+diff -Naur orig/dcmtk/dcmdata/Makefile.in patched/dcmtk/dcmdata/Makefile.in
+--- orig/dcmtk/dcmdata/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmdata/Makefile.in	2016-05-09 23:23:25.453329443 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmimage/Makefile.in patched/dcmtk/dcmimage/Makefile.in
+--- orig/dcmtk/dcmimage/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmimage/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmimgle/Makefile.in patched/dcmtk/dcmimgle/Makefile.in
+--- orig/dcmtk/dcmimgle/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmimgle/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmjpeg/Makefile.in patched/dcmtk/dcmjpeg/Makefile.in
+--- orig/dcmtk/dcmjpeg/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmjpeg/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmjpls/Makefile.in patched/dcmtk/dcmjpls/Makefile.in
+--- orig/dcmtk/dcmjpls/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmjpls/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmnet/Makefile.in patched/dcmtk/dcmnet/Makefile.in
+--- orig/dcmtk/dcmnet/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmnet/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmpstat/Makefile.in patched/dcmtk/dcmpstat/Makefile.in
+--- orig/dcmtk/dcmpstat/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmpstat/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmqrdb/Makefile.in patched/dcmtk/dcmqrdb/Makefile.in
+--- orig/dcmtk/dcmqrdb/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmqrdb/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmrt/Makefile.in patched/dcmtk/dcmrt/Makefile.in
+--- orig/dcmtk/dcmrt/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmrt/Makefile.in	2016-05-09 23:23:25.457329463 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmsign/Makefile.in patched/dcmtk/dcmsign/Makefile.in
+--- orig/dcmtk/dcmsign/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmsign/Makefile.in	2016-05-09 23:23:25.461329483 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmsr/Makefile.in patched/dcmtk/dcmsr/Makefile.in
+--- orig/dcmtk/dcmsr/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmsr/Makefile.in	2016-05-09 23:23:25.461329483 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmtls/Makefile.in patched/dcmtk/dcmtls/Makefile.in
+--- orig/dcmtk/dcmtls/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmtls/Makefile.in	2016-05-09 23:23:25.461329483 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/dcmwlm/Makefile.in patched/dcmtk/dcmwlm/Makefile.in
+--- orig/dcmtk/dcmwlm/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/dcmwlm/Makefile.in	2016-05-09 23:23:25.461329483 +0200
+@@ -13,9 +13,9 @@
+ include $(configdir)/@common_makefile@
+ 
+ 
+-all: include-all libsrc-all apps-all tests-all
++all: include-all libsrc-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: apps-install
+ 
+diff -Naur orig/dcmtk/oflog/Makefile.in patched/dcmtk/oflog/Makefile.in
+--- orig/dcmtk/oflog/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/oflog/Makefile.in	2016-05-09 23:23:25.461329483 +0200
+@@ -15,7 +15,7 @@
+ 
+ all: include-all libsrc-all tests-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: all
+ 
+diff -Naur orig/dcmtk/ofstd/Makefile.in patched/dcmtk/ofstd/Makefile.in
+--- orig/dcmtk/ofstd/Makefile.in	2016-02-16 17:32:13.000000000 +0100
++++ patched/dcmtk/ofstd/Makefile.in	2016-05-09 23:23:25.465329502 +0200
+@@ -15,7 +15,7 @@
+ 
+ all: include-all libsrc-all tests-all
+ 
+-install: install-bin install-doc install-support
++install:
+ 
+ install-bin: all
+ 

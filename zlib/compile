@@ -1,0 +1,28 @@
+#!/bin/sh -eux
+
+# A -O3 veszélyes
+ub_replace -O3 -O2 configure
+ub_replace -O3 -O2 contrib/inflate86/inffast.S
+ub_replace -O3 -O2 crc32.c
+ub_replace -O3 -O2 Makefile.in
+ub_replace -O3 -O2 treebuild.xml
+ub_replace -O3 -O2 msdos/Makefile.emx
+ub_replace -O3 -O2 msdos/Makefile.dj2
+
+# compile static lib
+./configure \
+	--prefix=/usr \
+	--libdir=/lib
+make
+
+# compile shared lib
+./configure \
+	--prefix=/usr \
+	--libdir=/lib \
+	--shared
+make
+
+# minizip
+cd contrib/minizip
+autoreconf -vif
+ub_compile

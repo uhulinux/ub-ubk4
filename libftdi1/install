@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_install
+
+install -Dm644 "packages/99-libftdi.rules" "$UB_INSTALLDIR/usr/lib/udev/rules.d/69-libftdi.rules"

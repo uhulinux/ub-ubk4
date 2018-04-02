@@ -1,0 +1,20 @@
+diff -Naur orig/src/sysinfo.cpp patched/src/sysinfo.cpp
+--- orig/src/sysinfo.cpp	2015-10-16 04:52:53.880511175 +0200
++++ patched/src/sysinfo.cpp	2015-10-16 04:56:12.537496261 +0200
+@@ -601,13 +601,13 @@
+         if (g_file_test ("/etc/linuxmint/info", G_FILE_TEST_EXISTS)) {
+             return new MintSysInfo;
+         }
+-        else if (g_file_test ("/etc/os-release", G_FILE_TEST_EXISTS)) {
+-            return new GenericSysInfo;
+-        }
+         else if (char *p = g_find_program_in_path("lsb_release")) {
+             g_free(p);
+             return new LSBSysInfo;
+         }
++        else if (g_file_test ("/etc/os-release", G_FILE_TEST_EXISTS)) {
++            return new GenericSysInfo;
++        }
+         else if (SysInfo::system() == "SunOS") {
+             return new SolarisSysInfo;
+         }

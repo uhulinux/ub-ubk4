@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+make \
+	PREFIX=/usr \
+	DESTDIR=${UB_INSTALLDIR} \
+	TERMINFO=${UB_INSTALLDIR}/usr/share/terminfo \
+	install

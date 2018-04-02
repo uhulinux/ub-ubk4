@@ -1,0 +1,36 @@
+#!/bin/sh -eux
+
+chmod -x ./usr/hla/makefile
+chmod -x ./usr/hla/hlalib/*.a
+chmod -x ./usr/hla/include/*.hhf
+chmod -x ./usr/hla/include/os/*.hhf
+
+#mkdir -p "$UB_INSTALLDIR"/usr/share/HLA/doc/HLAStdlibTOC
+mkdir -p "$UB_INSTALLDIR"/usr/share/HLA
+cp -a ./usr/hla/. "$UB_INSTALLDIR"/usr/share/HLA/
+#cp -a ./HLARef "$UB_INSTALLDIR"/usr/share/HLA/doc/
+#cp -a ./HLAStdlib*.* "$UB_INSTALLDIR"/usr/share/HLA/doc/
+#cp -a ./HLAStdlibTOC "$UB_INSTALLDIR"/usr/share/HLA/doc/
+ln -s ../share/HLA/hla "$UB_INSTALLDIR"/usr/bin/hla
+ln -s ../share/HLA/hlacmp "$UB_INSTALLDIR"/usr/bin/hlacmp
+ln -s ../share/HLA/hlaparse "$UB_INSTALLDIR"/usr/bin/hlaparse
+ln -s ../share/HLA/delete "$UB_INSTALLDIR"/usr/bin/delete
+ln -s ../share/HLA/mkMake "$UB_INSTALLDIR"/usr/bin/mkMake
+ln -s ../share/HLA/hlalib/hlalib.a "$UB_INSTALLDIR"/usr/lib/hlalib.a
+ln -s ../share/HLA/hlalib/hlalib_safe.a "$UB_INSTALLDIR"/usr/lib/hlalib_safe.a
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/HLA/examples
+cp -a ./Linux "$UB_INSTALLDIR"/usr/share/HLA/examples/
+cp -a ./generic "$UB_INSTALLDIR"/usr/share/HLA/examples/
+cp -a ./unix.make "$UB_INSTALLDIR"/usr/share/HLA/examples/
+
+#mkdir -p "$UB_INSTALLDIR"/usr/share/HLA/HIDE
+#cp -a ./HIDE_Src/. "$UB_INSTALLDIR"/usr/share/HLA/HIDE/
+
+mkdir -p "$UB_INSTALLDIR"/usr/include/os
+cd "$UB_INSTALLDIR"/usr/share/HLA/include
+find -name "*.hhf" -exec ln -s ../share/HLA/include/{} "${UB_INSTALLDIR}/usr/include/{}" \;
+cd ./os
+find -name "*.hhf" -exec ln -sf ../../share/HLA/include/os/{} "${UB_INSTALLDIR}/usr/include/os/{}" \;
+
+sed -e s'|#!/bin/sh\r|#!/bin/sh|' -i "$UB_INSTALLDIR"/usr/share/HLA/hlalibsrc/trunk/args/hooks/*.tmpl

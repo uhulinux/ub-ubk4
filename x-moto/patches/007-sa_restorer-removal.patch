@@ -1,0 +1,21 @@
+Description: sa_restorer isn't defined in POSIX and is being removed
+Author: Pino Toscano <pino@debian.org>
+Bug: http://todo.xmoto.tuxfamily.org/index.php?do=details&task_id=806
+Forwarded: https://github.com/xmoto/xmoto/pull/17
+
+--- xmoto-0.5.9+dfsg.orig/src/GameInit.cpp
++++ xmoto-0.5.9+dfsg/src/GameInit.cpp
+@@ -268,12 +268,9 @@ void GameApp::run_load(int nNumArgs, cha
+   if(v_xmArgs.isOptServerOnly()) {
+     struct sigaction v_act;
+ 
++    memset(&v_act, 0, sizeof(struct sigaction));
+     v_act.sa_handler  = xmexit_term;
+-#if !defined(__APPLE__) && !defined(__FreeBSD__)
+-    v_act.sa_restorer = NULL;
+-#endif
+     sigemptyset(&v_act.sa_mask);
+-    v_act.sa_flags = 0;
+ 
+     if(sigaction(SIGTERM, &v_act, NULL) != 0) {
+       LogWarning("sigaction failed");

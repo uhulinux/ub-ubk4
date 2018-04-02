@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--with-screen=slang \
+	--enable-vfs       \
+	--enable-vfs-undelfs \
+	--enable-charset
+
+cd po
+	rm *.gmo
+	for i in *.po; do
+		make "${i/.po/.gmo}"
+	done
+cd ..

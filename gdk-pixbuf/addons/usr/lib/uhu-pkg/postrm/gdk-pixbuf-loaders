@@ -1,0 +1,23 @@
+#!/bin/sh -e
+
+query_loaders ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Querying GDK pixbuf loaders ..."
+	touch /usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+	gdk-pixbuf-query-loaders --update-cache
+	true > /var/lib/uhu-pkg/gdk-pixbuf-loaders
+	while [ ! /var/lib/uhu-pkg/gdk-pixbuf-loaders -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/gdk-pixbuf-loaders -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/gdk-pixbuf-loaders
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ "$2" = "upgrade" ]; then
+	exit 0
+fi
+
+if [ ! -f /var/lib/uhu-pkg/gdk-pixbuf-loaders ]; then
+	query_loaders
+fi

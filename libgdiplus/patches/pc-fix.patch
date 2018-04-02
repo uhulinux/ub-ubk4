@@ -1,0 +1,12 @@
+diff -Nur orig/configure mod/configure
+--- orig/configure	2015-12-20 18:33:18.000000000 +0100
++++ mod/configure	2016-11-08 17:38:15.836344747 +0100
+@@ -13093,7 +13093,7 @@
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $jpeg_ok" >&5
+ $as_echo "$jpeg_ok" >&6; }
+       if test "$jpeg_ok" = yes; then
+-        JPEG='jpeg'; LIBJPEG='-L${libjpeg_prefix}/lib -ljpeg'
++        JPEG='jpeg'; LIBJPEG='-ljpeg'
+       else
+         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** JPEG loader will not be built (JPEG header file not found) ***" >&5
+ $as_echo "$as_me: WARNING: *** JPEG loader will not be built (JPEG header file not found) ***" >&2;}

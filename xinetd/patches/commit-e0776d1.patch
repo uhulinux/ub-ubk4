@@ -1,0 +1,52 @@
+From e0776d13d8024f849bb67ce028ebcde357f7d371 Mon Sep 17 00:00:00 2001
+From: Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>
+Date: Fri, 10 May 2013 12:45:09 +0200
+Subject: The Documentation fixes patch from the debian package.
+
+
+diff --git a/xinetd/itox.8 b/xinetd/itox.8
+index de109db..89a68fb 100644
+--- a/xinetd/itox.8
++++ b/xinetd/itox.8
+@@ -1,19 +1,22 @@
+-.TH ITOX 8 "October 1999" "xinetd"
++.TH ITOX 8 "March 2005" "xinetd"
+ .SH NAME
+ itox \- converts inetd.conf style configuration files to xinetd.conf
+ .SH SYNOPSIS
+-itox [-daemon_dir <dir_path>]
++itox [-daemon_dir <dir_name>]
+ .SH DESCRIPTION
+ .B itox
+ takes on its standard input inetd.conf style entries and dumps to
+ standard output the corresponding xinetd.conf style entries.
+ .SH OPTIONS
+ .TP
+-.I -daemon_dir <dir_path>
+-Specifies the file name of the TCP daemon used in the inetd.conf file.
++.I -daemon_dir <dir_name>
++If you use tcpd, this option specifies the directory where all the daemons are.
++You must specify this option if you use tcpd and the daemon file names are not
++absolute.
+ .SH EXAMPLES
+-itox -daemon_dir /usr/sbin/tcpd < inetd.conf > xinetd.conf
++itox -daemon_dir /usr/sbin < inetd.conf > xinetd.conf
+ .SH AUTHOR
+ xinetd and itox were written by Panagiotis Tsirigotis.
+ .sp
+-This man page was written by Norbert Veber <nveber@debian.org>.
++This man page was written by Norbert Veber <nveber@debian.org> and Thomas Seyrat
++<tomasera@debian.org>
+diff --git a/xinetd/xinetd.man b/xinetd/xinetd.man
+index fb180cc..cd416d1 100644
+--- a/xinetd/xinetd.man
++++ b/xinetd/xinetd.man
+@@ -155,7 +155,7 @@ causes an internal state dump (the default dump file is
+ \fI/var/run/xinetd.dump\fP;
+ to change the filename, edit \fIconfig.h\fP and recompile).
+ .TP
+-.B SIGIOT
++.B SIGABRT
+ causes an internal consistency check to verify that the data structures
+ used by the program have not been corrupted.
+ When the check is completed

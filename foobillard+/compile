@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+aclocal --force
+autoconf -f
+autoheader -f
+automake -a -c -f
+./configure \
+  --prefix=/usr/share/games \
+  --enable-fastmath=no
+make

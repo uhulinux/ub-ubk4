@@ -1,0 +1,14 @@
+diff -urN audio-entropyd-2.0.1.orig/Makefile audio-entropyd-2.0.1/Makefile
+--- audio-entropyd-2.0.1.orig/Makefile	2009-05-01 22:20:18.000000000 +0200
++++ audio-entropyd-2.0.1/Makefile	2009-05-28 19:44:02.000000000 +0200
+@@ -15,8 +15,8 @@
+ 	$(CC) -o $@ $^ $(LFLAGS) 
+ 
+ install: audio-entropyd
+-	cp audio-entropyd /usr/local/sbin/
+-	cp init.d-audio-entropyd /etc/init.d/
++	cp audio-entropyd $(DESTDIR)/usr/sbin/
++	cp init.d-audio-entropyd $(DESTDIR)/etc/init.d/
+ 
+ clean:
+ 	rm -f *.o core $(TARGETS)

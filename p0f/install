@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+DESTDIR="$UB_INSTALLDIR"
+
+	cp -f p0f "$DESTDIR"/usr/sbin/
+	cp -f tools/p0f-sendsyn "$DESTDIR"/usr/sbin/
+	cp -f tools/p0f-sendsyn6 "$DESTDIR"/usr/sbin/
+	cp -f tools/p0f-client "$DESTDIR"/usr/sbin/
+	mkdir -p "$DESTDIR"/etc/p0f
+	cp -f p0f.fp "$DESTDIR"/etc/p0f/

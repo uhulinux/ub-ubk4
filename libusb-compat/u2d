@@ -1,0 +1,2 @@
+minor=$(urllist http://sourceforge.net/projects/libusb/files/ | splitver '^libusb-compat-([0-9.]+)$' | sort -V | tail -n 1)
+sflist libusb libusb-compat-$minor | splitver '^libusb-compat-([0-9.]+)$' | sort -V | tail -n 1

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+# drop translations until UTF-8 terminal is supported
+rm -rf "$UB_INSTALLDIR"/usr/share/locale

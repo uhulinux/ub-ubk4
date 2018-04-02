@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+ub_configure\
+	--datadir=/usr/share/games \
+	--datarootdir=/usr/share \
+	--localedir=/usr/share/locale \
+	--docdir=/usr/share/doc/toppler \
+	--localstatedir=/var/games \
+
+ub_make \
+	docdir=/usr/share/doc \
+	pixmapsdir=/usr/share/pixmaps \
+	applicationsdir=/usr/share/applications\
+	localedir=/usr/share/locale

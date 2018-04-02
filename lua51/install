@@ -1,0 +1,22 @@
+#!/bin/sh -eux
+
+make \
+    TO_BIN='lua5.1 luac5.1' \
+    TO_LIB="liblua5.1.a liblua5.1.so liblua5.1.so.5.1 liblua5.1.so.$UB_VERSION" \
+    INSTALL_DATA='cp -d' \
+    INSTALL_TOP="$UB_INSTALLDIR"/usr \
+    INSTALL_INC="$UB_INSTALLDIR"/usr/include/lua5.1 \
+    INSTALL_MAN="$UB_INSTALLDIR"/usr/share/man/man1 \
+install
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
+cp etc/lua.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua51.pc
+ln -sf lua51.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua5.1.pc
+ln -sf lua51.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua-5.1.pc
+
+cd "$UB_INSTALLDIR"/usr/share/man/man1
+mv lua.1 lua5.1.1
+mv luac.1 luac5.1.1
+
+ln -sf lua5.1 "$UB_INSTALLDIR"/usr/bin/lua
+ln -sf luac5.1 "$UB_INSTALLDIR"/usr/bin/luac

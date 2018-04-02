@@ -1,0 +1,14 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2016-03-31 06:46:19.000000000 +0200
++++ patched/CMakeLists.txt	2016-05-25 23:47:00.849861220 +0200
+@@ -58,8 +58,8 @@
+ message(STATUS "Using vm machine type: ${GRAPHITE2_VM_TYPE}")
+ 
+ add_subdirectory(src)
+-add_subdirectory(tests)
+-add_subdirectory(doc)
++# add_subdirectory(tests)
++# add_subdirectory(doc)
+ if (NOT (GRAPHITE2_NSEGCACHE OR GRAPHITE2_NFILEFACE))
+     add_subdirectory(gr2fonttest)
+ endif (NOT (GRAPHITE2_NSEGCACHE OR GRAPHITE2_NFILEFACE))

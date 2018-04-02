@@ -1,0 +1,28 @@
+diff -Naurd a/lspci.c b/lspci.c
+--- a/lspci.c	2006-04-05 18:02:34.000000000 +0200
++++ b/lspci.c	2006-04-05 18:05:49.000000000 +0200
+@@ -252,6 +252,7 @@
+   byte classbuf[128], devbuf[128];
+ 
+   show_slot_name(d);
++  if (pacc->numeric_ids)
+   printf(" %s: %s",
+ 	 pci_lookup_name(pacc, classbuf, sizeof(classbuf),
+ 			 PCI_LOOKUP_CLASS,
+@@ -259,6 +260,16 @@
+ 	 pci_lookup_name(pacc, devbuf, sizeof(devbuf),
+ 			 PCI_LOOKUP_VENDOR | PCI_LOOKUP_DEVICE,
+ 			 p->vendor_id, p->device_id));
++  else
++  printf(" %04x:%04x %s: %s",
++	 p->vendor_id,
++	 p->device_id,
++	 pci_lookup_name(pacc, classbuf, sizeof(classbuf),
++			 PCI_LOOKUP_CLASS,
++			 p->device_class),
++	 pci_lookup_name(pacc, devbuf, sizeof(devbuf),
++			 PCI_LOOKUP_VENDOR | PCI_LOOKUP_DEVICE,
++			 p->vendor_id, p->device_id));
+   if (c = get_conf_byte(d, PCI_REVISION_ID))
+     printf(" (rev %02x)", c);
+   if (verbose)

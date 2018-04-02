@@ -1,0 +1,133 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxc/src/c_main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/c_main.c	2007-08-28 14:41:01.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/c_main.c	2007-08-28 14:44:29.000000000 +0200
+@@ -36,6 +36,11 @@
+ 
+ #include <fnx_loadlib.h>
+ 
++#include <fxdll_version.h>
++#ifndef FXDLL_VERSION
++#error "FXDLL_VERSION NOT DEFINED"
++#endif
++
+ #ifdef USE_GETTEXT
+ #include <libintl.h>
+ #include <locale.h>
+@@ -351,6 +356,9 @@
+     const char  * filename ;
+     void        * library = NULL;
+     dlfunc      RegisterFunctions ;
++#ifdef FXDLL_VERSION
++    unsigned int  * PluginVersion ;
++#endif
+ 
+ #if defined( TARGET_Linux ) || defined ( TARGET_BEOS ) || defined ( TARGET_BSD )
+     struct stat stat_buf;
+@@ -438,8 +446,13 @@
+     library  = dlopen (filename, RTLD_NOW | RTLD_GLOBAL) ;
+     if (!library) compile_error (dlerror()) ;
+ 
+-    RegisterFunctions = dlsym (library, "RegisterFunctions") ;
++    RegisterFunctions = (dlfunc) dlsym (library, "RegisterFunctions") ;
+     if (!RegisterFunctions) compile_error(MSG_NO_COMPATIBLE_DLL) ;
++#ifdef FXDLL_VERSION
++    PluginVersion = (unsigned int *) dlsym (library, "PluginVersion") ;
++    if (PluginVersion && *PluginVersion != FXDLL_VERSION)
++        compile_error(MSG_NO_COMPATIBLE_DLL) ;
++#endif
+ 
+     (*RegisterFunctions)(compile_export, sysproc_add) ;
+ }
+Index: fenix-0.92a.dfsg1/include/fnx_loadlib.h
+===================================================================
+--- fenix-0.92a.dfsg1.orig/include/fnx_loadlib.h	2007-08-28 14:38:30.000000000 +0200
++++ fenix-0.92a.dfsg1/include/fnx_loadlib.h	2007-08-28 14:41:04.000000000 +0200
+@@ -61,7 +61,7 @@
+ 
+     #ifdef WIN32
+         #define dlopen(a,b)     LoadLibrary(a)
+-        #define dlsym(a,b)      (dlfunc)GetProcAddress(a,b)
++        #define dlsym(a,b)      (void *)GetProcAddress(a,b)
+ 
+         static char * dlerror (void)
+         {
+Index: fenix-0.92a.dfsg1/include/fxdll.h
+===================================================================
+--- fenix-0.92a.dfsg1.orig/include/fxdll.h	2007-08-28 14:38:31.000000000 +0200
++++ fenix-0.92a.dfsg1/include/fxdll.h	2007-08-28 14:44:32.000000000 +0200
+@@ -54,6 +54,14 @@
+ #else
+ #define FXEXTERN extern
+ #endif
++
++/*
++ * Identificador de la version soportada de plugins
++ * Debera cambiar cada vez que se modifiquen las cabeceras
++ * usadas para los plugins.
++ */
++
++#include "fxdll_version.h"
+ 
+ /*
+  * Declaracion de funciones
+Index: fenix-0.92a.dfsg1/include/fxdll_version.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ fenix-0.92a.dfsg1/include/fxdll_version.h	2007-08-28 14:41:04.000000000 +0200
+@@ -0,0 +1,11 @@
++#ifndef FXDLL_VERSION
++
++/*
++ * Identificador de la version soportada de plugins
++ * Debera cambiar cada vez que se modifiquen las cabeceras
++ * usadas para los plugins.
++ */
++
++#define FXDLL_VERSION 0x0001
++
++#endif
+Index: fenix-0.92a.dfsg1/fxi/src/i_func.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/i_func.c	2007-08-28 14:41:02.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/i_func.c	2007-08-28 14:44:31.000000000 +0200
+@@ -125,6 +125,11 @@
+ 
+ #include <fnx_loadlib.h>
+ 
++#include <fxdll_version.h>
++#ifndef FXDLL_VERSION
++#error "FXDLL_VERSION NOT DEFINED"
++#endif
++
+ #ifdef USE_GETTEXT
+ #include <libintl.h>
+ #define _(String) gettext (String)
+@@ -5037,6 +5042,9 @@
+     SYSPROC       * proc = sysprocs ;
+     void          * library ;
+     dlfunc          RegisterFunctions ;
++#ifdef FXDLL_VERSION
++    unsigned int  * PluginVersion ;
++#endif
+     const char    * filename;
+     unsigned int    n ;
+ 
+@@ -5121,8 +5129,13 @@
+ 
+         if (!library) gr_error (dlerror()) ;
+ 
+-        RegisterFunctions = dlsym (library, "RegisterFunctions") ;
++        RegisterFunctions = (dlfunc) dlsym (library, "RegisterFunctions") ;
+         if (!RegisterFunctions) gr_error(_("Error in %s"), filename) ;
++#ifdef FXDLL_VERSION
++        PluginVersion = (unsigned int *) dlsym (library, "PluginVersion") ;
++        if (PluginVersion && *PluginVersion != FXDLL_VERSION)
++            gr_error(_("Error in %s"), filename) ;
++#endif
+ 
+         (*RegisterFunctions)(fnc_import, sysproc_add) ;
+     }

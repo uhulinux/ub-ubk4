@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+# compat symlinks
+ln -s enchant-2 ${UB_INSTALLDIR}/usr/include/enchant
+ln -s libenchant-2.so ${UB_INSTALLDIR}/usr/lib/libenchant.so
+ln -s enchant-2.pc ${UB_INSTALLDIR}/usr/lib/pkgconfig/enchant.pc

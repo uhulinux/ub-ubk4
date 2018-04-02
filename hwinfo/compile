@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+echo 'touch changelog' > git2log
+echo "$UB_VERSION" > VERSION
+make -j1 \
+    HWINFO_VERSION="$UB_VERSION" \
+    CFLAGS+="-fPIC -I$UB_COMPILEDIR/src/hd" \
+    LIBDIR=/usr/lib

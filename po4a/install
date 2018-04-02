@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+perl Build destdir=${UB_INSTALLDIR} install
+find ${UB_INSTALLDIR} -name .packlist -o -name perllocal.pod -delete

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+make \
+	RPM_OPT_FLAGS="-fPIC -DPIC -D_REENTRANT -DHAVE_STRERROR" \
+	MAJOR="$UB_VERSION_MAJOR" \
+	MINOR="$UB_VERSION_MINOR" \
+	REL=0 \
+	linux

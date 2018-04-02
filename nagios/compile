@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+ub_configure \
+	--with-template-extinfo \
+	--sbindir=/srv/www/cgi-bin/nagios \
+	--sysconfdir=/etc/nagios \
+	--datadir=/srv/www/html/nagios \
+	--localstatedir=/var/lib/nagios \
+	--with-lockfile=/var/run/nagios.pid \
+	--with-cgiurl=/cgi-bin/nagios \
+	--with-nagios-user=111 \
+	--with-nagios-group=111 \
+	--enable-embedded-perl \
+	--with-perlcache
+
+ub_make all

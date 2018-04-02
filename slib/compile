@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+sed -i -e 's,/usr/local/lib,/usr/share,g' \
+       -e 's,/usr/lib,/usr/share,g' \
+       -e 's,/usr/local,/usr,g' *

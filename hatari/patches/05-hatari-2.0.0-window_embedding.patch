@@ -1,0 +1,38 @@
+
+# HG changeset patch
+# User Thomas Huth
+# Date 1483601902 -3600
+# Node ID 2b82cd9e99d1c68d9d6d77420f1e724744dcb9ad
+# Parent  9b133f4e18327a088f456ff16dbe7bc16065a895
+Fix X11 window embedding with SDL2 on Gnome
+
+diff -r 9b133f4e1832 -r 2b82cd9e99d1 src/control.c
+--- a/src/control.c	Wed Jan 04 23:24:08 2017 +0100
++++ b/src/control.c	Thu Jan 05 08:38:22 2017 +0100
+@@ -583,7 +583,9 @@
+ 				perror("Control_ReparentWindow write");
+ 		}
+ 	}
+-#if !WITH_SDL2
++#if WITH_SDL2
++	XSync(display, false);
++#else
+ 	info.info.x11.unlock_func();
+ #endif
+ }
+diff -r 9b133f4e1832 -r 2b82cd9e99d1 src/screen.c
+--- a/src/screen.c	Wed Jan 04 23:24:08 2017 +0100
++++ b/src/screen.c	Thu Jan 05 08:38:22 2017 +0100
+@@ -345,7 +345,10 @@
+ 	else
+ 	{
+ 		int deskw, deskh;
+-		sdlVideoFlags  = SDL_WINDOW_RESIZABLE;
++		if (getenv("PARENT_WIN_ID") != NULL)	/* Embedded window? */
++			sdlVideoFlags = SDL_WINDOW_BORDERLESS;
++		else
++			sdlVideoFlags = SDL_WINDOW_RESIZABLE;
+ 		/* Make sure that window is not bigger than current desktop */
+ 		Resolution_GetDesktopSize(&deskw, &deskh);
+ 		if (win_width > deskw)
+

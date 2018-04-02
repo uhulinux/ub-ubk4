@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+make install
+
+#remove all unnecessary??? python files from /usr/lib
+rm -r "$UB_INSTALLDIR"/usr/lib/
+
+#install desktop file
+cp -a canorus.desktop "$UB_INSTALLDIR"/usr/share/applications/

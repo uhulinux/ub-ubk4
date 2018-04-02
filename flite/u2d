@@ -1,0 +1,7 @@
+dirs=$(urllist http://festvox.org/flite/packed/ | splitver '^flite-([0-9.]+)$')
+for dir in $dirs;do
+ver=$(urllist http://festvox.org/flite/packed/flite-$dir | splitver '^flite-([0-9.]+)-release.tar.bz2$')
+endver=$(echo -e "$ver\n$endver" | sort -V | tail -n 1)
+done
+echo $endver
+

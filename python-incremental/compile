@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp -a twisted twisted3
+cd twisted
+python setup.py build
+cd ../twisted3
+python3 setup.py build

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cp -a zhu3d "$UB_INSTALLDIR"/usr/bin/
+mkdir -p "$UB_INSTALLDIR"/usr/share/zhu3d
+mv {system,work,doc} "$UB_INSTALLDIR"/usr/share/zhu3d/
+find "$UB_INSTALLDIR"/usr/share/zhu3d -type f -exec chmod 644 "{}" +

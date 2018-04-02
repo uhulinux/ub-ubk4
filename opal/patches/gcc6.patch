@@ -1,0 +1,37 @@
+diff -Naur orig/plugins/audio/G.722.2/AMR-WB/dec_lpc.c patched/plugins/audio/G.722.2/AMR-WB/dec_lpc.c
+--- orig/plugins/audio/G.722.2/AMR-WB/dec_lpc.c	2013-02-20 03:17:52.134739579 +0100
++++ patched/plugins/audio/G.722.2/AMR-WB/dec_lpc.c	2017-10-06 23:01:11.694753290 +0200
+@@ -3,6 +3,7 @@
+  *  3GPP AMR Wideband Floating-point Speech Codec
+  *===================================================================
+  */
++#include <stdlib.h>
+ #include <math.h>
+ #include "typedef.h"
+ #include "dec_util.h"
+diff -Naur orig/plugins/video/common/mpi.cxx patched/plugins/video/common/mpi.cxx
+--- orig/plugins/video/common/mpi.cxx	2013-02-20 03:18:05.134739579 +0100
++++ patched/plugins/video/common/mpi.cxx	2017-10-06 22:45:53.241707475 +0200
+@@ -132,8 +132,8 @@
+   // to the desired one or matches it
+   for (i=0; i < MPIs.size(); i++) {
+     // we square the value in order to get absolute distances
+-    distance = ( abs(MPIs[i].width  - desiredWidth ) *
+-                 abs(MPIs[i].height - desiredHeight) );
++    distance = ( (MPIs[i].width  - desiredWidth ) *
++                 (MPIs[i].height - desiredHeight) );
+ 
+     if (distance < minDistance) {
+       minDistance = distance;
+diff -Naur orig/src/im/msrp.cxx patched/src/im/msrp.cxx
+--- orig/src/im/msrp.cxx	2013-02-20 03:18:42.134739579 +0100
++++ patched/src/im/msrp.cxx	2017-10-06 22:55:55.582302477 +0200
+@@ -835,7 +835,7 @@
+   flush();
+ 
+   {
+-    PStringStream str; str << ::setfill('\r') << mime.PrintContents(str);
++    PStringStream str; str << ::setfill('\r') << (const std::string&)mime.PrintContents(str);
+     PTRACE(4, "Sending MSRP REPORT\n" << "MSRP " << chunkId << " " << MSRPCommands[REPORT] << CRLF 
+                                                  << "To-Path: " << toUrl << CRLF 
+                                                  << "From-Path: "<< fromUrl << CRLF 

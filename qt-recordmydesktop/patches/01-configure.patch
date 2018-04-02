@@ -1,0 +1,61 @@
+--- ORIG/configure	2008-11-23 16:13:58.000000000 +0100
++++ UHU/configure	2009-09-22 22:20:00.000000000 +0200
+@@ -6320,32 +6320,32 @@
+ 
+ export PYTHONPATH=$PYTHONPATH
+ 
+-export PYQT4_VERSION=`python -c 'import PyQt4; from PyQt4 import QtCore; print QtCore.PYQT_VERSION_STR'  2>>/dev/null `
+-if test x$PYQT4_VERSION == x; then
+-    { { $as_echo "$as_me:$LINENO: error: You need PyQt4>=4.1 installed to procceed" >&5
+-$as_echo "$as_me: error: You need PyQt4>=4.1 installed to procceed" >&2;}
+-   { (exit 1); exit 1; }; };
+-fi
+-b=$(echo "$PYQT4_VERSION" | awk 'BEGIN{ FS="." } { print $1 "\n" $2 "\n" $3 }')
+-c=($b)
+-
+-
+-export PYQT4_MAJOR=${c[0]}
+-export PYQT4_MINOR=${c[1]}
+-
+-if test $PYQT4_MAJOR != 4; then
+-    { { $as_echo "$as_me:$LINENO: error: PyQt4 Major version number not 4!!!" >&5
+-$as_echo "$as_me: error: PyQt4 Major version number not 4!!!" >&2;}
+-   { (exit 1); exit 1; }; };
+-fi
+-
+-if test $PYQT4_MINOR -lt 1; then
+-    { { $as_echo "$as_me:$LINENO: error: You need PyQt4>=4.1 installed to procceed
+-    (earlier version found installed)" >&5
+-$as_echo "$as_me: error: You need PyQt4>=4.1 installed to procceed
+-    (earlier version found installed)" >&2;}
+-   { (exit 1); exit 1; }; };
+-fi
++#export PYQT4_VERSION=`python -c 'import PyQt4; from PyQt4 import QtCore; print QtCore.PYQT_VERSION_STR'  2>>/dev/null `
++#if test x$PYQT4_VERSION == x; then
++#    { { $as_echo "$as_me:$LINENO: error: You need PyQt4>=4.1 installed to procceed" >&5
++#$as_echo "$as_me: error: You need PyQt4>=4.1 installed to procceed" >&2;}
++#   { (exit 1); exit 1; }; };
++#fi
++#b=$(echo "$PYQT4_VERSION" | awk 'BEGIN{ FS="." } { print $1 "\n" $2 "\n" $3 }')
++#c=($b)
++
++
++#export PYQT4_MAJOR=${c[0]}
++#export PYQT4_MINOR=${c[1]}
++
++#if test $PYQT4_MAJOR != 4; then
++#    { { $as_echo "$as_me:$LINENO: error: PyQt4 Major version number not 4!!!" >&5
++#$as_echo "$as_me: error: PyQt4 Major version number not 4!!!" >&2;}
++#   { (exit 1); exit 1; }; };
++#fi
++
++#if test $PYQT4_MINOR -lt 1; then
++#    { { $as_echo "$as_me:$LINENO: error: You need PyQt4>=4.1 installed to procceed
++#    (earlier version found installed)" >&5
++#$as_echo "$as_me: error: You need PyQt4>=4.1 installed to procceed
++#    (earlier version found installed)" >&2;}
++#   { (exit 1); exit 1; }; };
++#fi
+ 
+ 
+ ac_config_files="$ac_config_files Makefile src/Makefile src/rmdConfig.py src/qt-recordMyDesktop po/Makefile.in m4/Makefile"

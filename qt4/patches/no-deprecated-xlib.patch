@@ -1,0 +1,50 @@
+diff -Naur orig/src/gui/kernel/qkeymapper_x11.cpp patched/src/gui/kernel/qkeymapper_x11.cpp
+--- orig/src/gui/kernel/qkeymapper_x11.cpp	2013-06-07 07:16:59.000000000 +0200
++++ patched/src/gui/kernel/qkeymapper_x11.cpp	2013-11-07 02:27:41.369661043 +0100
+@@ -598,7 +598,7 @@
+                             KeySym sym;
+                             int x = 0;
+                             do {
+-                                sym = XKeycodeToKeysym(X11->display, map->modifiermap[mapIndex], x++);
++                                sym = XkbKeycodeToKeysym(X11->display, map->modifiermap[mapIndex], x++, 0);
+                             } while (sym == NoSymbol && x < coreDesc.keysyms_per_keycode);
+                             const uchar mask = 1 << maskIndex;
+                             SETMASK(sym, mask);
+@@ -610,7 +610,7 @@
+                 // determine the meaning of the Lock modifier
+                 for (i = 0; i < map->max_keypermod; ++i) {
+                     for (int x = 0; x < coreDesc.keysyms_per_keycode; ++x) {
+-                        KeySym sym = XKeycodeToKeysym(X11->display, map->modifiermap[LockMapIndex], x);
++                        KeySym sym = XkbKeycodeToKeysym(X11->display, map->modifiermap[LockMapIndex], x, 0);
+                         if (sym == XK_Caps_Lock || sym == XK_ISO_Lock) {
+                             coreDesc.lock_meaning = XK_Caps_Lock;
+                             break;
+diff -Naur orig/tools/qvfb/x11keyfaker.cpp patched/tools/qvfb/x11keyfaker.cpp
+--- orig/tools/qvfb/x11keyfaker.cpp	2013-06-07 07:17:00.000000000 +0200
++++ patched/tools/qvfb/x11keyfaker.cpp	2013-11-07 02:27:03.101307839 +0100
+@@ -44,6 +44,7 @@
+ #include <QSocketNotifier>
+ #include <QDebug>
+ #include <X11/Xlib.h>
++#include <X11/XKBlib.h>
+ #include <X11/cursorfont.h>
+ #include <X11/extensions/XTest.h>
+ #include <X11/keysym.h>
+@@ -423,7 +424,7 @@
+ 
+     // Determine if we need to fake shift keys as well.
+     int index = 0;
+-    while (index < 4 && XKeycodeToKeysym(dpy, keycode, index) != keysym)
++    while (index < 4 && XkbKeycodeToKeysym(dpy, keycode, index, 0) != keysym)
+ 	++index;
+     int extraModifiers = 0;
+     if ((index & 1) != 0)
+@@ -506,7 +507,7 @@
+ static bool keycodeInUse(Display *dpy, int keycode)
+ {
+     for (int index = 0; index < 8; ++index) {
+-	if (XKeycodeToKeysym(dpy, keycode, index) != NoSymbol)
++	if (XkbKeycodeToKeysym(dpy, keycode, index, 0) != NoSymbol)
+ 	    return true;
+     }
+     return false;

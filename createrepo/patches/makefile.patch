@@ -1,0 +1,86 @@
+diff -Naur createrepo-0.10-orig/bin/Makefile createrepo-0.10/bin/Makefile
+--- createrepo-0.10-orig/bin/Makefile	2013-10-18 11:39:29.000000000 +0200
++++ createrepo-0.10/bin/Makefile	2013-11-17 13:51:31.020069091 +0100
+@@ -8,15 +8,15 @@
+ sbindir = ${exec_prefix}/sbin
+ libexecdir = ${exec_prefix}/libexec
+ datadir = ${prefix}/share
+-sysconfdir = ${prefix}/etc
+-sharedstatedir = ${prefix}/com
+-localstatedir = ${prefix}/var
++sysconfdir = /etc
++sharedstatedir = /var
++localstatedir = /var
+ libdir = ${exec_prefix}/lib
+-infodir = ${prefix}/info
++infodir = ${datadir}/info
+ docdir = 
+ includedir = ${prefix}/include
+ oldincludedir = /usr/include
+-mandir = ${prefix}/man
++mandir = ${datadir}/man
+ 
+ pkgdatadir = $(datadir)/$(PKGNAME)
+ pkglibdir = $(libdir)/$(PKGNAME)
+diff -Naur createrepo-0.10-orig/createrepo/Makefile createrepo-0.10/createrepo/Makefile
+--- createrepo-0.10-orig/createrepo/Makefile	2013-10-18 11:39:29.000000000 +0200
++++ createrepo-0.10/createrepo/Makefile	2013-11-17 13:52:38.391871164 +0100
+@@ -16,11 +16,11 @@
+ sbindir = ${exec_prefix}/sbin
+ libexecdir = ${exec_prefix}/libexec
+ datadir = ${prefix}/share
+-sysconfdir = ${prefix}/etc
+-sharedstatedir = ${prefix}/com
+-localstatedir = ${prefix}/var
++sysconfdir = /etc
++sharedstatedir = /var
++localstatedir = /var
+ libdir = ${exec_prefix}/lib
+-infodir = ${prefix}/info
++infodir = ${datadir}/info
+ docdir = 
+ includedir = ${prefix}/include
+ oldincludedir = /usr/include
+diff -Naur createrepo-0.10-orig/docs/Makefile createrepo-0.10/docs/Makefile
+--- createrepo-0.10-orig/docs/Makefile	2013-10-18 11:39:29.000000000 +0200
++++ createrepo-0.10/docs/Makefile	2013-11-17 13:53:50.555652499 +0100
+@@ -8,11 +8,11 @@
+ sbindir = ${exec_prefix}/sbin
+ libexecdir = ${exec_prefix}/libexec
+ datadir = ${prefix}/share
+-sysconfdir = ${prefix}/etc
+-sharedstatedir = ${prefix}/com
+-localstatedir = ${prefix}/var
++sysconfdir = /etc
++sharedstatedir = /var
++localstatedir = /var
+ libdir = ${exec_prefix}/lib
+-infodir = ${prefix}/info
++infodir = ${datadir}/info
+ docdir = 
+ includedir = ${prefix}/include
+ oldincludedir = /usr/include
+diff -Naur createrepo-0.10-orig/Makefile createrepo-0.10/Makefile
+--- createrepo-0.10-orig/Makefile	2013-10-18 11:39:29.000000000 +0200
++++ createrepo-0.10/Makefile	2013-11-17 13:55:18.919376584 +0100
+@@ -18,15 +18,15 @@
+ sbindir = ${exec_prefix}/sbin
+ libexecdir = ${exec_prefix}/libexec
+ datadir = ${prefix}/share
+-sysconfdir = ${prefix}/etc
+-sharedstatedir = ${prefix}/com
+-localstatedir = ${prefix}/var
++sysconfdir = /etc
++sharedstatedir = /var
++localstatedir = /var
+ libdir = ${exec_prefix}/lib
+-infodir = ${prefix}/info
++infodir = ${datadir}/info
+ docdir = 
+ includedir = ${prefix}/include
+ oldincludedir = /usr/include
+-mandir = ${prefix}/share/man
++mandir = ${datadir}/man
+ compdir = $(shell pkg-config --variable=completionsdir bash-completion)
+ compdir := $(or $(compdir), "/etc/bash_completion.d")
+ 

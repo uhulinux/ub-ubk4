@@ -1,0 +1,39 @@
+#!/bin/sh -eux
+
+rm -rf "$UB_COMPILEDIR"/srclib
+HTTPD_ROOT=/srv/www \
+ub_configure \
+	--enable-layout="UHU"                              \
+	--sysconfdir="/etc/apache"                         \
+	--enable-so                                        \
+	--enable-modules=all                               \
+	--enable-mods-shared=all                           \
+	--enable-headers                                   \
+	--enable-dav                                       \
+	--enable-dav-fs                                    \
+	--enable-vhost-alias                               \
+	--enable-ssl                                       \
+	--enable-deflate                                   \
+	--enable-suexec                                    \
+	--enable-cgi                                       \
+	--enable-cgid                                      \
+	--enable-info                                      \
+	--enable-cache                                     \
+	--enable-disk-cahe                                 \
+	--enable-file-cache                                \
+	--enable-http                                      \
+	--enable-proxy                                     \
+	--enable-ldap                                      \
+	--enable-authnz-ldap                               \
+	--with-suexec-bin="/usr/sbin/suexec"               \
+	--with-suexec-caller="www"                         \
+	--with-suexec-docroot="/srv/www"                   \
+	--with-suexec-logfile="/var/log/apache/suexec.log" \
+	--with-suexec-safepath="/usr/local/bin:/usr/bin:/bin" \
+	--with-dbm=db4 \
+	--with-pcre \
+	--with-apr=/usr \
+	--with-apr-util=/usr \
+	--with-mpm=event \
+	--datadir=/srv/www
+ub_make

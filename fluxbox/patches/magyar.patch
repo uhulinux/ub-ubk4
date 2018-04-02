@@ -1,0 +1,317 @@
+diff -Naur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2015-01-05 15:42:15.000000000 +0100
++++ mod/configure.ac	2015-02-07 20:05:20.949414165 +0100
+@@ -597,6 +597,7 @@
+ nls/vi_VN/Makefile
+ nls/zh_CN/Makefile
+ nls/zh_TW/Makefile
++nls/hu_HU/Makefile
+ ])
+ 
+ dnl Print results
+diff -Naur orig/nls/hu_HU/Makefile.am mod/nls/hu_HU/Makefile.am
+--- orig/nls/hu_HU/Makefile.am	1970-01-01 01:00:00.000000000 +0100
++++ mod/nls/hu_HU/Makefile.am	2015-02-07 20:25:21.577395683 +0100
+@@ -0,0 +1,7 @@
++# nls/hu_HU/Makefile.am for Fluxbox - www.fluxbox.org
++
++THE_LANG = hu_HU
++SRC_CODESET = ISO-8859-2
++DEST_CODESETS = UTF-8
++
++include $(top_srcdir)/nls/nls.mk
+diff -Naur orig/nls/hu_HU/Translation.m mod/nls/hu_HU/Translation.m
+--- orig/nls/hu_HU/Translation.m	1970-01-01 01:00:00.000000000 +0100
++++ mod/nls/hu_HU/Translation.m	2015-02-07 20:23:51.613397068 +0100
+@@ -0,0 +1,278 @@
++$ codeset=ISO-8859-2
++
++$set 1 #Align
++
++1 Alul közepütt
++2 Alul balra
++3 Alul jobbra
++4 Vízszintesen
++5 Balra
++6 Balra lent
++7 Balra közepütt
++8 Balra oben
++9 Relativ
++10 Jobbra
++11 Jobbra lent
++12 Jobbra közepütt
++13 Jobbra fenn
++14 Fenn közepütt
++15 Fenn balra
++16 Fenn jobbra
++17 Függõlegesen
++18 Középen
++19 Felül
++20 Alul
++
++$set 2 #BaseDisplay
++
++1 Félbeszakadt... nyomtatás\n
++2 Kikapcsolás\n
++3 %s:      jel %d érkezett\n
++
++$set 3 #Common
++
++1 Áttetszõség (Alpha)
++2 Automata elrejtés
++3 Fordítva
++4 Bekódolt opciók
++5 Fordító
++6 Fordító verzió
++7       init
++8       keys
++9        nls
++10       menu
++11      style
++12 Alapbeállítások/-fájlok\n
++13 Kikapcsolva
++14 Hiba
++15 Fluxbox verzió
++16 Teljes ablakok eltakarják
++17 GIT revízió
++18 Látható
++19 Ebben a stílusban nincs háttér lehetõség.\nOLvad el a leírást és a hogyanokat.
++
++$set 4 #Configmenu
++
++1 Élsimítás (AntiAliasing)
++2 Automata növelés
++3 Klikk növel
++4 Klikk fókuszál
++5 Átmeneti (dialóg) ablakok dekorálva
++6 Asztalváltás egérgörgõvel
++7 Ablak fókuszálás asztalváltásnál
++8 Fókusz típusa
++9 Új ablak fókuszba
++10 Teljesen megnagyítani
++11 Képelmosás
++12 Ablaktartalom áthelyezéskor is látszik
++14 Fókusz egérrel
++15 Ablak az asztalhatáron túlra is tolható
++16 Pszeudo áttetszõség kényszerítés
++17 Alpha áttetszõség a menünél
++18 Áttetszõség
++19 Alpha áttetszõség a fókuszált ablakoknál
++20 Alpha áttetszõség a fókuszálatlan ablakoknál
++21 Fülbeállítások
++22 Fülek a címlécben
++23 Külsõ fülek szélessége
++24 Klikk a fület fókuszálja
++25 Fül fókusza az egeret követi
++26 Maximálási beállítások
++27 Méretezési növelés nem számít
++28 Elhelyezést rögzít
++29 Nagyságot rögzít
++30 Fókusz az egeret követi (strikt)
++31 Azonos fej
++
++$set 5 #Ewmh
++
++1 Nagy hiba: Nincs több memória, nem lehet adni a EWMH-Client listának többat
++
++$set 6 #FbTkError
++
++1 Ejnye! Magasság > 3200, a magasság = 3200 lesz
++2 Ejnye! Szélesség > 3200, a szélesség = 3200 lesz
++3 Hoppá: Nincs betölthetõ tartalék betõtípus
++4 Hiba a memóriakiosztásnál
++5 Hiba a képalkotásnál
++6 Az XImage létrehozhatatlan
++7 Hiba az olvasásnál
++8 Ejnye! Az alphaértékhez nincs érvényes formátum.
++9 Ejnye! Alphakép létrehozási hiba.
++10 Ejnye! Alphapixmap létrehozási hiba..
++11 Hiba, a képernyõ(%d) formátuma nem lelhetõ fel.
++12 Elfogyott a memória.
++13 A kék pufferek létrehozásánál elfogyott a memória.
++14 A zöld pufferek létrehozásánál elfogyott a memória.
++15 A vörös pufferek létrehozásánál elfogyott a memória.
++16 A stílus olvashatatlan.
++17 A vizualizáció nem támogatott
++18 Alapbeállítások használata
++
++$set 7 #Fluxbox
++
++1 A beállítófájl neve (rc) érvénytelen!
++2 Csoportfájl betölthetetlen
++3 Adatbázis betölthetetlen
++4 Újból próbáljuk
++5 Ejnye! Nincs képernyõ az ablak megjelenítésére!
++6 A %s mappa létrehozhatatlan
++7 Nincs több szabad képernyõ.\nMegy már egy másik ablakkezelõ?
++8 Szabványos kifejezés kiértékelési hiba
++9 Szarvashiba! Csak egy Fluxbox-Klasse lehetséges
++10 Nincs futó X-Server.\nX a Fluxbox elõtt indítandó.
++11 Hoppá: Az X-Server nyelvi támogás nélküli
++12 Hoppá: Nyelvi támogatás nem indul
++
++$set 8 #Gnome
++
++1 Fataler Fehler: Kein Speicher mehr frei, kann keinen für GNOME-Clientlist zuweisen
++
++$set 9 #Keys
++
++1 keys: Sorhiba
++2 keys: A magányos billentyû nem társítható!
++3 keys: Érvénytelen billentyû/módosító (Modifier) a sorban
++
++$set 10 #Menu
++
++1 Beállítások
++2 Fluxbox alapmenü
++3 Befejezés
++4 Ikonok
++5 Réteg
++6 Monitoron
++7 Elhelyezés
++8 Beállítások újratöltése
++9 Újraindítás
++10 Hoppá: érdekes, hiányos, vahgy hibás [encoding] jel a menüben
++
++$set 11 #Remember
++
++1 Dekoráció
++2 Méret
++3 Munkaterület váltás
++4 Réteg
++5 Beállítások megjegyzése...
++6 Pozíció
++7 Bezáráskori mentés
++8 Felgördítve
++9 Tapadó
++10 Ismeretlen apps-bejegyzés
++11 Munkaterület
++12 Monitor
++13 Áttetszõség
++
++$set 12 #Screen
++
++1 BScreen::BScreen: X-Server csatlakozási hiba.\nMár fut egy másik ablakkezõ. 
++2 B: %4d x H: %4d
++3 BScreen::BScreen: Screen %d felügyelete, Visual 0x%lx, Színmélysége %d\n
++4 B: %04d x H: %04d
++
++$set 13 #Slit
++
++1 Aktív Slit-Programok
++2 Felfele görget
++3 Lefele görget
++4 Slit Beállítás
++5 Slit rétege
++6 Slit a monitoron
++7 Slit elhelyezés
++8 Slit
++9 Slitlista tárolása
++
++$set 14 #Toolbar
++
++1 Aktuális munkaterület átnevezése
++2 Szimbólumlista mód
++3 Minden ablak
++4 Szimbólumok
++5 Semmi
++6 Munkaterület: összes ablak
++7 Munkaterület: szimbólumok
++8 Tálca helye
++9 Tálca monitor
++10 Tálca elhelyezés
++11 Tálca
++12 Tálca hossz (százalék)
++13 Óra: 24 órás
++14 Óra: 12 órás
++15 Óraformátum
++16 Program ikonok látszanak
++17 Nincs szimbólum
++18 Munkaterület: nincs szimbólum
++
++$set 15 #Window
++
++1 Névtelen
++
++$set 16 #Windowmenu
++
++1 Bezárás
++2 Kicsinyítés
++3 Réteg
++4 Hátra
++5 Maximálás
++6 Elõre
++7 Áthelyezés...
++8 Felgördítés
++9 Minden asztalon látszik
++10 Megölés
++11 Alapbeállítások használata
++12 Ablakcím megadás
++
++$set 17 #Workspace
++
++1 Munkaterület %d
++2 Munkaterületek
++3 Új munkaterület
++4 Utolsó eltávolítása
++
++$set 18 #fbsetroot
++
++1 Hiba: Kell valamelyik paraméter: -solid, -mod, -gradient\n
++2 Pixmap-elem létrehozhatatlan, a kardomba dõlök!
++3 -display <string>        Összeköttetés mutatás\n\
++-mod <x> <y>             Modulo-Raster\n\
++-foreground, -fg <Farbe> Modulo-Tintaszín\n\
++-background, -bg <Farbe> Modulo-Papírszín\n\n\
++-gradient <Textur>       Színátmenet minta\n\
++-from <Farbe>            Színátmenet kezdõszín\n\
++-to <Farbe>              Színátmenet végszín\n\n\
++-solid <Farbe>           Egyszínû\n\n\
++-help                    Ezen segítség és kilépés\n
++
++$set 19 #main
++
++1 Hiba: '-display' paraméter igényû
++2 Rossz memóriakiosztás
++3 Rossz típuskonverzió
++4 Értékhatáron kívül
++5 Futásidejû hiba
++6 Standard Exception
++7 Ismeretlen hiba
++8 Hiba: '-log' paraméter igényû
++9 Logfájl
++10 Logírás ide
++11 Hiba: '-rc' paraméter igényû
++12 Hiba: '-screen' paraméter igényû
++13 Fluxbox %s: (c) %s Henrik Kinnunen\n\n\
++Honlap: http://www.fluxbox.org/\n\n\
++-display <string>\t\tMás képernyõ használata $DISPLAY.\n\
++-screen <all|int,int,int>\tA megadott képernyõn fut.\n\
++-rc <string>\t\t\tMegadott init fájl használata.\n\
++-version\t\t\tVerzió kiírás.\n\
++-info\t\t\t\tTovábbi információk.\n\
++-log <filename>\t\t\tLogfájl neve.\n\
++-help\t\t\t\tEzen segítség.\n\n
++14 Hoppá: A 'DISPLAY' környezeti változó használhatatlan
++
++$set 20 #LayerSet
++
++1 Dokk fölött
++2 Alul
++3 Asztal
++4 Dokk
++5 Normál
++6 Fenn
+diff -Naur orig/nls/Makemodule.am mod/nls/Makemodule.am
+--- orig/nls/Makemodule.am	2014-04-11 17:44:55.000000000 +0200
++++ mod/nls/Makemodule.am	2015-02-07 19:54:01.829424619 +0100
+@@ -41,7 +41,8 @@
+ 	nls/uk_UA \
+ 	nls/vi_VN \
+ 	nls/zh_CN \
+-	nls/zh_TW
++	nls/zh_TW \
++	nls/hu_HU
+ 
+ uninstall-local:
+ 	@if test x$(NLSTEST) = "x-DNLS"; then \

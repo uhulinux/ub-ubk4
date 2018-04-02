@@ -1,0 +1,27 @@
+diff -Naur orig/Modules/FindImageMagick.cmake patched/Modules/FindImageMagick.cmake
+--- orig/Modules/FindImageMagick.cmake	2016-07-07 16:47:27.000000000 +0200
++++ patched/Modules/FindImageMagick.cmake	2016-07-31 20:32:05.258618842 +0200
+@@ -185,17 +185,21 @@
+ # Start Actual Work
+ #---------------------------------------------------------------------
+ # Try to find a ImageMagick installation binary path.
+-find_path(ImageMagick_EXECUTABLE_DIR
++find_program(ImageMagick_EXECUTABLE_FILENAME
+   NAMES mogrify${CMAKE_EXECUTABLE_SUFFIX}
+   PATHS
+     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\ImageMagick\\Current;BinPath]"
+   DOC "Path to the ImageMagick binary directory."
+   NO_DEFAULT_PATH
+   )
+-find_path(ImageMagick_EXECUTABLE_DIR
++find_program(ImageMagick_EXECUTABLE_FILENAME
+   NAMES mogrify${CMAKE_EXECUTABLE_SUFFIX}
+   )
+ 
++if(ImageMagick_EXECUTABLE_FILENAME)
++  get_filename_component(ImageMagick_EXECUTABLE_DIR "${ImageMagick_EXECUTABLE_FILENAME}" DIRECTORY)
++endif()
++
+ # Find each component. Search for all tools in same dir
+ # <ImageMagick_EXECUTABLE_DIR>; otherwise they should be found
+ # independently and not in a cohesive module such as this one.

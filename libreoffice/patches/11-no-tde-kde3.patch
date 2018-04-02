@@ -1,0 +1,163 @@
+diff -Naur orig/vcl/inc/unx/desktops.hxx patched/vcl/inc/unx/desktops.hxx
+--- orig/vcl/inc/unx/desktops.hxx	2018-02-22 18:45:41.000000000 +0100
++++ patched/vcl/inc/unx/desktops.hxx	2018-03-13 00:32:21.637000835 +0100
+@@ -31,8 +31,6 @@
+     DESKTOP_UNITY,
+     DESKTOP_XFCE,
+     DESKTOP_MATE,
+-    DESKTOP_TDE,
+-    DESKTOP_KDE3,
+     DESKTOP_KDE4,
+     DESKTOP_KDE5
+ }; // keep in sync with desktop_strings[] in salplug.cxx
+diff -Naur orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx patched/vcl/unx/generic/desktopdetect/desktopdetector.cxx
+--- orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx	2018-02-22 18:45:41.000000000 +0100
++++ patched/vcl/unx/generic/desktopdetect/desktopdetector.cxx	2018-03-13 00:29:37.389732496 +0100
+@@ -136,47 +136,6 @@
+     typedef int(* XErrorHandler)(Display*,XErrorEvent*);
+ }
+ 
+-static int TDEVersion( Display* pDisplay )
+-{
+-    int nRet = 0;
+-
+-    Atom nFullSession = XInternAtom( pDisplay, "TDE_FULL_SESSION", True );
+-    Atom nTDEVersion  = XInternAtom( pDisplay, "TDE_SESSION_VERSION", True );
+-
+-    if( nFullSession )
+-    {
+-        if( !nTDEVersion )
+-            return 14;
+-
+-        Atom                aRealType   = None;
+-        int                 nFormat     = 8;
+-        unsigned long       nItems      = 0;
+-        unsigned long       nBytesLeft  = 0;
+-        unsigned char*  pProperty   = nullptr;
+-        XGetWindowProperty( pDisplay,
+-                            DefaultRootWindow( pDisplay ),
+-                            nTDEVersion,
+-                            0, 1,
+-                            False,
+-                            AnyPropertyType,
+-                            &aRealType,
+-                            &nFormat,
+-                            &nItems,
+-                            &nBytesLeft,
+-                            &pProperty );
+-        if( !WasXError() && nItems != 0 && pProperty )
+-        {
+-            nRet = *reinterpret_cast< sal_Int32* >( pProperty );
+-        }
+-        if( pProperty )
+-        {
+-            XFree( pProperty );
+-            pProperty = nullptr;
+-        }
+-    }
+-    return nRet;
+-}
+-
+ static int KDEVersion( Display* pDisplay )
+ {
+     int nRet = 0;
+@@ -218,39 +177,6 @@
+     return nRet;
+ }
+ 
+-static bool is_tde_desktop( Display* pDisplay )
+-{
+-    if ( nullptr != getenv( "TDE_FULL_SESSION" ) )
+-    {
+-        return true; // TDE
+-    }
+-
+-    if ( TDEVersion( pDisplay ) >= 14 )
+-        return true;
+-
+-    return false;
+-}
+-
+-static bool is_kde3_desktop( Display* pDisplay )
+-{
+-    static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
+-    if ( pFullVersion )
+-    {
+-        static const char * pSessionVersion = getenv( "KDE_SESSION_VERSION" );
+-        if ( !pSessionVersion || pSessionVersion[0] == '0' )
+-        {
+-            return true; // does not exist => KDE3
+-        }
+-
+-        if ( strcmp(pSessionVersion, "3" ) == 0 )
+-        {
+-            return true;
+-        }
+-    }
+-
+-    return KDEVersion( pDisplay ) == 3;
+-}
+-
+ static bool is_kde4_desktop( Display* pDisplay )
+ {
+     static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
+@@ -288,8 +214,6 @@
+     {
+         OString aOver( pOverride );
+ 
+-        if ( aOver.equalsIgnoreAsciiCase( "tde" ) )
+-            return DESKTOP_TDE;
+         if ( aOver.equalsIgnoreAsciiCase( "kde5" ) )
+             return DESKTOP_KDE5;
+         if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
+@@ -304,8 +228,6 @@
+             return DESKTOP_XFCE;
+         if ( aOver.equalsIgnoreAsciiCase( "mate" ) )
+             return DESKTOP_MATE;
+-        if ( aOver.equalsIgnoreAsciiCase( "kde" ) )
+-            return DESKTOP_KDE3;
+         if ( aOver.equalsIgnoreAsciiCase( "none" ) )
+             return DESKTOP_UNKNOWN;
+     }
+@@ -389,10 +311,6 @@
+             ret = DESKTOP_KDE4;
+         else if ( is_gnome_desktop( pDisplay ) )
+             ret = DESKTOP_GNOME;
+-        else if ( is_kde3_desktop( pDisplay ) )
+-            ret = DESKTOP_KDE3;
+-        else if ( is_tde_desktop( pDisplay ) )
+-            ret = DESKTOP_TDE;
+         else
+             ret = DESKTOP_UNKNOWN;
+ 
+diff -Naur orig/vcl/unx/generic/plugadapt/salplug.cxx patched/vcl/unx/generic/plugadapt/salplug.cxx
+--- orig/vcl/unx/generic/plugadapt/salplug.cxx	2018-02-22 18:45:41.000000000 +0100
++++ patched/vcl/unx/generic/plugadapt/salplug.cxx	2018-03-13 00:31:19.811414437 +0100
+@@ -193,8 +193,6 @@
+     else if ( desktop == DESKTOP_GNOME ||
+               desktop == DESKTOP_UNITY ||
+               desktop == DESKTOP_XFCE  ||
+-              desktop == DESKTOP_KDE3 ||
+-              desktop == DESKTOP_TDE ||
+               desktop == DESKTOP_MATE )
+         pList = pStandardFallbackList;
+     else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
+@@ -234,7 +232,7 @@
+ 
+     // fallback, try everything
+     static const char* const pPlugin[] = {
+-        "gtk3", "gtk", "kde4", "kde", "tde", "gen" };
++        "gtk3", "gtk", "kde4", "gen" };
+ 
+     for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
+         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
+@@ -293,8 +291,7 @@
+     // Order to match desktops.hxx' DesktopType
+     static const char * const desktop_strings[] = {
+         "none", "unknown", "GNOME", "UNITY",
+-        "XFCE", "MATE", "TDE",
+-        "KDE", "KDE4", "KDE5" };
++        "XFCE", "MATE", "KDE4", "KDE5" };
+     static OUString aRet;
+     if( aRet.isEmpty())
+     {

@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/vuze
+cp -a . "$UB_INSTALLDIR"/usr/lib/vuze/
+rm "$UB_INSTALLDIR"/usr/lib/vuze/{GPL.txt,LICENSES.txt,README.txt,TOS.txt}
+ln -s /usr/lib/vuze/vuze "$UB_INSTALLDIR"/usr/bin/vuze
+mv "$UB_INSTALLDIR"/usr/lib/vuze/vuze.desktop "$UB_INSTALLDIR"/usr/share/applications/
+cp -a "$UB_INSTALLDIR"/usr/lib/vuze/*.png "$UB_INSTALLDIR"/usr/share/pixmaps/
+
+# CRLF
+sed -i 's/\r//g' "$UB_INSTALLDIR"/usr/share/applications/vuze.desktop
+sed -i 's/vuze.png/vuze/g' "$UB_INSTALLDIR"/usr/share/applications/vuze.desktop

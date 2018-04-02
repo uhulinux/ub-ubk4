@@ -1,0 +1,12 @@
+diff -Naurdp perl-5.14.2/cpan/CPAN/lib/CPAN/FirstTime.pm perl-5.14.2.cpan/cpan/CPAN/lib/CPAN/FirstTime.pm
+--- perl-5.14.2/cpan/CPAN/lib/CPAN/FirstTime.pm	2011-09-26 11:44:34.000000000 +0200
++++ perl-5.14.2.cpan/cpan/CPAN/lib/CPAN/FirstTime.pm	2012-03-21 14:27:16.647223127 +0100
+@@ -1160,7 +1160,7 @@ sub init {
+     #== term_is_latin
+     #
+ 
+-    my_yn_prompt(term_is_latin => 1, $matcher);
++    my_yn_prompt(term_is_latin => 0, $matcher);
+ 
+     #
+     #== save history in file 'histfile'

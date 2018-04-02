@@ -1,0 +1,21 @@
+diff -Naurd libwww-perl-5.803.orig/lib/HTTP/Daemon.pm libwww-perl-5.803/lib/HTTP/Daemon.pm
+--- libwww-perl-5.803.orig/lib/HTTP/Daemon.pm	2004-12-11 16:13:22.000000000 +0100
++++ libwww-perl-5.803/lib/HTTP/Daemon.pm	2005-07-13 15:06:04.890354445 +0200
+@@ -50,7 +50,7 @@
+ 	$url .= gethostbyaddr($addr, AF_INET) || inet_ntoa($addr);
+     }
+     my $port = $self->sockport;
+-    $url .= ":$port" if $port != $self->_default_port;
++    $url .= ":$port" if $port and $port != $self->_default_port;
+     $url .= "/";
+     $url;
+ }
+@@ -146,7 +146,7 @@
+     my $uri = $2;
+     my $proto = $3 || "HTTP/0.9";
+     $uri = "http://$uri" if $method eq "CONNECT";
+-    $uri = $HTTP::URI_CLASS->new($uri, $self->daemon->url);
++    $uri = $HTTP::URI_CLASS->new($uri);
+     my $r = HTTP::Request->new($method, $uri);
+     $r->protocol($proto);
+     ${*$self}{'httpd_client_proto'} = $proto = _http_version($proto);

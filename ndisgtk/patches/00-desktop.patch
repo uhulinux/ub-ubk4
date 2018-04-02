@@ -1,0 +1,29 @@
+diff -Naur orig/ndisgtk.desktop.in patched/ndisgtk.desktop.in
+--- orig/ndisgtk.desktop.in	2010-01-28 17:26:32.000000000 +0100
++++ patched/ndisgtk.desktop.in	2016-02-19 02:50:57.839491852 +0100
+@@ -1,9 +1,9 @@
+ [Desktop Entry]
+ _Name=Windows Wireless Drivers
+ _Comment=Ndiswrapper driver installation tool
+-Exec=gksu /usr/sbin/ndisgtk
++Exec=ndisgtk
+ NotShowIn=KDE;
+-Icon=ndisgtk.png
++Icon=ndisgtk
+ Terminal=false
+ Type=Application
+ Categories=System;Settings;
+diff -Naur orig/ndisgtk-kde.desktop.in patched/ndisgtk-kde.desktop.in
+--- orig/ndisgtk-kde.desktop.in	2010-01-28 17:26:32.000000000 +0100
++++ patched/ndisgtk-kde.desktop.in	2016-02-19 02:50:40.947408089 +0100
+@@ -1,8 +1,8 @@
+ [Desktop Entry]
+ _Name=Windows Wireless Drivers
+ _Comment=Ndiswrapper driver installation tool
+-Exec=kdesu /usr/sbin/ndisgtk -- --kde
+-Icon=ndisgtk.png
++Exec=ndisgtk -- --kde
++Icon=ndisgtk
+ Terminal=false
+ Type=Application
+ OnlyShowIn=KDE;

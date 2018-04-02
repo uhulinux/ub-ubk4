@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/etc/fonts/conf.avail
+cp etc/fonts/conf.avail/* ${UB_INSTALLDIR}/etc/fonts/conf.avail
+
+mkdir -p ${UB_INSTALLDIR}/etc/fonts/conf.d
+ln -s /etc/fonts/conf.avail/64-ttf-thai-tlwg.conf ${UB_INSTALLDIR}/etc/fonts/conf.d/
+ln -s /etc/fonts/conf.avail/89-ttf-thai-tlwg-synthetic.conf ${UB_INSTALLDIR}/etc/fonts/conf.d/
+
+mkdir -p ${UB_INSTALLDIR}/usr/share/fonts/truetype/Thai/
+cp *.ttf ${UB_INSTALLDIR}/usr/share/fonts/truetype/Thai/

@@ -1,0 +1,49 @@
+diff -Naur orig/misc/ext.d/doc.sh.in patched/misc/ext.d/doc.sh.in
+--- orig/misc/ext.d/doc.sh.in	2015-11-05 12:35:09.000000000 +0100
++++ patched/misc/ext.d/doc.sh.in	2016-02-20 21:37:43.681649422 +0100
+@@ -92,7 +92,8 @@
+     case "${filetype}" in
+     ps)
+         if [ -n "$DISPLAY" ]; then
+-            (gv "${MC_EXT_FILENAME}" &)
++            (evince "${MC_EXT_FILENAME}" &) || \
++            (atril "${MC_EXT_FILENAME}" &)
+         else
+             ps2ascii "${MC_EXT_FILENAME}" | ${PAGER:-more}
+         fi
+@@ -100,13 +101,12 @@
+     pdf)
+         if [ ! -n "$DISPLAY" ]; then
+             pdftotext -layout -nopgbrk "${MC_EXT_FILENAME}" - | ${PAGER:-more}
+-        elif see > /dev/null 2>&1; then
+-            (see "${MC_EXT_FILENAME}" &)
+         else
+-            (xpdf "${MC_EXT_FILENAME}" &)
++            (evince "${MC_EXT_FILENAME}" &) || \
++            (atril "${MC_EXT_FILENAME}" &) || \
++            (qpdfview "${MC_EXT_FILENAME}" &) || \
++            (acroread "${MC_EXT_FILENAME}" &)
+         fi
+-        #(acroread "${MC_EXT_FILENAME}" &)
+-        #(ghostview "${MC_EXT_FILENAME}" &)
+         ;;
+     ooffice)
+         if [ -n "$DISPLAY" ]; then
+@@ -128,7 +128,7 @@
+         ;;
+     msdoc)
+         if [ -n "$DISPLAY" ]; then
+-            (abiword "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
++            (loffice "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
+         else
+             tmp=`mktemp -d ${TMPDIR:-/tmp}/%p.XXXXXX`
+             wvHtml "${MC_EXT_FILENAME}" --targetdir="$tmp" page.html -1
+@@ -138,7 +138,7 @@
+         ;;
+     msxls)
+         if [ -n "$DISPLAY" ]; then
+-            (gnumeric "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
++            (loffice "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
+         else
+             tmp=`mktemp -d ${TMPDIR:-/tmp}/%p.XXXXXX`
+             xlhtml -a "${MC_EXT_FILENAME}" > "$tmp/page.html"

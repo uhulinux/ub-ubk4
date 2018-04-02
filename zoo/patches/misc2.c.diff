@@ -1,0 +1,13 @@
+--- zoo-2.10.orig/misc2.c
++++ zoo-2.10/misc2.c
+@@ -7,6 +7,10 @@
+ Copyright (C) 1986, 1987 Rahul Dhesi -- All rights reserved
+ (C) Copyright 1988 Rahul Dhesi -- All rights reserved
+ */
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <fcntl.h>
++#include <unistd.h>
+ #include "options.h"
+ /* Miscellaneous routines */
+ #include "portable.h"

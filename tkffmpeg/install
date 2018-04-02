@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+install -d -m 755 "$UB_INSTALLDIR"/usr/share/tkffmpeg/language
+cp -a default.ini "$UB_INSTALLDIR"/usr/share/tkffmpeg/
+cp -a tkffmpeg.tcl "$UB_INSTALLDIR"/usr/share/tkffmpeg/
+ln -s ../share/tkffmpeg/tkffmpeg.tcl "$UB_INSTALLDIR"/usr/bin/tkffmpeg
+cp -a tkffmpeg.desktop "$UB_INSTALLDIR"/usr/share/applications/
+cp -a tkffmpeg.png "$UB_INSTALLDIR"/usr/share/pixmaps/
+cp -a language/. "$UB_INSTALLDIR"/usr/share/tkffmpeg/language/

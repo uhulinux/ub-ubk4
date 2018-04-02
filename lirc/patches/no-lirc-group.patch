@@ -1,0 +1,36 @@
+diff -Nur orig/contrib/60-lirc.rules mod/contrib/60-lirc.rules
+--- orig/contrib/60-lirc.rules	2017-01-17 08:42:58.000000000 +0100
++++ mod/contrib/60-lirc.rules	2017-09-08 23:15:10.306029302 +0200
+@@ -1,9 +1,9 @@
+ # Make the /dev/lirc* devices accessible for users in the group "lirc"
+ # using regular group permissions.
+ 
+-KERNEL=="lirc[0-9]*", SUBSYSTEM=="lirc", GROUP="lirc", MODE="0660"
++KERNEL=="lirc[0-9]*", SUBSYSTEM=="lirc", GROUP="users", MODE="0660"
+ 
+ # Grant rw permission to the lirc group for USB devices using acl(5).
+ 
+ ACTION=="add", SUBSYSTEM=="usb", ENV{DEVNAME}=="?*", \
+-    RUN+="/usr/bin/sh -c '/usr/bin/setfacl -m g:lirc:rw %E{DEVNAME} 2>/dev/null || :'"
++    RUN+="/usr/bin/sh -c '/usr/bin/setfacl -m g:users:rw %E{DEVNAME} 2>/dev/null || :'"
+diff -Nur orig/contrib/60-usb-generic-perms.rules mod/contrib/60-usb-generic-perms.rules
+--- orig/contrib/60-usb-generic-perms.rules	2017-01-16 14:55:54.000000000 +0100
++++ mod/contrib/60-usb-generic-perms.rules	2017-09-08 23:15:33.945991598 +0200
+@@ -9,4 +9,4 @@
+ 
+ ACTION=="add", SUBSYSTEM=="usb", \
+    ATTR{idVendor}=="*", ATTR{idProduct}=="*", \
+-   MODE="664",  GROUP="lirc"
++   MODE="664",  GROUP="users"
+diff -Nur orig/tools/lirc-setup/mvc_control.py mod/tools/lirc-setup/mvc_control.py
+--- orig/tools/lirc-setup/mvc_control.py	2017-01-23 10:23:38.000000000 +0100
++++ mod/tools/lirc-setup/mvc_control.py	2017-09-08 23:16:24.413911102 +0200
+@@ -33,7 +33,7 @@
+     """ Return error message if running user isn't member of group lirc. """
+     user = pwd.getpwuid(os.geteuid()).pw_name
+     try:
+-        if user in grp.getgrnam("lirc")[3]:
++        if user in grp.getgrnam("users")[3]:
+             return None
+     except KeyError:
+         pass

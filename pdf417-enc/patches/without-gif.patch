@@ -1,0 +1,37 @@
+Index: pdf417_enc.4.4/Makefile
+===================================================================
+--- pdf417_enc.4.4.orig/Makefile	2006-09-24 17:00:17.000000000 +0200
++++ pdf417_enc.4.4/Makefile	2007-12-23 11:39:33.000000000 +0100
+@@ -8,7 +8,7 @@
+ #UNAME = FreeBSD
+ #UNAME = Other
+ 
+-#CFLAGS = -O2
++CFLAGS = -O2
+ CC = gcc
+ LINK = gcc
+ 
+@@ -26,7 +26,7 @@
+ endif
+ 
+ ifeq ($(UNAME),Linux)
+-  LFLAGS += -lgif -L/usr/X11R6/lib -lX11
++  LFLAGS += -L/usr/X11R6/lib -lX11 # -lgif
+ endif
+ 
+ 
+Index: pdf417_enc.4.4/globs.h
+===================================================================
+--- pdf417_enc.4.4.orig/globs.h	2006-09-24 17:00:17.000000000 +0200
++++ pdf417_enc.4.4/globs.h	2007-12-23 09:48:16.000000000 +0100
+@@ -16,10 +16,6 @@
+ #define Ldec 1
+ #define MAX_LINE   1024         // longest input line allowed
+ 
+-#ifndef WIN32
+-#define DO_GIFS
+-#endif
+-
+ typedef int Int32;
+ typedef unsigned int UInt32;
+ typedef unsigned long UInt64;

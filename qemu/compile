@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+./configure \
+	--prefix=/usr \
+	--sysconfdir=/etc \
+	--localstatedir=/var \
+	--audio-drv-list=oss,alsa,sdl,pa \
+	--enable-docs
+
+ub_make

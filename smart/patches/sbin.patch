@@ -1,0 +1,31 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2009-03-05 00:07:49.000000000 +0100
++++ patched/Makefile	2010-02-17 23:01:53.000000000 +0100
+@@ -6,7 +6,7 @@
+ PYTHON=python
+ 
+ prefix=/usr
+-bindir=$(prefix)/bin
++bindir=$(prefix)/sbin
+ 
+ all:
+ 	$(PYTHON) setup.py build
+diff -Naur orig/setup.py patched/setup.py
+--- orig/setup.py	2009-03-05 00:07:50.000000000 +0100
++++ patched/setup.py	2010-02-17 23:00:50.000000000 +0100
+@@ -44,13 +44,13 @@
+ copy_file_orig = distutils.file_util.copy_file
+ copy_tree_orig = distutils.dir_util.copy_tree
+ def copy_file(src, dst, *args, **kwargs):
+-    if dst.endswith("bin/smart.py"):
++    if dst.endswith("sbin/smart.py"):
+         dst = dst[:-3]
+     return copy_file_orig(src, dst, *args, **kwargs)
+ def copy_tree(*args, **kwargs):
+     outputs = copy_tree_orig(*args, **kwargs)
+     for i in range(len(outputs)):
+-        if outputs[i].endswith("bin/smart.py"):
++        if outputs[i].endswith("sbin/smart.py"):
+             outputs[i] = outputs[i][:-3]
+     return outputs
+ distutils.file_util.copy_file = copy_file

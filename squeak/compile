@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+./unix/cmake/configure \
+	--prefix=/usr \
+	--without-quartz \
+	--with-x \
+    --enable-mpg-mmx
+
+make

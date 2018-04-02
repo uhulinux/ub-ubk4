@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+export ARCH="-fPIC -m64"
+else
+export ARCH="-m32 -march=pentium"
+fi
+ub_compile

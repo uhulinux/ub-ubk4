@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+./configure \
+	--prefix=/usr/musl \
+	--exec-prefix=/usr \
+	--includedir=/usr/include/musl \
+	--libdir=/usr/lib/musl \
+	--syslibdir=/usr/lib
+make

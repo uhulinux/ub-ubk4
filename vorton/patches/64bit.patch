@@ -1,0 +1,35 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2004-02-29 05:52:00.000000000 +0100
++++ mod/Makefile	2017-06-09 15:23:47.738232473 +0200
+@@ -5,18 +5,18 @@
+ STRIP=		strip
+ 
+ 
+-CFLAGS =	-Wall -Wno-switch -march=pentium -mcpu=pentium -DDEBUG \
+-		-DDATA_PREFIX=\"data/\" -DFILE_SEPARATOR=\"/\" -DARGS \
++CFLAGS =	-Wall -Wno-switch -DDEBUG \
++		-DDATA_PREFIX=\"/usr/share/games/vorton/data/\" -DFILE_SEPARATOR=\"/\" -DARGS \
+ 		-Isrc -Isrc/SDL_flic -Isrc/SFont `sdl-config --cflags` \
+ 		-ffast-math -fno-common -ffreestanding -fno-builtin \
+-		-fno-exceptions -fstrict-aliasing -O3 \
++		-fno-exceptions -fstrict-aliasing -O2 \
+ 		-Isrc/filmat -Isrc/phase2 -Isrc/ML_Lib \
+ 
+ 
+ #CFLAGS+=-DUSE_FIXED_POINT
+ 
+ 
+-LDFLAGS =	`sdl-config --libs` -lSDL_mixer -lSDL_image \
++LDFLAGS =	`sdl-config --libs` -lSDL_mixer -lSDL_image -lm\
+ 
+ 
+ .CFILES	=	src/vorton.c \
+@@ -70,7 +70,7 @@
+ 
+ 
+ $(TARGET):	$(OBJS)
+-	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
++	$(CC) $(ARCH) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
+ 	$(STRIP) $(TARGET)
+ 
+ 

@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+patch -p1 < sound.patch
+
+# make sure Makefile.in is newer than Makefile.am so that it isn't regenerated
+sleep 2
+touch Makefile.in
+
+ub_compile \
+	--sharedstatedir="/var/lib"

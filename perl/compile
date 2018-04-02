@@ -1,0 +1,24 @@
+#!/bin/sh -eux
+
+export UB_MAKE_PROCS=2
+arch_opts=""
+if [ "$UB_ARCH" == "amd64" ];then
+arch_opts="-Dccdlflags='-fPIC'"
+fi
+sh Configure -des \
+	-Dprefix="/usr"              \
+	-Dvendorprefix="/usr"        \
+	-Dsiteprefix="/usr"          \
+	-Dman3ext="3pm"              \
+	-Dcf_by="UHU Linux"          \
+	-Dmyhostname="localhost"     \
+	-Dperladmin="root@localhost" \
+	-Ud_csh                      \
+	-Duseshrplib                 \
+	-Dusethreads                 \
+	-Duse64bitint                \
+	-Dusemorebits ${arch_opts}   \
+	-Darchname=i386-linux
+
+make
+make test-notty

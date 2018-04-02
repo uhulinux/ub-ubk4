@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+make DESTDIR="$UB_INSTALLDIR" install
+
+celdir="$UB_INSTALLDIR"/usr/
+demodir="$celdir"/share/games/allegrodemos
+skaterdir="$demodir"/skater
+shooterdir="$demodir"/shooter
+
+install -d -m 777 "$skaterdir" "$shooterdir"
+install -m 755 demos/skater/{skater,skater_agl} "$skaterdir"/
+install -m 644 demos/skater/*.dat "$skaterdir"/
+cp -r demos/skater/blender "$skaterdir"/
+install -m 755 demos/shooter/shooter "$shooterdir"/
+install -m 644 readme.txt demos/shooter/{*.dat,music.txt} "$shooterdir"/

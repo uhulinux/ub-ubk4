@@ -1,0 +1,22 @@
+diff -Naurd a/growisofs.c b/growisofs.c
+--- a/growisofs.c	2006-09-24 19:28:53.000000000 +0200
++++ b/growisofs.c	2007-10-16 10:24:54.000000000 +0200
+@@ -418,6 +418,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <assert.h>
++#include <limits.h>
+ #include "mp.h"
+ 
+ #if defined(__unix) || defined(__unix__)
+diff -Naurd a/transport.hxx b/transport.hxx
+--- a/transport.hxx	2006-09-23 13:29:07.000000000 +0200
++++ b/transport.hxx	2007-10-16 10:25:28.000000000 +0200
+@@ -16,6 +16,7 @@
+ #include <fcntl.h>
+ #include <poll.h>
+ #include <sys/time.h>
++#include <limits.h>
+ 
+ inline long getmsecs()
+ { struct timeval tv;

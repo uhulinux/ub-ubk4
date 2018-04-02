@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# ha még nincs libglx.so link, akkor csinálunk az általunk szállított fájlra mutatón
+if [ ! -L /usr/lib/xorg/modules/extensions/libglx.so ]; then
+ln -sf libglx.so.xorg /usr/lib/xorg/modules/extensions/libglx.so
+fi

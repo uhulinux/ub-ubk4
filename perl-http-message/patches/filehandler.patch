@@ -1,0 +1,25 @@
+--- libwww-perl-5.833.orig/lib/HTTP/Request/Common.pm.orig	2009-06-15 15:20:06.000000000 +0200
++++ libwww-perl-5.833/lib/HTTP/Request/Common.pm	2012-03-02 18:33:59.000000000 +0100
+@@ -146,7 +146,9 @@
+             }
+ 	    my $content = "";
+ 	    my $h = HTTP::Headers->new(@headers);
+-	    if ($file) {
++	    if ((ref($file) eq 'GLOB' || ref($file) && $file->isa('IO::Handle')) && $file->fileno) { # dealing with filehandles
++	    	$content = $file;
++	    } elsif ($file) {
+ 		open(my $fh, "<", $file) or Carp::croak("Can't open file $file: $!");
+ 		binmode($fh);
+ 		if ($DYNAMIC_FILE_UPLOAD) {
+@@ -177,7 +179,10 @@
+ 	    my $head = join($CRLF, "Content-Disposition: $disp",
+ 			           $h->as_string($CRLF),
+ 			           "");
+-	    if (ref $content) {
++	    if ((ref $content eq 'GLOB' || ref($file) && $file->isa('IO::Handle')) && $content->fileno) { # dealing with filehandles
++	    	push(@parts, [$head, $content]);
++		$fhparts++;
++	    } elsif (ref $content) {
+ 		push(@parts, [$head, $$content]);
+ 		$fhparts++;
+ 	    }

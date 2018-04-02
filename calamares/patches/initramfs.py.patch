@@ -1,0 +1,17 @@
+diff -Nur orig/src/modules/initramfs/main.py mod/src/modules/initramfs/main.py
+--- orig/src/modules/initramfs/main.py	2017-11-14 16:18:58.000000000 +0100
++++ mod/src/modules/initramfs/main.py	2017-11-24 21:46:22.705169540 +0100
+@@ -27,11 +27,10 @@
+ 
+     :return:
+     """
+-    return_code = target_env_call(["update-initramfs", "-k", "all", "-c",
+-                                   "-t"])
++    return_code = target_env_call(["mkinitrd-installedkernel"])
+ 
+     if return_code != 0:
+         return (
+-            "Failed to run update-initramfs on the target",
++            "Failed to run mkinitrd-installedkernel on the target",
+             "The exit code was {}".format(return_code)
+             )

@@ -1,0 +1,7 @@
+for i in $(sflist gtkpod libgpod | grep -E '^libgpod-([0-9.]+)$' | sed -r 's/^libgpod-([0-9.]+)$/\1/' | sort -Vr); do
+	ver=$(sflist gtkpod libgpod/libgpod-$i | splitver | sort -V | tail -n 1)
+	if [ -n "$ver" ]; then
+		echo $ver
+		exit
+	fi
+done

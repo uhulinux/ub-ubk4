@@ -1,0 +1,2 @@
+version=$(urllist ftp://ftp.lyx.org/pub/lyx/stable/ | splitver '^([0-9.]+)' | sort -V | tail -n 1)
+urllist ftp://ftp.lyx.org/pub/lyx/stable/"$version"/ | splitver '^lyx-([0-9.]+).tar.(gz|xz)$' | sort -V | tail -n 1

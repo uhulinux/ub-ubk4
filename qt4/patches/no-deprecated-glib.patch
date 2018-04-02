@@ -1,0 +1,98 @@
+diff -Naur orig/config.tests/unix/glib/glib.cpp patched/config.tests/unix/glib/glib.cpp
+--- orig/config.tests/unix/glib/glib.cpp	2013-06-07 07:16:41.000000000 +0200
++++ patched/config.tests/unix/glib/glib.cpp	2013-11-07 18:52:13.654496089 +0100
+@@ -48,8 +48,10 @@
+     GMainContext *context;
+     GSource *source;
+     GPollFD *pollfd;
++#if !GLIB_CHECK_VERSION(2, 32, 0)
+     if (!g_thread_supported())
+-        g_thread_init(NULL);
++        g_thread_init(NULL); // Deprecated since 2.32
++#endif
+     context = g_main_context_default();
+     source = g_source_new(0, 0);
+     g_source_add_poll(source, pollfd);
+diff -Naur orig/src/3rdparty/libgq/gconf/gconfitem.cpp patched/src/3rdparty/libgq/gconf/gconfitem.cpp
+--- orig/src/3rdparty/libgq/gconf/gconfitem.cpp	2013-06-07 07:16:58.000000000 +0200
++++ patched/src/3rdparty/libgq/gconf/gconfitem.cpp	2013-11-07 18:54:38.763835407 +0100
+@@ -53,8 +53,9 @@
+ 
+   if (initialized)
+     return client;
+-
+-  g_type_init ();
++#if !GLIB_CHECK_VERSION(2, 36, 0)
++  g_type_init (); // Deprecated since 2.36.0
++#endif
+   client = gconf_client_get_default();
+   initialized = true;
+     
+diff -Naur orig/src/3rdparty/webkit/Source/WebKit2/WebProcess/gtk/WebProcessMainGtk.cpp patched/src/3rdparty/webkit/Source/WebKit2/WebProcess/gtk/WebProcessMainGtk.cpp
+--- orig/src/3rdparty/webkit/Source/WebKit2/WebProcess/gtk/WebProcessMainGtk.cpp	2013-06-07 07:16:53.000000000 +0200
++++ patched/src/3rdparty/webkit/Source/WebKit2/WebProcess/gtk/WebProcessMainGtk.cpp	2013-11-07 18:55:08.432109228 +0100
+@@ -48,7 +48,9 @@
+ #endif
+ 
+     gtk_init(&argc, &argv);
+-    g_type_init();
++#if !GLIB_CHECK_VERSION(2, 36, 0)
++	g_type_init (); // Deprecated since 2.36.0
++#endif
+ 
+     JSC::initializeThreading();
+     WTF::initializeMainThread();
+diff -Naur orig/src/corelib/kernel/qeventdispatcher_glib.cpp patched/src/corelib/kernel/qeventdispatcher_glib.cpp
+--- orig/src/corelib/kernel/qeventdispatcher_glib.cpp	2013-06-07 07:16:52.000000000 +0200
++++ patched/src/corelib/kernel/qeventdispatcher_glib.cpp	2013-11-07 18:53:47.199359469 +0100
+@@ -298,8 +298,10 @@
+     if (qgetenv("QT_NO_THREADED_GLIB").isEmpty()) {
+         static int dummyValue = 0; // only used for its address
+         QMutexLocker locker(QMutexPool::instance()->get(&dummyValue));
++#if !GLIB_CHECK_VERSION(2, 32, 0)
+         if (!g_thread_supported())
+-            g_thread_init(NULL);
++            g_thread_init(NULL); // Deprecated since 2.32
++#endif
+     }
+ 
+     if (mainContext) {
+diff -Naur orig/src/gui/styles/qgtkstyle_p.cpp patched/src/gui/styles/qgtkstyle_p.cpp
+--- orig/src/gui/styles/qgtkstyle_p.cpp	2013-06-07 07:16:59.000000000 +0200
++++ patched/src/gui/styles/qgtkstyle_p.cpp	2013-11-07 18:54:24.923707654 +0100
+@@ -616,7 +616,9 @@
+ {
+     QString retVal = fallback;
+     if (resolveGConf()) {
+-        g_type_init();
++#if !GLIB_CHECK_VERSION(2, 36, 0)
++  		g_type_init (); // Deprecated since 2.36.0
++#endif
+         GConfClient* client = gconf_client_get_default();
+         GError *err = 0;
+         char *str = gconf_client_get_string(client, qPrintable(value), &err);
+@@ -635,7 +637,9 @@
+ {
+     bool retVal = fallback;
+     if (resolveGConf()) {
+-        g_type_init();
++#if !GLIB_CHECK_VERSION(2, 36, 0)
++  		g_type_init (); // Deprecated since 2.36.0
++#endif
+         GConfClient* client = gconf_client_get_default();
+         GError *err = 0;
+         bool result = gconf_client_get_bool(client, qPrintable(key), &err);
+diff -Naur orig/src/plugins/bearer/icd/proxyconf.cpp patched/src/plugins/bearer/icd/proxyconf.cpp
+--- orig/src/plugins/bearer/icd/proxyconf.cpp	2013-06-07 07:17:00.000000000 +0200
++++ patched/src/plugins/bearer/icd/proxyconf.cpp	2013-11-07 18:54:51.851956202 +0100
+@@ -374,7 +374,9 @@
+ ProxyConf::ProxyConf()
+     : d_ptr(new ProxyConfPrivate)
+ {
+-    g_type_init();
++#if !GLIB_CHECK_VERSION(2, 36, 0)
++	g_type_init (); // Deprecated since 2.36.0
++#endif
+     d_ptr->prefix = CONF_PROXY;
+     d_ptr->http_prefix = HTTP_PROXY;
+ }

@@ -1,0 +1,11 @@
+diff -up telepathy-gabble-0.17.3/lib/ext/wocky/examples/Makefile.in.build telepathy-gabble-0.17.3/lib/ext/wocky/examples/Makefile.in
+--- telepathy-gabble-0.17.3/lib/ext/wocky/examples/Makefile.in.build	2013-03-01 17:28:41.000000000 +0100
++++ telepathy-gabble-0.17.3/lib/ext/wocky/examples/Makefile.in	2013-03-07 10:15:05.840910962 +0100
+@@ -306,6 +306,7 @@ wocky_unregister_SOURCES = unregister.c
+ wocky_unregister_DEPENDENCIES = $(top_builddir)/wocky/libwocky.la
+ LDADD = \
+     @GLIB_LIBS@ \
++    @TLS_LIBS@ \
+     $(top_builddir)/wocky/libwocky.la
+ 
+ AM_CFLAGS = \

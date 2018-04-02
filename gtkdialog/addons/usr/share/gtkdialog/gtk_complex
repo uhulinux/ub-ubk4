@@ -1,0 +1,192 @@
+#! /bin/bash
+
+export STYLE_WINDOW='
+<hbox>
+<vbox>
+  <frame Paper size and orientation>
+    <hbox>
+       <text><label>Size:</label></text>
+       <combobox>
+         <item>Letter</item>
+         <item>A4</item>
+         <item>B5</item>
+         <variable>SIZE</variable>
+       </combobox>
+    </hbox>
+    <radiobutton>
+      <label>Portrait</label>
+    </radiobutton>
+    <radiobutton>
+      <label>Landscape</label>
+    </radiobutton>
+  </frame>
+  <frame Headers and footers>
+    <checkbox><label>Print header</label>
+              <default>true</default></checkbox>
+
+    <hbox><text><label>Left header:</label></text>
+          <entry></entry>
+    </hbox>
+    <hbox><text><label>Center header:</label></text>
+          <entry><input>echo $HOME</input></entry>
+    </hbox>
+    <hbox><text><label>Right header:</label></text>
+          <entry></entry>
+    </hbox>
+    <checkbox><label>Print footer</label>
+              <default>true</default></checkbox>
+    <hbox>
+          <text>
+            <label>Left footer:</label>
+            <visible>enabled</visible>
+          </text>
+          <entry>
+            <visible>enabled</visible>
+            <variable>LF</variable>
+          </entry>
+    </hbox>
+    <hbox><text><label>Center footer:</label></text>
+          <entry></entry>
+    </hbox>
+    <hbox><text><label>Right footer:</label></text>
+          <entry></entry>
+    </hbox>
+  </frame>
+</vbox>
+  <vbox>
+  <frame Options>
+    <vbox>
+      <checkbox><label>Enable highlight</label></checkbox>
+      <checkbox><label>Heavy highlight</label></checkbox>
+      <checkbox><label>Strip comments</label></checkbox>
+      <checkbox><label>Interpret tab, bf, ff characters</label></checkbox>
+      <checkbox><label>Number all lines</label></checkbox>
+      <checkbox><label>Print borders</label></checkbox>
+      <checkbox><label>Cut long lines</label></checkbox>
+      <checkbox><label>Use watermark:</label></checkbox>
+      <entry></entry>
+      <checkbox><label>Duplex mode</label></checkbox>
+      <checkbox><label>Use special encoding:</label></checkbox>
+      <entry></entry>
+    </vbox>
+  </frame>
+
+  <hbox>
+    <button ok>
+    </button>
+    <button cancel>
+    </button>
+  </hbox>
+
+ </vbox>
+</hbox>
+'
+
+export TYPE_DIALOG='
+<vbox>
+  <frame Filetype>
+  <hbox>
+    <pixmap>
+      <input file>help.png</input>
+    </pixmap>
+    <text>
+      <label>
+"You did not select a filename as
+input file."
+      </label>
+    </text>
+  </hbox>
+  </frame>
+  <button ok></button>
+</vbox>
+'
+
+
+export DIALOG='
+<vbox>
+  <frame Description>
+  <hbox>
+  <pixmap>
+    <input file>help.png</input>
+  </pixmap>
+  <text><label>
+"a2ps: convert any file to Postscript format
+and optionally print it on a locally connected 
+or remote printer."
+  </label></text>
+  </hbox>
+  </frame>
+  <frame Source file>
+  <hbox>
+    <entry>
+      <variable>FILE</variable>
+    </entry>
+    <button>
+      <input file>fileopen.xpm</input>
+      <action fileselection>FILE</action>
+    </button>
+  </hbox>
+  </frame>
+  <frame Destination>
+    <radiobutton>
+      <label>Print on the choosen printer</label>
+    </radiobutton>
+    <table>
+      <label>Name|Location</label>
+      <item>lpd0|local</item>
+      <item>lJet|remote: gabor.szk</item>
+      <variable>PRINTER</variable>
+    </table>
+    <radiobutton>
+      <label>Print to file</label>
+    </radiobutton>
+    <hbox>
+      <entry>
+        <variable>OUTFILE</variable> 
+        <default>output.ps</default>
+        <visible>disabled</visible>
+      </entry>
+      <button>
+        <variable>BROWSFILE</variable>
+        <label>Browse</label>
+        <input file>fileopen.xpm</input>
+        <action fileselection>OUTFILE</action>
+        <visible>disabled</visible>
+      </button>
+    </hbox>
+  </frame>
+  <frame Style>
+   <hbox>
+    <combobox>
+      <item>Default style</item>
+      <variable>STYLE</variable>
+    </combobox>
+    <button>
+      <label>Custom...</label>
+      <action launchwindow>STYLE_WINDOW</action>
+    </button>
+   </hbox>
+  </frame>
+  <hbox>
+    <button ok></button>
+    <button cancel></button>
+    <button help></button>
+  </hbox>
+</vbox>
+'
+
+gtkdialog -d --program DIALOG
+exit 
+
+I=$IFS; IFS=""
+for STATEMENTS in  $(gtkdialog -d --program DIALOG); do
+  eval $STATEMENTS
+done
+IFS=$I
+
+if [ "$EXIT" = "OK" ]; then 
+  echo "You entered: $ENTRY."
+else
+  echo "You pressed the Cancel button."
+fi
+

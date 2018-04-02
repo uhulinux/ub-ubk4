@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+if [ "$1" = "texinfo" ]; then
+	rm -f /usr/share/info/dir
+else
+	for info in $(grep '^/usr/share/info/.*\.info$' /var/lib/dpkg/info/"$1".list); do
+		if grep -qx START-INFO-DIR-ENTRY "$info"; then
+			inf="${info##*/}"
+			inf="${inf%.info}"
+			install-info --delete "$inf" /usr/share/info/dir || true
+		fi
+	done
+fi

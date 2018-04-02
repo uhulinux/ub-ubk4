@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+./bootstrap.sh
+
+sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+ub_compile \
+	--disable-samplerate \
+	--disable-solaris \
+	--disable-waveout \
+	--disable-rpath \
+    --disable-default-build-tests \
+	--enable-force-preopen \
+	--with-speex \
+	--with-udev-rules-dir=/usr/lib/udev/rules.d/

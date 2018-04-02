@@ -1,0 +1,57 @@
+diff -Naur orig/policy/org.freedesktop.udisks.policy patched/policy/org.freedesktop.udisks.policy
+--- orig/policy/org.freedesktop.udisks.policy	2014-03-10 10:04:49.000000000 +0100
++++ patched/policy/org.freedesktop.udisks.policy	2014-08-22 00:48:08.229487791 +0200
+@@ -13,8 +13,8 @@
+     <message>Authentication is required to mount the device</message>
+     <message xml:lang="da">Autorisering er påkrævet for at montere et fil system</message>
+     <defaults>
+-      <allow_any>no</allow_any>
+-      <allow_inactive>no</allow_inactive>
++      <allow_any>yes</allow_any>
++      <allow_inactive>yes</allow_inactive>
+       <allow_active>yes</allow_active>
+     </defaults>
+   </action>
+@@ -25,8 +25,8 @@
+     <message>Authentication is required to mount the device</message>
+     <message xml:lang="da">Autorisering er påkrævet for at montere et fil system</message>
+     <defaults>
+-      <allow_any>no</allow_any>
+-      <allow_inactive>no</allow_inactive>
++      <allow_any>auth_admin_keep</allow_any>
++      <allow_inactive>auth_admin_keep</allow_inactive>
+       <allow_active>auth_admin_keep</allow_active>
+     </defaults>
+   </action>
+@@ -252,4 +252,4 @@
+     </defaults>
+   </action>
+ 
+-</policyconfig>
+\ No newline at end of file
++</policyconfig>
+diff -Naur orig/policy/org.freedesktop.udisks.policy.in patched/policy/org.freedesktop.udisks.policy.in
+--- orig/policy/org.freedesktop.udisks.policy.in	2014-03-10 09:57:48.000000000 +0100
++++ patched/policy/org.freedesktop.udisks.policy.in	2014-08-22 00:48:37.553633202 +0200
+@@ -13,8 +13,8 @@
+     <_description>Mount a device</_description>
+     <_message>Authentication is required to mount the device</_message>
+     <defaults>
+-      <allow_any>no</allow_any>
+-      <allow_inactive>no</allow_inactive>
++      <allow_any>yes</allow_any>
++      <allow_inactive>yes</allow_inactive>
+       <allow_active>yes</allow_active>
+     </defaults>
+   </action>
+@@ -23,8 +23,8 @@
+     <_description>Mount a system-internal device</_description>
+     <_message>Authentication is required to mount the device</_message>
+     <defaults>
+-      <allow_any>no</allow_any>
+-      <allow_inactive>no</allow_inactive>
++      <allow_any>auth_admin_keep</allow_any>
++      <allow_inactive>auth_admin_keep</allow_inactive>
+       <allow_active>auth_admin_keep</allow_active>
+     </defaults>
+   </action>

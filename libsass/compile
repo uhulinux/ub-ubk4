@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_compile
+
+ub_install
+
+cd sassc
+autoreconf -vif
+ub_compile --with-libsass=$UB_INSTALLDIR/usr

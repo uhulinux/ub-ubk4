@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+touch ChangeLog
+autoreconf -vif
+export CFLAGS="-std=gnu89"
+ub_compile \
+	--enable-static

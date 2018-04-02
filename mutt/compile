@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+chmod +x txt2c.sh
+
+ub_compile \
+	--with-curses \
+	--enable-pop \
+	--enable-imap \
+	--enable-smtp \
+	--with-sasl \
+	--with-gss \
+	--with-ssl \
+	--enable-mailtool \
+	--enable-hcache \
+	--without-gdbm \
+	--with-bdb=/usr \
+	--with-docdir=/usr/share/doc/Packages/mutt

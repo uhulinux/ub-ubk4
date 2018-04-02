@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm -Rf "$UB_INSTALLDIR"/usr/{include,lib/pkgconfig}
+rm -Rf "$UB_INSTALLDIR"/usr/lib/*.la

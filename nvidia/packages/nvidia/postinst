@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# ha valaki szabályos libglx.so fájlt rakott, akkor elmentjük
+if [ ! -L /usr/lib/xorg/modules/extensions/libglx.so ] && [ -f /usr/lib/xorg/modules/extensions/libglx.so ]; then
+mv -f /usr/lib/xorg/modules/extensions/libglx.so /usr/lib/xorg/modules/extensions/libglx.so.xorg
+fi
+# linket rakunk az nvidia libglx.so -ra
+ln -sf /usr/lib/nvidia/libglx.so.* /usr/lib/xorg/modules/extensions/libglx.so
+#
+ldconfig

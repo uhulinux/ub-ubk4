@@ -1,0 +1,45 @@
+.\"
+.\" Copyright (c) DFN-CERT, Univ. of Hamburg 1994
+.\"
+.\" Univ. Hamburg, Dept. of Computer Science
+.\" DFN-CERT
+.\" Vogt-Koelln-Strasse 30
+.\" 22527 Hamburg
+.\" Germany
+.\"
+.\" @(#) $Header: chkwtmp.1,v 
+.TH CHKWTMP 1  "Thu Oct 12 1994"
+.AT 3
+.SH NAME
+chkwtmp \- check wtmp-file for deleted entries
+.SH SYNOPSIS
+.na
+.B chkwtmp
+.ad
+.SH DESCRIPTION
+.LP
+\fIChkwtmp\fP examines the file \fI/var/adm/wtmp\fP for entries with no
+information (contaning only null-bytes). If such entries are found the
+program prints the time window for the original entry. This is done
+by displaying the timestamps of the wtmp-entry before and after the 
+deleted entry.
+
+To run chkwtmp you need read permission on the file /var/adm/wtmp.
+Normally this file is world-readable and no special privileges are 
+required to run the checker. 
+..
+.HD
+.SH "FILES"
+.PD 0
+.TP 20
+.B /var/adm/wtmp         
+login data base
+.PD
+.SH "SEE ALSO"
+wtmp(4), who(1)
+.SH "LIMITATIONS"
+An entry is recognized as overwritten if the time-information has been
+overwritten with null-bytes.
+
+This program was designed to run on SunOS 4.x systems only. On other 
+systems the output is undefined...

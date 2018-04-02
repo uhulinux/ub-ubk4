@@ -1,0 +1,87 @@
+#!/bin/bash
+
+umask 0022
+
+shopt -s nullglob dotglob
+
+retval=0
+
+SPOOLDIR=/var/spool/uhu-cron
+PIDFILE=/var/run/uhu-cron.pid
+
+LOG="logger -p cron.info -t uhu-cron"
+
+if [ -f "$PIDFILE" ]; then
+	if ps "$(cat "$PIDFILE")" | grep -q uhu-cron; then
+		# Még fut az előző uhu-cron, ezért szép csendben kilépünk.
+		exit 0
+	fi
+fi
+
+rm -rf "$PIDFILE"
+echo $$ >"$PIDFILE"
+trap 'rm "$PIDFILE"' EXIT
+
+run_script ()
+{
+	local dir="$1"
+	local file="$2"
+	local seconds="$3"
+	local script="/etc/cron.${dir}/${file}"
+	local lastrunfile="${SPOOLDIR}/${dir}_${file}"
+	local lastrun
+	local ret
+	if [ -f "$lastrunfile" ]; then
+		lastrun="$(date -r "$lastrunfile" +%s)"
+		if [ $((lastrun)) -ge $((now-seconds)) -a \
+		     $((lastrun)) -le $((now)) ]; then
+			return
+		fi
+	fi
+	$LOG "$script indítása"
+	"$script"
+	ret=$?
+	if [ $ret = 0 ]; then
+		$LOG "$script sikeresen befejeződött"
+	else
+		$LOG "$script ezzel a hibakóddal lépett ki: $ret"
+		retval=1
+		
+	fi
+	touch "$lastrunfile"
+	now="$(date +%s)"
+}
+
+run_directory ()
+{
+	local dir="$1"
+	local seconds="$2"
+	local directory="/etc/cron.${dir}"
+	if [ ! -d "$directory" ]; then
+		return
+	fi
+	for file in "$directory"/*; do
+		if [ ! -r "$file" -o ! -x "$file" ]; then
+			continue
+		fi
+		file="${file##*/}"
+		case "$file" in
+			*~ | \#* | *.bak | *.swp | *.swap | *,v)
+				continue;;
+			*.skip | *.txt | README*)
+				continue;;
+			*.orig | *.rej | *.dpkg* | *.rpm*)
+				continue;;
+		esac
+		run_script "$dir" "$file" "$seconds"
+	done
+}
+
+now="$(date +%s)"
+
+run_directory hourly  $((60*60))
+run_directory daily   $((60*60*24))
+run_directory weekly  $((60*60*24*7))
+run_directory monthly $((60*60*24*30))
+
+exit $retval

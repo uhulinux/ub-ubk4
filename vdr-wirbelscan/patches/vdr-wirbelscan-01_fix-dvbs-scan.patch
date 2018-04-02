@@ -1,0 +1,12 @@
+diff -Nur orig/scanner.c mod/scanner.c
+--- orig/scanner.c	2015-01-12 21:06:10.000000000 +0100
++++ mod/scanner.c	2016-08-02 16:45:43.935090039 +0200
+@@ -738,7 +738,7 @@
+                break;
+              case SCAN_SATELLITE:
+                aChannel->SetTransponderData(cSource::FromString(sat_list[this_channellist].source_id),
+-                                          sat_list[this_channellist].items[0].intermediate_frequency,
++                                          sat_list[this_channellist].items[channel].intermediate_frequency,
+                                           sat_list[this_channellist].items[channel].symbol_rate,
+                                           *ParamsToString('S',
+                                           GetVDRPolarizationFromDVB(sat_list[this_channellist].items[0].polarization),

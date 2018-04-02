@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+UB_MAKEINSTALL_USE_DESTDIR=yes \
+ub_install
+
+install -m 644 tcsh.man "$UB_INSTALLDIR"/usr/share/man/man1/tcsh.1
+
+ln -s tcsh "$UB_INSTALLDIR"/bin/csh

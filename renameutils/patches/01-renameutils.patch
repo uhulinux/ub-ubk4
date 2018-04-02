@@ -1,0 +1,12 @@
+diff -Naurd a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2012-04-23 13:24:10.000000000 +0200
++++ b/src/Makefile.in	2012-05-29 20:18:27.000000000 +0200
+@@ -1577,7 +1577,7 @@
+ 	@[ -f icp ] || (echo $(LN_S) icmd icp ; $(LN_S) icmd icp)
+ 
+ install-exec-local:
+-	$(mkdir_p) $(DESTDIR)($bindir)
++	$(mkdir_p) $(DESTDIR)$(bindir)
+ 	@[ -f $(DESTDIR)$(bindir)/qmv ] || (echo $(LN_S) qcmd $(DESTDIR)$(bindir)/qmv ; $(LN_S) qcmd $(DESTDIR)$(bindir)/qmv)
+ 	@[ -f $(DESTDIR)$(bindir)/qcp ] || (echo $(LN_S) qcmd $(DESTDIR)$(bindir)/qcp ; $(LN_S) qcmd $(DESTDIR)$(bindir)/qcp)
+ 	@[ -f $(DESTDIR)$(bindir)/imv ] || (echo $(LN_S) icmd $(DESTDIR)$(bindir)/imv ; $(LN_S) icmd $(DESTDIR)$(bindir)/imv)

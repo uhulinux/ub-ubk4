@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+cd luasocket
+make DESTDIR="$UB_INSTALLDIR" LUAV=5.1 prefix=/usr install-unix
+
+cd ../luasocket52
+make DESTDIR="$UB_INSTALLDIR" LUAV=5.2 prefix=/usr install-unix
+
+cd ../luasocket53
+make DESTDIR="$UB_INSTALLDIR" LUAV=5.3 prefix=/usr install-unix
+cd ..

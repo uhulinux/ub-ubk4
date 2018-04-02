@@ -1,0 +1,2 @@
+minor=$(urllist http://sylpheed.sraoss.jp/sylpheed/ | grep -E '^v([0-9.]+)$' | sort -V | tail -n 1)
+u2d http://sylpheed.sraoss.jp/sylpheed/"$minor" sylpheed-

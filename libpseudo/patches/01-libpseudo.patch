@@ -1,0 +1,24 @@
+diff -Naurd orig/Makefile mod/Makefile
+--- orig/Makefile	2009-03-17 21:24:50.000000000 +0100
++++ mod/Makefile	2009-10-24 13:32:25.000000000 +0200
+@@ -1,6 +1,6 @@
+ CFLAGS = -Wall 
+ DEFS = -D_REENTRANT
+-prefix = /usr/local
++prefix = /usr
+ libdir = ${prefix}/lib
+ includedir = ${prefix}/include
+ 
+@@ -19,9 +19,8 @@
+ 	rm -f *.so
+ 
+ install:
+-	cp -f pseudo.h $(includedir)
+-	cp -f libpseudo.so $(libdir)
+-	chmod 755 /usr/local/lib/libpseudo.so
+-	ldconfig	
++	cp -f pseudo.h $(DESTDIR)$(includedir)
++	cp -f libpseudo.so $(DESTDIR)$(libdir)
++	chmod 755 $(DESTDIR)$(libdir)/libpseudo.so
+ 	
+ 

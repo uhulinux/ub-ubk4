@@ -1,0 +1,188 @@
+diff -Naur orig/qstat.c mod/qstat.c
+--- orig/qstat.c	2006-10-28 14:37:18.000000000 +0200
++++ mod/qstat.c	2016-03-13 15:03:31.419189521 +0100
+@@ -2576,7 +2576,7 @@
+ unsigned int swap_long( void *);
+ unsigned short swap_short( void *);
+ float swap_float_from_little( void *f);
+-char * strndup( const char *string, size_t len);
++char * strndupz0r( const char *string, size_t len);
+ #define FORCE 1
+ 
+ /* Print an error message and the program usage notes
+@@ -6938,7 +6938,7 @@
+ 
+     rule= (struct rule *) malloc( sizeof( struct rule));
+     rule->name= strdup(key);
+-    rule->value= strndup(value,len);
++    rule->value= strndupz0r(value,len);
+     rule->next= NULL;
+     *server->last_rule= rule;
+     server->last_rule= & rule->next;
+@@ -7060,7 +7060,7 @@
+ 	}
+ 
+     *next = pt+len;
+-    return strndup( pt, len );
++    return strndupz0r( pt, len );
+ }
+ 
+ STATIC char *
+@@ -7077,7 +7077,7 @@
+ 	return NULL;
+ 
+     *next= pkt+len;
+-    return strndup( pkt, len);
++    return strndupz0r( pkt, len);
+ }
+ 
+ STATIC int
+@@ -7952,7 +7952,7 @@
+     add_nrule( server, "version", (char*)pkt+1, len);
+     pkt+= len+1;
+     len= *pkt;		/* server name */
+-    server->server_name= strndup( (char*)pkt+1, len);
++    server->server_name= strndupz0r( (char*)pkt+1, len);
+     pkt+= len+1;
+     add_rule( server, "dedicated", *pkt?"1":"0", NO_FLAGS);
+     pkt++;		/* flag: dedicated server */
+@@ -7975,7 +7975,7 @@
+     pkt+= len+1;
+ 
+     len= *pkt;		/* Mission (map) */
+-    server->map_name= strndup( (char*)pkt+1, len);
++    server->map_name= strndupz0r( (char*)pkt+1, len);
+     pkt+= len+1;
+ 
+     len= *pkt;		/* description (contains Admin: and Email: ) */
+@@ -8005,7 +8005,7 @@
+ 	    teams[t]->number= TRIBES_TEAM;
+ 	    teams[t]->team= t;
+ 	    len= *pkt;		/* team name */
+-	    teams[t]->name= strndup( (char*)pkt+1, len);
++	    teams[t]->name= strndupz0r( (char*)pkt+1, len);
+ if ( tribes_debug) printf( "team#0 <%.*s>\n", len, pkt+1);
+ 	    pkt+= len+1;
+ 
+@@ -8050,7 +8050,7 @@
+ 	player->flags |= PLAYER_FLAG_DO_NOT_FREE_TEAM;
+ 	player->ping= ping;
+ 	player->packet_loss= packet_loss;
+-	player->name= strndup( (char*)pkt+1, len);
++	player->name= strndupz0r( (char*)pkt+1, len);
+ if ( tribes_debug) 	printf( "player#%d, name %.*s\n", pnum, len, pkt+1);
+ 	pkt+= len+1;
+ 	len= *pkt;
+@@ -8096,7 +8096,7 @@
+ 	    char *n= name;
+ 	    for ( ; isprint(*n); n++)
+ 		;
+-	    player->tribe_tag= strndup( name, n-name);
++	    player->tribe_tag= strndupz0r( name, n-name);
+ 	    name= n;
+ 	}
+ 	if ( !*name)
+@@ -8159,7 +8159,7 @@
+ 	add_rule(server,"build_version",str, NO_FLAGS);
+ 	pkt+= 4;
+ 
+-	server->server_name= strndup( pkt+1, *(unsigned char*)(pkt));
++	server->server_name= strndupz0r( pkt+1, *(unsigned char*)(pkt));
+ 
+ 	/* Always send the player request because the ping packet
+ 	 * contains very little information */
+@@ -8178,11 +8178,11 @@
+ 	    return;
+ 	}
+     add_nrule( server, server->type->game_rule, pkt+1, *(unsigned char *)pkt);
+-    server->game= strndup( pkt+1, *(unsigned char *)pkt);
++    server->game= strndupz0r( pkt+1, *(unsigned char *)pkt);
+     pkt+= *pkt + 1;
+     add_nrule( server, "mission", pkt+1, *(unsigned char *)pkt);
+     pkt+= *pkt + 1;
+-    server->map_name= strndup( pkt+1, *(unsigned char *)pkt);
++    server->map_name= strndupz0r( pkt+1, *(unsigned char *)pkt);
+     pkt+= *pkt + 1;
+ 
+     status= *(unsigned char *)pkt;
+@@ -8223,7 +8223,7 @@
+ 
+     if ( strcmp( server->server_name, "VER3") == 0)  {
+ 	free( server->server_name);
+-	server->server_name= strndup( pkt+1, *(unsigned char*)pkt);
++	server->server_name= strndupz0r( pkt+1, *(unsigned char*)pkt);
+     }
+     else
+ 	add_nrule( server, "info", pkt+1, *(unsigned char*)pkt);
+@@ -8255,7 +8255,7 @@
+ 	/* team name */
+ 	term= strchr( pkt, 0x9);
+ 	if ( !term) { n_teams= t; goto info_done; }
+-	teams[t]->name= strndup( pkt, term-pkt);
++	teams[t]->name= strndupz0r( pkt, term-pkt);
+ 	pkt= term+1;
+ 	term= strchr( pkt, 0xa);
+ 	if ( !term) { n_teams= t; goto info_done; }
+@@ -8280,7 +8280,7 @@
+ 	    free( player);
+ 	    break;
+ 	}
+-	player->name= strndup( pkt, term-pkt);
++	player->name= strndupz0r( pkt, term-pkt);
+ 	get_tribes2_player_type( player);
+ 	pkt= term+1;
+ 	pkt++;		/* skip 0x9 */
+@@ -8470,7 +8470,7 @@
+ 		cleanup_qserver(server, 1);
+ 		return;
+ 	};
+-	server->server_name = strndup( pkt, iLen);
++	server->server_name = strndupz0r( pkt, iLen);
+ 	pkt += iLen;
+ 
+ 	iLen = swap_long_from_little(pkt);
+@@ -8481,7 +8481,7 @@
+ 		cleanup_qserver(server, 1);
+ 		return;
+ 	};
+-	server->map_name = strndup( pkt, iLen);
++	server->map_name = strndupz0r( pkt, iLen);
+ 	pkt += iLen;
+ 
+ 	iLen = swap_long_from_little(pkt);
+@@ -8495,7 +8495,7 @@
+ 	/* mission does not make sense unless a coop game type.  Since
+ 	   we dont know that now, we will save the mission and set
+ 	   the rule and free memory below when we know game type */
+-	lpszMission = strndup( pkt, iLen);
++	lpszMission = strndupz0r( pkt, iLen);
+ 	pkt += iLen;
+ 
+ 
+@@ -8559,7 +8559,7 @@
+ 			cleanup_qserver(server, 1);
+ 			return;
+ 		};
+-		player->name= strndup( pkt, iLen);
++		player->name= strndupz0r( pkt, iLen);
+ 		pkt += iLen;  /* player name */
+ 		player->team= i; // tag so we can find this record when we have player dat.
+ 		player->team_name= "Unassigned";
+@@ -8592,7 +8592,7 @@
+ 		cleanup_qserver(server, 1);
+ 		return;
+ 	};
+-	server->game= strndup( pkt, iLen);
++	server->game= strndupz0r( pkt, iLen);
+ 
+ 	for (i=0;i<(int)strlen(server->game)-5;i++)  // clean the "/mods/" part from every entry
+ 	{
+@@ -10524,7 +10524,7 @@
+  */
+ 
+ char *
+-strndup( const char *string, size_t len)
++strndupz0r( const char *string, size_t len)
+ {
+     char *result;
+     result= (char*) malloc( len+1);

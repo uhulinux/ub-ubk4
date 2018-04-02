@@ -1,0 +1,21 @@
+diff -urN procmail-3.22.orig/Makefile procmail-3.22/Makefile
+--- procmail-3.22.orig/Makefile	2001-09-11 06:53:09.000000000 +0200
++++ procmail-3.22/Makefile	2003-02-21 20:37:39.000000000 +0100
+@@ -53,7 +53,7 @@
+ 
+ # Makefile.0 - mark, don't (re)move this, a sed script needs it
+ 
+-LOCKINGTEST=__defaults__
++#LOCKINGTEST=__defaults__
+ 
+ #LOCKINGTEST=/tmp .	# Uncomment and add any directories you see fit.
+ #			If LOCKINGTEST is defined, autoconf will NOT
+@@ -65,7 +65,7 @@
+ # Only edit below this line if you *think* you know what you are doing #
+ ########################################################################
+ 
+-#LOCKINGTEST=100	# Uncomment (and change) if you think you know
++LOCKINGTEST=111		# Uncomment (and change) if you think you know
+ #			it better than the autoconf lockingtests.
+ #			This will cause the lockingtests to be hotwired.
+ #			100	to enable fcntl()

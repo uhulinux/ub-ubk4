@@ -1,0 +1,1 @@
+cldr-emoji-annotation

@@ -1,0 +1,2 @@
+geturl https://sourceforge.net/projects/mcj/files/ | grep tar.xz | grep  fig2dev | sed s/xz.*/xz/g | sed s%.*/fig2dev-%%g | splitver '^([0-9.]+).tar.xz$' | sort -V | tail -n 1
+

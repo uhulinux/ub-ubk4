@@ -1,0 +1,44 @@
+diff -Naur orig/packaging/systemd/nmb.service patched/packaging/systemd/nmb.service
+--- orig/packaging/systemd/nmb.service	2014-06-03 10:05:52.000000000 +0200
++++ patched/packaging/systemd/nmb.service	2015-08-02 21:26:17.474608481 +0200
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Samba NMB Daemon
+-After=syslog.target network.target
++After=network.target
+ 
+ [Service]
+ Type=notify
+diff -Naur orig/packaging/systemd/samba.service patched/packaging/systemd/samba.service
+--- orig/packaging/systemd/samba.service	2014-06-03 10:05:52.000000000 +0200
++++ patched/packaging/systemd/samba.service	2015-08-02 21:26:34.130691074 +0200
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Samba AD Daemon
+-After=syslog.target network.target
++After=network.target
+ 
+ [Service]
+ Type=notify
+diff -Naur orig/packaging/systemd/smb.service patched/packaging/systemd/smb.service
+--- orig/packaging/systemd/smb.service	2014-06-03 10:05:52.000000000 +0200
++++ patched/packaging/systemd/smb.service	2015-08-02 21:26:56.114800087 +0200
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Samba SMB Daemon
+-After=syslog.target network.target nmb.service winbind.service
++After=network.target nmb.service winbind.service
+ 
+ [Service]
+ Type=notify
+diff -Naur orig/packaging/systemd/winbind.service patched/packaging/systemd/winbind.service
+--- orig/packaging/systemd/winbind.service	2014-06-03 10:05:52.000000000 +0200
++++ patched/packaging/systemd/winbind.service	2015-08-02 21:27:04.874843526 +0200
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Samba Winbind Daemon
+-After=syslog.target network.target nmb.service
++After=network.target nmb.service
+ 
+ [Service]
+ Type=notify

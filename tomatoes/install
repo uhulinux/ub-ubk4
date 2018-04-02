@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/games/tomatoes
+mkdir -p "$UB_INSTALLDIR"/usr/share/pixmaps
+mkdir -p "$UB_INSTALLDIR"/usr/bin
+cp -r music "$UB_INSTALLDIR"/usr/share/games/tomatoes/
+cp tomatoes.mpk config.cfg "$UB_INSTALLDIR"/usr/share/games/tomatoes/
+cp icon.png "$UB_INSTALLDIR"/usr/share/pixmaps/tomatoes.png
+cp tomatoes "$UB_INSTALLDIR"/usr/bin/
+touch "$UB_INSTALLDIR"/usr/share/games/tomatoes/hiscore.lst

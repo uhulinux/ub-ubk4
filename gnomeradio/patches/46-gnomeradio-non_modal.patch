@@ -1,0 +1,93 @@
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -61,6 +61,9 @@ gboolean main_visible;
+ static GtkWidget *drawing_area;
+ static GdkPixbuf *digits, *signal_s, *stereo;
+ static GtkWidget *freq_scale;
++static GtkWidget *scfw_button, *scbw_button, *stfw_button, *stbw_button;
++static GtkWidget *rec_button;
++static GtkWidget *prefs_button;
+ 
+ static int timeout_id, bp_timeout_id = -1, bp_timeout_steps = 0;
+ 
+@@ -719,6 +722,25 @@ void tray_icon_items_set_sensible(gboole
+ 	gtk_widget_set_sensitive(menuitem, sensible);
+ }
+ 
++void recording_set_sensible(gboolean sensible)
++{
++	/* Disable the presets */
++	gtk_widget_set_sensitive(preset_combo, sensible);
++
++	/* Disable the scan button */
++	gtk_widget_set_sensitive(freq_scale, sensible);
++	gtk_widget_set_sensitive(scfw_button, sensible);
++	gtk_widget_set_sensitive(scbw_button, sensible);
++	gtk_widget_set_sensitive(stfw_button, sensible);
++	gtk_widget_set_sensitive(stbw_button, sensible);
++
++	/* Disable the record button */
++	gtk_widget_set_sensitive(rec_button, sensible);
++
++	/* Disable the preferences button */
++	gtk_widget_set_sensitive(prefs_button, sensible);
++}
++
+ static int start_recording(const gchar *destination, const char* station, const char* time)
+ {
+ 	Recording* recording;
+@@ -747,6 +769,7 @@ static int start_recording(const gchar *
+ 		return -1;
+ 	
+ 	tray_icon_items_set_sensible(FALSE);
++	recording_set_sensible(FALSE);
+ 	
+ 	recording->station = g_strdup(station);
+ 	record_status_window(recording);
+@@ -931,8 +954,8 @@ void toggle_mainwindow_visibility(GtkWid
+ GtkWidget* gnome_radio_gui(void)
+ {
+ 	GtkWidget *app;
+-	GtkWidget *prefs_button, *quit_button, *scfw_button, *scbw_button;
+-	GtkWidget *stfw_button, *stbw_button, *about_button, *rec_button;
++	GtkWidget *quit_button;
++	GtkWidget *about_button;
+ 	GtkWidget *prefs_pixmap, *rec_pixmap, *quit_pixmap, *scfw_pixmap, *scbw_pixmap;
+ 	GtkWidget *stfw_pixmap, *stbw_pixmap, *about_pixmap;
+ 	GtkWidget *freq_up_pixmap, *freq_down_pixmap;
+Index: gnomeradio-1.8/src/gui.h
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.h
++++ gnomeradio-1.8/src/gui.h
+@@ -75,6 +75,8 @@ void tray_icon_items_set_sensible(gboole
+ gboolean
+ key_press_event_cb(GtkWidget *app, GdkEventKey *event, gpointer data);
+ 
++void recording_set_sensible(gboolean sensible);
++
+ void display_help_cb(char *topic);
+ 
+ void change_preset(gboolean next);
+Index: gnomeradio-1.8/src/record.c
+===================================================================
+--- gnomeradio-1.8.orig/src/record.c
++++ gnomeradio-1.8/src/record.c
+@@ -50,6 +50,7 @@ void close_status_window(void)
+ 	status_dialog = NULL;
+ 	
+ 	tray_icon_items_set_sensible(TRUE);
++	recording_set_sensible(TRUE);
+ }
+ 
+ static char *seconds_to_full_string (guint seconds)
+@@ -335,7 +336,7 @@ GtkWidget* record_status_window(Recordin
+ 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(stop_rec_button_clicked_cb), recording);
+ 	g_signal_connect(G_OBJECT(status_dialog), "key-press-event", G_CALLBACK(key_press_event_cb), recording);
+ 
+-	gtk_window_set_modal(GTK_WINDOW(status_dialog), TRUE);
++	gtk_window_set_position(GTK_WINDOW(status_dialog), GTK_WIN_POS_CENTER);
+ 
+ 	return status_dialog;
+ }

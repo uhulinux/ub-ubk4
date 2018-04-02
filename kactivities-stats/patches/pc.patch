@@ -1,0 +1,16 @@
+diff -Naur orig/src/CMakeLists.txt patched/src/CMakeLists.txt
+--- orig/src/CMakeLists.txt	2017-12-02 10:53:31.000000000 +0100
++++ patched/src/CMakeLists.txt	2017-12-29 15:53:53.005037279 +0100
+@@ -128,10 +128,10 @@
+ if (NOT WIN32)
+    configure_file (
+       ${CMAKE_CURRENT_SOURCE_DIR}/libKActivitiesStats.pc.cmake
+-      ${CMAKE_CURRENT_BINARY_DIR}/libKActivitiesStats.pc
++      ${CMAKE_CURRENT_BINARY_DIR}/libKF5ActivitiesStats.pc
+       )
+    install (
+-      FILES ${CMAKE_CURRENT_BINARY_DIR}/libKActivitiesStats.pc
++      FILES ${CMAKE_CURRENT_BINARY_DIR}/libKF5ActivitiesStats.pc
+       DESTINATION ${KDE_INSTALL_LIBDIR}/pkgconfig
+       )
+ endif ()

@@ -1,0 +1,36 @@
+diff -Naur lbreakout2-2.6-orig/client/chart.c lbreakout2-2.6/client/chart.c
+--- lbreakout2-2.6-orig/client/chart.c	2008-03-29 15:31:37.000000000 +0100
++++ lbreakout2-2.6/client/chart.c	2009-11-13 18:29:24.000000000 +0100
+@@ -202,15 +202,13 @@
+ 	if ( charts ) list_delete( charts ); charts = 0;
+ 	charts = list_create( LIST_AUTO_DELETE, chart_set_delete );
+     /* load highscore */
+-    if ( !chart_load_from_path( HI_DIR ) ) {
+-        fprintf( stderr, _("Unable to access highscore chart in '%s'.\n"), HI_DIR );
+-        fprintf( stderr, _("Trying to use config directory '%s'.\n"), config.dir_name );
++
+         if ( !chart_load_from_path( config.dir_name ) ) {
+             fprintf( stderr, _("Unable to access highscore chart in config directory... won't be "
+                              "able to save any results. Sorry.\n") );
+             return;
+         }
+-    }
++
+     printf( _("Saving highscore chart in: %s\n"), chart_path );
+     /* compute size and position stuff of highscore */
+     char *cheader = _("Name      Level Score");
+diff -Naur lbreakout2-2.6-orig/client/Makefile.in lbreakout2-2.6/client/Makefile.in
+--- lbreakout2-2.6-orig/client/Makefile.in	2009-10-26 16:39:28.000000000 +0100
++++ lbreakout2-2.6/client/Makefile.in	2009-11-13 20:18:54.000000000 +0100
+@@ -668,10 +668,7 @@
+ install-data-local:
+ 	$(mkinstalldirs) $(DESTDIR)$(inst_dir)
+ 	$(mkinstalldirs) $(DESTDIR)$(hi_dir)
+-	if ! test -f $(DESTDIR)$(hi_dir)/lbreakout2.hscr; then \
+-	  $(INSTALL_DATA) -m 666 empty.hscr $(DESTDIR)$(hi_dir)/lbreakout2.hscr; \
+-	fi;
+-
++	
+ uninstall-local:
+ 	rm -rf $(DESTDIR)$(inst_dir)
+ 	rm -f $(DESTDIR)$(hi_dir)/lbreakout2.hscr

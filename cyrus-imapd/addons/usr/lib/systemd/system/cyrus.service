@@ -1,0 +1,10 @@
+[Unit]
+Description=IMAP/POP3 Server
+After=network.target
+
+[Service]
+PIDFile=/var/run/cyrus.pid
+ExecStart=/usr/libexec/cyrus-imapd/cyrus-master -p /var/run/cyrus.pid
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,185 @@
+diff -urN amavisd-new-2.8.1.orig/amavisd.conf amavisd-new-2.8.1/amavisd.conf
+--- amavisd-new-2.8.1.orig/amavisd.conf	2012-08-30 17:00:16.000000000 +0200
++++ amavisd-new-2.8.1/amavisd.conf	2014-02-24 10:28:49.486211224 +0100
+@@ -14,12 +14,12 @@
+ # $bypass_decode_parts = 1;         # controls running of decoders&dearchivers
+ 
+ $max_servers = 2;            # num of pre-forked children (2..30 is common), -m
+-$daemon_user  = 'vscan';     # (no default;  customary: vscan or amavis), -u
+-$daemon_group = 'vscan';     # (no default;  customary: vscan or amavis), -g
++$daemon_user  = 'amavis';     # (no default;  customary: vscan or amavis), -u
++$daemon_group = 'amavis';     # (no default;  customary: vscan or amavis), -g
+ 
+-$mydomain = 'example.com';   # a convenient default for other settings
++#$mydomain = 'example.com';   # a convenient default for other settings
+ 
+-# $MYHOME = '/var/amavis';   # a convenient default for other settings, -H
++$MYHOME = '/var/lib/amavis';   # a convenient default for other settings, -H
+ $TEMPBASE = "$MYHOME/tmp";   # working directory, needs to exist, -T
+ $ENV{TMPDIR} = $TEMPBASE;    # environment variable TMPDIR, used by SA, etc.
+ $QUARANTINEDIR = '/var/virusmails';  # -Q
+@@ -31,8 +31,8 @@
+ 
+ # $db_home   = "$MYHOME/db";      # dir for bdb nanny/cache/snmp databases, -D
+ # $helpers_home = "$MYHOME/var";  # working directory for SpamAssassin, -S
+-# $lock_file = "$MYHOME/var/amavisd.lock";  # -L
+-# $pid_file  = "$MYHOME/var/amavisd.pid";   # -P
++$lock_file = "/var/lock/amavis/amavisd.lock";  # -L
++$pid_file  = "/var/run/amavis/amavisd.pid";   # -P
+ #NOTE: create directories $MYHOME/tmp, $MYHOME/var, $MYHOME/db manually
+ 
+ $log_level = 0;              # verbosity 0..5, -d
+@@ -113,11 +113,6 @@
+ # $timestamp_fmt_mysql = 1; # if using MySQL *and* msgs.time_iso is TIMESTAMP;
+ #   defaults to 0, which is good for non-MySQL or if msgs.time_iso is CHAR(16)
+ 
+-$virus_admin               = "virusalert\@$mydomain";  # notifications recip.
+-
+-$mailfrom_notify_admin     = "virusalert\@$mydomain";  # notifications sender
+-$mailfrom_notify_recip     = "virusalert\@$mydomain";  # notifications sender
+-$mailfrom_notify_spamadmin = "spam.police\@$mydomain"; # notifications sender
+ $mailfrom_to_quarantine = ''; # null return path; uses original sender if undef
+ 
+ @addr_extension_virus_maps      = ('virus');
+@@ -193,7 +188,8 @@
+ # qr'^Zip archive data',     # don't trust Archive::Zip
+ ));
+ 
+-
++@banned_filename_maps = ();
++%banned_rules = ( 'DEFAULT' => undef);
+ $banned_filename_re = new_RE(
+ 
+ ### BLOCKED ANYWHERE
+@@ -244,7 +240,7 @@
+ 
+ # ENVELOPE SENDER SOFT-WHITELISTING / SOFT-BLACKLISTING
+ 
+-@score_sender_maps = ({ # a by-recipient hash lookup table,
++#@score_sender_maps = ({ # a by-recipient hash lookup table,
+                         # results from all matching recipient tables are summed
+ 
+ # ## per-recipient personal tables  (NOTE: positive: black, negative: white)
+@@ -254,60 +250,60 @@
+ #                           '.cleargreen.com'           => -5.0}],
+ 
+   ## site-wide opinions about senders (the '.' matches any recipient)
+-  '.' => [  # the _first_ matching sender determines the score boost
++#  '.' => [  # the _first_ matching sender determines the score boost
+ 
+-   new_RE(  # regexp-type lookup table, just happens to be all soft-blacklist
+-    [qr'^(bulkmail|offers|cheapbenefits|earnmoney|foryou)@'i         => 5.0],
+-    [qr'^(greatcasino|investments|lose_weight_today|market\.alert)@'i=> 5.0],
+-    [qr'^(money2you|MyGreenCard|new\.tld\.registry|opt-out|opt-in)@'i=> 5.0],
+-    [qr'^(optin|saveonlsmoking2002k|specialoffer|specialoffers)@'i   => 5.0],
+-    [qr'^(stockalert|stopsnoring|wantsome|workathome|yesitsfree)@'i  => 5.0],
+-    [qr'^(your_friend|greatoffers)@'i                                => 5.0],
+-    [qr'^(inkjetplanet|marketopt|MakeMoney)\d*@'i                    => 5.0],
+-   ),
++#   new_RE(  # regexp-type lookup table, just happens to be all soft-blacklist
++#    [qr'^(bulkmail|offers|cheapbenefits|earnmoney|foryou)@'i         => 5.0],
++#    [qr'^(greatcasino|investments|lose_weight_today|market\.alert)@'i=> 5.0],
++#    [qr'^(money2you|MyGreenCard|new\.tld\.registry|opt-out|opt-in)@'i=> 5.0],
++#    [qr'^(optin|saveonlsmoking2002k|specialoffer|specialoffers)@'i   => 5.0],
++#    [qr'^(stockalert|stopsnoring|wantsome|workathome|yesitsfree)@'i  => 5.0],
++#    [qr'^(your_friend|greatoffers)@'i                                => 5.0],
++#    [qr'^(inkjetplanet|marketopt|MakeMoney)\d*@'i                    => 5.0],
++#   ),
+ 
+ #  read_hash("/var/amavis/sender_scores_sitewide"),
+ 
+-   { # a hash-type lookup table (associative array)
+-     'nobody@cert.org'                        => -3.0,
+-     'cert-advisory@us-cert.gov'              => -3.0,
+-     'owner-alert@iss.net'                    => -3.0,
+-     'slashdot@slashdot.org'                  => -3.0,
+-     'securityfocus.com'                      => -3.0,
+-     'ntbugtraq@listserv.ntbugtraq.com'       => -3.0,
+-     'security-alerts@linuxsecurity.com'      => -3.0,
+-     'mailman-announce-admin@python.org'      => -3.0,
+-     'amavis-user-admin@lists.sourceforge.net'=> -3.0,
+-     'amavis-user-bounces@lists.sourceforge.net' => -3.0,
+-     'spamassassin.apache.org'                => -3.0,
+-     'notification-return@lists.sophos.com'   => -3.0,
+-     'owner-postfix-users@postfix.org'        => -3.0,
+-     'owner-postfix-announce@postfix.org'     => -3.0,
+-     'owner-sendmail-announce@lists.sendmail.org'   => -3.0,
+-     'sendmail-announce-request@lists.sendmail.org' => -3.0,
+-     'donotreply@sendmail.org'                => -3.0,
+-     'ca+envelope@sendmail.org'               => -3.0,
+-     'noreply@freshmeat.net'                  => -3.0,
+-     'owner-technews@postel.acm.org'          => -3.0,
+-     'ietf-123-owner@loki.ietf.org'           => -3.0,
+-     'cvs-commits-list-admin@gnome.org'       => -3.0,
+-     'rt-users-admin@lists.fsck.com'          => -3.0,
+-     'clp-request@comp.nus.edu.sg'            => -3.0,
+-     'surveys-errors@lists.nua.ie'            => -3.0,
+-     'emailnews@genomeweb.com'                => -5.0,
+-     'yahoo-dev-null@yahoo-inc.com'           => -3.0,
+-     'returns.groups.yahoo.com'               => -3.0,
+-     'clusternews@linuxnetworx.com'           => -3.0,
+-     lc('lvs-users-admin@LinuxVirtualServer.org')    => -3.0,
+-     lc('owner-textbreakingnews@CNNIMAIL12.CNN.COM') => -5.0,
++#   { # a hash-type lookup table (associative array)
++#     'nobody@cert.org'                        => -3.0,
++#     'cert-advisory@us-cert.gov'              => -3.0,
++#     'owner-alert@iss.net'                    => -3.0,
++#     'slashdot@slashdot.org'                  => -3.0,
++#     'securityfocus.com'                      => -3.0,
++#     'ntbugtraq@listserv.ntbugtraq.com'       => -3.0,
++#     'security-alerts@linuxsecurity.com'      => -3.0,
++#     'mailman-announce-admin@python.org'      => -3.0,
++#     'amavis-user-admin@lists.sourceforge.net'=> -3.0,
++#     'amavis-user-bounces@lists.sourceforge.net' => -3.0,
++#     'spamassassin.apache.org'                => -3.0,
++#     'notification-return@lists.sophos.com'   => -3.0,
++#     'owner-postfix-users@postfix.org'        => -3.0,
++#     'owner-postfix-announce@postfix.org'     => -3.0,
++#     'owner-sendmail-announce@lists.sendmail.org'   => -3.0,
++#     'sendmail-announce-request@lists.sendmail.org' => -3.0,
++#     'donotreply@sendmail.org'                => -3.0,
++#     'ca+envelope@sendmail.org'               => -3.0,
++#     'noreply@freshmeat.net'                  => -3.0,
++#     'owner-technews@postel.acm.org'          => -3.0,
++#     'ietf-123-owner@loki.ietf.org'           => -3.0,
++#     'cvs-commits-list-admin@gnome.org'       => -3.0,
++#     'rt-users-admin@lists.fsck.com'          => -3.0,
++#     'clp-request@comp.nus.edu.sg'            => -3.0,
++#     'surveys-errors@lists.nua.ie'            => -3.0,
++#     'emailnews@genomeweb.com'                => -5.0,
++#     'yahoo-dev-null@yahoo-inc.com'           => -3.0,
++#     'returns.groups.yahoo.com'               => -3.0,
++#     'clusternews@linuxnetworx.com'           => -3.0,
++#     lc('lvs-users-admin@LinuxVirtualServer.org')    => -3.0,
++#     lc('owner-textbreakingnews@CNNIMAIL12.CNN.COM') => -5.0,
+ 
+      # soft-blacklisting (positive score)
+-     'sender@example.net'                     =>  3.0,
+-     '.example.net'                           =>  1.0,
++#     'sender@example.net'                     =>  3.0,
++#     '.example.net'                           =>  1.0,
+ 
+-   },
+-  ],  # end of site-wide tables
+-});
++#   },
++#  ],  # end of site-wide tables
++#});
+ 
+ 
+ @decoders = (
+@@ -376,10 +372,10 @@
+ # settings for the SAVAPI3.conf: ArchiveScan=1, HeurLevel=2, MailboxScan=1
+ 
+ # ### http://www.clamav.net/
+-# ['ClamAV-clamd',
+-#   \&ask_daemon, ["CONTSCAN {}\n", "/var/run/clamav/clamd.sock"],
+-#   qr/\bOK$/m, qr/\bFOUND$/m,
+-#   qr/^.*?: (?!Infected Archive)(.*) FOUND$/m ],
++ ['ClamAV-clamd',
++   \&ask_daemon, ["CONTSCAN {}\n", "/var/run/clamav/clamd"],
++   qr/\bOK$/m, qr/\bFOUND$/m,
++   qr/^.*?: (?!Infected Archive)(.*) FOUND$/m ],
+ # # NOTE: run clamd under the same user as amavisd - or run it under its own
+ # #   uid such as clamav, add user clamav to the amavis group, and then add
+ # #   AllowSupplementaryGroups to clamd.conf;

@@ -1,0 +1,70 @@
+diff -Nur orig/fc-cache/fc-cache.c mod/fc-cache/fc-cache.c
+--- orig/fc-cache/fc-cache.c	2017-11-20 13:02:20.000000000 +0100
++++ mod/fc-cache/fc-cache.c	2017-12-17 12:16:53.041068184 +0100
+@@ -95,10 +95,10 @@
+ {
+     FILE *file = error ? stderr : stdout;
+ #if HAVE_GETOPT_LONG
+-    fprintf (file, _("usage: %s [-EfrsvVh] [-y SYSROOT] [--error-on-no-fonts] [--force|--really-force] [--sysroot=SYSROOT] [--system-only] [--verbose] [--version] [--help] [dirs]\n"),
++    fprintf (file, _("usage: %s [-EfrsvnVh] [-y SYSROOT] [--error-on-no-fonts] [--force|--really-force] [--sysroot=SYSROOT] [--system-only] [--verbose] [--version] [--help] [dirs]\n"),
+ 	     program);
+ #else
+-    fprintf (file, _("usage: %s [-EfrsvVh] [-y SYSROOT] [dirs]\n"),
++    fprintf (file, _("usage: %s [-EfrsvnVh] [-y SYSROOT] [dirs]\n"),
+ 	     program);
+ #endif
+     fprintf (file, _("Build font information caches in [dirs]\n"
+@@ -109,6 +109,7 @@
+     fprintf (file, _("  -f, --force              scan directories with apparently valid caches\n"));
+     fprintf (file, _("  -r, --really-force       erase all existing caches, then rescan\n"));
+     fprintf (file, _("  -s, --system-only        scan system-wide directories only\n"));
++    fprintf (file, _("  -n, --no-sleep           do not sleep before exit\n"));
+     fprintf (file, _("  -y, --sysroot=SYSROOT    prepend SYSROOT to all paths for scanning\n"));
+     fprintf (file, _("  -v, --verbose            display status information while busy\n"));
+     fprintf (file, _("  -V, --version            display font config version and exit\n"));
+@@ -119,6 +120,7 @@
+     fprintf (file, _("  -f         (force)   scan directories with apparently valid caches\n"));
+     fprintf (file, _("  -r,   (really force) erase all existing caches, then rescan\n"));
+     fprintf (file, _("  -s         (system)  scan system-wide directories only\n"));
++    fprintf (file, _("  -n        (no-sleep) do not sleep beofre exit"));
+     fprintf (file, _("  -y SYSROOT (sysroot) prepend SYSROOT to all paths for scanning\n"));
+     fprintf (file, _("  -v         (verbose) display status information while busy\n"));
+     fprintf (file, _("  -V         (version) display font config version and exit\n"));
+@@ -290,6 +292,7 @@
+     FcBool	force = FcFalse;
+     FcBool	really_force = FcFalse;
+     FcBool	systemOnly = FcFalse;
++    FcBool	nosleep = FcFalse;
+     FcBool	error_on_no_fonts = FcFalse;
+     FcConfig	*config;
+     FcChar8     *sysroot = NULL;
+@@ -300,9 +303,9 @@
+     int		c;
+ 
+ #if HAVE_GETOPT_LONG
+-    while ((c = getopt_long (argc, argv, "Efrsy:Vvh", longopts, NULL)) != -1)
++    while ((c = getopt_long (argc, argv, "Efrsny:Vvh", longopts, NULL)) != -1)
+ #else
+-    while ((c = getopt (argc, argv, "Efrsy:Vvh")) != -1)
++    while ((c = getopt (argc, argv, "Efrsny:Vvh")) != -1)
+ #endif
+     {
+ 	switch (c) {
+@@ -318,6 +321,9 @@
+ 	case 's':
+ 	    systemOnly = FcTrue;
+ 	    break;
++	case 'n':
++	    nosleep = FcTrue;
++	    break;
+ 	case 'y':
+ 	    sysroot = FcStrCopy ((const FcChar8 *)optarg);
+ 	    break;
+@@ -413,6 +419,7 @@
+      */
+     /* the resolution of mtime on FAT is 2 seconds */
+     if (changed)
++        if (!nosleep)
+ 	sleep (2);
+     if (verbose)
+ 	printf ("%s: %s\n", argv[0], ret ? _("failed") : _("succeeded"));

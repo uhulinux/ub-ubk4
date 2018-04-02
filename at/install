@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+make \
+	IROOT="$UB_INSTALLDIR" \
+	install
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/systemd/system
+cp atd.service "$UB_INSTALLDIR"/usr/lib/systemd/system/
+
+rm -rf "$UB_INSTALLDIR"/usr/doc

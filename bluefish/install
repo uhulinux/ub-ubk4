@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+# fix crlf
+perl -pi -e 's/\r\n/\n/g' "$UB_INSTALLDIR"/usr/share/bluefish/jsmin.py

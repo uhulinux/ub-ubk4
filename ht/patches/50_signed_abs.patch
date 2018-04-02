@@ -1,0 +1,15 @@
+Description: Force unambiguous signed abs()
+Author: Stephen Kitt <skitt@debian.org>
+Last-Update: 2017-08-11
+
+--- a/htapp.cc
++++ b/htapp.cc
+@@ -3023,7 +3023,7 @@
+ {
+ 	uint a = 2;
+ 	uint b = u/a;
+-	while (abs(a - b) > 1) {
++	while (abs((int) (a - b)) > 1) {
+ 		a = (a+b)/2;
+ 		b = u/a;
+         }

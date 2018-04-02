@@ -1,0 +1,24 @@
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2011-06-02 09:09:36.000000000 +0200
++++ patched/Makefile.am	2016-12-20 02:35:31.811250021 +0100
+@@ -6,7 +6,7 @@
+ AUTOMAKE_OPTIONS = foreign
+ 
+ ACLOCAL_AMFLAGS = -I m4
+-AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
++AM_CPPFLAGS = -Wshadow -Wall -pedantic -std=c99
+ 
+ lib_LTLIBRARIES = libdmtx.la
+ libdmtx_la_SOURCES = dmtx.c
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2011-06-02 09:10:47.000000000 +0200
++++ patched/Makefile.in	2016-12-20 02:35:54.111506879 +0100
+@@ -273,7 +273,7 @@
+ top_srcdir = @top_srcdir@
+ AUTOMAKE_OPTIONS = foreign
+ ACLOCAL_AMFLAGS = -I m4
+-AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
++AM_CPPFLAGS = -Wshadow -Wall -pedantic -std=c99
+ lib_LTLIBRARIES = libdmtx.la
+ libdmtx_la_SOURCES = dmtx.c
+ libdmtx_la_CFLAGS = -Wall -pedantic

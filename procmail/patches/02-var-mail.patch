@@ -1,0 +1,12 @@
+diff -urN procmail-3.22.orig/src/autoconf procmail-3.22/src/autoconf
+--- procmail-3.22.orig/src/autoconf	2001-09-11 06:55:46.000000000 +0200
++++ procmail-3.22/src/autoconf	2003-02-21 20:39:43.000000000 +0100
+@@ -1416,7 +1416,7 @@
+ 
+ found=no
+ 
+-for a in /var/spool/mail /usr/spool/mail /var/mail /usr/mail /spool/mail
++for a in /var/mail /var/spool/mail /usr/spool/mail /usr/mail /spool/mail
+ do
+   test -d $a -a $found != yes &&
+    echo '#define MAILSPOOLDIR "'$a'/"' >>$ACONF && found=yes

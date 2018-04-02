@@ -1,0 +1,54 @@
+diff -Nur orig/awesomeConfig.cmake mod/awesomeConfig.cmake
+--- orig/awesomeConfig.cmake	2017-07-15 15:53:13.000000000 +0200
++++ mod/awesomeConfig.cmake	2018-03-31 20:21:54.227756271 +0200
+@@ -361,7 +361,7 @@
+ 
+ add_custom_command(
+         OUTPUT ${BUILD_DIR}/docs/06-appearance.md
+-        COMMAND lua ${SOURCE_DIR}/docs/06-appearance.md.lua
++        COMMAND lua5.3 ${SOURCE_DIR}/docs/06-appearance.md.lua
+         ${BUILD_DIR}/docs/06-appearance.md
+         DEPENDS lgi-check
+ )
+@@ -369,7 +369,7 @@
+ add_custom_command(
+         OUTPUT ${BUILD_DIR}/awesomerc.lua ${BUILD_DIR}/docs/05-awesomerc.md
+             ${BUILD_DIR}/script_files/rc.lua
+-        COMMAND lua ${SOURCE_DIR}/docs/05-awesomerc.md.lua
++        COMMAND lua5.3 ${SOURCE_DIR}/docs/05-awesomerc.md.lua
+         ${BUILD_DIR}/docs/05-awesomerc.md ${SOURCE_DIR}/awesomerc.lua
+         ${BUILD_DIR}/awesomerc.lua
+         ${BUILD_DIR}/script_files/rc.lua
+@@ -377,7 +377,7 @@
+ 
+ add_custom_command(
+         OUTPUT ${BUILD_DIR}/script_files/theme.lua
+-        COMMAND lua ${SOURCE_DIR}/docs/sample_theme.lua ${BUILD_DIR}/script_files/
++        COMMAND lua5.3 ${SOURCE_DIR}/docs/sample_theme.lua ${BUILD_DIR}/script_files/
+ )
+ 
+ # Create a target for the auto-generated awesomerc.lua and other files
+diff -Nur orig/build-utils/lgi-check.sh mod/build-utils/lgi-check.sh
+--- orig/build-utils/lgi-check.sh	2017-07-15 15:53:13.000000000 +0200
++++ mod/build-utils/lgi-check.sh	2018-03-31 20:16:30.000000000 +0200
+@@ -22,16 +22,16 @@
+ }
+ 
+ # Check if we have lgi
+-lua -e 'require("lgi")' || die
++lua5.3 -e 'require("lgi")' || die
+ 
+ # Check the version number.
+-# Keep this in sync with lib/gears/surface.lua and .travis.yml (LGIVER)!
+-lua -e '_, _, major_minor, patch = string.find(require("lgi.version"), "^(%d%.%d)%.(%d)");
++# Keep this in sync with lib/gears/surface.lua5.3 and .travis.yml (LGIVER)!
++lua5.3 -e '_, _, major_minor, patch = string.find(require("lgi.version"), "^(%d%.%d)%.(%d)");
+ 	if tonumber(major_minor) < 0.8 or (tonumber(major_minor) == 0.8 and tonumber(patch) < 0) then
+ 		error(string.format("lgi is too old, need at least version %s, got %s.",
+ 		                    "0.8.0", require("lgi.version"))) end' || die
+ 
+ # Check for the needed gi files
+-lua -e 'l = require("lgi") assert(l.cairo, l.Pango, l.PangoCairo, l.GLib, l.Gio)' || die
++lua5.3 -e 'l = require("lgi") assert(l.cairo, l.Pango, l.PangoCairo, l.GLib, l.Gio)' || die
+ 
+ # vim: filetype=sh:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

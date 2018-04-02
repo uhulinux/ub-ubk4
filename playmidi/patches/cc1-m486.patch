@@ -1,0 +1,12 @@
+diff -Naurdp playmidi-2.4.orig/Makefile playmidi-2.4/Makefile
+--- playmidi-2.4.orig/Makefile	1998-10-01 04:39:18.000000000 +0200
++++ playmidi-2.4/Makefile	2009-12-04 16:32:15.000000000 +0100
+@@ -43,7 +43,7 @@ INSTALLDIR = /usr/bin
+ INSTALL = install -s
+ 
+ # if you are using the GUS Ultra driver module, add -DULTRA_DRIVER
+-CFLAGS	= -Wall -pipe -fomit-frame-pointer -O2 -m486 $(INCAWE)
++CFLAGS	= -Wall -pipe -fomit-frame-pointer $(INCAWE)
+ LDFLAGS =
+ 
+ OBJECTS = playmidi.o readmidi.o playevents.o \

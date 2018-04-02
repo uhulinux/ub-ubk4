@@ -1,0 +1,12 @@
+diff -Nur orig/mainwindow.cpp mod/mainwindow.cpp
+--- orig/mainwindow.cpp	2010-05-16 11:42:14.000000000 +0200
++++ mod/mainwindow.cpp	2016-11-19 21:20:28.714807400 +0100
+@@ -781,8 +781,6 @@
+  ******************************************************************************/
+ void MainWindow::find  () throw() {
+ 
+-	auto autoSettingsReset asr(sui);  // dtor calls sui->reset()
+-
+ 	bool modeAdvanced = ui->actionAdvanced->isChecked();
+ 	qDebug() << "modeAdvanced-" << modeAdvanced;
+ 	//

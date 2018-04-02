@@ -1,0 +1,12 @@
+diff -Naur vte-0.11.10.orig/gnome-pty-helper/Makefile.in vte-0.11.10/gnome-pty-helper/Makefile.in
+--- vte-0.11.10.orig/gnome-pty-helper/Makefile.in	2003-06-16 23:50:27.000000000 +0200
++++ vte-0.11.10/gnome-pty-helper/Makefile.in	2004-10-15 15:52:33.819797106 +0200
+@@ -514,8 +514,6 @@
+ 
+ 
+ install-exec-hook:
+-	chown root.utmp $(DESTDIR)$(libexecdir)/gnome-pty-helper || true
+-	chmod g+s       $(DESTDIR)$(libexecdir)/gnome-pty-helper || true
+
+ -include $(top_srcdir)/git.mk
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.

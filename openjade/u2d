@@ -1,0 +1,6 @@
+dirs=$(sflist openjade openjade)
+for dir in $dirs;do
+ver=$(sflist openjade openjade/${dir}/ | splitver '^openjade-([0-9.]+).tar.gz$' | sort -V | tail -n 1)
+endver=$(echo -e "$ver\n$endver" | sort -V | tail -n 1)
+done
+echo $endver

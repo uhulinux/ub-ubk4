@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/{fonts/,}ghostscript
+cp -a [a-z]* "$UB_INSTALLDIR"/usr/share/fonts/ghostscript/
+ln -s ../fonts/ghostscript "$UB_INSTALLDIR"/usr/share/ghostscript/fonts

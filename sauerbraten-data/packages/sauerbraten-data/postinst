@@ -1,0 +1,13 @@
+#/bin/sh
+
+echo downloading data...
+
+mkdir -p /usr/share/games/
+mkdir -p /tmp/install
+cd /tmp/install
+curl -o sauerbraten_2013_02_03_collect_edition_linux.tar.bz2 https://kent.dl.sourceforge.net/project/sauerbraten/sauerbraten/2013_01_04/sauerbraten_2013_02_03_collect_edition_linux.tar.bz2
+echo extracting data...
+tar -xvf sauerbraten_2013_02_03_collect_edition_linux.tar.bz2 -C /usr/share/games/
+rm -rf /usr/share/games/sauerbraten/src
+cd -
+rm -rf /tmp/install

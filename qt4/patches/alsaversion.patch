@@ -1,0 +1,14 @@
+diff -Naur orig/config.tests/unix/alsa/alsatest.cpp patched/config.tests/unix/alsa/alsatest.cpp
+--- orig/config.tests/unix/alsa/alsatest.cpp	2015-05-07 16:14:42.000000000 +0200
++++ patched/config.tests/unix/alsa/alsatest.cpp	2016-11-13 00:36:50.657938323 +0100
+@@ -40,8 +40,8 @@
+ ****************************************************************************/
+ 
+ #include <alsa/asoundlib.h>
+-#if(!(SND_LIB_MAJOR == 1 && SND_LIB_MINOR == 0 && SND_LIB_SUBMINOR >= 10))
+-#error "Alsa version found too old, require >= 1.0.10"
++#if(!(SND_LIB_MAJOR == 1 && SND_LIB_MINOR == 1 && SND_LIB_SUBMINOR >= 0))
++#error "Alsa version found too old, require >= 1.1.0"
+ #endif
+ 
+ int main(int argc,char **argv)

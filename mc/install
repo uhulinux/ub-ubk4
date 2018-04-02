@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/etc/bashrc.d
+cp "$UB_INSTALLDIR"/usr/libexec/mc/mc.sh "$UB_INSTALLDIR"/etc/bashrc.d/
+
+#rm "$UB_INSTALLDIR"/usr/share/mc/mc.menu.*

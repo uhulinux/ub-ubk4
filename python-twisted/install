@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+cd twisted3
+python3 setup.py install --prefix=/usr --root="$UB_INSTALLDIR" --optimize=1
+mv $UB_INSTALLDIR/usr/bin/trial $UB_INSTALLDIR/usr/bin/trial3
+mv $UB_INSTALLDIR/usr/bin/twistd $UB_INSTALLDIR/usr/bin/twistd3
+mkdir -p  $UB_INSTALLDIR/usr/share/doc/Packages/python3-twisted
+cp {README.rst,NEWS.rst,LICENSE} $UB_INSTALLDIR/usr/share/doc/Packages/python3-twisted/
+mv {README.rst,NEWS.rst,LICENSE} ../
+cd ../twisted
+python setup.py install --prefix=/usr --root="$UB_INSTALLDIR" --optimize=1

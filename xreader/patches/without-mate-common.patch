@@ -1,0 +1,168 @@
+diff -Naur orig/autogen.sh patched/autogen.sh
+--- orig/autogen.sh	2017-05-05 14:06:41.134741323 +0200
++++ patched/autogen.sh	2017-05-06 02:36:47.938862375 +0200
+@@ -12,19 +12,15 @@
+     exit 1
+ }
+ 
+-which mate-autogen || {
+-    echo "You need to install mate-common"
+-    exit 1
+-}
+-
+ which yelp-build || {
+     echo "You need to install yelp-tools" 
+     exit 1
+ }
+ 
+-REQUIRED_AUTOMAKE_VERSION=1.10
+-REQUIRED_GTK_DOC_VERSION=1.13
+-USE_MATE2_MACROS=1
+-
+-. mate-autogen
++mkdir $srcdir/m4
++intltoolize --force --copy --automake
++autoreconf -vif
+ 
++if test -z "$NOCONFIGURE"; then
++exec ./configure $@
++fi
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2017-05-05 14:06:41.134741323 +0200
++++ patched/configure.ac	2017-05-06 01:40:25.262245768 +0200
+@@ -62,10 +62,6 @@
+ AC_PATH_PROG([GLIB_GENMARSHAL], [glib-genmarshal])
+ AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
+ 
+-MATE_MAINTAINER_MODE_DEFINES
+-MATE_COMPILE_WARNINGS
+-MATE_CXX_WARNINGS
+-
+ DISABLE_DEPRECATED=
+ AC_SUBST([DISABLE_DEPRECATED])
+ 
+@@ -636,12 +632,6 @@
+ 
+ YELP_HELP_INIT
+ 
+-# *****************
+-# API documentation
+-# *****************
+-
+-GTK_DOC_CHECK([1.13], [--flavour no-tmpl])
+-
+ AC_SUBST([GLIB_PREFIX], [$($PKG_CONFIG --variable=prefix glib-2.0)])
+ AC_SUBST([GTK_PREFIX], [$($PKG_CONFIG --variable=prefix gtk+-3.0)])
+ 
+@@ -754,7 +744,6 @@
+     Nemo Plugin.........:    $enable_nemo
+     Thumbnailer.........:    $enable_thumbnailer
+     Previewer...........:    $enable_previewer
+-    Gtk-Doc Support.....:    $enable_gtk_doc
+     Debug mode..........:    $enable_debug
+     GObj. Introspection.:    $enable_introspection
+     Tests...............:    $enable_tests
+diff -Naur orig/help/Makefile.am patched/help/Makefile.am
+--- orig/help/Makefile.am	2017-05-05 14:06:41.134741323 +0200
++++ patched/help/Makefile.am	2017-05-06 02:16:22.712962734 +0200
+@@ -1,5 +1,3 @@
+-SUBDIRS = reference
+-
+ @YELP_HELP_RULES@
+ 
+ HELP_ID = xreader
+diff -Naur orig/help/reference/libdocument/Makefile.am patched/help/reference/libdocument/Makefile.am
+--- orig/help/reference/libdocument/Makefile.am	2017-05-05 14:06:41.134741323 +0200
++++ patched/help/reference/libdocument/Makefile.am	2017-05-06 02:18:39.286737102 +0200
+@@ -110,12 +110,9 @@
+ 	$(top_builddir)/libdocument/libxreaderdocument.la	\
+ 	$(LIBDOCUMENT_LIBS)
+ 
+-# This includes the standard gtk-doc make rules, copied by gtkdocize.
+-include $(top_srcdir)/gtk-doc.make
+-
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in
+-EXTRA_DIST += \
++EXTRA_DIST = \
+ 	version.xml.in
+ 
+ # Files not to distribute
+@@ -123,10 +120,4 @@
+ # for --rebuild-sections in $(SCAN_OPTIONS) e.g. $(DOC_MODULE)-sections.txt
+ #DISTCLEANFILES +=
+ 
+-# Comment this out if you want your docs-status tested during 'make check'
+-if ENABLE_GTK_DOC
+-#TESTS_ENVIRONMENT = cd $(srcsrc) &&
+-#TESTS = $(GTKDOC_CHECK)
+-endif
+-
+ -include $(top_srcdir)/git.mk
+diff -Naur orig/help/reference/libview/Makefile.am patched/help/reference/libview/Makefile.am
+--- orig/help/reference/libview/Makefile.am	2017-05-05 14:06:41.134741323 +0200
++++ patched/help/reference/libview/Makefile.am	2017-05-06 02:19:11.455153900 +0200
+@@ -119,12 +119,9 @@
+ 	$(LIBDOCUMENT_LIBS)						\
+ 	$(WEBKIT_LIBS)
+ 
+-# This includes the standard gtk-doc make rules, copied by gtkdocize.
+-include $(top_srcdir)/gtk-doc.make
+-
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in
+-EXTRA_DIST += \
++EXTRA_DIST = \
+ 	version.xml.in
+ 
+ # Files not to distribute
+@@ -132,10 +129,4 @@
+ # for --rebuild-sections in $(SCAN_OPTIONS) e.g. $(DOC_MODULE)-sections.txt
+ #DISTCLEANFILES +=
+ 
+-# Comment this out if you want your docs-status tested during 'make check'
+-if ENABLE_GTK_DOC
+-#TESTS_ENVIRONMENT = cd $(srcsrc) &&
+-#TESTS = $(GTKDOC_CHECK)
+-endif
+-
+ -include $(top_srcdir)/git.mk
+diff -Naur orig/help/reference/shell/Makefile.am patched/help/reference/shell/Makefile.am
+--- orig/help/reference/shell/Makefile.am	2017-05-05 14:06:41.134741323 +0200
++++ patched/help/reference/shell/Makefile.am	2017-05-06 02:19:40.283527101 +0200
+@@ -128,12 +128,9 @@
+ 	$(MATE_DESKTOP_LIBS)						\
+ 	$(filter-out $(FILTER_OUT),$(wildcard $(top_builddir)/shell/*.o))
+ 
+-# This includes the standard gtk-doc make rules, copied by gtkdocize.
+-include $(top_srcdir)/gtk-doc.make
+-
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in
+-EXTRA_DIST += \
++EXTRA_DIST = \
+ 	version.xml.in
+ 
+ # Files not to distribute
+@@ -141,10 +138,4 @@
+ # for --rebuild-sections in $(SCAN_OPTIONS) e.g. $(DOC_MODULE)-sections.txt
+ #DISTCLEANFILES +=
+ 
+-# Comment this out if you want your docs-status tested during 'make check'
+-if ENABLE_GTK_DOC
+-#TESTS_ENVIRONMENT = cd $(srcsrc) &&
+-#TESTS = $(GTKDOC_CHECK)
+-endif
+-
+ -include $(top_srcdir)/git.mk
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2017-05-05 14:06:41.134741323 +0200
++++ patched/Makefile.am	2017-05-06 02:04:02.007150064 +0200
+@@ -83,7 +83,6 @@
+     $(srcdir)/mkinstalldirs  \
+     $(srcdir)/omf.make       \
+     $(srcdir)/xmldocs.make   \
+-    $(srcdir)/gtk-doc.make   \
+     $(srcdir)/po/Makefile.in.in \
+     `find "$(srcdir)" -type f -name Makefile.in -print`
+ 

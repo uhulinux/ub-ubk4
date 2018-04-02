@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+# First copy the source to elsewhere
+cp -a . "$UB_OBJECTDIR"
+
+# Second build the python2 part
+export PYTHON=python
+ub_compile
+
+# And finally build the python3 part
+export PYTHON=python3
+cd "$UB_OBJECTDIR"
+ub_compile

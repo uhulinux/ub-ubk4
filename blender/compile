@@ -1,0 +1,30 @@
+#!/bin/sh -eux
+
+# openexr: nincs ImfMultiPartInputFile.h
+# az openimageio függ az openexr-től, így az is letiltva
+# a cycles pedig az openimageio-tól
+
+ub_compile \
+	-DCMAKE_SKIP_RPATH=ON \
+	-DBUILD_SHARED_LIBS=OFF \
+	-DWITH_CODEC_FFMPEG=ON \
+	-DWITH_CODEC_SNDFILE=ON \
+	-DWITH_CXX_GUARDEDALLOC=OFF \
+	-DWITH_CYCLES=OFF \
+	-DWITH_FFTW3=ON \
+	-DWITH_GAMEENGINE=ON \
+	-DWITH_INSTALL_PORTABLE=OFF \
+	-DWITH_JACK=ON \
+	-DWITH_OPENCOLLADA=ON \
+	-DWITH_OPENCOLORIO=ON \
+	-DWITH_OPENIMAGEIO=OFF \
+	-DWITH_PLAYER=ON \
+	-DWITH_PYTHON=ON \
+	-DWITH_PYTHON_INSTALL=OFF \
+	-DWITH_PYTHON_SAFETY=ON \
+	-DWITH_SYSTEM_GLEW=ON \
+	-DWITH_SYSTEM_OPENJPEG=ON \
+	-DPYTHON_VERSION=3.6 \
+	-DPYTHON_LIBPATH=/usr/lib \
+	-DPYTHON_LIBRARY=python3.6m \
+	-DPYTHON_INCLUDE_DIRS=/usr/include/python3.6m

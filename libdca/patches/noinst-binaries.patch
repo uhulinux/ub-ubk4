@@ -1,0 +1,21 @@
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2007-04-07 20:51:23.000000000 +0200
++++ patched/Makefile.am	2016-02-24 02:23:16.606080731 +0100
+@@ -1,4 +1,4 @@
+-SUBDIRS = libdca libao src test include
++SUBDIRS = libdca libao test include
+ DIST_SUBDIRS = $(SUBDIRS) autotools vc++
+ 
+ EXTRA_DIST = bootstrap doc/libdca.txt
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2007-04-10 14:31:22.000000000 +0200
++++ patched/Makefile.in	2016-02-24 02:30:08.476123084 +0100
+@@ -175,7 +175,7 @@
+ target_alias = @target_alias@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = libdca libao src test include
++SUBDIRS = libdca libao test include
+ DIST_SUBDIRS = $(SUBDIRS) autotools vc++
+ EXTRA_DIST = bootstrap doc/libdca.txt
+ all: config.h

@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+python ./configure.py \
+	  --prefix=/usr \
+	  --pkgconfigdir=/usr/lib/pkgconfig \
+	  --with-cxx-compiler=/usr/bin/g++
+ub_make

@@ -1,0 +1,13 @@
+diff --git a/libview/ev-view-accessible.c b/libview/ev-view-accessible.c
+index 7805219..c871ff9 100644
+--- a/libview/ev-view-accessible.c
++++ b/libview/ev-view-accessible.c
+@@ -578,7 +578,7 @@ ev_view_accessible_set_page_range (EvViewAccessible *accessible,
+ 	g_return_if_fail (EV_IS_VIEW_ACCESSIBLE (accessible));
+ 
+ 	for (i = accessible->priv->start_page; i <= accessible->priv->end_page; i++) {
+-		if (i < start || i > end) {
++		if ((i < start || i > end) && i < ev_view_accessible_get_n_pages (accessible)) {
+ 			page = g_ptr_array_index (accessible->priv->children, i);
+ 			atk_object_notify_state_change (page, ATK_STATE_SHOWING, FALSE);
+ 		}

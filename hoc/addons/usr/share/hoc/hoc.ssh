@@ -1,0 +1,76 @@
+# -----------------------------------------------------------------------
+#
+# This file is part of a2ps.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; see the file COPYING.  If not, write to
+# the Free Software Foundation, 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+#
+
+style "hoc" is
+
+requires a2ps 4.13
+
+written by "Nelson H. F. Beebe <beebe.math.utah.edu>"
+
+version is 7.0.5.beta
+
+documentation is
+	"This is a simple a2ps style sheet for printing hoc (high-order"
+	"calculator) programs."
+end documentation
+
+first alphabet is
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
+
+second alphabet is
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
+
+case sensitive
+
+keywords in Keyword_strong are
+	break, continue, else, for, func, if, print, printf, println,
+	proc, read, return, while
+end keywords
+
+keywords in Keyword are
+	BASE, CATALAN, CLASS_NEGINF, CLASS_NEGNORMAL,
+	CLASS_NEGSUBNORMAL, CLASS_NEGZERO, CLASS_POSINF,
+	CLASS_POSNORMAL, CLASS_POSSUBNORMAL, CLASS_POSZERO, CLASS_QNAN,
+	CLASS_SNAN, CLASS_UNKNOWN, DEG, E, EBIAS, EBITS, EMAX, EMIN,
+	GAMMA, INF, Inf, Infinity, MAXNORMAL, MAXSUBNORMAL, MINNORMAL,
+	MINSUBNORMAL, NAN, NaN, P, PHI, PI, PREC, QNAN, QNaN, SNAN,
+	SNaN,
+	J0, J1, Jn, Y0, Y1, Yn, __hex, abort, abs, acos, acosh, asin,
+	asinh, atan, atanh, cbrt, cd, ceil, char, class, copysign, cos,
+	cosh, cpulimit, defined, delete, double, endinput, erf, erfc,
+	eval, exit, exp, expm1, exponent, floor, fmod, gamma, getenv,
+	hexfp, hexint, hypot, ichar, ilogb, index, int, isfinite, isinf,
+	isnan, isnormal, isqnan, issnan, issubnormal, ldexp, length,
+	lgamma, ln, load, log, log10, log1p, log2, logfile, logoff,
+	logon, macheps, msg_translate, nearest, nextafter, nint, now,
+	number, printenv, protect, putenv, pwd, rand, randint, randl,
+	remainder, rint, rsqrt, save, scalb,
+	## ???? WHY NOT THIS ONE ????: second,
+	setrand, significand, sin, single, sinh, sqrt, strftime, string,
+	substr, symnum, symstr, systime, tan, tanh, tolower, toupper,
+	trunc, unordered, who
+end keywords
+
+sequences are
+	"#" Comment,
+	C-string
+end sequences
+
+end style

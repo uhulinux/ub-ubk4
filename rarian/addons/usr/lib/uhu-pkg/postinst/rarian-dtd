@@ -1,0 +1,8 @@
+#!/bin/bash
+
+/usr/bin/xmlcatalog --noout --add "rewriteSystem" \
+  "http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd" \
+  "/usr/share/xml/scrollkeeper/dtds/scrollkeeper-omf.dtd" /etc/xml/catalog >& /dev/null || :
+/usr/bin/xmlcatalog --noout --add "rewriteURI" \
+  "http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd" \
+  "/usr/share/xml/scrollkeeper/dtds/scrollkeeper-omf.dtd" /etc/xml/catalog >& /dev/null || :

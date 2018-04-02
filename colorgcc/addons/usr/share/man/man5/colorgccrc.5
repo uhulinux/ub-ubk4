@@ -1,0 +1,122 @@
+.TH COLORGCCRC 5 "Jan 15, 2003"
+
+.SH NAME
+colorgccrc \- configuration file for colorgcc
+
+.SH DESCRIPTION
+A
+.B colorgccrc
+configuration file is used to configure the highlighting of
+the compiler output from
+.BR colorgcc .
+
+.SH SYNTAX
+Each line consists of a keyword designating a configuration
+variable.
+The keyword is followed by `:' and then one or several values
+(depending on the keyword).
+Lines beginning with a hash mark `#' are comments.
+
+.SH CONFIGURATION VARIABLES
+.TP
+.B g++ | gcc | c++ | cc | g77 | gcj | gnat | gpc
+Specifies the paths to the compilers.
+Takes one value; a path to the compiler.
+.TP
+.B nocolor
+Specifies what terminal types colorization should be disabled on.
+Takes one or several values, separated by whitespace.
+.TP
+.B srcColor
+Specifies the highlighting attributes source-code should be given.
+Takes one or several color attributes.
+See the section
+.B COLOR ATTRIBUTES
+for more information.
+.TP
+.B introColor
+Specifies the highlighting attributes for normal compiler output.
+Takes one or several color attributes.
+See the section
+.B COLOR ATTRIBUTES
+for more information.
+.TP
+.B warningFileNameColor | errorFileNameColor
+Specifies the highlighting attributes for the filename in a
+warning or an error, respectively.
+Takes one or several color attributes.
+See the section
+.B COLOR ATTRIBUTES
+for more information.
+.TP
+.B warningNumberColor | errorNumberColor
+Specifies the highlighting attributes for the line-number in a
+warning or an error, respectively.
+Takes one or several color attributes.
+See the section
+.B COLOR ATTRIBUTES
+for more information.
+.TP
+.B warningMessageColor | errorMessageColor
+Specifies the highlighting attributes for the message-text in a
+warning or an error, respectively.
+Takes one or several color attributes.
+See the section
+.B COLOR ATTRIBUTES
+for more information.
+
+.SH COLOR ATTRIBUTES
+The following attributes are valid for highlighting.
+
+.BR clear,
+.BR reset
+
+.BR bold,
+.BR underline,
+.BR underscore,
+.BR blink,
+.BR reverse,
+.BR concealed
+
+.BR black,
+.BR red,
+.BR green,
+.BR yellow,
+.BR blue,
+.BR magenta,
+.BR cyan,
+.BR white
+
+.BR on_black,
+.BR on_red,
+.BR on_green,
+.BR on_yellow,
+.BR on_blue,
+.BR on_magenta,
+.BR on_cyan,
+.BR on_white
+
+.SH SEE ALSO
+.BR gcc (1),
+.BR colorgcc (1)
+
+.SH HISTORY
+Jan 15 2003: Initial version of this manual-page.
+
+.SH REPORTING BUGS
+Report bugs to
+<\fIjmoyers@geeks.com\fP>
+
+.SH AUTHORS
+Jamie Moyers <\fIjmoyers@geeks.com\fP> is the author of colorgcc.
+.PP
+This manual page was written by Joe Wreschnig <\fIpiman@sacredchao.net\fP>,
+and modified by David Weinehall <\fItao@debian.org\fP>, for the
+Debian GNU/Linux system (but may be used by others).
+
+.SH COPYRIGHT
+Copyright \(co 2003 Jamie Moyers
+.br
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.

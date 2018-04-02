@@ -1,0 +1,32 @@
+diff -Naur orig/misc/syntax/php.syntax patched/misc/syntax/php.syntax
+--- orig/misc/syntax/php.syntax	2014-08-14 15:29:32.000000000 +0200
++++ patched/misc/syntax/php.syntax	2014-10-06 19:44:28.915508688 +0200
+@@ -3078,6 +3078,8 @@
+ 
+     keyword wholeright $+ brightgreen
+ 
++    keyword " green
++    keyword '*' brightgreen
+     keyword /\* brown
+     keyword \*/ brown
+     keyword // brown
+@@ -3114,7 +3116,7 @@
+     keyword : brightcyan
+     keyword ; brightmagenta
+ 
+-context " " green
++context exclusive " " green
+     spellcheck
+     keyword \\" brightgreen
+     keyword \\\n brightgreen
+@@ -3130,10 +3132,6 @@
+     keyword \\' brightgreen
+     keyword \\\{abtnvfr\} brightgreen
+ 
+-context ' ' brightgreen
+-    spellcheck
+-    keyword \\' brightcyan
+-
+ context exclusive <? ?> cyan
+     keyword whole &*; brightgreen
+ context <html > cyan

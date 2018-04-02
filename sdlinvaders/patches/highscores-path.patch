@@ -1,0 +1,21 @@
+diff -Naur orig/main.c patch/main.c
+--- $UB_COMPILEDIR/main.c	2003-01-13 10:59:46.000000000 +0100
++++ $UB_COMPILEDIR/main.c	2007-10-05 08:04:51.000000000 +0200
+@@ -773,7 +773,7 @@
+   int i;
+   char filename[100];
+        
+-  sprintf (filename, "data/highscores");
++  sprintf (filename, "/var/games/SDLInvaders/highscores");
+ 
+   file = fopen(filename, "w");
+ 
+@@ -800,7 +800,7 @@
+   int i;
+   char filename[100];
+        
+-  sprintf (filename, "data/highscores");
++  sprintf (filename, "/var/games/SDLInvaders/highscores");
+ 
+   file = fopen(filename, "r");
+ 

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cd build/generic
+ub_install
+cd "$UB_INSTALLDIR"/usr/lib
+ln -sf libxvidcore.so.4  libxvidcore.so

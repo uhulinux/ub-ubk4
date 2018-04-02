@@ -1,0 +1,50 @@
+#!/bin/sh -eux
+
+VIMVER=72
+
+PREFIX="$UB_INSTALLDIR"/usr
+
+VRT=$PREFIX/share/vim/vim$VIMVER
+
+HERE=`dirname $0`
+
+echo "Verifying directories exist..."
+mkdir -p $VRT/cream
+mkdir -p $VRT/cream/addons
+mkdir -p $VRT/cream/bitmaps
+mkdir -p $VRT/cream/docs
+mkdir -p $VRT/cream/docs-html
+mkdir -p $VRT/cream/filetypes
+mkdir -p $VRT/cream/help
+mkdir -p $VRT/cream/lang
+#mkdir -p $VRT/cream/spelldicts
+mkdir -p $PREFIX/share/cream
+
+echo "Copying runtime files..."
+cp creamrc $VRT/cream/
+cp *.vim $VRT/cream/
+ln -s ../vim/vim$VIMVER/cream/cream-conf.example.vim $PREFIX/share/cream/cream-conf.vim
+cp addons/*.vim $VRT/cream/addons/
+cp bitmaps/*.xpm $VRT/cream/bitmaps/
+cp docs/*.txt $VRT/cream/docs/
+cp docs-html/*.html $VRT/cream/docs-html/
+cp docs-html/css.php $VRT/cream/docs-html/
+cp docs-html/favicon.ico $VRT/cream/docs-html/
+cp docs-html/*.png $VRT/cream/docs-html/
+cp docs-html/*.gif $VRT/cream/docs-html/
+cp filetypes/*.vim $VRT/cream/filetypes/
+cp help/*.txt $VRT/cream/help/
+#cp lang/*.vim $VRT/cream/lang/
+cp lang/menu_en_us.utf-8.vim $VRT/cream/lang/
+cp lang/strings_en_us.utf-8.vim $VRT/cream/lang/
+#cp spelldicts/cream-spell-dict-eng-s*.vim $VRT/cream/spelldicts/
+
+echo "Copying shell command..."
+cp cream $PREFIX/bin/
+
+echo "Copying menu entry..."
+install -p -m 644 cream.desktop $PREFIX/share/applications/
+
+echo "Copying graphic icons..."
+cp cream.svg $PREFIX/share/pixmaps/
+cp cream.png $PREFIX/share/pixmaps/

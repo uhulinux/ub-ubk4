@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+sed 's@SSL_library_init@SSL_new@g' -i configure.ac configure
+# autoreconf -fi
+ub_compile \
+	--with-openssl

@@ -1,0 +1,24 @@
+diff -Naur orig/scripts/engrampa.tap patched/scripts/engrampa.tap
+--- orig/scripts/engrampa.tap	2017-12-06 04:03:07.000000000 +0100
++++ patched/scripts/engrampa.tap	2018-01-08 23:03:54.981638166 +0100
+@@ -34,7 +34,7 @@
+ 	;;
+ 
+ extract-here)
+-	exec engrampa --extract-to="$(pwd)" --extract-here --force "$@"
++	exec engrampa --extract-here --force "$@"
+ 	;;
+ 
+ extract-to)
+diff -Naur orig/scripts/file-roller.tap patched/scripts/file-roller.tap
+--- orig/scripts/file-roller.tap	2017-05-18 03:32:34.000000000 +0200
++++ patched/scripts/file-roller.tap	2018-01-08 23:04:13.729894678 +0100
+@@ -35,7 +35,7 @@
+ 	;;
+ 
+ extract-here)
+-	exec file-roller "--extract-to=$(pwd)" --extract-here --force "$@"
++	exec file-roller --extract-here --force "$@"
+ 	;;
+ 
+ extract-to)

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_compile \
+	--with-udev-dir=/usr/lib/udev \
+	--without-hal

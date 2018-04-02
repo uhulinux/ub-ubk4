@@ -1,0 +1,25 @@
+# /etc/profile
+
+umask 022
+
+# UTF-8 mód bekapcsolása, segítendő a távoli belépést.
+if [ -t 1 -a "$(locale charmap)" = "UTF-8" ]; then
+	echo -ne '\e%G'
+fi
+
+for i in /etc/profile.d/*.sh /etc/profile.local; do
+	if [ -f "$i" -a -r "$i" ]; then
+		. "$i"
+	fi
+done
+unset i
+
+# /etc/bashrc-t és ~/.bashrc-t csak az interaktív shellek hajtják végre.
+if [ "${-//[^i]/}" != "" ]; then
+	if [ -r /etc/bashrc ]; then
+		. /etc/bashrc
+	fi
+	if [ -r ~/.bashrc ]; then
+		. ~/.bashrc
+	fi
+fi

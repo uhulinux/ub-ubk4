@@ -1,0 +1,20 @@
+--- a/Makefile.in.orig	2011-03-19 12:14:09.000000000 +0100
++++ a/Makefile.in	2011-11-04 20:08:27.000000000 +0100
+@@ -779,7 +779,7 @@
+ 
+ info-am:
+ 
+-install-data-am: install-osm_gps_mapdocDATA install-pkgconfigDATA
++install-data-am: install-pkgconfigDATA
+ 
+ install-dvi: install-dvi-recursive
+ 
+@@ -825,7 +825,7 @@
+ 
+ ps-am:
+ 
+-uninstall-am: uninstall-osm_gps_mapdocDATA uninstall-pkgconfigDATA
++uninstall-am: uninstall-pkgconfigDATA
+ 
+ .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all \
+ 	ctags-recursive install-am install-strip tags-recursive

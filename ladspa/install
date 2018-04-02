@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+cd src
+make \
+	INSTALL_PLUGINS_DIR="$UB_INSTALLDIR"/usr/lib/ladspa \
+	INSTALL_INCLUDE_DIR="$UB_INSTALLDIR"/usr/include \
+	INSTALL_BINARY_DIR="$UB_INSTALLDIR"/usr/bin \
+	install

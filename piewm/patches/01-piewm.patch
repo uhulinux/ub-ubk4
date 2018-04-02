@@ -1,0 +1,117 @@
+diff -Naur orig/iconmgr.c patched/iconmgr.c
+--- orig/iconmgr.c	1998-01-08 07:02:45.000000000 +0100
++++ patched/iconmgr.c	2016-05-10 21:49:01.584387270 +0200
+@@ -43,7 +43,7 @@
+ #include <X11/Xos.h>
+ #include <X11/Xmu/CharSet.h>
+ 
+-int strcmp();
++//int strcmp();
+ 
+ int iconmgr_textx = siconify_width+11;
+ WList *Active = NULL;
+diff -Naur orig/icons.c patched/icons.c
+--- orig/icons.c	1998-01-08 07:00:35.000000000 +0100
++++ patched/icons.c	2016-05-10 21:49:01.584387270 +0200
+@@ -144,7 +144,7 @@
+     return ((v + multiple - 1) / multiple) * multiple;
+ }
+ 
+-static void
++void
+ PlaceIcon(TwmWindow *tmp_win, int def_x, int def_y, int *final_x, int *final_y)
+ {
+     IconRegion	*ir;
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	1998-01-08 06:08:58.000000000 +0100
++++ patched/Makefile	2016-05-10 21:51:50.053222662 +0200
+@@ -109,12 +109,12 @@
+          IMAKESRC = $(CONFIGSRC)/imake
+         DEPENDSRC = $(CONFIGSRC)/util
+ 
+-          INCROOT = /usr/X11R6/include
+-        USRLIBDIR = /usr/X11R6/lib
++          INCROOT = /usr/include
++        USRLIBDIR = /usr/lib
+         VARLIBDIR = /var/lib
+-         SHLIBDIR = /usr/X11R6/lib
++         SHLIBDIR = /usr/lib
+        LINTLIBDIR = $(USRLIBDIR)/lint
+-          MANPATH = /usr/X11R6/man
++          MANPATH = /usr/share/man
+     MANSOURCEPATH = $(MANPATH)/man
+            MANDIR = $(MANSOURCEPATH)1
+         LIBMANDIR = $(MANSOURCEPATH)3
+@@ -128,7 +128,7 @@
+ .SUFFIXES: .cxx
+ 
+               CXX = c++
+-    CXXDEBUGFLAGS = -O2 -fno-strength-reduce -m486
++    CXXDEBUGFLAGS = -O2 -fno-strength-reduce #-m486
+  CXXEXTRA_DEFINES =
+ CXXEXTRA_INCLUDES =
+    CXXSTD_DEFINES = -Dlinux -D__i386__ -D_POSIX_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -DX_LOCALE
+@@ -203,11 +203,11 @@
+      INSTDATFLAGS = -m 0444
+     INSTKMEMFLAGS = -m 4711
+ 
+-      PROJECTROOT = /usr/X11R6
++      PROJECTROOT = /usr
+ 
+      TOP_INCLUDES = -I$(INCROOT)
+ 
+-      CDEBUGFLAGS = -O2 -fno-strength-reduce -m486 -Wall -pedantic
++      CDEBUGFLAGS = -O2 -fno-strength-reduce -Wall -pedantic
+         CCOPTIONS =
+ 
+       ALLINCLUDES = $(INCLUDES) $(EXTRA_INCLUDES) $(TOP_INCLUDES) $(STD_INCLUDES)
+@@ -257,7 +257,7 @@
+ # -----------------------------------------------------------------------
+ # X Window System make variables; these need to be coordinated with rules
+ 
+-           BINDIR = /usr/X11R6/bin
++           BINDIR = /usr/bin
+      BUILDINCROOT = $(TOP)
+       BUILDINCDIR = $(BUILDINCROOT)/X11
+       BUILDINCTOP = ..
+@@ -540,8 +540,8 @@
+ # other image formats besides Xpm or Xbm)
+ #                                 Chris P. Ross
+ #                                 <cross@eng.umd.edu>
+-       PIEWMDIR = /usr/local/lib/piewm
+-    XLOADIM_DEF = -DXLOADIMAGE=\"/usr/local/bin/xloadimage\"
++       PIEWMDIR = /usr/lib/piewm
++    XLOADIM_DEF = -DXLOADIMAGE=\"/usr/bin/xloadimage\"
+         MATHLIB = -lm
+   LOCAL_DEFINES = -DSHAPE
+ 
+@@ -555,7 +555,7 @@
+ 
+            OBJS = gram.o lex.o deftwmrc.o add_window.o gc.o list.o twm.o 		parse.o menus.o events.o resize.o util.o version.o iconmgr.o 		cursor.o icons.o vdt.o move.o LocPixmap.o
+ 
+-all:: piewm ssetroot
++all:: piewm
+ 
+ parse.o:	 vdt.c
+ 	$(RM) $@
+@@ -569,7 +569,7 @@
+ 
+  PROGRAM = piewm
+ 
+-all:: piewm
++all:: piewm ssetroot
+ 
+ piewm: $(OBJS) $(DEPLIBS)
+ 	$(RM) $@
+@@ -614,11 +614,6 @@
+ 	$(INSTALL) $(INSTALLFLAGS) $(INSTDATFLAGS) system.twmrc $(DESTDIR)$(TWMDIR)
+ #
+ 
+-install:: ssetroot
+-	@if [ -d $(DESTDIR)$(BINDIR) ]; then set +x; \
+-	else (set -x; $(MKDIRHIER) $(DESTDIR)$(BINDIR)); fi
+-	$(INSTALL) $(INSTALLFLAGS) $(INSTBINFLAGS) ssetroot $(DESTDIR)$(BINDIR)/xsetroot
+-
+ gram.h gram.c: gram.y
+ 	$(YACC) $(YFLAGS) gram.y
+ 	$(MV) y.tab.c gram.c

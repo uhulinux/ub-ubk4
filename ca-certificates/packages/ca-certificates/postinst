@@ -1,0 +1,18 @@
+#/bin/sh
+
+if [ -d "/usr/share/ca-certificates" ] ; then
+	# if the user has local certs, we need to rebuild again
+	# to include their stuff in the db.
+	# However it's too overzealous when the user has custom certs in place.
+	# --fresh is to clean up dangling symlinks
+	/usr/sbin/update-ca-certificates --fresh
+fi
+badcerts=0
+for c in $(find -L /etc/ssl/certs/ -type l) ; do
+	echo "Broken symlink for a certificate at $c"
+	badcerts=1
+done
+if [ ${badcerts} -eq 1 ]; then
+	echo "Removing the following broken symlinks:"
+	echo "$(find -L /etc/ssl/certs/ -type l -printf '%p -> %l\n' -delete)"
+fi

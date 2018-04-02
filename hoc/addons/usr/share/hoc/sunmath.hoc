@@ -1,0 +1,111 @@
+### -*-hoc-*-
+### ====================================================================
+### Provide additional mathematical functions offered by the Sun Solaris
+### C/C++ runtime library:
+### [17-Jan-2002]
+### ====================================================================
+
+### Support for MAXSUBNORMAL was added only at hoc-7.0.2.beta; make this
+### file work for earlier versions too.
+
+if (!defined(MAXSUBNORMAL)) \
+{
+	if (__IEEE_754__) \
+	{
+		MAXSUBNORMAL = (1 - 2^(-52)) * 2^(-1022)
+		if (MAXSUBNORMAL == 0) \
+		       MAXSUBNORMAL = MINNORMAL
+	} \
+	else \
+		MAXSUBNORMAL = MINNORMAL
+	MAXSUBNORMAL := MAXSUBNORMAL
+}
+
+func exp10(x)		{ return (10 ^ x) }
+
+func exp2(x)		{ return (2 ^ x) }
+
+func iszero(x)		{ return (x == 0) }
+
+func max_normal()	{ return MAXNORMAL }
+
+func max_subnormal()	{ return MAXSUBNORMAL }
+
+func min_subnormal()	{ return MINSUBNORMAL }
+
+func min_normal()	{ return MINNORMAL }
+
+func signaling_nan()	{ return snan() }
+
+func signbit(x)		{ return (copysign(1.0, x) == -1) }
+
+proc help_exp10() \
+{
+	print "\texp10(x) returns 10^x.\n\n"
+}
+
+proc help_exp2() \
+{
+	print "\texp2(x) returns 2^x.\n\n"
+}
+
+proc help_iszero() \
+{
+	print "\tiszero(x) returns 1 if x is zero, and 0 otherwise.\n\n"
+}
+
+proc help_max_subnormal() \
+{
+	print "\tmax_subnormal() returns the largest positive subnormal\n"
+	print "\tfloating-point number.\n\n"
+
+	print "\tHowever, if the host architecture does not support subnormal\n"
+	print "\tnumbers, then it returns the smallest positive normalized\n"
+	print "\tfloating-point number.\n\n"
+}
+
+proc help_min_subnormal() \
+{
+	print "\tmin_subnormal() returns the smallest positive subnormal\n"
+	print "\tfloating-point number.\n\n"
+
+	print "\tHowever, if the host architecture does not support subnormal\n"
+	print "\tnumbers, then it returns the smallest positive normalized\n"
+	print "\tfloating-point number.\n\n"
+}
+
+proc help_min_normal() \
+{
+	print "\tmin_normal() returns the smallest positive normalized\n"
+	print "\tfloating-point number.\n\n"
+}
+
+proc help_max_normal() \
+{
+	print "\tmax_normal() returns the largest positive normalized\n"
+	print "\tfloating-point number.\n\n"
+}
+
+proc help_quiet_nan() \
+{
+	print "\tquiet_nan() returns a quiet NaN.\n\n"
+}
+
+proc help_signaling_nan() \
+{
+	print "\tsignaling_nan() returns a signaling NaN.\n\n"
+}
+
+proc help_signbit() \
+{
+	print "\tsignbit(x) returns 1 if the sign bit of x is nonzero, and 0\n"
+	print "\totherwise.\n\n"
+
+	print "\tWarning 1: Some architectures (e.g., SGI MIPS) do not support\n"
+	print "\tsigned NaNs, so on such systems, signbit(+NaN) and\n"
+	print "\tsignbit(-NaN) both return 0.\n\n"
+
+	print "\tWarning 2: Some architectures (e.g., Intel x86 (IA32) and\n"
+	print "\tHP/Intel IA64) have negative native NaNs, so on such systems,\n"
+	print "\tsignbit(+NaN) returns 1, and signbit(-NaN) returns 0.\n\n"
+}

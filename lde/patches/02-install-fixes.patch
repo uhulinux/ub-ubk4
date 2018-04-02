@@ -1,0 +1,23 @@
+diff -Naurd lde.orig/macros/Makefile.in lde/macros/Makefile.in
+--- lde.orig/macros/Makefile.in	2002-01-12 07:20:34.000000000 +0100
++++ lde/macros/Makefile.in	2003-04-21 11:08:54.000000000 +0200
+@@ -21,8 +21,8 @@
+ prefix = @prefix@
+ exec_prefix = @exec_prefix@
+ libdir = @libdir@
+-sbindir = @SBIN_LOCATION@
+-mandir = $(prefix)/man/man8
++sbindir = @sbindir@
++mandir = $(prefix)/man
+ manext = 8
+ program_name = lde
+ 
+@@ -101,7 +101,7 @@
+ 
+ install:	$(program_name)
+ 	${INSTALL_PROGRAM} $(program_name) $(sbindir)/$(program_name)
+-	${INSTALL_DATA} doc/lde.man $(mandir)/$(program_name).$(manext)
++	${INSTALL_DATA} doc/lde.man $(mandir)/man8/$(program_name).$(manext)
+ 
+ test:
+ 	( cd ../lde-testdata ; ./test.sh )

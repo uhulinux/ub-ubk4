@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--with-udev-dir=/usr/lib/udev/ \
+	--with-pppd-plugin-dir=/usr/lib/pppd/2.4.7 \
+	--enable-more-warnings=no \
+	--enable-ifupdown \
+	--enable-modify-system \
+	--enable-concheck \
+	--with-session-tracking=systemd \
+	--with-suspend-resume=systemd

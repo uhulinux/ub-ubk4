@@ -1,0 +1,44 @@
+diff -urN XBlast-2.6-sound.orig/Legacy/README XBlast-2.6-sound/Legacy/README
+--- XBlast-2.6-sound.orig/Legacy/README	Sun Oct  3 11:43:31 1999
++++ XBlast-2.6-sound/Legacy/README	Mon Dec 10 19:18:01 2001
+@@ -36,7 +36,7 @@
+ INTRO
+ 
+ XBlast is a multi-player arcade game for X11R5/R6. The game can be played
+-with at least two players and up to four players. It was inspired by
++with at least two players and up to six players. It was inspired by
+ the video/computer game Bomberman(Dynablaster), which was to my
+ knowledge first programmed for NEC's PC Engine/Turbo Grafx. Other
+ (commercial) versions of the original game exist for IBM-PC, Atari ST,
+diff -urN XBlast-2.6-sound.orig/Legacy/WEB_SITE XBlast-2.6-sound/Legacy/WEB_SITE
+--- XBlast-2.6-sound.orig/Legacy/WEB_SITE	Fri Nov 29 14:13:20 1996
++++ XBlast-2.6-sound/Legacy/WEB_SITE	Mon Dec 10 19:18:53 2001
+@@ -1,6 +1,6 @@
+ The "official" XBlast web site is:
+ 
+-http://www.ikp.uni-koeln.de/~vogel/xblast/xblast.html
++http://www.ndh.net/home/m.vogel/
+ 
+ It also contains links to other XBlast web resources.
+ 
+diff -u -r -N XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.tcl XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.tcl
+--- XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.tcl	Sun Sep 26 10:56:48 1999
++++ XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.tcl	Tue Jan  8 17:48:03 2002
+@@ -3076,7 +3076,7 @@
+ 	incr l
+     } 
+     $W.l${frame}.title config \
+-	    -text "Level $startLevel - [expr $levelID-1]"
++	    -text "Level $startLevel - [expr $levelID]"
+ }
+ 
+ proc getLevelString {} {
+diff -urN XBlast-2.6-sound.orig/Legacy/xblast.man XBlast-2.6-sound/Legacy/xblast.man
+--- XBlast-2.6-sound.orig/Legacy/xblast.man	Sun Sep 19 16:31:51 1999
++++ XBlast-2.6-sound/Legacy/xblast.man	Mon Dec 10 19:24:11 2001
+@@ -1,4 +1,4 @@
+-.TH xblast 1 "Release 2.6.1 (September 18th 1999)"
++.TH xblast 6 "Release 2.6.1 (September 18th 1999)"
+ .SH NAME
+ XBlast - Multi-player "Blast the Others" game
+ .PP

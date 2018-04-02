@@ -1,0 +1,34 @@
+diff -Naur ltris-1.0.13-orig/src/chart.c ltris-1.0.13/src/chart.c
+--- ltris-1.0.13-orig/src/chart.c	2009-10-25 20:17:27.000000000 +0100
++++ ltris-1.0.13/src/chart.c	2009-11-27 20:54:55.000000000 +0100
+@@ -189,15 +189,13 @@
+ 	if ( charts ) list_delete( charts ); charts = 0;
+ 	charts = list_create( LIST_AUTO_DELETE, chart_set_delete );
+     /* load highscore */
+-    if ( !chart_load_from_path( HI_DIR ) ) {
+-        fprintf( stderr, "Unable to access highscore chart in '%s'.\n", HI_DIR );
+-        fprintf( stderr, "Trying to use config directory '%s'.\n", config.dir_name );
++
+         if ( !chart_load_from_path( config.dir_name ) ) {
+             fprintf( stderr, "Unable to access highscore chart in config directory... won't be "
+                              "able to save any results. Sorry.\n" );
+             return;
+         }
+-    }
++
+     printf( "Saving highscore chart in: %s\n", chart_path );
+     /* load resources */
+     cfont = load_fixed_font( "f_small_yellow.bmp", 32, 96, 8 );
+diff -Naur ltris-1.0.13-orig/src/Makefile.in ltris-1.0.13/src/Makefile.in
+--- ltris-1.0.13-orig/src/Makefile.in	2009-10-25 20:27:29.000000000 +0100
++++ ltris-1.0.13/src/Makefile.in	2009-11-27 20:55:46.000000000 +0100
+@@ -611,9 +611,6 @@
+ 	$(mkinstalldirs) $(DESTDIR)$(inst_dir)
+ 	$(INSTALL_DATA) figures $(DESTDIR)$(inst_dir)/figures
+ 	$(mkinstalldirs) $(DESTDIR)$(hi_dir)
+-	if ! test -f $(DESTDIR)$(hi_dir)/ltris.hscr; then \
+-	  $(INSTALL_DATA) --mode=666 empty.hscr $(DESTDIR)$(hi_dir)/ltris.hscr; \
+-	fi;
+ 
+ uninstall-local:
+ 	-rm -fr $(DESTDIR)$(inst_dir)

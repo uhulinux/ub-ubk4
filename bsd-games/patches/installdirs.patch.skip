@@ -1,0 +1,61 @@
+diff -Nur orig/install-man.in mod/install-man.in
+--- orig/install-man.in	2001-03-03 14:02:52.000000000 +0100
++++ mod/install-man.in	2018-02-09 23:40:28.762798557 +0100
+@@ -33,11 +33,11 @@
+     basepage=$(basename "$page")
+     section=${basepage##*.}
+     if [ "$section" = 6 ]; then
+-	mandir=@install_prefix@@man6dir@
++	mandir=/var/uhubuild/work/install@man6dir@
+     elif [ "$section" = 8 ]; then
+-	mandir=@install_prefix@@man8dir@
++	mandir=/var/uhubuild/work/install@man8dir@
+     elif [ "$section" = 5 ]; then
+-	mandir=@install_prefix@@man5dir@
++	mandir=/var/uhubuild/work/install@man5dir@
+     else
+ 	echo "Unknown manpage section $section" >&2
+ 	exit 1
+@@ -55,11 +55,11 @@
+     page2=$2
+     section2=${page2##*.}
+     if [ "$section2" = 6 ]; then
+-	mandir=@install_prefix@@man6dir@
++	mandir=/var/uhubuild/work/install@man6dir@
+     elif [ "$section2" = 8 ]; then
+-	mandir=@install_prefix@@man8dir@
++	mandir=/var/uhubuild/work/install@man8dir@
+     elif [ "$section2" = 5 ]; then
+-	mandir=@install_prefix@@man5dir@
++	mandir=/var/uhubuild/work/install@man5dir@
+     else
+ 	echo "Unknown manpage section $section2" >&2
+ 	exit 1
+diff -Nur orig/install-score.in mod/install-score.in
+--- orig/install-score.in	2001-03-03 14:02:52.000000000 +0100
++++ mod/install-score.in	2018-02-09 23:33:06.891504475 +0100
+@@ -29,10 +29,10 @@
+ set -e
+ 
+ if [ "$1" = "-p" ]; then
+-    scorefile="@install_prefix@$2"
++    scorefile="/var/uhubuild/work/install$2"
+     perms=@vardata_perms_priv@
+ else
+-    scorefile="@install_prefix@$1"
++    scorefile="/var/uhubuild/work/install$1"
+     perms=@vardata_perms@
+ fi
+ 
+diff -Nur orig/Makeconfig.in mod/Makeconfig.in
+--- orig/Makeconfig.in	2004-02-09 02:37:31.000000000 +0100
++++ mod/Makeconfig.in	2018-02-09 23:21:16.528643816 +0100
+@@ -35,7 +35,7 @@
+ # Build directories
+ BUILDDIRS := @build_dirs@
+ # Installation prefix
+-INSTALL_PREFIX := @install_prefix@
++INSTALL_PREFIX := /var/uhubuild/work/install
+ # Games directory
+ GAMESDIR := @gamesdir@
+ # Daemon directory

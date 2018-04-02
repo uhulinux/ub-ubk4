@@ -1,0 +1,14 @@
+#/bin/sh
+
+version=ubversion
+echo downloading data...
+mkdir -p /usr/share/openmortal
+mkdir -p /tmp/install
+cd /tmp/install
+curl -o openmortal-$version.tar.bz2 https://10gbps-io.dl.sourceforge.net/project/openmortal/openmortal/$version/openmortal-$version.tar.bz2
+echo extracting...
+tar -xvf openmortal-$version.tar.bz2 -C /usr/share/
+mv  -f /usr/share/openmortal-$version/data/{sound,characters,script,gfx,fonts} /usr/share/openmortal/
+rm -rf /usr/share/openmortal-$version
+cd -
+rm -rf /tmp/install

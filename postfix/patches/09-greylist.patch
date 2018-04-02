@@ -1,0 +1,45 @@
+diff -Naur orig/conf/main.cf patched/conf/main.cf
+--- orig/conf/main.cf	2011-11-17 19:23:48.000000000 +0100
++++ patched/conf/main.cf	2013-03-18 00:31:47.531107642 +0100
+@@ -654,4 +654,16 @@
+ # readme_directory: The location of the Postfix README files.
+ #
+ readme_directory =
++
++# Greylisting
++#
++# restart the policy server less frequently so
++#
++#policy_time_limit = 3600
++
++#smtpd_recipient_restrictions =
++#  reject_unlisted_recipient
++#  reject_unauth_destination
++#  check_policy_service unix:private/policy
++
+ inet_protocols = ipv4
+diff -Naur orig/conf/master.cf patched/conf/master.cf
+--- orig/conf/master.cf	2011-12-14 18:44:24.000000000 +0100
++++ patched/conf/master.cf	2013-03-18 00:28:49.041460242 +0100
+@@ -117,3 +117,9 @@
+ #mailman   unix  -       n       n       -       -       pipe
+ #  flags=FR user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py
+ #  ${nexthop} ${user}
++#
++# Policy server (greylist.pl)
++#
++#policy  unix  -       n       n       -       -       spawn
++#  user=nobody argv=/usr/bin/perl /usr/lib/postfix/greylist.pl
++#
+diff -Naur orig/examples/smtpd-policy/greylist.pl patched/examples/smtpd-policy/greylist.pl
+--- orig/examples/smtpd-policy/greylist.pl	2007-01-04 23:30:26.000000000 +0100
++++ patched/examples/smtpd-policy/greylist.pl	2013-03-18 00:28:49.041460242 +0100
+@@ -73,7 +73,7 @@
+ # In case of database corruption, this script saves the database as
+ # $database_name.time(), so that the mail system does not get stuck.
+ #
+-$database_name="/var/mta/greylist.db";
++$database_name="/var/lib/greylist/greylist.db"
+ $greylist_delay=60;
+ 
+ #

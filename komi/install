@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+DATAPATH="$UB_INSTALLDIR"/usr/share/games/komidata/
+BINPATH="$UB_INSTALLDIR"/usr/bin/
+MANPATH="$UB_INSTALLDIR"/usr/share/man/man6/
+	install -d -m 755 "$DATAPATH" "$BINPATH" "$MANPATH"
+	install -m 755 komi "$BINPATH"/
+	install -m 644 komidata/* "$DATAPATH"/
+	cp komi.6 "$MANPATH"/
+	mv CHANGELOG.txt CHANGELOG
+	mv COPYING.txt COPYING
+	convert komidata/sprites_komi.bmp "$UB_INSTALLDIR"/usr/share/pixmaps/komi.png

@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+cd gtk2
+ub_install
+cd ../gtk3
+ub_install
+
+# Ezeket UBUNTU sem használja, mi sem egyelőre, csak bajnak lennének.
+rm -rf ${UB_INSTALLDIR}/usr/lib/libdummy*
+
+# A libindicator3 csomagnak is legyen doc része
+mkdir -p $UB_INSTALLDIR/usr/share/doc/Packages/libindicator3
+cp AUTHORS COPYING ChangeLog $UB_INSTALLDIR/usr/share/doc/Packages/libindicator3/

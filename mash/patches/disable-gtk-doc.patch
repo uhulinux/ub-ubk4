@@ -1,0 +1,37 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2011-09-12 18:19:14.000000000 +0200
++++ mod/configure.ac	2018-01-01 15:46:08.515230426 +0100
+@@ -82,8 +82,6 @@
+ CLUTTER_PREFIX="`$PKG_CONFIG --variable=prefix clutter-1.0`"
+ AC_SUBST(CLUTTER_PREFIX)
+ 
+-GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+-
+ GOBJECT_INTROSPECTION_CHECK([0.6.1])
+ 
+ AC_PATH_PROG([GLIB_MKENUMS], [glib-mkenums])
+@@ -93,9 +91,6 @@
+         mash/Makefile
+         mash/rply/Makefile
+         example/Makefile
+-        docs/Makefile
+-        docs/reference/Makefile
+-        docs/reference/mash-docs.sgml
+         mash-$MASH_API_VERSION.pc:mash.pc.in
+ ])
+ 
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2011-09-12 18:19:14.000000000 +0200
++++ mod/Makefile.am	2018-01-01 15:46:23.410847692 +0100
+@@ -1,4 +1,4 @@
+-SUBDIRS = mash example docs
++SUBDIRS = mash example
+ 
+ ACLOCAL_AMFLAGS = -I m4
+ 
+@@ -10,5 +10,3 @@
+ EXTRA_DIST = mash.pc.in
+ 
+ DISTCLEANFILES = $(pcfile)
+-
+-DISTCHECK_CONFIGURE_FLAGS=--enable-gtk-doc

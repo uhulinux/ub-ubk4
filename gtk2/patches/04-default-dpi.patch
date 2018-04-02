@@ -1,0 +1,43 @@
+diff -Naur gtk+-2.8.17.orig/gdk/x11/gdkxftdefaults.c gtk+-2.8.17/gdk/x11/gdkxftdefaults.c
+--- gtk+-2.8.17.orig/gdk/x11/gdkxftdefaults.c	2005-10-25 20:10:59.000000000 +0200
++++ gtk+-2.8.17/gdk/x11/gdkxftdefaults.c	2006-04-25 22:02:18.000000000 +0200
+@@ -101,8 +101,13 @@
+   return FALSE;
+ }
+ 
++/* Hack:
++ *  - if the Xft.dpi resource is unset, assume the value 96,
++ *  - if it is set to 0, ask from the X server.
++ * A similar patch is maintained in libxft.
++ */
+ static gboolean
+-get_double_default (Display *dpy,
++get_double_default_dpi_hack (Display *dpy,
+ 		    gchar   *option,
+ 		    gdouble *value)
+ {
+@@ -117,11 +122,13 @@
+        * decimal separator.
+        */
+       *value = g_strtod (v, &e);
+-      if (e != v)
++      if (e != v && *value != 0.0)
+ 	return TRUE;
++      return FALSE;
+     }
+   
+-  return FALSE;
++  *value = 96.0;
++  return TRUE;
+ }
+ 
+ static gboolean
+@@ -206,7 +213,7 @@
+       screen_x11->xft_rgba = subpixel;
+     }
+ 
+-  if (!get_double_default (xdisplay, "dpi", &dpi_double))
++  if (!get_double_default_dpi_hack (xdisplay, "dpi", &dpi_double))
+     dpi_double = (((double) DisplayHeight (xdisplay, xscreen) * 25.4) / 
+ 		  (double) DisplayHeightMM (xdisplay, xscreen));
+ 

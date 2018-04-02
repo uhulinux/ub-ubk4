@@ -1,0 +1,12 @@
+diff -Naurdp a/Makefile b/Makefile
+--- a/Makefile	2007-05-30 17:28:48.000000000 +0200
++++ b/Makefile	2007-10-17 07:52:10.000000000 +0200
+@@ -51,7 +51,7 @@ MANDIR = $(prefix)/usr/share/man
+ 
+ # The following define determines whether the package adheres to the
+ # file system standard.
+-FSSTND = -DFSSTND
++FSSTND = -DFSSTND -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ 
+ # The following define establishes ownership for the man pages.
+ # Avery tells me that there is a difference between Debian and

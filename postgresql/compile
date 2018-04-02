@@ -1,0 +1,22 @@
+#!/bin/sh -eux
+
+./configure \
+	--with-template=linux \
+	--prefix=/usr \
+	--bindir=/usr/bin \
+	--libdir=/usr/lib \
+	--mandir=/usr/share/man \
+	--includedir=/usr/include/postgresql \
+	--datadir=/usr/share \
+	--with-openssl \
+	--with-gnu-ld \
+	--with-pam \
+	--with-python \
+	--with-perl \
+	--with-tcl \
+	--with-krb5 \
+	--with-ldap
+ub_make
+
+cd contrib
+ub_make

@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+export ARCH=i386
+if [ "$UB_ARCH" == "amd64" ];then
+export ARCH=x86_64
+fi
+ub_compile

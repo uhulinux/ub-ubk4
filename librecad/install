@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+install -D -m 755 unix/librecad "${UB_INSTALLDIR}/usr/bin/librecad"
+install -D -m 755 unix/ttf2lff "${UB_INSTALLDIR}/usr/bin/ttf2lff"
+
+install -D -m 644 desktop/librecad.desktop "${UB_INSTALLDIR}/usr/share/applications/librecad.desktop"
+install -D -m 644 desktop/librecad.1 "${UB_INSTALLDIR}/usr/share/man/man1/librecad.1"
+
+for SIZE in 16 24 32 48 64 96 128; do
+	convert -scale ${SIZE} \
+		desktop/graphics_icons_and_splash/Icon\ LibreCAD/Icon_Librecad.svg \
+		librecad.png
+	install -D -m 644 librecad.png "${UB_INSTALLDIR}/usr/share/icons/hicolor/${SIZE}x${SIZE}/apps/librecad.png"
+done
+install -D -m 644 desktop/graphics_icons_and_splash/Icon\ LibreCAD/Icon_Librecad.svg "${UB_INSTALLDIR}/usr/share/icons/hicolor/scalable/apps/librecad.svg"
+mkdir -p "${UB_INSTALLDIR}/usr/share/librecad/"
+cp -r unix/resources/{library,patterns,fonts,qm,plugins} "${UB_INSTALLDIR}/usr/share/librecad/"

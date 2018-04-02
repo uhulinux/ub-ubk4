@@ -1,0 +1,1 @@
+urllist http://archive.debian.org/debian/pool/main/l/lexmark7000linux/ | grep orig | sed s/-//g | splitver '^lexmark7000linux_([0-9.]+).orig.tar.gz$' | sed s/\.19/\./

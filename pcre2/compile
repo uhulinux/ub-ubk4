@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_configure \
+	--enable-pcre2-16 \
+	--enable-utf8 \
+	--enable-unicode-properties \
+	--enable-pcre2-32 \
+	--enable-jit \
+	--enable-pcre2grep-libz \
+	--enable-pcre2grep-libbz2 \
+	--enable-pcre2test-libreadline
+ub_make

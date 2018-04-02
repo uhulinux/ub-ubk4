@@ -1,0 +1,36 @@
+diff -Nur orig/k9copy_assistant.desktop mod/k9copy_assistant.desktop
+--- orig/k9copy_assistant.desktop	2014-09-29 17:00:12.000000000 +0200
++++ mod/k9copy_assistant.desktop	2016-12-01 11:21:31.334711633 +0100
+@@ -3,7 +3,7 @@
+ Encoding=UTF-8
+ Type=Application
+ Name=k9copy assistant
+-Exec=k9copy --assistant -caption "%c" %i %m  %u
++Exec=k9copy --assistant
+ Comment=DVD9 to DVD5 backup tool
+ Comment[fr]=Backup de DVD9 en DVD5
+ Comment[tr]=DVD9 DVD5 yedekleme aracı
+@@ -14,9 +14,8 @@
+ GenericName[tr]=DVD Vidyo Yedekleme Aracı
+ GenericName[ru]=Копирование с видео-DVD
+ GenericName[uk]=Копіювання відео-DVD
+-MimeTypes=
+ Terminal=false
+ Icon=k9copy
+ X-DocPath=k9copy/index.html
+ Categories=Qt;KDE;AudioVideo;DiscBurning;
+-X-KDE-StartupNotify=true
+\ No newline at end of file
++X-KDE-StartupNotify=true
+diff -Nur orig/k9copy.desktop mod/k9copy.desktop
+--- orig/k9copy.desktop	2014-09-29 17:00:11.000000000 +0200
++++ mod/k9copy.desktop	2016-12-01 11:21:07.086757131 +0100
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ Type=Application
+ Name=k9copy
+-Exec=k9copy -caption "%c" %i %u
++Exec=k9copy
+ Comment=DVD9 to DVD5 backup tool
+ Comment[fr]=Backup de DVD9 en DVD5
+ Comment[tr]=DVD9 DVD5 yedekleme aracı

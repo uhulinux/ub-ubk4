@@ -1,0 +1,25 @@
+diff -Naurd orig/Makefile mod/Makefile
+--- orig/Makefile	1997-04-17 12:00:06.000000000 +0200
++++ mod/Makefile	2009-06-23 20:54:35.000000000 +0200
+@@ -15,17 +15,12 @@
+ 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+ 
+ install: bclock Clock-col.ad
+-	@if [ -d /usr/X11R6/bin ]; then set +x; \
+-	else (set -x; mkdir -p /usr/X11R6/bin); fi
+-	install -c -s bclock /usr/X11R6/bin/bclock
+-	@if [ -d /usr/X11R6/lib/X11/app-defaults ]; then set +x; \
+-	else (set -x; mkdir -p /usr/X11R6/lib/X11/app-defaults); fi
+-	install -c -m 0444 Clock-col.ad /usr/X11R6/lib/X11/app-defaults/Clock-color
++	install -c -s bclock $(DESTDIR)/usr/bin/bclock
++	mkdir -p $(DESTDIR)/usr/lib/X11/app-defaults
++	install -c -m 0444 Clock-col.ad $(DESTDIR)/usr/lib/X11/app-defaults/Clock-color
+ 
+ install.man: bclock.man
+-	@if [ -d /usr/X11R6/man/man1 ]; then set +x; \
+-	else (set -x; mkdir -p /usr/X11R6/man/man1); fi
+-	install -c -m 0444 bclock.man /usr/X11R6/man/man1/bclock.1
++	install -c -m 0444 bclock.man $(DESTDIR)/usr/share/man/man1/bclock.1
+ 
+ clean:
+ 	rm -f *.o *% *.bak *\~ bclock

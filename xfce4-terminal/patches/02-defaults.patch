@@ -1,0 +1,66 @@
+diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-preferences.c
+--- orig/terminal/terminal-preferences.c	2017-01-13 17:07:00.134741323 +0100
++++ patched/terminal/terminal-preferences.c	2017-03-31 18:08:02.957517549 +0200
+@@ -691,7 +691,7 @@
+       g_param_spec_boolean ("font-allow-bold",
+                             NULL,
+                             "FontAllowBold",
+-                            TRUE,
++                            FALSE,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ 
+   /**
+@@ -832,7 +832,7 @@
+       g_param_spec_boolean ("misc-toolbar-default",
+                             NULL,
+                             "MiscToolbarDefault",
+-                            FALSE,
++                            TRUE,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ 
+   /**
+@@ -974,7 +974,7 @@
+       g_param_spec_uint ("scrolling-lines",
+                          NULL,
+                          "ScrollingLines",
+-                         0u, 1024u * 1024u, 1000u,
++                         0u, 1024u * 1024u, 2000u,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ 
+   /**
+@@ -994,7 +994,7 @@
+       g_param_spec_boolean ("scrolling-on-output",
+                             NULL,
+                             "ScrollingOnOutput",
+-                            TRUE,
++                            FALSE,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ 
+   /**
+@@ -1028,7 +1028,7 @@
+       g_param_spec_boolean ("shortcuts-no-menukey",
+                             NULL,
+                             "ShortcutsNoMenukey",
+-                            FALSE,
++                            TRUE,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ 
+   /**
+@@ -1038,7 +1038,7 @@
+       g_param_spec_boolean ("shortcuts-no-mnemonics",
+                             NULL,
+                             "ShortcutsNoMnemonics",
+-                            FALSE,
++                            TRUE,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ 
+   /**
+@@ -1069,7 +1069,7 @@
+       g_param_spec_string ("word-chars",
+                            NULL,
+                            "WordChars",
+-                           "-A-Za-z0-9,./?%&#:_=+@~",
++                           "-,./?%&#:_=+@~",
+                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ 
+   /* install all properties */

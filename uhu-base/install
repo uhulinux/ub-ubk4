@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/boot
+ln -s . "$UB_INSTALLDIR"/boot/boot
+
+mkdir -p "$UB_INSTALLDIR"/etc
+ln -s /proc/self/mounts "$UB_INSTALLDIR"/etc/mtab
+
+mkdir -p "$UB_INSTALLDIR"/var/spool
+ln -s ../mail "$UB_INSTALLDIR"/var/spool/mail
+
+mkdir -p "$UB_INSTALLDIR"/usr{,/local}
+ln -s bin "$UB_INSTALLDIR"/usr/games
+ln -s bin "$UB_INSTALLDIR"/usr/local/games

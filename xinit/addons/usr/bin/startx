@@ -1,0 +1,123 @@
+#!/bin/bash --
+
+#
+# /usr/bin/startx
+#
+# (c) 2002-2003 UHU-Linux Kft.
+# Koblinger Egmont <egmont@uhulinux.hu>
+#
+
+userclientrc=~/.xinitrc
+userserverrc=~/.xserverrc
+
+sysclientrc=/etc/X11/xinit/xinitrc
+sysserverrc=/etc/X11/xinit/xserverrc
+
+defaultclientargs=""
+defaultserverargs=""
+clientargs=""
+serverargs=""
+
+if [ -f "$userclientrc" ]; then
+	defaultclient="$userclientrc"
+elif [ -f "$sysclientrc" ]; then
+	defaultclient="$sysclientrc"
+else
+	defaultclient=/usr/bin/xterm
+fi
+
+if [ -f "$userserverrc" ]; then
+	defaultserver="$userserverrc"
+elif [ -f "$sysserverrc" ]; then
+	defaultserver="$sysserverrc"
+else
+	defaultserver=/usr/bin/X
+fi
+
+whoseargs="client"
+while [ x"$1" != x ]; do
+	case "$1" in
+	# '' required to prevent cpp from treating "/*" as a C comment.
+	/''*|\./''*)
+		if [ "$whoseargs" = "client" ]; then
+			if [ x"$clientargs" = x ]; then
+				client="$1"
+			else
+				clientargs="$clientargs $1"
+			fi
+		else
+			if [ x"$serverargs" = x ]; then
+				server="$1"
+			else
+				serverargs="$serverargs $1"
+			fi
+		fi
+		;;
+	--)
+		whoseargs="server"
+		;;
+	*)
+		if [ "$whoseargs" = "client" ]; then
+			clientargs="$clientargs $1"
+		else
+			# display must be the FIRST server argument
+			if [ x"$serverargs" = x ] && expr "$1" : ':[0-9][0-9]*$' > /dev/null 2>&1; then
+				display="$1"
+			else
+				serverargs="$serverargs $1"
+			fi
+		fi
+		;;
+	esac
+	shift
+done
+
+# process client arguments
+if [ x"$client" = x ]; then
+	client="$defaultclient"
+	# if no client arguments either, use rc file instead
+	if [ x"$clientargs" = x ]; then
+		clientargs="$defaultclientargs"
+	fi
+fi
+
+# process server arguments
+if [ x"$server" = x ]; then
+	server="$defaultserver"
+	# if no server arguments or display either, use rc file instead
+	if [ x"$serverargs" = x -a x"$display" = x ]; then
+		serverargs="$defaultserverargs"
+	fi
+fi
+
+serverargs="$serverargs -nolisten tcp"
+
+removelist=
+
+# set up default Xauth info for this machine
+if [ -z "$XAUTHORITY" ]; then
+	XAUTHORITY=~/.Xauthority
+fi
+export XAUTHORITY
+
+hostname="$(hostname -f)"
+
+authdisplay="${display:-:0}"
+mcookie="$(mcookie)"
+for displayname in "$authdisplay" "$hostname$authdisplay"; do
+	if ! xauth list "$displayname" | grep "$displayname " >/dev/null 2>&1; then
+		echo "add $displayname . $mcookie" | xauth >/dev/null
+		removelist="$displayname $removelist"
+	fi
+done
+
+xinit $client $clientargs -- $server $display $serverargs
+
+if [ x"$removelist" != x ]; then
+	echo "remove $removelist" | xauth >/dev/null
+fi
+
+if type -p deallocvt >/dev/null 2>&1; then
+	deallocvt
+fi
+

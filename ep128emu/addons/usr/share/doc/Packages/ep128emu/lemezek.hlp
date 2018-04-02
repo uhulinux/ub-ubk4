@@ -1,0 +1,43 @@
+Az újabb 2.0.7 -es verzióban a floppy imágók zip formában, a HD imágó bz2 formában van a /usr/share/ep128/disk könyvtárban, amik természetesen kicsomagolandók valahova (pl a ~/.ep128emu/disks/ könyvtár alá.
+
+floppy lemez disk imágó felcsatolási példa:
+--------------------------------------------------
+Létrehozunk egy célkönyvtárat valahol, majd rendszergazdaként terminálból kiadjuk:
+mount sajátkönyvtár/.ep128emu/disks/floppyimágónk célkönyvtár -t msdos -o loop,umask=0000
+
+Ha az emulátorban a floppyimágót aktualizáljuk, akkor az emulátor a célkönyvtárat látja, oda írkálhat, oda mi is írkálhatunk bármivel.
+
+A floppyimágó változásainak véglegesítése, és a célkönyvtár felszabadításához elegendő terminálból kiadni:
+umount célkönyvtár
+
+
+
+# V. István útmutatása az IDE használatához,(természetesen az  IDE.ROM és EPDOS 1.9használatával):
+
+A 126 MB-os IDE image partícióinak a mountolása Linux alatt:
+
+  losetup -o XXXXXXXX /dev/loop0 /.../ide126m.vhd
+  mount /dev/loop0 ...
+  ...
+  umount /dev/loop0
+  losetup -d /dev/loop0
+
+Az XXXXXXXX helyére a partíciónak megfelelő számot kell írni:
+
+  1.    32256
+  2.    33030144
+  3.    66060288
+  4.    99090432
+
+Természetesen a számok az adott image file-tól függenek; a partíciók kezdő szektorait az
+
+  /sbin/sfdisk -l -uS ide126m.vhd
+
+paranccsal lehet listázni, és ezt az értéket kell - 512-vel megszorozva - az losetup-nak megadni.
+A HD imágó használatához a README és a NEWS fájlok további tanulmányozása szükséges.
+
+Kérdésekkel nyugodtan lehet fordulni a www.enterpriseforever.org honlapra.
+
+2009 08 25
+
+Attus

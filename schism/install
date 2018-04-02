@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/usr/share/{applications,icons}
+ub_install
+cp icons/schism{-itf-,-}icon-128.png ${UB_INSTALLDIR}/usr/share/icons/
+cp sys/fd.org/*.desktop ${UB_INSTALLDIR}/usr/share/applications/

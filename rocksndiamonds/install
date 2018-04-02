@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cp rocksndiamonds $UB_INSTALLDIR/usr/bin/
+install -d -m 755 $UB_INSTALLDIR/usr/share/games/rocksndiamonds
+install -d -m 777 $UB_INSTALLDIR/var/games/rocksndiamonds/scores
+cp -r docs graphics levels music sounds $UB_INSTALLDIR/usr/share/games/rocksndiamonds/

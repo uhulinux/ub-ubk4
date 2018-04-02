@@ -1,0 +1,2 @@
+dir=$(sflist sf-xpaint sf-xpaint | splitver '^xpaint-([0-9.]+)$' | sort -V | tail -n 1)
+sflist sf-xpaint sf-xpaint/xpaint-$dir | splitver 'xpaint-([0-9.]+).tar.bz2' | sort -V | tail -n 1

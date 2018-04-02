@@ -1,0 +1,8 @@
+#!/bin/sh --
+
+if [ -t 0 -a -t 1 ]; then
+	exec xblast.bin "$@"
+else
+	exec xterm -title 'xblast - xterm' -e xblast.bin "$@"
+fi
+

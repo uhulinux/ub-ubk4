@@ -1,0 +1,10 @@
+diff -Naurd orig/Makefile mod/Makefile
+--- orig/Makefile	2003-05-27 14:23:25.000000000 +0200
++++ mod/Makefile	2010-08-10 18:21:20.000000000 +0200
+@@ -56,5 +56,5 @@
+ 
+ # Wow! You want to install it?
+ install: bitedit	
+-	install bitedit /usr/local/bin
++	install bitedit $(DESTDIR)/usr/bin
+ 

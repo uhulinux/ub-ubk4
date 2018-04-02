@@ -1,0 +1,51 @@
+.TH chkrootkit 1 "12 April 2001"
+.SH NAME 
+chkrootkit
+\- Determine whether the system is infected with a rootkit
+.SH SYNOPSIS
+.B chkrootkit
+[\fIOPTION\fR]... [\fITESTNAME\fR]...
+.SH DESCRIPTION
+.B chkrootkit
+examines certain elements of the target system and determines 
+whether they have been tampered with. Some tools which 
+.B chkrootkit
+applies while analyzing binaries and log files can be found at 
+\fI\//usr/lib/chkrootkit\fR.
+
+.SH OPTIONS
+.TP
+\fB\-h\fR
+Print a short help message and exit.
+.TP
+\fB\-V\fR
+Print version information and exit.
+.TP
+\fB\-l\fR
+Print available tests.
+.TP
+\fB\-d\fR
+Enter debug mode.
+.TP
+\fB\-x\fR
+Enter expert mode.
+.TP
+\fB\-q\fR
+Enter quiet mode.
+.TP
+\fB\-r\fR
+.B dir
+Use 
+.B dir
+as the root directory.
+.TP
+\fB\-p\fR
+.B dir1:dir2:dirN
+Specify the path for the external commands used by chkrootkit.
+
+.SH "AUTHOR"
+Manual page written by Yotam Rubin
+.I <yotam@makif.omer.k12.il>
+for the Debian project. It may be used by others.
+.SH SEE ALSO
+\fBstrings\fR(1)

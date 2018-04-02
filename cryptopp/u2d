@@ -1,0 +1,2 @@
+dir=$(sflist cryptopp cryptopp | grep -E '^([0-9.]+)$' | sort -V | tail -n 1)
+sflist cryptopp cryptopp/"$dir" | splitver '^cryptopp([0-9.]+).zip$' | sort -V | tail -n 1

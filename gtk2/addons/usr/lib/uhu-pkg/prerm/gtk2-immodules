@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+if [ ! -f /var/lib/uhu-pkg/gtk-immodules ]; then
+	exit 0
+fi
+
+if grep -q '^/usr/lib/gtk-2\.0/2\.2\.0/immodules/' /var/lib/dpkg/info/"$1".list; then
+	rm -f /var/lib/uhu-pkg/gtk-immodules
+fi

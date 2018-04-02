@@ -1,0 +1,20 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_compile \
+	--enable-remember \
+	--enable-regexp \
+	--enable-slit \
+	--enable-toolbar \
+	--enable-ewnh \
+	--enable-nls \
+	--enable-timedcache \
+	--enable-xft \
+	--enable-xrender \
+	--enable-xpm \
+	--enable-imlib2 \
+	--enable-xmb \
+	--enable-xinerama \
+	--enable-shape \
+	--enable-randr \
+	--enable-fribidi

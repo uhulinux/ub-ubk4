@@ -1,0 +1,29 @@
+diff -Naur pfqueue-0.5.6-orig/configure pfqueue-0.5.6/configure
+--- pfqueue-0.5.6-orig/configure	2007-02-03 18:49:30.000000000 +0100
++++ pfqueue-0.5.6/configure	2009-12-05 15:17:24.000000000 +0100
+@@ -11181,13 +11181,13 @@
+ 
+ 
+ 
+-{ echo "$as_me:$LINENO: checking for newwin in -lncurses" >&5
+-echo $ECHO_N "checking for newwin in -lncurses... $ECHO_C" >&6; }
++{ echo "$as_me:$LINENO: checking for newwin in -lncursesw" >&5
++echo $ECHO_N "checking for newwin in -lncursesw... $ECHO_C" >&6; }
+ if test "${ac_cv_lib_ncurses_newwin+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lncurses  $LIBS"
++LIBS="-lncursesw  $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+@@ -11247,7 +11247,7 @@
+ #define HAVE_LIBNCURSES 1
+ _ACEOF
+ 
+-  LIBS="-lncurses $LIBS"
++  LIBS="-lncursesw $LIBS"
+ 
+ fi
+ 

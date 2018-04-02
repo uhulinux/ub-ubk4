@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_compile \
+	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
+	-DCMAKE_INSTALL_PREFIX:PATH=/usr \
+	-DCMAKE_INSTALL_LIBDIR:PATH=lib \
+	-DENABLE_TESTING:BOOL=OFF \
+	-DBUILD_SHARED_LIBS:BOOL=ON \

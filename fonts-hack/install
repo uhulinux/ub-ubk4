@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/fonts/truetype
+cp -a *.ttf "$UB_INSTALLDIR"/usr/share/fonts/truetype/
+mkfontscale "$UB_INSTALLDIR"/usr/share/fonts/truetype
+sed 1d \
+  <"$UB_INSTALLDIR"/usr/share/fonts/truetype/fonts.scale \
+  >"$UB_INSTALLDIR"/usr/share/fonts/truetype/fonts.scale.hack
+rm "$UB_INSTALLDIR"/usr/share/fonts/truetype/fonts.scale
+cp -a "$UB_INSTALLDIR"/usr/share/fonts/truetype/fonts.{scale,dir}.hack

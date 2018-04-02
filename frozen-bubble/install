@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp share/icons/frozen-bubble-icon-64x64.png "$UB_INSTALLDIR"/usr/share/pixmaps/frozen-bubble.png
+
+# Verify that the magic patch really worked.
+if grep -q '@DATADIR@' "$UB_INSTALLDIR"/usr/lib/perl5/*/*/*/fb_stuff.pm; then
+	echo "Compilation failed. Try again."
+	exit 1
+fi

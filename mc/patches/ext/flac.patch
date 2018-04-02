@@ -1,0 +1,14 @@
+diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
+--- orig/misc/mc.ext.in	2011-07-26 14:55:53.000000000 +0200
++++ patched/misc/mc.ext.in	2011-07-29 16:57:11.000000000 +0200
+@@ -394,6 +394,10 @@
+ 	View=%view{ascii} identify %f
+ 	#View=%view{ascii} asciiview %f
+ 
++regex/\.([fF][lL][aA][cC])$
++	Open=if [ "$DISPLAY" = "" ]; then mplayer %f; else (totem %f &); fi
++	View=%view{ascii} metaflac --list --except-block-type=SEEKTABLE %s
++
+ 
+ ### Sound files ###
+ 

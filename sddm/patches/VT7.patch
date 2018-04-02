@@ -1,0 +1,26 @@
+diff -Naur orig/CMakeLists.txt mod/CMakeLists.txt
+--- orig/CMakeLists.txt	2015-06-20 14:09:12.000000000 +0200
++++ mod/CMakeLists.txt	2015-06-20 14:10:55.611386406 +0200
+@@ -121,7 +121,7 @@
+         string(REGEX REPLACE "[ \t\n]+" "" SYSTEMD_SYSTEM_UNIT_DIR ${SYSTEMD_SYSTEM_UNIT_DIR})
+     endif()
+ 
+-    set(MINIMUM_VT 1)
++    set(MINIMUM_VT 7)
+     set(HALT_COMMAND "/usr/bin/systemctl poweroff")
+     set(REBOOT_COMMAND "/usr/bin/systemctl reboot")
+ else()
+diff -Naur orig/services/sddm.service.in mod/services/sddm.service.in
+--- orig/services/sddm.service.in	2015-06-20 14:09:12.000000000 +0200
++++ mod/services/sddm.service.in	2015-06-20 14:11:12.543293495 +0200
+@@ -1,8 +1,8 @@
+ [Unit]
+ Description=Simple Desktop Display Manager
+ Documentation=man:sddm(1) man:sddm.conf(5)
+-Conflicts=getty@tty1.service
+-After=systemd-user-sessions.service getty@tty1.service plymouth-quit.service
++Conflicts=getty@tty7.service
++After=systemd-user-sessions.service getty@tty7.service plymouth-quit.service
+ 
+ [Service]
+ ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/sddm

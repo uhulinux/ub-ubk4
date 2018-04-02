@@ -1,0 +1,13 @@
+diff -urN dbus-1.2.1/bus/system.conf.in dbus-1.2.1.b/bus/system.conf.in
+--- dbus-1.2.1/bus/system.conf.in	2008-04-04 11:24:08.000000000 -0400
++++ dbus-1.2.1.b/bus/system.conf.in	2008-07-17 13:56:26.000000000 -0400
+@@ -17,6 +17,9 @@
+   <!-- Run as special user -->
+   <user>@DBUS_USER@</user>
+ 
++  <!-- Up the max timeout -->
++  <limit name="reply_timeout">21600000</limit>
++
+   <!-- Fork into daemon mode -->
+   <fork/>
+ 

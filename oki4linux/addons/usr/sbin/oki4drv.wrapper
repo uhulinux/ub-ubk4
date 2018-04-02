@@ -1,0 +1,11 @@
+#!/bin/bash
+
+f="$(mktemp -t oki4drv.XXXXXX)"
+
+if [ ! -f "$f" ]; then
+	exit 1
+fi
+
+/usr/sbin/oki4drv -g -s a4 -V -o "$f" - && cat "$f"
+
+rm -f -- "$f"

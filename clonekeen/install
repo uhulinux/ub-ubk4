@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+installdir="$UB_INSTALLDIR"/usr/share/games/clonekeen
+install -Dm755 src/keen $installdir/keen
+install -d -m 755 $installdir/data
+cp -rf bin/* $installdir/
+cp data/* "$installdir"/data
+find "$installdir" -type f ! -name keen -exec chmod 644 '{}' \;
+find "$installdir" -type d -exec chmod 755 '{}' \;
+chmod +s $installdir/keen

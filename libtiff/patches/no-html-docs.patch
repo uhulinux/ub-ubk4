@@ -1,0 +1,14 @@
+diff -Naur tiff-4.0.6-orig/Makefile.in tiff-4.0.6/Makefile.in
+--- tiff-4.0.6-orig/Makefile.in	2015-09-12 21:48:44.025171280 +0200
++++ tiff-4.0.6/Makefile.in	2016-02-15 19:47:43.494104370 +0100
+@@ -434,8 +434,8 @@
+ 	libtiff-4.pc.in \
+ 	nmake.opt
+ 
+-dist_doc_DATA = $(docfiles)
+-SUBDIRS = port libtiff tools build contrib test man html
++dist_doc_DATA = #$(docfiles)
++SUBDIRS = port libtiff tools build contrib test man # html
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libtiff-4.pc
+ 

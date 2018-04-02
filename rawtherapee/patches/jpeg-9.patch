@@ -1,0 +1,12 @@
+diff -Naur orig/rtengine/iccjpeg.cc patched/rtengine/iccjpeg.cc
+--- orig/rtengine/iccjpeg.cc	2016-05-04 13:12:05.000000000 +0200
++++ patched/rtengine/iccjpeg.cc	2016-05-04 18:58:16.898348511 +0200
+@@ -124,7 +124,7 @@
+ /*
+  * Handy subroutine to test whether a saved marker is an ICC profile marker.
+  */
+-static boolean
++static bool
+ marker_is_icc (jpeg_saved_marker_ptr marker)
+ {
+     return

@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+# remove execute bit from these examples, we dont want to depend on tcsh
+chmod -x "$UB_INSTALLDIR"/usr/share/doc/util-linux/getopt/*
+
+# fix version in .pc files
+if [ "$UB_VERSION_HEAD2" = "$UB_VERSION" ]; then
+	sed -i "s/^Version: .*$/Version: $UB_VERSION/g" "$UB_INSTALLDIR"/usr/lib/pkgconfig/*.pc
+fi

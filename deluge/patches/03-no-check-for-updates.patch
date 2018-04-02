@@ -1,0 +1,21 @@
+diff -Nur orig/deluge/core/preferencesmanager.py mod/deluge/core/preferencesmanager.py
+--- orig/deluge/core/preferencesmanager.py	2017-05-12 14:57:19.000000000 +0200
++++ mod/deluge/core/preferencesmanager.py	2018-03-06 20:59:52.732682316 +0100
+@@ -109,7 +109,7 @@
+     "auto_managed": True,
+     "move_completed": False,
+     "move_completed_path": deluge.common.get_default_download_dir(),
+-    "new_release_check": True,
++    "new_release_check": False,
+     "proxies": {
+         "peer": {
+             "type": 0,
+@@ -473,7 +473,7 @@
+                 self.new_release_timer.stop()
+             # Set a timer to check for a new release every 3 days
+             self.new_release_timer = LoopingCall(
+-                self._on_new_release_check, "new_release_check", True)
++                self._on_new_release_check, "new_release_check", False)
+             self.new_release_timer.start(72 * 60 * 60, False)
+         else:
+             if self.new_release_timer and self.new_release_timer.running:

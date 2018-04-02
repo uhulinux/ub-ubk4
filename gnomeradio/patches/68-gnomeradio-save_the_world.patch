@@ -1,0 +1,15 @@
+Description: Use g_timeout_add_seconds instead g_timeout_add.
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -1474,7 +1474,7 @@ int main(int argc, char* argv[])
+ 	 * Necessary, because the mono/stereo reception
+ 	 * needs some time to be correctly detected
+ 	 */
+-	g_timeout_add(3000, (GSourceFunc)redraw_status_window, NULL);	
++	g_timeout_add_seconds(3, (GSourceFunc)redraw_status_window, NULL);
+ 
+ 	/* Checks if the volume has been changed by an 
+ 	 * external app

@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+DST="$UB_INSTALLDIR"
+cd mksh
+install -D -m 755 mksh "$DST/usr/bin/mksh"
+install -D -m 644 mksh.1.gz "$DST/usr/share/man/man1/mksh.1.gz"
+install -D -m 644 dot.mkshrc "$DST/etc/skel/.mkshrc"
+ln -s mksh "$DST/usr/bin/ksh"
+ln -s ../usr/bin/mksh "$DST/bin/ksh"

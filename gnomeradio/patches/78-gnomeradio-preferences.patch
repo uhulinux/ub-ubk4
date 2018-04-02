@@ -1,0 +1,713 @@
+Description: Avoid memory leak (unref the gconf client when we're done).
+             Added option to disable audio loopback mode in Preferences settings.
+             Moved in separate GOptionGroup all command line parameters which refers to audio loopback mode.
+             Make sentence capitalization in text and increased preferences dialog.
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/prefs.c
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.c
++++ gnomeradio-1.8/src/prefs.c
+@@ -31,6 +31,8 @@
+ #include "rb_missing_plugins.h"
+ 
+ extern int autodetect;
++extern int can_capture;
++extern int alsa_loopback;
+ 
+ extern GtkWidget *preset_combo;
+ extern GtkAdjustment *adj;
+@@ -42,7 +44,9 @@ extern gboolean main_visible;
+ 
+ static GtkWidget *device_entry;
+ static GtkWidget *mixer_entry;
+-static GtkWidget *mute_on_exit_cb;
++static GtkWidget *audio_box;
++static GtkWidget *audio_switch;
++static GtkWidget *mute_on_exit;
+ static GtkWidget *list_view;
+ static GtkListStore *list_store;
+ static GtkTreeSelection *selection;
+@@ -78,6 +82,7 @@ gboolean save_settings(void)
+ 	gconf_client_set_bool(client, "/apps/gnomeradio/muted", settings.muted, NULL);
+ 	gconf_client_set_float(client, "/apps/gnomeradio/unmute-volume", settings.unmute_volume, NULL);
+ 	gconf_client_set_bool(client, "/apps/gnomeradio/mute-on-exit", settings.mute_on_exit, NULL);
++	gconf_client_set_bool(client, "/apps/gnomeradio/audio-loopback", settings.audio_loopback , NULL);
+ 	/*gconf_client_set_float(client, "/apps/gnomeradio/volume", volume->value, NULL);*/
+ 	gconf_client_set_float(client, "/apps/gnomeradio/last-freq", gtk_adjustment_get_value(adj)/STEPS, NULL);
+ 
+@@ -109,6 +114,8 @@ gboolean save_settings(void)
+ 	}	
+ 	gconf_client_set_int(client, "/apps/gnomeradio/presets/last", mom_ps, NULL);
+ 	/*g_print("Storing Settings in GConf database\n");*/
++
++	g_object_unref (client);
+ 	
+ 	return TRUE;
+ }			
+@@ -131,10 +138,10 @@ gboolean load_settings(void)
+ 		return FALSE;
+ 
+ 	/* Load general settings */
+-	settings.device = gconf_client_get_string(client, "/apps/gnomeradio/device" , NULL);
++	settings.device = gconf_client_get_string(client, "/apps/gnomeradio/device", NULL);
+ 	if (!settings.device)
+ 		settings.device = g_strdup("auto");
+-	settings.driver = gconf_client_get_string(client, "/apps/gnomeradio/driver" , NULL);
++	settings.driver = gconf_client_get_string(client, "/apps/gnomeradio/driver", NULL);
+ 	if (!settings.driver)
+ 		settings.driver = g_strdup("any");
+ 	settings.mixer = gconf_client_get_string(client, "/apps/gnomeradio/mixer", NULL);
+@@ -143,6 +150,7 @@ gboolean load_settings(void)
+ 	settings.muted = gconf_client_get_bool(client, "/apps/gnomeradio/muted", NULL);
+ 	settings.unmute_volume = gconf_client_get_float(client, "/apps/gnomeradio/unmute-volume", NULL);
+ 	settings.mute_on_exit = gconf_client_get_bool(client, "/apps/gnomeradio/mute-on-exit", NULL);
++	settings.audio_loopback = gconf_client_get_bool(client, "/apps/gnomeradio/audio-loopback", NULL);
+ 	/*volume->value = gconf_client_get_float(client, "/apps/gnomeradio/volume", NULL);*/
+ 	freq = gconf_client_get_float(client, "/apps/gnomeradio/last-freq", NULL);
+ 	if ((freq < FREQ_MIN) || (freq > FREQ_MAX))
+@@ -201,13 +209,37 @@ gboolean load_settings(void)
+ 	if (mom_ps >= count)
+ 		mom_ps = -1;
+ 
++	g_object_unref (client);
++
+ 	return TRUE;
+ }			
+ 	
+ static void mute_on_exit_toggled_cb(GtkWidget* widget, gpointer data)
+ {
+-	settings.mute_on_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mute_on_exit_cb));
+-}	
++	settings.mute_on_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mute_on_exit));
++}
++
++void audio_box_set_visible (gboolean visible)
++{
++	gtk_widget_hide (audio_box);
++	gtk_widget_set_no_show_all (audio_box, !visible);
++	if (visible)
++		gtk_widget_show_all (audio_box);
++}
++
++static void audio_switch_activate_cb (GtkWidget* widget, gpointer data)
++{
++	settings.audio_loopback = gtk_switch_get_active (GTK_SWITCH (audio_switch));
++
++	start_radio(TRUE, data);
++
++	if (settings.audio_loopback)
++		alsa_loopback = 1;
++	else
++		alsa_loopback = 0;
++
++	audio_box_set_visible (can_capture);
++}
+ 
+ static gboolean device_entry_activate_cb(GtkWidget *widget, gpointer data)
+ {
+@@ -224,6 +256,8 @@ static gboolean device_entry_activate_cb
+ 	settings.device = g_strdup(text);
+ 	
+ 	start_radio(TRUE, data);
++
++	audio_box_set_visible (can_capture);
+ 	
+ 	return FALSE;
+ }
+@@ -1244,73 +1278,112 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 
+ 	content_area = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
+ 
+-	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 15);
++	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+ 	gtk_container_set_border_width(GTK_CONTAINER(box), 10);
+ 	gtk_box_pack_start (GTK_BOX (content_area), box, TRUE, TRUE, 0);
+ 	
+ 	grid = gtk_grid_new();
+-	gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
+-	gtk_grid_set_column_spacing(GTK_GRID(grid), 20);
+-	gtk_box_pack_start(GTK_BOX(box), grid, TRUE, TRUE, 0);
++	gtk_grid_set_row_spacing (GTK_GRID (grid), 5);
++	gtk_grid_set_column_spacing (GTK_GRID (grid), 30);
++	gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
++	gtk_box_pack_start (GTK_BOX (box), grid, TRUE, TRUE, 0);
+ 
+ 	/* The general settings part */
+ 	label = gtk_label_new (NULL);
+-	gtk_widget_set_halign (label, GTK_ALIGN_START);
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
+ 	markup = g_strdup_printf ("<span weight=\"bold\">%s</span>", _("General Settings"));
+ 	gtk_label_set_markup (GTK_LABEL (label), markup);
+ 	g_free (markup);
+-	gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
+-
+-	label = gtk_label_new ("");
+-	gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 3);
++	gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
+ 
+-	label = gtk_label_new (_("Radio Device:"));
+-	gtk_widget_set_halign (label, GTK_ALIGN_START);
+-	gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
++	label = gtk_label_new (_("Radio device:"));
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
++	gtk_widget_set_margin_start (label, 10);
++	gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+ 
+ 	device_entry = gtk_entry_new();
++
+ 	if (autodetect)
+ 		gtk_entry_set_placeholder_text(GTK_ENTRY(device_entry), "auto");
+ 	else
+ 		gtk_entry_set_text(GTK_ENTRY(device_entry), settings.device);
+-	gtk_grid_attach(GTK_GRID(grid), device_entry, 2, 1, 1, 1);
+ 
+-	label = gtk_label_new (_("Mixer Source:"));
+-	gtk_widget_set_halign (label, GTK_ALIGN_START);
+-	gtk_grid_attach (GTK_GRID (grid), label, 1, 2, 1, 1);
++	gtk_grid_attach(GTK_GRID(grid), device_entry, 1, 1, 1, 1);
++
++	label = gtk_label_new (_("Mixer source:"));
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
++	gtk_widget_set_margin_start (label, 10);
++	gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
+ 
+ 	mixer_entry = gtk_entry_new();
+ 	gtk_entry_set_text(GTK_ENTRY(mixer_entry), settings.mixer);
+-	gtk_grid_attach(GTK_GRID(grid), mixer_entry, 2, 2, 1, 1);
++	gtk_grid_attach(GTK_GRID(grid), mixer_entry, 1, 2, 1, 1);
++
++	audio_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
++	gtk_widget_set_no_show_all (audio_box, TRUE);
++
++	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
++
++	label = gtk_label_new (_("Audio loopback mode"));
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
++	gtk_widget_set_margin_start (label, 10);
++
++	audio_switch = gtk_switch_new ();
++
++	gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
++	gtk_box_pack_end (GTK_BOX (box), audio_switch, FALSE, FALSE, 0);
++
++	label = gtk_label_new (NULL);
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
++	gtk_widget_set_valign (label, GTK_ALIGN_START);
++ 	gtk_widget_set_margin_start (label, 10);
++	markup = g_strconcat ("<span size=\"small\" style=\"italic\"><b>", _("Note:   "), "</b>",
++			    _("The audio loopback mode is required when radio card is not connected\n"
++			      "to the sound card via a cable. In this case, Gnomeradio needs to map the audio\n"
++			      "from the internal digital capture out to sound card."),
++			      "</span>", NULL);
++	gtk_label_set_markup (GTK_LABEL (label), markup);
++	g_free (markup);
++
++	gtk_box_pack_start (GTK_BOX (audio_box), box, FALSE, FALSE, 0);
++	gtk_box_pack_end (GTK_BOX (audio_box), label, FALSE, FALSE, 0);
++	gtk_grid_attach(GTK_GRID(grid), audio_box, 0, 3, 2, 1);
++
++	/* Enabled audio loopback from switch|commandline */
++	if (settings.audio_loopback || alsa_loopback)
++		gtk_switch_set_active (GTK_SWITCH (audio_switch), TRUE);
++	else
++		gtk_switch_set_active (GTK_SWITCH (audio_switch), FALSE);
+ 
+-	mute_on_exit_cb = gtk_check_button_new_with_label(_("Mute on exit"));
+-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mute_on_exit_cb), settings.mute_on_exit);
++	audio_box_set_visible (can_capture);
+ 
+-	gtk_grid_attach(GTK_GRID(grid), mute_on_exit_cb, 1, 3, 1, 1);
++	mute_on_exit = gtk_check_button_new_with_label(_("Mute on exit"));
++	gtk_widget_set_margin_start (mute_on_exit, 10);
++	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mute_on_exit), settings.mute_on_exit);
++	gtk_grid_attach(GTK_GRID(grid), mute_on_exit, 0, 4, 2, 1);
+ 
+ 	g_signal_connect(G_OBJECT(device_entry), "hide", G_CALLBACK(device_entry_activate_cb), app);
+ 	g_signal_connect(G_OBJECT(device_entry), "activate", G_CALLBACK(device_entry_activate_cb), NULL);
+ 	g_signal_connect(G_OBJECT(device_entry), "changed", G_CALLBACK(device_entry_auto_activate_cb), NULL);
+ 	g_signal_connect(G_OBJECT(mixer_entry), "hide", G_CALLBACK(mixer_entry_activate_cb), app);
+ 	g_signal_connect(G_OBJECT(mixer_entry), "activate", G_CALLBACK(mixer_entry_activate_cb), NULL);
+-	g_signal_connect(G_OBJECT(mute_on_exit_cb), "toggled", G_CALLBACK(mute_on_exit_toggled_cb), NULL);
++	g_signal_connect(G_OBJECT(audio_switch), "notify::active", G_CALLBACK(audio_switch_activate_cb), NULL);
++	g_signal_connect(G_OBJECT(mute_on_exit), "toggled", G_CALLBACK(mute_on_exit_toggled_cb), NULL);
+ 
+ 	gtk_widget_set_tooltip_text(device_entry, _("The radio device to use (e.g. /dev/radio0)"));
+ 	gtk_widget_set_tooltip_text(mixer_entry, _("The mixer device and channel to use (e.g. hw:0/Line)"));
+-	gtk_widget_set_tooltip_text(mute_on_exit_cb, _("Mute radio device on exit"));
++	gtk_widget_set_tooltip_text(mute_on_exit, _("Mute radio device on exit"));
+ 
+ 	/* The presets part */
+ 	label = gtk_label_new (NULL);
+-	gtk_widget_set_halign (label, GTK_ALIGN_START);
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
+ 	markup = g_strdup_printf ("<span weight=\"bold\">%s</span>", _("Presets"));
+ 	gtk_label_set_markup (GTK_LABEL (label), markup);
+ 	g_free (markup);
+-	gtk_grid_attach(GTK_GRID(grid), label, 0, 4, 2, 1);
+-
+-	label = gtk_label_new ("");
+-	gtk_grid_attach (GTK_GRID (grid), label, 0, 5, 1, 2);
++	gtk_grid_attach(GTK_GRID(grid), label, 0, 5, 1, 1);
+ 
+ 	scrolled_window = gtk_scrolled_window_new(NULL, NULL);
++	gtk_widget_set_margin_start (scrolled_window, 10);
+ 	gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(scrolled_window), 75);
+ 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolled_window), GTK_SHADOW_IN);
+ 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+@@ -1366,7 +1439,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 		i++;
+ 	}
+ 
+-	gtk_grid_attach(GTK_GRID(grid), scrolled_window, 1, 5, 2, 2);
++	gtk_grid_attach(GTK_GRID(grid), scrolled_window, 0, 6, 2, 1);
+ 
+ 	button_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 
+@@ -1434,44 +1507,43 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_box_pack_end(GTK_BOX(button_box), save_button, FALSE, FALSE, 0);
+ 	gtk_box_pack_end(GTK_BOX(button_box), open_button, FALSE, FALSE, 0);
+ 
+-	gtk_grid_attach(GTK_GRID(grid), button_box, 2, 7, 1, 1);
++	gtk_grid_attach(GTK_GRID(grid), button_box, 1, 7, 1, 1);
+ 
+ 	/* The record settings part */
+ 	label = gtk_label_new (NULL);
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
+ 	markup = g_strdup_printf ("<span weight=\"bold\">%s</span>", _("Record Settings"));
+-	gtk_widget_set_halign (label, GTK_ALIGN_START);
+ 	gtk_label_set_markup (GTK_LABEL (label), markup);
+ 	g_free (markup);
+-	gtk_grid_attach (GTK_GRID (grid), label, 0, 8, 2, 1);
+-
+-	label = gtk_label_new ("");
+-	gtk_grid_attach (GTK_GRID (grid), label, 0, 9, 1, 2);
++	gtk_grid_attach (GTK_GRID (grid), label, 0, 8, 1, 1);
+ 
+ 	label = gtk_label_new (_("Destination:"));
+-	gtk_widget_set_halign (label, GTK_ALIGN_START);
+-	gtk_grid_attach(GTK_GRID(grid), label, 1, 9, 1, 1);
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
++	gtk_widget_set_margin_start (label, 10);
++	gtk_grid_attach(GTK_GRID(grid), label, 0, 9, 1, 1);
+ 
+ 	destination_button = gtk_file_chooser_button_new (_("Select a folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+ 	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(destination_button), rec_settings.destination);
+-	gtk_grid_attach(GTK_GRID(grid), destination_button, 2, 9, 1, 1);
++	gtk_grid_attach(GTK_GRID(grid), destination_button, 1, 9, 1, 1);
+ 
+-	label = gtk_label_new (_("Format:"));
+-	gtk_widget_set_halign (label, GTK_ALIGN_START);
+-	gtk_grid_attach (GTK_GRID (grid), label, 1, 10, 1, 1);
++	label = gtk_label_new (_("File format:"));
++ 	gtk_widget_set_halign (label, GTK_ALIGN_START);
++	gtk_widget_set_margin_start (label, 10);
++	gtk_grid_attach (GTK_GRID (grid), label, 0, 10, 1, 1);
+ 
+ 	audio_profile_combo = audio_profile_choose_new();
+ 	audio_profile_chooser_set_active(audio_profile_combo, rec_settings.profile);
+-	gtk_grid_attach (GTK_GRID (grid), audio_profile_combo, 2, 10, 1, 1);
++	gtk_grid_attach (GTK_GRID (grid), audio_profile_combo, 1, 10, 1, 1);
+ 
+ 	install_button = gtk_button_new_with_label(_("Install additional software required to use this format\xE2\x80\xA6"));
+ 	gtk_widget_set_no_show_all (install_button, TRUE);
+-	gtk_grid_attach (GTK_GRID (grid), install_button, 2, 11, 1, 1);
++	gtk_grid_attach (GTK_GRID (grid), install_button, 1, 11, 1, 1);
+ 
+ 	profile = rb_gst_get_encoding_profile (rec_settings.profile);
+ 	if (rb_gst_check_missing_plugins (profile, NULL, NULL)) {
+ 		gtk_widget_set_visible (install_button, TRUE);
+ 		gtk_widget_set_sensitive (install_button,
+-					gst_install_plugins_supported ());
++					  gst_install_plugins_supported ());
+ 	} else {
+ 		gtk_widget_set_visible (install_button, FALSE);
+ 	}
+Index: gnomeradio-1.8/data/gnomeradio.schemas.in
+===================================================================
+--- gnomeradio-1.8.orig/data/gnomeradio.schemas.in
++++ gnomeradio-1.8/data/gnomeradio.schemas.in
+@@ -85,6 +85,18 @@
+     </schema>
+ 
+     <schema>
++      <key>/schemas/apps/gnomeradio/audio-loopback</key>
++      <applyto>/apps/gnomeradio/audio-loopback</applyto>
++      <owner>gnomeradio</owner>
++      <type>bool</type>
++      <default>TRUE</default>
++      <locale name="C">
++	<short>Audio Loopback mode</short>
++	<long>Start an audio streaming between the radio device and the audio output device</long>
++      </locale>
++    </schema>
++
++    <schema>
+       <key>/schemas/apps/gnomeradio/presets/presets</key>
+       <applyto>/apps/gnomeradio/presets/presets</applyto>
+       <owner>gnomeradio</owner>
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -60,8 +60,9 @@
+ #define DEFAULT_LATENCY 500
+ 
+ int autodetect;
++int can_capture;
+ 
+-int alsa_loopback = 1;
++int alsa_loopback = 0;
+ char *alsa_playback = NULL;
+ char *alsa_capture = NULL;
+ int alsa_latency = DEFAULT_LATENCY;
+@@ -99,20 +100,31 @@ static DBusGProxy      * connect_to_sess
+ 
+ static gboolean is_first_start(void)
+ {
+-	GConfClient *client = gconf_client_get_default();
++	GConfClient *client;
++	gboolean first_start;
++
++	client = gconf_client_get_default();
+ 	if (!client)
+ 		return TRUE;
+ 
+-	return !gconf_client_get_bool(client, "/apps/gnomeradio/first_time_flag", NULL);
++	first_start = gconf_client_get_bool(client, "/apps/gnomeradio/first_time_flag", NULL);
++
++	g_object_unref (client);
++
++	return !first_start;
+ }
+ 
+ static void set_first_time_flag(void)
+ {
+-	GConfClient *client = gconf_client_get_default();
++	GConfClient *client;
++
++	client = gconf_client_get_default();
+ 	if (!client)
+ 		return;
+ 
+ 	gconf_client_set_bool(client, "/apps/gnomeradio/first_time_flag", TRUE, NULL);
++
++	g_object_unref (client);
+ }
+ 
+ typedef struct {
+@@ -379,8 +391,14 @@ static void prefs_button_clicked_cb(GtkB
+ void start_radio(gboolean restart, GtkWidget *app)
+ {
+ 	DriverType driver = DRIVER_ANY;
+-	if (restart)
++
++	if (restart) {
+ 		radio_stop();
++		if (settings.audio_loopback)
++			alsa_loopback = 1;
++		else
++			alsa_loopback = 0;
++	}
+ 
+ 	if (settings.driver) {
+ 		if (0 == strcmp(settings.driver, "v4l1"))
+@@ -390,12 +408,19 @@ void start_radio(gboolean restart, GtkWi
+ 	}
+ 
+ 	autodetect = 0;
+-	if (0 == strcmp(settings.device, "auto"))
++	if ((0 == strcmp(settings.device, "auto")) || (0 == strcmp(settings.device, "")))
+ 		autodetect = 1;
+ 
++	if (settings.audio_loopback)
++		alsa_loopback = 1;
++
+ 	if (!radio_init(settings.device, driver)) {
+ 		char *caption, *detail;
+ 
++		can_capture = 0;
++		if (restart)
++			audio_box_set_visible (can_capture);
++
+ 		if (autodetect) {
+ 			caption = g_strdup_printf (_("Could not detect radio device!"));
+ 			detail = g_strdup_printf (_("To listen to the FM radio, you will need an FM tuner connected to or installed "
+@@ -1283,7 +1308,6 @@ key_press_event_cb(GtkWidget *app, GdkEv
+ enum
+ {
+ 	ARG_ALSA_LOOPBACK,
+-	ARG_NO_ALSA_LOOPBACK,
+ 	ARG_ALSA_CAPTURE,
+ 	ARG_ALSA_PLAYBACK,
+ 	ARG_ALSA_LATENCY,
+@@ -1297,16 +1321,13 @@ parse_one_option (gint opt, const gchar
+ 		case ARG_ALSA_LOOPBACK:
+ 			alsa_loopback = 1;
+ 			break;
+-		case ARG_NO_ALSA_LOOPBACK:
+-			alsa_loopback = 0;
+-			break;
+ 		case ARG_ALSA_CAPTURE:
+ 			if (!strncmp(arg, "hw:", 3) && isdigit(arg[3]) && arg[4] == ',' && isdigit(arg[5])) {
+ 				alsa_capture = g_strdup (arg);
+ 				break;
+ 			} else {
+ 				g_set_error(err, G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+-					    _("invalid argument name '%s', must be e.g. 'hw:1,0'"), arg);
++					    _("Invalid argument name '%s'. Example usage: --alsa-capture=hw:1,0"), arg);
+ 				return FALSE;
+ 			}
+ 		case ARG_ALSA_PLAYBACK:
+@@ -1315,7 +1336,7 @@ parse_one_option (gint opt, const gchar
+ 				break;
+ 			} else {
+ 				g_set_error(err, G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+-					    _("invalid argument name '%s', must be e.g. 'hw:0,0'"), arg);
++					    _("Invalid argument name '%s'. Example usage: --alsa-playback=hw:0,0"), arg);
+ 				return FALSE;
+ 			}
+ 		case ARG_ALSA_LATENCY:
+@@ -1344,7 +1365,6 @@ option_alsa_cb (const gchar * opt,
+ 	} options[] = {
+ 		{
+ 		"--alsa-loopback", ARG_ALSA_LOOPBACK}, {
+-		"--no-alsa-loopback", ARG_NO_ALSA_LOOPBACK}, {
+ 		"--alsa-capture", ARG_ALSA_CAPTURE}, {
+ 		"--alsa-playback", ARG_ALSA_PLAYBACK}, {
+ 		"--alsa-latency", ARG_ALSA_LATENCY}, {
+@@ -1363,6 +1383,27 @@ option_alsa_cb (const gchar * opt,
+ 	return parse_one_option (val, arg, err);
+ }
+ 
++static GOptionGroup *
++alsa_get_option_group (void)
++{
++	GOptionGroup *group;
++
++	static const GOptionEntry alsa_args[] = {
++		{ "alsa-loopback", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Enable audio loopback mode"), NULL },
++		{ "alsa-capture", '\0', 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set an capture device for audio loopback mode"), N_("DEVICE") },
++		{ "alsa-playback", '\0', 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set an playback device for audio loopback mode"), N_("DEVICE") },
++		{ "alsa-latency", '\0', 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set a latency for audio loopback mode in ms"), N_("TIME") },
++		{ "alsa-debug", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Show the debug output for audio loopback mode"), NULL },
++		{ NULL }
++	};
++
++	group = g_option_group_new ("alsa", _("Alsa Options"),
++				    _("Show Alsa Options"), NULL, NULL);
++	g_option_group_add_entries (group, alsa_args);
++
++	return group;
++}
++
+ G_GNUC_NORETURN static gboolean
+ option_version_cb (const gchar * opt,
+ 		   const gchar * arg, gpointer data, GError ** err)
+@@ -1379,13 +1420,7 @@ int main(int argc, char* argv[])
+ 	gboolean do_scan = FALSE;
+ 	GOptionContext *ctx;
+ 	const GOptionEntry entries[] = {
+-		{ "alsa-loopback", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Enable loopback digital audio from radio device (default: enable)"), NULL },
+-		{ "no-alsa-loopback", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Disable loopback digital audio from radio device"), NULL },
+-		{ "alsa-capture", 0, 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set capture device for loopback digital audio (default: auto)"), N_("DEVICE") },
+-		{ "alsa-playback", 0, 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set playback device for loopback digital audio (default: default)"), N_("DEVICE") },
+-		{ "alsa-latency", 0, 0, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Set latency for loopback digital audio in ms (default: 500)"), N_("TIME") },
+-		{ "alsa-debug", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, (gpointer) option_alsa_cb, N_("Enable debug output for loopback digital audio"), NULL },
+-		{ "scan", '\0', 0, G_OPTION_ARG_NONE, &do_scan, N_("Scan for stations"), NULL },
++		{ "scan", '\0', 0, G_OPTION_ARG_NONE, &do_scan, N_("Scan for available stations"), NULL },
+ 		{ "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
+ 		{ NULL }
+ 	};
+@@ -1399,11 +1434,13 @@ int main(int argc, char* argv[])
+ 	
+ 	ctx = g_option_context_new("- Listen to FM radio");
+ 	g_option_context_add_main_entries(ctx, entries, GETTEXT_PACKAGE);
++	g_option_context_add_group(ctx, alsa_get_option_group());
+ 	g_option_context_add_group(ctx, gtk_get_option_group (TRUE));
+ 	g_option_context_add_group(ctx, gst_init_get_option_group());
+ 	if (g_option_context_parse(ctx, &argc, &argv, &err) == FALSE) {
+ 		g_print(_("%s\nRun '%s --help' to see a full list of available command line options.\n"),
+ 			  err->message, argv[0]);
++		g_option_context_free(ctx);
+ 		g_error_free(err);
+ 		exit(1);
+ 	}
+Index: gnomeradio-1.8/src/radio.c
+===================================================================
+--- gnomeradio-1.8.orig/src/radio.c
++++ gnomeradio-1.8/src/radio.c
+@@ -30,6 +30,7 @@
+ #include "get_media_devices.h"
+ 
+ extern int autodetect;
++extern int can_capture;
+ 
+ extern int alsa_loopback;
+ extern char *alsa_playback;
+@@ -45,21 +46,14 @@ static RadioDev *dev;
+ int radio_init(char *device, DriverType driver)
+ {
+ 	int rv = -1;
++	void *md;
++	const char *p;
+ 
+-	if (autodetect) {
+-		void *md;
+-		const char *p = NULL;
++	md = discover_media_devices();
+ 
++	if (autodetect) {
++		p = NULL;
+ 		*device = 0;
+-		md = discover_media_devices();
+-		if (!md) {
+-			fprintf (stderr, "open: Failed to open \"auto\" device");
+-			if (*device)
+-				fprintf (stderr, " at %s\n", device);
+-			else
+-				fprintf (stderr, "\n");
+-			goto failure;
+-		}
+ 
+ 		while (1) {
+ 			p = get_associated_device(md, p, MEDIA_V4L_RADIO, NULL, NONE);
+@@ -67,8 +61,6 @@ int radio_init(char *device, DriverType
+ 				break;
+ 			asprintf(&device, "/dev/%s", p);
+ 		}
+-
+-		free_media_devices(md);
+ 	}
+ 
+ 	switch (driver) {
+@@ -84,9 +76,10 @@ try_v4l1:
+ 	dev = v4l1_radio_dev_new();
+ 	rv = dev->init (dev, device);
+ 	if (rv == 0) {
+-        fprintf(stderr, "v4l1: Initialization failed\n");
++        	fprintf(stderr, "v4l1: Initialization failed\n");
+ 		dev->finalize (dev);
+ 		dev = NULL;
++		can_capture = 0;
+ 		if (alsa_loopback)
+ 			alsa_loopback = 0;
+ 		if (driver != DRIVER_ANY)
+@@ -99,9 +92,10 @@ try_v4l2:
+ 	dev = v4l2_radio_dev_new();
+ 	rv = dev->init (dev, device);
+ 	if (rv == 0) {
+-        fprintf(stderr, "v4l2: Initialization failed\n");
++        	fprintf(stderr, "v4l2: Initialization failed\n");
+ 		dev->finalize (dev);
+ 		dev = NULL;
++		can_capture = 0;
+ 		if (alsa_loopback)
+ 			alsa_loopback = 0;
+ 		if (driver != DRIVER_ANY)
+@@ -111,41 +105,35 @@ try_v4l2:
+ 	}
+ 
+ success:
+-	if (autodetect)
+-		fprintf(stderr, "open: Using radio device: %s\n", device);
+-
+-	if (alsa_loopback) {
+-		if (alsa_capture == NULL) {
+-			void *md = discover_media_devices();
+-			const char *p = strrchr(device, '/');
+-			if (p)
+-				p++;
+-			else
+-				p = device;
+-
+-			p = get_associated_device(md, NULL, MEDIA_SND_CAP, p, MEDIA_V4L_RADIO);
+-			if (p)
+-				alsa_capture = strdup(p);
+-			else
+-				alsa_loopback = 0;
++	p = NULL;
++	p = strrchr(device, '/');
++	if (p)
++		p++;
++	else
++		p = device;
+ 
+-			free_media_devices(md);
+-		}
++	p = get_associated_device(md, NULL, MEDIA_SND_CAP, p, MEDIA_V4L_RADIO);
++	if (p) {
++		can_capture = 1;
++		if (alsa_loopback && alsa_capture == NULL)
++			alsa_capture = strdup(p);
++	} else {
++		can_capture = 0;
++		if (alsa_loopback)
++			alsa_loopback = 0;
++	}
+ 
+-		if (alsa_loopback) {
+-			if (alsa_playback == NULL)
+-				alsa_playback = "default";
++	if (alsa_loopback && alsa_playback == NULL)
++		alsa_playback = strdup("default");
+ 
+-			fprintf(stderr, "alsa: Using audio loopback device from %s (%s) to %s\n",
+-				alsa_capture, device, alsa_playback);
+-		}
+-	}
+ 
+ 	radio_unmute();
+ 
+ failure:
++	free_media_devices(md);
+ 	if (autodetect)
+ 		free (device);
++
+ 	return rv;
+ }
+ 
+@@ -163,6 +151,16 @@ void radio_stop(void)
+ 	
+ 	if (dev)
+ 		dev->finalize (dev);
++	if (alsa_loopback) {
++		if (alsa_capture) {
++			free (alsa_capture);
++			alsa_capture = NULL;
++		}
++		if (alsa_playback) {
++			free (alsa_playback);
++			alsa_playback = NULL;
++		}
++	}
+ }
+ 
+ double radio_get_freq(void)
+Index: gnomeradio-1.8/src/prefs.h
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.h
++++ gnomeradio-1.8/src/prefs.h
+@@ -20,8 +20,11 @@
+ #include <math.h>
+ 
+ gboolean save_settings(void);
++
+ gboolean load_settings(void);
+ 
++void audio_box_set_visible (gboolean visible);
++
+ enum
+ {
+ 	RADIO_DEVICE,
+Index: gnomeradio-1.8/src/gui.h
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.h
++++ gnomeradio-1.8/src/gui.h
+@@ -34,6 +34,7 @@ struct Gnomeradio_Settings
+ 	gboolean muted;
+ 	gfloat unmute_volume;
+ 	gboolean mute_on_exit;
++	gboolean audio_loopback;
+ 	gchar *driver;
+ 	
+ 	GList *presets;

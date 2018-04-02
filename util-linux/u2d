@@ -1,0 +1,7 @@
+urllist https://kernel.org/pub/linux/utils/util-linux/ | grep -E '^v[0-9.]+$' | sort -rV | while read dir; do
+	ver="$(urllist "https://kernel.org/pub/linux/utils/util-linux/$dir/" | splitver '^util-linux-([0-9.]+).tar.(gz|bz2|xz)$' | sort -V | tail -n 1)"
+	if [ -n "$ver" ]; then
+		echo $ver;
+		break;
+	fi
+done

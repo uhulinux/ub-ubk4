@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# VDR indító példa szkript a menü számára, értelemszerűen szerkeszthető kívánság szerint.
+#Idézőjelekre vigyázzunk, kívánt pluginok elől vegyük ki a # jelet, nem kívánatosok elé szúrjuk be!
+
+###########	alkalmazandó pluginok felsorolása	########
+
+# softcam a kódolt adók vételéhez, elsőként kell szerepelnie, használatához, beállításához google a barátunk
+#pl1="-Psc"
+
+# ....megjelenítők....
+
+# xineliboutput megjelenítő hardveres hud OSD-vel, Nvidia hardveres h264 dekódolással és csíktalanítással, ablakbecsukáskor rendben kilép
+#pl2="'-Pxineliboutput -c --hud --local=sxfe --video=vdpau --display=0: -p --post tvtime:method=use_vo_driver -f'"
+# xineliboutput megjelenítő, Nvidia hardveres h264 dekódolással és csíktalanítással, ablakbecsukáskor rendben kilép
+#pl2="'-Pxineliboutput -c --local=sxfe --video=vdpau --display=0: -p --post tvtime:method=use_vo_driver -f'"
+# xineliboutput szoftveres xv megjelenítővel, ablakbecsukáskor rendben kilép
+#pl2="'-Pxineliboutput -c --video=xv '"
+# xineliboutput automatán kiválasztott megjelenítővel, ablakbecsukáskor rendben kilép
+pl2="'-Pxineliboutput -c --video=auto '"
+#pl2="'-Psofthddevice'"	# softhddevice megjelenító hardveres videó dekódolásra képes videó kártyákhoz
+#pl2="'-Pxine'"		# a vdr indítását követőn indított xine lejátszó családdal tötrénő megjelenítés
+#pl2="'-Pxvdr'"		# a vdr indítását követőn indított xbmc lesz a megjelenítő
+#pl2="-Pstreamdev"	# adatszórási plugin. például mozilla böngészőven nézhető a TV
+
+# .....OSD variációk....
+
+#pl3="-Pskinenigmang"
+#pl4="-Pskinsoppalusikka"
+#pl5="-Pskinelchi"
+#pl6="-Pskinreel"
+#pl7="-Pskinpearlhd"
+#pl8="-Posdadjust"	# OSD méretezés, hud és egyes skinek esetén nem használható
+
+#.....vegyes pluginok
+
+#pl9="-Pchanman"		# csatornák csoportosítása
+#pl10="-Pchannellists"	# csatornalista válthatósága
+#pl11="-Pfemon"		# térerő és stream adatok kijelezhetősége
+#pl12="-Pdvd"		# dvd lejátszás a VDR-el
+#pl13="-Pzappilot"	# gyors EPG kereső
+#pl14="-Psetup"		# vegyes beállítátó
+#pl15="-Protorng"	# parabola forgató motor kezelése
+#pl16="-Posdteletext"	# teletext
+
+# pluginok összevonása baromi hosszú paraméter stringgé
+PLUGINS=" $pl1 $pl2 $pl3 $pl4 $pl5 $pl6 $pl7 $pl8 $pl9 $pl10 $pl11 $pl12 $pl13 $pl14 $pl15 $pl16 "
+
+#Indító opciók
+
+opt1="'-s killall vdr'"			# hogy a kilépési billentyűre kivághassuk magunk alól a fát
+#opt2=" --no-kbd "			# ne várjon induláskor billentyű definícióra
+#opt3=" --lirc=/var/run/lirc/lircd"	#távirányító használata lircd-vel
+
+# opciók összefűzése
+OPTS=" $opt1 $opt2 $opt3"
+
+
+VDRPRG="/usr/bin/vdr"
+VDRCMD=" $VDRLANG $VDRPRG $OPTS $PLUGINS $*"
+echo "$VDRCMD"
+KILL="/usr/bin/killall -q -TERM"
+
+     eval "$VDRCMD 2>&1"
+      if test $? -eq 0 -o $? -eq 2; then exit; fi
+      $KILL $VDRPRG

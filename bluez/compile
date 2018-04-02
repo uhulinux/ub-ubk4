@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+libtoolize -f -c
+autoreconf -vif
+ub_compile \
+	--enable-tools \
+	--enable-cups \
+	--enable-library

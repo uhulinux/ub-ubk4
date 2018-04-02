@@ -1,0 +1,52 @@
+#!/bin/sh -eux
+
+# fix filename
+mv $'TNT/level/reconstruct\356on2.xal' 'TNT/level/reconstruction2.xal'
+
+# apply abort flag patch
+( cd Legacy/image/score ; uudecode ../../player*_abort.uu )
+
+# source cleanup
+find TNT/image TNT/level TNT/sounds \( \
+  -iname '*makefile*' -o \
+  -name 'pspbrwse.jbf' \
+  \) -print0 | xargs -0 rm
+
+# doc hack
+for i in AUTHORS ChangeLog NEWS README; do
+	cp TNT/$i{,-TNT}
+done
+
+# TNT fork
+cp -a TNT TNT-SMPF
+
+# build TNT version with 16 players
+# disable nls since it doesn't handle accents correctly
+cd TNT-SMPF
+ub_compile \
+	--disable-nls \
+	--enable-SMPF \
+	--with-otherdatadir=/usr/share/xblast \
+	--enable-sound
+cd ..
+
+# build TNT version
+# disable nls since it doesn't handle accents correctly
+cd TNT
+ub_compile \
+	--disable-nls \
+	--with-otherdatadir=/usr/share/xblast \
+	--enable-sound
+cd ..
+
+# build legacy xblast
+cd Legacy
+xmkmf -a
+touch xblast.man xbsndsrv.man
+make \
+	XBLASTDIR=/usr/share/xblast
+
+# build tk frontend for legacy xblast
+cd tkXBlast
+xmkmf -a
+cp -a tkXBlast.tcl tkXBlast

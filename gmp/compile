@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--enable-cxx
+
+# Quoting the homepage:
+# "GMP is very often miscompiled! We are seeing ever increasing problems
+# with mis-compilations of the GMP code. Please never use your newly
+# compiled libgmp.a or libgmp.so without first running make check."
+make check

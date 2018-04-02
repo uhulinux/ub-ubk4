@@ -1,0 +1,23 @@
+diff -Nur orig/cmake/FindGuile.cmake mod/cmake/FindGuile.cmake
+--- orig/cmake/FindGuile.cmake	2017-12-21 21:27:33.000000000 +0100
++++ mod/cmake/FindGuile.cmake	2018-01-09 22:37:35.199396407 +0100
+@@ -40,7 +40,7 @@
+     STRING(REGEX MATCHALL "[-][D]([^ ;])+" _guile_definitions_with_prefix "${_guileconfig_compile}" )
+     STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" Guile_VERSION_STRING "${_guileconfig_version}")
+       
+-    STRING(REPLACE "-L" " " _guile_libdirs ${_guile_libdirs_with_prefix} "")
++    STRING(REPLACE "-L" " " _guile_libdirs "${_guile_libdirs_with_prefix}" )
+     STRING(REPLACE "-l" " " _guile_lib_list "${_guile_libraries_with_prefix}" )
+     STRING(REPLACE "-I" " " _guile_includes "${_guile_includes_with_prefix}" )
+ #    SEPARATE_ARGUMENTS(_guile_libdirs)
+diff -Nur orig/TeXmacs/misc/mime/texmacs.desktop mod/TeXmacs/misc/mime/texmacs.desktop
+--- orig/TeXmacs/misc/mime/texmacs.desktop	2017-12-21 21:28:42.000000000 +0100
++++ mod/TeXmacs/misc/mime/texmacs.desktop	2018-01-09 22:38:18.731324844 +0100
+@@ -1,6 +1,7 @@
+ [Desktop Entry]
+ Name=GNU TeXmacs
+ Comment=A structured wysiwyg scientific text editor
++Comment[hu]=Tudományos szerkesztő
+ BinaryPattern=texmacs
+ Protocols=
+ MimeType=text/x-texmacs;text/plain;text/x-tex;

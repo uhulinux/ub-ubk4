@@ -1,0 +1,14 @@
+[Unit]
+Description=Domain Name Service Server
+After=network.target
+
+[Service]
+PIDFile=/var/run/named/named.pid
+ExecStart=/usr/sbin/named
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

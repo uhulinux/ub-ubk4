@@ -1,0 +1,13 @@
+diff -Naurp fbgetty-0.1.698.orig/src/kbd.c fbgetty-0.1.698/src/kbd.c
+--- fbgetty-0.1.698.orig/src/kbd.c	2001-07-07 17:52:21.000000000 +0200
++++ fbgetty-0.1.698/src/kbd.c	2006-01-12 13:19:57.000000000 +0100
+@@ -164,6 +164,9 @@ init_kbd(void)
+   unsigned int unset;
+   unsigned int set;
+ 
++  /* kbd_mode -u */
++  ioctl(STDIN_FILENO, KDSKBMODE, K_UNICODE);
++
+   /* only init kbd when there somethings to change */
+ 
+   if (fgoptions->leds != 0)

@@ -1,0 +1,71 @@
+diff -urN DMCRadio-1.1.4.orig/DMCRadio.1 DMCRadio-1.1.4/DMCRadio.1
+--- DMCRadio-1.1.4.orig/DMCRadio.1	2005-01-09 16:07:18.000000000 +0100
++++ DMCRadio-1.1.4/DMCRadio.1	2006-03-30 14:26:46.000000000 +0200
+@@ -22,7 +22,7 @@
+ .PD 0
+ .TP
+ .B --radiodev dev
+-Sets the radiodevice to dev. The default is /dev/radio.
++Sets the radiodevice to dev. The default is /dev/radio0.
+ .PD
+ .TP
+ .B -m dev
+@@ -239,7 +239,7 @@
+ .br
+ # Specifies the radiodevice
+ .br
+-.B Radiodev=/dev/radio
++.B Radiodev=/dev/radio0
+ .br
+ # Specifies the mixerdevice
+ .br
+diff -urN DMCRadio-1.1.4.orig/DMCRadio.c DMCRadio-1.1.4/DMCRadio.c
+--- DMCRadio-1.1.4.orig/DMCRadio.c	2005-01-09 16:07:18.000000000 +0100
++++ DMCRadio-1.1.4/DMCRadio.c	2006-03-30 14:27:14.000000000 +0200
+@@ -185,7 +185,7 @@
+ 	printf("Usage: DMCRadio [options]\n\n");
+ 	printf("	-h	--help			This help\n");
+ 	printf("	-m	--mute			Just mute and exit\n");
+-	printf("	-r dev	--radiodev dev		Set Radiodevice to dev [/dev/radio]\n");
++	printf("	-r dev	--radiodev dev		Set Radiodevice to dev [/dev/radio0]\n");
+ 	printf("	-x dev	--mixerdev dev		Set Mixerdevice to dev [/dev/mixer]\n");
+ 	printf("	-d dev	--dspdev dev		Set DSPdevice to dev [/dev/dsp]\n");
+ 	printf("	-v	--version		Print version and exit\n\n");
+@@ -199,7 +199,7 @@
+ #ifdef __FreeBSD__
+ 	if(!strlen(rdev)) strcpy(rdev, "/dev/tuner");
+ #else
+-	if(!strlen(rdev)) strcpy(rdev, "/dev/radio");
++	if(!strlen(rdev)) strcpy(rdev, "/dev/radio0");
+ #endif
+ 	if(!strlen(mdev)) strcpy(mdev, "/dev/mixer");
+ 	if(!strlen(ddev)) strcpy(ddev, "/dev/dsp");
+diff -urN DMCRadio-1.1.4.orig/README DMCRadio-1.1.4/README
+--- DMCRadio-1.1.4.orig/README	2005-01-09 16:07:18.000000000 +0100
++++ DMCRadio-1.1.4/README	2006-03-30 14:27:42.000000000 +0200
+@@ -24,14 +24,14 @@
+ 2. ./configure
+ 3. make
+ 4. make install
+-5. Make sure, everybody can access your radiodevice (usually /dev/radio)
++5. Make sure, everybody can access your radiodevice (usually /dev/radio0)
+ 
+ Usage
+ -----
+ 
+ -h	--help			Show help page and exit
+ -m	--mute			Mute and exit
+--r dev	--radiodev dev		Set Radiodevice to dev [/dev/radio]
++-r dev	--radiodev dev		Set Radiodevice to dev [/dev/radio0]
+ -m dev	--mixerdev dev		Set Mixerdevice to dev [/dev/mixer]
+ -d dev	--dspdev dev		Set DSPdevice to dev [/dev/dsp]
+ -v	--version		Print version and exit
+@@ -107,7 +107,7 @@
+ 				// Up to 20 buttons are possible
+ [Misc]
+ 
+-Radiodev=/dev/radio		// Specifies the radiodevice
++Radiodev=/dev/radio0		// Specifies the radiodevice
+ Mixerdev=/dev/mixer		// Specifies the mixerdevice
+ DSPdev=/dev/dsp			// Specifies the DSPdevice
+ Audioinput=cd			// Last audioinput (volumecontrol) used was cd

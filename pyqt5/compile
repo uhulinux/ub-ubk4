@@ -1,0 +1,39 @@
+#!/bin/sh -eux
+
+if [ $UB_ARCH == "i386" ]; then
+qmake -set QMAKE_XSPEC linux-g++-32
+fi
+
+export QTDIR=/usr/lib/qt5
+
+python2 configure.py --confirm-license \
+	-w \
+	-q $QTDIR/bin/qmake \
+	-b /usr/bin \
+	-d /usr/lib/python2.7/site-packages \
+	-v /usr/share/sip/PyQt5 \
+	--designer-plugindir /usr/lib/qt5/plugins/designer \
+	--qml-plugindir /usr/lib/qt5/plugins/PyQt5
+
+ub_make
+
+ub_install INSTALL_ROOT="$UB_INSTALLDIR"
+
+# Fix conflicts with python-pyqt5
+mv "$UB_INSTALLDIR"/usr/bin/{,python2-}pyuic5
+mv "$UB_INSTALLDIR"/usr/bin/{,python2-}pylupdate5
+mv "$UB_INSTALLDIR"/usr/bin/{,python2-}pyrcc5
+
+rm -Rf "$UB_INSTALLDIR"/usr/lib/qt5
+rm -Rf "$UB_INSTALLDIR"/usr/share/sip
+
+python3 configure.py --confirm-license \
+	-w \
+	-q $QTDIR/bin/qmake \
+	-b /usr/bin \
+	-d /usr/lib/python3.6/site-packages \
+	-v /usr/share/sip/PyQt5 \
+	--designer-plugindir /usr/lib/qt5/plugins/designer \
+	--qml-plugindir /usr/lib/qt5/plugins/PyQt5
+
+ub_make

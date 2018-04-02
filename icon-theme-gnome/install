@@ -1,0 +1,59 @@
+#!/bin/sh -eux
+
+ub_install
+ikondir="$UB_INSTALLDIR"/usr/share/icons/gnome
+cd "$ikondir"
+for i in 16x16 22x22 24x24 32x32 48x48; do
+ln -s "$ikondir"/$i/categories/applications-accessories.png $i/categories/icon-applications.png
+ln -s "$ikondir"/$i/categories/applications-other.png $i/categories/icon-development.png
+ln -s "$ikondir"/$i/categories/applications-games.png $i/categories/icon-games.png
+ln -s "$ikondir"/$i/categories/applications-graphics.png $i/categories/icon-gfx.png
+ln -s "$ikondir"/$i/categories/applications-internet.png $i/categories/stock-panel-internet.png
+ln -s "$ikondir"/$i/categories/applications-multimedia.png $i/categories/icon-media.png
+ln -s "$ikondir"/$i/mimetypes/x-office-address-book.png $i/categories/icon-documentation.png
+ln -s "$ikondir"/$i/categories/applications-system.png $i/categories/package_edutainment.png
+ln -s "$ikondir"/$i/categories/preferences-desktop.png $i/categories/icon-configuration.png
+ln -s "$ikondir"/$i/apps/accessories-calculator.png $i/categories/icon-accessories.png
+ln -s "$ikondir"/$i/devices/computer.png $i/categories/icon-computer.png
+ln -s "$ikondir"/$i/apps/system-file-manager.png $i/categories/icon-filemanager.png
+ln -s "$ikondir"/$i/apps/accessories-text-editor.png $i/categories/icon-notepad.png
+ln -s "$ikondir"/$i/status/network-idle.png $i/categories/icon-network.png
+ln -s "$ikondir"/$i/status/network-error.png $i/categories/icon-network-firewall.png
+ln -s "$ikondir"/$i/status/network-transmit.png $i/categories/icon-network-system.png
+ln -s "$ikondir"/$i/actions/document-print.png $i/categories/stock-print.png
+ln -s "$ikondir"/$i/mimetypes/text-html.png $i/categories/icon-html.png
+ln -s "$ikondir"/$i/apps/utilities-system-monitor.png $i/categories/icon-monitor.png
+ln -s "$ikondir"/$i/apps/accessories-character-map.png $i/categories/icon-launcher.png
+ln -s "$ikondir"/$i/apps/accessories-calculator.png $i/categories/icon-calculator.png
+ln -s "$ikondir"/$i/mimetypes/x-office-calendar.png $i/categories/icon-date.png
+ln -s "$ikondir"/$i/mimetypes/x-office-calendar.png $i/categories/icon-datetime.png
+ln -s "$ikondir"/$i/mimetypes/x-office-document.png $i/categories/icon-office.png
+ln -s "$ikondir"/$i/mimetypes/x-office-address-book.png $i/categories/stock-book.png
+ln -s "$ikondir"/$i/mimetypes/x-office-document.png $i/categories/icon-office-wordprocessor.png
+ln -s "$ikondir"/$i/mimetypes/x-office-presentation.png $i/categories/icon-office-presentation.png
+ln -s "$ikondir"/$i/mimetypes/x-office-spreadsheet.png $i/categories/icon-office-spreadsheet.png
+ln -s "$ikondir"/$i/apps/utilities-terminal.png $i/categories/icon-terminal.png
+ln -s "$ikondir"/$i/apps/preferences-desktop-locale.png $i/categories/stock-convert.png
+ln -s "$ikondir"/$i/apps/accessories-text-editor.png $i/categories/file-devel.png
+ln -s "$ikondir"/$i/devices/camera-photo.png $i/categories/stock-panel-screenshot.png
+ln -s "$ikondir"/$i/emblems/emblem-web.png $i/categories/news.png
+ln -s "$ikondir"/$i/categories/stock_internet.png $i/categories/icon-web-browser.png
+ln -s "$ikondir"/$i/actions/view-refresh.png $i/categories/icon-update.png
+ln -s "$ikondir"/$i/emblems/emblem-mail.png $i/categories/icon-email.png
+ln -s "$ikondir"/$i/apps/system-users.png $i/categories/icon-instantmessage.png
+ln -s "$ikondir"/$i/emotes/face-monkey.png $i/categories/package_games_arcade.png
+ln -s "$ikondir"/$i/mimetypes/application-x-executable.png $i/categories/package_games_board.png
+ln -s "$ikondir"/$i/emblems/emblem-favorite.png $i/categories/package_games_card.png
+ln -s "$ikondir"/$i/actions/go-home.png $i/categories/package_games_strategy.png
+ln -s "$ikondir"/$i/emotes/face-angel.png $i/categories/package_toys.png
+ln -s "$ikondir"/$i/devices/media-optical.png $i/categories/cd.png
+ln -s "$ikondir"/$i/devices/audio-card.png $i/categories/icon-mixer.png
+ln -s "$ikondir"/$i/status/audio-volume-high.png $i/categories/icon-sound.png
+ln -s "$ikondir"/$i/mimetypes/video-x-generic.png $i/categories/emblem-video.png
+ln -s "$ikondir"/$i/apps/utilities-system-monitor.png $i/categories/icon-television.png
+ln -s "$ikondir"/$i/apps/preferences-desktop-locale.png $i/categories/edu_languages.png
+ln -s "$ikondir"/$i/apps/accessories-calculator.png $i/categories/edu_mathematics.png
+ln -s "$ikondir"/$i/categories/applications-other.png $i/categories/edu_miscellaneous.png
+ln -s "$ikondir"/$i/categories/applications-science.png $i/categories/edu_science.png
+ln -s "$ikondir"/$i/mimetypes/x-office-address-book.png $i/categories/icon-logbook.png
+done

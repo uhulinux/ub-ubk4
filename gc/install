@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm -rf "$UB_INSTALLDIR"/usr/share/gc
+install -m 644 doc/gc.man "$UB_INSTALLDIR"/usr/share/man/man3/gc.3

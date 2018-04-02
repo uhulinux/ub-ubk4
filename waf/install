@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+install -Dm755 waf "$UB_INSTALLDIR/usr/bin/waf"
+
+waflib="$UB_INSTALLDIR/usr/lib/waf-$UB_VERSION-$(grep -aPom1 '(?<=^REVISION=")[[:xdigit:]]*(?="$)' "$UB_INSTALLDIR/usr/bin/waf")"
+install -dm755 "$waflib"
+unzip -d "$waflib" zip/waflib.zip
+
+# compile all python sources for once to be used after installation.
+python -m compileall "$waflib"

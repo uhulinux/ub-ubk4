@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_compile \
+	--disable-meanwhile \
+	--disable-tcl \
+	--enable-cyrus-sasl \
+	--disable-vv \
+	--disable-gevolution

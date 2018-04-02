@@ -1,0 +1,12 @@
+diff -Nur orig/common.mk mod/common.mk
+--- orig/common.mk	2015-12-30 05:22:14.000000000 +0100
++++ mod/common.mk	2017-05-12 18:02:17.862761077 +0200
+@@ -49,7 +49,7 @@
+ CXXFLAGS_COMMON = -DNDEBUG
+ 
+ ifeq ($(C_COMPILER_GNU),yes)
+-  CFLAGS_COMMON += $(GCC_C_WARNINGS) -fno-common -g -O3
++  CFLAGS_COMMON += $(GCC_C_WARNINGS) -fno-common -g -O2
+ endif
+ 
+ ifeq ($(CXX_COMPILER_GNU),yes)

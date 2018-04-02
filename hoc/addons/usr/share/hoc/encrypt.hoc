@@ -1,0 +1,33 @@
+### -*-hoc-*-
+### ====================================================================
+### Demonstrate a simple one-time-pad encryption based on a
+### pseudo-random number generator.
+### [23-Jul-2002]
+### ====================================================================
+
+### Usage: encrypt(key,plaintext)
+### The returned string is an encrypted text stream: the ciphertext.
+func encrypt(key,plaintext) \
+{
+    plaintext = (plaintext char(255))		# add message terminator
+    while (length(plaintext) < 32) \
+	plaintext = (plaintext char(randint(1,255))) # pad to 32*n characters
+    setrand(key)				# restart the generator
+    n = 0
+    ciphertext = "\n\t"					   
+    for (k = 1; k <= length(plaintext); ++k) \
+    {
+	## Output 32-character lines in 4 chunks of 8 characters each
+
+	if ((n > 0) && (n % 32 == 0)) \
+	    ciphertext = ciphertext "\n\t" \
+	else if ((n > 0) && (n % 4 == 0)) \
+	    ciphertext = ciphertext " "
+
+	ciphertext = sprintf "%s%02x", ciphertext, \
+		((ichar(substr(plaintext,k,1)) + randint(0,255)) % 256)
+	n++
+    }
+    ciphertext = ciphertext "\n"
+    return (ciphertext)
+}

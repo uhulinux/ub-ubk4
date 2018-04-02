@@ -1,0 +1,34 @@
+diff -Nur orig/src/makefile mod/src/makefile
+--- orig/src/makefile	2018-02-11 06:29:59.000000000 +0100
++++ mod/src/makefile	2018-02-15 10:44:43.984915631 +0100
+@@ -88,18 +88,18 @@
+ 	#binary
+ 	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
+ 	install -m 0755 gtk3-version-polo "$(DESTDIR)$(bindir)"
+-	install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
++	#install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
+ 
+ 	#shared files
+ 	cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/${app_name}" ./share/${app_name}/*
+-	chmod --recursive 0755 $(DESTDIR)$(sharedir)/${app_name}/*
++	chmod --recursive 0644 $(DESTDIR)$(sharedir)/${app_name}/images/*
+ 	chmod a+x $(DESTDIR)$(sharedir)/${app_name}/files/gtk-theme/install-gtk-theme
+ 
+ 	#launcher
+ 	install -m 0644 ${app_name}-gtk.desktop "$(DESTDIR)$(launcherdir)"
+ 
+ 	#app icon
+-	install -m 0755 ./share/pixmaps/${app_name}.png "$(DESTDIR)$(sharedir)/pixmaps/"
++	install -m 0644 ./share/pixmaps/${app_name}.png "$(DESTDIR)$(sharedir)/pixmaps/"
+ 
+ 	# appdata
+ 	install -m 0755 ../debian/${app_name}-gtk.appdata.xml "$(DESTDIR)$(sharedir)/appdata"
+@@ -115,7 +115,7 @@
+ 	#binary
+ 	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk"
+ 	rm -f "$(DESTDIR)$(bindir)/gtk3-version-polo"
+-	rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
++	#rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
+ 
+ 	#shared files
+ 	rm -rf "$(DESTDIR)$(sharedir)/${app_name}"

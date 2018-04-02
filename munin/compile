@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+export PERL5LIB+=${UB_COMPILEDIR}/master:${UB_COMPILEDIR}/node:${UB_COMPILEDIR}/plugins:
+UB_MAKE_PROCS=1 \
+ub_compile

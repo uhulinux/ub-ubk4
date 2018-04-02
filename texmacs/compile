@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+export QMAKE=qmake-qt4
+export MOC=moc-qt4
+export UIC=uic-qt4
+export RCC=/usr/lib/qt4/bin/rcc
+export LDFLAGS="-lz"
+sed -i '/^LDPATH/d' src/makefile.in
+export GUILE_CONFIG='/usr/bin/guile-config1.8'
+./configure \
+	--prefix=/usr \
+	--enable-pdf-renderer \
+	--enable-optimize \
+	--enable-guile2=no \
+	--with-freetypeDIR=/usr/bin/freetype-config \
+	--with-imlib2 \
+	--with-qt
+ub_make

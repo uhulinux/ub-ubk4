@@ -1,0 +1,84 @@
+diff -Naur wxPython-src-3.0.2.0-orig/src/expat/amiga/Makefile wxPython-src-3.0.2.0/src/expat/amiga/Makefile
+--- wxPython-src-3.0.2.0-orig/src/expat/amiga/Makefile	2013-12-16 14:42:30.000000000 +0100
++++ wxPython-src-3.0.2.0/src/expat/amiga/Makefile	2017-05-05 19:54:17.862442638 +0200
+@@ -80,7 +80,7 @@
+ LIBTOOL    := ar
+ STRIP      := strip
+ 
+-CFLAGS     := -DNDEBUG -O3
++CFLAGS     := -DNDEBUG -O2
+ LTFLAGS    := -crs
+ STRIPFLAGS := -R.comment
+ 
+diff -Naur wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.cegcc wxPython-src-3.0.2.0/src/png/scripts/makefile.cegcc
+--- wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.cegcc	2013-12-16 14:42:31.000000000 +0100
++++ wxPython-src-3.0.2.0/src/png/scripts/makefile.cegcc	2017-05-05 19:59:09.523979911 +0200
+@@ -65,7 +65,7 @@
+ compilation:
+ 	@echo " * Compilation of $(PACKAGE)"
+ 	cd $(PACKAGE) && CPPFLAGS="$(CPPFLAGS) -DPNG_CONSOLE_IO_SUPPORTED -D_WIN32_WCE=0x0420" \
+-		CFLAGS="$(CFLAGS) -mms-bitfields -O3 -pipe -fomit-frame-pointer" \
++		CFLAGS="$(CFLAGS) -mms-bitfields -O2 -pipe -fomit-frame-pointer" \
+ 		LDFLAGS="$(LDFLAGS) -Wl,--enable-auto-import -Wl,-s" \
+ 		./configure --prefix=/opt/wince --host=arm-mingw32ce && make
+ 
+diff -Naur wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.linux wxPython-src-3.0.2.0/src/png/scripts/makefile.linux
+--- wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.linux	2013-12-16 14:42:31.000000000 +0100
++++ wxPython-src-3.0.2.0/src/png/scripts/makefile.linux	2017-05-05 19:55:54.216271942 +0200
+@@ -48,7 +48,7 @@
+ 
+ # for pgcc version 2.95.1, -O3 is buggy; don't use it.
+ 
+-CFLAGS=-I$(ZLIBINC) -W -Wall -O3 -funroll-loops \
++CFLAGS=-I$(ZLIBINC) -W -Wall -O2 -funroll-loops \
+ 	$(ALIGN) # $(WARNMORE) -g -DPNG_DEBUG=5
+ 
+ LDFLAGS=-L. -Wl,-rpath,. -L$(ZLIBLIB) -Wl,-rpath,$(ZLIBLIB) -lpng16 -lz -lm
+diff -Naur wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.sco wxPython-src-3.0.2.0/src/png/scripts/makefile.sco
+--- wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.sco	2013-12-16 14:42:31.000000000 +0100
++++ wxPython-src-3.0.2.0/src/png/scripts/makefile.sco	2017-05-05 19:57:09.913709077 +0200
+@@ -37,7 +37,7 @@
+ ZLIBLIB=../zlib
+ ZLIBINC=../zlib
+ 
+-CFLAGS= -dy -belf -I$(ZLIBINC) -O3
++CFLAGS= -dy -belf -I$(ZLIBINC) -O2
+ LDFLAGS=-L. -L$(ZLIBLIB) -lpng16 -lz -lm
+ 
+ INCPATH=$(prefix)/include
+diff -Naur wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.so9 wxPython-src-3.0.2.0/src/png/scripts/makefile.so9
+--- wxPython-src-3.0.2.0-orig/src/png/scripts/makefile.so9	2013-12-16 14:42:31.000000000 +0100
++++ wxPython-src-3.0.2.0/src/png/scripts/makefile.so9	2017-05-05 19:58:11.902885958 +0200
+@@ -47,7 +47,7 @@
+ 	-Wmissing-declarations -Wtraditional -Wcast-align \
+ 	-Wstrict-prototypes -Wmissing-prototypes #-Wconversion
+ #CFLAGS=-I$(ZLIBINC) -W -Wall -O3 $(WARNMORE) -g -DPNG_DEBUG=5 -DPNG_NO_MMX_CODE
+-CFLAGS=-I$(ZLIBINC) -O3 -DPNG_NO_MMX_CODE
++CFLAGS=-I$(ZLIBINC) -O2 -DPNG_NO_MMX_CODE
+ LDFLAGS=-L. -R. -L$(ZLIBLIB) -R$(ZLIBLIB) -lpng16 -lz -lm
+ 
+ INCPATH=$(prefix)/include
+diff -Naur wxPython-src-3.0.2.0-orig/wxPython/config.py wxPython-src-3.0.2.0/wxPython/config.py
+--- wxPython-src-3.0.2.0-orig/wxPython/config.py	2014-10-14 00:37:51.000000000 +0200
++++ wxPython-src-3.0.2.0/wxPython/config.py	2017-05-05 19:51:45.283545886 +0200
+@@ -1037,7 +1037,7 @@
+         cflags.append('-ggdb')
+         cflags.append('-O0')
+     else:
+-        cflags.append('-O3')
++        cflags.append('-O2')
+ 
+     lflags = getWxConfigValue('--libs')
+     MONOLITHIC = (lflags.find("_xrc") == -1)
+diff -Naur wxPython-src-3.0.2.0-orig/wxPython/wx/build/config.py wxPython-src-3.0.2.0/wxPython/wx/build/config.py
+--- wxPython-src-3.0.2.0-orig/wxPython/wx/build/config.py	2014-10-14 00:37:51.000000000 +0200
++++ wxPython-src-3.0.2.0/wxPython/wx/build/config.py	2017-05-05 19:53:04.113042486 +0200
+@@ -1037,7 +1037,7 @@
+         cflags.append('-ggdb')
+         cflags.append('-O0')
+     else:
+-        cflags.append('-O3')
++        cflags.append('-O2')
+ 
+     lflags = getWxConfigValue('--libs')
+     MONOLITHIC = (lflags.find("_xrc") == -1)

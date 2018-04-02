@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+export QTDIR="/usr/lib/qt5"
+export CMAKE_PREFIX_PATH=/usr/lib/qt5
+
+sh bootStrap.bash \
+        --with-system-libass \
+        --with-system-libmad \
+        --with-system-libmp4v2 \
+        --with-system-liba52 \
+        --with-cli \
+        --with-core \
+        --with-plugins

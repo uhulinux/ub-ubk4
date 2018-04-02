@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+make DSTROOT=$UB_INSTALLDIR install
+rm $UB_INSTALLDIR/usr/share/doc/minixml/html/{CHANGES,COPYING,README}
+rm $UB_INSTALLDIR/usr/lib/libmxml.a

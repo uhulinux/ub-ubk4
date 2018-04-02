@@ -1,0 +1,12 @@
+diff -Naur truecrypt-7.1a-source-orig/Makefile truecrypt-7.1a-source/Makefile
+--- truecrypt-7.1a-source-orig/Makefile	2012-02-07 11:36:48.000000000 +0100
++++ truecrypt-7.1a-source/Makefile	2016-11-19 15:39:09.212317085 +0100
+@@ -39,7 +39,7 @@
+ export CXXFLAGS := -Wall -Wno-unused-parameter
+ C_CXX_FLAGS := -MMD -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGE_FILES -I$(BASE_DIR) -I$(BASE_DIR)/Crypto
+ export ASFLAGS := -Ox -D __GNUC__
+-export LFLAGS :=
++export LFLAGS := -Wl,-z,noexecstack
+ 
+ export PKG_CONFIG_PATH ?= /usr/local/lib/pkgconfig
+ 

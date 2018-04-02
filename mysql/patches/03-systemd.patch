@@ -1,0 +1,44 @@
+diff -Naur orig/cmake/systemd.cmake patched/cmake/systemd.cmake
+--- orig/cmake/systemd.cmake	2016-08-29 16:38:51.000000000 +0200
++++ patched/cmake/systemd.cmake	2016-09-17 16:22:24.457980160 +0200
+@@ -63,8 +63,7 @@
+                                ${INSTALL_SYSTEMD_UNITDIR}/mariadb@.service
+                                ${INSTALL_SYSTEMD_UNITDIR}/mariadb@bootstrap.service.d/use_galera_new_cluster.conf")
+         IF(DEB)
+-          SET(SYSTEMD_EXECSTARTPRE "ExecStartPre=/usr/bin/install -m 755 -o mysql -g root -d /var/run/mysqld")
+-          SET(SYSTEMD_EXECSTARTPOST "ExecStartPost=/etc/mysql/debian-start")
++          SET(SYSTEMD_EXECSTARTPOST "ExecStartPost=/usr/bin/mysqld-ping")
+         ENDIF()
+         MESSAGE(STATUS "Systemd features enabled")
+       ELSE()
+diff -Naur orig/support-files/mariadb.service.in patched/support-files/mariadb.service.in
+--- orig/support-files/mariadb.service.in	2016-08-29 16:39:04.000000000 +0200
++++ patched/support-files/mariadb.service.in	2016-09-17 16:23:50.655046152 +0200
+@@ -15,7 +15,6 @@
+ [Unit]
+ Description=MariaDB database server
+ After=network.target
+-After=syslog.target
+ 
+ [Install]
+ WantedBy=multi-user.target
+@@ -59,8 +58,6 @@
+ # Execute pre and post scripts as root, otherwise it does it as User=
+ PermissionsStartOnly=true
+ 
+-@SYSTEMD_EXECSTARTPRE@
+-
+ # Perform automatic wsrep recovery. When server is started without wsrep,
+ # galera_recovery simply returns an empty string. In any case, however,
+ # the script is not expected to return with a non-zero status.
+diff -Naur orig/support-files/mariadb@.service.in patched/support-files/mariadb@.service.in
+--- orig/support-files/mariadb@.service.in	2016-08-29 16:39:04.000000000 +0200
++++ patched/support-files/mariadb@.service.in	2016-09-17 16:22:24.457980160 +0200
+@@ -20,7 +20,6 @@
+ [Unit]
+ Description=MariaDB database server
+ After=network.target
+-After=syslog.target
+ 
+ ConditionPathExists=@INSTALL_SYSCONF2DIR@/my%I.cnf
+ 

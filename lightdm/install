@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+ub_install
+
+install -dm 755 "${UB_INSTALLDIR}"/var/cache/lightdm
+install -dm 770 "${UB_INSTALLDIR}"/var/lib/lightdm{,-data}
+install -dm 711 "${UB_INSTALLDIR}"/var/log/lightdm
+
+# ubuntu cucc felesleges
+rm -rf "${UB_INSTALLDIR}"/etc/apparmor.d
+rm -rf "${UB_INSTALLDIR}"/etc/init
+
+# ezeket addons-ból tesszük fel
+rm -f "${UB_INSTALLDIR}"/etc/pam.d/lightdm
+rm -f "${UB_INSTALLDIR}"/etc/pam.d/lightdm-autologin

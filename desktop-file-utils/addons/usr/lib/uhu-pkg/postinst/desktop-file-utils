@@ -1,0 +1,26 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+update_desktop_database ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Generating MIME cache for desktop files ..."
+	update-desktop-database /usr/share/applications >/dev/null
+	true > /var/lib/uhu-pkg/desktop-file-utils
+	while [ ! /var/lib/uhu-pkg/desktop-file-utils -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/desktop-file-utils -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/desktop-file-utils
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ -f /var/lib/uhu-pkg/desktop-file-utils -a /var/lib/uhu-pkg/desktop-file-utils -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "desktop-file-utils" -o "$1" = "+" ]; then
+	update_desktop_database
+elif grep -q '^/usr/share/applications/' /var/lib/dpkg/info/"$1".list; then
+	update_desktop_database
+fi

@@ -1,0 +1,1 @@
+urllist https://github.com/xinetd-org/xinetd/releases/ | splitver '^xinetd-([0-9]-[0-9]-[0-9]+).tar.gz$' | sed -e 's/-/./g' | sort -V | tail -n 1

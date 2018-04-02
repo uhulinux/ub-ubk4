@@ -1,0 +1,14 @@
+diff -Naur orig/tinyxml.pc patched/tinyxml.pc
+--- orig/tinyxml.pc	1970-01-01 01:00:00.000000000 +0100
++++ patched/tinyxml.pc	2013-04-23 15:59:07.652032004 +0200
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: TinyXml
++Description: simple, small, C++ XML parser
++Version: @PKGVER@
++Libs: -L${libdir} -ltinyxml
++Cflags: -I${includedir}

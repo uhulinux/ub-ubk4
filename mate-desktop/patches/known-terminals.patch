@@ -1,0 +1,60 @@
+diff -Naur orig/libmate-desktop/mate-desktop-utils.c patched/libmate-desktop/mate-desktop-utils.c
+--- orig/libmate-desktop/mate-desktop-utils.c	2015-04-05 19:22:23.000000000 +0200
++++ patched/libmate-desktop/mate-desktop-utils.c	2015-04-06 21:07:04.651455849 +0200
+@@ -132,30 +132,33 @@
+ 		term_argv = g_new0 (char *, 3);
+ 
+ 		check = g_find_program_in_path ("mate-terminal");
+-		if (check != NULL) {
+-			term_argv[0] = check;
+-			/* Note that mate-terminal takes -x and
+-			 * as -e in mate-terminal is broken we use that. */
+-			term_argv[1] = g_strdup ("-x");
+-		} else {
+-			if (check == NULL)
+-				check = g_find_program_in_path ("nxterm");
+-			if (check == NULL)
+-				check = g_find_program_in_path ("color-xterm");
+-			if (check == NULL)
+-				check = g_find_program_in_path ("rxvt");
+-			if (check == NULL)
+-				check = g_find_program_in_path ("xterm");
+-			if (check == NULL)
+-				check = g_find_program_in_path ("dtterm");
+-			if (check == NULL) {
+-				g_warning (_("Cannot find a terminal, using "
+-					     "xterm, even if it may not work"));
+-				check = g_strdup ("xterm");
+-			}
+-			term_argv[0] = check;
+-			term_argv[1] = g_strdup ("-e");
++		if (check == NULL)
++			check = g_find_program_in_path ("gnome-terminal");
++		if (check == NULL)
++			check = g_find_program_in_path ("xfce4-terminal");
++		if (check == NULL)
++			check = g_find_program_in_path ("lxterminal");
++		if (check == NULL)
++			check = g_find_program_in_path ("eterm");
++		if (check == NULL)
++			check = g_find_program_in_path ("roxterm");
++		if (check == NULL)
++			check = g_find_program_in_path ("sakura");
++		if (check == NULL)
++			check = g_find_program_in_path ("nxterm");
++		if (check == NULL)
++			check = g_find_program_in_path ("color-xterm");
++		if (check == NULL)
++			check = g_find_program_in_path ("rxvt");
++		if (check == NULL)
++			check = g_find_program_in_path ("dtterm");
++		if (check == NULL) {
++			g_warning (_("Cannot find a terminal, using "
++				     "xterm, even if it may not work"));
++			check = g_strdup ("xterm");
+ 		}
++		term_argv[0] = check;
++		term_argv[1] = g_strdup ("-e");
+ 	}
+ 
+         real_argc = term_argc + *argc;

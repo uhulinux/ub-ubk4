@@ -1,0 +1,203 @@
+.\" Jean II - HPL - 03
+.\" irnet.4
+.\"
+.TH IRNET 4 "2 May 2003" "irda-utils" "Linux-IrDA man pages"
+.\"
+.\" NAME part
+.\"
+.SH NAME
+irnet \- IrNET protocol device
+.\"
+.\" DESCRIPTION part
+.\"
+.SH DESCRIPTION
+File
+.B /dev/irnet
+is used to access and configure the IrNET protocol part of the
+Linux-IrDA stack.
+.PP
+.B IrNET
+is a protocol allowing to create
+.I TCP/IP connections
+between two IrDA peers in an efficient fashion, and generally to
+enable standard networking over IrDA. It is a thin layer, passing PPP
+packets to IrTTP and vice versa. It uses
+.I PPP
+in synchronous mode, because IrTTP offer a reliable sequenced packet
+service (as opposed to a byte stream). In fact, you could see IrNET as
+carrying TCP/IP in a IrDA socket, using PPP to provide the glue.
+.PP
+The main difference with traditional
+.I PPP over IrCOMM
+is that it avoids the framing and serial emulation which are a
+performance bottleneck. It also allows multipoint communications in a
+sensible fashion. And finally, it can automatically handle incomming
+connections through
+.B irnetd.
+.PP
+The main difference with
+.I IrLAN
+is that we use PPP for the link management, which is more standard,
+interoperable and flexible than the IrLAN protocol. For example, PPP
+adds authentication, encryption, compression, header compression and
+automated routing setup. And, as IrNET let PPP do the hard work, the
+implementation is much simpler than IrLAN.
+.PP
+.B IrNET
+connections are initiated and managed with
+.IR pppd (8).
+File
+.B /dev/irnet
+also offer a
+.IR "control channel" .
+Reads from
+.B /dev/irnet
+will return various
+.IR "IrNET events" .
+Write to
+.B /dev/irnet
+allow to
+.I configure
+the IrNET connection.
+.\"
+.\" CONFIGURATION part
+.\"
+.SH CONFIGURATION
+If your system does not have
+.B /dev/irnet
+created already, it can be created with the following commands:
+.nf
+
+        mknod -m 644 /dev/irnet c 10 187
+        chown root:root /dev/irnet
+.fi
+.PP
+You will also need to have IrNET support in your kernel or as module
+and the Linux-IrDA stack installed and configured (see 
+.IR irattach (8)).
+.PP
+File
+.B /dev/irnet
+is supposed to only be used with the
+.I PPP line discipline
+or for accessing the 
+.IR "control channel" ,
+other use are unsupported.
+.B IrNET
+support multiple concurent connections (limited by the IrDA stack),
+all those connections are multiplexed on a single
+.B /dev/irnet
+device (as opposed to IrCOMM which as one device per connection).
+.\"
+.\" PARAMETER part
+.\"
+.SH PARAMETERS
+Writing commands to
+.B /dev/irnet
+allow to
+.I configure
+the IrNET connection being made. This need to be done through
+.IR pppd (8)
+(see below for examples). Commands are separated by comas.
+.TP
+.BI name " <peer>"
+Connect to the IrDA device which IrDA nickname is
+.IR <peer> .
+The IrDA nickname is a string up to 31 characters.
+.TP
+.BI daddr " <peer>"
+Connect to the IrDA device which IrDA address is
+.IR <peer> .
+The IrDA address is a 32 bits hexadecimal number.
+.TP
+.BI raddr " <port>"
+Restrict connections to the local IrDA interface which IrDA address is
+.IR <port> .
+The IrDA address is a 32 bits hexadecimal number.
+.\"
+.\" DISPLAY part
+.\"
+.SH DISPLAY
+Reading from
+.B /dev/irnet
+will show various
+.IR "IrNET events" .
+This is usually done with the command
+.IR "cat /dev/irnet" .
+.TP
+.B Found
+Dump of the current IrNET discovery log.
+.TP
+.B Discovered 
+New IrNET device discovered.
+.TP
+.B Expired
+Previously discovered IrNET device no longer present.
+.TP
+.B Connected to 
+This computer successfully established an IrNET connection to a peer.
+.TP
+.B Connection from 
+A peer successfully established an IrNET connection to this computer.
+.TP
+.B Request from
+A peer attempted to connect to this computer, but no IrNET connection
+was waiting for it.
+.TP
+.B No-answer from
+This computer attempted to connect to a peer, but no IrNET connection
+was waiting for it.
+.TP
+.B Blocked link with
+The IrDA link of the IrNET connection is currently blocked.
+.TP
+.B Disconnection from
+A peer successfully terminated an IrNET connection with this computer.
+.TP
+.B Disconnected to
+This computer successfully terminated an IrNET connection with a peer.
+.PP
+File
+.B /proc/net/irda/irnet
+will also show the current state of the various IrNET connections.
+.\"
+.\" EXAMPLE part
+.\"
+.SH EXAMPLE
+Start a IrNET server accepting any incomming connection:
+.br
+.B "	pppd /dev/irnet 9600 local noauth nolock passive"
+.PP
+Start a IrNET client connecting to any IrDA peer:
+.br
+.B "	pppd /dev/irnet 9600 local noauth nolock"
+.PP
+Start a IrNET client connecting to the IrDA peer called
+.IR MyIrDANode :
+.br
+.B "	pppd /dev/irnet 9600 local noauth nolock connect ""echo name MyIrDANode""
+.PP
+Start a IrNET server accepting incomming connection from peer with IrDA address 0x12345678 only on IrDA port 0x87654321:
+.br
+.B "	pppd /dev/irnet 9600 local noauth nolock passive connect ""echo daddr 0x12345678 , saddr 0x87654321"""
+.\"
+.\" AUTHOR part
+.\"
+.SH AUTHOR
+Jean Tourrilhes \- jt@hpl.hp.com
+.\"
+.\" FILES part
+.\"
+.SH FILES
+.I /dev/irnet
+.br
+.I /proc/net/irda/irnet
+.\"
+.\" SEE ALSO part
+.\"
+.SH SEE ALSO
+.BR irda (7),
+.BR irnetd (8),
+.BR pppd (8),
+.BR irattach (8),
+.BR irdadump (8).

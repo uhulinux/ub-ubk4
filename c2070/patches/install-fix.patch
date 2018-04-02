@@ -1,0 +1,13 @@
+diff -Naurd a/makefile b/makefile
+--- a/makefile	1999-10-04 23:01:21.000000000 +0200
++++ b/makefile	2004-01-12 03:20:31.000000000 +0100
+@@ -39,7 +39,7 @@
+ 
+ #install the driver
+ install: all
+-	cp c2070 /usr/bin
+-	chmod a+x /usr/bin/c2070
++	cp c2070 $(DESTDIR)/usr/bin
++	chmod a+x $(DESTDIR)/usr/bin/c2070
+ 
+ 

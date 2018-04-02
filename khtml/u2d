@@ -1,0 +1,2 @@
+dir=$(urllist https://download.kde.org/stable/frameworks/ | grep -E '^([0-9])' | sort -V | tail -n 1)
+urllist https://download.kde.org/stable/frameworks/$dir/portingAids/ | splitver '^khtml-([0-9.]+).tar.xz$' | sort -V | tail -n 1

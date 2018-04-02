@@ -1,0 +1,301 @@
+diff -Nur orig/lang/calamares_hu.ts mod/lang/calamares_hu.ts
+--- orig/lang/calamares_hu.ts	2018-01-02 15:37:36.000000000 +0100
++++ mod/lang/calamares_hu.ts	2018-02-28 10:49:25.702674920 +0100
+@@ -1,10 +1,12 @@
+-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
++<?xml version="1.0" encoding="utf-8"?>
++<!DOCTYPE TS>
++<TS version="2.1" language="hu">
+ <context>
+     <name>BootInfoWidget</name>
+     <message>
+         <location filename="../src/modules/partition/gui/BootInfoWidget.cpp" line="69"/>
+         <source>The &lt;strong&gt;boot environment&lt;/strong&gt; of this system.&lt;br&gt;&lt;br&gt;Older x86 systems only support &lt;strong&gt;BIOS&lt;/strong&gt;.&lt;br&gt;Modern systems usually use &lt;strong&gt;EFI&lt;/strong&gt;, but may also show up as BIOS if started in compatibility mode.</source>
+-        <translation>A rendszer &lt;strong&gt;indító környezete.&lt;strong&gt; &lt;br&gt;&lt;br&gt;Régebbi x86 alapú rendszerek csak &lt;strong&gt;BIOS&lt;/strong&gt;&lt;br&gt;-t támogatják. A modern rendszerek gyakran &lt;strong&gt;EFI&lt;/strong&gt;-t használnak, de lehet, hogy BIOS-ként látható ha kompatibilitási módban fut az indító környezet. </translation>
++        <translation>A rendszer &lt;strong&gt;indító környezete.&lt;strong&gt; &lt;br&gt;&lt;br&gt;Régebbi x86 alapú rendszerek csak &lt;strong&gt;BIOS&lt;/strong&gt;&lt;br&gt;-t támogatják. A modern rendszerek gyakran &lt;strong&gt;EFI&lt;/strong&gt;-t használnak, de lehet, hogy BIOS-ként látható ha kompatibilitási módban fut az indító környezet.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/BootInfoWidget.cpp" line="79"/>
+@@ -262,7 +264,7 @@
+     <message>
+         <location filename="../src/libcalamaresui/ViewManager.cpp" line="106"/>
+         <source>&amp;No</source>
+-        <translation>@Nem</translation>
++        <translation>&amp;Nem</translation>
+     </message>
+     <message>
+         <location filename="../src/libcalamaresui/ViewManager.cpp" line="186"/>
+@@ -413,12 +415,12 @@
+     <message>
+         <location filename="../src/modules/partition/gui/ChoicePage.cpp" line="916"/>
+         <source>%1 will be shrunk to %2MB and a new %3MB partition will be created for %4.</source>
+-        <translation>%1 lesz zsugorítva %2MB méretűre és egy új %3MB méretű partíció lesz létrehozva itt %4</translation>
++        <translation>%1 lesz zsugorítva %2MB méretűre és egy új %3MB méretű partíció lesz létrehozva itt %4.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/ChoicePage.cpp" line="126"/>
+         <source>Select storage de&amp;vice:</source>
+-        <translation>Válassz tároló eszközt:</translation>
++        <translation>&amp;Válassz tároló eszközt:</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/ChoicePage.cpp" line="127"/>
+@@ -431,7 +433,7 @@
+     <message>
+         <location filename="../src/modules/partition/gui/ChoicePage.cpp" line="776"/>
+         <source>Reuse %1 as home partition for %2.</source>
+-        <translation>%1 partíció használata mint home partíció a %2 -n</translation>
++        <translation>%1 partíció használata mint home partíció a %2 -n.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/ChoicePage.cpp" line="899"/>
+@@ -513,7 +515,7 @@
+     <message>
+         <location filename="../src/modules/partition/jobs/ClearMountsJob.cpp" line="53"/>
+         <source>Clearing mounts for partitioning operations on %1.</source>
+-        <translation>%1 csatolás törlése partícionáláshoz</translation>
++        <translation>%1 csatolás törlése partícionáláshoz.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/jobs/ClearMountsJob.cpp" line="190"/>
+@@ -526,22 +528,22 @@
+     <message>
+         <location filename="../src/modules/partition/jobs/ClearTempMountsJob.cpp" line="42"/>
+         <source>Clear all temporary mounts.</source>
+-        <translation>Minden ideiglenes csatolás törlése</translation>
++        <translation>Minden ideiglenes csatolás törlése.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/jobs/ClearTempMountsJob.cpp" line="49"/>
+         <source>Clearing all temporary mounts.</source>
+-        <translation>Minden ideiglenes csatolás törlése</translation>
++        <translation>Minden ideiglenes csatolás törlése.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/jobs/ClearTempMountsJob.cpp" line="60"/>
+         <source>Cannot get list of temporary mounts.</source>
+-        <translation>Nem lehet lekérni az ideiglenes csatolási listát</translation>
++        <translation>Nem lehet lekérni az ideiglenes csatolási listát.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/jobs/ClearTempMountsJob.cpp" line="99"/>
+         <source>Cleared all temporary mounts.</source>
+-        <translation>Minden ideiglenes csatolás törölve</translation>
++        <translation>Minden ideiglenes csatolás törölve.</translation>
+     </message>
+ </context>
+ <context>
+@@ -554,7 +556,7 @@
+     <message>
+         <location filename="../src/modules/partition/gui/CreatePartitionDialog.ui" line="48"/>
+         <source> MiB</source>
+-        <translation>MiB</translation>
++        <translation> MiB</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/CreatePartitionDialog.ui" line="55"/>
+@@ -574,7 +576,7 @@
+     <message>
+         <location filename="../src/modules/partition/gui/CreatePartitionDialog.ui" line="119"/>
+         <source>Fi&amp;le System:</source>
+-        <translation>Fájlrendszer:</translation>
++        <translation>Fáj&amp;lrendszer:</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/CreatePartitionDialog.ui" line="178"/>
+@@ -594,7 +596,7 @@
+     <message>
+         <location filename="../src/modules/partition/gui/CreatePartitionDialog.cpp" line="66"/>
+         <source>En&amp;crypt</source>
+-        <translation>Titkosítás</translation>
++        <translation>Tit&amp;kosítás</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/CreatePartitionDialog.cpp" line="162"/>
+@@ -731,7 +733,7 @@
+     <message>
+         <location filename="../src/modules/users/CreateUserJob.cpp" line="64"/>
+         <source>Creating user %1.</source>
+-        <translation>%1 nevű felhasználó létrehozása</translation>
++        <translation>%1 nevű felhasználó létrehozása.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/users/CreateUserJob.cpp" line="80"/>
+@@ -789,7 +791,7 @@
+     <message>
+         <location filename="../src/modules/partition/jobs/DeletePartitionJob.cpp" line="42"/>
+         <source>Delete partition %1.</source>
+-        <translation>%1 partíció törlése</translation>
++        <translation>%1 partíció törlése.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/jobs/DeletePartitionJob.cpp" line="50"/>
+@@ -799,7 +801,7 @@
+     <message>
+         <location filename="../src/modules/partition/jobs/DeletePartitionJob.cpp" line="58"/>
+         <source>Deleting partition %1.</source>
+-        <translation>%1 partíció törlése</translation>
++        <translation>%1 partíció törlése.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/jobs/DeletePartitionJob.cpp" line="67"/>
+@@ -873,7 +875,7 @@
+     <message>
+         <location filename="../src/modules/dracutlukscfg/DracutLuksCfgJob.cpp" line="133"/>
+         <source>Skip writing LUKS configuration for Dracut: &quot;/&quot; partition is not encrypted</source>
+-        <translation>Dracut LUKS konfiguráció mentésének kihagyása: &quot;/&quot; partíció nincs titkosítva.</translation>
++        <translation>Dracut LUKS konfiguráció mentésének kihagyása: &quot;/&quot; partíció nincs titkosítva</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/dracutlukscfg/DracutLuksCfgJob.cpp" line="149"/>
+@@ -929,12 +931,12 @@
+     <message>
+         <location filename="../src/modules/partition/gui/EditExistingPartitionDialog.ui" line="129"/>
+         <source> MiB</source>
+-        <translation>MiB</translation>
++        <translation> MiB</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/EditExistingPartitionDialog.ui" line="136"/>
+         <source>Fi&amp;le System:</source>
+-        <translation>&amp;fájlrendszer</translation>
++        <translation>fáj&amp;lrendszer:</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/EditExistingPartitionDialog.ui" line="149"/>
+@@ -957,7 +959,7 @@
+     <message>
+         <location filename="../src/modules/partition/gui/EncryptWidget.ui" line="32"/>
+         <source>En&amp;crypt system</source>
+-        <translation>Rendszer titkosítása</translation>
++        <translation>Rendszer tit&amp;kosítása</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/EncryptWidget.ui" line="42"/>
+@@ -1010,7 +1012,7 @@
+     <message>
+         <location filename="../src/modules/partition/jobs/FillGlobalStorageJob.cpp" line="186"/>
+         <source>Setting up mount points.</source>
+-        <translation>Csatlakozási pontok létrehozása</translation>
++        <translation>Csatlakozási pontok létrehozása.</translation>
+     </message>
+ </context>
+ <context>
+@@ -1023,7 +1025,7 @@
+     <message>
+         <location filename="../src/modules/finished/FinishedPage.ui" line="77"/>
+         <source>&amp;Restart now</source>
+-        <translation>$Újraindítás most</translation>
++        <translation>Új&amp;raindítás most</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/finished/FinishedPage.cpp" line="52"/>
+@@ -1046,7 +1048,7 @@
+     <message>
+         <location filename="../src/modules/finished/FinishedViewStep.cpp" line="126"/>
+         <source>Installation Complete</source>
+-        <translation>A telepítés befejeződött.</translation>
++        <translation>A telepítés befejeződött</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/finished/FinishedViewStep.cpp" line="127"/>
+@@ -1163,12 +1165,12 @@
+     <message>
+         <location filename="../src/modules/locale/LCLocaleDialog.cpp" line="66"/>
+         <source>&amp;Cancel</source>
+-        <translation type="unfinished"/>
++        <translation>&amp;Mégse</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/locale/LCLocaleDialog.cpp" line="67"/>
+         <source>&amp;OK</source>
+-        <translation type="unfinished"/>
++        <translation type="unfinished"></translation>
+     </message>
+ </context>
+ <context>
+@@ -1553,7 +1555,7 @@
+     <message>
+         <location filename="../src/modules/partition/gui/PartitionPage.ui" line="22"/>
+         <source>Storage de&amp;vice:</source>
+-        <translation>Eszköz:</translation>
++        <translation>Eszkö&amp;z:</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/PartitionPage.ui" line="51"/>
+@@ -1795,7 +1797,7 @@
+     <message>
+         <location filename="../src/modules/partition/gui/ReplaceWidget.cpp" line="270"/>
+         <source>The EFI system partition at %1 will be used for starting %2.</source>
+-        <translation>A %2 indításához az EFI rendszer partíciót használja a következőn: %1</translation>
++        <translation>Az EFI rendszer a %1 partíciót használja a %2 indításához.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/partition/gui/ReplaceWidget.cpp" line="286"/>
+@@ -1838,7 +1840,7 @@
+     <message>
+         <location filename="../src/modules/welcome/checker/RequirementsChecker.cpp" line="129"/>
+         <source>The system is not plugged in to a power source.</source>
+-        <translation>A rendszer nincs csatlakoztatva külső áramforráshoz</translation>
++        <translation>A rendszer nincs csatlakoztatva külső áramforráshoz.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/welcome/checker/RequirementsChecker.cpp" line="136"/>
+@@ -1936,7 +1938,7 @@
+     <message>
+         <location filename="../src/modules/users/SetHostNameJob.cpp" line="51"/>
+         <source>Setting hostname %1.</source>
+-        <translation>Hálózati név beállítása a %1 -hez</translation>
++        <translation>Hálózati név beállítása a %1 -hez.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/users/SetHostNameJob.cpp" line="61"/>
+@@ -1961,7 +1963,7 @@
+     <message>
+         <location filename="../src/modules/keyboard/SetKeyboardLayoutJob.cpp" line="320"/>
+         <source>Failed to write keyboard configuration for the virtual console.</source>
+-        <translation>Hiba történt a billentyűzet virtuális konzolba való beállításakor</translation>
++        <translation>Hiba történt a billentyűzet virtuális konzolba való beállításakor.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/keyboard/SetKeyboardLayoutJob.cpp" line="321"/>
+@@ -1973,7 +1975,7 @@
+     <message>
+         <location filename="../src/modules/keyboard/SetKeyboardLayoutJob.cpp" line="324"/>
+         <source>Failed to write keyboard configuration for X11.</source>
+-        <translation>Hiba történt a billentyűzet X11- hez való beállításakor</translation>
++        <translation>Hiba történt a billentyűzet X11- hez való beállításakor.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/keyboard/SetKeyboardLayoutJob.cpp" line="330"/>
+@@ -2102,12 +2104,12 @@
+     <message>
+         <location filename="../src/modules/users/SetPasswordJob.cpp" line="51"/>
+         <source>Setting password for user %1.</source>
+-        <translation>%1 felhasználói jelszó beállítása</translation>
++        <translation>%1 felhasználó jelszó beállítása.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/users/SetPasswordJob.cpp" line="108"/>
+         <source>Bad destination system path.</source>
+-        <translation>Rossz célrendszer elérési út</translation>
++        <translation>Rossz célrendszer elérési út.</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/users/SetPasswordJob.cpp" line="109"/>
+@@ -2165,7 +2167,7 @@
+     <message>
+         <location filename="../src/modules/locale/SetTimezoneJob.cpp" line="96"/>
+         <source>Cannot set timezone,</source>
+-        <translation>Nem lehet beállítani az időzónát .</translation>
++        <translation>Nem lehet beállítani az időzónát,</translation>
+     </message>
+     <message>
+         <location filename="../src/modules/locale/SetTimezoneJob.cpp" line="97"/>
+@@ -2298,4 +2300,4 @@
+         <translation>Üdvözlet</translation>
+     </message>
+ </context>
+-</TS>
+\ Nincs új sor a fájl végén
++</TS>

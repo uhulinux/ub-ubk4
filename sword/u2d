@@ -1,0 +1,2 @@
+minor=$(urllist http://www.crosswire.org/ftpmirror/pub/sword/source/ | splitver '^v([0-9.]+)' | sort -V | tail -n 1)
+u2d http://www.crosswire.org/ftpmirror/pub/sword/source/v"$minor"/ sword-

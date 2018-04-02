@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+
+sed -i \
+	-e "s:/usr/local/etc:/etc:g" \
+	"${UB_INSTALLDIR}"/etc/wgetrc \
+	"${UB_INSTALLDIR}"/usr/share/man/man1/wget.1 \
+	"${UB_INSTALLDIR}"/usr/share/info/wget.info

@@ -1,0 +1,12 @@
+--- perl-5.8.0/Makefile.SH.sharedlinker	Tue Jun 18 12:36:27 2002
++++ perl-5.8.0/Makefile.SH	Tue Jun 18 12:37:31 2002
+@@ -61,6 +61,9 @@
+ 	netbsd*|freebsd[234]*|openbsd*)
+ 		linklibperl="-L. -lperl"
+ 		;;
++	linux*)
++		shrpldflags="$shrpldflags $ldflags $perllibs $cryptlib"
++		;;
+ 	aix*)
+ 		shrpldflags="-H512 -T512 -bhalt:4 -bM:SRE -bE:perl.exp"
+ 		case "$osvers" in

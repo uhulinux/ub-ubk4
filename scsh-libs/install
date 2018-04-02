@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+make DESTDIR=$UB_INSTALLDIR dirs
+make DESTDIR=$UB_INSTALLDIR install-scsh
+rm -rf $UB_INSTALLDIR/usr/bin

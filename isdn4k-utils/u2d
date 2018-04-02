@@ -1,0 +1,1 @@
+geturl http://misdn.eu/?p=repositories/isdn4k-utils.git | grep v | sed s/.*v//g | splitver '^([0-9]\.[0-9]+)$' | sort -V | tail -n 1

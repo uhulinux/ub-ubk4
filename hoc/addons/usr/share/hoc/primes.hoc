@@ -1,0 +1,400 @@
+### -*-hoc-*-
+### ====================================================================
+### Implement a simple library for prime number support, patterned
+### after the Emacs Lisp library, primes.el, written by the same
+### author.
+### [11-Jan-2002]
+### ====================================================================
+
+func isprime(n) \
+{
+	## Return 1 if the argument is a prime integer, and 0 otherwise.
+
+	n = $1
+	if (isnan(n) || isinf(n)) \
+		return (0) \
+	else if (n != nint(n)) \
+		return (0) \
+	else if (n < 2) \
+		return (0) \
+	else if (n == 2) \
+		return (1) \
+	else if (n % 2 == 0) \
+		return (0) \
+	else \
+	{
+		limit = floor(sqrt(n))
+		isprime_divisor = 1
+		while (++isprime_divisor <= limit) \
+		{
+			if (n % isprime_divisor == 0) \
+				return (0)
+		}
+		return (1)
+	}
+}
+
+proc prime_factors(n) \
+{
+	## Print a list of the prime factors of the argument, n.  If n
+	## is prime, there are no factors, except the trivial one of n
+	## itself, so just n is printed.  If more than one number is
+	## printed, then n is composite.  If n is not an integer, then
+	## nothing is printed.
+
+	if (isnan(n) || isinf(n)) \
+		return \
+	else if (n != nint(n))\
+		return \
+	else if (n < 2) \
+		return \
+	else \
+	{
+		divisor = 2
+		limit = n / 2
+		count = 0
+		while (divisor <= limit) \
+		{
+			## To correctly handle factors of multiplicity > 1, we must
+			## be careful to advance the divisor only when it is not a
+			## factor!  When n is replaced by n/divisor, we can reset
+			## limit, but only to n/2, not to n.  Consider
+			## (prime-factors 15): the first factor found is 3, which
+			## reduces n to 5, which will be the next prime factor
+			## found, but would be lost if we reset limit to 5/2 == 2.
+			##
+			## If this divisor is rejected, as long as it is greater
+			## than 2, and thus, odd, we can step it by 2, halving the
+			## number of loop iterations.
+
+			if (n % divisor == 0) \
+			{
+				n /= divisor
+				limit = n
+				print divisor, ""
+				count++
+			} \
+			else if (divisor == 2) \
+				divisor = 3 \
+			else \
+				divisor += 2
+		}
+		## If we end the while loop without having printed any results,
+		## the input n was prime, so print it.
+
+		if (count == 0) \
+			print n
+		println ""
+	}
+}
+
+func next_prime(n) \
+{
+	## Return the next prime number after the argument, or -1 if
+	## the argument is a NaN or Infinity.
+
+	n = $1
+	if (isnan(n) || isinf(n)) \
+		return (-1) \
+	else if (n >= 2) \
+	{
+		n = max(2,ceil(n))
+		if (n % 2 == 0) \
+			k = n + 1 \
+		else \
+			k = n + 2
+		while (!isprime(k)) \
+			k += 2
+		return (k)
+	} \
+	else \
+		return 2
+}
+
+func nth_prime(n) \
+{
+	## Return the n-th prime number (the first of them is 2).  The
+	## return value is -1 if the argument is not a positive
+	## integer.
+	if (isnan(n) || isinf(n)) \
+		return (-1) \
+	else if (n != nint(n)) \
+		return (-1) \
+	else if (n < 1) \
+		return (-1) \
+	else if (n == 1) \
+		return (2) \
+	else \
+	{
+		k = 1
+		while (n > 1) \
+		{
+			k += 2
+			if (isprime(k)) \
+				n = n - 1
+		}
+		return (k)
+	}
+}
+
+func prev_prime(n) \
+{
+	## Return the prime number before (i.e., less than) the
+	## argument, n, or -1 if the argument is Infinity or NaN, or
+	## there is no such prime.
+
+	if (isnan(n) || isinf(n)) \
+		return (-1)
+
+	n = ceil(n)
+
+	if (n <= 2) \
+		return (-1) \
+	else if (n == 3) \
+		return (2) \
+	else \
+	{
+		if (n % 2 == 0) \
+			k = n - 1 \
+		else \
+			k = n - 2
+		while (!isprime(k)) \
+			k -= 2
+		return (k)
+	}
+}
+
+proc primes_between(from,to) \
+{
+	## Print a list of the primes between the two arguments,
+	## inclusive.
+
+	if (isnan(from) || isnan(to)) \
+		return
+
+	from = ceil(from)
+	to = floor(to)
+	if ((from <= 2) && (2 <= to)) \
+		print 2,""
+	count = 0
+	if (from % 2 == 0) \
+		k = from + 1 \
+	else \
+		k = from
+
+	while (k <= to) \
+	{
+		if (isprime(k)) \
+		{
+			count++
+			print k,""
+		}
+		k += 2
+	}
+	if (count > 0) \
+		println ""
+}
+
+func this_or_next_prime(n) \
+{
+	## Return the argument, n, if it is prime, else return the
+	## next prime number after n.  Otherwise, return -1 if n is
+	## Infinity or NaN.
+
+	if (isnan(n) || isinf(n)) \
+		return (-1)
+
+	if (isprime(n)) \
+		return (n) \
+	else \
+		return (next_prime(n))
+}
+
+func this_or_prev_prime(n) \
+{
+	## Return the argument, n, if it is prime, else return the
+	## previous prime number before n.  Otherwise, return -1 if n is
+	## Infinity or NaN.
+
+	if (isnan(n) || isinf(n)) \
+		return (-1)
+
+	if (isprime(n)) \
+		return (n) \
+	else \
+		return (prev_prime(n))
+}
+
+proc help_isprime() \
+{
+	print "\tisprime(n) returns 1 if n is a prime integer, and 0 otherwise.\n\n"
+
+	print "\tCost: O(sqrt(n))\n\n"
+}
+
+proc help_prime_factors() \
+{
+	print "\tprime_factors(n) prints a list of the prime factors of n.\n\n"
+
+	print "\tIf n is prime, there are no factors, except the trivial one of\n"
+	print "\tn itself, so just n is printed.\n\n"
+
+	print "\tIf more than one number is printed, then n is composite.\n\n"
+
+	print "\tIf n is not an integer, then nothing is printed.\n\n"
+
+	print "\tCost: O(n)\n\n"
+}
+
+proc help_next_prime() \
+{
+	print "\tnext_prime(n) returns the next prime number after n, or -1 if\n"
+	print "\tn is a NaN or Infinity.\n\n"
+
+	print "\tCost: O(sqrt(n))\n\n"
+}
+
+proc help_nth_prime() \
+{
+	print "\tnth_prime(n) returns the n-th prime number (the first of them\n"
+	print "\tis 2).\n\n"
+
+	print "\tThe return value is -1 if the argument is not a positive\n"
+	print "\tinteger.\n\n"
+
+	print "\tCost: O(n*sqrt(n))\n\n"
+}
+
+proc help_prev_prime() \
+{
+	print "\tprev_prime(n) returns the prime number before n, or -1 if\n"
+	print "\tn is a NaN or Infinity, or there is no such prime.\n\n"
+
+	print "\tCost: O(sqrt(n))\n\n"
+}
+
+proc help_primes_between() \
+{
+	print "\tprimes_between(from,to) prints a list of the primes between\n"
+	print "\tfrom and to, inclusive.\n\n"
+
+	print "\tCost: O((to - from + 1)*sqrt(n)/2)\n\n"
+}
+
+proc help_this_or_next_prime() \
+{
+	print "\tthis_or_next_prime(n) returns n, if it is prime, and otherwise,\n"
+	print "\treturns the next prime number after n.\n\n"
+
+	print "\tIt returns -1 if n is Infinity or NaN.\n\n"
+
+	print "\tCost: O(sqrt(n))\n\n"
+}
+
+
+proc help_this_or_prev_prime() \
+{
+	print "\tthis_or_prev_prime(n) returns n, if it is prime, and otherwise,\n"
+	print "\treturns the previous prime number before n.\n\n"
+
+	print "\tIt returns -1 if n is Infinity or NaN.\n\n"
+
+	print "\tCost: O(sqrt(n))\n\n"
+}
+
+proc help_primes() \
+{
+	print "\tA prime number is any integer greater than one which has no\n"
+	print "\texact integer divisors other than one and itself.\n\n"
+
+	print "\tPrime numbers have increasingly important practical applications\n"
+	print "\tin cryptography, and are also useful in hashing, besides being\n"
+	print "\tof fundamental importance in number theory.\n\n"
+
+	print "\tThis is a small collection of functions for:\n\n"
+
+	print "\t\t* testing integers for primality,\n"
+	print "\t\t* generating nearby primes,\n"
+	print "\t\t* finding the n-th prime,\n"
+	print "\t\t* generating lists of primes in a given range,\n"
+	print "\t\t* factoring a number into a product of primes,\n"
+	print "\t\t* finding the greatest common divisor of two numbers,\n"
+	print "\t\t  and\n"
+	print "\t\t* finding the least common multiple of two numbers.\n\n"
+
+	print "\tThe functions provided are:\n\n"
+
+	print "\t\tgcd(n, m)		[cost: O((12(ln 2)/PI^2)ln n)]\n"
+	print "\t\tisprime(n)		[cost: O(sqrt(n))]\n"
+	print "\t\tlcm(n, m)		[cost: O((12(ln 2)/PI^2)ln n)]\n"
+	print "\t\tnext_prime(n)		[cost: O(sqrt(n))]\n"
+	print "\t\tnth_prime(n)		[cost: O(n*sqrt(n))]\n"
+	print "\t\tprev_prime(n)		[cost: O(sqrt(n))]\n"
+	print "\t\tprime_factors(n)	[cost: O(n)]\n"
+	print "\t\tprimes_between(from,to)	[cost: O((to-from+1)*sqrt(n))]\n"
+	print "\t\tthis_or_next_prime(n)	[cost: O(sqrt(n))]\n"
+	print "\t\tthis_or_prev_prime(n)	[cost: O(sqrt(n))]\n\n"
+
+	print "\tThe modest collection of functions here is likely to grow, and\n"
+	print "\tperhaps may even be improved algorithmically.  The core of most\n"
+	print "\tof these functions is the primality test, isprime(n), whose\n"
+	print "\trunning time is O(sqrt(n)), which becomes excessive for large n.\n"
+	print "\tNote that sqrt(n) == 2^{(lg n)/2}, where lg n, the base-2\n"
+	print "\tlogarithm of n, is the number of bits in n.  Thus O(sqrt(n))\n"
+	print "\tmeans O(2^(bits in n)), or O(10^(digits in n)).  That is, the\n"
+	print "\trunning time increases EXPONENTIALLY in the number of digits of\n"
+	print "\tn.\n\n"
+
+	print "\tBecause knowledge of the cost of these functions may be critical\n"
+	print "\tto the caller, each function's documentation string ends with a\n"
+	print "\tbracketed cost estimate as a final paragraph.\n\n"
+
+	print "\tFaster algorithms capable of dealing with larger integers are\n"
+	print "\tknown.  For example, Maple V Release 5 (1997) implements a\n"
+	print "\tprobabilistic function, isprime(n), that is\n\n"
+
+	print "\t\t``very probably'' prime - see Knuth ``The Art of\n"
+	print "\t\tComputer Programming'', Vol 2, 2nd edition, Section\n"
+	print "\t\t4.5.4, Algorithm P for a reference and H. Reisel,\n"
+	print "\t\t``Prime numbers and computer methods for\n"
+	print "\t\tfactorization''. No counter example is known and it has\n"
+	print "\t\tbeen conjectured that such a counter example must be\n"
+	print "\t\thundreds of digits long.\n\n"
+
+	print "\tRobert Sedgewick also promises a fast prime test in Part 5 of\n"
+	print "\this book ``Algorithms in C'', not yet published at the time of\n"
+	print "\twriting this in March 1999.\n\n"
+
+	print "\tThree algorithms for probabilistic primality tests for large\n"
+	print "\tnumbers are discussed in Bruce Schneier, ``Applied\n"
+	print "\tCryptography'', (Wiley, 1994, ISBN 0-471-59756-2), pp. 213--216.\n\n"
+
+	print "\tOther key references include\n\n"
+
+	print "\t\tLeonard M. Adleman, Algorithmic Number Theory --- The\n"
+	print "\t\tComplexity Contribution, Proc. 35th IEEE Symposium on\n"
+	print "\t\tthe Foundations of Computer Science (FOCS'94), Shafi\n"
+	print "\t\tGoldwasser (Ed.), IEEE Computer Society Press (Silver\n"
+	print "\t\tSpring, MD), pp. 88--113, 1994, ISBN 0-8186-6582-3, ISSN\n"
+	print "\t\t0272-5428.\n\n"
+
+	print "\t\tEric Bach and Jeffrey Shallit, Algorithmic Number\n"
+	print "\t\tTheory.  Volume I: Efficient Algorithms, MIT Press\n"
+	print "\t\t(Cambridge, MA), 1996, ISBN 0-262-02405-5.\n\n"
+
+	print "\t\tRonald L. Graham, Donald E. Knuth and Oren Patashnik,\n"
+	print "\t\tConcrete Mathematics, Addison-Wesley, Reading, MA, USA,\n"
+	print "\t\t1989, ISBN 0-201-14236-8.\n\n"
+
+	print "\t\tDonald E. Knuth, Fundamental algorithms, The Art of\n"
+	print "\t\tComputer Programming, Volume 1, Third edition,\n"
+	print "\t\tAddison-Wesley (Reading, MA), 1997, ISBN 0-201-89683-4.\n\n"
+
+	print "\t\tDonald E. Knuth, Seminumerical algorithms, The Art of\n"
+	print "\t\tComputer Programming, Volume 2, Third edition,\n"
+	print "\t\tAddison-Wesley (Reading, MA), 1997, ISBN 0-201-89684-2.\n\n"
+
+	print "\t\tSteven S. Skiena, The Algorithm Design Manual,\n"
+	print "\t\tSpringer-Verlag (New York, NY), 1998, ISBN\n"
+	print "\t\t0-387-94860-0.\n\n"
+}

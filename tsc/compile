@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+git submodule update --init --recursive
+
+cd tsc
+ub_compile \
+	-DENABLE_MRUBY=ON

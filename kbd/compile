@@ -1,0 +1,22 @@
+#!/bin/sh -eux
+
+# remove obsolete "gr" translations
+rm -f po/gr.po po/gr.gmo
+
+cd data/keymaps/i386
+
+# 7-bit maps are obsolete; so are non-euro maps
+cp qwerty/pt-latin9.map qwerty/pt.map
+cp qwerty/sv-latin1.map qwerty/se-latin1.map
+mv azerty/fr.map azerty/fr-old.map
+cp azerty/fr-latin9.map azerty/fr-latin0.map # legacy alias
+
+# Rename conflicting keymaps
+mv dvorak/no.map dvorak/no-dvorak.map
+mv fgGIod/trf.map fgGIod/trf-fgGIod.map
+mv olpc/es.map olpc/es-olpc.map
+mv olpc/pt.map olpc/pt-olpc.map
+mv qwerty/cz.map qwerty/cz-qwerty.map
+cd -
+ub_configure
+make KEYCODES_PROGS=yes RESIZECONS_PROGS=yes

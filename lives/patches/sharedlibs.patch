@@ -1,0 +1,35 @@
+diff -Naur orig/libOSC/sendOSC/Makefile.in patched/libOSC/sendOSC/Makefile.in
+--- orig/libOSC/sendOSC/Makefile.in	2017-04-23 00:11:52.134741211 +0200
++++ patched/libOSC/sendOSC/Makefile.in	2017-05-22 00:24:01.251912013 +0200
+@@ -467,7 +467,7 @@
+ @ENABLE_OSC_TRUE@sendOSC = sendOSC
+ @ENABLE_OSC_TRUE@LIBOSCDIR = ../client
+ @ENABLE_OSC_TRUE@sendOSCdir = $(bindir)
+-@ENABLE_OSC_TRUE@sendOSC_LDFLAGS = $(mingw_LIBFLAGS) $(top_builddir)/libOSC/client/.libs/libOSC_client.a
++@ENABLE_OSC_TRUE@sendOSC_LDFLAGS = $(mingw_LIBFLAGS) $(top_builddir)/libOSC/client/.libs/libOSC_client.so
+ @ENABLE_OSC_TRUE@sendOSC_CFLAGS = -I.. $(mingw_CFLAGS)
+ @ENABLE_OSC_TRUE@sendOSC_SOURCES = htmsocket.c htmsocket.h sendOSC.c
+ all: all-am
+diff -Naur orig/src/Makefile.in patched/src/Makefile.in
+--- orig/src/Makefile.in	2017-04-23 00:11:53.134741211 +0200
++++ patched/src/Makefile.in	2017-05-22 00:25:17.528942089 +0200
+@@ -265,8 +265,8 @@
+ lives_exe_OBJECTS = $(am_lives_exe_OBJECTS)
+ am__DEPENDENCIES_1 =
+ @ENABLE_OSC_TRUE@am__DEPENDENCIES_2 =  \
+-@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/.libs/libOSC.a \
+-@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/client/.libs/libOSC_client.a
++@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/.libs/libOSC.so \
++@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/client/.libs/libOSC_client.so
+ @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed_slice.la \
+ @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@	$(abs_top_srcdir)/libweed/libweed-utils.la
+ @DISABLE_GLSLICE_TRUE@@HAVE_SYSTEM_WEED_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed.la \
+@@ -658,7 +658,7 @@
+ @HAVE_UNICAP_TRUE@unicap_SOURCES = videodev.c videodev.h
+ @HAVE_UNICAP_TRUE@unicap_CFLAGS = -DHAVE_UNICAP=1
+ @ENABLE_OSC_TRUE@osc_SOURCES = osc.c osc.h omc-learn.c omc-learn.h osc_notify.h
+-@ENABLE_OSC_TRUE@osc_LDADD = $(top_builddir)/libOSC/.libs/libOSC.a $(top_builddir)/libOSC/client/.libs/libOSC_client.a -lm
++@ENABLE_OSC_TRUE@osc_LDADD = $(top_builddir)/libOSC/.libs/libOSC.so $(top_builddir)/libOSC/client/.libs/libOSC_client.so -lm
+ @ENABLE_OSC_TRUE@osc_CFLAGS = -DENABLE_OSC=1
+ @ENABLE_LDVGRAB_TRUE@ldvgrab_SOURCES = ldvgrab.c ldvgrab.h ldvcallbacks.c ldvcallbacks.h ldvinterface.c ldvinterface.h
+ @ENABLE_LDVGRAB_TRUE@ldvgrab_CFLAGS = -DHAVE_LDVGRAB=1 -I libavc1394/avc1394.h -I libraw1394/raw1394.h -I libraw1394/rom1394.h

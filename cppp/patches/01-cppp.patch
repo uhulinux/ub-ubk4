@@ -1,0 +1,23 @@
+diff -Naur cppp-2.6-orig/Makefile cppp-2.6/Makefile
+--- cppp-2.6-orig/Makefile	2015-11-04 08:48:17.000000000 +0100
++++ cppp-2.6/Makefile	2016-02-13 13:54:07.113353657 +0100
+@@ -2,7 +2,7 @@
+ 
+ # Where to install
+ #
+-prefix = /usr/local
++prefix = /usr
+ version = 2.6
+ 
+ CC = gcc
+@@ -22,8 +22,8 @@
+ cppp.o    : cppp.c gen.h unixisms.h error.h symset.h ppproc.h
+ 
+ install:
+-	cp ./cppp $(prefix)/bin/.
+-	cp ./cppp.1 $(prefix)/share/man/man1/.
++	cp ./cppp $(DESTDIR)$(prefix)/bin/.
++	cp ./cppp.1 $(DESTDIR)$(prefix)/share/man/man1/.
+ 
+ clean:
+ 	rm -f $(OBJLIST) cppp

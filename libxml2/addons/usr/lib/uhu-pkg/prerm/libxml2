@@ -1,0 +1,17 @@
+#!/bin/sh -e
+
+catalog_del ()
+{
+	if [ ! -s /etc/xml/catalog ]; then
+		return
+	fi
+	while IFS='"' read x type x orig x replace x; do
+		xmlcatalog --noout --del "$orig" /etc/xml/catalog
+	done <"$i"
+}
+
+shopt -s nullglob
+
+for i in $(grep '^/etc/xml/catalog.d/' /var/lib/dpkg/info/"$1".list); do
+	catalog_del "$i"
+done

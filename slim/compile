@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_compile \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DUSE_PAM=yes \
+    -DUSE_CONSOLEKIT=no

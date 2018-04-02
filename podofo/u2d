@@ -1,0 +1,2 @@
+alap=$(sflist podofo podofo | grep -E '^([0-9.]+)$' | sort -V | tail -n 1)
+sflist podofo podofo/"$alap" | parsever | sort -V | tail -n 1

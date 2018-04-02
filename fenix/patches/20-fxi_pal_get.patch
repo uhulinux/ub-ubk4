@@ -1,0 +1,14 @@
+# Copyright (C) 2007  Dann Frazier <dannf@debian.org>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+# See http://bugs.debian.org/437735
+
+--- fenix-0.92a.dfsg1/fxi/inc/g_pal.h~	2007-10-08 15:54:16.000000000 -0600
++++ fenix-0.92a.dfsg1/fxi/inc/g_pal.h	2007-10-08 16:00:04.000000000 -0600
+@@ -27,6 +27,7 @@
+ #ifndef __G_PAL_H
+ #define __G_PAL_H
+ 
++int pal_get (PALETTE * spal, int color, int num, Uint8 * pal);
+ int pal_set (PALETTE * spal, int color, int num, Uint8 * pal);
+ int pal_map_assign (int libid, int mapcode, PALETTE * palid);
+ 

@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+
+ln -s openldap/ldap.conf "$UB_INSTALLDIR"/etc/ldap.conf
+# fix libraries permissions
+chmod 0755 "$UB_INSTALLDIR"/usr/lib/lib*.so*
+# delete the old config files
+rm -rf "$UB_INSTALLDIR"/etc/openldap/slapd.conf{,.default}

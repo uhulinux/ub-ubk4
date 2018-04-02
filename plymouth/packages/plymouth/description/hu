@@ -1,0 +1,7 @@
+Beállítás:
+- a &grub &konfigban a kernel parancssor végére: &quiet &splash
+- &mkinitrd-installedkernel futtatása
+Ha a &boot során &'Error: &Driver &'pcspkr' is &already &registered, &aborting...' hiba jelentkezik,
+kell egy &blacklist:
+&echo &'blacklist &snd-pcsp' > /etc/modprobe.d/snd-pcsp.conf
+Ezután ismét &mkinitrd-installedkernel.

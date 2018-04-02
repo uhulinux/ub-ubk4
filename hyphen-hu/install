@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+install -dm755 ${UB_INSTALLDIR}/usr/share/hyphen
+install -Dm0644 hyph_hu_HU.dic ${UB_INSTALLDIR}/usr/share/hyphen/hyph_hu_HU.dic
+
+# myspell/hunspell symlink
+install -dm755 ${UB_INSTALLDIR}/usr/share/myspell
+ln -sv /usr/share/hyphen/hyph_hu_HU.dic ${UB_INSTALLDIR}/usr/share/myspell/hyph_hu_HU.dic

@@ -1,0 +1,54 @@
+diff -urN efax-0.9a-001114.orig/efax.c efax-0.9a-001114/efax.c
+--- efax-0.9a-001114.orig/efax.c	2000-11-14 18:22:09.000000000 +0100
++++ efax-0.9a-001114/efax.c	2003-05-25 16:10:47.000000000 +0200
+@@ -26,6 +26,12 @@
+ 
+ */
+ 
++  /* the call to setlocale(), was omitted by Chris Vine 25 May 2003:
++   * it causes incorrect floating point representation in locales
++   * which use the comma instead of the full-stop as the decimal
++   * separator.  Apart from that, efax-0.9a-001114 is unchanged
++  */
++
+ const char *Usage =
+   "Usage:\n"
+   "  %s [ option ]... [ -t num [ file... ] ]\n"
+@@ -2236,7 +2242,10 @@
+   msg ( "A compiled "__DATE__ " " __TIME__ ) ;
+   verb[1] = "" ;
+ 
++  /* omit setlocale(), it causes incorrect floating point representatin
++   * in some locales
+   setlocale ( LC_ALL, "" ) ;
++  */
+ 
+   while ( ! err && ! doneargs &&
+ 	 ( c = nextopt ( argc,argv,
+diff -urN efax-0.9a-001114.orig/efix.c efax-0.9a-001114/efix.c
+--- efax-0.9a-001114.orig/efix.c	2000-02-06 23:36:25.000000000 +0100
++++ efax-0.9a-001114/efix.c	2003-05-25 16:10:47.000000000 +0200
+@@ -26,6 +26,12 @@
+ 
+ */
+ 
++  /* the call to setlocale(), was omitted by Chris Vine 25 May 2003:
++   * it causes incorrect floating point representation in locales
++   * which use the comma instead of the full-stop as the decimal
++   * separator.  Apart from that, efax-0.9a-001114 is unchanged
++  */
++
+ const char *Usage =
+   "Usage:\n"
+   "  %s [ option ]... file... \n"
+@@ -249,7 +255,10 @@
+ 
+   argv0 = argv[0] ;
+ 
++  /* omit setlocale(), it causes incorrect floating point representatin
++   * in some locales
+   setlocale ( LC_ALL, "" ) ;
++  */
+ 
+   /* process arguments */
+ 

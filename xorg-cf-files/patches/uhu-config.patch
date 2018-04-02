@@ -1,0 +1,34 @@
+diff -Naur xorg-cf-files-1.0.4/host.def xorg-cf-files-1.0.4/host.def
+--- xorg-cf-files-1.0.4/host.def	1970-01-01 01:00:00.000000000 +0100
++++ xorg-cf-files-1.0.4/host.def	2006-06-30 15:41:00.000000000 +0200
+@@ -0,0 +1,30 @@
++#define LinuxDistName "UHU-Linux"
++
++#define HasZlib       YES
++#define HasPam        YES
++#define HasFreetype2  YES
++#define HasFontconfig YES
++#define HasExpat      YES
++
++#define BuildHtmlManPages NO
++
++#define ProjectRoot      /usr
++#define FontDir          /usr/share/fonts
++#define ManDirectoryRoot /usr/share/man
++#define ModuleDir        /usr/lib/xorg/modules
++#define XAppLoadDir      /usr/share/X11/app-defaults
++#define MotifDir         /usr
++
++#define UseConfDirForAppDefaults NO
++
++#define InstPgmFlags -m 0755
++#define InstBinFlags -m 0755
++#define InstUidFlags -m 0755
++#define InstLibFlags -m 0644
++#define InstIncFlags -m 0644
++#define InstManFlags -m 0644
++#define InstDatFlags -m 0644
++#define InstallFlags /**/
++
++#define LinkGLToUsrInclude NO
++#define LinkGLToUsrLib     NO

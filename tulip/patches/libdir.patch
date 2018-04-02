@@ -1,0 +1,21 @@
+diff -Naur orig/library/tulip-core/src/TlpTools.cpp patched/library/tulip-core/src/TlpTools.cpp
+--- orig/library/tulip-core/src/TlpTools.cpp	2017-06-27 08:34:12.134739579 +0200
++++ patched/library/tulip-core/src/TlpTools.cpp	2017-07-15 03:02:46.065641708 +0200
+@@ -162,16 +162,7 @@
+       TulipLibDir.append(appDirPath,
+                          strlen(appDirPath) -
+                          strlen(strrchr(appDirPath, '/') + 1));
+-#ifdef X86_64
+-      // check for lib64
+-      string tlpPath64 = TulipLibDir + "lib64/tulip";
+-      tlp_stat_t statInfo;
+-
+-      if (statPath(tlpPath64, &statInfo) == 0)
+-        TulipLibDir.append("lib64");
+-      else
+-#endif
+-        TulipLibDir.append("lib");
++      TulipLibDir.append("lib");
+ 
+ #endif
+     }

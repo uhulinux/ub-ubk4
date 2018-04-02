@@ -1,0 +1,81 @@
+Description: Re-add hb_version_check to unbreak API/ABI
+  This patch should be removed on the next API/ABI break by upstream.
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
+Bug-Debian: http://bugs.debian.org/755094
+Forwarded: not-needed
+
+--- a/src/hb-common.cc
++++ b/src/hb-common.cc
+@@ -989,3 +989,23 @@
+ {
+   return HB_VERSION_ATLEAST (major, minor, micro);
+ }
++
++/**
++ * hb_version_check:
++ * @major: 
++ * @minor: 
++ * @micro: 
++ *
++ * 
++ *
++ * Return value: 
++ *
++ * Since: 1.0
++ **/
++hb_bool_t
++hb_version_check (unsigned int major,
++		    unsigned int minor,
++		    unsigned int micro)
++{
++  return HB_VERSION_CHECK (major, minor, micro);
++}
+--- a/src/hb-version.h
++++ b/src/hb-version.h
+@@ -45,6 +45,9 @@
+ #define HB_VERSION_ATLEAST(major,minor,micro) \
+ 	((major)*10000+(minor)*100+(micro) <= \
+ 	 HB_VERSION_MAJOR*10000+HB_VERSION_MINOR*100+HB_VERSION_MICRO)
++#define HB_VERSION_CHECK(major,minor,micro) \
++	((major)*10000+(minor)*100+(micro) >= \
++	 HB_VERSION_MAJOR*10000+HB_VERSION_MINOR*100+HB_VERSION_MICRO)
+ 
+ 
+ void
+@@ -60,6 +63,11 @@
+ 		    unsigned int minor,
+ 		    unsigned int micro);
+ 
++hb_bool_t
++hb_version_check (unsigned int major,
++		    unsigned int minor,
++		    unsigned int micro);
++
+ 
+ HB_END_DECLS
+ 
+--- a/src/hb-version.h.in
++++ b/src/hb-version.h.in
+@@ -45,6 +45,10 @@
+ #define HB_VERSION_ATLEAST(major,minor,micro) \
+ 	((major)*10000+(minor)*100+(micro) <= \
+ 	 HB_VERSION_MAJOR*10000+HB_VERSION_MINOR*100+HB_VERSION_MICRO)
++#define HB_VERSION_CHECK(major,minor,micro) \
++	((major)*10000+(minor)*100+(micro) >= \
++	 HB_VERSION_MAJOR*10000+HB_VERSION_MINOR*100+HB_VERSION_MICRO)
++
+ 
+ 
+ void
+@@ -60,6 +64,11 @@
+ 		    unsigned int minor,
+ 		    unsigned int micro);
+ 
++hb_bool_t
++hb_version_check (unsigned int major,
++		    unsigned int minor,
++		    unsigned int micro);
++
+ 
+ HB_END_DECLS
+ 

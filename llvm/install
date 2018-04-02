@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm -Rf "$UB_INSTALLDIR/usr/share/doc/{clang,llvm}/html/_sources"
+rm -f "$UB_INSTALLDIR/usr/share/doc/{clang,llvm}/html/.buildinfo"
+cp tools/lldb/docs/*.1 "$UB_INSTALLDIR/usr/share/man/man1/"

@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+cd GUI/xephem
+install -m 755 xephem "$UB_INSTALLDIR"/usr/bin/
+install -m 644 xephem.man "$UB_INSTALLDIR"/usr/share/man/man1/xephem.1
+mkdir -p "$UB_INSTALLDIR"/usr/share/xephem
+cp -a auxil catalogs fifos fits "$UB_INSTALLDIR"/usr/share/xephem/
+mkdir -p "$UB_INSTALLDIR"/usr/share/X11/app-defaults
+echo 'XEphem.ShareDir: /usr/share/xephem' >"$UB_INSTALLDIR"/usr/share/X11/app-defaults/XEphem

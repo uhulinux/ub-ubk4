@@ -1,0 +1,29 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--libexecdir=/usr/sbin \
+	--enable-syslog \
+	--enable-dynamic \
+	--enable-ipv6 \
+	--enable-local \
+	\
+	--enable-slapd \
+	--enable-slp \
+	--enable-cleartext \
+	--enable-crypt \
+	--enable-lmpasswd \
+	--enable-spasswd \
+	--enable-rewrite \
+	--enable-rlookups \
+	\
+	--enable-backends=mod \
+	--enable-bdb \
+	--enable-hdb \
+	--enable-mdb \
+	--enable-monitor \
+	--enable-perl \
+	--disable-ndb \
+	\
+	--enable-overlays=mod \
+	\
+	--without-fetch

@@ -1,0 +1,31 @@
+diff -Naur orig/src/media/sdl/joystick.c mod/src/media/sdl/joystick.c
+--- orig/src/media/sdl/joystick.c	2001-09-21 12:43:57.000000000 +0200
++++ mod/src/media/sdl/joystick.c	2012-12-18 15:38:19.000000000 +0100
+@@ -63,6 +63,13 @@
+ 
+ void get_joystick_state (void)
+ {
++  /* Make sure we never use SDL's Joystick API if it wasn't
++     initialized (this happens when the game is run with -J): crashes
++     have been reported by a Windows user.  More generally, avoid
++     these extra calls if no joystick was detected.  */
++  if (joystick_detected == 0)
++    return;
++
+   SDL_JoystickUpdate();
+   if (joystick[0]) {
+     joystick_b[0] = (joystick_b[0] & ~1) |
+diff -Naur orig/src/media/video.h mod/src/media/video.h
+--- orig/src/media/video.h	2001-09-21 12:43:57.000000000 +0200
++++ mod/src/media/video.h	2012-12-18 15:35:08.000000000 +0100
+@@ -25,8 +25,8 @@
+ /* the three macro below configure the rendering buffers used in the game */
+ #define xbuf 512		/* large width to suppress any clipping need,
+ 				   power of two of easier multiplications */
+-#define ybuf 300		/* height */
+-#define sbuf (50*xbuf)		/* keep sbuf empty line on top of the buffers
++#define ybuf 320		/* height */
++#define sbuf (60*xbuf)		/* keep sbuf empty line on top of the buffers
+ 				   (to avoid clipping) */
+ 
+ 

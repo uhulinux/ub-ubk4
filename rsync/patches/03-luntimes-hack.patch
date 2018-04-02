@@ -1,0 +1,9 @@
+diff -Naur rsync-3.0.6-orig/rsync.h rsync-3.0.6/rsync.h
+--- rsync-3.0.6-orig/rsync.h	2009-02-14 16:57:50.000000000 +0100
++++ rsync-3.0.6/rsync.h	2009-06-06 22:26:51.000000000 +0200
+@@ -1144,3 +1144,5 @@
+ #ifdef MAINTAINER_MODE
+ const char *get_panic_action(void);
+ #endif
++
++#undef HAVE_LUTIMES

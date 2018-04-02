@@ -1,0 +1,16 @@
+diff -Naur orig/libdm/dm_handle2path.c patched/libdm/dm_handle2path.c
+--- orig/libdm/dm_handle2path.c	2012-09-13 20:09:44.000000000 +0200
++++ patched/libdm/dm_handle2path.c	2016-07-24 20:02:34.095082009 +0200
+@@ -22,7 +22,12 @@
+ 
+ #include <mntent.h>
+ #include <dirent.h>
++#include <string.h>
+ #ifdef linux
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
+ #include "getdents.h"
+ #endif
+ 

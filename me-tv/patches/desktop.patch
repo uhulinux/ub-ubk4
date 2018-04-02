@@ -1,0 +1,27 @@
+diff -Nur orig/data/CMakeLists.txt mod/data/CMakeLists.txt
+--- orig/data/CMakeLists.txt	2017-10-27 17:52:31.000000000 +0200
++++ mod/data/CMakeLists.txt	2017-10-27 18:38:52.913009854 +0200
+@@ -35,5 +35,5 @@
+ install(
+     FILES
+     ${CMAKE_CURRENT_BINARY_DIR}/${desktop_file_name}
+-    DESTINATION $ENV{HOME}/.local/share/applications
++    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications
+ )
+diff -Nur orig/data/me-tv.desktop.in mod/data/me-tv.desktop.in
+--- orig/data/me-tv.desktop.in	2017-10-27 17:52:31.000000000 +0200
++++ mod/data/me-tv.desktop.in	2017-10-27 18:37:20.861160224 +0200
+@@ -1,10 +1,10 @@
+ [Desktop Entry]
+ Type=Application
+-Encoding=UTF-8
+ Name=Me TV
+ Comment=A digital television (DVB) viewer for GTK+3
+-Exec=@PREFIX@/bin/me-tv %U
+-Icon=@PREFIX@/share/pixmaps/me-tv.png
++Comment[hu]=Digitális televízó néző
++Exec=me-tv %U
++Icon=me-tv
+ Terminal=false
+ StartupNotify=true
+ Categories=AudioVideo;GTK;TV;Player;

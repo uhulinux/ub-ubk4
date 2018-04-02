@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/slib
+mkdir -p "$UB_INSTALLDIR"/usr/share/guile/2.0/slib
+mkdir -p "$UB_INSTALLDIR"/usr/share/guile/site/2.2/
+install -m 644 *.scm *.init *.xyz *.txt *.dat *.ps "$UB_INSTALLDIR"/usr/share/slib/
+install -m 644 slib.info "$UB_INSTALLDIR"/usr/share/info/
+install -m 644 slib.1 "$UB_INSTALLDIR"/usr/share/man/man1/
+ln -sf ../../slib "$UB_INSTALLDIR"/usr/share/guile/2.0/slib
+ln -sf mklibcat.scm "$UB_INSTALLDIR"/usr/share/guile/2.0/slib/mklibcat

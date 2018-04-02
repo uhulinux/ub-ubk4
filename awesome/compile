@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_compile \
+    -DCMAKE_BUILD_TYPE=RELEASE \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DSYSCONFDIR=/etc \
+    -DLUA_LIBRARY=/usr/lib/liblua5.3.so \
+    -DAWESOME_DOC_PATH=/usr/share/doc/Packages/awesome

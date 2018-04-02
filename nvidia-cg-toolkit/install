@@ -1,0 +1,23 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+
+tar -xzvf Cg-${UB_VERSION}_April2012_x86_64.tgz
+
+cp usr/bin/cgc ${UB_INSTALLDIR}/usr/bin/
+mkdir -p ${UB_INSTALLDIR}/usr/include/Cg
+cp usr/include/Cg/* ${UB_INSTALLDIR}/usr/include/Cg/
+cp usr/lib64/* ${UB_INSTALLDIR}/usr/lib/
+cp -r usr/local/Cg ${UB_INSTALLDIR}/usr/share/
+
+else
+
+tar -xzvf Cg-${UB_VERSION}_April2012_x86.tgz
+
+cp usr/bin/cgc ${UB_INSTALLDIR}/usr/bin/
+mkdir -p ${UB_INSTALLDIR}/usr/include/Cg
+cp usr/include/Cg/* ${UB_INSTALLDIR}/usr/include/Cg/
+cp usr/lib/* ${UB_INSTALLDIR}/usr/lib/
+cp -r usr/local/Cg ${UB_INSTALLDIR}/usr/share/
+
+fi

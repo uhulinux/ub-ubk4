@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--with-distro=generic \
+	--with-bashcompletion \
+	--with-udev \
+	--without-rgmanager \
+	--without-pacemaker \
+	--without-heartbeat \
+	--with-initscripttype=systemd \
+	--without-xen

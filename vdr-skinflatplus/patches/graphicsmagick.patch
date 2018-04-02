@@ -1,0 +1,18 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2015-02-14 11:36:27.000000000 +0100
++++ mod/Makefile	2016-10-19 18:24:37.311013989 +0200
+@@ -66,12 +66,12 @@
+ 
+ ### Includes and Defines and Dependencies (add further entries here):
+ 
+-INCLUDES += $(shell pkg-config --cflags Magick++ freetype2 fontconfig)
++INCLUDES += $(shell pkg-config --cflags GraphicsMagick++ freetype2 fontconfig)
+ 
+ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"' -DVDRLOGO=\"$(SKINFLATPLUS_VDRLOGO)\"
+ DEFINES += -DWIDGETFOLDER='"$(SKINFLATPLUS_WIDGETDIR)"'
+ 
+-LIBS += $(shell pkg-config --libs Magick++)
++LIBS += $(shell pkg-config --libs GraphicsMagick++)
+ 
+ ### The object files (add further files here):
+ 

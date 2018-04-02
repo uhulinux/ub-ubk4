@@ -1,0 +1,4 @@
+# /etc/udev/rules.d/60-pcmcia.rules
+
+ACTION=="add", SUBSYSTEM=="pcmcia_socket", RUN+="/sbin/pcmcia-socket-startup"
+ACTION=="add", SUBSYSTEM=="pcmcia_socket", RUN+="/sbin/modprobe pcmcia"

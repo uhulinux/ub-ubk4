@@ -1,0 +1,37 @@
+diff -Naur orig/src/sysinfo.cpp patched/src/sysinfo.cpp
+--- orig/src/sysinfo.cpp	2015-07-02 23:46:27.000000000 +0200
++++ patched/src/sysinfo.cpp	2015-09-12 22:36:17.203064237 +0200
+@@ -292,10 +292,9 @@
+         {
+             xmlDocPtr document;
+             xmlXPathContextPtr context;
+-            const string nodes[3] = { "string(/mate-version/platform)",
+-                                      "string(/mate-version/minor)",
+-                                      "string(/mate-version/micro)" };
+-            string values[3];
++            const string nodes[2] = { "string(/mate-version/platform)",
++                                      "string(/mate-version/minor)"};
++            string values[2];
+ 
+             if (not (document = xmlParseFile(DATADIR "/mate-about/mate-version.xml")))
+                 return;
+@@ -303,7 +302,7 @@
+             if (not (context = xmlXPathNewContext(document)))
+                 return;
+ 
+-            for (size_t i = 0; i != 3; ++i)
++            for (size_t i = 0; i != 2; ++i)
+             {
+                 xmlXPathObjectPtr xpath;
+                 xpath = xmlXPathEvalExpression(BAD_CAST nodes[i].c_str(), context);
+@@ -317,8 +316,8 @@
+             xmlXPathFreeContext(context);
+             xmlFreeDoc(document);
+ 
+-            if (!values[0].empty() && !values[1].empty() && !values[2].empty())
+-                this->mate_version = values[0] + '.' + values[1] + '.' + values[2];
++            if (!values[0].empty() && !values[1].empty())
++                this->mate_version = values[0] + '.' + values[1];
+         }
+     };
+ 

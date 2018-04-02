@@ -1,0 +1,105 @@
+diff -Naurdp fbgetty-0.1.698.orig/src/prompt.c fbgetty-0.1.698/src/prompt.c
+--- fbgetty-0.1.698.orig/src/prompt.c	2001-12-27 18:23:22.000000000 +0100
++++ fbgetty-0.1.698/src/prompt.c	2005-09-06 15:00:00.000000000 +0200
+@@ -304,14 +304,15 @@ void
+ get_login_name (void)
+ {
+   char c;
++  unsigned char uc;
+   int eof; /* if eof == 1, that's EOF
+ 	      otherwise is 0 */
+ 
+   struct termios term, old_term;
+ 
+-  int count;
++  int count, count2;
+   int login_allocated;
+-  int login_length;
++  int login_length_byte, login_length_char;
+   char *new_ptr; 
+ #ifdef FB_GETTY_DEBUG
+   int i;
+@@ -355,8 +356,8 @@ get_login_name (void)
+       fatal_error("login_name alloc() failed: %s", strerror(errno));
+     }
+ 
+-  login_length = 0;
+-  fgoptions->login_name[login_length] = '\0'; /* put the initial NUL char */
++  login_length_byte = 0; login_length_char = 0;
++  fgoptions->login_name[login_length_byte] = '\0'; /* put the initial NUL char */
+ 
+ #ifdef FB_GETTY_DEBUG
+   error("reading login");
+@@ -398,17 +399,23 @@ get_login_name (void)
+ 	  count = 1;
+ 	  goto login_clear;
+ 	case CKILL: /* clear the line */
+-	  count = login_length;
++	  count = login_length_char;
+ 	  goto login_clear;
+ 	case CWERASE: /* clear the last word */
+ 	  /* first, erase space after the word */
+-	  for(count = login_length - 1; 
++	  for(count = login_length_byte - 1; 
+ 	      count >= 0 && isspace(fgoptions->login_name[count]); count --);
+ 	  /* then erase the word up to the next space */
+ 	  for(;count >= 0 && !isspace(fgoptions->login_name[count]); count --);
+-	  count = login_length - count - 1;
++	  count2 = count + 1;
++	  count = 0;
++	  for(; count2 < login_length_byte; count2++)
++	    {
++	      uc = fgoptions->login_name[count2];
++	      if (uc < 128 || uc >= 192) count++;
++	    }
+ 	login_clear:
+-	  for(; count > 0 && login_length > 0; count --)
++	  for(; count > 0 && login_length_char > 0; count --)
+ 	    {
+ 	      /* erasing a char from screen */
+ 	      putchar('\b'); /* go back */
+@@ -417,8 +424,15 @@ get_login_name (void)
+ 	      putchar('\b'); /* rewind */
+ 	      
+ 	      /* erase the character from the login name */
+-	      login_length --;
+-	      fgoptions->login_name[login_length] = '\0';
++	      while (login_length_byte > 1) {
++	        uc = fgoptions->login_name[login_length_byte-1];
++	        if (uc >= 128 && uc < 192) login_length_byte--;
++	        else break;
++	      }
++	      uc = fgoptions->login_name[login_length_byte-1];
++	      if (uc < 128 || uc >= 192) login_length_char--;
++	      login_length_byte--;
++	      fgoptions->login_name[login_length_byte] = '\0';
+ 	    }
+ 	  break;
+ 
+@@ -434,9 +448,9 @@ get_login_name (void)
+ 	  break;
+ 
+ 	default:  /* store the character, if it's printable but not a control char */
+-	  if (isprint((int)c) && !iscntrl ((int)c))
++	  if ((isprint((int)c) && !iscntrl ((int)c)) || (unsigned char)c>=128)
+ 	    {
+-	      if (login_length >= login_allocated)
++	      if (login_length_byte >= login_allocated)
+ 		{
+ 		  /* get more memory for login name */
+ 		  new_ptr = (char *) realloc (fgoptions->login_name,
+@@ -455,10 +469,11 @@ get_login_name (void)
+ 		  fgoptions->login_name = new_ptr;
+ 		}
+ 
+-	      login_length++;
+-	      fgoptions->login_name[login_length] = '\0'; /* put first the new NUL char, 
++	      login_length_byte++;
++	      fgoptions->login_name[login_length_byte] = '\0'; /* put first the new NUL char, 
+ 							     to be sure the string is terminated */
+-	      fgoptions->login_name[login_length - 1] = c;
++	      fgoptions->login_name[login_length_byte - 1] = c;
++	      if ((unsigned char)c < 128 || (unsigned char)c >= 192) login_length_char++;
+ 
+ 	      /* print it */
+ 	      putchar((int)c);

@@ -1,0 +1,398 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2010-07-13 13:15:24.000000000 +0200
++++ patched/CMakeLists.txt	2014-07-20 18:19:43.224519693 +0200
+@@ -30,4 +30,3 @@
+ add_subdirectory(mpccut)
+ add_subdirectory(mpcchap)
+ add_subdirectory(wavcmp)
+-add_subdirectory(include)
+diff -Naur orig/common/fastmath.c patched/common/fastmath.c
+--- orig/common/fastmath.c	2007-06-09 16:43:34.000000000 +0200
++++ patched/common/fastmath.c	2014-07-20 18:12:01.143225266 +0200
+@@ -29,7 +29,7 @@
+ 
+ void   Init_FastMath ( void )
+ {
+-    int i; mpc_floatint X, Y; double xm, x0, xp, x, y; float* p;
++    int i; mpc_floatint X; double xm, x0, xp, x, y; float* p;
+ 
+     p = (float*) tabatan2;
+     for ( i = -TABSTEP; i <= TABSTEP; i++ ) {
+@@ -56,7 +56,6 @@
+     p = (float*) tabsqrt_ex;
+     for ( i = 0; i < 255; i++ ) {
+         X.n = (i << 23);
+-        Y.n = (i << 23) + (1<<23) - 1;
+         *p++ = sqrt(X.f);
+     }
+     X.n  = (255 << 23) - 1;
+diff -Naur orig/include/CMakeLists.txt patched/include/CMakeLists.txt
+--- orig/include/CMakeLists.txt	2009-08-03 11:44:13.000000000 +0200
++++ patched/include/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
+@@ -1 +0,0 @@
+-INSTALL(DIRECTORY mpc DESTINATION include)
+diff -Naur orig/libmpcdec/CMakeLists.txt patched/libmpcdec/CMakeLists.txt
+--- orig/libmpcdec/CMakeLists.txt	2010-08-21 17:55:01.000000000 +0200
++++ patched/libmpcdec/CMakeLists.txt	2014-07-20 18:17:35.655059648 +0200
+@@ -1,7 +1,23 @@
++SET(mpcdec_VERSION_MAJOR 7)
++SET(mpcdec_VERSION_MINOR 0)
++SET(mpcdec_VERSION_PATCH 1)
++
++set(mpcdec_VERSION ${mpcdec_VERSION_MAJOR}.${mpcdec_VERSION_MINOR}.${mpcdec_VERSION_PATCH})
++
+ include_directories(${libmpc_SOURCE_DIR}/include)
++install(FILES
++	${libmpc_SOURCE_DIR}/include/mpc/mpcdec.h
++	${libmpc_SOURCE_DIR}/include/mpc/reader.h
++	${libmpc_SOURCE_DIR}/include/mpc/streaminfo.h
++	${libmpc_SOURCE_DIR}/include/mpc/mpc_types.h
++	DESTINATION include/mpc COMPONENT headers)
++
+ if(SHARED)
+   add_library(mpcdec SHARED huffman mpc_decoder mpc_reader streaminfo mpc_bits_reader mpc_demux requant synth_filter ${libmpc_SOURCE_DIR}/common/crc32)
++  set_target_properties(mpcdec PROPERTIES VERSION ${mpcdec_VERSION} SOVERSION ${mpcdec_VERSION_MAJOR})
++  install(TARGETS mpcdec LIBRARY DESTINATION "lib" COMPONENT libraries)
+ else(SHARED)
+   add_library(mpcdec_static STATIC huffman mpc_decoder mpc_reader streaminfo mpc_bits_reader mpc_demux requant synth_filter ${libmpc_SOURCE_DIR}/common/crc32)
++  install(TARGETS mpcdec_static ARCHIVE DESTINATION "lib/static" COMPONENT libraries)
+ endif(SHARED)
+ 
+diff -Naur orig/libmpcdec/Makefile.am patched/libmpcdec/Makefile.am
+--- orig/libmpcdec/Makefile.am	2009-07-29 23:00:32.000000000 +0200
++++ patched/libmpcdec/Makefile.am	2014-07-20 18:16:03.738006856 +0200
+@@ -16,4 +16,5 @@
+ 	mpc_bits_reader.h huffman.h decoder.h internal.h requant.h mpcdec_math.h \
+ 	$(common_sources)
+ 
++# version info shoud match the one in CMakeLists.txt
+ libmpcdec_la_LDFLAGS = -no-undefined -version-info 7:0:1
+diff -Naur orig/libmpcdec/mpc_demux.c patched/libmpcdec/mpc_demux.c
+--- orig/libmpcdec/mpc_demux.c	2011-07-28 20:51:30.000000000 +0200
++++ patched/libmpcdec/mpc_demux.c	2014-07-20 18:12:01.143225266 +0200
+@@ -78,16 +78,6 @@
+ 	return d->bytes_total + d->buffer - d->bits_reader.buff - ((8 - d->bits_reader.count) >> 3);
+ }
+ 
+-// Returns the amount of unread bytes in the demux buffer.
+-static mpc_uint32_t mpc_unread_bytes(mpc_demux * d) {
+-	mpc_int32_t unread_bytes = mpc_unread_bytes_unchecked(d);
+-
+-	if (unread_bytes < 0) return 0;
+-	
+-	return (mpc_uint32_t) unread_bytes;
+-}
+-
+-
+ 
+ // Returns the number of bytes available in the buffer.
+ static mpc_uint32_t
+@@ -96,8 +86,8 @@
+ 	mpc_uint32_t unread_bytes = (mpc_uint32_t) mpc_unread_bytes_unchecked(d);
+ 	int offset = 0;
+ 
+-	if ((mpc_int32_t)
+-		unread_bytes < 0) return 0; // Error - we've been reading past the end of the buffer - abort
++	if ((mpc_int32_t) unread_bytes < 0)
++		return 0; // Error - we've been reading past the end of the buffer - abort
+ 
+ 	if (min_bytes == 0 || min_bytes > DEMUX_BUFFER_SIZE ||
+ 		    (unread_bytes < min_bytes && (flags & MPC_BUFFER_FULL) != 0 ))
+@@ -637,10 +627,15 @@
+ }
+ 
+ mpc_status mpc_demux_decode(mpc_demux * d, mpc_frame_info * i) {
+-	mpc_status s = mpc_demux_decode_inner(d, i);
+-	if (MPC_IS_FAILURE(s))
+-		i->bits = -1; // we pretend it's end of file
+-	return s;
++	for(;;) { 
++ 		// mpc_demux_decode_inner may return 0 samples and require repeated calls after a seek. Loop over until we have data to return. 
++ 		mpc_status s = mpc_demux_decode_inner(d, i); 
++ 		if (MPC_IS_FAILURE(s)) 
++ 		i->bits = -1; // we pretend it's end of file 
++ 	
++ 		if (i->bits == -1 || i->samples > 0) 
++ 		return s; 
++ 	}
+ }
+ 
+ mpc_status mpc_demux_seek_second(mpc_demux * d, double seconds)
+diff -Naur orig/libmpcdec/requant.h patched/libmpcdec/requant.h
+--- orig/libmpcdec/requant.h	2009-02-23 19:44:04.000000000 +0100
++++ patched/libmpcdec/requant.h	2014-07-20 18:12:01.143225266 +0200
+@@ -47,9 +47,9 @@
+ 
+ 
+ /* C O N S T A N T S */
+-const mpc_uint8_t      Res_bit [18];     ///< Bits per sample for chosen quantizer
+-const MPC_SAMPLE_FORMAT __Cc    [1 + 18]; ///< Requantization coefficients
+-const mpc_int16_t       __Dc    [1 + 18]; ///< Requantization offset
++extern const mpc_uint8_t      Res_bit [18];     ///< Bits per sample for chosen quantizer
++extern const MPC_SAMPLE_FORMAT __Cc    [1 + 18]; ///< Requantization coefficients
++extern const mpc_int16_t       __Dc    [1 + 18]; ///< Requantization offset
+ 
+ #define Cc (__Cc + 1)
+ #define Dc (__Dc + 1)
+diff -Naur orig/libmpcdec/streaminfo.c patched/libmpcdec/streaminfo.c
+--- orig/libmpcdec/streaminfo.c	2011-07-28 20:51:30.000000000 +0200
++++ patched/libmpcdec/streaminfo.c	2014-07-20 18:12:01.143225266 +0200
+@@ -108,7 +108,6 @@
+ mpc_status
+ streaminfo_read_header_sv7(mpc_streaminfo* si, mpc_bits_reader * r)
+ {
+-    mpc_uint16_t Estimatedpeak_title = 0;
+ 	mpc_uint32_t frames, last_frame_samples;
+ 
+ 	si->bitrate            = 0;
+@@ -120,7 +119,7 @@
+ 	si->profile_name       = mpc_get_version_string(si->profile);
+ 	mpc_bits_read(r, 2); // Link ?
+ 	si->sample_freq        = samplefreqs[mpc_bits_read(r, 2)];
+-	Estimatedpeak_title    = (mpc_uint16_t) mpc_bits_read(r, 16);   // read the ReplayGain data
++	mpc_bits_read(r, 16);   // skip MaxLevel (maximum level of input PCM)
+ 	si->gain_title         = (mpc_uint16_t) mpc_bits_read(r, 16);
+ 	si->peak_title         = (mpc_uint16_t) mpc_bits_read(r, 16);
+ 	si->gain_album         = (mpc_uint16_t) mpc_bits_read(r, 16);
+diff -Naur orig/libreplaygain/src/CMakeLists.txt patched/libreplaygain/src/CMakeLists.txt
+--- orig/libreplaygain/src/CMakeLists.txt	2009-07-31 14:03:57.000000000 +0200
++++ patched/libreplaygain/src/CMakeLists.txt	2014-07-20 18:15:21.537523400 +0200
+@@ -6,4 +6,6 @@
+ add_library(replaygain-shared SHARED gain_analysis)
+ set_target_properties(replaygain-shared PROPERTIES OUTPUT_NAME replaygain CLEAN_DIRECT_OUTPUT 1 VERSION 1.0.0 SOVERSION 1)
+ 
+-install(TARGETS replaygain-static replaygain-shared LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
++install(TARGETS replaygain-static replaygain-shared LIBRARY DESTINATION "lib${LIB_SUFFIX}" ARCHIVE DESTINATION "lib${LIB_SUFFIX}" COMPONENT libraries)
++
++install(FILES ${libreplaygain_SOURCE_DIR}/include/replaygain/gain_analysis.h DESTINATION include/replaygain COMPONENT headers)
+diff -Naur orig/mpcchap/iniparser.c patched/mpcchap/iniparser.c
+--- orig/mpcchap/iniparser.c	2008-04-05 22:41:11.000000000 +0200
++++ patched/mpcchap/iniparser.c	2014-07-20 18:12:01.147225305 +0200
+@@ -184,10 +184,10 @@
+ /*--------------------------------------------------------------------------*/
+ int iniparser_getnkey(dictionary * d, int n)
+ {
+-	int i, i_sec, cnt = 0 ;
++	int i, cnt = 0 ;
+ 
+ 	if (d==NULL) return -1 ;
+-	for (i_sec=i=0 ; i<d->size ; i++) {
++	for (i=0 ; i<d->size ; i++) {
+ 		if (d->key[i]==NULL)
+ 			continue ;
+ 		if (strchr(d->key[i], ':')==NULL) {
+diff -Naur orig/mpcdec/CMakeLists.txt patched/mpcdec/CMakeLists.txt
+--- orig/mpcdec/CMakeLists.txt	2010-08-21 17:55:01.000000000 +0200
++++ patched/mpcdec/CMakeLists.txt	2014-07-20 18:12:01.147225305 +0200
+@@ -5,11 +5,6 @@
+ include_directories(${libmpc_SOURCE_DIR}/libmpcdec)
+ link_directories(${libmpc_BINARY_DIR}/libmpcdec)
+ 
+-if(MSVC)
+-include_directories(${libmpc_SOURCE_DIR}/win32)
+-add_executable(mpcdec_cmd mpcdec.c ${libmpc_SOURCE_DIR}/win32/attgetopt)
+-endif(MSVC)
+-
+ add_executable(mpcdec_cmd mpcdec.c)
+ 
+ if(NOT MSVC)
+@@ -26,4 +21,9 @@
+ 
+ SET_TARGET_PROPERTIES(mpcdec_cmd PROPERTIES OUTPUT_NAME "mpcdec")
+ 
++if(MSVC)
++include_directories(${libmpc_SOURCE_DIR}/win32)
++add_executable(mpcdec_cmd mpcdec.c ${libmpc_SOURCE_DIR}/win32/attgetopt)
++endif(MSVC)
++
+ install(TARGETS mpcdec_cmd RUNTIME DESTINATION bin)
+diff -Naur orig/mpcdec/mpcdec.c patched/mpcdec/mpcdec.c
+--- orig/mpcdec/mpcdec.c	2009-06-24 22:45:50.000000000 +0200
++++ patched/mpcdec/mpcdec.c	2014-07-20 18:12:01.147225305 +0200
+@@ -39,6 +39,7 @@
+ #include "../libmpcdec/internal.h"
+ #include <libwaveformat.h>
+ #include <getopt.h>
++#include <math.h>
+ 
+ #ifdef _MSC_VER
+ #include <crtdbg.h>
+@@ -75,6 +76,49 @@
+     return (t_wav_uint32) !fseek(p_handle, p_position, SEEK_SET);
+ }
+ 
++static short bswap_16(short in)
++{
++	return (in << 8) | ((in >> 8) & 0xFF);
++}
++
++#ifdef MPC_FIXED_POINT
++
++static int raw_output_int16(FILE * file, short * buff, int cnt, mpc_bool_t reverse_endian)
++{
++	int i;
++	for (i = 0; i < cnt; i++) {
++		short out = buff[i];
++		if (reverse_endian)
++			out = bswap_16(out);
++		if (fwrite(&out, sizeof(out), 1, file) != 1)
++			return -1;
++	}
++	return 0;
++}
++
++#else
++
++static int raw_output_float32(FILE * file, float * buff, int cnt, mpc_bool_t reverse_endian)
++{
++	int i;
++	for (i = 0; i < cnt; i++) {
++		int tmp = nearbyintf(buff[i] * (1 << 15));
++		short out;
++		if (tmp > ((1 << 15) - 1))
++			tmp = ((1 << 15) - 1);
++		if (tmp < -(1 << 15))
++			tmp = -(1 << 15);
++		if (reverse_endian)
++			tmp = bswap_16((short) tmp);
++		out = (short)tmp;
++		if (fwrite(&out, sizeof(out), 1, file) != 1)
++			return -1;
++	}
++	return 0;
++}
++
++#endif
++
+ static void print_info(mpc_streaminfo * info, char * filename)
+ {
+ 	int time = (int) mpc_streaminfo_get_length(info);
+@@ -108,6 +152,8 @@
+ 			"-i : print file information on stdout\n"
+ 			"-c : check the file for stream errors\n"
+ 			"     (doesn't fully decode, outfile will be ignored)\n"
++			"-r : output raw data (left/right) in machine native endian\n"
++			"-e : reverse raw data endianness\n"
+ 			"-h : print this help\n"
+             "you can use stdin and stdout as resp. <infile.mpc> and\n"
+             "<outfile.wav> replacing the file name by \"-\"\n", exename);
+@@ -121,13 +167,16 @@
+ 	mpc_streaminfo si;
+ 	mpc_status err;
+ 	mpc_bool_t info = MPC_FALSE, is_wav_output = MPC_FALSE, check = MPC_FALSE;
++	mpc_bool_t is_raw_output = MPC_FALSE, reverse_endian = MPC_FALSE;
+     MPC_SAMPLE_FORMAT sample_buffer[MPC_DECODER_BUFFER_LENGTH];
+-    clock_t begin, end, sum; int total_samples; t_wav_output_file wav_output;
++    clock_t begin, end, sum; int total_samples;
++	t_wav_output_file wav_output;
++	t_wav_output_file_callback wavo_fc;
+ 	int c;
+ 
+     fprintf(stderr, About);
+ 
+-	while ((c = getopt(argc , argv, "ihc")) != -1) {
++	while ((c = getopt(argc , argv, "ihcre")) != -1) {
+ 		switch (c) {
+ 			case 'i':
+ 				info = MPC_TRUE;
+@@ -135,6 +184,12 @@
+ 			case 'c':
+ 				check = MPC_TRUE;
+ 				break;
++			case 'r':
++				is_raw_output = MPC_TRUE;
++				break;
++			case 'e':
++				reverse_endian = MPC_TRUE;
++				break;
+ 			case 'h':
+ 				usage(argv[0]);
+ 				return 0;
+@@ -165,22 +220,29 @@
+ 		return 0;
+ 	}
+ 
+-	if (!check)
+-		is_wav_output = argc - optind > 1;
+-    if(is_wav_output)
++	if (check) {
++		is_raw_output = MPC_FALSE;
++	} else if (argc - optind > 1 && is_raw_output == MPC_FALSE) {
++		is_wav_output = MPC_TRUE;
++	};
++	
++    if (is_wav_output || is_raw_output)
+     {
+-        t_wav_output_file_callback wavo_fc;
+         memset(&wav_output, 0, sizeof wav_output);
+         wavo_fc.m_seek      = mpc_wav_output_seek;
+         wavo_fc.m_write     = mpc_wav_output_write;
+-		if (strcmp(argv[optind + 1], "-") == 0) {
++		if (strcmp(argv[optind + 1], "-") == 0 || (is_raw_output && argc - optind <= 1)) {
+ 			SET_BINARY_MODE(stdout);
+ 		    wavo_fc.m_user_data = stdout;
+ 		} else
+ 			wavo_fc.m_user_data = fopen(argv[optind + 1], "wb");
+-        if(!wavo_fc.m_user_data) return !MPC_STATUS_OK;
+-        err = waveformat_output_open(&wav_output, wavo_fc, si.channels, 16, 0, si.sample_freq, (t_wav_uint32) si.samples * si.channels);
+-        if(!err) return !MPC_STATUS_OK;
++        if(!wavo_fc.m_user_data)
++			return !MPC_STATUS_OK;
++		
++		if (is_wav_output) {
++			if (!waveformat_output_open(&wav_output, wavo_fc, si.channels, 16, 0, si.sample_freq, (t_wav_uint32) si.samples * si.channels))
++				return !MPC_STATUS_OK;
++		}
+     }
+ 
+     sum = total_samples = 0;
+@@ -199,7 +261,7 @@
+         total_samples += frame.samples;
+         sum           += end - begin;
+ 
+-		if(is_wav_output) {
++		if (is_wav_output || is_raw_output) {
+ #ifdef MPC_FIXED_POINT
+ 			mpc_int16_t tmp_buff[MPC_DECODER_BUFFER_LENGTH];
+ 			int i;
+@@ -209,11 +271,23 @@
+ 				if (tmp < -(1 << 15)) tmp = -(1 << 15);
+ 				tmp_buff[i] = tmp;
+ 			}
+-			if(waveformat_output_process_int16(&wav_output, tmp_buff, frame.samples * si.channels) < 0)
++#endif
++			if (is_wav_output) {
++#ifdef MPC_FIXED_POINT
++				if(waveformat_output_process_int16(&wav_output, tmp_buff, frame.samples * si.channels) < 0)
++#else
++				if(waveformat_output_process_float32(&wav_output, sample_buffer, frame.samples * si.channels) < 0)
++#endif
++					break;
++			}
++			if (is_raw_output) {
++#ifdef MPC_FIXED_POINT
++				if (raw_output_int16(wavo_fc.m_user_data, tmp_buff, frame.samples * si.channels, reverse_endian) < 0)
+ #else
+-			if(waveformat_output_process_float32(&wav_output, sample_buffer, frame.samples * si.channels) < 0)
++				if (raw_output_float32(wavo_fc.m_user_data, sample_buffer, frame.samples * si.channels, reverse_endian) < 0)
+ #endif
+-                break;
++					break;
++			}
+ 		}
+     }
+ 
+diff -Naur orig/mpcgain/mpcgain.c patched/mpcgain/mpcgain.c
+--- orig/mpcgain/mpcgain.c	2009-03-31 13:24:41.000000000 +0200
++++ patched/mpcgain/mpcgain.c	2014-07-20 18:12:01.147225305 +0200
+@@ -163,8 +163,8 @@
+ 
+ 	for (j = 1; j < argc; j++) {
+ 		MPC_SAMPLE_FORMAT sample_buffer[MPC_DECODER_BUFFER_LENGTH];
+-		MPC_SAMPLE_FORMAT title_max = 0, chap_max;
+-		mpc_uint16_t * chap_gain, * chap_peak;
++		MPC_SAMPLE_FORMAT title_max = 0, chap_max = 0;
++		mpc_uint16_t * chap_gain = 0, * chap_peak = 0;
+ 		mpc_reader reader;
+ 		mpc_demux* demux;
+ 		mpc_streaminfo si;

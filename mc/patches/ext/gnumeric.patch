@@ -1,0 +1,13 @@
+diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
+--- orig/misc/mc.ext.in	2011-07-26 14:55:53.000000000 +0200
++++ patched/misc/mc.ext.in	2011-07-29 17:00:01.000000000 +0200
+@@ -532,6 +532,9 @@
+ 	Open=(gnumeric %f >/dev/null 2>&1 &)
+ 	View=%view{ascii} xls2csv %f || strings %f
+ 
++regex/\.([gG][nN][uU][mM][eE][rR][iI][cC])$
++	Open=(gnumeric %f >/dev/null 2>&1 &)
++
+ # Use OpenOffice.org to open any MS Office documents
+ type/^Microsoft\ Office\ Document
+ 	Open=(ooffice %f &)

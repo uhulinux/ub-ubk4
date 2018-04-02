@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_configure \
+        --with-tls=gnutls \
+        --enable-avahi-tests=no \
+        --disable-Werror \
+        --disable-plugins
+make

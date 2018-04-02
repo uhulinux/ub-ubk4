@@ -1,0 +1,24 @@
+diff -Naur orig/etc/useradd patched/etc/useradd
+--- orig/etc/useradd	2014-09-01 16:36:40.134739579 +0200
++++ patched/etc/useradd	2017-06-26 16:37:52.174955608 +0200
+@@ -1,5 +1,5 @@
+ # useradd defaults file
+-GROUP=1000
++GROUP=999
+ HOME=/home
+ INACTIVE=-1
+ EXPIRE=
+diff -Naur orig/src/useradd.c patched/src/useradd.c
+--- orig/src/useradd.c	2017-05-17 21:19:44.134739579 +0200
++++ patched/src/useradd.c	2017-06-26 16:36:35.597776660 +0200
+@@ -95,8 +95,8 @@
+ /*
+  * These defaults are used if there is no defaults file.
+  */
+-static gid_t def_group = 100;
+-static const char *def_gname = "other";
++static gid_t def_group = 999;
++static const char *def_gname = "users";
+ static const char *def_home = "/home";
+ static const char *def_shell = "";
+ static const char *def_template = SKEL_DIR;

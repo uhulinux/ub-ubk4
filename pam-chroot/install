@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/etc/security
+cp chroot.conf "$UB_INSTALLDIR"/etc/security/

@@ -1,0 +1,42 @@
+diff -Naur lrzsz-0.12.20.orig/src/Makefile.in lrzsz-0.12.20/src/Makefile.in
+--- lrzsz-0.12.20.orig/src/Makefile.in	1998-12-30 17:31:46.000000000 +0100
++++ lrzsz-0.12.20/src/Makefile.in	2004-07-30 17:20:23.455367731 +0200
+@@ -370,16 +370,34 @@
+ 
+ install-exec-local:
+ 	rm -f $(DESTDIR)/$(bindir)/`echo lsb | sed -e '$(transform)'`
+-	ln $(DESTDIR)/$(bindir)/`echo lsz |sed -e '$(transform)'` \
++	ln -s `echo lsz |sed -e '$(transform)'` \
+ 		$(DESTDIR)/$(bindir)/`echo lsb |sed -e '$(transform)'` 
+ 	rm -f $(bindir)/`echo lsx | sed -e '$(transform)'`
+-	ln $(DESTDIR)/$(bindir)/`echo lsz |sed -e '$(transform)'` \
++	ln -s `echo lsz |sed -e '$(transform)'` \
+ 		$(DESTDIR)/$(bindir)/`echo lsx |sed -e '$(transform)'` 
+ 	rm -f $(bindir)/`echo lrb | sed -e '$(transform)'`
+-	ln $(DESTDIR)/$(bindir)/`echo lrz |sed -e '$(transform)'` \
++	ln -s `echo lrz |sed -e '$(transform)'` \
+ 		$(DESTDIR)/$(bindir)/`echo lrb |sed -e '$(transform)'` 
+ 	rm -f $(bindir)/`echo lrx | sed -e '$(transform)'`
+-	ln $(DESTDIR)/$(bindir)/`echo lrz |sed -e '$(transform)'` \
++	ln -s `echo lrz |sed -e '$(transform)'` \
+ 		$(DESTDIR)/$(bindir)/`echo lrx |sed -e '$(transform)'` 
++	rm -f $(bindir)/`echo sz | sed -e '$(transform)'`
++	ln -s `echo lsz |sed -e '$(transform)'` \
++		$(DESTDIR)/$(bindir)/`echo sz |sed -e '$(transform)'` 
++	rm -f $(bindir)/`echo sb | sed -e '$(transform)'`
++	ln -s `echo lsb |sed -e '$(transform)'` \
++		$(DESTDIR)/$(bindir)/`echo sb |sed -e '$(transform)'` 
++	rm -f $(bindir)/`echo sx | sed -e '$(transform)'`
++	ln -s `echo lsx |sed -e '$(transform)'` \
++		$(DESTDIR)/$(bindir)/`echo sx |sed -e '$(transform)'` 
++	rm -f $(bindir)/`echo rz | sed -e '$(transform)'`
++	ln -s `echo lrz |sed -e '$(transform)'` \
++		$(DESTDIR)/$(bindir)/`echo rz |sed -e '$(transform)'` 
++	rm -f $(bindir)/`echo rb | sed -e '$(transform)'`
++	ln -s `echo lrb |sed -e '$(transform)'` \
++		$(DESTDIR)/$(bindir)/`echo rb |sed -e '$(transform)'` 
++	rm -f $(bindir)/`echo rx | sed -e '$(transform)'`
++	ln -s `echo lrx |sed -e '$(transform)'` \
++		$(DESTDIR)/$(bindir)/`echo rx |sed -e '$(transform)'` 
+ #	rm -f $(bindir)/`echo lrzszbug | sed -e '$(transform)'`
+ #	ln $(bindir)/`echo lrzszbug |sed -e '$(transform)'` \

@@ -1,0 +1,21 @@
+#!/bin/sh -eux
+
+mkdir build
+cd build
+cmake \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_INSTALL_LIBDIR=lib \
+	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
+	-DUSE_HDF5=ON \
+	-DUSE_PROTOCALL=OFF \
+	-DUSE_MOLEQUEUE=ON\
+	-DUSE_VTK=OFF\
+	-DCMAKE_BUILD_TYPE=Release \
+	-DHDF5_INCLUDE_DIRS=/usr/include \
+	-DSPGLIB_INCLUDE_DIR=/usr/include/spglib \
+	-DSPGLIB_LIBRARY=/usr/lib/libsymspg.so.0 \
+	-DUSE_QT=ON \
+	-DUSE_LIBMSYM=OFF \
+	..
+sed s/-lQt5OpenGL//g -i avogadro/qtplugins/CMakeFiles/AvogadroQtPlugins.dir/link.txt
+make

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+mkdir -p $UB_INSTALLDIR/usr/bin $UB_INSTALLDIR/usr/share/man/man8/
+	install -D -m755 run-parts $UB_INSTALLDIR/usr/bin/run-parts
+	install -D -m644 run-parts.8 $$UB_INSTALLDIR/usr/share/man/man8/run-parts.8
+	for l in po4a/*/run-parts.8; do
+		install -D -m644  ${l} $$UB_INSTALLDIR/usr/share/man/${l:5:2}/man8/run-parts.8
+	done

@@ -1,0 +1,13 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2017-07-27 15:13:33.134739579 +0200
++++ patched/configure	2017-08-05 00:39:23.119122891 +0200
+@@ -2653,6 +2653,9 @@
+     --target-arch=*)
+       TARGET_MACHINE=`echo $option | cut -d'=' -f2`
+       ;;
++	--target-cpu=*)
++      TARGET_CPU=`echo $option | cut -d'=' -f2`
++      ;;
+     --disable-xpcom)
+       [ $WITH_XPCOM -eq 1 ] && WITH_XPCOM=0
+       ;;

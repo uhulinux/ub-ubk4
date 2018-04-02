@@ -1,0 +1,1 @@
+urllist http://varaneckas.com/jad/ | splitver 'jad([0-9,a-z]+).linux.static.zip$' | sort -V | tail -n 1 |  sed -e :a -e 's/\(.*[0-9]\)\([0-9]\{1\}\)/\1\.\2/;ta'

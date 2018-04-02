@@ -1,0 +1,200 @@
+diff -Naurdp xkeyboard-config-2.7/rules/base.xml.in xkeyboard-config-2.7-hu_us_intl/rules/base.xml.in
+--- xkeyboard-config-2.7/rules/base.xml.in	2012-08-30 01:25:30.000000000 +0200
++++ xkeyboard-config-2.7-hu_us_intl/rules/base.xml.in	2013-10-20 18:41:33.282422799 +0200
+@@ -3325,6 +3325,18 @@
+             <_description>Hungarian (102/qwerty/dot/eliminate dead keys)</_description>
+           </configItem>
+         </variant>
++        <variant>
++          <configItem>
++            <name>hu_us_intl</name>
++            <_description>Hungarian U.S. International</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
++            <name>hu_altgr</name>
++            <_description>Hungarian on AltGr</_description>
++          </configItem>
++        </variant>
+       </variantList>
+     </layout>
+     <layout>
+diff -Naurdp xkeyboard-config-2.7/rules/evdev.xml.in xkeyboard-config-2.7-hu_us_intl/rules/evdev.xml.in
+--- xkeyboard-config-2.7/rules/evdev.xml.in	2012-08-30 01:25:32.000000000 +0200
++++ xkeyboard-config-2.7-hu_us_intl/rules/evdev.xml.in	2013-10-20 18:42:07.710250495 +0200
+@@ -3325,6 +3325,18 @@
+             <_description>Hungarian (102/qwerty/dot/eliminate dead keys)</_description>
+           </configItem>
+         </variant>
++        <variant>
++          <configItem>
++            <name>hu_us_intl</name>
++            <_description>Hungarian U.S. International</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
++            <name>hu_altgr</name>
++            <_description>Hungarian on AltGr</_description>
++          </configItem>
++        </variant>
+       </variantList>
+     </layout>
+     <layout>
+diff -Naurdp xkeyboard-config-2.7/symbols/hu xkeyboard-config-2.7-hu_us_intl/symbols/hu
+--- xkeyboard-config-2.7/symbols/hu	2012-01-20 00:21:06.000000000 +0100
++++ xkeyboard-config-2.7-hu_us_intl/symbols/hu	2013-10-20 18:42:57.931832776 +0200
+@@ -429,3 +429,152 @@ xkb_symbols "def_common" {
+     key <AB10>  { [        minus,   underscore,          asterisk                  ] };
+ 
+ };
++
++// US-international like Hungarian layout
++// by Henrik Pauli  henrik.pauli@uhusystems.com
++//
++// Version 0.1 2006-08-08 Initial Release
++// 
++// Permission is granted to anyone to use, distribute and modify
++// this file in any way, provided that the above copyright notice
++// is left intact and the author of the modification summarizes
++// the changes in this header.
++//
++// This file is distributed without any expressed or implied warranty.
++//
++// Please send fixes, modification considerations, wishlists to the e-mail address listed above.
++//
++
++partial alphanumeric_keys
++xkb_symbols "hu_us_intl" {
++    name[Group1] = "Hungary - 102/qwerty/US International";
++    include "latin"
++    include "level3(ralt_switch)"
++    include "hu(def_dot)"
++
++    key <TLDE>	{ [     grave,  asciitilde,         dead_cedilla,           0x01002248 ]	}; // AltGr-Shift: Approximately symbol
++    key <AE01>	{ [         1,      exclam,           dead_tilde,           exclamdown ]	};
++    key <AE02>	{ [         2,          at,           dead_caron,           0x0100201E ]	}; // AltGr-Shift: Low-99 quotation mark
++    key <AE03>	{ [         3,  numbersign,      dead_circumflex,            plusminus ]	};
++    key <AE04>	{ [         4,      dollar,             currency,             sterling ]	};
++    key <AE05>	{ [         5,     percent,       dead_abovering,             EuroSign ]	};
++    key <AE06>	{ [         6, asciicircum,          dead_ogonek,           dead_breve ]	};
++    key <AE07>	{ [         7,   ampersand,           dead_grave,           dead_acute ]	};
++    key <AE08>	{ [         8,    asterisk,        dead_abovedot,           0x01002042 ]	}; // AltGr-Shift: Asterism
++    key <AE09>	{ [         9,   parenleft,  leftsinglequotemark,  leftdoublequotemark ]	};
++    key <AE10>	{ [         0,  parenright, rightsinglequotemark, rightdoublequotemark ]	};
++    key <AE11>	{ [     minus,  underscore,               endash,               emdash ]	}; // minus = 0x002D hyphen-minus
++    key <AE12>	{ [     equal,        plus,             multiply,             division ]	};
++
++    key <AD01>	{ [            q,          Q,     adiaeresis, Adiaeresis ]	};
++    key <AD02>	{ [            w,          W,          aring,      Aring ]	};
++    key <AD03>	{ [            e,          E,         eacute,     Eacute ]	};
++    key <AD04>	{ [            r,          R,     registered,  trademark ]	};
++    key <AD05>	{ [            t,          T,          thorn,      THORN ]	};
++    key <AD06>	{ [            y,          Y,     udiaeresis, Udiaeresis ]	};
++    key <AD07>	{ [            u,          U,         uacute,     Uacute ]	};
++    key <AD08>	{ [            i,          I,         iacute,     Iacute ]	};
++    key <AD09>	{ [            o,          O,         oacute,     Oacute ]	};
++    key <AD10>	{ [            p,          P,     odiaeresis, Odiaeresis ]	};
++    key <AD11>	{ [  bracketleft,  braceleft,     0x010000AB,   NoSymbol ]	}; // AltGr: Double left angle bracket
++    key <AD12>	{ [ bracketright, braceright,     0x010000BB,   NoSymbol ]	}; // AltGr: Double right angle bracket
++
++    key <AC01>	{ [          a,          A,       aacute,       Aacute ]	};
++    key <AC02>	{ [          s,          S,       ssharp,      section ]	};
++    key <AC03>	{ [          d,          D,          eth,          ETH ]	};
++    key <AC04>	{ [          f,          F,     NoSymbol,     NoSymbol ]	};
++    key <AC05>	{ [          g,          G,     NoSymbol,     NoSymbol ]	};
++    key <AC06>	{ [          h,          H, udoubleacute, Udoubleacute ]	};
++    key <AC07>	{ [          j,          J,     NoSymbol,     NoSymbol ]	};
++    key <AC08>	{ [          k,          K,      lstroke,      Lstroke ]	};
++    key <AC09>	{ [          l,          L, odoubleacute, Odoubleacute ]	};
++    key <AC10>	{ [  semicolon,      colon,    paragraph,       degree ]	};
++    key <AC11>	{ [ apostrophe,   quotedbl,   0x01002032,   0x01002033 ]	}; // AltGr: Prime; AltGr-Shift: Double prime
++    key <BKSL>	{ [  backslash,        bar,      notsign,   0x010000A6 ]	}; // AltGr-Shift: broken bar
++
++    key <LSGT>  { [ 0x01002010,  0x01002212,   0x010000A0,       NoSymbol ]	}; // Normal: Hyphen; Shift: Minus; AltGr: NBSP
++    key <AB01>	{ [          z,           Z,           ae,              AE ]	};
++    key <AB02>	{ [          x,           X,   0x01002020,     0x01002021 ]	}; // AltGr: Dagger; AltGr-Shift: Double dagger
++    key <AB03>	{ [          c,           C,    copyright,           cent ]	};
++    key <AB04>	{ [          v,           V,     NoSymbol,       NoSymbol ]	};
++    key <AB05>	{ [          b,           B,          eng,            ENG ]	};
++    key <AB06>	{ [          n,           N,       ntilde,         Ntilde ]	};
++    key <AB07>	{ [          m,           M,           mu,     0x01002022 ]	}; // AltGr-Shift: Bullet
++    key <AB08>	{ [      comma,        less,       oslash,       Ooblique ]	};
++    key <AB09>	{ [     period,     greater,   0x01002026,     0x01002027 ]	}; // AltGr: Horizontal ellipsis; AltGr-Shift: Centered dot
++    key <AB10>	{ [      slash,    question,   0x0100203D,   questiondown ]	}; // AltGr: Interrobang
++};
++
++// American layout, Hungarian on AltGr
++// by  Henrik Pauli   henrik.pauli@uhusystems.com
++// and Balázs Pozsár  pozsy@uhulinux.hu
++//
++// Permission is granted to anyone to use, distribute and modify
++// this file in any way, provided that the above copyright notice
++// is left intact and the author of the modification summarizes
++// the changes in this header.
++//
++// This file is distributed without any expressed or implied warranty.
++//
++// Please send fixes, modification considerations, wishlists to the e-mail address listed above.
++//
++
++partial alphanumeric_keys
++xkb_symbols "hu_altgr" {
++    name[Group1] = "Hungary - 102/qwerty/Hungarian on AltGr";
++    include "latin"
++    include "level3(ralt_switch)"
++    include "hu(def_dot)"
++
++    key <TLDE>	{ [     grave,  asciitilde,               iacute,               Iacute ]	}; // AltGr: í and Í
++    key <AE01>	{ [         1,      exclam,           dead_tilde,           exclamdown ]	};
++    key <AE02>	{ [         2,          at,           dead_caron,           0x0100201E ]	}; // AltGr-Shift: Low-99 quotation mark
++    key <AE03>	{ [         3,  numbersign,      dead_circumflex,            plusminus ]	};
++    key <AE04>	{ [         4,      dollar,             currency,             sterling ]	};
++    key <AE05>	{ [         5,     percent,       dead_abovering,             EuroSign ]	};
++    key <AE06>	{ [         6, asciicircum,          dead_ogonek,           dead_breve ]	};
++    key <AE07>	{ [         7,   ampersand,               endash,               emdash ]	}; // AltGr: – and —
++    key <AE08>	{ [         8,    asterisk,  leftsinglequotemark,  leftdoublequotemark ]	}; // AltGr: ‘ and “
++    key <AE09>	{ [         9,   parenleft, rightsinglequotemark, rightdoublequotemark ]	}; // AltGr: ’ and ”
++    key <AE10>	{ [         0,  parenright,           odiaeresis,           Odiaeresis ]	}; // AltGr: ö and Ö
++    key <AE11>	{ [     minus,  underscore,           udiaeresis,           Udiaeresis ]	}; // AltGr: ü and Ü
++    key <AE12>	{ [     equal,        plus,               oacute,               Oacute ]	}; // AltGr: ó and Ó
++
++    key <AD01>	{ [            q,          Q,     adiaeresis, Adiaeresis ]	};
++    key <AD02>	{ [            w,          W,          aring,      Aring ]	};
++    key <AD03>	{ [            e,          E,         eacute,     Eacute ]	};
++    key <AD04>	{ [            r,          R,     registered,  trademark ]	};
++    key <AD05>	{ [            t,          T,          thorn,      THORN ]	};
++    key <AD06>	{ [            y,          Y,              z,          Z ]	};
++    key <AD07>	{ [            u,          U,         uacute,     Uacute ]	};
++    key <AD08>	{ [            i,          I,         iacute,     Iacute ]	};
++    key <AD09>	{ [            o,          O,         oacute,     Oacute ]	};
++    key <AD10>	{ [            p,          P,     odiaeresis, Odiaeresis ]	};
++    key <AD11>	{ [  bracketleft,  braceleft,   odoubleacute, Odoubleacute ]	}; // AltGr: ő and Ő
++    key <AD12>	{ [ bracketright, braceright,     uacute,   Uacute ]	}; // AltGr: ú and Ú
++
++    key <AC01>	{ [          a,          A,       aacute,       Aacute ]	};
++    key <AC02>	{ [          s,          S,       ssharp,      section ]	};
++    key <AC03>	{ [          d,          D,          eth,          ETH ]	};
++    key <AC04>	{ [          f,          F,     NoSymbol,     NoSymbol ]	};
++    key <AC05>	{ [          g,          G,     NoSymbol,     NoSymbol ]	};
++    key <AC06>	{ [          h,          H, udoubleacute, Udoubleacute ]	};
++    key <AC07>	{ [          j,          J,     NoSymbol,     NoSymbol ]	};
++    key <AC08>	{ [          k,          K,      lstroke,      Lstroke ]	};
++    key <AC09>	{ [          l,          L, odoubleacute, Odoubleacute ]	};
++    key <AC10>	{ [  semicolon,      colon,    eacute,       Eacute ]	}; // AltGr: é and É
++    key <AC11>	{ [ apostrophe,   quotedbl,    aacute,       Aacute ]	}; // AltGr: á and Á
++    key <BKSL>	{ [  backslash,        bar,    udoubleacute, Udoubleacute ]	}; // AltGr: ű and Ű
++
++    key <LSGT>  { [ 0x01002010,  0x01002212,   iacute,      Iacute ]	}; // Normal: Hyphen; Shift: Minus; AltGr: í and Í
++    key <AB01>	{ [          z,           Z,            y,              Y ]	};
++    key <AB02>	{ [          x,           X,   0x01002020,     0x01002021 ]	}; // AltGr: Dagger; AltGr-Shift: Double dagger
++    key <AB03>	{ [          c,           C,    copyright,           cent ]	};
++    key <AB04>	{ [          v,           V,     NoSymbol,       NoSymbol ]	};
++    key <AB05>	{ [          b,           B,          eng,            ENG ]	};
++    key <AB06>	{ [          n,           N,       ntilde,         Ntilde ]	};
++    key <AB07>	{ [          m,           M,           mu,     0x01002022 ]	}; // AltGr-Shift: Bullet
++    key <AB08>	{ [      comma,        less,       oslash,       Ooblique ]	};
++    key <AB09>	{ [     period,     greater,   0x01002026,     0x01002027 ]	}; // AltGr: Horizontal ellipsis; AltGr-Shift: Centered dot
++    key <AB10>	{ [      slash,    question,   0x0100203D,   questiondown ]	}; // AltGr: Interrobang
++};

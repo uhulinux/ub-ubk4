@@ -1,0 +1,12 @@
+diff -rupN fbpanel-6.1/plugins/taskbar/taskbar.c fbpanel-6.1_edited/plugins/taskbar/taskbar.c
+--- fbpanel-6.1/plugins/taskbar/taskbar.c	2010-05-12 15:28:58.000000000 -0400
++++ fbpanel-6.1_edited/plugins/taskbar/taskbar.c	2013-11-04 11:39:47.649336639 -0500
+@@ -1158,7 +1158,7 @@ tb_propertynotify(taskbar_priv *tb, XEve
+             DBG("NET_WM_DESKTOP\n");
+ 	    tk->desktop = get_net_wm_desktop(win);
+ 	    tb_display(tb);	
+-	} else if (at == XA_WM_NAME) {
++	} else if (at == XA_WM_NAME || at == a_NET_WM_NAME) {
+             DBG("WM_NAME\n");
+             tk_get_names(tk);
+             tk_set_names(tk);

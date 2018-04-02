@@ -1,0 +1,85 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2017-08-05 00:39:23.119122891 +0200
++++ patched/configure	2017-08-05 00:42:41.090519396 +0200
+@@ -397,12 +397,12 @@
+   esac
+   [ -z "$TARGET_MACHINE" ] && TARGET_MACHINE=$BUILD_MACHINE
+   [ -z "$TARGET_CPU"     ] && TARGET_CPU=$BUILD_CPU
+-  DEVDIR_BIN="$DEVDIR/$OS.$BUILD_MACHINE/bin"
+-  log_success "Determined build machine: $OS.$BUILD_MACHINE, target machine: $OS.$TARGET_MACHINE"
++  DEVDIR_BIN="$DEVDIR/$OS.$TARGET_MACHINE/bin"
++  log_success "Determined build machine: $OS.$TARGET_MACHINE, target machine: $OS.$TARGET_MACHINE"
+ 
+   echo "BUILD_PLATFORM=\"$OS\"" >> $ENV
+   echo "export BUILD_PLATFORM" >> $ENV
+-  echo "BUILD_PLATFORM_ARCH=\"$BUILD_MACHINE\"" >> $ENV
++  echo "BUILD_PLATFORM_ARCH=\"$TARGET_MACHINE\"" >> $ENV
+   echo "export BUILD_PLATFORM_ARCH" >> $ENV
+   echo "BUILD_TARGET=\"$OS\"" >> $ENV
+   echo "export BUILD_TARGET" >> $ENV
+@@ -456,14 +456,14 @@
+       else
+         log_success "found version $cc_ver"
+       fi
+-      if [ "$BUILD_MACHINE" = "amd64" ]; then
++      if [ "$TARGET_MACHINE" = "amd64" ]; then
+         [ -z "$CC32"  ] && CC32="$CC -m32"
+         [ -z "$CXX32" ] && CXX32="$CXX -m32"
+       else
+         [ -z "$CC32"  ] && CC32="$CC"
+         [ -z "$CXX32" ] && CXX32="$CXX"
+       fi
+-      if [ "$BUILD_MACHINE" = "x86" -a "$TARGET_MACHINE" = "amd64" ]; then
++      if [ "$TARGET_MACHINE" = "x86" -a "$TARGET_MACHINE" = "amd64" ]; then
+         [ -z "$CC64"  ] && CC64="$CC -m64"
+         [ -z "$CXX64" ] && CXX64="$CXX -m64"
+       fi
+@@ -509,7 +509,7 @@
+         cnf_append "TOOL_GXX64_LD"  "$CXX64"
+       fi
+       # Solaris sports a 32-bit gcc/g++.
+-      if [ "$OS" = "solaris" -a "$BUILD_MACHINE" = "amd64" ]; then
++      if [ "$OS" = "solaris" -a "$TARGET_MACHINE" = "amd64" ]; then
+         [ "$CC" = "gcc" ] && CC="gcc -m64"
+         [ "$CXX" = "g++" ] && CXX="g++ -m64"
+       fi
+@@ -1984,8 +1984,8 @@
+ check_kbuild()
+ {
+   test_header kBuild
+-  if which_wrapper "$KBUILDDIR/bin/$OS.$BUILD_MACHINE/kmk" > /dev/null; then
+-    KBUILDDIR_BIN="$KBUILDDIR/bin/$OS.$BUILD_MACHINE"
++  if which_wrapper "$KBUILDDIR/bin/$OS.$TARGET_MACHINE/kmk" > /dev/null; then
++    KBUILDDIR_BIN="$KBUILDDIR/bin/$OS.$TARGET_MACHINE"
+     echo "PATH_KBUILD=\"`cd $KBUILDDIR ; pwd`\"" >> $ENV
+     echo "export PATH_KBUILD" >> $ENV
+     echo "PATH_DEVTOOLS=\"$DEVDIR\"" >> $ENV
+@@ -2006,7 +2006,7 @@
+     echo "export PATH" >> $ENV
+     echo "unset path_kbuild_bin path_dev_bin" >> $ENV
+     KBUILD_SED="$KBUILDDIR_BIN/kmk_sed"
+-  elif [ "$OS.$BUILD_MACHINE" = "darwin.amd64" ]; then
++  elif [ "$OS.$TARGET_MACHINE" = "darwin.amd64" ]; then
+     # Currently there are no amd64 kBuild bins. So use the x86 variant in any case.
+     KBUILDDIR_BIN="$KBUILDDIR/bin/$OS.x86"
+     echo "PATH_KBUILD=\"`cd $KBUILDDIR ; pwd`\"" >> $ENV
+@@ -2219,8 +2219,8 @@
+     ;;
+     *) eval "wineprefixcreate() { true ; }" ;; # now created automatically
+   esac
+-  export WINEPREFIX="${ODIR}wine.$BUILD_MACHINE"
+-  echo "WINEPREFIX=\"${ODIR}wine.$BUILD_MACHINE\"" >> $ENV
++  export WINEPREFIX="${ODIR}wine.$TARGET_MACHINE"
++  echo "WINEPREFIX=\"${ODIR}wine.$TARGET_MACHINE\"" >> $ENV
+   echo "export WINEPREFIX" >> $ENV
+   rm -rf $WINEPREFIX
+   mkdir -p $WINEPREFIX
+@@ -3006,7 +3006,7 @@
+     check_libcap
+   fi
+   check_compiler_h
+-  [ $ONLY_ADDITIONS -eq 0 -a "$BUILD_MACHINE" = "amd64" -a $WITH_VMMRAW -eq 1 ] && check_32bit
++  [ $ONLY_ADDITIONS -eq 0 -a "$TARGET_MACHINE" = "amd64" -a $WITH_VMMRAW -eq 1 ] && check_32bit
+   # tools/common/makeself*
+   [ $OSE -ge 1 ] && check_makeself
+ fi

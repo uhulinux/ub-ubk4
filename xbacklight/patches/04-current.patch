@@ -1,0 +1,47 @@
+From 25f2612062e733b1f7eb4bc2ccedf653ec6f052a Mon Sep 17 00:00:00 2001
+From: Nils Schneider <nils@nilsschneider.net>
+Date: Wed, 4 Nov 2015 18:03:25 +0100
+Subject: Use current output configuration
+
+Do not trigger re-enumerating output devices when changing or querying
+the backlight.
+
+Re-enumerating output devices may stall Xorg at least on Intel GPUs when
+EDID is unresponsive or contains bogus data (due to retries). When
+working with the backlight it is safe to assume that a monitor capable
+of setting its backlight is currently connected.
+
+Signed-off-by: Nils Schneider <nils@nilsschneider.net>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+diff --git a/xbacklight.c b/xbacklight.c
+index f4a8b12..278043f 100644
+--- a/xbacklight.c
++++ b/xbacklight.c
+@@ -265,18 +265,18 @@ main (int argc, char **argv)
+ 	xcb_window_t root = screen->root;
+ 	xcb_randr_output_t *outputs;
+ 
+-	xcb_randr_get_screen_resources_cookie_t resources_cookie;
+-	xcb_randr_get_screen_resources_reply_t *resources_reply;
++	xcb_randr_get_screen_resources_current_cookie_t resources_cookie;
++	xcb_randr_get_screen_resources_current_reply_t *resources_reply;
+ 
+-	resources_cookie = xcb_randr_get_screen_resources (conn, root);
+-	resources_reply = xcb_randr_get_screen_resources_reply (conn, resources_cookie, &error);
++	resources_cookie = xcb_randr_get_screen_resources_current (conn, root);
++	resources_reply = xcb_randr_get_screen_resources_current_reply (conn, resources_cookie, &error);
+ 	if (error != NULL || resources_reply == NULL) {
+ 	    int ec = error ? error->error_code : -1;
+ 	    fprintf (stderr, "RANDR Get Screen Resources returned error %d\n", ec);
+ 	    continue;
+ 	}
+ 
+-	outputs = xcb_randr_get_screen_resources_outputs (resources_reply);
++	outputs = xcb_randr_get_screen_resources_current_outputs (resources_reply);
+ 	for (int o = 0; o < resources_reply->num_outputs; o++)
+ 	{
+ 	    xcb_randr_output_t output = outputs[o];
+-- 
+cgit v0.10.2

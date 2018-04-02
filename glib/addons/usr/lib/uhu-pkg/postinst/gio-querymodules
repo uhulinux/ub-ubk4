@@ -1,0 +1,24 @@
+#!/bin/sh -e
+
+query_giomodules ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Querying GIO modules ..."
+	gio-querymodules /usr/lib/gio/modules
+	true > /var/lib/uhu-pkg/gio-querymodules
+	while [ ! /var/lib/uhu-pkg/gio-querymodules -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/gio-querymodules -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/gio-querymodules
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ -f /var/lib/uhu-pkg/gio-querymodules -a /var/lib/uhu-pkg/gio-querymodules -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "glib" -o "$1" = "+" ]; then
+	query_giomodules
+elif grep -q '^/usr/lib/gio/modules/' /var/lib/dpkg/info/"$1".list; then
+	query_giomodules
+fi

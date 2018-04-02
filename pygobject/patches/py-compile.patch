@@ -1,0 +1,27 @@
+diff -Naur ORIG/py-compile UHU/py-compile
+--- ORIG/py-compile	2013-11-11 14:36:41.000000000 +0100
++++ UHU/py-compile	2014-03-01 21:41:26.745610789 +0100
+@@ -115,6 +115,12 @@
+     filetrans="filepath = os.path.normpath('$destdir' + os.sep + path)"
+ fi
+ 
++# The py_compile standard python module wants to import
++# the types standard python module, not this one!
++if [ -f types.py ]; then
++    mv types.py types.save
++fi
++
+ $PYTHON -c "
+ import sys, os, py_compile, imp
+ 
+@@ -159,6 +165,10 @@
+         py_compile.compile(filepath, filepath + 'o', path)
+ sys.stdout.write('\n')" 2>/dev/null || :
+ 
++if [ -f types.save ]; then
++    mv types.save types.py
++fi
++
+ # Local Variables:
+ # mode: shell-script
+ # sh-indentation: 2

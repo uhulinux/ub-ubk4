@@ -1,0 +1,53 @@
+diff -Naur pfqueue-0.5.6-orig/backends/pfq_exim.c pfqueue-0.5.6/backends/pfq_exim.c
+--- pfqueue-0.5.6-orig/backends/pfq_exim.c	2007-02-01 19:29:17.000000000 +0100
++++ pfqueue-0.5.6/backends/pfq_exim.c	2009-12-04 21:36:33.000000000 +0100
+@@ -93,7 +93,7 @@
+ }
+ 
+ int pfb_init() {
+-	pfb_conf.max_char = 200;
++	pfb_conf.max_char = 20000;
+ 	strcpy ( pfb_conf.command_path, "" );
+ 	strcpy ( pfb_conf.config_path, "" );
+ 	return PFBE_OK;
+diff -Naur pfqueue-0.5.6-orig/backends/pfq_postfix1.c pfqueue-0.5.6/backends/pfq_postfix1.c
+--- pfqueue-0.5.6-orig/backends/pfq_postfix1.c	2007-01-19 17:39:29.000000000 +0100
++++ pfqueue-0.5.6/backends/pfq_postfix1.c	2009-12-04 21:37:30.000000000 +0100
+@@ -108,7 +108,7 @@
+ }
+ 
+ int pfb_init() {
+-	pfb_conf.max_char = 200;
++	pfb_conf.max_char = 20000;
+ 	strcpy ( pfb_conf.command_path, "" );
+ 	strcpy ( pfb_conf.config_path, "" );
+ 	return PFBE_OK;
+diff -Naur pfqueue-0.5.6-orig/libpfq/pfqlib.c pfqueue-0.5.6/libpfq/pfqlib.c
+--- pfqueue-0.5.6-orig/libpfq/pfqlib.c	2007-02-04 18:22:24.000000000 +0100
++++ pfqueue-0.5.6/libpfq/pfqlib.c	2009-12-04 21:44:59.000000000 +0100
+@@ -583,11 +583,11 @@
+ 
+ int pfql_init(struct pfql_context_t *ctx) {
+ 	/* Defaults */
+-	ctx->pfql_conf.max_char      = 200;
++	ctx->pfql_conf.max_char      = 20000;
+ 	ctx->pfql_conf.initial_queue = 0;
+ 	sprintf ( ctx->pfql_conf.backends_path, "%c", 0 );
+ 	sprintf ( ctx->pfql_conf.backend_name, "autodetect" );
+-	ctx->pfql_conf.msg_max       = 200;
++	ctx->pfql_conf.msg_max       = 20000;
+ 	ctx->pfql_conf.scan_limit    = 0;
+ 	ctx->pfql_conf.scan_delay    = 1;
+ 	sprintf ( ctx->pfql_conf.remote_host, "%c", 0 );
+diff -Naur pfqueue-0.5.6-orig/pfqueue.1 pfqueue-0.5.6/pfqueue.1
+--- pfqueue-0.5.6-orig/pfqueue.1	2007-02-03 19:05:32.000000000 +0100
++++ pfqueue-0.5.6/pfqueue.1	2009-12-04 21:42:09.000000000 +0100
+@@ -67,7 +67,7 @@
+ vary: for example, postfix needs a directory, exim needs a file.
+ .TP
+ .B -m max
+-Set the maximum number of messages shown in a queue. The default is \fB200\fP.
++Set the maximum number of messages shown in a queue. The default is \fB20000\fP.
+ .TP
+ .B -s seconds
+ Set the display autorefresh rate in seconds. Default is \fB1\fP.

@@ -1,0 +1,23 @@
+#!/bin/bash -eux
+
+#előkészület
+if [ "$UB_ARCH" == "amd64" ];then
+KVER="$(ls -1 /lib/modules | grep x86_64)"
+forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
+else
+KVER="$(ls -1 /lib/modules | grep i386)"
+forras="NVIDIA-Linux-x86-${UB_VERSION}"
+fi
+moduldir="$UB_COMPILEDIR/lib/modules/"$KVER"/kernel/drivers"
+mkdir -p $moduldir
+#kicsomagolás és belépés
+chmod +x $forras.run
+./"$forras".run -x
+mv $forras/* ./
+rm *.run
+patch -i "$UB_SRCDIR"/patches/menu.patch.skip
+cd kernel
+make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
+export UB_MAKE_PROCS=1
+cd uvm
+make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir/uvm module

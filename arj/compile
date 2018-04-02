@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+cd gnu
+aclocal
+autoconf
+rm -f config.{guess,sub}
+cp /usr/share/automake-1.15/config.{guess,sub} .
+./configure --prefix=/usr
+cd ..
+export UB_MAKE_PROCS=1
+make prepare
+make

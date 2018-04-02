@@ -1,0 +1,12 @@
+diff -Naur orig/render.c mod/render.c
+--- orig/render.c	2011-11-05 22:14:58.000000000 +0100
++++ mod/render.c	2015-02-16 19:53:50.000000000 +0100
+@@ -813,7 +813,7 @@
+ 	switch (Token.Type) {
+ 	case tFreeDiskSpace: {
+ 			int FreeMB;
+-			VideoDiskSpace(&FreeMB);
++			cVideoDirectory::VideoDiskSpace(&FreeMB);
+ 			Dprintf("FreeMB: %d, attrib type is %d\n", FreeMB,Token.Attrib.Type);
+ 			return Token.Attrib.Type == aString && Token.Attrib.Text.length() > 0
+ 			       ? (cxType)DurationType(FreeMB * 60 / MB_PER_MINUTE,

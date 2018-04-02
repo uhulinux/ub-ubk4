@@ -1,0 +1,21 @@
+#!/bin/sh -eux
+
+make \
+  DESTDIR=$UB_INSTALLDIR \
+  PREFIX=/usr \
+  install
+
+#alap config fájlok
+mkdir -p  $UB_INSTALLDIR/etc/vdr
+cp *.conf $UB_INSTALLDIR/etc/vdr/
+
+#plugin fejlesztői cuccok, a vdr-sc pluginhoz kell
+mkdir -p $UB_INSTALLDIR/usr/include/vdr/PLUGINS
+cd PLUGINS/src
+for i in `ls`;do
+  cd $i
+  make clean
+  rm -rf Makefile README HISTORY COPYING po
+  cd ..
+done
+cp -R * $UB_INSTALLDIR/usr/include/vdr/PLUGINS/

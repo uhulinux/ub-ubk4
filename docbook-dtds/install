@@ -1,0 +1,138 @@
+#!/bin/sh -eux
+
+# DocBook V3.0
+cd 3.0-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-3.0
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook V3.1
+cd 3.1-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-3.1
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook V4.0
+cd 4.0-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-4.0
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook V4.1
+cd 4.1-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-4.1
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook XML V4.1.2
+cd 4.1.2-xml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/xml-dtd-4.1.2
+mkdir -p $DESTDIR/ent
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+install ent/* $DESTDIR/ent
+cd ..
+
+# DocBook V4.2
+cd 4.2-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-4.2
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook XML V4.2
+cd 4.2-xml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/xml-dtd-4.2
+mkdir -p $DESTDIR/ent
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+install ent/* $DESTDIR/ent
+cd ..
+
+# DocBook V4.3
+cd 4.3-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-4.3
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook XML V4.3
+cd 4.3-xml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/xml-dtd-4.3
+mkdir -p $DESTDIR/ent
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+install ent/* $DESTDIR/ent
+cd ..
+
+# DocBook V4.4
+cd 4.4-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-4.4
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook XML V4.4
+cd 4.4-xml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/xml-dtd-4.4
+mkdir -p $DESTDIR/ent
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+install ent/* $DESTDIR/ent
+cd ..
+
+# DocBook V4.5
+cd 4.5-sgml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/sgml-dtd-4.5
+mkdir -p $DESTDIR
+install *.dcl $DESTDIR
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+cd ..
+
+# DocBook XML V4.5
+cd 4.5-xml
+DESTDIR="$UB_INSTALLDIR"/usr/share/sgml/docbook/xml-dtd-4.5
+mkdir -p $DESTDIR/ent
+install docbook.cat $DESTDIR/catalog
+install *.dtd $DESTDIR
+install *.mod $DESTDIR
+install ent/* $DESTDIR/ent
+cd ..
+
+# Symlinks
+#mkdir -p "$UB_INSTALLDIR"/etc/sgml
+#ln -s sgml-docbook-4.4.cat "$UB_INSTALLDIR"/etc/sgml/sgml-docbook.cat
+#ln -s xml-docbook-4.4.cat "$UB_INSTALLDIR"/etc/sgml/xml-docbook.cat
+
+find "$UB_INSTALLDIR"/usr/share/sgml -type f -print0 | xargs -r0 chmod -x

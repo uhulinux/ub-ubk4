@@ -1,0 +1,17 @@
+diff -Naur orig/nscd/nscd.conf patched/nscd/nscd.conf
+--- orig/nscd/nscd.conf	2016-02-18 18:54:00.000000000 +0100
++++ patched/nscd/nscd.conf	2016-06-17 00:16:29.846359193 +0200
+@@ -78,11 +78,11 @@
+ 	shared			services	yes
+ 	max-db-size		services	33554432
+ 
+-	enable-cache		netgroup	yes
++	enable-cache		netgroup	no
+ 	positive-time-to-live	netgroup	28800
+ 	negative-time-to-live	netgroup	20
+ 	suggested-size		netgroup	211
+-	check-files		netgroup	yes
++	check-files		netgroup	no
+ 	persistent		netgroup	yes
+ 	shared			netgroup	yes
+ 	max-db-size		netgroup	33554432

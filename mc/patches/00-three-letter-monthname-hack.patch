@@ -1,0 +1,37 @@
+diff -Naur orig/lib/timefmt.c patched/lib/timefmt.c
+--- orig/lib/timefmt.c	2017-11-18 18:45:59.134739579 +0100
++++ patched/lib/timefmt.c	2017-12-27 17:52:19.098530882 +0100
+@@ -144,7 +144,20 @@
+     else
+         fmt = user_recent_timeformat;
+ 
+-    FMT_LOCALTIME (timebuf, sizeof (timebuf), fmt, when);
++	if (fmt[0] == '%' && fmt[1] == 'b') {
++		wchar_t wcsbuf[8];
++		strftime(timebuf, 8, "%b", localtime(&when));
++		timebuf[8] = 0;
++		while (1) {
++		    int i;
++		    i = mbstowcs(wcsbuf, timebuf, 8);
++		    if (i >= 0 && i <= 3) break;
++		    timebuf[strlen(timebuf)-1] = 0;
++		}
++	 	strftime(timebuf + strlen(timebuf), sizeof (timebuf) - 1 - strlen(timebuf), fmt + 2, localtime(&when));
++	} else {
++		strftime(timebuf, sizeof (timebuf) - 1, fmt, localtime(&when));
++	}
+ 
+     return timebuf;
+ }
+diff -Naur orig/lib/timefmt.h patched/lib/timefmt.h
+--- orig/lib/timefmt.h	2017-03-04 18:51:38.134739579 +0100
++++ patched/lib/timefmt.h	2017-12-27 17:52:19.098530882 +0100
+@@ -11,7 +11,7 @@
+ 
+ /*** typedefs(not structures) and defined constants **********************************************/
+ 
+-#define MAX_I18NTIMELENGTH 20
++#define MAX_I18NTIMELENGTH 12
+ #define MIN_I18NTIMELENGTH 10
+ #define STD_I18NTIMELENGTH 12
+ 

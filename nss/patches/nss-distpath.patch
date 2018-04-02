@@ -1,0 +1,12 @@
+diff -Naur orig/coreconf/source.mk patched/coreconf/source.mk
+--- orig/coreconf/source.mk	2013-06-27 19:58:08.000000000 +0200
++++ patched/coreconf/source.mk	2013-07-26 19:40:29.000000000 +0200
+@@ -13,7 +13,7 @@
+ 
+ ifndef SOURCE_PREFIX
+     ifndef BUILD_TREE
+-	SOURCE_PREFIX = $(CORE_DEPTH)/../dist
++	SOURCE_PREFIX = $(CORE_DEPTH)/dist
+     else
+ 	SOURCE_PREFIX = $(BUILD_TREE)/dist
+     endif

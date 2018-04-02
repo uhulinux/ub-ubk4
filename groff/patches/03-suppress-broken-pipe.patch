@@ -1,0 +1,14 @@
+diff -Naur groff.orig/groff-utf8/groff-utf8 groff/groff-utf8/groff-utf8
+--- groff.orig/groff-utf8/groff-utf8	2005-07-03 01:29:40.000000000 +0200
++++ groff/groff-utf8/groff-utf8	2005-09-02 15:43:55.000000000 +0200
+@@ -46,4 +46,9 @@
+ # We use -s (invocation of soelim), because it's easier to stuff the u8_prep
+ # pass into soelim than into troff, because the command-line option parsing of
+ # soelim is simpler.
+-groff -s "$@" | u8_${device}_postp
++
++# Terrible hack to suppress bash's "Broken pipe" message, but still keep
++# groff's stderr available.
++exec 60>&2
++exec 2>/dev/null
++groff -s "$@" 2>&60 | u8_${device}_postp 2>&60

@@ -1,0 +1,10 @@
+#!/bin/bash -eux
+
+cd wxPython
+
+export CFLAGS=`wx-config --cxxflags`
+export CFLAGS="$CFLAGS "`pkg-config --cflags gtk+-3.0`
+export LDFLAGS=`wx-config --libs`
+export LDFLAGS="$LDFLAGS "`pkg-config --libs gtk+-3.0`
+
+ub_compile

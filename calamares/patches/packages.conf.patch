@@ -1,0 +1,25 @@
+diff -Nur orig/src/modules/packages/packages.conf mod/src/modules/packages/packages.conf
+--- orig/src/modules/packages/packages.conf	2017-11-14 16:18:58.000000000 +0100
++++ mod/src/modules/packages/packages.conf	2017-11-30 20:03:20.696271283 +0100
+@@ -12,7 +12,7 @@
+ #  - entropy     - Sabayon package manager
+ #  - dummy       - Dummy manager, only logs
+ #
+-backend: dummy
++backend: apt
+ 
+ # If set to true, a package-manager specific update procedure
+ # is run first (only if there is internet) to update the list
+@@ -111,12 +111,3 @@
+ # "binutils", and then a second time for "wget". When installing large numbers
+ # of packages, this can lead to a considerable time savings.
+ #
+-operations:
+-  - install:
+-    - vi
+-    - wget
+-    - binutils
+-  - remove:
+-    - vi
+-    - wget
+-    - binutils

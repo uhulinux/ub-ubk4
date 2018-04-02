@@ -1,0 +1,24 @@
+diff -Naur orig/configure.in patched/configure.in
+--- orig/configure.in	2010-01-05 03:59:13.000000000 +0100
++++ patched/configure.in	2016-07-31 19:56:23.163794397 +0200
+@@ -81,7 +81,7 @@
+ AC_CHECK_FUNCS(random_r nrand48)
+ 
+ # Check for ImageMagick.
+-PKG_CHECK_MODULES(Wand, Wand >= 6.4)
++# PKG_CHECK_MODULES(Wand, Wand >= 6.4)
+ 
+ if test -d src/skyrocket_sounds ; then
+ 	AC_ARG_ENABLE(sound, [  --disable-sound         Don't compile with sound.])
+diff -Naur orig/src/Makefile.am patched/src/Makefile.am
+--- orig/src/Makefile.am	2010-01-04 01:44:04.000000000 +0100
++++ patched/src/Makefile.am	2016-07-31 20:03:16.754514889 +0200
+@@ -3,7 +3,7 @@
+ INCLUDES = -I$(top_srcdir)/src
+ AM_LDFLAGS = @GLEW@
+ 
+-bin_PROGRAMS = biof busyspheres colorfire cyclone drempels euphoria feedback fieldlines flocks flux helios hufo_smoke hufo_tunnel hyperspace lattice lorenz matrixview pixelcity plasma skyrocket solarwinds spirographx sundancer2
++bin_PROGRAMS = biof busyspheres colorfire cyclone euphoria feedback fieldlines flocks flux helios hufo_smoke hufo_tunnel hyperspace lattice lorenz pixelcity plasma skyrocket solarwinds spirographx sundancer2
+ 
+ biof_SOURCES = driver.c biof.c
+ busyspheres_SOURCES = driver.c busyspheres.c

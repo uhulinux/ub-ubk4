@@ -1,0 +1,497 @@
+Index: b/src/bacon-volume.c
+===================================================================
+--- a/src/bacon-volume.c	2012-12-03 10:14:50.018899953 +0000
++++ b/src/bacon-volume.c	2012-12-03 10:14:53.474899850 +0000
+@@ -242,19 +242,23 @@
+   BaconVolumeButton *button = BACON_VOLUME_BUTTON (widget);
+   GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (button->scale));
+   float d;
++  gdouble i;
+ 
+   if (event->type != GDK_SCROLL)
+     return FALSE;
+ 
+   d = bacon_volume_button_get_value (button);
++  i = gtk_adjustment_get_step_increment(adj);
+   if (event->direction == GDK_SCROLL_UP) {
+-    d += adj->step_increment;
+-    if (d > adj->upper)
+-      d = adj->upper;
++    gdouble u = gtk_adjustment_get_upper(adj);
++    d += i;
++    if (d > u)
++      d = u;
+   } else {
+-    d -= adj->step_increment;
+-    if (d < adj->lower)
+-      d = adj->lower;
++    gdouble l = gtk_adjustment_get_lower(adj);
++    d -= i;
++    if (d < l)
++      d = l;
+   }
+   bacon_volume_button_set_value (button, d);
+ 
+@@ -270,55 +274,59 @@
+   gint x, y, m, dx, dy, sx, sy, ystartoff, mouse_y;
+   float v;
+   GdkEventButton *e;
++  GtkAllocation widget_all, dock_all, scale_all;
+ 
+   /* position roughly */
+-  gdk_window_get_origin (widget->window, &x, &y);
+-  x += widget->allocation.x;
+-  y += widget->allocation.y;
++  gdk_window_get_origin (gtk_widget_get_window(widget), &x, &y);
++  gtk_widget_get_allocation(widget, &widget_all);
++  x += widget_all.x;
++  y += widget_all.y;
+   gtk_window_move (GTK_WINDOW (button->dock), x, y - (SCALE_SIZE / 2));
+   gtk_widget_show_all (button->dock);
+-  gdk_window_get_origin (button->dock->window, &dx, &dy);
+-  dy += button->dock->allocation.y;
+-  gdk_window_get_origin (button->scale->window, &sx, &sy);
+-  sy += button->scale->allocation.y;
++  gdk_window_get_origin (gtk_widget_get_window(button->dock), &dx, &dy);
++  gtk_widget_get_allocation (button->dock, &dock_all);
++  dy += dock_all.y;
++  gdk_window_get_origin (gtk_widget_get_window(button->scale), &sx, &sy);
++  gtk_widget_get_allocation (button->scale, &scale_all);
++  sy += scale_all.y;
+   ystartoff = sy - dy;
+   mouse_y = event->y;
+   button->timeout = TRUE;
+ 
+   /* position (needs widget to be shown already) */
+-  v = bacon_volume_button_get_value (button) / (adj->upper - adj->lower);
+-  x += (widget->allocation.width - button->dock->allocation.width) / 2;
++  v = bacon_volume_button_get_value (button) / (gtk_adjustment_get_upper(adj) - gtk_adjustment_get_lower(adj));
++  x += (widget_all.width - dock_all.width) / 2;
+   y -= ystartoff;
+-  y -= GTK_RANGE (button->scale)->min_slider_size / 2;
+-  m = button->scale->allocation.height -
+-      GTK_RANGE (button->scale)->min_slider_size;
++  y -= gtk_range_get_min_slider_size(GTK_RANGE (button->scale)) / 2;
++  m = scale_all.height -
++      gtk_range_get_min_slider_size(GTK_RANGE (button->scale));
+   y -= m * (1.0 - v);
+   y += mouse_y;
+   gtk_window_move (GTK_WINDOW (button->dock), x, y);
+-  gdk_window_get_origin (button->scale->window, &sx, &sy);
++  gdk_window_get_origin (gtk_widget_get_window(button->scale), &sx, &sy);
+ 
+   GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, event);
+ 
+   /* grab focus */
+   gtk_widget_grab_focus (button->dock);
+   gtk_grab_add (button->dock);
+-  gdk_pointer_grab (button->dock->window, TRUE,
++  gdk_pointer_grab (gtk_widget_get_window(button->dock), TRUE,
+       GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+       GDK_POINTER_MOTION_MASK, NULL, NULL, GDK_CURRENT_TIME);
+-  gdk_keyboard_grab (button->dock->window, TRUE, GDK_CURRENT_TIME);
++  gdk_keyboard_grab (gtk_widget_get_window(button->dock), TRUE, GDK_CURRENT_TIME);
+ 
+   /* forward event to the slider */
+   e = (GdkEventButton *) gdk_event_copy ((GdkEvent *) event);
+-  e->window = button->scale->window;
++  e->window = gtk_widget_get_window(button->scale);
+ 
+   /* position: the X position isn't relevant, halfway will work just fine.
+    * The vertical position should be *exactly* in the middle of the slider
+    * of the scale; if we don't do that correctly, it'll move from its current
+    * position, which means a position change on-click, which is bad. */
+-  e->x = button->scale->allocation.width / 2;
+-  m = button->scale->allocation.height -
+-      GTK_RANGE (button->scale)->min_slider_size;
+-  e->y = ((1.0 - v) * m) + GTK_RANGE (button->scale)->min_slider_size / 2;
++  e->x = scale_all.width / 2;
++  m = scale_all.height -
++      gtk_range_get_min_slider_size(GTK_RANGE (button->scale));
++  e->y = ((1.0 - v) * m) + gtk_range_get_min_slider_size(GTK_RANGE (button->scale)) / 2;
+   gtk_widget_event (button->scale, (GdkEvent *) e);
+   e->window = event->window;
+   gdk_event_free ((GdkEvent *) e);
+@@ -345,12 +353,12 @@
+ 
+   val = bacon_volume_button_get_value (button);
+   val += button->direction;
+-  if (val <= adj->lower) {
++  if (val <= gtk_adjustment_get_lower(adj)) {
+     res = FALSE;
+-    val = adj->lower;
+-  } else if (val > adj->upper) {
++    val = gtk_adjustment_get_lower(adj);
++  } else if (val > gtk_adjustment_get_upper(adj)) {
+     res = FALSE;
+-    val = adj->upper;
++    val = gtk_adjustment_get_upper(adj);
+   }
+   bacon_volume_button_set_value (button, val);
+ 
+@@ -373,7 +381,7 @@
+   if (button->click_id != 0)
+     g_source_remove (button->click_id);
+   button->direction = (widget == button->plus) ?
+-      fabs (adj->page_increment) : - fabs (adj->page_increment);
++      fabs (gtk_adjustment_get_page_increment(adj)) : - fabs (gtk_adjustment_get_page_increment(adj));
+   button->click_id = g_timeout_add (CLICK_TIMEOUT,
+ 				    (GSourceFunc) cb_button_timeout, button);
+   cb_button_timeout (button);
+@@ -416,7 +424,7 @@
+   button->timeout = FALSE;
+ 
+   e = (GdkEventButton *) gdk_event_copy ((GdkEvent *) event);
+-  e->window = GTK_WIDGET (button)->window;
++  e->window = gtk_widget_get_window (GTK_WIDGET (button));
+   e->type = GDK_BUTTON_RELEASE;
+   gtk_widget_event (GTK_WIDGET (button), (GdkEvent *) e);
+   e->window = event->window;
+@@ -571,7 +579,7 @@
+   BaconVolumeScale *scale = BACON_VOLUME_SCALE (range);
+   BaconVolumeButton *button = scale->button;
+   GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (button->scale));
+-  float step = (adj->upper - adj->lower) / 4;
++  float step = (gtk_adjustment_get_upper(adj) - gtk_adjustment_get_lower(adj)) / 4;
+   float val = gtk_range_get_value (range);
+   gint w, h;
+ #ifdef HAVE_GTK_ONLY
+@@ -585,13 +593,13 @@
+   const char *s;
+   GdkPixbuf *buf;
+ 
+-  if (val == adj->lower)
++  if (val == gtk_adjustment_get_lower(adj))
+     s = "stock_volume-mute";
+-  else if (val > adj->lower && val <= adj->lower + step)
++  else if (val > gtk_adjustment_get_lower(adj) && val <= gtk_adjustment_get_lower(adj) + step)
+     s = "stock_volume-0";
+-  else if (val > adj->lower + step && val <= adj->lower + step * 2)
++  else if (val > gtk_adjustment_get_lower(adj) + step && val <= gtk_adjustment_get_lower(adj) + step * 2)
+     s = "stock_volume-min";
+-  else if (val > adj->lower + step * 2 && val <= adj->lower + step * 3)
++  else if (val > gtk_adjustment_get_lower(adj) + step * 2 && val <= gtk_adjustment_get_lower(adj) + step * 3)
+     s = "stock_volume-med";
+   else
+     s = "stock_volume-max";
+Index: b/src/gui.c
+===================================================================
+--- a/src/gui.c	2012-12-03 10:14:53.066899862 +0000
++++ b/src/gui.c	2012-12-03 10:14:53.474899850 +0000
+@@ -22,6 +22,7 @@
+ 
+ #include <config.h>
+ #include <gnome.h>
++#include <libgnome-media-profiles/gnome-media-profiles.h>
+ #include <gconf/gconf-client.h>
+ #include <math.h>
+ #include "bacon-volume.h"
+@@ -139,14 +140,14 @@
+ 	gtk_misc_set_alignment(GTK_MISC(title), 0, 0.5);
+ 	gtk_label_set_use_markup(GTK_LABEL(title), TRUE);
+ 	g_free(title_hdr);
+-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(data.dialog)->vbox), title, FALSE, FALSE, 6);
++	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(data.dialog))), title, FALSE, FALSE, 6);
+ 	
+ 	data.progress = gtk_progress_bar_new();
+-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(data.dialog)->vbox), data.progress, TRUE, FALSE, 6);
++	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(data.dialog))), data.progress, TRUE, FALSE, 6);
+ 	
+ 	data.label = gtk_label_new(_("No stations found"));
+ 	gtk_misc_set_alignment(GTK_MISC(data.label), 0, 0.5);
+-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(data.dialog)->vbox), data.label, TRUE, FALSE, 6);
++	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(data.dialog))), data.label, TRUE, FALSE, 6);
+ 	
+ 	gtk_widget_show_all(data.dialog);
+ 	
+@@ -162,7 +163,7 @@
+ 	} else {
+ 		if (g_list_length(data.stations) > 0) {
+ 			gfloat f = *((gfloat*)data.stations->data);
+-			adj->value = f*STEPS;
++			gtk_adjustment_set_value(adj, f*STEPS);
+ 			radio_set_freq(f);
+ 			
+ 			GtkWidget *dialog;
+@@ -310,7 +311,7 @@
+ 	int win_width, win_height;
+ 	int val, freq[5], signal_strength, is_stereo;
+ 	
+-	val = (int)(rint(adj->value/STEPS * 100.0));
++	val = (int)(rint(gtk_adjustment_get_value(adj)/STEPS * 100.0));
+ 	
+ 	freq[0] = val / 10000;
+ 	freq[1] = (val % 10000) / 1000;
+@@ -325,7 +326,7 @@
+ 	if (signal_strength < 0) signal_strength = 0;
+ 	is_stereo = (is_stereo == 1) ? 1 : 0;
+ 	
+-	real_window = drawing_area->window;
++	real_window = gtk_widget_get_window(drawing_area);
+ 	if (real_window == NULL)
+ 		/* UI has not been realized yet */
+ 		return TRUE;
+@@ -400,7 +401,7 @@
+ static void adj_value_changed_cb(GtkAdjustment* data, gpointer window)
+ {
+ 	char *buffer;
+-	float freq = rint(adj->value)/STEPS;
++	float freq = rint(gtk_adjustment_get_value(adj))/STEPS;
+ 	const char *preset_title = get_preset(freq, &mom_ps);
+ 
+ 	preset_combo_set_item(mom_ps);
+@@ -419,7 +420,7 @@
+ 	gtk_tooltips_set_tip(tooltips, freq_scale, buffer, NULL);
+ 	g_free(buffer);
+ 
+-	radio_set_freq(adj->value/STEPS);
++	radio_set_freq(gtk_adjustment_get_value(adj)/STEPS);
+ }
+ 
+ static void volume_value_changed_cb(BaconVolumeButton *button, gpointer user_data)
+@@ -460,20 +461,21 @@
+ static void change_frequency(gpointer data)
+ {
+ 	gboolean increase = (gboolean)data;
++	gint v = gtk_adjustment_get_value(adj);
+ 	
+ 	if (increase)
+ 	{
+-		if (adj->value >= FREQ_MAX*STEPS)
++		if (v >= FREQ_MAX*STEPS)
+ 			gtk_adjustment_set_value(adj, FREQ_MIN*STEPS);
+ 		else
+-			gtk_adjustment_set_value(adj, adj->value+1);
++			gtk_adjustment_set_value(adj, v+1);
+ 	}
+ 	else
+ 	{
+-		if (adj->value <= FREQ_MIN*STEPS)
++		if (v <= FREQ_MIN*STEPS)
+ 			gtk_adjustment_set_value(adj, FREQ_MAX*STEPS);
+ 		else
+-			gtk_adjustment_set_value(adj, adj->value-1);
++			gtk_adjustment_set_value(adj, v-1);
+ 	}
+ }
+ 
+@@ -517,14 +519,14 @@
+ 		max = (FREQ_MAX - FREQ_MIN) * STEPS;
+ 	}	
+ 		
+-	if (radio_check_station(adj->value/STEPS) || (start > max))	{
++	if (radio_check_station(gtk_adjustment_get_value(adj)/STEPS) || (start > max))	{
+ 		start = mom = 0;
+ 		radio_unmute();
+ 		timeout_id = 0;
+ 		return FALSE;
+ 	}
+ 	if (!mom) {
+-		mom = adj->value;
++		mom = gtk_adjustment_get_value(adj);
+ 	}
+ 		
+ 	if (mom > FREQ_MAX*STEPS) 
+@@ -610,7 +612,7 @@
+ 	int i, cnt = g_list_length(settings.presets);
+ 	
+ 	
+-	menuitems = GTK_MENU_SHELL(tray_menu)->children;
++	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+ 	
+ 	g_assert(cnt + 6 == g_list_length(menuitems));
+ 	
+@@ -683,7 +685,7 @@
+ 	strftime(time_str, 100, _("%B-%d-%Y_%H-%M-%S"), localtime(&t));
+ 	
+ 	if (mom_ps < 0) {
+-		station = g_strdup_printf(_("%.2f MHz"), rint(adj->value)/STEPS);
++		station = g_strdup_printf(_("%.2f MHz"), rint(gtk_adjustment_get_value(adj))/STEPS);
+ 	} else {
+ 		g_assert(mom_ps < g_list_length(settings.presets));
+ 		preset* ps = g_list_nth_data(settings.presets, mom_ps);
+@@ -797,7 +799,7 @@
+ void toggle_mainwindow_visibility(GtkWidget *app)
+ {
+ 	static gint posx, posy;
+-	if (GTK_WIDGET_VISIBLE(app))
++	if (gtk_widget_get_visible(app))
+ 	{
+ 		gtk_window_get_position(GTK_WINDOW(app), &posx, &posy);
+ 		gtk_widget_hide(app);
+@@ -813,6 +815,7 @@
+ GtkWidget* gnome_radio_gui(void)
+ {
+ 	GtkWidget *app;
++	GdkWindow *app_window;
+ 	GtkWidget *prefs_button, *quit_button, *scfw_button, *scbw_button;
+ 	GtkWidget *stfw_button, *stbw_button, *about_button, *rec_button;
+ 	GtkWidget *prefs_pixmap, *quit_pixmap, *scfw_pixmap, *scbw_pixmap;
+@@ -901,10 +904,11 @@
+ 	/*gtk_widget_set_size_request(freq_scale, 160, -1);*/
+ 
+ 	gtk_widget_realize(app);
++	app_window = gtk_widget_get_window(app);
+ 	drawing_area = gtk_drawing_area_new();
+-	digits = gdk_pixmap_create_from_xpm_d (app->window, NULL, NULL, digits_xpm);
+-	signal_s = gdk_pixmap_create_from_xpm_d (app->window, NULL, NULL, signal_xpm);
+-	stereo = gdk_pixmap_create_from_xpm_d (app->window, NULL, NULL, stereo_xpm);
++	digits = gdk_pixmap_create_from_xpm_d (app_window, NULL, NULL, digits_xpm);
++	signal_s = gdk_pixmap_create_from_xpm_d (app_window, NULL, NULL, signal_xpm);
++	stereo = gdk_pixmap_create_from_xpm_d (app_window, NULL, NULL, stereo_xpm);
+ 	
+ 	vseparator1 = gtk_vseparator_new();
+ 	vseparator2 = gtk_vseparator_new();
+@@ -993,7 +997,7 @@
+ 	gtk_tooltips_set_tip(tooltips, prefs_button, _("Edit your Preferences"), NULL);
+ 	gtk_tooltips_set_tip(tooltips, mute_button, _("Adjust the Volume"), NULL);
+ 	gtk_tooltips_set_tip(tooltips, quit_button, _("Quit"), NULL);
+-	text = g_strdup_printf(_("Frequency: %.2f MHz"), adj->value/STEPS);
++	text = g_strdup_printf(_("Frequency: %.2f MHz"), gtk_adjustment_get_value(adj)/STEPS);
+ 	gtk_tooltips_set_tip(tooltips, freq_scale, text, NULL);
+ 	g_free(text);
+ /*	text = g_strdup_printf(_("Volume: %d%%"), (gint)volume->value);
+@@ -1206,7 +1210,7 @@
+ 	return 0;
+ }
+ 
+-static show_message(GtkMessageType type, const char* text, const char* details)
++static void show_message(GtkMessageType type, const char* text, const char* details)
+ {
+ 	GtkWidget *dialog;
+ 	
+Index: b/src/prefs.c
+===================================================================
+--- a/src/prefs.c	2012-12-03 10:14:53.262899857 +0000
++++ b/src/prefs.c	2012-12-03 10:14:53.478899850 +0000
+@@ -60,7 +60,7 @@
+ 	gconf_client_set_string(client, "/apps/gnomeradio/mixer-device", settings.mixer_dev, NULL);
+ 	gconf_client_set_bool(client, "/apps/gnomeradio/mute-on-exit", settings.mute_on_exit, NULL);
+ 	/*gconf_client_set_float(client, "/apps/gnomeradio/volume", volume->value, NULL);*/
+-	gconf_client_set_float(client, "/apps/gnomeradio/last-freq", adj->value/STEPS, NULL);
++	gconf_client_set_float(client, "/apps/gnomeradio/last-freq", gtk_adjustment_get_value(adj)/STEPS, NULL);
+ 
+ 	/* Store recording settings */
+ /*	gconf_client_set_string(client, "/apps/gnomeradio/recording/audiodevice", rec_settings.audiodevice, NULL);
+@@ -128,9 +128,9 @@
+ 	/*volume->value = gconf_client_get_float(client, "/apps/gnomeradio/volume", NULL);*/
+ 	freq = gconf_client_get_float(client, "/apps/gnomeradio/last-freq", NULL);
+ 	if ((freq < FREQ_MIN) || (freq > FREQ_MAX))
+-		adj->value = FREQ_MIN * STEPS;
++		gtk_adjustment_set_value(adj, FREQ_MIN * STEPS);
+ 	else
+-		adj->value = freq * STEPS;
++		gtk_adjustment_set_value(adj, freq * STEPS);
+ 	
+ 	/* Load recording settings */
+ /*	rec_settings.audiodevice = gconf_client_get_string(client, "/apps/gnomeradio/recording/audiodevice", NULL);
+@@ -299,7 +299,7 @@
+ 	
+ 	ps = malloc(sizeof(preset));
+ 	ps->title = g_strdup(_("unnamed"));
+-	ps->freq = rint(adj->value) / STEPS;
++	ps->freq = rint(gtk_adjustment_get_value(adj)) / STEPS;
+ 	settings.presets = g_list_append(settings.presets, (gpointer) ps);
+ 	buffer = g_strdup_printf("%.2f", ps->freq);
+ 
+@@ -310,14 +310,14 @@
+ 	gtk_tree_selection_unselect_all(selection);
+ 	
+ 	v_scb = gtk_tree_view_get_vadjustment(GTK_TREE_VIEW(list_view));
+-	gtk_adjustment_set_value(v_scb, v_scb->upper);
++	gtk_adjustment_set_value(v_scb, gtk_adjustment_get_upper(v_scb));
+ 	
+ 	if (main_visible) {
+ 		gtk_combo_box_append_text(GTK_COMBO_BOX(preset_combo), ps->title);
+ 		mom_ps = g_list_length(settings.presets) - 1;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitems = GTK_MENU_SHELL(tray_menu)->children;
++		menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+ 		menuitem = gtk_menu_item_new_with_label(ps->title); 
+ 			
+ 		gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, mom_ps);		
+@@ -366,7 +366,7 @@
+ 		if (!g_list_length(settings.presets)) mom_ps = -1;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitems = GTK_MENU_SHELL(tray_menu)->children;
++		menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+ 		g_assert(*row < g_list_length(menuitems));
+ 		menuitem = g_list_nth_data(menuitems, *row);
+ 		gtk_widget_destroy(menuitem);
+@@ -432,7 +432,7 @@
+ 		mom_ps = *row;
+ 		preset_combo_set_item(mom_ps);
+ 
+-		menuitems = GTK_MENU_SHELL(tray_menu)->children;
++		menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+ 		g_assert(mom_ps < g_list_length(menuitems));
+ 		menuitem = g_list_nth_data(menuitems, mom_ps);
+ 		gtk_widget_destroy(menuitem);
+@@ -546,7 +546,7 @@
+ 
+ 	box = gtk_vbox_new(FALSE, 18);
+ 	gtk_container_set_border_width(GTK_CONTAINER(box), 12);
+-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), box, TRUE, TRUE, 0);
++	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box, TRUE, TRUE, 0);
+ 	
+ 	settings_box = gtk_vbox_new(FALSE, 6);
+ 	gtk_box_pack_start(GTK_BOX(box), settings_box, TRUE, TRUE, 0);
+@@ -653,17 +653,17 @@
+ 	gtk_tree_selection_set_select_function(selection, (GtkTreeSelectionFunc)list_view_select_cb, NULL, NULL);*/
+ 	
+ 	cellrenderer = gtk_cell_renderer_text_new();
+-	cellrenderer->mode = GTK_CELL_RENDERER_MODE_EDITABLE;
+-	GTK_CELL_RENDERER_TEXT(cellrenderer)->editable = TRUE;
++	g_object_set(GTK_OBJECT(cellrenderer), "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
++	g_object_set(GTK_OBJECT(GTK_CELL_RENDERER_TEXT(cellrenderer)), "editable", TRUE, NULL);
+ 	list_column = gtk_tree_view_column_new_with_attributes(NULL, cellrenderer, "text", 0, NULL);
+ 	gtk_tree_view_column_set_min_width(list_column, 150);
+ 	gtk_tree_view_append_column(GTK_TREE_VIEW(list_view), list_column);
+ 	g_signal_connect(GTK_OBJECT(cellrenderer), "edited", GTK_SIGNAL_FUNC(name_cell_edited_cb), NULL);
+ 
+ 	cellrenderer = gtk_cell_renderer_text_new();
+-	cellrenderer->mode = GTK_CELL_RENDERER_MODE_EDITABLE;
+-	cellrenderer->xalign = 1.0f;
+-	GTK_CELL_RENDERER_TEXT(cellrenderer)->editable = TRUE;
++	g_object_set(GTK_OBJECT(cellrenderer), "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
++	g_object_set(GTK_OBJECT(cellrenderer), "xalign", 1.0f, NULL);
++	g_object_set(GTK_OBJECT(GTK_CELL_RENDERER_TEXT(cellrenderer)), "editable", TRUE, NULL);
+ 	list_column = gtk_tree_view_column_new_with_attributes(NULL, cellrenderer, "text", 1, NULL);
+ 	gtk_tree_view_append_column(GTK_TREE_VIEW(list_view), list_column);
+ 	g_signal_connect(GTK_OBJECT(cellrenderer), "edited", GTK_SIGNAL_FUNC(freq_cell_edited_cb), NULL);
+Index: b/src/record.c
+===================================================================
+--- a/src/record.c	2012-12-03 10:14:50.018899953 +0000
++++ b/src/record.c	2012-12-03 10:14:53.478899850 +0000
+@@ -57,7 +57,7 @@
+ 
+ 	g_assert(recording);	
+ 	
+-	if (!GTK_WIDGET_VISIBLE(status_dialog))
++	if (!gtk_widget_get_visible(status_dialog))
+ 		gtk_widget_show_all(status_dialog);
+ 	
+ 	s = get_file_size(recording->filename);
+Index: b/src/trayicon.c
+===================================================================
+--- a/src/trayicon.c	2012-12-03 10:14:50.018899953 +0000
++++ b/src/trayicon.c	2012-12-03 10:14:53.478899850 +0000
+@@ -22,6 +22,7 @@
+ #include <gnome.h>
+ #include "gui.h"
+ #include "trayicon.h"
++#include "tech.h"
+ 
+ extern GtkAdjustment *adj;
+ extern GtkTooltips *tooltips;
+@@ -141,7 +142,7 @@
+ 	g_signal_connect(G_OBJECT(tray_icon), "popup-menu",
+ 		G_CALLBACK(tray_popup_menu), (gpointer)app);
+ 	
+-	text = g_strdup_printf(_("Gnomeradio - %.2f MHz"), adj->value/STEPS);
++	text = g_strdup_printf(_("Gnomeradio - %.2f MHz"), gtk_adjustment_get_value(adj)/STEPS);
+         gtk_status_icon_set_tooltip(GTK_STATUS_ICON(tray_icon), text);
+ 	g_free(text);
+ }

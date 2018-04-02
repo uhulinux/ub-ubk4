@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+host="-host i686-pc-linux-gnu"
+if [ "$UB_ARCH" == "amd64" ];then
+    host=""
+fi
+# not autoconf compatible
+./configure \
+	$host \
+	-bindir /usr/bin \
+	-libdir /usr/lib/ocaml \
+	-mandir /usr/share/man
+
+make world opt opt.opt

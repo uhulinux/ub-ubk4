@@ -1,0 +1,12 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2016-10-07 20:11:01.134741211 +0200
++++ patched/CMakeLists.txt	2017-05-26 00:07:20.697918358 +0200
+@@ -854,7 +854,7 @@
+ 
+ IF(UNIX AND NOT WIN32 AND NOT APPLE)
+   IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
+-      SET(LIB_POSTFIX "64" CACHE STRING "suffix for 32/64 dir placement")
++      SET(LIB_POSTFIX "" CACHE STRING "suffix for 32/64 dir placement")
+       MARK_AS_ADVANCED(LIB_POSTFIX)
+   ENDIF()
+ ENDIF()

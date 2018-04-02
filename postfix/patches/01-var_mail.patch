@@ -1,0 +1,76 @@
+diff -Naur postfix-3.1.0-orig/conf/main.cf postfix-3.1.0/conf/main.cf
+--- postfix-3.1.0-orig/conf/main.cf	2015-04-01 12:56:39.000000000 +0200
++++ postfix-3.1.0/conf/main.cf	2016-02-25 18:11:07.229280574 +0100
+@@ -427,8 +427,8 @@
+ #
+ # The home_mailbox parameter specifies the optional pathname of a
+ # mailbox file relative to a user's home directory. The default
+-# mailbox file is /var/spool/mail/user or /var/mail/user.  Specify
+-# "Maildir/" for qmail-style delivery (the / is required).
++# mailbox file is /var/mail/user.  Specify "Maildir/" for qmail-style
++# delivery (the / is required).
+ #
+ #home_mailbox = Mailbox
+ #home_mailbox = Maildir/
+@@ -438,7 +438,6 @@
+ # system type.
+ #
+ #mail_spool_directory = /var/mail
+-#mail_spool_directory = /var/spool/mail
+ 
+ # The mailbox_command parameter specifies the optional external
+ # command to use instead of mailbox delivery. The command is run as
+diff -Naur postfix-3.1.0-orig/html/local.8.html postfix-3.1.0/html/local.8.html
+--- postfix-3.1.0-orig/html/local.8.html	2016-02-14 02:32:49.000000000 +0100
++++ postfix-3.1.0/html/local.8.html	2016-02-25 18:12:43.449281847 +0100
+@@ -567,7 +567,7 @@
+        The following are examples; details differ between systems.
+        $HOME/.forward, per-user aliasing
+        /etc/aliases, system-wide alias database
+-       /var/spool/mail, system mailboxes
++       /var/mail, system mailboxes
+ 
+ <b>SEE ALSO</b>
+        <a href="qmgr.8.html">qmgr(8)</a>, queue manager
+diff -Naur postfix-3.1.0-orig/man/man8/local.8 postfix-3.1.0/man/man8/local.8
+--- postfix-3.1.0-orig/man/man8/local.8	2016-02-14 02:32:47.000000000 +0100
++++ postfix-3.1.0/man/man8/local.8	2016-02-25 18:14:44.753283453 +0100
+@@ -110,7 +110,7 @@
+ .ad
+ .fi
+ The default per\-user mailbox is a file in the UNIX mail spool
+-directory (\fB/var/mail/\fIuser\fR or \fB/var/spool/mail/\fIuser\fR);
++directory (\fB/var/mail/\fIuser\fR);
+ the location can be specified with the \fBmail_spool_directory\fR
+ configuration parameter. Specify a name ending in \fB/\fR for
+ \fBqmail\fR\-compatible \fBmaildir\fR delivery.
+@@ -598,7 +598,7 @@
+ The following are examples; details differ between systems.
+ $HOME/.forward, per\-user aliasing
+ /etc/aliases, system\-wide alias database
+-/var/spool/mail, system mailboxes
++/var/mail, system mailboxes
+ .SH "SEE ALSO"
+ .na
+ .nf
+diff -Naur postfix-3.1.0-orig/src/local/local.c postfix-3.1.0/src/local/local.c
+--- postfix-3.1.0-orig/src/local/local.c	2016-02-14 02:29:26.000000000 +0100
++++ postfix-3.1.0/src/local/local.c	2016-02-25 18:16:45.745285054 +0100
+@@ -96,7 +96,7 @@
+ /* .ad
+ /* .fi
+ /*	The default per-user mailbox is a file in the UNIX mail spool
+-/*	directory (\fB/var/mail/\fIuser\fR or \fB/var/spool/mail/\fIuser\fR);
++/*	directory (\fB/var/mail/\fIuser\fR);
+ /*	the location can be specified with the \fBmail_spool_directory\fR
+ /*	configuration parameter. Specify a name ending in \fB/\fR for
+ /*	\fBqmail\fR-compatible \fBmaildir\fR delivery.
+@@ -552,7 +552,7 @@
+ /*	The following are examples; details differ between systems.
+ /*	$HOME/.forward, per-user aliasing
+ /*	/etc/aliases, system-wide alias database
+-/*	/var/spool/mail, system mailboxes
++/*	/var/mail, system mailboxes
+ /* SEE ALSO
+ /*	qmgr(8), queue manager
+ /*	bounce(8), delivery status reports

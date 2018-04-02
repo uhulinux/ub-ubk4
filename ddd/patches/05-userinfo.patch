@@ -1,0 +1,13 @@
+diff -Naur ddd-3.3.9.orig/ddd/Makefile.in ddd-3.3.9/ddd/Makefile.in
+--- ddd-3.3.9.orig/ddd/Makefile.in	2004-06-20 20:40:06.000000000 +0200
++++ ddd-3.3.9/ddd/Makefile.in	2004-07-01 13:36:41.820410915 +0200
+@@ -2695,8 +2695,7 @@
+ 
+ # If `~/.ddd_userinfo' exists, use this file as personal identification.
+ USERINFO.txt: userinfo$(EXEEXT)
+-	-(cat $$HOME/.ddd_userinfo 2> /dev/null || \
+-	./userinfo || echo '(unknown)') > $@~ && $(MV) $@~ $@
++	-echo 'UBK Team <ubk@ubk.hu>' > $@~ && $(MV) $@~ $@
+ 	@$(ECHO) ""
+ 	@$(ECHO) "Please check your name and e-mail address:"
+ 	@$(ECHO) ""

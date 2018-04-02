@@ -1,0 +1,25 @@
+#!/bin/sh -eux
+
+UB_MAKEINSTALL_USE_DESTDIR=yes ub_makeinstall \
+	VIMRCLOC=/etc \
+	VIMRUNTIMEDIR='$(VIMRTLOC)'
+
+# rm "$UB_INSTALLDIR"/usr/bin/gvim
+mv "$UB_INSTALLDIR"/usr/bin/vim "$UB_INSTALLDIR"/usr/bin/gvim
+
+install Install/vi  "$UB_INSTALLDIR"/bin/
+install Install/vim "$UB_INSTALLDIR"/usr/bin/
+ln -s ../../bin/vi  "$UB_INSTALLDIR"/usr/bin/vi
+
+ln -sf gvim "$UB_INSTALLDIR"/usr/bin/gview
+ln -sf gvim "$UB_INSTALLDIR"/usr/bin/gvimdiff
+ln -sf gvim "$UB_INSTALLDIR"/usr/bin/rgvim
+ln -sf gvim "$UB_INSTALLDIR"/usr/bin/rgview
+
+ln -s  vim.1  "$UB_INSTALLDIR"/usr/share/man/man1/vi.1
+ln -sf gvim.1 "$UB_INSTALLDIR"/usr/share/man/man1/gview.1
+ln -sf gvim.1 "$UB_INSTALLDIR"/usr/share/man/man1/gvimdiff.1
+ln -sf gvim.1 "$UB_INSTALLDIR"/usr/share/man/man1/rgvim.1
+ln -sf gvim.1 "$UB_INSTALLDIR"/usr/share/man/man1/rgview.1
+
+rm -r "$UB_INSTALLDIR"/usr/share/man/*.*

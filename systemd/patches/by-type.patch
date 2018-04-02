@@ -1,0 +1,11 @@
+diff -urN systemd-213.orig/rules/60-persistent-storage.rules systemd-213/rules/60-persistent-storage.rules
+--- systemd-213.orig/rules/60-persistent-storage.rules	2014-03-11 23:59:57.843898632 +0100
++++ systemd-213/rules/60-persistent-storage.rules	2014-08-18 12:52:01.927298552 +0200
+@@ -92,6 +92,7 @@
+ # by-label/by-uuid links (filesystem metadata)
+ ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
+ ENV{ID_FS_USAGE}=="filesystem|other", ENV{ID_FS_LABEL_ENC}=="?*", SYMLINK+="disk/by-label/$env{ID_FS_LABEL_ENC}"
++ENV{ID_FS_USAGE}=="filesystem|other|raid|crypto", ENV{ID_FS_TYPE}=="?*", SYMLINK+="disk/by-type/$env{ID_FS_TYPE}/%k"
+ 
+ # by-id (World Wide Name)
+ ENV{DEVTYPE}=="disk", ENV{ID_WWN_WITH_EXTENSION}=="?*", SYMLINK+="disk/by-id/wwn-$env{ID_WWN_WITH_EXTENSION}"

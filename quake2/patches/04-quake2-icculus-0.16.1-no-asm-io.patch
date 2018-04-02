@@ -1,0 +1,22 @@
+diff -Nur orig/src/linux/rw_aa.c mod/src/linux/rw_aa.c
+--- orig/src/linux/rw_aa.c	2003-07-12 03:59:51.000000000 +0200
++++ mod/src/linux/rw_aa.c	2016-08-03 09:54:25.847329457 +0200
+@@ -63,7 +63,6 @@
+ #include <dlfcn.h>
+ #if defined (__linux__)
+ #include <sys/vt.h>
+-#include <asm/io.h>
+ #endif
+ #include <aalib.h>
+ 
+diff -Nur orig/src/linux/rw_in_aa.c mod/src/linux/rw_in_aa.c
+--- orig/src/linux/rw_in_aa.c	2003-07-12 03:59:51.000000000 +0200
++++ mod/src/linux/rw_in_aa.c	2016-08-03 09:54:06.419316786 +0200
+@@ -46,7 +46,6 @@
+ #include <sys/mman.h>
+ 
+ #if defined (__linux__)
+-#include <asm/io.h>
+ #include <sys/vt.h>
+ #endif
+ 

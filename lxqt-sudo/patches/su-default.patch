@@ -1,0 +1,12 @@
+diff -Nur orig/sudo.cpp mod/sudo.cpp
+--- orig/sudo.cpp	2016-09-24 00:47:03.000000000 +0200
++++ mod/sudo.cpp	2016-12-14 12:56:04.346842224 +0100
+@@ -97,7 +97,7 @@
+     if (app_lxsu == cmd)
+         mBackend = BACK_SU;
+     else if (app_lxsudo == cmd || app_master == cmd)
+-        mBackend = BACK_SUDO;
++        mBackend = BACK_SU;
+ }
+ 
+ Sudo::~Sudo()

@@ -1,0 +1,71 @@
+diff -Naur orig/doc/doc.gpm.in patched/doc/doc.gpm.in
+--- orig/doc/doc.gpm.in	2012-10-26 23:21:38.134739579 +0200
++++ patched/doc/doc.gpm.in	2017-09-15 23:25:11.958221244 +0200
+@@ -548,7 +548,7 @@
+ .SH SEE ALSO
+ .nf
+ \fB mev(1)\fP        A sample client for the gpm daemon.
+-\fB gpm-root(1)\fP   An handler for Control-Mouse events.
++\fB gpm-root(8)\fP   An handler for Control-Mouse events.
+ 
+ .fi
+ The info file about `gpm', which gives more complete information and
+@@ -1860,7 +1860,7 @@
+ .SH SEE ALSO
+ .nf
+ \fB gpm(8) \fP      The mouse server
+-\fB gpm-root(1) \fP An handler for Control-Mouse events.
++\fB gpm-root(8) \fP An handler for Control-Mouse events.
+ 
+ .fi
+ The info file about `gpm', which gives more complete information and
+@@ -1931,8 +1931,8 @@
+ @node gpm-root, hltest, Emacs Support, Demo Clients
+ @section The ``gpm-root'' program
+ 
+-%MANPAGE gpm-root.1
+-%M .TH GPM-ROOT 1 "February 1995"
++%MANPAGE gpm-root.8
++%M .TH GPM-ROOT 8 "February 1995"
+ %M .UC 4
+ %M .SH NAME
+ %M gpm-root \- a default handler for gpm, used to draw menus on
+diff -Naur orig/doc/Makefile.in patched/doc/Makefile.in
+--- orig/doc/Makefile.in	2012-10-26 23:21:38.134739579 +0200
++++ patched/doc/Makefile.in	2017-09-15 23:25:11.962221293 +0200
+@@ -30,7 +30,7 @@
+ 
+ include $(top_builddir)/Makefile.include
+ 
+-MANPAGES = gpm.8 mev.1 gpm-root.1 gpm-types.7 mouse-test.1
++MANPAGES = gpm.8 mev.1 gpm-root.8 gpm-types.7 mouse-test.1
+ 
+ all: $(srcdir)/gpm.info gpm.man
+ 
+@@ -60,7 +60,7 @@
+ $(MANPAGES): gpm.man
+ gpm.man: doc.gpm $(srcdir)/manpager
+ 	$(AWK) -f $(srcdir)/manpager doc.gpm
+-	for i in gpm-root.1 gpm-types.7 gpm.8 mev.1 mouse-test.1; do \
++	for i in gpm-root.8 gpm-types.7 gpm.8 mev.1 mouse-test.1; do \
+ 		expand $$i | sed s/^'[ ]*'//g > $$i.new; \
+ 		mv $$i.new $$i; \
+ 	done;
+@@ -116,7 +116,7 @@
+ install:	all installdirs
+ 	$(INSTALL_DATA) -m 644 mev.1          $(man1dir)
+ 	$(INSTALL_DATA) -m 644 mouse-test.1   $(man1dir)
+-	$(INSTALL_DATA) -m 644 gpm-root.1     $(man1dir)
++	$(INSTALL_DATA) -m 644 gpm-root.8     $(man8dir)
+ 	$(INSTALL_DATA) -m 644 gpm-types.7    $(man7dir)
+ 	$(INSTALL_DATA) -m 644 gpm.8          $(man8dir)
+ 	$(INSTALL_DATA) -m 644 $(srcdir)/gpm.info       $(infodir)
+@@ -139,7 +139,7 @@
+ # e.g. /var/cache/man/cat1/mev.1.gz.  Deleting these is not our job,
+ # but the job of the man program on the host.
+ uninstall:	
+-	cd $(man1dir) && rm -f mev.1 mouse-test.1 gpm-root.1
++	cd $(man1dir) && rm -f mev.1 mouse-test.1 gpm-root.8
+ 	rm -f $(man7dir)/gpm-types.7 $(man8dir)/gpm.8 
+ 	rm -f $(infodir)/gpm.info $(infodir)/gpm.info.gz
+ 	-if $(SHELL) -c 'install-info --version' >/dev/null 2>&1; then \

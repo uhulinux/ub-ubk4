@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+DTDDIR="$UB_INSTALLDIR/usr/share/sgml/docbook-sgml-$UB_VERSION"
+mkdir -p $DTDDIR
+cp docbook.cat $DTDDIR/catalog
+cp *.dtd *.mod *.dcl $DTDDIR/

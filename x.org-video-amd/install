@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+if [ ! "$UB_ARCH" == "amd64" ];then
+ub_install
+
+# backwards compatibility
+ln -s geode_drv.la "$UB_INSTALLDIR"/usr/lib/xorg/modules/drivers/amd_drv.la
+ln -s geode_drv.so "$UB_INSTALLDIR"/usr/lib/xorg/modules/drivers/amd_drv.so
+fi

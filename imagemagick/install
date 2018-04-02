@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm -r "$UB_INSTALLDIR/usr/share/doc/ImageMagick-${UB_VERSION_HEAD1}/index.html"
+rm -r "$UB_INSTALLDIR/usr/share/doc/ImageMagick-${UB_VERSION_HEAD1}/images"
+rm -r "$UB_INSTALLDIR/usr/share/doc/ImageMagick-${UB_VERSION_HEAD1}/www"
+rm -r "$UB_INSTALLDIR/usr/share/doc/ImageMagick-${UB_VERSION_HEAD1}/LICENSE"
+rm -r "$UB_INSTALLDIR/usr/share/doc/ImageMagick-${UB_VERSION_HEAD1}/NEWS.txt"
+rm -r "$UB_INSTALLDIR/usr/share/doc/ImageMagick-${UB_VERSION_HEAD1}/ChangeLog"
+rmdir "$UB_INSTALLDIR/usr/share/doc/ImageMagick-${UB_VERSION_HEAD1}"

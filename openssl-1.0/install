@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+make \
+    INSTALL_PREFIX="$UB_INSTALLDIR" \
+    install_sw
+
+mkdir -p "$UB_INSTALLDIR/usr/include/openssl-1.0"
+mv "$UB_INSTALLDIR/usr/include/openssl" "$UB_INSTALLDIR/usr/include/openssl-1.0/"
+mv "$UB_INSTALLDIR/usr/lib/openssl-1.0/libcrypto.so.1.0.0" "$UB_INSTALLDIR/usr/lib/"
+mv "$UB_INSTALLDIR/usr/lib/openssl-1.0/libssl.so.1.0.0" "$UB_INSTALLDIR/usr/lib/"
+ln -sf ../libssl.so.1.0.0 "$UB_INSTALLDIR/usr/lib/openssl-1.0/libssl.so"
+ln -sf ../libcrypto.so.1.0.0 "$UB_INSTALLDIR/usr/lib/openssl-1.0/libcrypto.so"
+mv "$UB_INSTALLDIR/usr/bin/openssl" "$UB_INSTALLDIR/usr/bin/openssl-1.0"
+
+sed -e 's|/include$|/include/openssl-1.0|' -i "$UB_INSTALLDIR"/usr/lib/openssl-1.0/pkgconfig/*.pc
+
+rm -rf "$UB_INSTALLDIR"/{etc,usr/bin/c_rehash}

@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+cd luasocket
+make LUAV=5.1 linux
+
+cd ../luasocket52
+make LUAV=5.2 linux
+
+cd ../luasocket53
+make LUAV=5.3 linux
+cd ..

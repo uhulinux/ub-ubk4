@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ ! -f ~/.quake2/baseq2/config.cfg ];then
+    mkdir -p ~/.quake2/baseq2
+    cp /usr/share/games/quake2/config.cfg ~/.quake2/baseq2/
+fi
+sdlquake2 +set basedir /usr/share/games/quake2

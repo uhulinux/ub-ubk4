@@ -1,0 +1,382 @@
+### -*-hoc-*-
+### ====================================================================
+### Demonstrate how fortunes can be randomly selected.  The data used
+### here includes 10 selections of the 3544 fortunes in the
+###
+###	4.4BSD-Lite/usr/src/games/fortune/datfiles/fortunes
+###
+### file, selected for numeric content.  The remainder are from the
+### author's personal collection of quotations, from the New Hacker's
+### Dictionary, and from the Century Dictionary Online.
+###
+### The basic idea is to create hidden variable names with numeric
+### suffixes, and then have the fortune() function create a name with a
+### random suffix, and use eval() to display it.
+### [04-Jan-2002]
+### ====================================================================
+
+___fortune_1 = "10.0 times 0.1 is hardly ever 1.0."
+
+___fortune_2 = "355/113 -- Not the famous irrational number PI, but an incredible\
+simulation!"
+
+___fortune_3 = "A language that doesn't affect the way you think about programming is\
+not worth knowing."
+
+___fortune_4 = "A language that doesn't have everything is actually easier to program\
+in than some that do.\
+		-- Dennis M. Ritchie"
+
+___fortune_5 = "After a number of decimal places, nobody gives a damn."
+
+___fortune_6 = "The generation of random numbers is too important to be left to\
+chance."
+
+___fortune_7 = "The number of arguments is unimportant unless some of them are\
+correct.\
+		-- Ralph Hartley"
+
+___fortune_8 = "The primary purpose of the DATA statement is to give names to\
+constants; instead of referring to pi as 3.141592653589793 at every\
+appearance, the variable PI can be given that value with a DATA\
+statement and used instead of the longer form of the constant.  This\
+also simplifies modifying the program, should the value of pi change.\
+		-- FORTRAN manual for Xerox Computers"
+
+___fortune_9 = "How many seconds are there in a year?  If I tell you there  are\
+3.155  x  10^7, you won't even try to remember it.  On the other hand,\
+who could forget that, to within half a percent, pi seconds is a\
+nanocentury.\
+		-- Tom Duff, Bell Labs"
+
+___fortune_10 = "The only number that is both odd and even is infinity."
+
+### Others added from Nelson H. F. Beebe's collection of quotes
+
+___fortune_11 = "The sum of the reciprocals of the ascending positive nonzero cardinal\
+numbers converges, albeit slowly, to a finite number on all computer\
+arithmetic systems with fixed precision, but the correct answer is\
+nevertheless infinity."
+
+___fortune_12 = "Java's floating-point hurts everyone everywhere.\
+		-- W. Kahan, UC/Berkeley"
+
+___fortune_13 = "Cray's arithmetic hurts scientific computation.\
+		-- W. Kahan, UC/Berkeley"
+
+___fortune_14 = "There is only one mistake that can be made in computer design that is\
+difficult to recover from---not having enough address bits for memory\
+addressing and memory management.  The PDP-11 followed the unbroken\
+tradition of nearly every computer.\
+		-- C. G. Bell and W. D. Strecker (1976)"
+
+___fortune_15 = "A partial list of successful machines that eventually starved to death\
+for lack of address bits includes the PDP-8, PDP-10, PDP-11, Intel 8080,\
+Intel 8086, Intel 80186, Intel 80286, AMI 6502, Zilog Z80, CRAY-1, and\
+CRAY X-MP.\
+		-- David A. Patterson and John L. Hennessy (1990)"
+
+___fortune_16 = "I/O certainly has been lagging in the last decade.\
+		-- Seymour Cray (1976)"
+
+___fortune_17 = "Also, I/O needs a lot of work.\
+		-- David Kuck (1988)"
+
+___fortune_18 = "The architects of the IBM 360 were aware of the importance of address\
+size and planned for the architecture to extend to 32 bits of address.\
+Only 24 bits were used in the IBM 360, however, because the low-end 360\
+models would have been even slower with the larger addresses.\
+Unfortunately, the architects didn't reveal their plans to the software\
+people, and the expansion effort was foiled by programmers who stored\
+extra information in the upper eight ``unused'' address bits.\
+		-- David A. Patterson and John L. Hennessy (1990)"
+
+___fortune_19 = "Today's PCs are a shameful hodgepodge of clumsy technologies that waste\
+untold hours of users' time and soak up productivity like a sponge.\
+		-- Tom R. Halfhill, Byte magazine (December 1995)"
+
+___fortune_20 = "Each line of the space shuttle's flight-control software costs NASA\
+contractor Loral about US$1000, or 10 times more than typical commercial\
+software packages.\
+		-- Alan Joch, Byte magazine (December 1995)"
+
+___fortune_21 = "Distributed computing system: ``One in which the failure of a computer\
+you didn't even know existed can render your own computer unusable.''\
+		-- Leslie Lamport, Scientific American (May 1996)"
+
+___fortune_22 = "... all that programming courses can do, apparently, is make poor\
+programmers a bit better.  Experience, while necessary, seems not to be\
+enough.\
+		-- R. W. Hamming, Computerworld (February 3, 1997)"
+
+___fortune_23 = "But unfortunately, many of the current professors of programming are\
+themselves poor programmers with no real sense of taste or style.\
+		-- R. W. Hamming, Computerworld (February 3, 1997)"
+
+___fortune_24 = "I finally got to try some parallel programming as a graduate student in\
+1975 at the University of Utah.  We had an add-on to our PDP-11 made by\
+a company called Floating Point Systems that did pipelined floating\
+add/multiplies.  Unfortunately, it died before I could debug my program.\
+		-- Jim Blinn (1997)"
+
+___fortune_25 = "This scheme [interval arithmetic] is not so popular in the U.S.A. as it\
+is in parts of Europe, where some people distrust computers.\
+		-- W. Kahan, UC/Berkeley"
+
+___fortune_26 = "The above has caused software people to refer to RISC as ``Relegate the\
+Important Stuff to Compilers''\
+		-- D. Bhandarkar (1995)"
+
+___fortune_27 = "The term RISC should really denote ``Reduced Instruction Set\
+Complexity'' measured in the number of instruction formats and\
+addressing modes.\
+		-- D. Bhandarkar (1995)"
+
+___fortune_28 = "FORTRAN is not a flower, but a weed.  It is hardy, occasionally\
+blooms, and grows in every computer.\
+		-- Alan J. Perlis (1987)"
+
+___fortune_29 = "Men de skal vel foretage sig noget for de store penge, de faar udbetalt\
+af staten.  Der er jo snart saa mange embedsmænd or videnskabsmænd, de\
+kalder det, at en knap kan spytte for dem.\
+		-- Lars Sjældenglad, i Hans Kirks Daglejerne (1936)\
+\
+[English translation:\
+Well they better do something for the great piles of money that they get\
+paid by the state.  There'll soon be so many civil servants and\
+scientists, as they call themselves, that you won't be able to spit\
+without hitting one.\
+		-- Lars Sjældenglad [Hans Kirk's The Day Laborers (1936, 2001)]"
+
+___fortune_30 = "It's interesting (and saddening) to me how little ``science'' there is\
+in ``computer science''.  Independent validation is one of the\
+cornerstones of the scientific method, after all.\
+		-- L. Peter Deutsch (1998)"
+
+___fortune_31 = "Horizontal rules don't apply.\
+		-- Roman Czyborra"
+
+___fortune_32 = "Various mnemonic devices are available for cluttering the storage cells\
+of one's brain with the decimal digits of PI.  In the following\
+sentence, for example, the number of letters in each word represents the\
+successive digits of PI:\
+\
+        How I want a drink, alcoholic of course, after the heavy \
+        lectures involving quantum mechanics!         (3.14159265358979)\
+		-- Petr Beckmann, A history of $\\pi$ (pi) (1968)"
+
+___fortune_33 = "C++: The scientific programming language of the future.  And it always\
+will be.\
+		-- Michael Pernice (2000)"
+
+___fortune_34 = "He suggested using FORTRAN, and everybody barfed.\
+		-- The Shogakukan ``Dictionary of New English''"
+
+___fortune_35 = "Computer programming requires more attention to detail than anything\
+else that human beings have ever done.\
+		-- Donald Knuth (1999)"
+
+___fortune_36 = "Anyone who creates his or her own cryptographic primitive is either a\
+genius or a fool.  Given the genius/fool ratio for our species, the odds\
+aren't very good.\
+		-- Bruce Schneier, ``Secrets and Lies'' (2000)."
+
+### More entries from the jargon.info file (online version of the New
+### Hacker's Dictionary)
+
+___fortune_37 = "The Algol 68-R compiler used to initialize its storage to the character\
+string ``F00LF00LF00LF00L...'' because as a pointer or as a floating\
+point number it caused a crash, and as an integer or a character string\
+it was very recognizable in a dump.  Sadly, one day a very senior\
+professor at Nottingham University wrote a program that called him a\
+fool.  He proceeded to demonstrate the correctness of this assertion by\
+lobbying the university (not quite successfully) to forbid the use of\
+Algol on its computers.\
+		-- New Hacker's Dictionary (1993)"
+
+___fortune_38 = "PI equals 3 -- for small values of PI and large values of 3.\
+		-- New Hacker's Dictionary (1993)"
+
+___fortune_39 = "There are exactly 23,000 prime numbers less than 2^(18).\
+		-- New Hacker's Dictionary (1993)"
+
+___fortune_40 = "21963283741 is the only number such that if you represent it on the\
+PDP-10 as both an integer and a floating-point number, the bit patterns\
+of the two representations are identical.\
+		-- New Hacker's Dictionary (1993)"
+
+___fortune_41 = "2 PI: The number of years it takes to finish one's thesis.\
+		-- New Hacker's Dictionary (1993)"
+
+### From The Century Dictionary Online
+
+___fortune_42 = "null (nul), a. and n.: ... II. n. 1. Something that has no force or\
+meaning; that which is of a NEGATIVE or meaningless character...\
+		--- The Century Dictionary Online (1914)\
+[Evidence that signed zeros were not invented by computer architects!]"
+
+___fortune_43 = "nan, a. and pron. A Middle English form of `none'.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_44 = "nan, n. A small earthern jar.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_45 = "infinity, n. ... This endless addition or addibility of numbers ... is\
+that ... which gives us the clearest and most distinct idea of infinity.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_46 = "overflow-bug, n. A caraboid beetle, Platynus maculicollis, which\
+occasionally appears in enormous numbers, especially in southern\
+California, becoming a pest simply from its numbers, as it does no\
+damage.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_47 = "overflow, v. ... 4. To overcome with drink; intoxicate.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_48 = "underflow, n. A current flowing beneath the surface, or not in the same\
+direction with the surface-current, over a certain region.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_48 = "underflow, n. 2. The water which is now known to be often in transit\
+beneath the apparently dry gravels of rivers in arid districts, such as\
+the southwestern United States.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_49 = "division, n. 2. ... Division is one of the fundamental operations in\
+arithmetic, common algebra, and quaternions; but in other forms of\
+algebra it generally gives an indeterminate quotient, and so loses its\
+importance.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_50 = "Scratch divison, the ordinary method of division before long division\
+came into general use, late in the seventeenth century.  The products\
+were not set down at all, but only the remainders.  The divisor was set\
+down under the dividdent; the first figure of the quotient was then set\
+down and was multiplied by the first figure of the divisor, and the\
+remainder was set down over the corresponding figures of the dividend,\
+which were immediately canceled, together with the first figure of the\
+divisor.  The process having been repeated until the whole divisor had\
+been cancelled, the later was written down again one place further to\
+the left, the second figure of the quotient was set down, and the whole\
+proceeding repeated until a remainder was obtained less than the\
+divisor.  The following shows the successive stages of the division of\
+351 by 13:\
+\
+					2        2\
+	       1       19      19      19       19\
+	351 (  351 (2  351 (2  351 (2  351 (27  351 (27\
+	 13    13      13      133     133      133\
+	                        1       1        1\
+\
+The rule was derived from Arabian writers.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_51 = "Queen Anne (1665--1714, Queen of England and Scotland 1702--1714), who\
+was very fond of brandy: on the statue of Queen Anne in St. Paul's\
+Churchyard a wit wrote:\
+\
+	``Brandy Nan, Brandy Nan, left in the lurch,\
+	Her face to the gin-shop, her back to the church.''\
+\
+A `gin palace' used to stand at the south corner of St. Paul's\
+Churchyard.\
+		-- E. C. Brewer, Dictionary of Phrase and Fable (1898)"
+
+___fortune_52 = "Underflows resemble ants; where there is one there are quite likely many\
+more, and they tend to come one after another.\
+		-- W. Kahan, UC/Berkeley"
+
+___fortune_53 = "Epitaph on a tomb of a Dutch mathematician (1540--1610) in the\
+Pieterskerk in Leiden, The Netherlands (translated to English):\
+	Here lies Mr. Ludolph van Ceulen ... When the diameter is\
+	100000000000000000000000000000000000, the circumference is\
+	greater than 314159265358979323846264338327950288 and less\
+	than 314159265358979323846264338327950289.\
+		-- Hendrik W. Lenstra, in a lecture ``Pi in the\
+                   Pieterskerk'', MSRI Berkeley, April 1, 2001"
+
+
+___fortune_54 = "Requiring correctly rounded results not only improves the accuracy of\
+computations: it is the only way to make numerical software portable.\
+Portability would need a standardization of the elementary functions,\
+and a standard cannot be widely accepted if some implementations are\
+better than the standard.\
+		-- J.-M. Muller\
+		   Elementary Functions: Algorithms and Implementation (1997)"
+
+___fortune_55 = "cipher, n. 2. ... something of no value, consequence, or power.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_56 = "pi, n. 2. The name of a symbol used in geometry for the ratio of the\
+circumference of a circle to its diameter, or 3.1415927: first so used\
+by Euler.\
+		--- The Century Dictionary Online (1914)"
+
+___fortune_57 = "logarithm, n. ... Logarithms were invented and a table published in\
+1614 by John Napier of Scotland; but the kind now chiefly in use were\
+proposed by his contemporary Henry Briggs, professor of geometry in\
+Gresham College in London.  The first extended table of common\
+logarithms, by Adrian Vlacq, 1628, has been the basis of every one\
+since published.\
+		--- The Century Dictionary Online (1914)"
+
+### ====================================================================
+
+___fortune_count = 57
+
+___fortune_seed = int(systime())
+___last_fortune = ""
+___n = 0
+___old_seed = 0
+
+proc fortune() \
+{
+	### Use our own private pseudo-random number sequence, but be
+	### careful to preserve any current sequence.
+
+	global ___fortune_count, ___fortune_seed, ___last_fortune, ___n
+
+	___old_seed = setrand(___fortune_seed)
+ 	___n = randint(1,___fortune_count)
+	___fortune_seed = setrand(___old_seed)
+
+	### NB: Because the current implementation of eval() works by
+	### pushing strings onto the input stack, successive eval()
+	### calls must be in REVERSE order!
+
+	eval("println \"\"")
+	eval("___last_fortune")
+	eval("___last_fortune = ___fortune_" ___n)
+	eval("println \"\"")
+}
+
+proc findfortune(str) \
+{
+	## Print fortune strings containing a particular substring.
+	## Usage:
+	##	findfortune("substring")
+
+	global ___fortune_count
+	n = 0
+
+	s = ""		
+	for (k = 1; k <= ___fortune_count; ++k) \
+	{
+		s = symstr("___fortune_" string(k))
+		if (index(s, str) > 0) { n++; println "\n" s }
+	}
+	if (n > 0) println ""
+}
+
+proc help_findfortune() \
+{
+	print "\tfindfortune(\"substring\") prints fortune strings containing a\n"
+	print "\tparticular substring.\n\n"
+}
+
+proc help_fortune() \
+{
+	print "\tfortune() displays a random fortune cookie message, usually\n"
+	print "\twith a numeric or computer-related content.\n\n"
+}

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+cd js/src
+ub_install
+
+# install some binaries
+install -m 755 shell/js "$UB_INSTALLDIR"/usr/bin/
+install -m 755 jscpucfg "$UB_INSTALLDIR"/usr/bin/

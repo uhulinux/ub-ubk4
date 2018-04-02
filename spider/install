@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/usr/bin ${UB_INSTALLDIR}/usr/share/spider-${UB_VERSION}
+mkdir -p ${UB_INSTALLDIR}/usr/share/man/man6/
+cp spider ${UB_INSTALLDIR}/usr/bin/
+cp doc.* spider.info  ${UB_INSTALLDIR}/usr/share/spider-${UB_VERSION}/
+cp spider.man ${UB_INSTALLDIR}/usr/share/man/man6/spider.6

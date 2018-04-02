@@ -1,0 +1,96 @@
+From 6c8d7229f9c7f039e0386e4a0827d104662ae23e Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <puiterwijk@redhat.com>
+Date: Sun, 19 Feb 2017 23:23:05 +0000
+Subject: [PATCH] Fix DH parameter access for OpenSSL 1.1.0
+
+Signed-off-by: Patrick Uiterwijk <puiterwijk@redhat.com>
+---
+ lib/basic_op.cc | 24 +++++++++++++++++++-----
+ lib/basic_rp.cc | 22 +++++++++++++++++-----
+ 2 files changed, 36 insertions(+), 10 deletions(-)
+
+diff --git a/lib/basic_op.cc b/lib/basic_op.cc
+index 511b51a..00cdd64 100644
+--- a/lib/basic_op.cc
++++ b/lib/basic_op.cc
+@@ -73,12 +73,20 @@ namespace opkele {
+ 	    if(!(dh = DH_new()))
+ 		throw exception_openssl(OPKELE_CP_ "failed to DH_new()");
+ 	    c_pub = util::base64_to_bignum(inm.get_field("dh_consumer_public"));
+-	    try { dh->p = util::base64_to_bignum(inm.get_field("dh_modulus"));
++	    BIGNUM *p;
++	    BIGNUM *g;
++	    try { p = util::base64_to_bignum(inm.get_field("dh_modulus"));
+ 	    }catch(failed_lookup&) {
+-		dh->p = util::dec_to_bignum(data::_default_p); }
+-	    try { dh->g = util::base64_to_bignum(inm.get_field("dh_gen"));
++		p = util::dec_to_bignum(data::_default_p); }
++	    try { g = util::base64_to_bignum(inm.get_field("dh_gen"));
+ 	    }catch(failed_lookup&) {
+-		dh->g = util::dec_to_bignum(data::_default_g); }
++		g = util::dec_to_bignum(data::_default_g); }
++	    #if OPENSSL_VERSION_NUMBER >= 0x10100000L
++	    	DH_set0_pqg(dh, p, NULL, g);
++	    #else
++	    	dh->p = p;
++		dh->g = g;
++	    #endif
+ 	    if(!DH_generate_key(dh))
+ 		throw exception_openssl(OPKELE_CP_ "failed to DH_generate_key()");
+ 	    vector<unsigned char> ck(DH_size(dh)+1);
+@@ -113,7 +121,13 @@ namespace opkele {
+ 	    if(d_len != secret.size())
+ 		throw bad_input(OPKELE_CP_ "Association secret and session MAC are not of the same size");
+ 	    oum.set_field("session_type",sts);
+-	    oum.set_field("dh_server_public",util::bignum_to_base64(dh->pub_key));
++	    const BIGNUM *pub_key;
++	    #if OPENSSL_VERSION_NUMBER >= 0x10100000L
++	    	DH_get0_key(dh, &pub_key, NULL);
++	    #else
++	    	pub_key = dh->pub_key;
++	    #endif
++	    oum.set_field("dh_server_public",util::bignum_to_base64(pub_key));
+ 	    string b64; secret.enxor_to_base64(key_digest,b64);
+ 	    oum.set_field("enc_mac_key",b64);
+ 	}else /* TODO: support cleartext over encrypted connection */
+diff --git a/lib/basic_rp.cc b/lib/basic_rp.cc
+index bc1fb7f..bfb88a9 100644
+--- a/lib/basic_rp.cc
++++ b/lib/basic_rp.cc
+@@ -80,16 +80,28 @@ namespace opkele {
+ 	util::dh_t dh = DH_new();
+ 	if(!dh)
+ 	    throw exception_openssl(OPKELE_CP_ "failed to DH_new()");
+-	dh->p = util::dec_to_bignum(data::_default_p);
+-	dh->g = util::dec_to_bignum(data::_default_g);
++	BIGNUM *p = util::dec_to_bignum(data::_default_p);
++	BIGNUM *g = util::dec_to_bignum(data::_default_g);
++	#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++		DH_set0_pqg(dh, p, NULL, g);
++	#else
++		dh->p = util::dec_to_bignum(data::_default_p);
++		dh->g = util::dec_to_bignum(data::_default_g);
++	#endif
+ 	if(!DH_generate_key(dh))
+ 	    throw exception_openssl(OPKELE_CP_ "failed to DH_generate_key()");
+ 	openid_message_t req;
+ 	req.set_field("ns",OIURI_OPENID20);
+ 	req.set_field("mode","associate");
+-	req.set_field("dh_modulus",util::bignum_to_base64(dh->p));
+-	req.set_field("dh_gen",util::bignum_to_base64(dh->g));
+-	req.set_field("dh_consumer_public",util::bignum_to_base64(dh->pub_key));
++	req.set_field("dh_modulus",util::bignum_to_base64(p));
++	req.set_field("dh_gen",util::bignum_to_base64(g));
++	const BIGNUM *pub_key;
++	#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++		DH_get0_key(dh, &pub_key, NULL);
++	#else
++		pub_key = dh->pub_key;
++	#endif
++	req.set_field("dh_consumer_public",util::bignum_to_base64(pub_key));
+ 	openid_message_t res;
+ 	req.set_field("assoc_type","HMAC-SHA256");
+ 	req.set_field("session_type","DH-SHA256");
+-- 
+2.11.0
+

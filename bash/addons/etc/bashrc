@@ -1,0 +1,63 @@
+# /etc/bashrc
+
+if [ "$HOSTNAME" != "localhost" -a "$HOSTNAME" != "(none)" ]; then
+	pshostname=$'@\\h'
+else
+	pshostname=''
+fi
+psmain=$'\\u'"$pshostname"$':\\w'
+psxtermtitle=''
+# 3x = betűk színe, 4x = háttér színe, 1 = extra fényerő
+# x = 0:fekete 1:piros 2:zöld 3:sárga/barna 4:sötétkék 5:lila 6:világoskék 7:fehér
+if [ "$UID" = "0" ]; then
+	pscolor='1;31'
+else
+	pscolor='1;34'
+fi
+case "$TERM" in
+	linux) psreset=$'\017\e[10;0m\e[?0c' ;;
+	xterm) psreset=$'\017\e[10;0m\e[?9l\e[?25h' ;;
+esac
+PS1=$'\\['"$psreset"$'\e['"$pscolor"$'m\\]'"$psmain"$'\\$ \\[\e[0m'"$psxtermtitle"$'\\]'
+export PS1
+if [ -t 1 -a "$TERM" = "xterm" ]; then
+	PROMPT_COMMAND="builtin echo -ne '\017\e];$USERNAME@$HOSTNAME\a'"
+fi
+unset pshostname psmain psxtermtitle pscolor psreset
+
+# Néhány alias
+alias df='df -h'
+alias du='du -h'
+alias ls='ls --color=auto'
+alias ll='ls -l --color=auto'
+alias la='ls -la --color=auto'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+alias -- +='pushd .'
+alias -- -='popd'
+
+if [ -t 1 ]; then
+	stty ixany
+fi
+
+for i in /etc/bashrc.d/*.sh /etc/bashrc.local; do
+	if [ -f "$i" -a -r "$i" ]; then
+		. "$i"
+	fi
+done
+unset i
+
+# ~/.bash_completion fájl létezése esetén szándékosan nem source-oljuk a
+# globális /etc/bash_completion fájlt. Így akinek nem tetszik, az egy üres
+# ~/.bash_completion fájl létrehozásával letilthatja az "intelligens"
+# TAB-os kiegészítést.
+if [ -r ~/.bash_completion ]; then
+	. ~/.bash_completion
+elif [ -r /etc/bash_completion ]; then
+	. /etc/bash_completion
+fi

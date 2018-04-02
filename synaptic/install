@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp debian/synaptic-pkexec "$UB_INSTALLDIR"/usr/bin/
+
+#We dont need separate desktop file for KDE
+rm -f "$UB_INSTALLDIR"/usr/share/applications/synaptic-kde.desktop
+
+sed -i -e 's|\[pt_PT\]|\[pt\]|g' \
+  "$UB_INSTALLDIR"/usr/share/applications/synaptic.desktop

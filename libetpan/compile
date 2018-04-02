@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+#UB_SKIP_UPDATE_LIBTOOL=yes
+touch README
+
+autoreconf -vif
+ub_compile \
+	--enable-debug \
+	--enable-ipv6 \
+	--with-gnutls \
+	--without-openssl

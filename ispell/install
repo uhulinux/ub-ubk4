@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+sed -i "s@/usr@$UB_INSTALLDIR/usr@g" config.sh
+mkdir -p "$UB_INSTALLDIR/usr/lib/ispell"
+make install

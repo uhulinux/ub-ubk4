@@ -1,0 +1,21 @@
+--- zoo-2.10.orig/zooadd2.c
++++ zoo-2.10/zooadd2.c
+@@ -7,7 +7,9 @@
+ Copyright (C) 1986, 1987 Rahul Dhesi -- All rights reserved
+ (C) Copyright 1988 Rahul Dhesi -- All rights reserved
+ */
++#include <unistd.h>
+ #include "options.h"
++#undef PORTABLE
+ #include "zoo.h"
+ #ifndef	OK_STDIO
+ #include <stdio.h>
+@@ -20,7 +22,7 @@
+ #include "assert.h"
+ #include "debug.h"
+ #include "parse.h"
+-
++int isfdir PARMS((char *));
+ /*
+ Miscellaneous routines to support zooadd().
+ */

@@ -1,0 +1,52 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps
+
+# This replacement masks a composite program icon .SVG down
+# so that only its full-size scalable icon is visible
+PROGRAM_ICONFIX='s/height="272"/height="256"/;'\
+'s/width="632"/width="256"\n'\
+'   x="368"\n'\
+'   y="8"\n'\
+'   viewBox="368, 8, 256, 256"/;'
+
+# This icon file is still in the legacy format
+install -p -m 644 dlls/user32/resources/oic_winlogo.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/wine.svg
+sed -i -e '3s/368/64/' "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/wine.svg
+
+# The rest come from programs/, and contain larger scalable icons
+# with a new layout that requires the PROGRAM_ICONFIX sed adjustment
+install -p -m 644 programs/notepad/notepad.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/notepad.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/notepad.svg
+
+install -p -m 644 programs/regedit/regedit.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/regedit.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/regedit.svg
+
+install -p -m 644 programs/msiexec/msiexec.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/msiexec.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/msiexec.svg
+
+install -p -m 644 programs/winecfg/winecfg.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winecfg.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winecfg.svg
+
+install -p -m 644 programs/winefile/winefile.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winefile.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winefile.svg
+
+install -p -m 644 programs/winemine/winemine.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winemine.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winemine.svg
+
+install -p -m 644 programs/winhlp32/winhelp.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winhelp.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/winhelp.svg
+
+install -p -m 644 programs/wordpad/wordpad.svg \
+ "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/wordpad.svg
+sed -i -e "$PROGRAM_ICONFIX" "$UB_INSTALLDIR"/usr/share/icons/hicolor/scalable/apps/wordpad.svg

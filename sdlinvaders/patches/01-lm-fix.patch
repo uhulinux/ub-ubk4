@@ -1,0 +1,10 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2002-10-25 14:44:54.000000000 +0200
++++ mod/Makefile	2013-01-05 20:23:29.000000000 +0100
+@@ -1,5 +1,5 @@
+ CC=gcc -Wall -ansi -pedantic
+-CFLAGS=-g `sdl-config --cflags --libs` -Wall -ansi -pedantic -lSDL_image
++CFLAGS=-g `sdl-config --cflags --libs` -Wall -ansi -pedantic -lSDL_image -lm
+ SRC=main.c graphics.c SFont.c alien.c weapons.c music.c
+ TARGET=SDLInvaders
+ 

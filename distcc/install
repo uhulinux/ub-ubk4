@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+make DESTDIR=${UB_INSTALLDIR} install
+
+mkdir -p "$UB_INSTALLDIR/usr/lib/distcc"
+for i in \
+	cc	\
+	c++	\
+	gcc	\
+	g++	\
+	i386-pc-linux-gnu-c++	\
+	i386-pc-linux-gnu-gcc	\
+	i386-pc-linux-gnu-g++
+do
+	ln -s ../../bin/distcc "$UB_INSTALLDIR/usr/lib/distcc/$i"
+done
+
+rm -rf "$UB_INSTALLDIR"/usr/share/doc/distcc

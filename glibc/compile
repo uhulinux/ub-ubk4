@@ -1,0 +1,36 @@
+#!/bin/sh -eux
+
+export UB_MAKE_PROCS=1
+cd "$UB_OBJECTDIR"
+
+# The glibc 2.26 supports kernel versions 3.2.0 and above only.
+common_opts=(
+	--with-headers=/usr/include
+	--with-tls
+	--enable-add-ons
+	--enable-kernel=3.2.0
+	--enable-obsolete-rpc
+	--enable-obsolete-nsl
+	--disable-werror
+	--disable-timezone-tools
+)
+
+if [ "$UB_ARCH" == "amd64" ];then
+UB_CONFIGURE_DIR="$UB_COMPILEDIR" ub_configure \
+	${common_opts[@]} \
+	--enable-bind-now \
+	--disable-profile \
+	--enable-lock-elision \
+	libc_cv_slibdir=/lib
+else
+UB_CONFIGURE_DIR="$UB_COMPILEDIR" ub_configure \
+	${common_opts[@]} \
+	--with-cpu=i686
+fi
+
+# glibc doesn't like -Os!
+# build failures with -O1 maybe gcc bug:
+# https://sourceware.org/bugzilla/show_bug.cgi?id=19444
+ub_make \
+	CFLAGS="-O2 -mtune=generic" \
+	user-defined-trusted-dirs=/usr/local/lib

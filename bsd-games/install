@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+patch -i $UB_SRCDIR/patches/installdirs.patch.skip
+./substscr g h Makeconfig.in Makeconfig
+./substscr g h install-man.in install-man
+./substscr g h install-score.in install-score
+make install

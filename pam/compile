@@ -1,0 +1,24 @@
+#!/bin/sh -eux
+
+msgfmt -o po/hu.gmo po/hu.po
+
+cp -a modules/pam_envfeed/Makefile{,.in}
+cp -a modules/pam_locallogin/Makefile{,.in}
+
+autoreconf -i
+
+export UB_MAKE_PROCS=1
+CFLAGS="-fPIC -O2" \
+SGML2TXT=no \
+SGML2LATEX=no \
+PS2PDF=no \
+SGML2PS=no \
+ub_compile \
+	--bindir=/bin \
+	--libdir=/lib \
+	--sbindir=/sbin \
+	--docdir=/usr/share/doc/Packages/pam \
+	--disable-nis
+
+ub_make -C modules/pam_envfeed
+ub_make -C modules/pam_locallogin

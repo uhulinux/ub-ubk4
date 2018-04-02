@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+## Disables because of conflicts:
+# kill - procps
+# login, nologin - shadow
+
+ub_compile \
+    --bindir=/usr/bin \
+    --exec-prefix=/usr \
+	--enable-partx \
+	--enable-raw \
+	--enable-write \
+	\
+	--disable-kill \
+	\
+	--disable-login \
+	--disable-nologin \
+	--disable-chfn-chsh

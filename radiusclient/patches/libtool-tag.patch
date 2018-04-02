@@ -1,0 +1,64 @@
+diff -Naurd radiusclient-0.3.2.orig/lib/Makefile.in radiusclient-0.3.2/lib/Makefile.in
+--- radiusclient-0.3.2.orig/lib/Makefile.in	2002-02-03 14:55:52.000000000 +0100
++++ radiusclient-0.3.2/lib/Makefile.in	2009-07-17 23:23:14.000000000 +0200
+@@ -126,9 +126,9 @@
+ util.lo lock.lo
+ CFLAGS = @CFLAGS@
+ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
++LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
++LINK = $(LIBTOOL) --mode=link --tag=CC $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+ HEADERS =  $(noinst_HEADERS)
+ 
+ DIST_COMMON =  Makefile.am Makefile.in memcmp.c strcasecmp.c strdup.c \
+@@ -198,13 +198,13 @@
+ maintainer-clean-compile:
+ 
+ .c.lo:
+-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
++	$(LIBTOOL) --mode=compile --tag=CC $(COMPILE) -c $<
+ 
+ .s.lo:
+-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
++	$(LIBTOOL) --mode=compile --tag=CC $(COMPILE) -c $<
+ 
+ .S.lo:
+-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
++	$(LIBTOOL) --mode=compile --tag=CC $(COMPILE) -c $<
+ 
+ mostlyclean-libtool:
+ 	-rm -f *.lo
+diff -Naurd radiusclient-0.3.2.orig/src/Makefile.in radiusclient-0.3.2/src/Makefile.in
+--- radiusclient-0.3.2.orig/src/Makefile.in	2002-02-03 14:55:53.000000000 +0100
++++ radiusclient-0.3.2/src/Makefile.in	2009-07-17 23:24:26.000000000 +0200
+@@ -133,9 +133,9 @@
+ radexample_LDFLAGS = 
+ CFLAGS = @CFLAGS@
+ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
++LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
++LINK = $(LIBTOOL) --mode=link --tag=CC $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+ HEADERS =  $(noinst_HEADERS)
+ 
+ DIST_COMMON =  Makefile.am Makefile.in
+@@ -204,13 +204,13 @@
+ maintainer-clean-compile:
+ 
+ .c.lo:
+-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
++	$(LIBTOOL) --mode=compile --tag=CC $(COMPILE) -c $<
+ 
+ .s.lo:
+-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
++	$(LIBTOOL) --mode=compile --tag=CC $(COMPILE) -c $<
+ 
+ .S.lo:
+-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
++	$(LIBTOOL) --mode=compile --tag=CC $(COMPILE) -c $<
+ 
+ mostlyclean-libtool:
+ 	-rm -f *.lo

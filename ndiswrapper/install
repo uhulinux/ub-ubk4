@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+for i in $(ls -1 /lib/modules); do
+	KVERS_UNAME="$i" ub_compile
+	KVERS_UNAME="$i" ub_install
+done

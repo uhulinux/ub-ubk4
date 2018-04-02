@@ -1,0 +1,52 @@
+diff -Naur orig/providers/sqlcipher/sqlite3.c patched/providers/sqlcipher/sqlite3.c
+--- orig/providers/sqlcipher/sqlite3.c	2015-06-13 11:10:56.134739579 +0200
++++ patched/providers/sqlcipher/sqlite3.c	2017-10-05 01:01:00.937961364 +0200
+@@ -15696,14 +15696,14 @@
+ }
+ 
+ static int sqlcipher_openssl_hmac(void *ctx, unsigned char *hmac_key, int key_sz, unsigned char *in, int in_sz, unsigned char *in2, int in2_sz, unsigned char *out) {
+-  HMAC_CTX hctx;
+   unsigned int outlen;
+-  HMAC_CTX_init(&hctx);
+-  HMAC_Init_ex(&hctx, hmac_key, key_sz, EVP_sha1(), NULL);
+-  HMAC_Update(&hctx, in, in_sz);
+-  HMAC_Update(&hctx, in2, in2_sz);
+-  HMAC_Final(&hctx, out, &outlen);
+-  HMAC_CTX_cleanup(&hctx);
++  HMAC_CTX* hctx = HMAC_CTX_new();
++  if(hctx == NULL) return SQLITE_ERROR;
++  HMAC_Init_ex(hctx, hmac_key, key_sz, EVP_sha1(), NULL);
++  HMAC_Update(hctx, in, in_sz);
++  HMAC_Update(hctx, in2, in2_sz);
++  HMAC_Final(hctx, out, &outlen);
++  HMAC_CTX_free(hctx);
+   return SQLITE_OK; 
+ }
+ 
+@@ -15713,18 +15713,19 @@
+ }
+ 
+ static int sqlcipher_openssl_cipher(void *ctx, int mode, unsigned char *key, int key_sz, unsigned char *iv, unsigned char *in, int in_sz, unsigned char *out) {
+-  EVP_CIPHER_CTX ectx;
+   int tmp_csz, csz;
+  
+-  EVP_CipherInit(&ectx, ((openssl_ctx *)ctx)->evp_cipher, NULL, NULL, mode);
+-  EVP_CIPHER_CTX_set_padding(&ectx, 0); // no padding
+-  EVP_CipherInit(&ectx, NULL, key, iv, mode);
+-  EVP_CipherUpdate(&ectx, out, &tmp_csz, in, in_sz);
++  EVP_CIPHER_CTX* ectx = EVP_CIPHER_CTX_new();
++  if(ectx == NULL) return SQLITE_ERROR;
++  EVP_CipherInit_ex(ectx, ((openssl_ctx *)ctx)->evp_cipher, NULL, NULL, NULL, mode);
++  EVP_CIPHER_CTX_set_padding(ectx, 0); // no padding
++  EVP_CipherInit_ex(ectx, NULL, NULL, key, iv, mode);
++  EVP_CipherUpdate(ectx, out, &tmp_csz, in, in_sz);
+   csz = tmp_csz;  
+   out += tmp_csz;
+-  EVP_CipherFinal(&ectx, out, &tmp_csz);
++  EVP_CipherFinal_ex(ectx, out, &tmp_csz);
+   csz += tmp_csz;
+-  EVP_CIPHER_CTX_cleanup(&ectx);
++  EVP_CIPHER_CTX_free(ectx);
+   assert(in_sz == csz);
+   return SQLITE_OK; 
+ }

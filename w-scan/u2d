@@ -1,0 +1,1 @@
+urllist http://wirbel.htpc-forum.de/w_scan/index2.html | splitver  '^(w_scan-[0-9.]+).tar.bz2$' | sed s/w_scan-/0\./g | sort -V | tail -n 1

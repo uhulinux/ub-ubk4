@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+sed -i 's|# bind 127.0.0.1|bind 127.0.0.1|' redis.conf
+sed -i 's|daemonize no|daemonize yes|' redis.conf
+sed -i 's|dir \./|dir /var/lib/redis/|' redis.conf
+sed -i 's|pidfile .*|pidfile /run/redis/redis.pid|' redis.conf
+sed -i 's|logfile stdout|logfile /var/log/redis.log|' redis.conf
+
+ub_compile

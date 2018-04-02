@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+# A -O3 veszélyes
+
+ub_replace -O3 -O2 js/src/config/Makefile.in
+ub_replace -O3 -O2 js/src/config/mkdepend/Makefile.in
+ub_replace -O3 -O2 js/src/configure
+
+cd js/src
+export SHELL=/bin/bash
+rm -rf ctypes/libffi editline
+ub_compile \
+	--with-system-nspr \
+	--enable-threadsafe \
+	--enable-readline \
+	--enable-jemalloc \
+	--enable-system-ffi

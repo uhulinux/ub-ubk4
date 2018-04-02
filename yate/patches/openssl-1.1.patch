@@ -1,0 +1,43 @@
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2017-09-08 13:08:24.000000000 +0200
++++ patched/configure.ac	2018-03-22 16:00:02.091570431 +0100
+@@ -1441,6 +1441,24 @@
+     fi
+     AC_MSG_RESULT([$verssl])
+ fi
++if [[ "x$HAVE_OPENSSL" != "xno" ]]; then
++    HAVE_AESCTR=no
++    SAVE_CFLAGS="$CFLAGS"
++    CFLAGS="$CFLAGS $OPENSSL_INC -Wall -Werror"
++    AC_MSG_CHECKING([for OpenSSL AES_ctr128_encrypt])
++    AC_TRY_COMPILE([
++#include <openssl/aes.h>
++    ],[
++unsigned char *data = 0;
++AES_KEY *key = 0;
++unsigned char ivec[AES_BLOCK_SIZE];
++unsigned char ecount[AES_BLOCK_SIZE];
++unsigned int num = 0;
++AES_ctr128_encrypt(data,data,AES_BLOCK_SIZE,key,ivec,ecount,&num);
++    ],HAVE_AESCTR="yes",OPENSSL_INC="-DNO_AESCTR $OPENSSL_INC")
++    AC_MSG_RESULT([$HAVE_AESCTR])
++    CFLAGS="$SAVE_CFLAGS"
++fi
+ AC_SUBST(HAVE_OPENSSL)
+ AC_SUBST(OPENSSL_INC)
+ AC_SUBST(OPENSSL_LIB)
+diff -Naur orig/modules/openssl.cpp patched/modules/openssl.cpp
+--- orig/modules/openssl.cpp	2017-08-01 15:34:33.000000000 +0200
++++ patched/modules/openssl.cpp	2018-03-22 18:46:42.897137267 +0100
+@@ -30,6 +30,11 @@
+ 
+ #ifndef OPENSSL_NO_AES
+ #include <openssl/aes.h>
++#ifdef NO_AESCTR
++#include <openssl/modes.h>
++#define AES_ctr128_encrypt(in,out,len,key,ivec,ecount,num) \
++     CRYPTO_ctr128_encrypt(in,out,len,key,ivec,ecount,num,(block128_f)AES_encrypt)
++#endif
+ #endif
+ 
+ #ifndef OPENSSL_NO_DES

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+export LDFLAGS="-lm"
+ub_compile \
+	--disable-scrollkeeper

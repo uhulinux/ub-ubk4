@@ -1,0 +1,30 @@
+diff -Naur orig/src/Makefile.am mod/src/Makefile.am
+--- orig/src/Makefile.am	2014-10-30 15:20:01.000000000 +0100
++++ mod/src/Makefile.am	2014-11-06 21:35:37.116419713 +0100
+@@ -119,7 +119,7 @@
+ 	meta/util.h				\
+ 	core/window-props.c			\
+ 	core/window-props.h			\
+-	core/window.c				\
++	core/window.c		if 		\
+ 	core/window-private.h			\
+ 	meta/window.h				\
+ 	core/workspace.c			\
+@@ -202,7 +202,7 @@
+ muffin_SOURCES = core/muffin.c
+ muffin_LDADD = $(MUFFIN_LIBS) libmuffin.la -lclutter-glx-1.0
+ 
+-if HAVE_INTROSPECTION
++#if HAVE_INTROSPECTION
+ include $(INTROSPECTION_MAKEFILE)
+ 
+ # Since we don't make any guarantees about stability and we don't support
+@@ -237,7 +237,7 @@
+ 	$(filter %.c,$(libmuffin_la_SOURCES))
+ @META_GIR@_SCANNERFLAGS = --warn-all --warn-error
+ 
+-endif
++#endif
+ 
+ muffin_theme_viewer_LDADD= $(MUFFIN_LIBS) libmuffin.la
+ 

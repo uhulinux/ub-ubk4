@@ -1,0 +1,183 @@
+## Description: Resolve build warnings about is used deprecated GTK3 API
+## Origin: upstream, https://launchpadlibrarian.net/97001445/gnomeradio-gtk3.patch
+## Bug-Ubuntu: http://launchpad.net/bugs/954993
+## Bug-Debian: 
+## Author: Pojar George
+## Forwarded: not-needed
+Index: b/src/gui.c
+===================================================================
+--- a/src/gui.c	2012-12-03 10:14:54.230899828 +0000
++++ b/src/gui.c	2012-12-03 10:14:54.530899819 +0000
+@@ -928,11 +928,11 @@
+ 	gtk_container_add(GTK_CONTAINER(rec_button), rec_pixmap);
+ 	/*gtk_container_add(GTK_CONTAINER(help_button), help_pixmap);*/
+ 
+-	vbox = gtk_vbox_new(FALSE, 0);
+-	hbox1 = gtk_hbox_new(FALSE, 0);
+-	hbox2 = gtk_hbox_new(FALSE, 0);
+-	menubox = gtk_vbox_new(FALSE, 0);
+-	freq_vol_box = gtk_hbox_new(FALSE, 0);
++	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
++	hbox1 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
++	hbox2 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
++	menubox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
++	freq_vol_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 	
+ 	adj = GTK_ADJUSTMENT(gtk_adjustment_new(SUNSHINE*STEPS, FREQ_MIN*STEPS, FREQ_MAX*STEPS+1, 1, STEPS, 1));
+ /*	volume = GTK_ADJUSTMENT(gtk_adjustment_new(100, 0, 101, 1, 10, 1)); */
+@@ -943,7 +943,7 @@
+ 	gtk_widget_set_size_request(preset_combo, 10, -1);
+ 	label = gtk_label_new(_("Presets:"));
+ 	
+-	freq_scale = gtk_hscale_new(adj);
++	freq_scale = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, adj);
+ 	/*gtk_range_set_update_policy(GTK_RANGE(freq_scale), GTK_UPDATE_DELAYED);*/
+ 	/*vol_scale = gtk_hscale_new(volume);*/
+ 	
+@@ -968,10 +968,10 @@
+ 	signal_s = gdk_pixbuf_new_from_xpm_data((const char**)signal_xpm);
+ 	stereo = gdk_pixbuf_new_from_xpm_data((const char**)stereo_xpm);
+ 	
+-	vseparator1 = gtk_vseparator_new();
+-	/*vseparator2 = gtk_vseparator_new();*/
+-	/*vseparator3 = gtk_vseparator_new();*/
+-	vseparator4 = gtk_vseparator_new();
++	vseparator1 = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
++ 	/*vseparator2 = gtk_vseparator_new();*/
++ 	/*vseparator3 = gtk_vseparator_new();*/
++	vseparator4 = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
+ 	
+ 	gtk_scale_set_digits(GTK_SCALE(freq_scale), 0);
+ 	gtk_scale_set_draw_value(GTK_SCALE(freq_scale), FALSE);
+Index: b/src/prefs.c
+===================================================================
+--- a/src/prefs.c	2012-12-03 10:14:53.722899843 +0000
++++ b/src/prefs.c	2012-12-03 10:14:54.530899819 +0000
+@@ -309,7 +309,7 @@
+ 	g_free(buffer);
+ 	gtk_tree_selection_unselect_all(selection);
+ 	
+-	v_scb = gtk_tree_view_get_vadjustment(GTK_TREE_VIEW(list_view));
++	v_scb = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(list_view));
+ 	gtk_adjustment_set_value(v_scb, gtk_adjustment_get_upper(v_scb));
+ 	
+ 	if (main_visible) {
+@@ -544,11 +544,11 @@
+ 	gtk_window_set_resizable(GTK_WINDOW(dialog), FALSE);
+ 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
+ 
+-	box = gtk_vbox_new(FALSE, 18);
++	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 18);
+ 	gtk_container_set_border_width(GTK_CONTAINER(box), 12);
+ 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box, TRUE, TRUE, 0);
+ 	
+-	settings_box = gtk_vbox_new(FALSE, 6);
++	settings_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+ 	gtk_box_pack_start(GTK_BOX(box), settings_box, TRUE, TRUE, 0);
+ 
+ 	settings_hdr = g_strconcat("<span weight=\"bold\">", _("General Settings"), "</span>", NULL);
+@@ -558,7 +558,7 @@
+ 	g_free(settings_hdr);
+ 	gtk_box_pack_start(GTK_BOX(settings_box), settings_label, TRUE, TRUE, 0);
+ 
+-	presets_box = gtk_vbox_new(FALSE, 6);
++	presets_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+ 	gtk_box_pack_start(GTK_BOX(box), presets_box, TRUE, TRUE, 0);
+ 
+ 	presets_hdr = g_strconcat("<span weight=\"bold\">", _("Presets"), "</span>", NULL);
+@@ -568,7 +568,7 @@
+ 	g_free(presets_hdr);
+ 	gtk_box_pack_start(GTK_BOX(presets_box), presets_label, TRUE, TRUE, 0);
+ 
+-	record_box = gtk_vbox_new(FALSE, 6);
++	record_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
+ 	gtk_box_pack_start(GTK_BOX(box), record_box, TRUE, TRUE, 0);
+ 
+ 	record_hdr = g_strconcat("<span weight=\"bold\">", _("Record Settings"), "</span>", NULL);
+@@ -579,7 +579,7 @@
+ 	gtk_box_pack_start(GTK_BOX(record_box), record_label, TRUE, TRUE, 0);
+ 
+ 	/* The general settings part */
+-	sbox = gtk_hbox_new(FALSE, 0);
++	sbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 	gtk_box_pack_start(GTK_BOX(settings_box), sbox, TRUE, TRUE, 0);
+ 	s_indent_label = gtk_label_new("    ");
+ 	gtk_box_pack_start(GTK_BOX(sbox), s_indent_label, FALSE, FALSE, 0);
+@@ -630,12 +630,12 @@
+ 
+ 	
+ 	/* The presets part */
+-	pbox = gtk_hbox_new(FALSE, 0);
++	pbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 	gtk_box_pack_start(GTK_BOX(presets_box), pbox, TRUE, TRUE, 0);
+ 	p_indent_label = gtk_label_new("    ");
+ 	gtk_box_pack_start(GTK_BOX(pbox), p_indent_label, FALSE, FALSE, 0);
+ 
+-	preset_box = gtk_vbox_new(FALSE, 10);
++	preset_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+ 	gtk_box_pack_start(GTK_BOX(pbox), preset_box, TRUE, TRUE, 0);
+ 
+ 	scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+@@ -668,7 +668,7 @@
+ 	gtk_tree_view_append_column(GTK_TREE_VIEW(list_view), list_column);
+ 	g_signal_connect(G_OBJECT(cellrenderer), "edited", G_CALLBACK(freq_cell_edited_cb), NULL);
+ 
+-	button_box = gtk_hbox_new(FALSE, 12);
++	button_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
+ 
+ 	add_button = gtk_button_new_from_stock(GTK_STOCK_ADD);
+ 	del_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
+@@ -699,7 +699,7 @@
+ 
+ 
+ 	/* The record settings part */
+-	rbox = gtk_hbox_new(FALSE, 0);
++	rbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 	gtk_box_pack_start(GTK_BOX(record_box), rbox, TRUE, TRUE, 0);
+ 	r_indent_label = gtk_label_new("    ");
+ 	gtk_box_pack_start(GTK_BOX(rbox), r_indent_label, FALSE, FALSE, 0);
+Index: b/src/record.c
+===================================================================
+--- a/src/record.c	2012-12-03 10:14:53.722899843 +0000
++++ b/src/record.c	2012-12-03 10:14:54.530899819 +0000
+@@ -110,7 +110,7 @@
+ 	/*gtk_window_set_resizable(GTK_WINDOW(status_dialog), FALSE);*/
+ 	gtk_window_set_default_size(GTK_WINDOW(status_dialog), 400, -1);
+ 
+-	vbox = gtk_vbox_new(FALSE, 5);
++	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+ 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
+ 
+ 	table = gtk_table_new(3, 2, FALSE);
+@@ -153,7 +153,7 @@
+ 	gtk_table_attach(GTK_TABLE(table), size_lbl, 1, 2, 2, 3, GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+ 
+ 	button = gtk_button_new();
+-	btn_box = gtk_hbox_new(FALSE, 0);
++	btn_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 	btn_label = gtk_label_new(_("Stop Recording"));
+ 	btn_pixmap = gtk_image_new_from_stock(GTK_STOCK_STOP, GTK_ICON_SIZE_BUTTON);
+ 	
+@@ -162,7 +162,7 @@
+ 
+ 	gtk_container_add(GTK_CONTAINER(button), btn_box);
+ 	
+-	hbox = gtk_hbox_new(FALSE, 0);
++	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+ 	gtk_box_pack_end (GTK_BOX(hbox), button, TRUE, FALSE, 0);
+ 	
+ 	gtk_box_pack_start (GTK_BOX(vbox), table, TRUE, TRUE, 0);
+Index: b/src/trayicon.c
+===================================================================
+--- a/src/trayicon.c	2012-12-03 10:14:53.722899843 +0000
++++ b/src/trayicon.c	2012-12-03 10:14:54.530899819 +0000
+@@ -134,8 +134,7 @@
+ 	pixbuf = gtk_icon_theme_load_icon(icontheme, "gnomeradio", 22, 0, NULL);
+ 	g_return_if_fail(pixbuf);
+ 	tray_icon = G_OBJECT(gtk_status_icon_new_from_pixbuf(pixbuf));
+-	gdk_pixbuf_unref(pixbuf);
+-
++	g_object_unref(pixbuf);
+ 
+ 	g_signal_connect(G_OBJECT(tray_icon), "activate", 
+ 		G_CALLBACK(tray_activate_cb), (gpointer)app);

@@ -1,0 +1,20 @@
+--- playmidi-2.3/playevents.c.consthertz	Sat Feb 24 09:00:00 1996
++++ playmidi-2.3/playevents.c	Mon Sep  2 12:07:27 1996
+@@ -15,6 +15,7 @@
+  *************************************************************************/
+ #include "playmidi.h"
+ #include <sys/time.h>
++#include <sys/param.h>        /* to get "HZ" defined */
+ 
+ extern int seq_set_patch(int, int);
+ extern void seq_key_pressure(int, int, int, int);
+@@ -153,7 +154,8 @@
+ 		if (dtime > 4096.0)
+ 		    playing = 0;
+ 		else if ((int) current > ticks) {
+-		    SEQ_WAIT_TIME((ticks = (int) current));
++		    /* our ticks are 100/sec, so convert to hardware jiffies */
++		    SEQ_WAIT_TIME(((ticks = (int) current)*HZ)/100);
+ 		    SEQ_DUMPBUF();
+ 		    if (graphics)
+ 			if ((play_status = updatestatus()) != NO_EXIT)

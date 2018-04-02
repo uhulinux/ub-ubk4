@@ -1,0 +1,16 @@
+diff -Naur lmms-1.1.90-orig/plugins/zynaddsubfx/zynaddsubfx/src/UI/ResonanceUI.fl lmms-1.1.90/plugins/zynaddsubfx/zynaddsubfx/src/UI/ResonanceUI.fl
+--- lmms-1.1.90-orig/plugins/zynaddsubfx/zynaddsubfx/src/UI/ResonanceUI.fl	2016-02-16 20:27:44.000000000 +0100
++++ lmms-1.1.90/plugins/zynaddsubfx/zynaddsubfx/src/UI/ResonanceUI.fl	2016-11-21 23:34:59.553616025 +0100
+@@ -133,8 +133,10 @@
+ if ((event==FL_PUSH)||(event==FL_DRAG)){
+   int leftbutton=1;
+   if (Fl::event_button()==FL_RIGHT_MOUSE) leftbutton=0;
+-  if (x_<0) x_=0;if (y_<0) y_=0;
+-  if (x_>=w()) x_=w();if (y_>=h()-1) y_=h()-1;
++  if (x_<0) x_=0;
++  if (y_<0) y_=0;
++  if (x_>=w()) x_=w();
++  if (y_>=h()-1) y_=h()-1;
+ 
+   if ((oldx<0)||(oldx==x_)){
+     int sn=(int)(x_*1.0/w()*N_RES_POINTS);

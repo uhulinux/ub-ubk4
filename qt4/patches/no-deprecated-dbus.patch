@@ -1,0 +1,42 @@
+diff -Naur orig/src/dbus/qdbusintegrator.cpp patched/src/dbus/qdbusintegrator.cpp
+--- orig/src/dbus/qdbusintegrator.cpp	2013-06-07 07:16:52.000000000 +0200
++++ patched/src/dbus/qdbusintegrator.cpp	2013-11-07 02:07:09.934295306 +0100
+@@ -241,7 +241,7 @@
+     QDBusConnectionPrivate *d = static_cast<QDBusConnectionPrivate *>(data);
+ 
+     int flags = q_dbus_watch_get_flags(watch);
+-    int fd = q_dbus_watch_get_fd(watch);
++    int fd = q_dbus_watch_get_unix_fd(watch);
+ 
+     if (QCoreApplication::instance() && QThread::currentThread() == d->thread()) {
+         return qDBusRealAddWatch(d, watch, flags, fd);
+@@ -292,7 +292,7 @@
+     //qDebug("remove watch");
+ 
+     QDBusConnectionPrivate *d = static_cast<QDBusConnectionPrivate *>(data);
+-    int fd = q_dbus_watch_get_fd(watch);
++    int fd = q_dbus_watch_get_unix_fd(watch);
+ 
+     QDBusWatchAndTimeoutLocker locker(RemoveWatchAction, d);
+     QDBusConnectionPrivate::WatcherHash::iterator i = d->watchers.find(fd);
+@@ -323,7 +323,7 @@
+     Q_ASSERT(data);
+ 
+     QDBusConnectionPrivate *d = static_cast<QDBusConnectionPrivate *>(data);
+-    int fd = q_dbus_watch_get_fd(watch);
++    int fd = q_dbus_watch_get_unix_fd(watch);
+ 
+     if (QCoreApplication::instance() && QThread::currentThread() == d->thread()) {
+         qDBusRealToggleWatch(d, watch, fd);
+diff -Naur orig/src/dbus/qdbus_symbols_p.h patched/src/dbus/qdbus_symbols_p.h
+--- orig/src/dbus/qdbus_symbols_p.h	2013-06-07 07:16:52.000000000 +0200
++++ patched/src/dbus/qdbus_symbols_p.h	2013-11-07 02:06:39.902018124 +0100
+@@ -176,7 +176,7 @@
+ 
+ DEFINEFUNC(dbus_bool_t  , dbus_watch_get_enabled, (DBusWatch        *watch),
+            (watch), return)
+-DEFINEFUNC(int , dbus_watch_get_fd, (DBusWatch        *watch),
++DEFINEFUNC(int , dbus_watch_get_unix_fd, (DBusWatch        *watch),
+            (watch), return)
+ DEFINEFUNC(unsigned int , dbus_watch_get_flags, (DBusWatch        *watch),
+            (watch), return)

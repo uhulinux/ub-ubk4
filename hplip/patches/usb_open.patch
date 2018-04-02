@@ -1,0 +1,21 @@
+diff -Naur orig/data/rules/56-hpmud.rules patched/data/rules/56-hpmud.rules
+--- orig/data/rules/56-hpmud.rules	2016-08-26 12:06:59.000000000 +0200
++++ patched/data/rules/56-hpmud.rules	2016-09-12 01:59:09.591097205 +0200
+@@ -1,7 +1,7 @@
+ # HPLIP udev rules file. Notify console user if plugin support is required for this device.
+ 
+ ACTION!="add", GOTO="hpmud_rules_end"
+-SUBSYSTEM=="ppdev", OWNER="root", GROUP="lp", MODE="0664"
++SUBSYSTEM=="ppdev", OWNER="root", GROUP="users", MODE="0666"
+ SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", GOTO="hpmud_usb_rules"
+ GOTO="hpmud_rules_end"
+ 
+@@ -10,7 +10,7 @@
+ ENV{ID_USB_INTERFACES}=="", IMPORT{builtin}="usb_id"
+ 
+ # ENV{ID_HPLIP}="1" is for Ubuntu udev-acl
+-ATTR{idVendor}=="03f0", ENV{ID_USB_INTERFACES}=="*:0701??:*|*:ffcc00:", OWNER="root", GROUP="lp", MODE="0664", ENV{libsane_matched}="yes", ENV{hp_test}="yes", ENV{ID_HPLIP}="1"
++ATTR{idVendor}=="03f0", ENV{ID_USB_INTERFACES}=="*:0701??:*|*:ffcc00:", OWNER="root", GROUP="users", MODE="0666", ENV{libsane_matched}="yes", ENV{hp_test}="yes", ENV{ID_HPLIP}="1"
+ 
+ # This rule will check the smart install feature, plugin status and firmware download for the required printers.
+ ENV{hp_test}=="yes", PROGRAM="/bin/sh -c 'logger -p user.info loading HP Device $env{BUSNUM} $env{DEVNUM}'", RUN+="/bin/sh -c '/usr/bin/nohup /usr/bin/hp-config_usb_printer $env{BUSNUM}:$env{DEVNUM}'"

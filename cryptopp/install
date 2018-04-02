@@ -1,0 +1,19 @@
+#!/bin/sh -eux
+
+export PREFIX='/usr'
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
+cat >"$UB_INSTALLDIR"/usr/lib/pkgconfig/libcrypto++.pc <<EOF
+prefix=/usr
+libdir=\${prefix}/lib
+includedir=\${prefix}/include/cryptopp
+
+Name: libcrypto++
+Description: General purpose cryptographic shared library
+URL: http://www.cryptopp.com
+Version: ${UB_VERSION}
+Requires:
+Libs: -L\${libdir} -lcryptopp
+Cflags: -I\${includedir}
+EOF

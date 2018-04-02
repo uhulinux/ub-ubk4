@@ -1,0 +1,59 @@
+diff -Naur orig/data/menu.in mod/data/menu.in
+--- orig/data/menu.in	2015-08-19 15:22:29.000000000 +0200
++++ mod/data/menu.in	2015-08-20 12:21:28.800494739 +0200
+@@ -55,53 +55,10 @@
+ 
+ [begin] (Blackbox)
+   [exec] (xterm)    {xterm -ls}
+-  [exec] (rxvt)     {rxvt}
+-
+-  [exec] (StarOffice) {soffice}
+-  [exec] (XEmacs)     {xemacs}
+-  [exec] (Acroread)   {acroread}
+-
+-  [submenu] (Graphics)
+-    [exec] (The GIMP)     {gimp}
+-    [exec] (Image Magick) {display}
+-  [end]
+-
+-  [submenu] (Mozilla)
+-    [exec] (Mozilla Navigator)  {mozilla}
+-    [submenu] (More...)
+-      [exec] (Mozilla Mail)     {mozilla -mail}
+-      [exec] (Mozilla News)     {mozilla -news}
+-      [exec] (Mozilla Composer) {mozilla -edit}
+-    [end]
+-  [end]
+-
+-  [submenu] (X Utilities)
+-    [exec] (Xfontsel) {xfontsel}
+-    [exec] (Xman)     {xman}
+-    [exec] (Xcalc)    {xcalc}
+-    [exec] (Xload)    {xload}
+-  [end]
+- 
+-  [submenu] (Styles) {Choose a style...}
+-    [stylesdir] (@pkgdatadir@/styles)
+-  [end]
+-
+-  [workspaces] (Workspace List)
+-  [config] (Configuration)
+-
+-  [reconfig] (Reconfigure)
++  [include] (/usr/share/blackbox/bbmenu)
++  [exec] (Menügnerátor) {mmaker -c BlackBox > /usr/share/blackbox/bbmenu}
+   [restart] (Restart)
+-  [submenu] (Others)              {Other Window Managers}
+-    [restart] (Start FVWM)        {fvwm}
+-    [restart] (Start WindowMaker) {wmaker}
+-    [restart] (Start Afterstep)   {afterstep}
+-    [restart] (Start Enlightenment) {enlightenment}
+-    [restart] (Start TWM)         {twm}
+-    [restart] (Start KWM)         {kwm}
+-  [end]
+-
+   [exit] (Exit)
+ [end]
+ 
+ # End of example menu.
+-

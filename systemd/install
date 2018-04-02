@@ -1,0 +1,42 @@
+#!/bin/sh -eux
+
+ub_install
+
+# nem kell rpm macro
+rm -rf "$UB_INSTALLDIR"/usr/lib/rpm
+
+# udev symlinks
+for i in udev{monitor,trigger,settle,control,info,test}; do
+	ln -s udevadm "$UB_INSTALLDIR"/usr/bin/"$i"
+done
+
+ln -s /usr/lib/systemd/systemd-udevd "$UB_INSTALLDIR"/sbin/udevd
+
+find "$UB_INSTALLDIR"/usr/lib/udev/ -type f -maxdepth 1 | while read n; do
+	name="$(basename $n)"
+	ln -s ../usr/lib/udev/"$name" "$UB_INSTALLDIR"/sbin/"$name"
+done
+
+# hiányzó csoportok helyettesítése
+for file in "$UB_INSTALLDIR"/usr/lib/udev/rules.d/*.rules; do
+	for group in cdrom dialout disk floppy input kmem render tape utmp uucp; do
+		sed -e "s/GROUP=\"$group\"/GROUP=\"media\"/g" -i "$file"
+	done
+	sed -e "s/GROUP=\"kvm\"/GROUP=\"users\"/g" -i "$file"
+done
+
+# halt poweroff reboot shutdown symlinks
+for i in halt poweroff reboot shutdown; do
+	ln -s systemctl "$UB_INSTALLDIR"/usr/bin/$i
+done
+
+# postboot_run
+for target in graphical multi-user; do
+	mkdir -p "$UB_INSTALLDIR"/etc/systemd/system/"$target".target.wants
+	ln -s /usr/lib/systemd/system/postboot_run.service "$UB_INSTALLDIR"/etc/systemd/system/$target.target.wants/postboot_run.service
+done
+
+# compat symlinks
+# for i in libsystemd-{daemon,id128,journal,login}; do
+#	ln -s libsystemd.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig/"$i".pc
+# done

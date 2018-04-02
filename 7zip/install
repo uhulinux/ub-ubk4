@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install DEST_DIR="$UB_INSTALLDIR"
+
+#remove duplicate doc files
+rm -rf "$UB_INSTALLDIR"/usr/share/doc/p7zip/{ChangeLog,README}
+#remove gui doc files
+rm -rf "$UB_INSTALLDIR"/usr/share/doc/p7zip/DOC/MANUAL/fm
+# ln -sf 7za "$UB_INSTALLDIR"/usr/bin/7z

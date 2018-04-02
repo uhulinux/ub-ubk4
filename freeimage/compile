@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+# A -O3 veszélyes
+ub_replace -O3 -O2 Examples/Linux/Makefile
+ub_replace -O3 -O2 Makefile.gnu
+ub_replace -O3 -O2 Makefile.fip
+ub_replace -O3 -O2 Source/ZLib/configure
+
+ub_make

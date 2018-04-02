@@ -1,0 +1,15 @@
+[Unit]
+Description=Postboot RUN script
+DefaultDependencies=no
+After=network-online.target
+Wants=network-online.target
+ConditionKernelCommandLine=RUN
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/systemd/scripts/postboot_run.sh
+
+
+[Install]
+WantedBy=multi-user.target graphical.target

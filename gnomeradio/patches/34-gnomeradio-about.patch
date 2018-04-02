@@ -1,0 +1,242 @@
+Description: Added license dialog and website label to "About" dialog.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/997473
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -819,43 +819,57 @@ static void mute_button_toggled_cb(GtkBu
+ }
+ */
+ 
++static char *get_license_text (void)
++{
++	const gchar *license[] = {
++		N_("Gnomeradio is free software; you can redistribute it and/or modify "
++		   "it under the terms of the GNU General Public License as published by "
++		   "the Free Software Foundation; either version 2 of the License, or "
++		   "(at your option) any later version."),
++		N_("Gnomeradio is distributed in the hope that it will be useful, "
++		   "but WITHOUT ANY WARRANTY; without even the implied warranty of "
++		   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
++		   "GNU General Public License for more details."),
++		N_("You should have received a copy of the GNU General Public License "
++		   "along with Gnomeradio; if not, write to the Free Software Foundation, "
++		   "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA")
++	};
++	return g_strjoin ("\n\n",
++			  _(license[0]),
++			  _(license[1]),
++			  _(license[2]),
++			  NULL);
++}
++
+ static void about_button_clicked_cb(GtkButton *button, gpointer data)
+ {
+-	GdkPixbuf *app_icon;
+-	GtkIconTheme *icontheme;
+ 	static GtkWidget *about;
+-	const char *authors[] = {"Jörgen Scheibengruber <mfcn@gmx.de>", NULL};
+-	char *text;
++	const char *authors[] = {"J\xc3\xb6rgen Scheibengruber <mfcn@gmx.de>", NULL};
+ 	
+ 	/* Feel free to put your names here translators :-) */
+ 	char *translators = _("TRANSLATORS");
++	char *license = get_license_text ();
+ 
+-	if (about)
+-	{
+-		gtk_window_present(GTK_WINDOW(about));
++	if (about) {
++		gtk_window_present (GTK_WINDOW (about));
+ 		return;
+ 	}
+-	icontheme = gtk_icon_theme_get_default();
+-	app_icon = gtk_icon_theme_load_icon(icontheme, "gnomeradio", 48, 0, NULL);
+ 
+-#ifdef HAVE_LIRC	
+-	text =_("Gnomeradio is a FM-Tuner application for the GNOME desktop. "
+-							"It should work with all tuner hardware that is supported by the video4linux drivers.\n\n"
+-							"This version has been compiled with LIRC support.");
+-#else
+-	text =_("Gnomeradio is a FM-Tuner application for the GNOME desktop. "
+-							"It should work with all tuner hardware that is supported by the video4linux drivers.\n\n"
+-							"This version has been compiled without LIRC support.");
+-#endif
+-	
+-	gtk_show_about_dialog(NULL,
+-				"program-name", "Gnomeradio",
+-				"version", VERSION,
+-				"copyright", "Copyright 2001 - 2006 Jörgen Scheibengruber",
+-				"comments", text,
+-				"authors", (const char **) authors,
+-				"translator-credits", strcmp("TRANSLATORS", translators) ? translators : NULL,
+-				"logo", app_icon, NULL);
++	gtk_show_about_dialog (NULL,
++			       "version", VERSION,
++			       "copyright", _("Copyright \xc2\xa9 2001 - 2006 J\xc3\xb6rgen Scheibengruber"),
++			       "comments", _("Listen to FM radio"),
++			       "authors", authors,
++			       "translator-credits", strcmp("TRANSLATORS", translators) ? translators : NULL,
++			       "logo-icon-name", "gnomeradio",
++			       "license", license,
++			       "wrap-license", TRUE,
++			       "website-label", _("Gnomeradio Website"),
++			       "website", "http://www.gnome.org/projects/gnomeradio/",
++			       NULL);
++
++	g_free (license);
++
+ 	/* about = gnome_about_new ("Gnomeradio", VERSION, "Copyright 2001 - 2006 Jörgen Scheibengruber",
+ 							text, (const char **) authors, NULL, 
+ 							strcmp("TRANSLATORS", translators) ? translators : NULL, 
+@@ -1091,7 +1105,7 @@ GtkWidget* gnome_radio_gui(void)
+ 	gtk_widget_set_tooltip_text(scfw_button, _("Scan Forwards"));
+ 	gtk_widget_set_tooltip_text(stbw_button, _("0.05 MHz Backwards"));
+ 	gtk_widget_set_tooltip_text(stfw_button, _("0.05 MHz Forwards"));
+-	gtk_widget_set_tooltip_text(about_button, _("About Gnomeradio"));
++	gtk_widget_set_tooltip_text(about_button, _("About"));
+ 	gtk_widget_set_tooltip_text(rec_button, _("Record radio as Wave, OGG or MP3"));
+ 	gtk_widget_set_tooltip_text(prefs_button, _("Edit your Preferences"));
+ 	gtk_widget_set_tooltip_text(mute_button, _("Adjust the Volume"));
+Index: gnomeradio-1.8/data/icons/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/data/icons/Makefile.am
++++ gnomeradio-1.8/data/icons/Makefile.am
+@@ -1,11 +1,13 @@
+ SUBDIRS = 16x16 22x22 24x24 32x32 48x48 scalable
+ 
+ gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
+-install-data-hook:
++install-data-hook: update-icon-cache
++uninstall-hook: update-icon-cache
++update-icon-cache:
+ 	@-if test -z "$(DESTDIR)"; then \
+ 	echo "Updating Gtk icon cache."; \
+ 	$(gtk_update_icon_cache); \
+ 	else \
+-	echo "*** Icon cache not updated.  After install, run this:"; \
++	echo "*** Icon cache not updated.  After (un)install, run this:"; \
+ 	echo "***   $(gtk_update_icon_cache)"; \
+ 	fi
+Index: gnomeradio-1.8/COPYING
+===================================================================
+--- gnomeradio-1.8.orig/COPYING
++++ gnomeradio-1.8/COPYING
+@@ -1,12 +1,12 @@
+-		    GNU GENERAL PUBLIC LICENSE
+-		       Version 2, June 1991
++                    GNU GENERAL PUBLIC LICENSE
++                       Version 2, June 1991
+ 
+- Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ Copyright (C) 1989, 1991 Free Software Foundation, Inc.,
++ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+  Everyone is permitted to copy and distribute verbatim copies
+  of this license document, but changing it is not allowed.
+ 
+-			    Preamble
++                            Preamble
+ 
+   The licenses for most software are designed to take away your
+ freedom to share and change it.  By contrast, the GNU General Public
+@@ -15,7 +15,7 @@ software--to make sure the software is f
+ General Public License applies to most of the Free Software
+ Foundation's software and to any other program whose authors commit to
+ using it.  (Some other Free Software Foundation software is covered by
+-the GNU Library General Public License instead.)  You can apply it to
++the GNU Lesser General Public License instead.)  You can apply it to
+ your programs, too.
+ 
+   When we speak of free software, we are referring to freedom, not
+@@ -55,8 +55,8 @@ patent must be licensed for everyone's f
+ 
+   The precise terms and conditions for copying, distribution and
+ modification follow.
+-
+-		    GNU GENERAL PUBLIC LICENSE
++
++                    GNU GENERAL PUBLIC LICENSE
+    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ 
+   0. This License applies to any program or other work which contains
+@@ -110,7 +110,7 @@ above, provided that you also meet all o
+     License.  (Exception: if the Program itself is interactive but
+     does not normally print such an announcement, your work based on
+     the Program is not required to print an announcement.)
+-
++
+ These requirements apply to the modified work as a whole.  If
+ identifiable sections of that work are not derived from the Program,
+ and can be reasonably considered independent and separate works in
+@@ -168,7 +168,7 @@ access to copy from a designated place,
+ access to copy the source code from the same place counts as
+ distribution of the source code, even though third parties are not
+ compelled to copy the source along with the object code.
+-
++
+   4. You may not copy, modify, sublicense, or distribute the Program
+ except as expressly provided under this License.  Any attempt
+ otherwise to copy, modify, sublicense or distribute the Program is
+@@ -225,7 +225,7 @@ impose that choice.
+ 
+ This section is intended to make thoroughly clear what is believed to
+ be a consequence of the rest of this License.
+-
++
+   8. If the distribution and/or use of the Program is restricted in
+ certain countries either by patents or by copyrighted interfaces, the
+ original copyright holder who places the Program under this License
+@@ -255,7 +255,7 @@ make exceptions for this.  Our decision
+ of preserving the free status of all derivatives of our free software and
+ of promoting the sharing and reuse of software generally.
+ 
+-			    NO WARRANTY
++                            NO WARRANTY
+ 
+   11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+ FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
+@@ -277,9 +277,9 @@ YOU OR THIRD PARTIES OR A FAILURE OF THE
+ PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGES.
+ 
+-		     END OF TERMS AND CONDITIONS
+-
+-	    How to Apply These Terms to Your New Programs
++                     END OF TERMS AND CONDITIONS
++
++            How to Apply These Terms to Your New Programs
+ 
+   If you develop a new program, and you want it to be of the greatest
+ possible use to the public, the best way to achieve this is to make it
+@@ -303,17 +303,16 @@ the "copyright" line and a pointer to wh
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+ 
+-    You should have received a copy of the GNU General Public License
+-    along with this program; if not, write to the Free Software
+-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-
++    You should have received a copy of the GNU General Public License along
++    with this program; if not, write to the Free Software Foundation, Inc.,
++    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ 
+ Also add information on how to contact you by electronic and paper mail.
+ 
+ If the program is interactive, make it output a short notice like this
+ when it starts in an interactive mode:
+ 
+-    Gnomovision version 69, Copyright (C) year  name of author
++    Gnomovision version 69, Copyright (C) year name of author
+     Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+     This is free software, and you are welcome to redistribute it
+     under certain conditions; type `show c' for details.
+@@ -336,5 +335,6 @@ necessary.  Here is a sample; alter the
+ This General Public License does not permit incorporating your program into
+ proprietary programs.  If your program is a subroutine library, you may
+ consider it more useful to permit linking proprietary applications with the
+-library.  If this is what you want to do, use the GNU Library General
++library.  If this is what you want to do, use the GNU Lesser General
+ Public License instead of this License.
++

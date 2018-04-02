@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+export MODE="64"
+else
+export MODE="32"
+fi
+ub_make

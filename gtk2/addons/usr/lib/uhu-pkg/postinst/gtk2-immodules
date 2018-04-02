@@ -1,0 +1,24 @@
+#!/bin/sh -e
+
+query_immodules ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Querying GTK2 input methods ..."
+	gtk-query-immodules-2.0 > /etc/gtk-2.0/gtk.immodules
+	true > /var/lib/uhu-pkg/gtk-immodules
+	while [ ! /var/lib/uhu-pkg/gtk-immodules -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/gtk-immodules -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/gtk-immodules
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ -f /var/lib/uhu-pkg/gtk-immodules -a /var/lib/uhu-pkg/gtk-immodules -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "gtk2" -o "$1" = "+" ]; then
+	query_immodules
+elif grep -q '^/usr/lib/gtk-2\.0/2\.2\.0/immodules/' /var/lib/dpkg/info/"$1".list; then
+	query_immodules
+fi

@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+cd amd64
+else
+cd i386
+fi
+cp Credits.txt LICENSE.txt README.txt ../
+cp -a . -- "$UB_INSTALLDIR"/usr/share/Phun/
+ln -s /usr/lib/libpng16.so.16 "$UB_INSTALLDIR"/usr/share/Phun/lib/libpng.so.3
+ln -sf Magyar.png "$UB_INSTALLDIR"/usr/share/Phun/data/language/Hungarian.png
+rm -rf "$UB_INSTALLDIR"/usr/share/Phun/*.txt

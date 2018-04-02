@@ -1,0 +1,101 @@
+Description: Fix the build on GNU/kFreeBSD
+Forwarded: no
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2011-03-15
+
+--- a/configure
++++ b/configure
+@@ -1621,7 +1621,7 @@
+ 
+ 
+ case "$target_os" in
+-    linux-gnu*)
++    linux-gnu*|kfreebsd-gnu*)
+         case "$target_cpu" in
+             powerpc*)
+ 	            COMMON_CFLAGS="-Wall -DTARGET_LinuxPPC -DTARGET_Linux"
+--- a/configure.in
++++ b/configure.in
+@@ -40,7 +40,7 @@
+ 
+ dnl Aqui es donde se chequeara el SO, pero solo hay una opcion xD
+ case "$target_os" in
+-    linux-gnu*)
++    linux-gnu*|kfreebsd-gnu*)
+         case "$target_cpu" in
+             powerpc*)
+ 	            COMMON_CFLAGS="-Wall -DTARGET_LinuxPPC -DTARGET_Linux"
+--- a/fxi/src/i_func.c
++++ b/fxi/src/i_func.c
+@@ -3577,6 +3577,27 @@
+ 
+ #elif !defined(TARGET_MAC)
+     /* Linux and other Unix (?) */
++#ifdef __FreeBSD_kernel__
++    long pagesize, freeram;
++
++    pagesize = sysconf(_SC_PAGE_SIZE);
++    freeram = sysconf(_SC_AVPHYS_PAGES);
++    if (pagesize == -1L)
++    {
++	gr_con_printf (_("No pagesize"));
++	return -1;
++    }
++    else if (freeram == -1L)
++    {
++	gr_con_printf (_("No freeram"));
++	return -1;
++    }
++    else
++    {
++	gr_con_printf (_("Returning %d"), pagesize * freeram);
++	return pagesize * freeram;
++    }
++#else
+     struct sysinfo meminf;
+     int fv;
+ 
+@@ -3596,6 +3617,7 @@
+         gr_con_printf (_("Returning %d"), meminf.freeram);
+         return meminf.freeram;
+     }
++#endif
+ 
+     return -1;
+ 
+@@ -3623,6 +3645,27 @@
+ 
+ #elif !defined(TARGET_MAC)
+     /* Linux and other Unix (?) */
++#ifdef __FreeBSD_kernel__
++    long pagesize, totalram;
++
++    pagesize = sysconf(_SC_PAGE_SIZE);
++    totalram = sysconf(_SC_PHYS_PAGES);
++    if (pagesize == -1L)
++    {
++	gr_con_printf (_("No pagesize"));
++	return -1;
++    }
++    else if (totalram == -1L)
++    {
++	gr_con_printf (_("No totalram"));
++	return -1;
++    }
++    else
++    {
++	gr_con_printf (_("Returning %d"), pagesize * totalram);
++	return pagesize * totalram;
++    }
++#else
+     struct sysinfo meminf;
+     int fv;
+ 
+@@ -3636,6 +3679,7 @@
+         return meminf.totalram * meminf.mem_unit;
+     else
+         return meminf.totalram;
++#endif
+ 
+     return -1;
+ 

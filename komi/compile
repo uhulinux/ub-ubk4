@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+make DATAPATH=/usr/share/games/komidata/ \
+	BINPATH=/usr/bin/ \
+	MANPATH=/usr/share/man/man6/ \
+	SDL_LIB="`sdl-config --libs` -lSDL_mixer" \
+all

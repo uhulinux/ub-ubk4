@@ -1,0 +1,175 @@
+Subject: Enable shading support as a command line option "--shading".
+Author: Fabian Greffrath <fabian+debian@greffrath.com>
+
+--- a/Makefile
++++ b/Makefile
+@@ -65,6 +65,7 @@ SRCS += wl_agent.cpp
+ SRCS += wl_atmos.cpp
+ SRCS += wl_cloudsky.cpp
+ SRCS += wl_debug.cpp
++SRCS += wl_shade.cpp
+ SRCS += wl_draw.cpp
+ SRCS += wl_floorceiling.cpp
+ SRCS += wl_game.cpp
+--- a/version.h
++++ b/version.h
+@@ -32,7 +32,7 @@
+ #endif
+ 
+ //#define USE_FEATUREFLAGS    // Enables the level feature flags (see bottom of wl_def.h)
+-//#define USE_SHADING         // Enables shading support (see wl_shade.cpp)
++#define USE_SHADING         // Enables shading support (see wl_shade.cpp)
+ //#define USE_DIR3DSPR        // Enables directional 3d sprites (see wl_dir3dspr.cpp)
+ //#define USE_FLOORCEILINGTEX // Enables floor and ceiling textures stored in the third mapplane (see wl_floorceiling.cpp)
+ //#define USE_HIRES           // Enables high resolution textures/sprites (128x128)
+--- a/wl_def.h
++++ b/wl_def.h
+@@ -933,6 +933,7 @@ extern  int      param_audiobuffer;
+ extern  int      param_mission;
+ extern  boolean  param_goodtimes;
+ extern  boolean  param_ignorenumchunks;
++extern  boolean  param_shading;
+ 
+ 
+ void            NewGame (int difficulty,int episode);
+--- a/wl_dir3dspr.cpp
++++ b/wl_dir3dspr.cpp
+@@ -101,10 +101,11 @@ void Scale3DShaper(int x1, int x2, int s
+                         if(scrstarty!=screndy && screndy>0)
+                         {
+ #ifdef USE_SHADING
++                            if (param_shading)
+                             col=curshades[((byte *)shape)[newstart+j]];
+-#else
+-                            col=((byte *)shape)[newstart+j];
++                            else
+ #endif
++                            col=((byte *)shape)[newstart+j];
+                             if(scrstarty<0) scrstarty=0;
+                             if(screndy>viewheight) screndy=viewheight,j=endy;
+ 
+--- a/wl_draw.cpp
++++ b/wl_draw.cpp
+@@ -307,10 +307,11 @@ void ScalePost()
+     if(yw < 0) return;
+ 
+ #ifdef USE_SHADING
++    if (param_shading)
+     col = curshades[postsource[yw]];
+-#else
+-    col = postsource[yw];
++    else
+ #endif
++    col = postsource[yw];
+     yendoffs = yendoffs * vbufPitch + postx;
+     while(yoffs <= yendoffs)
+     {
+@@ -326,10 +327,11 @@ void ScalePost()
+             while(ywcount <= 0);
+             if(yw < 0) break;
+ #ifdef USE_SHADING
++            if (param_shading)
+             col = curshades[postsource[yw]];
+-#else
+-            col = postsource[yw];
++            else
+ #endif
++            col = postsource[yw];
+         }
+         yendoffs -= vbufPitch;
+     }
+@@ -640,16 +642,21 @@ void VGAClearScreen (void)
+     int y;
+     byte *ptr = vbuf;
+ #ifdef USE_SHADING
++    if (param_shading)
++    {
+     for(y = 0; y < viewheight / 2; y++, ptr += vbufPitch)
+         memset(ptr, shadetable[GetShade((viewheight / 2 - y) << 3)][ceiling], viewwidth);
+     for(; y < viewheight; y++, ptr += vbufPitch)
+         memset(ptr, shadetable[GetShade((y - viewheight / 2) << 3)][0x19], viewwidth);
+-#else
++    }
++    else
++#endif
++    {
+     for(y = 0; y < viewheight / 2; y++, ptr += vbufPitch)
+         memset(ptr, ceiling, viewwidth);
+     for(; y < viewheight; y++, ptr += vbufPitch)
+         memset(ptr, 0x19, viewwidth);
+-#endif
++    }
+ }
+ 
+ //==========================================================================
+@@ -756,10 +763,11 @@ void ScaleShape (int xcenter, int shapen
+                             if(scrstarty!=screndy && screndy>0)
+                             {
+ #ifdef USE_SHADING
++                                if (param_shading)
+                                 col=curshades[((byte *)shape)[newstart+j]];
+-#else
+-                                col=((byte *)shape)[newstart+j];
++                                else
+ #endif
++                                col=((byte *)shape)[newstart+j];
+                                 if(scrstarty<0) scrstarty=0;
+                                 if(screndy>viewheight) screndy=viewheight,j=endy;
+ 
+--- a/wl_floorceiling.cpp
++++ b/wl_floorceiling.cpp
+@@ -66,16 +66,21 @@ void DrawFloorAndCeiling(byte *vbuf, uns
+                     v = (gv >> (TILESHIFT - TEXTURESHIFT)) & (TEXTURESIZE - 1);
+                     unsigned texoffs = (u << TEXTURESHIFT) + (TEXTURESIZE - 1) - v;
+ #ifdef USE_SHADING
++                    if (param_shading)
++                    {
+                     if(curtoptex)
+                         vbuf[top_add] = curshades[toptex[texoffs]];
+                     if(curbottex)
+                         vbuf[bot_add] = curshades[bottex[texoffs]];
+-#else
++                    }
++                    else
++#endif
++                    {
+                     if(curtoptex)
+                         vbuf[top_add] = toptex[texoffs];
+                     if(curbottex)
+                         vbuf[bot_add] = bottex[texoffs];
+-#endif
++                    }
+                 }
+             }
+             gu += du;
+--- a/wl_main.cpp
++++ b/wl_main.cpp
+@@ -102,6 +102,7 @@ int     param_audiobuffer = 2048 / (4410
+ int     param_mission = 0;
+ boolean param_goodtimes = false;
+ boolean param_ignorenumchunks = false;
++boolean param_shading = false;
+ 
+ /*
+ =============================================================================
+@@ -1717,6 +1718,10 @@ void CheckParameters(int argc, char *arg
+             fullscreen = false;
+             forcegrabmouse = true;
+         }
++#ifdef USE_SHADING
++        else IFARG("--shading")
++            param_shading = true;
++#endif
+         else IFARG("--res")
+         {
+             if(i + 2 >= argc)
+@@ -1897,6 +1902,9 @@ void CheckParameters(int argc, char *arg
+             " --hard                 Sets the difficulty to hard for tedlevel\n"
+             " --nowait               Skips intro screens\n"
+             " --windowed[-mouse]     Starts the game in a window [and grabs mouse]\n"
++#ifdef USE_SHADING
++            " --shading              Enables shading support\n"
++#endif
+             " --res <width> <height> Sets the screen resolution\n"
+             "                        (must be multiple of 320x200 or 320x240)\n"
+             " --resf <w> <h>         Sets any screen resolution >= 320x200\n"

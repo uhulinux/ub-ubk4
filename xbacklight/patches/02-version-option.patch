@@ -1,0 +1,58 @@
+From b2a08484343f0ae9b50309d3f69eeb0931223f14 Mon Sep 17 00:00:00 2001
+From: Alan Coopersmith <alan.coopersmith@oracle.com>
+Date: Mon, 25 Nov 2013 22:40:43 -0800
+Subject: Add -version option to print program version
+
+Signed-off-by: Alan Coopersmith <alan.coopersmith@oracle.com>
+
+diff --git a/man/xbacklight.man b/man/xbacklight.man
+index c3aa48e..5a10d6a 100644
+--- a/man/xbacklight.man
++++ b/man/xbacklight.man
+@@ -46,6 +46,8 @@ Increases brightness by the specified amount.
+ Decreases brightness by the specified amount.
+ .IP \-help
+ Print out a summary of the usage and exit.
++.IP \-version
++Print out the program version and exit.
+ .IP "\-time \fImilliseconds\fP"
+ Length of time to spend fading the backlight between old and new value.
+ Default is 200.
+diff --git a/xbacklight.c b/xbacklight.c
+index 4f384cc..21cca72 100644
+--- a/xbacklight.c
++++ b/xbacklight.c
+@@ -19,6 +19,11 @@
+  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+  * OF THIS SOFTWARE.
+  */
++
++#ifdef HAVE_CONFIG_H
++# include "config.h"
++#endif
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
+@@ -44,6 +49,7 @@ usage (int exitcode)
+             "  where options are:\n"
+             "  -display <display> or -d <display>\n"
+             "  -help\n"
++            "  -version\n"
+             "  -set <percentage> or = <percentage>\n"
+             "  -inc <percentage> or + <percentage>\n"
+             "  -dec <percentage> or - <percentage>\n"
+@@ -200,6 +206,11 @@ main (int argc, char **argv)
+ 	{
+ 	    usage (0);
+ 	}
++	if (!strcmp (argv[i], "-version"))
++	{
++	    puts (PACKAGE_STRING);
++	    exit (0);
++	}
+ 	fprintf(stderr, "%s: unrecognized argument '%s'\n",
+ 		program_name, argv[i]);
+ 	usage (1);
+-- 
+cgit v0.10.2

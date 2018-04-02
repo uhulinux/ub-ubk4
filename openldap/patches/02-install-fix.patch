@@ -1,0 +1,14 @@
+--- a/servers/slapd/Makefile.in.orig	2013-10-23 15:22:11.000000000 +0200
++++ a/servers/slapd/Makefile.in	2013-10-23 15:23:24.000000000 +0200
+@@ -445,9 +445,9 @@
+ 
+ install-db-config: FORCE
+ 	@-$(MKDIR) $(DESTDIR)$(localstatedir) $(DESTDIR)$(sysconfdir)
+-	@-$(INSTALL) -m 700 -d $(DESTDIR)$(localstatedir)/openldap-data
++	@-$(INSTALL) -m 700 -d $(DESTDIR)$(localstatedir)/lib/openldap
+ 	$(INSTALL) $(INSTALLFLAGS) -m 600 $(srcdir)/DB_CONFIG \
+-		$(DESTDIR)$(localstatedir)/openldap-data/DB_CONFIG.example
++		$(DESTDIR)$(localstatedir)/lib/openldap/DB_CONFIG.example
+ 	$(INSTALL) $(INSTALLFLAGS) -m 600 $(srcdir)/DB_CONFIG \
+ 		$(DESTDIR)$(sysconfdir)/DB_CONFIG.example
+ 

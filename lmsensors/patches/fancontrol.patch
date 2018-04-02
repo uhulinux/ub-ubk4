@@ -1,0 +1,30 @@
+diff -Naur orig/prog/pwm/fancontrol patched/prog/pwm/fancontrol
+--- orig/prog/pwm/fancontrol	2015-06-25 12:34:52.000000000 +0200
++++ patched/prog/pwm/fancontrol	2016-04-01 07:53:11.821696225 +0200
+@@ -350,7 +350,7 @@
+ cd $DIR
+ 
+ # Check for configuration change
+-if [ "$DIR" != "/" ] && [ -z "$DEVPATH" -o -z "$DEVNAME" ]
++if [[ "$DIR" != "/"  && ( -z "$DEVPATH"  ||  -z "$DEVNAME" ) ]]
+ then
+ 	echo "Configuration is too old, please run pwmconfig again" >&2
+ 	exit 1
+@@ -401,7 +401,7 @@
+ 	# It didn't work, try pwmN_enable=1 pwmN=255
+ 	echo 1 > $ENABLE 2> /dev/null
+ 	echo $MAX > $1
+-	if [ `cat $ENABLE` -eq 1 -a `cat $1` -ge 190 ]
++	if [ `cat $ENABLE` -eq 1 ] && [ `cat $1` -ge 190 ]
+ 	then
+ 		# Success
+ 		return 0
+@@ -541,7 +541,7 @@
+ 		else
+ 		  # calculate the new value from temperature and settings
+ 		  pwmval="(${tval}-${mint})*(${maxpwm}-${minso})/(${maxt}-${mint})+${minso}"
+-		  if [ $pwmpval -eq 0 -o $min_fanval -eq 0 ]
++		  if [ $pwmpval -eq 0 ] || [ $min_fanval -eq 0 ]
+ 		  then # if fan was stopped start it using a safe value
+ 		  	echo $minsa > $pwmo
+ 			# Sleep while still handling signals

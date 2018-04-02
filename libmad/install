@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
+cat >"$UB_INSTALLDIR"/usr/lib/pkgconfig/mad.pc <<END
+prefix=/usr
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: mad
+Description: MPEG Audio Decoder
+Requires:
+Version: $UB_VERSION
+Libs: -L\${libdir} -lmad -lm
+Cflags: -I\${includedir}
+END

@@ -1,0 +1,57 @@
+diff -Naur orig/config/Makefile.in patched/config/Makefile.in
+--- orig/config/Makefile.in	2011-09-25 09:42:16.000000000 +0200
++++ patched/config/Makefile.in	2013-04-08 00:51:02.464607271 +0200
+@@ -318,8 +318,6 @@
+ 	Xstartup
+ 
+ dist_xdmscript_SCRIPTS = \
+-	GiveConsole \
+-	TakeConsole \
+ 	Xsetup_0 \
+ 	Xwilling
+ 
+diff -Naur orig/config/xdm-config.cpp patched/config/xdm-config.cpp
+--- orig/config/xdm-config.cpp	2011-09-25 09:35:47.000000000 +0200
++++ patched/config/xdm-config.cpp	2013-04-08 00:52:37.825487433 +0200
+@@ -16,7 +16,7 @@
+ DisplayManager.servers:		XDMCONFIGDIR/Xservers
+ DisplayManager.accessFile:	XDMCONFIGDIR/Xaccess
+ DisplayManager*resources:	XDMCONFIGDIR/Xresources
+-DisplayManager.willing:		SU nobody -s /bin/sh -c XDMSCRIPTDIR/Xwilling
++DisplayManager.willing:		SU nobody -s /bin/bash -c XDMSCRIPTDIR/Xwilling
+ ! All displays should use authorization, but we cannot be sure
+ ! X terminals may not be configured that way, so they will require
+ ! individual resource settings.
+@@ -29,8 +29,8 @@
+ DisplayManager*authComplain:	true
+ ! The following three resources set up display :0 as the console.
+ DisplayManager._0.setup:	XDMSCRIPTDIR/Xsetup_0
+-DisplayManager._0.startup:	XDMSCRIPTDIR/GiveConsole
+-DisplayManager._0.reset:	XDMSCRIPTDIR/TakeConsole
++DisplayManager._0.startup:	XDMSCRIPTDIR/Xstartup
++DisplayManager._0.reset:	XDMSCRIPTDIR/Xreset
+ #ifdef XPM
+ DisplayManager*loginmoveInterval:	10
+ #endif /* XPM */
+diff -Naur orig/config/Xreset.cpp patched/config/Xreset.cpp
+--- orig/config/Xreset.cpp	2011-09-25 09:35:47.000000000 +0200
++++ patched/config/Xreset.cpp	2013-04-08 00:51:02.464607271 +0200
+@@ -1,5 +1,4 @@
+ XCOMM!/bin/sh
+-XCOMM Deregister a login. (Derived from TakeConsole as follows:)
++XCOMM Xreset - Run as root after session exits
+ XCOMM
+-BINDIR/sessreg -d -w WTMP_FILE -u UTMP_FILE \
+-	-x XDMCONFIGDIR/Xservers -l $DISPLAY -h "" $USER
++BINDIR/sessreg -d -l "$DISPLAY" "$USER"
+diff -Naur orig/config/Xstartup.cpp patched/config/Xstartup.cpp
+--- orig/config/Xstartup.cpp	2011-09-25 09:35:47.000000000 +0200
++++ patched/config/Xstartup.cpp	2013-04-08 00:54:02.146265552 +0200
+@@ -1,5 +1,4 @@
+ XCOMM!/bin/sh
+-XCOMM Register a login (derived from GiveConsole as follows:)
++XCOMM Xstartup - Run as root before session starts
+ XCOMM
+-exec BINDIR/sessreg  -a -w WTMP_FILE -u UTMP_FILE \
+-	-x XDMCONFIGDIR/Xservers -l $DISPLAY -h "" $USER
++exec BINDIR/sessreg  -a -l "$DISPLAY" "$USER"

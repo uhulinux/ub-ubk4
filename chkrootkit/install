@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp -a chkrootkit "$UB_INSTALLDIR"/usr/sbin/
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/chkrootkit
+cp -a chk{lastlog,utmp,wtmp,dirs,proc} ifpromisc check_wtmpx strings-static \
+	"$UB_INSTALLDIR"/usr/lib/chkrootkit/

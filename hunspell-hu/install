@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/myspell
+
+cp -a hu_HU_u8_morph.aff "$UB_INSTALLDIR"/usr/share/myspell/hu_HU.aff
+cp -a hu_HU_u8_morph.dic "$UB_INSTALLDIR"/usr/share/myspell/hu_HU.dic
+ln -s hu_HU.aff "$UB_INSTALLDIR"/usr/share/myspell/hungarian.aff
+ln -s hu_HU.aff "$UB_INSTALLDIR"/usr/share/myspell/magyar.aff
+ln -s hu_HU.aff "$UB_INSTALLDIR"/usr/share/myspell/hu.aff
+ln -s hu_HU.dic "$UB_INSTALLDIR"/usr/share/myspell/hungarian.dic
+ln -s hu_HU.dic "$UB_INSTALLDIR"/usr/share/myspell/magyar.dic
+ln -s hu_HU.dic "$UB_INSTALLDIR"/usr/share/myspell/hu.dic

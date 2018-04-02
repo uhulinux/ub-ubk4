@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+./waf configure \
+		--prefix=/usr \
+		--dbus \
+		--classic \
+		--alsa
+./waf build

@@ -1,0 +1,13 @@
+diff -Naur lesspipe-1.71-orig/lesspipe.sh.in lesspipe-1.71/lesspipe.sh.in
+--- lesspipe-1.71-orig/lesspipe.sh.in	2010-04-06 14:35:09.000000000 +0200
++++ lesspipe-1.71/lesspipe.sh.in	2010-05-17 15:22:57.000000000 +0200
+@@ -28,7 +28,8 @@
+ # Author:  Wolfgang Friebel, DESY (Wolfgang.Friebel AT desy.de)
+ #
+ #===============================================================================
+-setopt KSH_ARRAYS SH_WORD_SPLIT 2>/dev/null
++exec 2>/dev/null
++setopt KSH_ARRAYS SH_WORD_SPLIT
+ set +o noclobber
+ #ifdef tar
+ tarcmd='tar'

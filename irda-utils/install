@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install \
+	RPM_BUILD_ROOT="$UB_INSTALLDIR" \
+	ROOT="$UB_INSTALLDIR" \
+	PREFIX="$UB_INSTALLDIR/usr"
+
+# gzipped man pages are corrupted in 0.9.17
+rm "$UB_INSTALLDIR"/usr/share/man/man?/*.gz

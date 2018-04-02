@@ -1,0 +1,26 @@
+#!/bin/sh -eux
+
+sed -ri 's/^=item ([0-9]+)/=item C<\1>/' doc/{apps,crypto,ssl}/*.pod
+
+# A -O3 veszélyes
+ub_replace -O3 -O2 Configure
+
+if [ "$UB_ARCH" == "amd64" ];then
+opts=" linux-x86_64 enable-ec_nistp_64_gcc_128"
+else
+opts=" linux-elf"
+fi
+
+./Configure \
+	--prefix=/usr \
+	--openssldir=/etc/ssl \
+	--libdir=lib/openssl-1.0 \
+	$opts \
+	shared \
+	no-sse2 \
+	-Wa,--noexecstack \
+	no-ssl3-method \
+	zlib-dynamic
+
+make depend
+make

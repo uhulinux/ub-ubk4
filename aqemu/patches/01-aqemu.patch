@@ -1,0 +1,12 @@
+diff -Naurd a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2010-12-21 17:45:24.000000000 +0100
++++ b/CMakeLists.txt	2011-02-07 19:34:01.000000000 +0100
+@@ -271,7 +271,7 @@
+ 		
+ 		SET( _out ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.rcc )
+ 		
+-		ADD_CUSTOM_COMMAND( OUTPUT ${_out} COMMAND rcc ARGS ${_in} -binary -o ${_out} DEPENDS ${_in} )
++		ADD_CUSTOM_COMMAND( OUTPUT ${_out} COMMAND /usr/lib/qt5/bin/rcc ARGS ${_in} -binary -o ${_out} DEPENDS ${_in} )
+ 		
+ 		SET( ${_sources} ${${_sources}} ${_out} )
+ 	ENDFOREACH( curFile )

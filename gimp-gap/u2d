@@ -1,0 +1,2 @@
+minor=$(urllist http://download.gimp.org/pub/gimp/plug-ins/ | splitver '^v([0-9.]+)$' | sort -V | tail -n 1)
+urllist http://download.gimp.org/pub/gimp/plug-ins/v"$minor"/gap/ | parsever | sort -V | tail -n 1

@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+make \
+	GLOBAL_INSTALL_DIR="$UB_INSTALLDIR"/usr/bin \
+	GLOBAL_RESOURCES_DIR="$UB_INSTALLDIR"/usr/share/antiword \
+	global_install
+install -m 644 Docs/antiword.1 "$UB_INSTALLDIR"/usr/share/man/man1/

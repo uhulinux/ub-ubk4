@@ -1,0 +1,12 @@
+diff -Naur orig/compile.sh mod/compile.sh
+--- orig/compile.sh	2013-05-30 16:07:32.000000000 +0200
++++ mod/compile.sh	2014-03-23 21:20:48.000000000 +0100
+@@ -290,7 +290,7 @@
+ # Try -lsocket (e.g. QNX)
+ if [ "x$has_pthread" = xno ]; then
+   CFLAGS_THREAD=
+-  LFLAGS_THREAD="-lsocket"
++  LFLAGS_THREAD=
+   GLFW_CFLAGS="$CFLAGS_OLD $CFLAGS_THREAD"
+   GLFW_LFLAGS="$LFLAGS_OLD $LFLAGS_THREAD"
+   if { (eval echo $self: \"$link\") 1>&5; (eval $link) 2>&5; }; then

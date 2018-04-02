@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+# install -Dm755 build/libfreshwrapper-flashplayer.so "$UB_INSTALLDIR"/usr/lib/firefox/plugins/libfreshwrapper-flashplayer.so
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/mozilla/plugins
+ln -s ../../firefox/plugins/libfreshwrapper-flashplayer.so "$UB_INSTALLDIR"/usr/lib/mozilla/plugins/
+
+install -Dm644 data/freshwrapper.conf.example \
+    "$UB_INSTALLDIR"/usr/share/freshplayerplugin/freshwrapper.conf.example
+
+install -Dm644 data/freshwrapper.conf.example "$UB_INSTALLDIR"/etc/freshwrapper.conf

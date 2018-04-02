@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+cd groff-utf8
+ub_install
+
+ln -s soelim   "$UB_INSTALLDIR"/usr/bin/zsoelim
+ln -s soelim.1 "$UB_INSTALLDIR"/usr/share/man/man1/zsoelim.1
+
+rm -r "$UB_INSTALLDIR"/usr/share/doc/groff-"$UB_VERSION"

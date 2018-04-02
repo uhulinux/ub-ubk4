@@ -1,0 +1,12 @@
+diff -Naur prboom-2.2.6.orig/src/Makefile.in prboom-2.2.6/src/Makefile.in
+--- prboom-2.2.6.orig/src/Makefile.in	2004-09-27 19:31:32.000000000 +0200
++++ prboom-2.2.6/src/Makefile.in	2006-01-06 17:35:48.000000000 +0100
+@@ -276,7 +276,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ SUBDIRS = SDL POSIX MAC
+-gamesdir = $(prefix)/games
++gamesdir = $(prefix)/bin
+ prboom_game_server_SOURCES = d_server.c protocol.h
+ prboom_game_server_LDADD = POSIX/libposixdoom.a SDL/i_network.o @NET_LIBS@ @SDL_LIBS@
+ COMMON_SRC = \

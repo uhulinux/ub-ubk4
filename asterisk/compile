@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+md5sum pjproject-2.6.tar.bz2 >pjproject-2.6.md5
+cp pjproject-2.6* /tmp/
+ub_compile \
+	--with-sounds-cache=no

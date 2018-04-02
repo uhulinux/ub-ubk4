@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+rm *.stamp
+autoreconf -vif
+ub_compile \
+	--enable-man \
+	--enable-gtk3

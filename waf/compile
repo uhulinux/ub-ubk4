@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+# Extract license
+head -n 30 waf | tail -n 25 > LICENSE
+
+# Fix spaces to tabs.
+find -iname '*.py' -exec sed -i 's/ \{8\}/\t/g' '{}' +
+
+./waf-light \
+	configure --prefix=/usr \
+	build --make-waf

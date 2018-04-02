@@ -1,0 +1,97 @@
+diff -Naur orig/data/mint.pc.in patched/data/mint.pc.in
+--- orig/data/mint.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/mint.pc.in	2016-11-08 03:31:44.003390781 +0100
+@@ -1,5 +1,5 @@
+-prefix=${pcfiledir}/../..
+-exec_prefix=${pcfiledir}/../..
++prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=${prefix}/lib
+ includedir=${prefix}/include/mono-@API_VER@
+ 
+diff -Naur orig/data/mono-2.pc.in patched/data/mono-2.pc.in
+--- orig/data/mono-2.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/mono-2.pc.in	2016-11-08 03:34:59.342407199 +0100
+@@ -1,5 +1,5 @@
+-prefix=${pcfiledir}/../..
+-exec_prefix=${pcfiledir}/../..
++prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=${prefix}/@reloc_libdir@
+ includedir=${prefix}/include/mono-@API_VER@
+ sysconfdir=@sysconfdir@
+diff -Naur orig/data/mono-cairo.pc.in patched/data/mono-cairo.pc.in
+--- orig/data/mono-cairo.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/mono-cairo.pc.in	2016-11-08 03:35:12.878616233 +0100
+@@ -1,5 +1,5 @@
+-prefix=${pcfiledir}/../..
+-exec_prefix=${pcfiledir}/../..
++prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=${prefix}/@reloc_libdir@
+ includedir=${prefix}/include
+ 
+diff -Naur orig/data/mono-lineeditor.pc.in patched/data/mono-lineeditor.pc.in
+--- orig/data/mono-lineeditor.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/mono-lineeditor.pc.in	2016-11-08 03:35:29.810877695 +0100
+@@ -1,4 +1,4 @@
+-prefix=${pcfiledir}/../..
++prefix=@prefix@
+ assemblies_dir=${prefix}/lib/mono-source-libs
+ Sources=${assemblies_dir}/getline.cs
+ 
+diff -Naur orig/data/mono-nunit.pc.in patched/data/mono-nunit.pc.in
+--- orig/data/mono-nunit.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/mono-nunit.pc.in	2016-11-08 03:35:46.231131259 +0100
+@@ -1,4 +1,4 @@
+-prefix=${pcfiledir}/../..
++prefix=@prefix@
+ exec_prefix=${prefix}
+ libdir=${exec_prefix}/lib
+ 
+@@ -6,4 +6,4 @@
+ Name: Mono NUnit
+ Description: Mono's version of NUnit
+ Version: @VERSION@
+-Libs: -r:${libdir}/mono/4.5/nunit.core.dll -r:${libdir}/mono/4.5/nunit.core.interfaces.dll -r:${libdir}/mono/4.5/nunit.core.extensions.dll -r:${libdir}/mono/4.5/nunit.framework.dll -r:${libdir}/mono/4.5/nunit.framework.extensions.dll -r:${libdir}/mono/4.5/nunit.mocks.dll -r:${libdir}/mono/4.5/nunit.util.dll -r:${libdir}/mono/4.5/nunit-console-runner.dll 
++Libs: -r:${libdir}/mono/4.5/nunit.core.dll -r:${libdir}/mono/4.5/nunit.core.interfaces.dll -r:${libdir}/mono/4.5/nunit.core.extensions.dll -r:${libdir}/mono/4.5/nunit.framework.dll -r:${libdir}/mono/4.5/nunit.framework.extensions.dll -r:${libdir}/mono/4.5/nunit.mocks.dll -r:${libdir}/mono/4.5/nunit.util.dll -r:${libdir}/mono/4.5/nunit-console-runner.dll
+diff -Naur orig/data/mono-options.pc.in patched/data/mono-options.pc.in
+--- orig/data/mono-options.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/mono-options.pc.in	2016-11-08 03:36:00.371349613 +0100
+@@ -1,4 +1,4 @@
+-prefix=${pcfiledir}/../..
++prefix=@prefix@
+ assemblies_dir=${prefix}/lib/mono-source-libs
+ Sources=${assemblies_dir}/Options.cs
+ 
+diff -Naur orig/data/mono.pc.in patched/data/mono.pc.in
+--- orig/data/mono.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/mono.pc.in	2016-11-08 03:34:47.962231466 +0100
+@@ -1,5 +1,5 @@
+-prefix=${pcfiledir}/../..
+-exec_prefix=${pcfiledir}/../..
++prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=${prefix}/@reloc_libdir@
+ includedir=${prefix}/include/mono-@API_VER@
+ sysconfdir=@sysconfdir@
+diff -Naur orig/data/monosgen-2.pc.in patched/data/monosgen-2.pc.in
+--- orig/data/monosgen-2.pc.in	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/monosgen-2.pc.in	2016-11-08 03:31:04.866786425 +0100
+@@ -1,5 +1,5 @@
+-prefix=${pcfiledir}/../..
+-exec_prefix=${pcfiledir}/../..
++prefix=@prefix@
++exec_prefix=@exec_prefix@
+ libdir=${prefix}/@reloc_libdir@
+ includedir=${prefix}/include/mono-@API_VER@
+ sysconfdir=@sysconfdir@
+diff -Naur orig/data/xbuild12.pc patched/data/xbuild12.pc
+--- orig/data/xbuild12.pc	2016-11-02 14:40:22.000000000 +0100
++++ patched/data/xbuild12.pc	2016-11-08 03:31:31.115191762 +0100
+@@ -1,4 +1,4 @@
+-bindir=${pcfiledir}/../mono/xbuild/12.0/bin
++bindir=@reloc_libdir@/mono/xbuild/12.0/bin
+ 
+ Name: XBuild 12.0
+ Description: XBuild/MSBuild 12.0

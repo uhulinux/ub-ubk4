@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+install -Dm644 {.,"$UB_INSTALLDIR"/usr}/include/libstemmer.h
+install -D {.,"$UB_INSTALLDIR"/usr/lib}/libstemmer.so.0.0.0
+ln -s libstemmer.so.0.0.0 "$UB_INSTALLDIR/usr/lib/libstemmer.so.0"
+ln -s libstemmer.so.0 "$UB_INSTALLDIR/usr/lib/libstemmer.so"

@@ -1,0 +1,57 @@
+## Description: Changed audio source from osssrc to autoaudiosrc that automatically detects an appropriate audio source to use.
+## Origin: upstream, no
+## Bug-Ubuntu: http://launchpad.net/bugs/1004761
+## Author: Pojar George 
+## Forwarded: no
+Index: b/src/rec_tech.c
+===================================================================
+--- a/src/rec_tech.c	2012-12-03 10:14:54.942899807 +0000
++++ b/src/rec_tech.c	2012-12-03 10:14:56.370899764 +0000
+@@ -42,8 +42,8 @@
+ recording_start(const char* filename)
+ {
+ 	GMAudioProfile *profile;
+-	GstElement *pipeline, *oss_src, *encoder, *filesink;
+-	pipeline = oss_src = encoder = filesink = NULL;
++	GstElement *pipeline, *source, *encoder, *filesink;
++	pipeline = source = encoder = filesink = NULL;
+ 	
+ 	profile = gm_audio_profile_lookup(rec_settings.profile);
+ 	g_assert(profile);
+@@ -54,9 +54,9 @@
+ 		goto error;
+ 	}		
+ 	
+-	oss_src = gst_element_factory_make("osssrc", "oss-source");
+-	if (!oss_src) {
+-		g_warning(_("Could not open Gstreamer OSS Source. Verify your Gstreamer OSS subsystem installation!\n"));
++	source = gst_element_factory_make("autoaudiosrc", "audio_source");
++	if (!source) {
++		g_warning(_("Could not open Gstreamer AUDIO Source. Verify your Gstreamer AUDIO subsystem installation!\n"));
+ 		goto error;
+ 	}
+ 	
+@@ -82,10 +82,10 @@
+ 	}
+ 	
+ 	/* Add the elements to the pipeline */
+-	gst_bin_add_many(GST_BIN(pipeline), oss_src, encoder, filesink, NULL);
++	gst_bin_add_many(GST_BIN(pipeline), source, encoder, filesink, NULL);
+ 	
+ 	/* Link it all together */
+-	if (!gst_element_link_many(oss_src, encoder, filesink, NULL)) {
++	if (!gst_element_link_many(source, encoder, filesink, NULL)) {
+ 		g_warning("Could not link elements. This is bad!\n");
+ 		goto error;
+ 	}
+@@ -103,8 +103,8 @@
+ error:
+ 	if (pipeline)
+ 		gst_object_unref(GST_OBJECT(pipeline));
+-	if (oss_src)
+-		gst_object_unref(GST_OBJECT(oss_src));
++	if (source)
++		gst_object_unref(GST_OBJECT(source));
+ 	if (encoder)
+ 		gst_object_unref(GST_OBJECT(encoder));
+ 	if (filesink)

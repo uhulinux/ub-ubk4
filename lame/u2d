@@ -1,0 +1,2 @@
+minor=$(sflist lame lame | splitver '^([0-9.]+)' | sort -V | tail -n 1)
+sflist lame lame/"$minor" | splitver '^lame-([0-9.]+).tar.(gz|bz2|xz)$' | sort -V | tail -n 1

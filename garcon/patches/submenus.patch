@@ -1,0 +1,1207 @@
+diff -Naur orig/data/xfce/Makefile.am patched/data/xfce/Makefile.am
+--- orig/data/xfce/Makefile.am	2014-02-22 23:26:36.000000000 +0100
++++ patched/data/xfce/Makefile.am	2014-05-26 19:28:35.789376352 +0200
+@@ -24,19 +24,67 @@
+ directorydir = $(datadir)/desktop-directories
+ directory_in_files =							\
+ 	xfce-accessories.directory.in					\
++	xfce-accessories-sub-archiving.directory.in			\
++	xfce-accessories-sub-calculator.directory.in			\
++	xfce-accessories-sub-clock.directory.in				\
++	xfce-accessories-sub-compression.directory.in			\
++	xfce-accessories-sub-filetool.directory.in			\
++	xfce-accessories-sub-telephonytool.directory.in			\
++	xfce-accessories-sub-texteditor.directory.in			\
++	xfce-accessories-sub-texttool.directory.in			\
+ 	xfce-development.directory.in					\
+ 	xfce-education.directory.in					\
+ 	xfce-games.directory.in						\
++	xfce-games-sub-action.directory.in				\
++	xfce-games-sub-adventure.directory.in				\
++	xfce-games-sub-arcade.directory.in				\
++	xfce-games-sub-board.directory.in				\
++	xfce-games-sub-blocks.directory.in				\
++	xfce-games-sub-card.directory.in				\
++	xfce-games-sub-kids.directory.in				\
++	xfce-games-sub-logic.directory.in				\
++	xfce-games-sub-roleplaying.directory.in				\
++	xfce-games-sub-simulation.directory.in				\
++	xfce-games-sub-sports.directory.in				\
++	xfce-games-sub-strategy.directory.in				\
+ 	xfce-graphics.directory.in					\
+ 	xfce-hardware.directory.in					\
+ 	xfce-multimedia.directory.in					\
++	xfce-multimedia-sub-audiovideoediting.directory.in		\
++	xfce-multimedia-sub-discburning.directory.in			\
++	xfce-multimedia-sub-midi.directory.in				\
++	xfce-multimedia-sub-mixer.directory.in				\
++	xfce-multimedia-sub-music.directory.in				\
++	xfce-multimedia-sub-player.directory.in				\
++	xfce-multimedia-sub-recorder.directory.in			\
++	xfce-multimedia-sub-sequencer.directory.in			\
++	xfce-multimedia-sub-tuner.directory.in				\
++	xfce-multimedia-sub-tv.directory.in				\
+ 	xfce-network.directory.in					\
++	xfce-network-sub-chat.directory.in				\
++	xfce-network-sub-dialup.directory.in				\
++	xfce-network-sub-feed.directory.in				\
++	xfce-network-sub-filetransfer.directory.in			\
++	xfce-network-sub-hamradio.directory.in				\
++	xfce-network-sub-instantmessaging.directory.in			\
++	xfce-network-sub-ircclient.directory.in				\
++	xfce-network-sub-news.directory.in				\
++	xfce-network-sub-p2p.directory.in				\
++	xfce-network-sub-remoteaccess.directory.in			\
++	xfce-network-sub-telephony.directory.in				\
++	xfce-network-sub-videoconference.directory.in			\
++	xfce-network-sub-webbrowser.directory.in			\
+ 	xfce-office.directory.in					\
+ 	xfce-other.directory.in						\
+ 	xfce-personal.directory.in					\
+ 	xfce-screensavers.directory.in					\
+ 	xfce-settings.directory.in					\
+-	xfce-system.directory.in
++	xfce-system.directory.in					\
++	xfce-system-sub-emulator.directory.in				\
++	xfce-system-sub-filemanager.directory.in			\
++	xfce-system-sub-filesystem.directory.in				\
++	xfce-system-sub-monitor.directory.in				\
++	xfce-system-sub-terminalemulator.directory.in
+ 
+ directory_DATA = $(directory_in_files:.directory.in=.directory)
+ @INTLTOOL_DIRECTORY_RULE@
+diff -Naur orig/data/xfce/Makefile.in patched/data/xfce/Makefile.in
+--- orig/data/xfce/Makefile.in	2014-02-22 23:26:38.000000000 +0100
++++ patched/data/xfce/Makefile.in	2014-05-26 19:28:35.789376352 +0200
+@@ -361,19 +361,68 @@
+ directorydir = $(datadir)/desktop-directories
+ directory_in_files = \
+ 	xfce-accessories.directory.in					\
++	xfce-accessories-sub-archiving.directory.in			\
++	xfce-accessories-sub-calculator.directory.in			\
++	xfce-accessories-sub-clock.directory.in				\
++	xfce-accessories-sub-compression.directory.in			\
++	xfce-accessories-sub-filetool.directory.in			\
++	xfce-accessories-sub-telephonytool.directory.in			\
++	xfce-accessories-sub-texteditor.directory.in		\
++	xfce-accessories-sub-texttool.directory.in		\
+ 	xfce-development.directory.in					\
+ 	xfce-education.directory.in					\
+ 	xfce-games.directory.in						\
++	xfce-games-sub-action.directory.in				\
++	xfce-games-sub-adventure.directory.in			\
++	xfce-games-sub-arcade.directory.in				\
++	xfce-games-sub-board.directory.in				\
++	xfce-games-sub-blocks.directory.in				\
++	xfce-games-sub-card.directory.in				\
++	xfce-games-sub-kids.directory.in				\
++	xfce-games-sub-logic.directory.in				\
++	xfce-games-sub-roleplaying.directory.in			\
++	xfce-games-sub-simulation.directory.in			\
++	xfce-games-sub-sports.directory.in				\
++	xfce-games-sub-strategy.directory.in			\
+ 	xfce-graphics.directory.in					\
+ 	xfce-hardware.directory.in					\
+ 	xfce-multimedia.directory.in					\
++	xfce-multimedia-sub-audiovideoediting.directory.in		\
++	xfce-multimedia-sub-discburning.directory.in			\
++	xfce-multimedia-sub-midi.directory.in				\
++	xfce-multimedia-sub-mixer.directory.in				\
++	xfce-multimedia-sub-music.directory.in				\
++	xfce-multimedia-sub-player.directory.in				\
++	xfce-multimedia-sub-recorder.directory.in			\
++	xfce-multimedia-sub-sequencer.directory.in			\
++	xfce-multimedia-sub-tuner.directory.in				\
++	xfce-multimedia-sub-tv.directory.in				\
+ 	xfce-network.directory.in					\
++	xfce-network-sub-chat.directory.in				\
++	xfce-network-sub-dialup.directory.in				\
++	xfce-network-sub-email.directory.in				\
++	xfce-network-sub-feed.directory.in				\
++	xfce-network-sub-filetransfer.directory.in			\
++	xfce-network-sub-hamradio.directory.in				\
++	xfce-network-sub-instantmessaging.directory.in			\
++	xfce-network-sub-ircclient.directory.in				\
++	xfce-network-sub-news.directory.in				\
++	xfce-network-sub-p2p.directory.in				\
++	xfce-network-sub-remoteaccess.directory.in			\
++	xfce-network-sub-telephony.directory.in				\
++	xfce-network-sub-videoconference.directory.in			\
++	xfce-network-sub-webbrowser.directory.in			\
+ 	xfce-office.directory.in					\
+ 	xfce-other.directory.in						\
+ 	xfce-personal.directory.in					\
+ 	xfce-screensavers.directory.in					\
+ 	xfce-settings.directory.in					\
+-	xfce-system.directory.in
++	xfce-system.directory.in					\
++	xfce-system-sub-emulator.directory.in				\
++	xfce-system-sub-filemanager.directory.in			\
++	xfce-system-sub-filesystem.directory.in				\
++	xfce-system-sub-monitor.directory.in				\
++	xfce-system-sub-terminalemulator.directory.in
+ 
+ directory_DATA = $(directory_in_files:.directory.in=.directory)
+ EXTRA_DIST = \
+diff -Naur orig/data/xfce/xfce-accessories-sub-archiving.directory.in patched/data/xfce/xfce-accessories-sub-archiving.directory.in
+--- orig/data/xfce/xfce-accessories-sub-archiving.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-archiving.directory.in	2014-05-26 19:28:35.789376352 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Archiving
++Name[hu]=Archiválás
++_Comment=Tool to archive/backup data
++Comment[hu]=Adat archiváló/visszaállító eszköz
++Icon=package-x-generic
++Type=Directory
+diff -Naur orig/data/xfce/xfce-accessories-sub-calculator.directory.in patched/data/xfce/xfce-accessories-sub-calculator.directory.in
+--- orig/data/xfce/xfce-accessories-sub-calculator.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-calculator.directory.in	2014-05-26 19:28:35.789376352 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=Calculator
++Name[hu]=Számológép
++Icon=accessories-calculator
++Type=Directory
+diff -Naur orig/data/xfce/xfce-accessories-sub-clock.directory.in patched/data/xfce/xfce-accessories-sub-clock.directory.in
+--- orig/data/xfce/xfce-accessories-sub-clock.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-clock.directory.in	2014-05-26 19:28:35.789376352 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=Clock
++Name[hu]=Óra
++Icon=applications-accessories
++Type=Directory
+diff -Naur orig/data/xfce/xfce-accessories-sub-compression.directory.in patched/data/xfce/xfce-accessories-sub-compression.directory.in
+--- orig/data/xfce/xfce-accessories-sub-compression.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-compression.directory.in	2014-05-26 19:28:35.789376352 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Compression
++Name[hu]=Tömörítés
++_Comment=Tool to manage compressed data/archives
++Comment[hu]=Tömörített adatokat/archívumokat kezelő eszköz
++Icon=package-x-generic
++Type=Directory
+diff -Naur orig/data/xfce/xfce-accessories-sub-filetool.directory.in patched/data/xfce/xfce-accessories-sub-filetool.directory.in
+--- orig/data/xfce/xfce-accessories-sub-filetool.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-filetool.directory.in	2014-05-26 19:28:35.789376352 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=File tool
++Name[hu]=Fájlkezelő eszköz
++Icon=system-file-manager
++Type=Directory
+diff -Naur orig/data/xfce/xfce-accessories-sub-telephonytool.directory.in patched/data/xfce/xfce-accessories-sub-telephonytool.directory.in
+--- orig/data/xfce/xfce-accessories-sub-telephonytool.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-telephonytool.directory.in	2014-05-26 19:28:35.789376352 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Telephony tool
++Name[hu]=Segédeszköz telefonáláshoz
++_Comment=Telephony tool, to dial a number, manage PBX, ...
++Comment[hu]=Segédeszköz telefonáláshoz; tárcsázás, PBX kezelése, ...
++Icon=call-start
++Type=Directory
+diff -Naur orig/data/xfce/xfce-accessories-sub-texteditor.directory.in patched/data/xfce/xfce-accessories-sub-texteditor.directory.in
+--- orig/data/xfce/xfce-accessories-sub-texteditor.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-texteditor.directory.in	2014-05-26 19:28:35.789376352 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Text editor
++Name[hu]=Szövegszerkesztő
++_Comment=Text editing
++Comment[hu]=Szöveg szerkesztése
++Icon=accessories-text-editor
++Type=Directory
+diff -Naur orig/data/xfce/xfce-accessories-sub-texttool.directory.in patched/data/xfce/xfce-accessories-sub-texttool.directory.in
+--- orig/data/xfce/xfce-accessories-sub-texttool.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-accessories-sub-texttool.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Text tool
++Name[hu]=Szöveg kezelő
++_Comment=Text tool utility
++Comment[hu]=Szöveg kezelő eszköz
++Icon=accessories-text-editor
++Type=Directory
+diff -Naur orig/data/xfce/xfce-applications.menu patched/data/xfce/xfce-applications.menu
+--- orig/data/xfce/xfce-applications.menu	2014-02-22 23:26:36.000000000 +0100
++++ patched/data/xfce/xfce-applications.menu	2014-05-26 19:31:07.263422846 +0200
+@@ -34,6 +34,9 @@
+         <Include>
+             <Category>Settings</Category>
+         </Include>
++        <Exclude>
++            <Category>System</Category>
++        </Exclude>
+ 
+         <Layout>
+             <Filename>xfce-settings-manager.desktop</Filename>
+@@ -62,6 +65,14 @@
+             </Or>
+         </Include>
+         <Exclude>
++        	<Category>Archiving</Category>
++        	<Category>Calculator</Category>
++        	<Category>Clock</Category>
++        	<Category>Compression</Category>
++        	<Category>FileTools</Category>
++        	<Category>TelephonyTools</Category>
++        	<Category>TextEditor</Category>
++        	<Category>TextTools</Category>
+             <Or>
+                 <Filename>exo-file-manager.desktop</Filename>
+                 <Filename>exo-terminal-emulator.desktop</Filename>
+@@ -69,6 +80,62 @@
+                 <Filename>xfce4-run.desktop</Filename>
+             </Or>
+         </Exclude>
++    	<Menu>
++      		<Name>Archiving</Name>
++      		<Directory>xfce-accessories-sub-archiving.directory</Directory>
++      		<Include>
++        		<Category>Archiving</Category>
++      		</Include>
++    	</Menu>    
++    	<Menu>
++      		<Name>Calculator</Name>
++      		<Directory>xfce-accessories-sub-calculator.directory</Directory>
++      		<Include>
++        		<Category>Calculator</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Clock</Name>
++      		<Directory>xfce-accessories-sub-clock.directory</Directory>
++      		<Include>
++        		<Category>Clock</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Compression</Name>
++      		<Directory>xfce-accessories-sub-compression.directory</Directory>
++      		<Include>
++        		<Category>Compression</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>File tools</Name>
++      		<Directory>xfce-accessories-sub-filetool.directory</Directory>
++      		<Include>
++        		<Category>FileTools</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Telephony tools</Name>
++      		<Directory>xfce-accessories-sub-telephonytool.directory</Directory>
++      		<Include>
++        		<Category>TelephonyTools</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Text editor</Name>
++      		<Directory>xfce-accessories-sub-texteditor.directory</Directory>
++      		<Include>
++        		<Category>TextEditor</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Text tools</Name>
++      		<Directory>xfce-accessories-sub-texttool.directory</Directory>
++      		<Include>
++        		<Category>TextTools</Category>
++      		</Include>
++    	</Menu>
+     </Menu>
+ 
+     <Menu>
+@@ -91,8 +158,108 @@
+         <Name>Games</Name>
+         <Directory>xfce-games.directory</Directory>
+         <Include>
+-            <Category>Game</Category>
++      	  <And>
++			<Category>Game</Category>
++          </And>
+         </Include>
++	    <Exclude>
++			<Category>ActionGame</Category>
++			<Category>AdventureGame</Category>
++			<Category>ArcadeGame</Category>
++			<Category>BoardGame</Category>
++			<Category>BlocksGame</Category>
++			<Category>CardGame</Category>
++			<Category>KidsGame</Category>
++			<Category>LogicGame</Category>
++			<Category>RolePlaying</Category>
++			<Category>Simulation</Category>
++			<Category>SportsGame</Category>
++			<Category>StrategyGame</Category>
++	    </Exclude>
++    	<Menu>
++      		<Name>Action</Name>
++      		<Directory>mate-game-sub-action.directory</Directory>
++      		<Include>
++        		<Category>ActionGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Adventure</Name>
++      		<Directory>xfce-games-sub-adventure.directory</Directory>
++      		<Include>
++        		<Category>AdventureGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Arcade</Name>
++      		<Directory>xfce-games-sub-arcade.directory</Directory>
++      		<Include>
++        		<Category>ArcadeGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Board</Name>
++      		<Directory>xfce-games-sub-board.directory</Directory>
++      		<Include>
++        		<Category>BoardGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Blocks</Name>
++      		<Directory>xfce-games-sub-blocks.directory</Directory>
++      		<Include>
++        		<Category>BlocksGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Cards</Name>
++      		<Directory>xfce-games-sub-card.directory</Directory>
++      		<Include>
++        		<Category>CardGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Kids</Name>
++      		<Directory>xfce-games-sub-kids.directory</Directory>
++      		<Include>
++        		<Category>KidsGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Logic</Name>
++      		<Directory>xfce-games-sub-logic.directory</Directory>
++      		<Include>
++        		<Category>LogicGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Role Playing</Name>
++      		<Directory>xfce-games-sub-roleplaying.directory</Directory>
++      		<Include>
++        		<Category>RolePlaying</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Simulation</Name>
++      		<Directory>xfce-games-sub-simulation.directory</Directory>
++      		<Include>
++        		<Category>Simulation</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Sports</Name>
++      		<Directory>xfce-games-sub-sports.directory</Directory>
++      		<Include>
++        		<Category>SportsGame</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Strategy</Name>
++      		<Directory>xfce-games-sub-strategy.directory</Directory>
++      		<Include>
++        		<Category>StrategyGame</Category>
++      		</Include>
++    	</Menu>
+     </Menu>
+ 
+     <Menu>
+@@ -111,6 +278,88 @@
+             <Category>Video</Category>
+             <Category>AudioVideo</Category>
+         </Include>
++    	<Exclude>
++        	<Category>AudioVideoEditing</Category>
++        	<Category>DiscBurning</Category>
++        	<Category>Midi</Category>
++        	<Category>Mixer</Category>
++        	<Category>Music</Category>
++        	<Category>Player</Category>
++        	<Category>Recorder</Category>
++        	<Category>Sequencer</Category>
++        	<Category>Tuner</Category>
++        	<Category>TV</Category>
++    	</Exclude>
++    	<Menu>
++      		<Name>Audio/Video editing</Name>
++      		<Directory>xfce-multimedia-sub-audiovideoediting.directory</Directory>
++      		<Include>
++        		<Category>AudioVideoEditing</Category>
++      		</Include>
++    	</Menu>    
++    	<Menu>
++      		<Name>Disc burning</Name>
++      		<Directory>xfce-multimedia-sub-discburning.directory</Directory>
++      		<Include>
++        		<Category>DiscBurning</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Midi</Name>
++      		<Directory>xfce-multimedia-sub-midi.directory</Directory>
++      		<Include>
++        		<Category>Midi</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Mixer</Name>
++      		<Directory>xfce-multimedia-sub-mixer.directory</Directory>
++      		<Include>
++        		<Category>Mixer</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Music</Name>
++      		<Directory>xfce-multimedia-sub-music.directory</Directory>
++      		<Include>
++        		<Category>Music</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Player</Name>
++      		<Directory>xfce-multimedia-sub-player.directory</Directory>
++      		<Include>
++        		<Category>Player</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Recorder</Name>
++      		<Directory>xfce-multimedia-sub-recorder.directory</Directory>
++      		<Include>
++        		<Category>Recorder</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Sequencer</Name>
++      		<Directory>xfce-multimedia-sequencer.directory</Directory>
++      		<Include>
++        		<Category>Sequencer</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Tuner</Name>
++      		<Directory>xfce-multimedia-sub-tuner.directory</Directory>
++      		<Include>
++        		<Category>Tuner</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>TV</Name>
++      		<Directory>xfce-multimedia-tv.directory</Directory>
++      		<Include>
++        		<Category>TV</Category>
++      		</Include>
++    	</Menu>
+     </Menu>
+ 
+     <Menu>
+@@ -120,11 +369,123 @@
+             <Category>Network</Category>
+         </Include>
+         <Exclude>
++            <Category>Chat</Category>
++        	<Category>Dialup</Category>
++        	<Category>Email</Category>
++        	<Category>Feed</Category>
++        	<Category>FileTransfer</Category>
++        	<Category>HamRadio</Category>
++        	<Category>InstantMessaging</Category>
++        	<Category>IRCClient</Category>
++        	<Category>News</Category>
++        	<Category>P2P</Category>
++        	<Category>RemoteAccess</Category>
++        	<Category>Telephony</Category>
++        	<Category>VideoConference</Category>
++        	<Category>WebBrowser</Category>
+             <Or>
+                 <Filename>exo-mail-reader.desktop</Filename>
+                 <Filename>exo-web-browser.desktop</Filename>
+             </Or>
+         </Exclude>
++        <Menu>
++      		<Name>Chat</Name>
++      		<Directory>xfce-network-sub-chat.directory</Directory>
++      		<Include>
++        		<Category>Chat</Category>
++      		</Include>
++    	</Menu>    
++    	<Menu>
++      		<Name>Dial-up</Name>
++      		<Directory>xfce-network-sub-dialup.directory</Directory>
++      		<Include>
++        		<Category>Dialup</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Email</Name>
++      		<Directory>xfce-network-sub-email.directory</Directory>
++      		<Include>
++        		<Category>Email</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Feed</Name>
++      		<Directory>xfce-network-sub-feed.directory</Directory>
++      		<Include>
++        		<Category>Feed</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>File transfer</Name>
++      		<Directory>xfce-network-sub-filetransfer.directory</Directory>
++      		<Include>
++        		<Category>FileTransfer</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Ham radio</Name>
++      		<Directory>xfce-network-sub-hamradio.directory</Directory>
++      		<Include>
++        		<Category>HamRadio</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Instant messaging</Name>
++      		<Directory>xfce-network-sub-instantmessaging.directory</Directory>
++      		<Include>
++        		<Category>InstantMessaging</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>IRC client</Name>
++      		<Directory>xfce-network-sub-ircclient.directory</Directory>
++      		<Include>
++        		<Category>IRCClient</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>News</Name>
++      		<Directory>xfce-network-sub-news.directory</Directory>
++      		<Include>
++        		<Category>News</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>P2P</Name>
++      		<Directory>xfce-network-sub-p2p.directory</Directory>
++      		<Include>
++        		<Category>P2P</Category>
++      		</Include>
++    	</Menu>    
++    	<Menu>
++      		<Name>Remote access</Name>
++      		<Directory>xfce-network-sub-remoteaccess.directory</Directory>
++      		<Include>
++        		<Category>RemoteAccess</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Telephony</Name>
++      		<Directory>xfce-network-sub-telephony.directory</Directory>
++      		<Include>
++        		<Category>telephony</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Video conference</Name>
++      		<Directory>xfce-network-sub-videoconference.directory</Directory>
++      		<Include>
++        		<Category>VideoConference</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Web browser</Name>
++      		<Directory>xfce-network-sub-webbrowser.directory</Directory>
++      		<Include>
++        		<Category>WebBrowser</Category>
++      		</Include>
++    	</Menu>
+     </Menu>
+ 
+     <Menu>
+@@ -139,16 +500,55 @@
+         <Name>System</Name>
+         <Directory>xfce-system.directory</Directory>
+         <Include>
+-            <Or>
+-                <Category>Emulator</Category>
++            <And>
+                 <Category>System</Category>
+-            </Or>
++            </And>
+         </Include>
+         <Exclude>
++        	<Category>Emulator</Category>
++        	<Category>FileManager</Category>
++        	<Category>Filesystem</Category>
++        	<Category>Monitor</Category>
++        	<Category>TerminalEmulator</Category>
+             <Or>
+                 <Filename>xfce4-session-logout.desktop</Filename>
+             </Or>
+         </Exclude>
++    	<Menu>
++      		<Name>Emulator</Name>
++      		<Directory>xfce-system-sub-emulator.directory</Directory>
++      		<Include>
++        		<Category>Emulator</Category>
++      		</Include>
++    	</Menu>    
++    	<Menu>
++      		<Name>Filemanager</Name>
++      		<Directory>xfce-system-sub-filemanager.directory</Directory>
++      		<Include>
++        		<Category>FileManager</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Filesystem</Name>
++      		<Directory>xfce-system-sub-filesystem.directory</Directory>
++      		<Include>
++        		<Category>Filesystem</Category>
++      		</Include>
++    	</Menu>   
++    	<Menu>
++      		<Name>Monitor</Name>
++      		<Directory>xfce-system-sub-monitor.directory</Directory>
++      		<Include>
++        		<Category>Monitor</Category>
++      		</Include>
++    	</Menu>
++    	<Menu>
++      		<Name>Terminal</Name>
++      		<Directory>xfce-system-sub-terminalemulator.directory</Directory>
++      		<Include>
++        		<Category>TerminalEmulator</Category>
++      		</Include>
++    	</Menu>
+     </Menu>
+ 
+     <Menu>
+diff -Naur orig/data/xfce/xfce-games-sub-action.directory.in patched/data/xfce/xfce-games-sub-action.directory.in
+--- orig/data/xfce/xfce-games-sub-action.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-action.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Action
++Name[hu]=Akció
++_Comment=Action game
++Comment[hu]=Akciójáték
++Icon=weather-storm
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-adventure.directory.in patched/data/xfce/xfce-games-sub-adventure.directory.in
+--- orig/data/xfce/xfce-games-sub-adventure.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-adventure.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Adventure
++Name[hu]=Kaland
++_Comment=Adventure style game
++Comment[hu]=Kalandjáték
++Icon=applications-games
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-arcade.directory.in patched/data/xfce/xfce-games-sub-arcade.directory.in
+--- orig/data/xfce/xfce-games-sub-arcade.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-arcade.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Arcade
++Name[hu]=Ügyességi
++_Comment=Arcade style game
++Comment[hu]=Ügyességi játék
++Icon=gnome-joystick
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-blocks.directory.in patched/data/xfce/xfce-games-sub-blocks.directory.in
+--- orig/data/xfce/xfce-games-sub-blocks.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-blocks.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Blocks
++Name[hu]=Blokkok
++_Comment=Falling blocks game
++Comment[hu]=Potyogó blokkok játék (pl. tetris)
++Icon=gnome-gnometris
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-board.directory.in patched/data/xfce/xfce-games-sub-board.directory.in
+--- orig/data/xfce/xfce-games-sub-board.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-board.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Board
++Name[hu]=Táblás
++_Comment=Board game
++Comment[hu]=Táblajáték
++Icon=applications-boardgames
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-card.directory.in patched/data/xfce/xfce-games-sub-card.directory.in
+--- orig/data/xfce/xfce-games-sub-card.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-card.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Card
++Name[hu]=Kártya
++_Comment=Card game
++Comment[hu]=Kártyajáték
++Icon=applications-cardgames
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-kids.directory.in patched/data/xfce/xfce-games-sub-kids.directory.in
+--- orig/data/xfce/xfce-games-sub-kids.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-kids.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Kids
++Name[hu]=Gyerekeknek
++_Comment=Game for kids
++Comment[hu]=Játék gyerekeknek
++Icon=gnome-amusements
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-logic.directory.in patched/data/xfce/xfce-games-sub-logic.directory.in
+--- orig/data/xfce/xfce-games-sub-logic.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-logic.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Logic
++Name[hu]=Logikai
++_Comment=Logic game
++Comment[hu]=Logikai játék
++Icon=system-run
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-roleplaying.directory.in patched/data/xfce/xfce-games-sub-roleplaying.directory.in
+--- orig/data/xfce/xfce-games-sub-roleplaying.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-roleplaying.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=Role playing
++Name[hu]=Szerepjáték
++Icon=stock_person
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-simulation.directory.in patched/data/xfce/xfce-games-sub-simulation.directory.in
+--- orig/data/xfce/xfce-games-sub-simulation.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-simulation.directory.in	2014-05-26 19:28:35.793376412 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Simulation
++Name[hu]=Szimuláció
++_Comment=Simulation game
++Comment[hu]=Szimulációs játék
++Icon=applications-games
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-sports.directory.in patched/data/xfce/xfce-games-sub-sports.directory.in
+--- orig/data/xfce/xfce-games-sub-sports.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-sports.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Sports
++Name[hu]=Sport
++_Comment=Sports game
++Comment[hu]=Sport játék
++Icon=stock_scores
++Type=Directory
+diff -Naur orig/data/xfce/xfce-games-sub-strategy.directory.in patched/data/xfce/xfce-games-sub-strategy.directory.in
+--- orig/data/xfce/xfce-games-sub-strategy.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-games-sub-strategy.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Strategy
++Name[hu]=Stratégia
++_Comment=Strategy game
++Comment[hu]=Stratégiai játék
++Icon=applications-games
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in patched/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Sound & Video editing
++Name[hu]=Hang és videó szerkesztés
++_Comment=Applications to edit audio/video files
++Comment[hu]=Hang/videó fájlokat szerkesztő alkalmazások
++Icon=video-x-generic
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-discburning.directory.in patched/data/xfce/xfce-multimedia-sub-discburning.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-discburning.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-discburning.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Disc burning
++Name[hu]=Optikai lemez írás
++_Comment=Applications to burn a disc
++Comment[hu]=Optikai lemez író alkalmazások
++Icon=drive-optical
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-midi.directory.in patched/data/xfce/xfce-multimedia-sub-midi.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-midi.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-midi.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=MIDI
++Name[hu]=MIDI
++_Comment=MIDI applications
++Comment[hu]=MIDI kezelő alkalmazások
++Icon=applications-multimedia
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-mixer.directory.in patched/data/xfce/xfce-multimedia-sub-mixer.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-mixer.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-mixer.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=Mixer
++Name[hu]=Mixer
++Icon=multimedia-volume-control
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-music.directory.in patched/data/xfce/xfce-multimedia-sub-music.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-music.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-music.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Music
++Name[hu]=Zene
++_Comment=Musical software
++Comment[hu]=Zenei program
++Icon=audio-x-generic
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-player.directory.in patched/data/xfce/xfce-multimedia-sub-player.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-player.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-player.directory.in	2014-05-26 19:28:35.797376460 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Player
++Name[hu]=Lejátszó
++_Comment=Play audio/video files
++Comment[hu]=Hang/videó fájlok lejátszása
++Icon=video-x-generic
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-recorder.directory.in patched/data/xfce/xfce-multimedia-sub-recorder.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-recorder.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-recorder.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Recorder
++Name[hu]=Felvevő
++_Comment=Record audio/video files
++Comment[hu]=Hang/videó fájlokat felvevő alkalmazás
++Icon=media-record
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-sequencer.directory.in patched/data/xfce/xfce-multimedia-sub-sequencer.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-sequencer.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-sequencer.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=Sequencer
++Name[hu]=Sequencer
++Icon=applications-multimedia
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-tuner.directory.in patched/data/xfce/xfce-multimedia-sub-tuner.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-tuner.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-tuner.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=Tuner
++Name[hu]=Tuner
++Icon=applications-multimedia
++Type=Directory
+diff -Naur orig/data/xfce/xfce-multimedia-sub-tv.directory.in patched/data/xfce/xfce-multimedia-sub-tv.directory.in
+--- orig/data/xfce/xfce-multimedia-sub-tv.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-multimedia-sub-tv.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=TV
++Name[hu]=TV
++_Comment=TV applications
++Comment[hu]=TV alkalmazások
++Icon=video-display
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-chat.directory.in patched/data/xfce/xfce-network-sub-chat.directory.in
+--- orig/data/xfce/xfce-network-sub-chat.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-chat.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Chat
++Name[hu]=Chat
++_Comment=Chat client
++Comment[hu]=Chat kliens
++Icon=user-available
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-dialup.directory.in patched/data/xfce/xfce-network-sub-dialup.directory.in
+--- orig/data/xfce/xfce-network-sub-dialup.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-dialup.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Dial-up
++Name[hu]=Tárcsázó
++_Comment=Dial-up program
++Comment[hu]=Tárcsázó program
++Icon=modem
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-email.directory.in patched/data/xfce/xfce-network-sub-email.directory.in
+--- orig/data/xfce/xfce-network-sub-email.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-email.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Email
++Name[hu]=E-mail
++_Comment=Email client
++Comment[hu]=E-mail kliens
++Icon=mail-send
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-feed.directory.in patched/data/xfce/xfce-network-sub-feed.directory.in
+--- orig/data/xfce/xfce-network-sub-feed.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-feed.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Feed
++Name[hu]=Hírforrások
++_Comment=RSS, podcast and other subscription based contents
++Comment[hu]=RSS, podcast és más, feliratkozás-alapú tartalom
++Icon=applications-internet
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-filetransfer.directory.in patched/data/xfce/xfce-network-sub-filetransfer.directory.in
+--- orig/data/xfce/xfce-network-sub-filetransfer.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-filetransfer.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=File transfer
++Name[hu]=Fájlátvitel
++_Comment=File transfer tool (e.g. FTP)
++Comment[hu]=Eszköz fájlátvitelhez (pl. FTP)
++Icon=emblem-downloads
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-hamradio.directory.in patched/data/xfce/xfce-network-sub-hamradio.directory.in
+--- orig/data/xfce/xfce-network-sub-hamradio.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-hamradio.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=HAM radio
++Name[hu]=Amatőr rádió
++_Comment=HAM radio software
++Comment[hu]=Programok amatőr rádiózáshoz
++Icon=applications-internet
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-instantmessaging.directory.in patched/data/xfce/xfce-network-sub-instantmessaging.directory.in
+--- orig/data/xfce/xfce-network-sub-instantmessaging.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-instantmessaging.directory.in	2014-05-26 19:28:35.801376512 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Instant messaging
++Name[hu]=Azonnali üzenetküldő
++_Comment=Instant messaging client
++Comment[hu]=Azonnali üzenetküldő kliens
++Icon=user-available
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-ircclient.directory.in patched/data/xfce/xfce-network-sub-ircclient.directory.in
+--- orig/data/xfce/xfce-network-sub-ircclient.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-ircclient.directory.in	2014-05-26 19:28:35.805376569 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=IRC client
++Name[hu]=IRC kliens
++Icon=user-available
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-news.directory.in patched/data/xfce/xfce-network-sub-news.directory.in
+--- orig/data/xfce/xfce-network-sub-news.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-news.directory.in	2014-05-26 19:28:35.805376569 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=News
++Name[hu]=Hírek
++_Comment=News reader or news ticker
++Comment[hu]=Hírolvasó
++Icon=internet-news-reader
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-p2p.directory.in patched/data/xfce/xfce-network-sub-p2p.directory.in
+--- orig/data/xfce/xfce-network-sub-p2p.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-p2p.directory.in	2014-05-26 19:28:35.805376569 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=P2P
++Name[hu]=P2P
++_Comment=P2P program
++Comment[hu]=P2P program
++Icon=emblem-downloads
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-remoteaccess.directory.in patched/data/xfce/xfce-network-sub-remoteaccess.directory.in
+--- orig/data/xfce/xfce-network-sub-remoteaccess.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-remoteaccess.directory.in	2014-05-26 19:28:35.805376569 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Remote access
++Name[hu]=Távoli elérés
++_Comment=Tool to remotely manage your PC
++Comment[hu]=A számítógép távoli elérése
++Icon=preferences-desktop-remote-desktop
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-telephony.directory.in patched/data/xfce/xfce-network-sub-telephony.directory.in
+--- orig/data/xfce/xfce-network-sub-telephony.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-telephony.directory.in	2014-05-26 19:28:35.805376569 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Telephony
++Name[hu]=Telefonálás
++_Comment=Telephony via PC
++Comment[hu]=Telefonálás számítógépen keresztül
++Icon=call-start
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-videoconference.directory.in patched/data/xfce/xfce-network-sub-videoconference.directory.in
+--- orig/data/xfce/xfce-network-sub-videoconference.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-videoconference.directory.in	2014-05-26 19:28:35.813376677 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Video conference
++Name[hu]=Videókonferencia
++_Comment=Video conference software
++Comment[hu]=Videókonferencia program
++Icon=camera-web
++Type=Directory
+diff -Naur orig/data/xfce/xfce-network-sub-webbrowser.directory.in patched/data/xfce/xfce-network-sub-webbrowser.directory.in
+--- orig/data/xfce/xfce-network-sub-webbrowser.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-network-sub-webbrowser.directory.in	2014-05-26 19:28:35.813376677 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=Web browser
++Name[hu]=Webböngésző
++Icon=web-browser
++Type=Directory
+diff -Naur orig/data/xfce/xfce-system-sub-emulator.directory.in patched/data/xfce/xfce-system-sub-emulator.directory.in
+--- orig/data/xfce/xfce-system-sub-emulator.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-system-sub-emulator.directory.in	2014-05-26 19:28:35.813376677 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Emulator
++Name[hu]=Emulátor
++_Comment=Emulator of another platform
++Comment[hu]=Más platform emulátora
++Icon=applications-system
++Type=Directory
+diff -Naur orig/data/xfce/xfce-system-sub-filemanager.directory.in patched/data/xfce/xfce-system-sub-filemanager.directory.in
+--- orig/data/xfce/xfce-system-sub-filemanager.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-system-sub-filemanager.directory.in	2014-05-26 19:28:35.813376677 +0200
+@@ -0,0 +1,5 @@
++[Desktop Entry]
++_Name=File manager
++Name[hu]=Fájlkezelő
++Icon=system-file-manager
++Type=Directory
+diff -Naur orig/data/xfce/xfce-system-sub-filesystem.directory.in patched/data/xfce/xfce-system-sub-filesystem.directory.in
+--- orig/data/xfce/xfce-system-sub-filesystem.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-system-sub-filesystem.directory.in	2014-05-26 19:28:35.813376677 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Filesystem
++Name[hu]=Fájlrendszer
++_Comment=Filesystem tool
++Comment[hu]=Fájlrendszer-kezelő eszköz
++Icon=applications-system
++Type=Directory
+diff -Naur orig/data/xfce/xfce-system-sub-monitor.directory.in patched/data/xfce/xfce-system-sub-monitor.directory.in
+--- orig/data/xfce/xfce-system-sub-monitor.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-system-sub-monitor.directory.in	2014-05-26 19:28:35.813376677 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Monitor
++Name[hu]=Rendszerfigyelő
++_Comment=Monitor application/applet that monitors some resource or activity
++Comment[hu]=Erőforrás vagy aktivitás figyelő alkalmazás
++Icon=utilities-system-monitor
++Type=Directory
+diff -Naur orig/data/xfce/xfce-system-sub-terminalemulator.directory.in patched/data/xfce/xfce-system-sub-terminalemulator.directory.in
+--- orig/data/xfce/xfce-system-sub-terminalemulator.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/xfce/xfce-system-sub-terminalemulator.directory.in	2014-05-26 19:28:35.813376677 +0200
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++_Name=Terminal emulator
++Name[hu]=Terminálemulátor
++_Comment=Terminal emulator application
++Comment[hu]=Terminálemulátor alkalmazás
++Icon=utilities-terminal
++Type=Directory
+diff -Naur orig/po/POTFILES.in patched/po/POTFILES.in
+--- orig/po/POTFILES.in	2014-02-22 23:26:36.000000000 +0100
++++ patched/po/POTFILES.in	2014-05-26 19:28:35.813376677 +0200
+@@ -1,17 +1,66 @@
+ data/xfce/xfce-accessories.directory.in
++data/xfce/xfce-accessories-sub-archiving.directory.in
++data/xfce/xfce-accessories-sub-calculator.directory.in
++data/xfce/xfce-accessories-sub-clock.directory.in
++data/xfce/xfce-accessories-sub-compression.directory.in
++data/xfce/xfce-accessories-sub-filetool.directory.in
++data/xfce/xfce-accessories-sub-telephonytool.directory.in
++data/xfce/xfce-accessories-sub-texteditor.directory.in
++data/xfce/xfce-accessories-sub-texttool.directory.in
+ data/xfce/xfce-development.directory.in
+ data/xfce/xfce-education.directory.in
+ data/xfce/xfce-games.directory.in
++data/xfce/xfce-games-sub-action.directory.in	
++data/xfce/xfce-games-sub-adventure.directory.in	
++data/xfce/xfce-games-sub-arcade.directory.in	
++data/xfce/xfce-games-sub-board.directory.in	
++data/xfce/xfce-games-sub-blocks.directory.in	
++data/xfce/xfce-games-sub-card.directory.in	
++data/xfce/xfce-games-sub-kids.directory.in	
++data/xfce/xfce-games-sub-logic.directory.in	
++data/xfce/xfce-games-sub-other.directory.in	
++data/xfce/xfce-games-sub-roleplaying.directory.in	
++data/xfce/xfce-games-sub-simulation.directory.in	
++data/xfce/xfce-games-sub-sports.directory.in	
++data/xfce/xfce-games-sub-strategy.directory.in	
+ data/xfce/xfce-graphics.directory.in
+ data/xfce/xfce-hardware.directory.in
+ data/xfce/xfce-multimedia.directory.in
++data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in
++data/xfce/xfce-multimedia-sub-discburning.directory.in
++data/xfce/xfce-multimedia-sub-midi.directory.in	
++data/xfce/xfce-multimedia-sub-mixer.directory.in	
++data/xfce/xfce-multimedia-sub-music.directory.in	
++data/xfce/xfce-multimedia-sub-player.directory.in	
++data/xfce/xfce-multimedia-sub-recorder.directory.in
++data/xfce/xfce-multimedia-sub-sequencer.directory.in
++data/xfce/xfce-multimedia-sub-tuner.directory.in	
++data/xfce/xfce-multimedia-sub-tv.directory.in	
+ data/xfce/xfce-network.directory.in
++data/xfce/xfce-network-sub-chat.directory.in	
++data/xfce/xfce-network-sub-dialup.directory.in	
++data/xfce/xfce-network-sub-feed.directory.in	
++data/xfce/xfce-network-sub-filetransfer.directory.in
++data/xfce/xfce-network-sub-hamradio.directory.in	
++data/xfce/xfce-network-sub-instantmessaging.directory.in
++data/xfce/xfce-network-sub-ircclient.directory.in	
++data/xfce/xfce-network-sub-news.directory.in	
++data/xfce/xfce-network-sub-p2p.directory.in	
++data/xfce/xfce-network-sub-remoteaccess.directory.in
++data/xfce/xfce-network-sub-telephony.directory.in	
++data/xfce/xfce-network-sub-videoconference.directory.in
++data/xfce/xfce-network-sub-webbrowser.directory.in
+ data/xfce/xfce-office.directory.in
+ data/xfce/xfce-other.directory.in
+ data/xfce/xfce-personal.directory.in
+ data/xfce/xfce-screensavers.directory.in
+ data/xfce/xfce-settings.directory.in
+ data/xfce/xfce-system.directory.in
++data/xfce/xfce-system-sub-emulator.directory.in	
++data/xfce/xfce-system-sub-filemanager.directory.in
++data/xfce/xfce-system-sub-filesystem.directory.in	
++data/xfce/xfce-system-sub-monitor.directory.in	
++data/xfce/xfce-system-sub-terminalemulator.directory.in
+ garcon/garcon-config.c
+ garcon/garcon-environment.c
+ garcon/garcon-menu.c

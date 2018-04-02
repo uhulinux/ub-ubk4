@@ -1,0 +1,24 @@
+diff -Naur alsa-lib-1.0.27-orig/src/error.c alsa-lib-1.0.27/src/error.c
+--- alsa-lib-1.0.27-orig/src/error.c	2013-04-11 13:43:05.000000000 +0200
++++ alsa-lib-1.0.27/src/error.c	2013-05-03 13:22:36.008942197 +0200
+@@ -97,19 +97,7 @@
+  */
+ static void snd_lib_error_default(const char *file, int line, const char *function, int err, const char *fmt, ...)
+ {
+-	va_list arg;
+-	va_start(arg, fmt);
+-	if (local_error) {
+-		local_error(file, line, function, err, fmt, arg);
+-		va_end(arg);
+-		return;
+-	}
+-	fprintf(stderr, "ALSA lib %s:%i:(%s) ", file, line, function);
+-	vfprintf(stderr, fmt, arg);
+-	if (err)
+-		fprintf(stderr, ": %s", snd_strerror(err));
+-	putc('\n', stderr);
+-	va_end(arg);
++
+ }
+ 
+ /**

@@ -1,0 +1,29 @@
+diff -Naur BerkeleyDB-0.27.orig/config.in BerkeleyDB-0.27/config.in
+--- BerkeleyDB-0.27.orig/config.in	2005-11-01 09:57:28.000000000 +0100
++++ BerkeleyDB-0.27/config.in	2006-01-12 15:53:33.000000000 +0100
+@@ -9,7 +9,7 @@
+ 
+ #INCLUDE	= /usr/local/include
+ #INCLUDE	= ../..
+-INCLUDE	= /usr/local/BerkeleyDB/include
++INCLUDE	= /usr/include/db4
+ 
+ # 2. Where is libdb?
+ #
+@@ -18,7 +18,7 @@
+ 
+ #LIB	= /usr/local/lib
+ #LIB	= ../..
+-LIB	= /usr/local/BerkeleyDB/lib
++LIB	= /usr/lib
+ 
+ # 3. Is the library called libdb?
+ #
+@@ -40,6 +40,6 @@
+ #    below (by removing the leading #) and edit the line to use the name
+ #    you have picked.
+ 
+-#DBNAME = -ldb-3.0
++DBNAME = -ldb
+ 
+ # end of file config.in

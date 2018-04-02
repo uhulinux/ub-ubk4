@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/apache
+install -m755 src/.libs/mod_auth_openid.so "$UB_INSTALLDIR"/usr/lib/apache

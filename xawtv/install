@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+UB_MAKEINSTALL_USE_DESTDIR=yes ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/pixmaps
+cp contrib/xawtv48x48.xpm "$UB_INSTALLDIR"/usr/share/pixmaps/

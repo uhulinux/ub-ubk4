@@ -1,0 +1,29 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxi/src/dcbr.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/dcbr.c	2007-08-28 14:39:54.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/dcbr.c	2007-08-28 14:44:30.000000000 +0200
+@@ -144,7 +144,7 @@
+ 	file * fp ;
+ 
+ 	/* check for existence of the DCB FILE */
+-	if (!file_exists(filename)) return 0 ;
++	if (strcmp(filename,"-")!=0 && !file_exists(filename)) return 0 ;
+ 
+ 	fp = file_open (filename, "rb0") ;
+ 	if (!fp)
+Index: fenix-0.92a.dfsg1/fxi/src/main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/main.c	2007-08-28 14:40:05.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/main.c	2007-08-28 14:45:52.000000000 +0200
+@@ -250,7 +250,7 @@
+ 
+ 		for (i = 1 ; i < argc ; i++)
+ 		{
+-			if (argv[i][0] == '-')
++			if (argv[i][0] == '-' && argv[i][1])
+ 			{
+ 				j = 1 ;
+ 				while (argv[i][j])

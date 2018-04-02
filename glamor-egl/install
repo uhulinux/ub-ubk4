@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+ub_install
+
+# x.org-server ütközések
+rm -rf ${UB_INSTALLDIR}/usr/lib/xorg
+rm -rf ${UB_INSTALLDIR}/usr/include

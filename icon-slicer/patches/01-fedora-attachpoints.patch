@@ -1,0 +1,69 @@
+diff -ur icon-slicer-0.3/src/main.c icon-slicer-0.3-attachpoints/src/main.c
+--- icon-slicer-0.3/src/main.c	2003-06-25 22:17:32.000000000 +0200
++++ icon-slicer-0.3-attachpoints/src/main.c	2004-09-30 10:16:43.884414198 +0200
+@@ -363,6 +363,35 @@
+     }
+ }
+ 
++struct AttachPointCompare {
++  int rowstride;
++  const guchar *pixels;
++};
++
++static gint
++compare_attach_points     (gconstpointer  a,
++			   gconstpointer  b,
++			   gpointer       user_data)
++{
++  const ThemePoint *attach_point_a, *attach_point_b;
++  struct AttachPointCompare *compare;
++  guint8 red_a, red_b;
++  
++  attach_point_a = a;
++  attach_point_b = b;
++  compare = user_data;
++
++  red_a = compare->pixels[compare->rowstride * attach_point_a->y + 4*attach_point_a->x];
++  red_b = compare->pixels[compare->rowstride * attach_point_b->y + 4*attach_point_b->x];
++
++  if (red_a > red_b)
++    return -1;
++  if (red_a == red_b)
++    return 0;
++  return 1;
++}
++
++
+ static void
+ icon_fetch_attach_points (ThemeIcon         *icon,
+ 			  ThemeIconInstance *instance,
+@@ -375,7 +404,8 @@
+   
+   const guchar *pixels;
+   int rowstride;
+-
++  struct AttachPointCompare compare;
++  
+   theme_source_location_start (source, &icon->location, &start_x, &start_y);
+   image = theme_source_find_image (source, THEME_SOURCE_USE_ATTACH_POINTS);
+   if (!image)
+@@ -390,6 +420,8 @@
+   
+   rowstride = gdk_pixbuf_get_rowstride (image->image);
+   pixels = gdk_pixbuf_get_pixels (image->image) + start_y * rowstride + start_x * 4;
++  compare.pixels = pixels;
++  compare.rowstride = rowstride;
+   
+   for (j = 0; j < source->gridsize; j++)
+     {
+@@ -407,6 +439,10 @@
+       
+       pixels += rowstride;
+     }
++
++  instance->attach_points = g_slist_sort_with_data (instance->attach_points,
++						    compare_attach_points,
++						    &compare);
+ }
+ 
+ static gboolean

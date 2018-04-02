@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+cp -r pycups py3cups
+cd pycups
+ub_compile
+cd ../py3cups
+export CFLAGS="-Wno-error=declaration-after-statement"
+make PYTHON=python3

@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+export LUA_VERSION=5.3
+export LUA_LIBDIR=/usr/lib/lua/$LUA_VERSION
+export LUA_SHAREDIR=/usr/share/lua/$LUA_VERSION
+export LDFLAGS+=`pkg-config --libs lua$LUA_VERSION`
+export CFLAGS+=`pkg-config --cflags lua$LUA_VERSION`
+export PREFIX=/usr
+ub_compile

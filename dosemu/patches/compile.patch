@@ -1,0 +1,13 @@
+diff -Naurdp a/src/include/pci.h b/src/include/pci.h
+--- a/src/include/pci.h	2006-10-31 21:28:54.000000000 +0100
++++ b/src/include/pci.h	2007-03-19 13:03:07.000000000 +0100
+@@ -7,6 +7,9 @@
+ #ifndef DOSEMU_PCI_H
+ #define DOSEMU_PCI_H
+ 
++#include <asm/types.h>
++typedef unsigned long kernel_ulong_t;
++
+ /* definitions from the Linux kernel's linux/pci.h */
+ #define PCI_VENDOR_ID			0x00
+ #define PCI_VENDOR_ID_INTEL		0x8086

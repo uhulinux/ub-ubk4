@@ -1,0 +1,1784 @@
+diff -Naur orig/po/hu_HU.po mod/po/hu_HU.po
+--- orig/po/hu_HU.po	1970-01-01 01:00:00.000000000 +0100
++++ mod/po/hu_HU.po	2012-12-18 16:47:43.000000000 +0100
+@@ -0,0 +1,1780 @@
++# translation of heroes.po to Hungarian
++# Copyright (C) 2007 Free Software Foundation, Inc.
++#
++# Kiss Attila <kissgyulaendre@t-online.hu>, 2007.
++msgid ""
++msgstr ""
++"Project-Id-Version: heroes\n"
++"POT-Creation-Date: 2002-03-30 18:44+0100\n"
++"PO-Revision-Date: 2012-12-18 16:47+0100\n"
++"Last-Translator: Kiss Attila <attus@enterpriseforever.com>\n"
++"Language-Team: Hungarian <hu@li.org>\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++"X-Generator: Poedit 1.5.3\n"
++"Plural-Forms: nplurals=1; plural=0;\n"
++
++#: lib/error.c:129 lib/error.c:157
++msgid "Unknown system error"
++msgstr "Ismeretlen rendszerhiba"
++
++#: lib/getopt.c:694
++#, c-format
++msgid "%s: option `%s' is ambiguous\n"
++msgstr "%s: opció `%s' homályos\n"
++
++#: lib/getopt.c:719
++#, c-format
++msgid "%s: option `--%s' doesn't allow an argument\n"
++msgstr "%s: opció `--%s' nem argumentumos\n"
++
++#: lib/getopt.c:724
++#, c-format
++msgid "%s: option `%c%s' doesn't allow an argument\n"
++msgstr "%s: opció `%c%s' nem argumentumos\n"
++
++#: lib/getopt.c:742 lib/getopt.c:915
++#, c-format
++msgid "%s: option `%s' requires an argument\n"
++msgstr "%s: opció `%s' argumentumos\n"
++
++#. --option
++#: lib/getopt.c:771
++#, c-format
++msgid "%s: unrecognized option `--%s'\n"
++msgstr "%s: ismeretlen opció `--%s'\n"
++
++#. +option or -option
++#: lib/getopt.c:775
++#, c-format
++msgid "%s: unrecognized option `%c%s'\n"
++msgstr "%s: ismeretlen opció `%c%s'\n"
++
++#. 1003.2 specifies the format of this message.
++#: lib/getopt.c:801
++#, c-format
++msgid "%s: illegal option -- %c\n"
++msgstr "%s: illegális opció -- %c\n"
++
++#: lib/getopt.c:804
++#, c-format
++msgid "%s: invalid option -- %c\n"
++msgstr "%s: illegális opció -- %c\n"
++
++#. 1003.2 specifies the format of this message.
++#: lib/getopt.c:834 lib/getopt.c:964
++#, c-format
++msgid "%s: option requires an argument -- %c\n"
++msgstr "%s: opció argumentumos -- %c\n"
++
++#: lib/getopt.c:881
++#, c-format
++msgid "%s: option `-W %s' is ambiguous\n"
++msgstr "%s: opció `-W %s' homályos\n"
++
++#: lib/getopt.c:899
++#, c-format
++msgid "%s: option `-W %s' doesn't allow an argument\n"
++msgstr "%s: opció `-W %s' nem argumentumos\n"
++
++#. If XALLOC_FAIL_FUNC is NULL, or does return, display this message
++#. before exiting when memory is exhausted.  Goes through gettext.
++#: lib/xmalloc.c:66
++msgid "memory exhausted"
++msgstr "memória elfogyott"
++
++#: src/argv.c:60
++#, c-format
++msgid ""
++"Copyright (C) %d  Alexandre Duret-Lutz, Romuald Genevois,\n"
++"Alexandre Liverneaux and Philippe Meisburger.\n"
++msgstr ""
++"Copyright (C) %d  Alexandre Duret-Lutz, Romuald Genevois,\n"
++"Alexandre Liverneaux és Philippe Meisburger.\n"
++
++#: src/argv.c:63 src/heroeslvl.c:64
++msgid ""
++"This is free software; see the source for copying conditions.  There is NO\n"
++"warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
++msgstr ""
++"Ez egy szabad program, erről több a forrásszövegben olvasható. SEMMI\n"
++"garanciát nem vállalunk. "
++
++#: src/argv.c:74
++msgid "Use `-lWORD' or `--list=WORD' where WORD can be:"
++msgstr "Használat `-lWORD' vagy `--list=WORD' ahol a WORD lehet:"
++
++#: src/argv.c:76
++msgid "display all debugging channels"
++msgstr "összes debug csatorna mutatása"
++
++#: src/argv.c:78
++msgid "list all level files"
++msgstr "összes level fájl listája"
++
++#: src/argv.c:80
++msgid "print the preferences settings"
++msgstr "a beállítások nyomtatása"
++
++#: src/argv.c:82
++msgid "print the resources list"
++msgstr "forráslisták nyomtatása"
++
++#: src/argv.c:84
++msgid "print the sound driver list"
++msgstr "hangmeghajtók listájának nyomtatása"
++
++#: src/argv.c:86
++msgid "print the sound track list"
++msgstr "hangsávok listájának nyomtatása"
++
++#: src/argv.c:145 src/heroeslvl.c:74
++#, c-format
++msgid "Try '%s --help' for more information.\n"
++msgstr "Próbáld a '%s --help'-et több segítségért.\n"
++
++#: src/argv.c:150
++#, c-format
++msgid ""
++"Usage: %s [OPTIONS]...\n"
++"\n"
++msgstr ""
++"Használat: %s [OPCIÓK]...\n"
++"\n"
++
++#: src/argv.c:151
++msgid ""
++"Heroes is a game similar to the \"Tron\" and \"Nibbles\" games of yore\n"
++"but includes many graphical improvements and new game features.\n"
++msgstr ""
++"A heroes játék a \"Tron\" és a \"Nibbles\" játékokhoz hasonló, csak\n"
++"sokkal jobb grafikájú és sok új elemet tartalmaz.\n"
++
++#: src/argv.c:154 src/heroeslvl.c:81
++msgid ""
++"Mandatory arguments to long options are mandatory for short options too.\n"
++msgstr ""
++"A teljes szavas paraméterek, vagy ezek egybetűs rövidített alakja is jó\n"
++
++#: src/argv.c:156
++msgid ""
++"General options:\n"
++"  -v, --version               display version number\n"
++"  -h, --help                  display this help\n"
++"  -q, --quiet                 don't print warning messages\n"
++"  -Q, --really-quiet          don't even print error messages\n"
++"  -v, --verbose=CHANNELS      enable or disable debugging channels\n"
++"                                (see --list=debug for available channels)\n"
++"  -l, --list=WORD             show some internal information; WORD can be\n"
++"                                'debug', 'resources', 'sound-drivers' or\n"
++"                                'sound-tracks'\n"
++msgstr ""
++"Fő beállítás:\n"
++"  -v, --version               verzió szám\n"
++"  -h, --help                  ez a segítség\n"
++"  -q, --quiet                 nincs figyelmeztezés\n"
++"  -Q, --really-quiet          nincs hibajelzés\n"
++"  -v, --verbose=CHANNELS      debug csatornák engedélye-tiltása\n"
++"                                ( --list=debug  a lehetséges csatornákja)\n"
++"  -l, --list=WORD             belső információk egy része; a WORD lehet\n"
++"                                'debug', 'resources', 'sound-drivers' vagy\n"
++"                                'sound-tracks'\n"
++
++#: src/argv.c:167
++msgid ""
++"Sound options:\n"
++"  -d, --driver=N[,OPTIONS]    use Nth driver for sound output (0:"
++"autodetect)\n"
++"                                (see --list=sound-drivers for available Ns)\n"
++"  -S, --no-sound              disable sound\n"
++"  -X, --no-sfx                disable sound-effects\n"
++"  -m, --mono                  non-stereo output\n"
++"  -8, --8bits                 8bits sound output\n"
++"  -i, --high-quality          high quality mixer\n"
++msgstr ""
++"hang beállítás:\n"
++"  -d, --driver=N[,OPCIOK]    az N. meghajó használata (0:automatikus)\n"
++"                                (--list=sound-drivers felsorolja az N-eket)\n"
++"  -S, --no-sound              csönd\n"
++"  -X, --no-sfx                zörejek tiltva\n"
++"  -m, --mono                  monó kimenet\n"
++"  -8, --8bits                 8 bites kimenet\n"
++"  -i, --high-quality          csúcs minőség\n"
++
++#: src/argv.c:176
++msgid ""
++"Display options:\n"
++"  -G, --gfx-options=OPTIONS   pass OPTIONS to the display driver\n"
++"  -F, --full-screen           full screen mode\n"
++"  -2, --double                stretch the display twofold\n"
++"  -3, --triple                stretch the display threefold\n"
++"  -4, --quadruple             stretch the display fourfold\n"
++"  -e, --even-lines            display only even-lines\n"
++msgstr ""
++"Kép beállítás:\n"
++"  -G, --gfx-options=OPCIÓK   használd az OPCIÓK meghajtót\n"
++"  -F, --full-screen           teljes képernyő\n"
++"  -2, --double                kétszeres kép\n"
++"  -3, --triple                háromszoros kép\n"
++"  -4, --quadruple             négyszeres kép\n"
++"  -e, --even-lines            csak a páros képsorok\n"
++
++#. TRANS: rotozoom is a graphical effect used in the demo of yore
++#. where the screen rotate and zoom (actually it doesn't zoom in Heroes);
++#. waves is another effect where the screen is agitated like some
++#. jelly (this was also called the `mushroom effect' in game like
++#. Death Rally).
++#: src/argv.c:189
++msgid ""
++"Miscellaneous options:\n"
++"      --cpu-off               disable computer opponents\n"
++"      --default-scores        restore default scores file\n"
++"      --default-options       restore default options file\n"
++"      --default-saves         restore default saves file\n"
++"  -s, --swap-sides            swap sides in two player mode\n"
++"      --no-double-fx          disable combination of rotozoom and waves\n"
++"  -g, --go                    skip the introduction\n"
++"  -J, --no-joystick           disable joystick handling\n"
++msgstr ""
++"Vegyes opciók:\n"
++"      --cpu-off               cpu ellenfelek tiltása\n"
++"      --default-scores        eredeti pontok visszaállítása\n"
++"      --default-options       eredeti beállítások visszaállítása\n"
++"      --default-saves         eredeti mentések visszaállítása\n"
++"  -s, --swap-sides            kétjátékos módban oldalak felcserélése\n"
++"      --no-double-fx          egyidejű hullámzás és pörgetés tiltása\n"
++"  -g, --go                    bevezető átlépése\n"
++"  -J, --no-joystick           botkormány tiltása\n"
++
++#: src/argv.c:199
++msgid ""
++"These options can be set in your file ~/.heroes/heroesrc (which is read\n"
++"before parsing other command line options) using a line like the following:\n"
++"\n"
++"  Options: -gs -d3,buffer=11,count=4\n"
++msgstr ""
++"Ezek az opciók mgadhatók a ~/.heroes/heroesrc fájlban(amely a\n"
++"parancssori paraméterek előtt lesz beolvasva) soronként, valahogy így:\n"
++"\n"
++"  Options: -gs -d3,buffer=11,count=4\n"
++
++#: src/argv.c:204
++msgid ""
++"Visit http://heroes.sourceforge.net/ for news, documentation, and updates."
++msgstr ""
++"A http://heroes.sourceforge.net/ címen vannak leírások, újdonságok és "
++"frissítések."
++
++#: src/argv.c:206 src/heroeslvl.c:102
++msgid "Report bugs to <heroes-bugs@lists.sourceforge.net>."
++msgstr "hibákat ide kérjük: <heroes-bugs@lists.sourceforge.net>."
++
++#: src/argv.c:312
++msgid "-n is an obsolete option, you should use --list=sound-drivers"
++msgstr "-n egy ósdi opció, próbáld ezt: --list=sound-drivers"
++
++#: src/bonus.c:324 src/bonus.c:329
++#, c-format
++msgid "SIZE IS %d"
++msgstr "A MERET %d"
++
++#: src/bonus.c:334
++msgid "SPEEDED UP"
++msgstr "GYORSABB"
++
++#: src/bonus.c:338
++msgid "SPEEDED DOWN"
++msgstr "LASSABB"
++
++#: src/bonus.c:345
++#, c-format
++msgid "GET %dPTS"
++msgstr " %dPONT"
++
++#: src/bonus.c:350
++msgid "FIRE TRAIL!"
++msgstr "TUZES FAROK!"
++
++#: src/bonus.c:364
++msgid "GET TURBO+"
++msgstr "TURBO+"
++
++#: src/bonus.c:371
++msgid "GET TURBO-"
++msgstr "TURBO-"
++
++#: src/bonus.c:379
++msgid "INVINCIBLE!"
++msgstr "SERTHETETLEN!"
++
++#: src/bonus.c:391
++msgid "EXTRA-LIFE!"
++msgstr "EXTRA-ELET!"
++
++#: src/endscroll.c:113
++msgid "THE END"
++msgstr "VEGE"
++
++#: src/fontdata.c:243
++#, c-format
++msgid "character '%c' is not drawable (in message '%s')"
++msgstr "a '%c' karakter rajzolhatatlan (a '%s' üzenetben)"
++
++#: src/hedlite.c:1622
++#, c-format
++msgid "Cannot create directory `%s'."
++msgstr "A `%s'.mappa létrehozhatatlan."
++
++#: src/hedlite.c:1679 src/hedlite.c:1686
++#, c-format
++msgid "%s: invalid level file"
++msgstr "%s: érvénytelen szint fájl"
++
++#: src/helptext.c:24
++msgid ""
++"\n"
++"%{img C 444 0 40 320}\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{center}%pUse the arrow keys to scroll up and down.\n"
++"\n"
++"%{head 1}CONTROL & BOARD\n"
++"\n"
++"%{img BC 357 55 80 205}\n"
++"%{textat cL -9 -81}%yPAUSE\n"
++"%{textat cR -9 97}%yQUIT GAME\n"
++"%{textat cR 26 -62}%yCONTROL\n"
++"%{textat cL 30 74}%ySTOP\n"
++"%{textat cL 52 68}%yTURBO\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{img BCG 486 0 140 320}\n"
++"%{textat cR -7 -82}%ySCORE\n"
++"%{textat cR 1 8}%yCOMMENTARY\n"
++"%{textat cL 16 29}%yHEROES\n"
++"%{textat cL 33 29}%yWALLS\n"
++"%{textat cL 55 29}%yBONUS\n"
++"%{textat cL 29 -102}%yLIFES\n"
++"%{textat cL 51 -109}%yTURBO ENERGY\n"
++"%{textat cL 72 -104}%yTIME\n"
++"%{textat cR 96 40}%yPLAYER COLOR\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++msgstr ""
++"\n"
++"%{img C 444 0 40 320}\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{center}%pNyilbillentyukkel gorgetgetsz.\n"
++"\n"
++"%{head 1}JATEK & PAD\n"
++"\n"
++"%{img BC 357 55 80 205}\n"
++"%{textat cL -9 -81}%ySZUNET\n"
++"%{textat cR -9 97}%yKILEPES\n"
++"%{textat cR 26 -62}%yIRANYITAS\n"
++"%{textat cL 30 74}%ySTOP\n"
++"%{textat cL 52 68}%yTURBO\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{img BCG 486 0 140 320}\n"
++"%{textat cR -7 -82}%yPONTOK\n"
++"%{textat cR 1 8}%yKOMMENTEK\n"
++"%{textat cL 16 29}%yHEROES\n"
++"%{textat cL 33 29}%yFALAK\n"
++"%{textat cL 55 29}%yBONUSZ\n"
++"%{textat cL 29 -102}%yELETEK\n"
++"%{textat cL 51 -109}%yTURBO ENERGIA\n"
++"%{textat cL 72 -104}%yIDO\n"
++"%{textat cR 96 40}%yJATEKOS SZINE\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++
++#: src/helptext.c:71
++msgid ""
++"\n"
++"\n"
++"\n"
++"%{head 2}BONUS\n"
++"\n"
++"%{img L 60 0 20 22}Affects the player that gets the item\n"
++"%{img L 60 22 20 22}Affects all players except the one who gets the bonus\n"
++"\n"
++"%{img L 0 0 20 22}%{>}%{img L 0 22 20 22}%{>>>}Trail +1\n"
++"%{img L 0 44 20 22}%{>}%{img L 0 66 20 22}%{>>>}Trail -1\n"
++"%{img L 0 88 20 22}%{>}%{img L 0 110 20 22}%{>>>}Speed Up\n"
++"%{img L 0 132 20 22}%{>}%{img L 0 154 20 22}%{>>>}Speed Down\n"
++"%{img L 0 176 20 22}%{>}%{img L 0 198 20 22}%{>>>}Random Bonus\n"
++"%{img L 0 220 20 22}%{>}%{img L 0 242 20 22}%{>>>}Points\n"
++"%{img L 0 264 20 22}%{>}%{img L 0 286 20 22}%{>>>}Fire Trail\n"
++"%{img L 20 0 20 22}%{>}%{img L 20 22 20 22}%{>>>}Stop\n"
++"%{img L 20 44 20 22}%{>}%{img L 20 66 20 22}%{>>>}Inverted controls\n"
++"%{img L 20 88 20 22}%{>}%{img L 20 110 20 22}%{>>>}Power +\n"
++"%{img L 20 132 20 22}%{>}%{img L 20 154 20 22}%{>>>}Power -\n"
++"%{img L 20 176 20 22}%{>}%{img L 20 198 20 22}%{>>>}End of Level\n"
++"%{img L 20 220 20 22}%{>}%{img L 20 242 20 22}%{>>>}Invulnerability\n"
++"%{img L 20 264 20 22}%{>}%{img L 20 286 20 22}%{>>>}Rotozoom\n"
++"%{img L 40 0 20 22}%{>}%{img L 40 22 20 22}%{>>>}Extra Life\n"
++"%{img L 40 44 20 22}%{>}%{img L 40 66 20 22}%{>>>}Wavy visions\n"
++"\n"
++msgstr ""
++"\n"
++"\n"
++"\n"
++"%{head 2}BONUSZ\n"
++"\n"
++"%{img L 60 0 20 22}Aze aki megszerzi\n"
++"%{img L 60 22 20 22}Mindenkie a bonuszt kiveve\n"
++"\n"
++"%{img L 0 0 20 22}%{>}%{img L 0 22 20 22}%{>>>}Nyomsav +1\n"
++"%{img L 0 44 20 22}%{>}%{img L 0 66 20 22}%{>>>}Nyomsav -1\n"
++"%{img L 0 88 20 22}%{>}%{img L 0 110 20 22}%{>>>}Gyorsabb\n"
++"%{img L 0 132 20 22}%{>}%{img L 0 154 20 22}%{>>>}Lassabb\n"
++"%{img L 0 176 20 22}%{>}%{img L 0 198 20 22}%{>>>}Valami\n"
++"%{img L 0 220 20 22}%{>}%{img L 0 242 20 22}%{>>>}Pontok\n"
++"%{img L 0 264 20 22}%{>}%{img L 0 286 20 22}%{>>>}Tuzes farok\n"
++"%{img L 20 0 20 22}%{>}%{img L 20 22 20 22}%{>>>}Stop\n"
++"%{img L 20 44 20 22}%{>}%{img L 20 66 20 22}%{>>>}Iranyvaltas\n"
++"%{img L 20 88 20 22}%{>}%{img L 20 110 20 22}%{>>>}Ero +\n"
++"%{img L 20 132 20 22}%{>}%{img L 20 154 20 22}%{>>>}Ero -\n"
++"%{img L 20 176 20 22}%{>}%{img L 20 198 20 22}%{>>>}Palya vege\n"
++"%{img L 20 220 20 22}%{>}%{img L 20 242 20 22}%{>>>}Sebezhetetlen\n"
++"%{img L 20 264 20 22}%{>}%{img L 20 286 20 22}%{>>>}Forgatas\n"
++"%{img L 40 0 20 22}%{>}%{img L 40 22 20 22}%{>>>}Extra Elet\n"
++"%{img L 40 44 20 22}%{>}%{img L 40 66 20 22}%{>>>}Hullamzas\n"
++"\n"
++
++#: src/helptext.c:99
++msgid ""
++"%{head 3}GAME MODES\n"
++"\n"
++"%{>>}%yQUEST\n"
++"\n"
++"%{>>>}The %yQUEST%w mode allows you to play all 100 levels HEROES offers "
++"you.  Your aim is to collect a given number (10) of Trail+1 bonuses and then "
++"to get the End-of-Level bonus that will send you to next level.\n"
++"%{>>>}%{img L 20 176 20 22}End-of-Level\n"
++"%{img R 0 0 20 22}%{flushright}Trail+1\n"
++"%{>>>}Trail+1 has the effect of growing your trail.  There are two way to "
++"get it smaller: take a Trail-1 or lose a life.  The End-of-Level bonus first "
++"appears when someone's trail reach 10 units.\n"
++"\n"
++"%{>>}%yDEATH MATCH\n"
++"\n"
++"%{>>>}The %yDEATH MATCH%w mode allows you to face the other players in a "
++"fight to death.  The aim of the game is to be the last player still alive.  "
++"For this, feel free to use any stratagems you want.  Nothing is forbidden.\n"
++"\n"
++"%{img BLVr 130 9 30 57}%{>>}%yKILL THEM ALL\n"
++"\n"
++"%{>>>}The %yKILL THEM ALL%w mode has only one rule: You have to overwhelm "
++"all the people of your competitors.  It was said \"There can be only one\", "
++"make sure it is yours!\n"
++"\n"
++"%{img LG 131 70 20 100}\n"
++"%{img LG 151 70 20 80}They are among us, find them !\n"
++"\n"
++"%{>>}%yCOLOR\n"
++"\n"
++"%{>>>}The %yCOLOR%w mode is very simple. You have a certain amount of time "
++"to get a maximum of gems of your color.  Beware, if you go over your "
++"competitor's gems, it's your competitor's gem account that you will "
++"increase.  Be also sure not to get crossed gems because you'll lose "
++"collected gems.  Grey ones gives gems to all players except the one that "
++"goes over it.  The Clocks give you extra time.\n"
++"\n"
++"%{>>}%yTIME CA$H\n"
++"\n"
++"%{>>>}In %yTIME CA$H%w mode the winner is the player who collected the "
++"largest amount of money.\n"
++"\n"
++msgstr ""
++"%{head 3}JATEK MODOK\n"
++"\n"
++"%{>>}%yKULDETES\n"
++"\n"
++"%{>>>}A %yKULDETES%w modban A HEROES 100 palyajat jatszhatod vegig.   "
++"Feladatod a megadott szamu (10) Nyomsav+1 bonusz begyujtese utan a Palya "
++"vege bonusz elerese, ami a kovetkezo palyara visz.\n"
++"%{>>>}%{img L 20 176 20 22}Palya vege\n"
++"%{img R 0 0 20 22}%{flushright}Nyomsav+1\n"
++"%{>>>}A Nyomsav+1 a nyomsavodat.szelesiti.  Keskenyebb lesz a nyomsavod "
++"Nyomsav-1 -re lepve, vagy elet vesztessel.  A Palya vege bonusz csak akkor "
++"jelenik meg, ha valaki 10 egyseget elert.\n"
++"\n"
++"%{>>}%yHALALOS MECCS\n"
++"\n"
++"%{>>>}A %yHALALOS MECCS%w modban feladatod a tobbi jatekossal szemben "
++"eletben maradni.  A jatek nyertese az, aki eletben marad.  Ennek erdekeben "
++"minden megengedett.\n"
++"\n"
++"%{img BLVr 130 9 30 57}%{>>}%yRAMBO\n"
++"\n"
++"%{>>>}A %yRAMBO%w modban a feladat: Mindenkit kiirtani.\n"
++"\" Ezt csak egy valaki teheti\", legy te az!\n"
++"\n"
++"%{img LG 131 70 20 100}\n"
++"%{img LG 151 70 20 80}Valami van, leld meg !\n"
++"\n"
++"%{>>}%ySZINES\n"
++"\n"
++"%{>>>}A %ySZINES%w mod egyszeru. Idore minel tobb sajat szint kell "
++"gyujtened.   Vigyazz, ha rivalis szint gyujtesz be, akkor az nem a teged "
++"gazdagit, hanem a tobbieket!  Ne gyujts be kombinalt szineket, mert az "
++"addigi szineidet is elveszted.   A szurke mindenkit gazdagit, kiveve azt, "
++"aki begyujtotte.   Az ora plusz idot ad.\n"
++"\n"
++"%{>>}%yIDO $\n"
++"\n"
++"%{>>>}In %yIDO $%w modban az a nyertes, aki a leggazdagabb lesz.\n"
++"\n"
++
++#: src/helptext.c:145
++msgid ""
++"%{head 4}GAME OPTIONS\n"
++"\n"
++"%{img L 293 165 20 134}\n"
++"%{>>}%gCOLOR SELECT\n"
++"\n"
++"%{>>>}This option allows you to choose the color of your vehicle between "
++"%pPINK%w, %yYELLOW%w, %bBLUE%w and %gGREEN%w.\n"
++"\n"
++"%{img L 335 165 20 32}\n"
++"%{>>}%gGAME SPEED\n"
++"\n"
++"%{>>>}The %gGAME SPEED%w option allows you to select the initial speed of "
++"the shuttles.  The 3 available speeds are: NORMAL, EXPERT, HEROES.\n"
++"\n"
++"%{img L 314 264 20 32}\n"
++"%{>>}%gROUNDS\n"
++"\n"
++"%{>>>}The %gROUNDS%w option allows you to select the number of rounds in the "
++"tournament modes: DEATH MATCH, KILL'EM ALL, COLOR and TIME CA$H.  These "
++"values range from 1 to 100 rounds.\n"
++"\n"
++"%{img L 293 0 20 33}%{img L 293 132 20 33}\n"
++"%{>>}%gRADAR & INFORMATION\n"
++"\n"
++"%{>>>}You can disable the %gRADAR%w and the %gINFORMATIONS%w for better "
++"visibility.\n"
++"\n"
++"%{img L 314 231 20 32}\n"
++"%{>>}%gLIGHTING\n"
++"\n"
++"%{>>>}The %gLIGHTING%w option is here to tune the luminosity of your "
++"screen.\n"
++"\n"
++"%{img L 314 0 20 32}\n"
++"%{>>}%gINERTIA\n"
++"\n"
++"%{>>>}The %gINERTIA%w switch enables or disables the scrolling inertia.\n"
++"\n"
++"%{img L 293 99 20 32}\n"
++"%{>>}%gAUTOPILOT\n"
++"\n"
++"%{>>>}If you are mad, you can try to play without %gAUTOPILOT%w, rest in "
++"peace...  Note that %gAUTOPILOT%w does not work against fire trails.\n"
++"\n"
++msgstr ""
++"%{head 4}JATEK OPCIOK\n"
++"\n"
++"%{img L 293 165 20 134}\n"
++"%{>>}%gSZIN VALASZTAS\n"
++"\n"
++"%{>>>}Valassz szint: %pBIBOR%w, %ySARGA%w, %bKEK%w es %gZOLD%w.\n"
++"\n"
++"%{img L 335 165 20 32}\n"
++"%{>>}%gGYORSASAG\n"
++"\n"
++"%{>>>}A %gGYORSASAG%w opcioval kivalaszthato az indulo sebesseg.  A 3 "
++"gyorsasag: NORMALIS, GYAKORLOTT, HEROES.\n"
++"\n"
++"%{img L 314 264 20 32}\n"
++"%{>>}%gKOROK\n"
++"\n"
++"%{>>>}A %gKOROK%w opcioval megszabhato a tobbprobas jatekban az egyes "
++"jatekfajtak, mint: HALALOS MECCS, RAMBO, SZINES es IDO $ szama.  Ez a szam 1 "
++"es 100 kozott lehet.\n"
++"\n"
++"%{img L 293 0 20 33}%{img L 293 132 20 33}\n"
++"%{>>}%gRADAR & INFORMACIO\n"
++"\n"
++"%{>>>}Letilthato a %gRADAR%w es az %gINFORMACIO%w , hogy jobban lass.\n"
++"\n"
++"%{img L 314 231 20 32}\n"
++"%{>>}%gVILAGOSSAG\n"
++"\n"
++"%{>>>}A %gVILAGOSSAG%w opcioval a kepernyo vilagossaga allithato be.\n"
++"\n"
++"%{img L 314 0 20 32}\n"
++"%{>>}%gTUNYASAG\n"
++"\n"
++"%{>>>}A %gTUNYASAG%w kapcsolo ki-be kapcsolja a gorgetes tunyasagat.\n"
++"\n"
++"%{img L 293 99 20 32}\n"
++"%{>>}%gROBOTPILOTA\n"
++"\n"
++"%{>>>}Ha akarod jatszhatsz %gROBOTPILOTA%w nelkul is, hogy pihenjen egy "
++"kicsit...  Viszont a %gROBOTPILOTA%w nem jo tuzes farok ellen.\n"
++"\n"
++
++#: src/helptext.c:191
++msgid ""
++"%{head 1}CONTACT\n"
++"\n"
++"%{center}home page:\n"
++"%{img BCVr 183 124 30 41}\n"
++"%{center}http://heroes.sourceforge.net/\n"
++"\n"
++"%{center}send bug reports to:\n"
++"%{img BCVr 183 124 30 41}\n"
++"%{center}heroes-bugs@lists.sourceforge.net\n"
++"\n"
++msgstr ""
++"%{head 1}KAPCSOLAT\n"
++"\n"
++"%{center}honlap:\n"
++"%{img BCVr 183 124 30 41}\n"
++"%{center}http://heroes.sourceforge.net/\n"
++"\n"
++"%{center}hibakat ide kerjuk:\n"
++"%{img BCVr 183 124 30 41}\n"
++"%{center}heroes-bugs@lists.sourceforge.net\n"
++"\n"
++
++#: src/helptext.c:204
++msgid ""
++"%{img C 175 0 10 119}\n"
++"%{img L 96 200 40 50}%{img R 96 200 40 50} We take care of today's "
++"environmental and ecological issues and did our best to use only recycled "
++"bytes in this program.\n"
++"%{img C 175 0 10 119}\n"
++"\n"
++"\n"
++"%{img CG 145 150 40 120}\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{img C 220 3 60 130}\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{center}Copyright 1997, 1998, 2000  Alexandre Duret-Lutz, Romuald Genevois, "
++"Alexandre Liverneaux and Philippe Meisburger.\n"
++"\n"
++msgstr ""
++"%{img C 175 0 10 119}\n"
++"%{img L 96 200 40 50}%{img R 96 200 40 50} Ovjad a mindennapi termeszeti es "
++"okologiai kornyezetet, es csak ujrahasznositott bajtokat hasznalj ebben a "
++"programban.\n"
++"%{img C 175 0 10 119}\n"
++"\n"
++"\n"
++"%{img CG 145 150 40 120}\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{img C 220 3 60 130}\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"\n"
++"%{center}Copyright 1997, 1998, 2000  Alexandre Duret-Lutz, Romuald Genevois, "
++"Alexandre Liverneaux and Philippe Meisburger.\n"
++"\n"
++
++#: src/heroes.c:677 src/heroes.c:763
++#, c-format
++msgid "Cannot load level %s (error %d)"
++msgstr "A %s szint nem olvasható (hibaszám: %d)"
++
++#: src/heroes.c:1969
++#, c-format
++msgid "INVERTED %d"
++msgstr "MEGFORDULT %d"
++
++#: src/heroes.c:2003
++#, c-format
++msgid "STOPPED %d"
++msgstr "MEGALLT %d"
++
++#. TRANS: %d, the number of remaining lives, is always
++#. positive.
++#: src/heroes.c:2300
++msgid "LAST LIFE"
++msgid_plural "%d LIVES LEFT"
++msgstr[0] ""
++msgstr[1] ""
++
++#: src/heroes.c:2873
++msgid "Error during level loading"
++msgstr "Hiba a pálya beolvasásnál"
++
++#: src/heroes.c:2909
++#, c-format
++msgid "-LEVEL %d-"
++msgstr "-SZINT %d-"
++
++#: src/heroes.c:2911
++#, c-format
++msgid "-ROUND %d/%d-"
++msgstr "-KOR %d/%d-"
++
++#: src/heroes.c:3416
++msgid "error in sfx.cfg"
++msgstr "hibás az sfx.cfg"
++
++#: src/heroeslvl.c:63
++#, c-format
++msgid "Copyright (C) %d  Alexandre Duret-Lutz.\n"
++msgstr ""
++
++#: src/heroeslvl.c:79
++#, c-format
++msgid ""
++"Usage: %s [OPTIONS]... levels\n"
++"\n"
++msgstr ""
++"Használat: %s [OPCIÓK]... szintek\n"
++"\n"
++
++#: src/heroeslvl.c:80
++msgid "Heroeslvl is a tool used to inspect Heroes' level files.\n"
++msgstr "A Heroeslvl eszköz a Heroes' szint fájlok készítésére.\n"
++
++#: src/heroeslvl.c:83
++msgid "  -v, --version               display version number"
++msgstr "  -v, --version               verzió kiírása"
++
++#: src/heroeslvl.c:85
++msgid "  -h, --help                  display this help"
++msgstr "  -h, --help                  ez a segítség"
++
++#: src/heroeslvl.c:87
++msgid ""
++"  -p, --print=WHAT            select information to display.  WHAT should "
++"be\n"
++"                                one or more of these characters:"
++msgstr ""
++"  -p, --print=MIT            kiírandó információk kiválasztása.   A MIT \n"
++"                                a következő karakterekből állhat:"
++
++#: src/heroeslvl.c:90
++msgid "d   print square directions"
++msgstr "d   útirány"
++
++#: src/heroeslvl.c:91
++msgid "f   print filename"
++msgstr "f    fájlnév"
++
++#: src/heroeslvl.c:92
++msgid "h   print header"
++msgstr "h   fej"
++
++#: src/heroeslvl.c:93
++msgid "i   print tile details"
++msgstr "i   építőelem részletek"
++
++#: src/heroeslvl.c:94
++msgid "t   print square type map"
++msgstr "t   út típusú térkép"
++
++#: src/heroeslvl.c:95
++msgid "T   print type keys"
++msgstr "T   típus kulcsok"
++
++#: src/heroeslvl.c:96
++msgid "w   print square wall map"
++msgstr "w   útmagaslat térkép"
++
++#: src/heroeslvl.c:97
++msgid "@   print tunnels"
++msgstr "@   alagutak"
++
++#: src/heroeslvl.c:98
++msgid "  -i, --indent                indent everything but the filename"
++msgstr "  -i, --indent                valami a fájlnév nélkül"
++
++#: src/heroeslvl.c:101
++msgid "When no options are given, the default is -ipfh."
++msgstr "Opció nélkül az alapértelmezett: -ipfh."
++
++#: src/heroeslvl.c:201
++#, c-format
++msgid "%sheight:\t%d tiles\t(%d squares)\n"
++msgstr "%smagasság:\t%d építőelemek\t(%d terek)\n"
++
++#: src/heroeslvl.c:203
++#, c-format
++msgid "%swidth:\t%d tiles\t(%d squares)\n"
++msgstr "%sszélesség:\t%d építőelemek\t(%d terek)\n"
++
++#: src/heroeslvl.c:206
++#, c-format
++msgid "%sY-wrap:\tno\n"
++msgstr "%sY-burkolat:\tnem\n"
++
++#: src/heroeslvl.c:208
++#, c-format
++msgid "%sY-wrap:\t%d tiles\t(%d squares)\n"
++msgstr "%sY-burkolat:\t%d építőkövek\t(%d terek)\n"
++
++#: src/heroeslvl.c:211
++#, c-format
++msgid "%sX-wrap:\tno\n"
++msgstr "%sX-burkolat:\tnem\n"
++
++#: src/heroeslvl.c:213
++#, c-format
++msgid "%sX-wrap:\t%d tiles\t(%d squares)\n"
++msgstr "%sX-burkolat:\t%d építőelemek\t(%d terek)\n"
++
++#: src/heroeslvl.c:215
++#, c-format
++msgid "%ssound track alias:\t%s\n"
++msgstr "%shang sáv mint:\t%s\n"
++
++#: src/heroeslvl.c:217
++#, c-format
++msgid "%stile map basename:\t%s\n"
++msgstr "%stílusú térkép alapneve:\t%s\n"
++
++#: src/heroeslvl.c:219
++#, c-format
++msgid "%sstarting squares and directions (y x dir):\n"
++msgstr "%sstartol a tér és irány (y x dir):\n"
++
++#: src/heroeslvl.c:261
++msgid "none"
++msgstr "semmi"
++
++#: src/heroeslvl.c:262
++msgid "stop"
++msgstr "állj"
++
++#: src/heroeslvl.c:263
++msgid "speed"
++msgstr "sebesség"
++
++#: src/heroeslvl.c:264
++msgid "tunnel"
++msgstr "alagút"
++
++#: src/heroeslvl.c:265
++msgid "boom"
++msgstr "tönk"
++
++#: src/heroeslvl.c:266
++msgid "anim"
++msgstr "állat"
++
++#: src/heroeslvl.c:267
++msgid "ice"
++msgstr "jég"
++
++#: src/heroeslvl.c:268
++msgid "dust"
++msgstr "por"
++
++#: src/heroeslvl.c:269
++msgid "outway"
++msgstr "kiút"
++
++#: src/heroeslvl.c:389
++#, c-format
++msgid "%sTunnels:\n"
++msgstr "%sAlagutak:\n"
++
++#. TRANS: This is the header of an array (output by heroeslvl -p@),
++#. so the position of these words is important.
++#.
++#. SRCIDX is a short for 'source index' (entrance of a tunnel) and
++#. DESTIDX means 'destination index' (output of the tunnel).
++#: src/heroeslvl.c:395
++#, c-format
++msgid "%s  NBR  SRCIDX   Y   X  DIR      DESTIDX\n"
++msgstr ""
++
++#. TRANS: `still' is used to describe tiles which are not animated.
++#: src/heroeslvl.c:426
++msgid "still"
++msgstr "csend"
++
++#. TRANS: `loop' is for animated tiles where frames are displayed
++#. from 1 to n, and then again from 1 to n, etc.
++#: src/heroeslvl.c:430
++msgid "loop"
++msgstr "hurok"
++
++#. TRANS: `pingpong' is for tiles animated in loop where frame
++#. displayed from 1 to n, then from n to 1, and then again from 1
++#. to n, etc.
++#: src/heroeslvl.c:435
++msgid "pingpong"
++msgstr ""
++
++#. TRANS: This is the header of an array (output by heroeslvl -pi) so
++#. the position of these word is important.
++#.
++#. SPRITE is the address of the sprite used to render the tile.  OVERLAY
++#. is the address of a sprite that should be displayed on top
++#. of the players (e.g. trees).  ANIM-TYPE is the kind of animation used
++#. for the tile, FRM the number of frame to display, DEL the delay
++#. between each frame.
++#: src/heroeslvl.c:453
++#, c-format
++msgid "%sTILE  Y  X    TYPE      SPRITE    OVERLAY  ANIM-TYPE FRM DEL\n"
++msgstr ""
++
++#: src/heroeslvl.c:503
++#, c-format
++msgid "cannot load %s"
++msgstr "nem tölthető a %s"
++
++#: src/heroeslvl.c:507
++#, c-format
++msgid "File:\t%s\n"
++msgstr "Fájl:\t%s\n"
++
++#: src/heroeslvl.c:539
++msgid "Missing filename."
++msgstr "Nincs fájlnév."
++
++#: src/levellst.c:53
++#, c-format
++msgid "cannot open directory %s"
++msgstr "a %s mappa nem nyitható meg"
++
++#. TRANS: in QUEST mode, the player goes throught all the levels, but
++#. have to search for specific powerups in order to jump to the next
++#. level.  Hence this is a `quest' for those powerups.
++#: src/menus.c:146
++msgid "QUEST"
++msgstr "KULDETES"
++
++#. TRANS: in DEATH MATCH mode, the user has to kill all other players.
++#: src/menus.c:148
++msgid "DEATH MATCH"
++msgstr "HALALOS MECCS"
++
++#. TRANS: in KILL'EM ALL mode there are lemmings moving on the ground
++#. and the player must run over them all.  You may want to translate
++#. `kill' as `run over', `squash', `mash' or something among those
++#. lines.
++#: src/menus.c:153
++msgid "KILL'EM ALL"
++msgstr "RAMBO"
++
++#. TRANS: in TIME CA$H mode, the player must collect dollars with
++#. restricted time.
++#: src/menus.c:156
++msgid "TIME CA$H"
++msgstr "IDO $"
++
++#. TRANS: in COLOR mode, the player must collect some colored gems
++#. with restricted time.
++#: src/menus.c:159
++msgid "COLORS"
++msgstr "SZINEK"
++
++#: src/menus.c:192
++msgid "GAME"
++msgstr "JATEK"
++
++#: src/menus.c:193
++msgid "SCREEN"
++msgstr "KEPERNYO"
++
++#: src/menus.c:194
++msgid "SOUND"
++msgstr "HANG"
++
++#: src/menus.c:195
++msgid "CONTROL"
++msgstr "IRANYITAS"
++
++#: src/menus.c:196
++msgid "KEYS"
++msgstr "BILLENTYUK"
++
++#: src/menus.c:197
++msgid "EXTRAS"
++msgstr "EXTRAK"
++
++#: src/menus.c:198 src/menus.c:222 src/menus.c:385 src/menus.c:395
++#: src/menus.c:409 src/menus.c:421 src/menus.c:431 src/menus.c:454
++#: src/menus.c:545
++msgid "GO BACK"
++msgstr "VISSZA"
++
++#. play menu
++#: src/menus.c:205 src/menus.c:539
++msgid "PLAY"
++msgstr "JATEK"
++
++#. options menu
++#: src/menus.c:206 src/menus.c:526
++msgid "OPTIONS"
++msgstr "OPCIOK"
++
++#: src/menus.c:207 src/menus.c:406
++msgid "INFOS"
++msgstr "INFO"
++
++#: src/menus.c:208
++msgid "CREDITS"
++msgstr "MI MAGUNK"
++
++#: src/menus.c:209
++msgid "SCORES"
++msgstr "PONTOK"
++
++#. editor first menu
++#: src/menus.c:210 src/menus.c:536
++msgid "EDITOR"
++msgstr ""
++
++#: src/menus.c:211
++msgid "QUIT"
++msgstr "KILEPES"
++
++#. TRANS: Create a new level.
++#: src/menus.c:219 src/menus.c:503
++msgid "NEW LEVEL"
++msgstr "UJ SZINT"
++
++#. TRANS: Load an existing level for edition.
++#: src/menus.c:221
++msgid "LOAD LEVEL"
++msgstr "SZINT TOLTESE"
++
++#: src/menus.c:375
++msgid "CONTROL OPTIONS"
++msgstr "IRANYITAS"
++
++#. 1st player
++#: src/menus.c:377 src/menus.c:416 src/menus.c:433
++msgid "PLAYER 1"
++msgstr "1 JATEKOS"
++
++#: src/menus.c:379 src/menus.c:383
++msgid "AUTO PILOT"
++msgstr "ROBOTPILOTA"
++
++#. 2nd player
++#: src/menus.c:381 src/menus.c:417 src/menus.c:441
++msgid "PLAYER 2"
++msgstr "2 JATEKOS"
++
++#: src/menus.c:391
++msgid "SOUND OPTIONS"
++msgstr "HANGOK"
++
++#: src/menus.c:393
++msgid "MUSIC"
++msgstr "ZENE"
++
++#: src/menus.c:394
++msgid "SFX"
++msgstr "ZOREJEK"
++
++#: src/menus.c:398
++msgid "MUSIC VOL"
++msgstr "ZENE ERO"
++
++#: src/menus.c:399
++msgid "SFX VOL"
++msgstr "ZOREJ ERO"
++
++#: src/menus.c:403
++msgid "SCREEN OPTIONS"
++msgstr "KEPI DOLGOK"
++
++#: src/menus.c:405
++msgid "RADAR"
++msgstr ""
++
++#: src/menus.c:407
++msgid "LIGHTING"
++msgstr "VILAGITAS"
++
++#: src/menus.c:408
++msgid "INERTIA"
++msgstr "TUNYASAG"
++
++#: src/menus.c:414
++msgid "GAME OPTIONS"
++msgstr "JATEK DOLGOK"
++
++#: src/menus.c:418
++msgid "PLAYER 3"
++msgstr "3 JATEKOS"
++
++#: src/menus.c:419
++msgid "PLAYER 4"
++msgstr "4 JATEKOS"
++
++#: src/menus.c:420
++msgid "SPEED"
++msgstr "GYORSASAG"
++
++#: src/menus.c:429
++msgid "KEYBOARD DEFS"
++msgstr "BILLENYU BEALLITAS"
++
++#: src/menus.c:434 src/menus.c:442
++msgid "UP"
++msgstr "FOL"
++
++#: src/menus.c:435 src/menus.c:443
++msgid "LEFT"
++msgstr "BALRA"
++
++#: src/menus.c:436 src/menus.c:444
++msgid "DOWN"
++msgstr "LE"
++
++#: src/menus.c:437 src/menus.c:445
++msgid "RIGHT"
++msgstr "JOBBRA"
++
++#: src/menus.c:438 src/menus.c:446
++msgid "TURBO"
++msgstr ""
++
++#: src/menus.c:439 src/menus.c:447
++msgid "STOP"
++msgstr "ALLJ"
++
++#: src/menus.c:452
++msgid "EXTRAS LEVELS"
++msgstr "EXTRAK SZINTEK"
++
++#: src/menus.c:456
++msgid "ORIGINAL LEVELS"
++msgstr "EREDETI SZINTEK"
++
++#: src/menus.c:458
++msgid "ORIGINAL+EXTRAS"
++msgstr "EREDETI+EXTRAK"
++
++#: src/menus.c:460
++msgid "EXTRAS ONLY"
++msgstr "CSAK EXTRAK"
++
++#: src/menus.c:462
++msgid "EXTRAS: NONE"
++msgstr "SEMMI EXTRA"
++
++#: src/menus.c:464
++msgid "EXTRAS: ALL"
++msgstr "OSSZES EXTRA"
++
++#: src/menus.c:466
++msgid "EXTRAS: SELECT"
++msgstr "SZELEKTALT EXTRAK"
++
++#. pause menu
++#: src/menus.c:491
++msgid "PAUSE"
++msgstr "SZUNET"
++
++#. quit y/n menus
++#: src/menus.c:495
++msgid "QUIT THIS GAME?"
++msgstr "EZEN JATEK VEGE?"
++
++#: src/menus.c:497
++msgid "REALLY QUIT?"
++msgstr "VALOBAN VEGE?"
++
++#: src/menus.c:499
++msgid "NO"
++msgstr "NEM"
++
++#: src/menus.c:500
++msgid "YES"
++msgstr "IGEN"
++
++#: src/menus.c:505
++msgid "EXISTING LEVEL"
++msgstr "LETEZO SZINT"
++
++#: src/menus.c:507
++msgid "NAME"
++msgstr "NEV"
++
++#. TRANS: in wrapped levels are unbounded level, e.g. whenever the
++#. player reach the left border it continue its way from the right border
++#. (except that the player doesn't even know there are borders, because
++#. the level is tiled infinitely).  In unwrapped levels there are explicit
++#. bounds that you cannot cross.  X-WRAP is a check box used to specified
++#. whether a level must be wrapped horizontally or not when creating a
++#. new level.
++#: src/menus.c:515
++msgid "X-WRAP"
++msgstr "X-MODI"
++
++#. TRANS: Y-WRAP is a check box used to specified whether a level
++#. must be wrapped vertically or not.
++#: src/menus.c:518
++msgid "Y-WRAP"
++msgstr "Y-MODI"
++
++#. TRANS: width of the level
++#: src/menus.c:520
++msgid "X-SIZE"
++msgstr "X-MERET"
++
++#. TRANS: height of the level
++#: src/menus.c:522
++msgid "Y-SIZE"
++msgstr "Y-MERET"
++
++#: src/menus.c:523
++msgid "EDIT"
++msgstr "SZERK"
++
++#. main menu
++#: src/menus.c:529
++msgid "HEROES"
++msgstr ""
++
++#. editor selector
++#: src/menus.c:532
++msgid "SELECT A LEVEL"
++msgstr "SZINT VALASZTAS"
++
++#: src/menus.c:541
++msgid "ONE PLAYER"
++msgstr "EGY JATEKOS"
++
++#: src/menus.c:543
++msgid "TWO PLAYERS"
++msgstr "KET JATEKOS"
++
++#: src/menus.c:547
++msgid "LOAD..."
++msgstr "TOLTES..."
++
++#. saved game selection
++#: src/menus.c:556
++msgid "CHOOSE A SAVE SLOT"
++msgstr "MENTESI REKESZ"
++
++#: src/menus.c:558
++msgid "CHOOSE A LOAD SLOT"
++msgstr "BETOLTESI REKESZ"
++
++#. enter your name
++#: src/menus.c:562
++msgid "ENTER YOUR NAME:"
++msgstr "ADD MEG A NEVED:"
++
++#. end level info
++#. TRANS: SIZE is the size of the player trail, PTS the
++#. number of PoinTS
++#: src/menus.c:568
++msgid "SIZE  PTS  LIVES"
++msgstr "MERET  PONT  ELET"
++
++#: src/menus.c:570
++msgid "PTS  LIVES"
++msgstr "PONT  ELET"
++
++#. TRANS: this is for KILL'EM ALL mode, and MEN is the number
++#. of lemmings killed by one player
++#: src/menus.c:574
++msgid " MEN  PTS  LIVES"
++msgstr " FO  PONT  ELET"
++
++#: src/menus.c:576
++msgid "CA$H  PTS  LIVES"
++msgstr "$  PONT  ELET"
++
++#: src/menus.c:578
++msgid "COLORS  PTS  LIVES"
++msgstr "SZIN  PONT  ELET"
++
++#: src/menus.c:583
++msgid "NEXT LEVEL"
++msgstr "UJ SZINT"
++
++#. TRANS: this is a menu entry that introduce the user to another
++#. menu.  This is NOT displayed DURING saving.
++#: src/menus.c:588
++msgid "SAVE..."
++msgstr "MENT..."
++
++#: src/menus.c:593
++msgid "PRESS RETURN"
++msgstr "NYUMJ ENTERT"
++
++#: src/menus.c:602
++msgid "WINS  PTS  LIVES"
++msgstr "NYERES  PONT  ELET"
++
++#. higher scores
++#: src/menus.c:613
++msgid "HIGHER SCORES"
++msgstr "NAGYOBB PONTOK"
++
++#: src/menus.c:1231
++#, c-format
++msgid "%d ROUND"
++msgid_plural "%d ROUNDS"
++msgstr[0] ""
++
++#: src/menus.c:2220
++#, c-format
++msgid "PLAYER %d, YOU CAME IN THE TOP 10"
++msgstr " %d,JATEKOS, AZ ELSO 10-BEN VAGY"
++
++#: src/menus.c:2287
++#, c-format
++msgid "PLAYER %d WON!"
++msgstr " %d NYERT!"
++
++#: src/menus.c:2293
++msgid "EVERYONE LOST!"
++msgstr "VALAKI VESZTETT!"
++
++#: src/menus.c:2295
++msgid "YOU LOST!"
++msgstr "VESZTES VAGY!"
++
++#: src/menus.c:2374
++#, c-format
++msgid "ROUND %d/%d"
++msgstr "KOR %d/%d"
++
++#: src/musicfiles.c:174
++#, c-format
++msgid "%s:%d: missing alias name"
++msgstr "%s:%d: hivatkozási név nincs"
++
++#: src/musicfiles.c:176
++#, c-format
++msgid "%s:%d: missing file name"
++msgstr "%s:%d: nincs fájlnév"
++
++#: src/musicfiles.c:178
++#, c-format
++msgid "%s:%d: missing title"
++msgstr "%s:%d: nincs cím"
++
++#: src/musicfiles.c:180
++#, c-format
++msgid "%s:%d: missing author"
++msgstr "%s:%d: nincs szerző"
++
++#: src/pcx.c:53
++#, c-format
++msgid "Cannot open %s"
++msgstr "Nem nyitható meg a(z) %s"
++
++#: src/people.c:39
++msgid "%{center}You owe this game to the following people"
++msgstr "%{center}A jatek a kovetkezoknek koszonheto"
++
++#: src/people.c:41
++msgid "Authors\n"
++msgstr "Szerzok\n"
++
++#: src/people.c:49
++msgid "Contributors\n"
++msgstr "Terjesztok\n"
++
++#: src/people.c:56
++msgid "Translators\n"
++msgstr "Forditok\n"
++
++#: src/people.c:59 src/people.c:74
++msgid "German"
++msgstr "Nemet"
++
++#: src/people.c:62
++msgid "Dutch"
++msgstr "Holland"
++
++#: src/people.c:65
++msgid "Brazilian Portuguese"
++msgstr "Brazil portugal"
++
++#: src/people.c:68
++msgid "Italian"
++msgstr "Olasz"
++
++#: src/people.c:71
++msgid "French"
++msgstr "Francia"
++
++#: src/people.c:78
++msgid "Packagers\n"
++msgstr "Csomagolok\n"
++
++#: src/people.c:87
++msgid "Porters\n"
++msgstr "Szallitok\n"
++
++#: src/people.c:94
++msgid "Other people we wish to thanks\n"
++msgstr "Meg akiknek koszonet jar\n"
++
++#: src/readmake.c:188
++#, c-format
++msgid "Unknown option '%c' for command '%s'."
++msgstr "A '%c' opció a '%s'.parancsnak ismeretlen."
++
++#: src/relocate.c:70
++msgid "HOME variable not found in environment, defaulting to `.'"
++msgstr "HOME változó nem lelhető, az alapértelmezett lesz`.'"
++
++#: src/relocate.c:182
++msgid ""
++"It looks like the game is not correctly installed.\n"
++"Maybe the data files have not been installed with the same configure "
++"options\n"
++"as the executable, or maybe the data files have been moved elsewhere.\n"
++"In the latter case it's probably enough to set the environment variable\n"
++"HEROES_PREFIX to the new location.  You may also want to set\n"
++"HEROES_DEBUG=system to see what files Heroes is looking after.\n"
++"If none of this helps, contact <heroes-bugs@lists.sourceforge.net>\n"
++msgstr ""
++"Úgy tűnik, hogy a játék nincs rendesen feltelepítve.\n"
++"Lehet, hogy az adat fájlok és a végrehajthatók nem azonosan lettek "
++"konfigurálva\n"
++",vagy az adatfájlok máshova lettek mozgatva.\n"
++"Az utóbbi esetben lehet, hogy elegendő a HEROES_PREFIX változó\n"
++"beállítása az új hely szerint.  Próbálkozz tehát ezzel:\n"
++"HEROES_DEBUG=system, amivel látható a Heroes fájl keresése.\n"
++"Ha ez sem segít, akkor: <heroes-bugs@lists.sourceforge.net>\n"
++
++#: src/rsc_files.c:31
++#, c-format
++msgid "%s: no such resource, possible misspelling of '%s'."
++msgstr "%s: nincs forrás, esetleg olvashatatlan a(z) '%s'."
++
++#: src/rsc_files.c:34
++#, c-format
++msgid "%s: no such resource."
++msgstr "%s: nincs forrás."
++
++#: src/rsc_files.c:149
++#, c-format
++msgid "%s: null resource"
++msgstr "%s: nulla forrás"
++
++#: src/rsc_files.c:151
++#, c-format
++msgid "%s: empty resource"
++msgstr "%s: üres forrás"
++
++#: src/savegame.c:90 src/scores.c:103
++#, c-format
++msgid "cannot write %s"
++msgstr "men írható a(z) %s"
++
++#: src/savegame.c:95 src/scores.c:107
++#, c-format
++msgid "%s: truncate error"
++msgstr "%s: csonkolási hiba"
++
++#: src/savegame.c:126
++#, c-format
++msgid "%s:%d: parse error.  Clearing saved-games table."
++msgstr "%s:%d: összevetési hiba.  Játék mentések törölve."
++
++#: src/scores.c:150
++#, c-format
++msgid "%s:%d: parse error.  Clearing score table."
++msgstr "%s:%d: összevetési hiba.  Ponttábla törölve."
++
++#: src/userconf.c:82 src/userconf.c:115
++#, c-format
++msgid "%s:%d: missing variable name"
++msgstr "%s:%d: hiányzó változó név"
++
++#: src/userconf.c:107
++#, c-format
++msgid "%s:%d: missing resource name"
++msgstr "%s:%d: nincs forrás név"
++
++#: src/userconf.c:131 src/userconf.c:145
++#, c-format
++msgid "%s:%d: %s: can only be used from the system configuration file"
++msgstr "%s:%d: %s: csak a rendszer beállító fájlban használható"
++
++#: src/userconf.c:140 src/userconf.c:154
++#, c-format
++msgid "%s:%d: %s: unknown value: %s"
++msgstr "%s:%d: %s: ismeretlen érték: %s"
++
++#: src/userconf.c:158
++#, c-format
++msgid "%s:%d: unknown keyword `%s'"
++msgstr "%s:%d: ismeretlen kulcsszó `%s'"
++
++#: src/debughash.gperf:45
++msgid "all messages"
++msgstr "minden üzenet"
++
++#: src/debughash.gperf:46
++msgid "different parts of the game"
++msgstr "a játék kölönféle részei"
++
++#: src/debughash.gperf:47
++msgid "system related messages"
++msgstr "rendszerfüggő üzenetek"
++
++#: src/debughash.gperf:48
++msgid "filename resources handling"
++msgstr "fájlnév kezelés"
++
++#: src/debughash.gperf:49
++msgid "files and directories handling"
++msgstr "fájl és mappa kezelés"
++
++#: src/debughash.gperf:50
++msgid "levels handling"
++msgstr "szintek kezelése"
++
++#: src/debughash.gperf:51
++msgid "sound track events"
++msgstr "hangsáv tulajdonságok"
++
++#: src/debughash.gperf:52
++msgid "sound effects events"
++msgstr "zörej tulajdonságok"
++
++#: src/debughash.gperf:53
++msgid "communication with the display driver"
++msgstr "párbeszéd a kép meghajtóval"
++
++#: src/debughash.gperf:54
++msgid "joystick initialization and events"
++msgstr "botkormány indítás és tulajdonságok"
++
++#: src/debughash.gperf:55
++msgid "timer handling"
++msgstr "időzítő kezelés"
++
++#: src/debughash.gperf:56
++msgid "miscellaneous events"
++msgstr "vegyes tulajdonságok"
++
++#: src/debughash.gperf:57
++msgid "palette fade events"
++msgstr "paletta tulajdonságok"
++
++#: src/debughash.gperf:58
++msgid "bonus"
++msgstr "bónusz"
++
++#: src/debughash.gperf:87
++#, c-format
++msgid "%s: no such channel, assuming you meant '%s'."
++msgstr "%s: nincs csatorna, a kívánt használatos '%s'."
++
++#: src/debughash.gperf:90
++#, c-format
++msgid "%s: no such channel (--list=debug will list all known channels)"
++msgstr "%s: nincs csatorna (--list=debug kiírja a létezőket)"
++
++#: src/media/sfx.c:94
++#, c-format
++msgid ""
++"Cannot open %s, disabling sound-effects\n"
++"(run with -X to supress this message)."
++msgstr ""
++"Nem nyitható meg a(z) %s, zörejek letiltva.\n"
++"(A -X opció elnyomja ezt az üzenetet)."
++
++#: src/media/sfx.c:260
++#, c-format
++msgid "Unable to load sample %s"
++msgstr "A %s minta nem tölthető be."
++
++#: src/media/allegro/joystick.c:45 src/media/gii/joystick.c:109
++#: src/media/sdl/joystick.c:50
++msgid "No joystick found (run with `-J' to suppress this message)."
++msgstr "Nincs botkormány (-J -vel indítva nem károgok!)."
++
++#: src/media/dummy/strack.c:75
++msgid "Heroes has been compiled without sound support."
++msgstr "A Heroes hanglehetőség nélkül lett lefordítva."
++
++#. FIXME: ask to send a bug report with a trace
++#: src/media/ggi/video.c:174
++msgid "failed to get any direct buffer for this visual"
++msgstr "nincs közvetlen elérésű puffer a megjelenítéshez"
++
++#. TRANS: a `visual' is associated by LibGGI to a display.  You can
++#. actually call it a `display', this makes no big difference.
++#: src/media/ggi/video.c:196
++msgid "failed to open visual."
++msgstr "nincs megjeleníthetőség."
++
++#: src/media/ggi/video.c:204
++msgid "cannot setup a correct display."
++msgstr "a képernyő nem állítható be korrekten."
++
++#: src/media/ggi/video.c:211
++#, c-format
++msgid "negotiated video mode is too small (width=%d, height=%d)"
++msgstr "szóbanforgó videó mód túl kicsi (szélesség=%d, magasság=%d)"
++
++#. TRANS: `display-memory' is the name of a LibGGI driver and
++#. make no sense to translate.
++#: src/media/ggi/video.c:224
++msgid "Failed to open an internal `display-memory' visual."
++msgstr "Belső kép memória nem foglalható le."
++
++#: src/media/ggi/video.c:226
++msgid "Failed to set 320x200x8 mode on display-memory"
++msgstr "A 320x200x8 módhoz nincs elég kép memória"
++
++#: src/media/ggi/video.c:304
++msgid "failed to acquire direct-buffer"
++msgstr "nincs közvetlen puffer elérés"
++
++#: src/media/ggi/video.c:321
++msgid "failed to release direct-buffer"
++msgstr "nem valósítható meg a közvetlen puffer"
++
++#: src/media/gii/joystick.c:96
++#, c-format
++msgid "unexpected event %d\n"
++msgstr "váratlan feladat %d\n"
++
++#: src/media/mikmod/strack.c:104
++#, c-format
++msgid ""
++"Could not initialize sound, reason: %s\n"
++"Disabling sound output (use -S to suppress this message)."
++msgstr ""
++"Hangrendszer nem indul, oka: %s\n"
++"Hangok letiltva ( -S opció elnyomja ezt az üzenetet)."
++
++#: src/media/mikmod/strack.c:114
++msgid ""
++"Could not initialize sound, reason: LibMikMod is not thread safe.\n"
++"Disabling sound output (use -S to suppress this message)."
++msgstr ""
++"Hangrendszer nem indítható, oka: LibMikMod nem indult el.\n"
++"Hangok letiltva ( -S opció elnyomja ezt az üzenetet)."
++
++#: src/media/mikmod/strack.c:149 src/media/sdl_mixer/strack.c:133
++#, c-format
++msgid "Could not load %s, reason: %s"
++msgstr "A %s nem tölthető be, az oka: %s"
++
++#: src/media/mikmod/strack.c:214
++#, c-format
++msgid "LibMikMod version %ld.%ld.%ld\n"
++msgstr "LibMikMod verzió %ld.%ld.%ld\n"
++
++#: src/media/mikmod/strack.c:217
++#, c-format
++msgid ""
++"\n"
++"Available drivers:\n"
++"%s\n"
++msgstr ""
++"\n"
++"Létező meghajtók:\n"
++"%s\n"
++
++#: src/media/mikmod/strack.c:233
++#, c-format
++msgid ""
++"Argument '%s' out of bounds, must be between %d and %d.\n"
++"Use '%s --help' for more information."
++msgstr ""
++"A(z) '%s' argument értéke %d és %d közé essen!\n"
++"A '%s --help' erről többet mond."
++
++#: src/media/sdl/video.c:114
++#, c-format
++msgid "Failed to open visual: %s"
++msgstr "A %s kép nem nyitható meg."
++
++#: src/media/sdl_mixer/strack.c:95
++#, c-format
++msgid ""
++"Couldn't open audio: %s\n"
++"Disabling sound output (use -S to suppress this message)."
++msgstr ""
++"A %s hang nem nyitható meg\n"
++"Hangok letiltva ( -S opció elnyomja ezt az üzenetet)."
++
++#: src/media/sdl_mixer/strack.c:171
++msgid ""
++"Heroes has been compiled with SDL_mixer, there is no driver list available."
++msgstr ""
++"A Heroes SDL_mixer lehetőség nélkül lett lefordítva, nicsenek meghajtók."
++
++#: src/media/sdl_mixer/strack.c:187
++#, c-format
++msgid "%s: missing parameter for 'freq'"
++msgstr "%s: a 'freq' paraméteres!"
++
++#: src/media/sdl_mixer/strack.c:193
++#, c-format
++msgid "%s: missing parameter for `buffers'"
++msgstr "%s: a `buffers' paraméteres!"
++
++#: src/media/sdl_mixer/strack.c:195
++#, c-format
++msgid "%s: recognized sound options are freq=nnn and buffers=nnn"
++msgstr "%s: a lehetséges hang opciók: freq=nnn és buffers=nnn"

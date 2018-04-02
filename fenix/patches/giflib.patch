@@ -1,0 +1,12 @@
+diff -Naur orig/map/map.c mod/map/map.c
+--- orig/map/map.c	2007-04-13 00:09:10.000000000 +0200
++++ mod/map/map.c	2016-05-02 16:07:27.712745748 +0200
+@@ -213,7 +213,7 @@
+ 	MAP * map ;
+ 	ColorMapObject * pal ;
+ 
+-	file = DGifOpenFileName (filename) ;
++	file = DGifOpenFileName (filename, 1) ;
+ 	if (!file) return NULL ;
+ 	DGifSlurp (file) ;
+ 

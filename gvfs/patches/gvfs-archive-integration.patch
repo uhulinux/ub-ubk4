@@ -1,0 +1,50 @@
+diff -up gvfs-1.29.90/Makefile.am.archive-integration gvfs-1.29.90/Makefile.am
+--- gvfs-1.29.90/Makefile.am.archive-integration	2016-08-11 14:01:26.000000000 +0200
++++ gvfs-1.29.90/Makefile.am	2016-08-13 12:19:21.313402711 +0200
+@@ -1,5 +1,20 @@
+ NULL =
+ 
++desktop_in_files = mount-archive.desktop.in
++
++mount-archive.desktop.in: mount-archive.desktop.in.in
++	sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
++
++desktopdir       = $(datadir)/applications
++if HAVE_ARCHIVE
++desktop_DATA     = $(desktop_in_files:.desktop.in=.desktop)
++
++$(desktop_DATA): %.desktop: %.desktop.in
++	$(AM_V_GEN) $(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
++else
++desktop_DATA     =
++endif
++
+ SUBDIRS = \
+ 	common \
+ 	metadata \
+@@ -24,6 +39,8 @@ EXTRA_DIST = \
+ 	gvfs.doap		\
+ 	README.commits		\
+ 	MAINTAINERS		\
++	mount-archive.desktop.in.in	\
++	$(desktop_in_files)	\
+ 	m4			\
+ 	gettext/its/polkit.loc	\
+ 	gettext/its/polkit.its	\
+diff -up gvfs-1.29.90/mount-archive.desktop.in.in.archive-integration gvfs-1.29.90/mount-archive.desktop.in.in
+--- gvfs-1.29.90/mount-archive.desktop.in.in.archive-integration	2016-08-13 12:19:21.313402711 +0200
++++ gvfs-1.29.90/mount-archive.desktop.in.in	2016-08-13 12:19:21.313402711 +0200
+@@ -0,0 +1,13 @@
++[Desktop Entry]
++Name=Archive Mounter
++Exec=@libexecdir@/gvfsd-archive file=%u
++X-Gnome-Vfs-System=gio
++MimeType=application/x-cd-image;application/x-bzip-compressed-tar;application/x-compressed-tar;application/x-tar;application/x-cpio;application/x-zip;application/zip;application/x-lzma-compressed-tar;application/x-xz-compressed-tar;
++Terminal=false
++StartupNotify=false
++Type=Application
++NoDisplay=true
++X-GNOME-Bugzilla-Bugzilla=GNOME
++X-GNOME-Bugzilla-Product=gvfs
++X-GNOME-Bugzilla-Component=archive-backend
++X-GNOME-Bugzilla-Version=@VERSION@

@@ -1,0 +1,23 @@
+#!/bin/sh -eux
+
+unset CPPFLAGS
+CXXFLAGS+=' -fno-delete-null-pointer-checks -fpermissive -fno-tree-vrp -fno-strict-aliasing'
+CFLAGS+=' -fno-delete-null-pointer-checks -fpermissive -fno-tree-vrp -fno-strict-aliasing'
+
+export PYTHON=/usr/bin/python2
+
+cd js/src
+
+export JS_STANDALONE=1
+ub_compile \
+	--with-system-nspr \
+    --with-system-zlib \
+	--with-system-icu \
+	--with-intl-api \
+	--enable-ctypes \
+    --enable-threadsafe \
+	--enable-system-ffi \
+	--enable-shared-js \
+	--enable-gcgenerational \
+	--disable-optimize \
+	--enable-pie

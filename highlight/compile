@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_make \
+	  LUA_CFLAGS=$(pkg-config --cflags lua53) \
+	  LUA_LIBS=$(pkg-config --libs lua53)

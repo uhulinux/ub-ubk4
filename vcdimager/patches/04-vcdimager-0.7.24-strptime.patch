@@ -1,0 +1,24 @@
+diff -Naur orig/frontends/cli/vcdimager.c patched/frontends/cli/vcdimager.c
+--- orig/frontends/cli/vcdimager.c	2005-06-09 02:53:23.134739579 +0200
++++ patched/frontends/cli/vcdimager.c	2017-12-22 03:22:50.846359549 +0100
+@@ -37,6 +37,7 @@
+ #ifdef HAVE_STRING_H
+ #include <string.h>
+ #endif
++#define _XOPEN_SOURCE
+ #include <time.h>
+ 
+ #include <popt.h>
+diff -Naur orig/frontends/xml/vcd_xml_build.c patched/frontends/xml/vcd_xml_build.c
+--- orig/frontends/xml/vcd_xml_build.c	2011-03-17 22:26:34.134739579 +0100
++++ patched/frontends/xml/vcd_xml_build.c	2017-12-22 03:35:10.505466625 +0100
+@@ -29,6 +29,9 @@
+ 
+ #include <popt.h>
+ 
++#define _XOPEN_SOURCE
++#include <time.h>
++
+ #include <libxml/parserInternals.h>
+ #include <libxml/parser.h>
+ #include <libxml/valid.h>

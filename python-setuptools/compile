@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+cp -a py2 py3
+export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
+cd py3
+python3 bootstrap.py
+python3 setup.py build
+cd ../py2
+python bootstrap.py
+python setup.py build

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+ln -sf efax "$UB_INSTALLDIR"/usr/bin/efax-0.9a
+ln -sf efix "$UB_INSTALLDIR"/usr/bin/efix-0.9a
+rm "$UB_INSTALLDIR"/usr/share/man/man1/efax.1
+rm "$UB_INSTALLDIR"/usr/share/man/man1/efix.1

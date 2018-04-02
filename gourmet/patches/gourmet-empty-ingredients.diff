@@ -1,0 +1,25 @@
+commit feb887ea97fe8b260273a2c844ca4de94f04b718
+Author: Thomas M. Hinkle <tmhinkle@gmail.com>
+Date:   Sun Jan 17 09:33:06 2016 -0500
+
+    Handle editing amount/unit of empty ingredients
+    
+    Fixes #837 by allowing empty ingredient keys when editing the amount and unit.
+
+diff --git a/gourmet/reccard.py b/gourmet/reccard.py
+index c3ef20a..5f4e019 100644
+--- a/gourmet/reccard.py
++++ b/gourmet/reccard.py
+@@ -2614,9 +2614,9 @@ class IngredientTreeUI:
+         """Handed a new unit and an ingredient, we decide whether to convert and return:
+         None (don't convert) or Amount (new amount)
+         Message (message for our user) or None (no message for our user)"""
+-        key=ingdict['ingkey']
+-        old_unit=ingdict['unit']
+-        old_amt=ingdict['amount']
++        key=ingdict.get('ingkey',None)
++        old_unit=ingdict.get('unit',None)
++        old_amt=ingdict.get('amount',None)
+         if type(old_amt)==str:
+             old_amt = convert.frac_to_float(old_amt)
+         density=None

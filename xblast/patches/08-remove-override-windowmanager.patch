@@ -1,0 +1,375 @@
+diff -urN XBlast-2.6-sound.orig/Legacy/defaults.h XBlast-2.6-sound/Legacy/defaults.h
+--- XBlast-2.6-sound.orig/Legacy/defaults.h	1999-05-14 23:01:38.000000000 +0200
++++ XBlast-2.6-sound/Legacy/defaults.h	2003-09-29 23:36:50.000000000 +0200
+@@ -82,7 +82,6 @@
+   { D_FrameRate,             "20" },
+   { D_Random,                "off" },
+   { D_AllowColorMode,        "true" },
+-  { D_ForceOverride,         "false" },
+   { D_BellSound,             "true" },
+   { D_RecordDemo,            "false" },
+   { D_PrintStat,             "false" },
+@@ -156,7 +155,6 @@
+ static BMEntry disp_default_setting[] = {
+   /* color mode */
+   { D_ColorMode,        "true" },
+-  { D_Override,         "false" },
+   /* color calibration */
+   { D_BaseRed,          "4096" },
+   { D_BaseGreen,        "4096" },
+@@ -241,8 +239,6 @@
+   { "+rl",      W_RandomLevelOrder,     XrmoptionNoArg,     (caddr_t) "off"},
+   { "-bw",      W_AllowColorMode,       XrmoptionNoArg,     (caddr_t) "false"},
+   { "+bw",      W_AllowColorMode,       XrmoptionNoArg,     (caddr_t) "true"},
+-  { "-wm",      W_ForceOverride,        XrmoptionNoArg,     (caddr_t) "true"},
+-  { "+wm",      W_ForceOverride,        XrmoptionNoArg,     (caddr_t) "false"},
+   { "-q",       W_BellSound,            XrmoptionNoArg,     (caddr_t) "false"},
+   { "+q",       W_BellSound,            XrmoptionNoArg,     (caddr_t) "true"},
+   { "-R",       W_RecordDemo,           XrmoptionNoArg,     (caddr_t) "true"},
+diff -urN XBlast-2.6-sound.orig/Legacy/graphics.c XBlast-2.6-sound/Legacy/graphics.c
+--- XBlast-2.6-sound.orig/Legacy/graphics.c	1999-10-03 11:41:44.000000000 +0200
++++ XBlast-2.6-sound/Legacy/graphics.c	2003-09-29 23:46:42.000000000 +0200
+@@ -1565,83 +1565,6 @@
+   }
+ }
+ 
+-/* 
+- * local function : init_window_override
+- */
+-#ifdef __STDC__
+-static void 
+-init_window_override (void)
+-#else
+-static void 
+-init_window_override ()
+-#endif
+-{
+-  XWindowAttributes xwa;
+-  XSetWindowAttributes xswa;
+-  XEvent xev;
+-  XGCValues xgcv;
+-  int fg, bg;
+-
+-  fg = black_pixel;
+-  bg = white_pixel;
+-
+-  /* Get Root Window Size */
+-  if ( XGetWindowAttributes(dpy, DefaultRootWindow(dpy), &xwa)
+-       == 0 ) {
+-    x_fatal("couldn't get root window size","");
+-  }
+-
+-  winX =  0;
+-  winY =  0;
+-  winW =  PIXW;
+-  winH =  PIXH + SCOREH;
+-
+-  /* Set Window Attributes */
+-  xswa.event_mask = NORMAL_EVENT_MASK;
+-  xswa.background_pixel = fg;
+-  xswa.border_pixel = fg;
+-  xswa.override_redirect = True;
+-
+-  /* Open the Window */
+-  win
+-    = XCreateWindow(dpy, DefaultRootWindow(dpy),
+-                    winX,winY, winW,winH, 0,
+-                    def_depth,
+-                    InputOutput, def_visual,
+-                    CWEventMask | CWBackPixel | CWBorderPixel 
+-		    | CWOverrideRedirect,
+-                    &xswa );
+-
+-  xgcv.foreground = fg;
+-  xgcv.background = bg;
+-  gc_window = XCreateGC(dpy, win, 
+-			      GCForeground | GCBackground, &xgcv);
+-
+-  /* Set Cursor */
+-  XDefineCursor(dpy, win,
+-                XCreateFontCursor(dpy, XC_trek) );
+-
+-  /* Map the Window */
+-  XMapRaised(dpy, win);
+-
+-  /* wait for an ExposeEvent */
+-  do {
+-    XNextEvent(dpy, &xev);
+-  } while (xev.type != Expose );
+-
+-  /* get actual window size */
+-  if ( XGetWindowAttributes(dpy, win , &xwa) == 0) {
+-    x_fatal("could not get window size","");
+-  }
+-
+-  winW = xwa.width;
+-  winH = xwa.height;
+-
+-  if ( (winW < PIXW) || (winH <PIXH) ) {
+-    x_warning("display is to small","");
+-  }
+-}
+-
+ #ifndef MONO_XBLAST
+ /* 
+  * Local function : init_pixmap_color
+@@ -2192,11 +2115,7 @@
+ #endif
+ 
+   /* init window, either override or normal */
+-  if (override_from_database()) {
+-    init_window_override();
+-  } else {
+     init_window_normal(win_title, icon_title);
+-  }
+ #ifndef MONO_XBLAST
+   /* init graphics either color or black an white */
+   switch (colorMode) {
+diff -urN XBlast-2.6-sound.orig/Legacy/resource.h XBlast-2.6-sound/Legacy/resource.h
+--- XBlast-2.6-sound.orig/Legacy/resource.h	1999-05-14 22:59:25.000000000 +0200
++++ XBlast-2.6-sound/Legacy/resource.h	2003-09-29 23:34:25.000000000 +0200
+@@ -154,11 +154,6 @@
+ #define D_AllowColorMode  "XBlast.allowColorMode"
+ #define N_AllowColorMode  "xblast.allowColorMode"
+ #define C_AllowColorMode  "XBlast.AllowColorMode"
+-/* force override window manager */
+-#define W_ForceOverride ".forceOverride"
+-#define D_ForceOverride "XBlast.forceOverride"
+-#define N_ForceOverride "xblast.forceOverride"
+-#define C_ForceOverride "XBlast.ForceOverride"
+ /* color calibration */
+ #define W_BaseRed   ".baseRed"
+ #define D_BaseRed   "XBlast.baseRed"
+@@ -249,10 +244,6 @@
+ #define N_ColorMode "xblast.colorMode"
+ #define D_ColorMode "XBlast.colorMode"
+ #define C_ColorMode "XBlast.ColorMode"
+-/* override window manager */
+-#define N_Override "xblast.override"
+-#define D_Override "Xblast.override"
+-#define C_Override "Xblast.Override"
+ /* fonts */
+ #define N_LargeFont  "xblast.largeFont"
+ #define D_LargeFont  "XBlast.largeFont"
+diff -urN XBlast-2.6-sound.orig/Legacy/setup.c XBlast-2.6-sound/Legacy/setup.c
+--- XBlast-2.6-sound.orig/Legacy/setup.c	1999-08-15 15:42:19.000000000 +0200
++++ XBlast-2.6-sound/Legacy/setup.c	2003-09-29 23:36:00.000000000 +0200
+@@ -1100,8 +1100,6 @@
+ #ifndef MONO_XBLAST
+   query_bool_for_database (&inter_DB, N_AllowColorMode, "Allow color mode");
+ #endif
+-  query_bool_for_database (&inter_DB, N_ForceOverride, 
+-			   "Override window managers");
+   query_int_for_database (&inter_DB, N_FrameRate, "Frames per second", 2, 100, 
+ 			  db_get_int(default_DB, 2, 100, N_FrameRate, 
+ 				     C_FrameRate) );
+@@ -1150,7 +1148,6 @@
+   }
+ 
+   string_to_children ( db_get_string (default_DB, N_AllowColorMode, C_AllowColorMode) );
+-  string_to_children ( db_get_string (default_DB, N_ForceOverride, C_ForceOverride) );
+   string_to_children ( db_get_string (default_DB, N_BellSound , C_BellSound) );
+ }
+ 
+@@ -1199,8 +1196,6 @@
+   string_from_parent(buf);
+   XrmPutStringResource(&inter_DB, N_AllowColorMode, buf);
+   string_from_parent(buf);
+-  XrmPutStringResource(&inter_DB, N_ForceOverride, buf);
+-  string_from_parent(buf);
+   XrmPutStringResource(&inter_DB, N_BellSound, buf);
+   string_to_children ( db_get_string (default_DB, N_BellSound , C_BellSound) );
+ 
+@@ -1972,21 +1967,6 @@
+ 
+ 
+ /*
+- * public function get_override_flag
+- */
+-#ifdef __STDC__
+-int
+-override_from_database (void)
+-#else
+-int
+-override_from_database ()
+-#endif
+-{
+-  return (db_get_bool(default_DB, N_ForceOverride, C_ForceOverride)
+-	  || db_get_bool(disp_DB, N_Override, C_Override) );
+-}
+-
+-/*
+  * public player_from_database
+  */
+ #ifdef __STDC__
+diff -urN XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.man XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.man
+--- XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.man	1996-12-14 20:15:47.000000000 +0100
++++ XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.man	2003-09-29 23:36:21.000000000 +0200
+@@ -85,8 +85,6 @@
+ .br
+ * \fIAllow Color Mode\fP 
+ .br
+-* \fIOverride Window Manager\fP 
+-.br
+ * \fIFrame Rate\fP
+ .br
+ * \fIBell Sound\fP
+diff -urN XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.tcl XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.tcl
+--- XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.tcl	1999-09-26 10:56:48.000000000 +0200
++++ XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.tcl	2003-09-29 23:32:04.000000000 +0200
+@@ -1171,7 +1171,6 @@
+     global randomPlayer
+     global randomLevel
+     global blackWhite
+-    global overRide
+     global soundOption
+     global forkMode
+     global gameStat
+@@ -1204,7 +1203,7 @@
+ 	}
+     }
+     set optionString "$teamMode -L $numLives -v $numVictories $randomPlayer\
+-	    $randomLevel $blackWhite $overRide -f $frameRate $soundOption \
++	    $randomLevel $blackWhite -f $frameRate $soundOption \
+ 	    $forkMode $recordMode $gameStat" 
+     wm withdraw .
+     #    catch "exec $xblastCommand $playerString $optionString" output
+@@ -1272,7 +1271,6 @@
+     global randomPlayer
+     global randomLevel
+     global blackWhite
+-    global overRide
+     global soundOption
+     global forkMode
+     global gameStat
+@@ -1317,11 +1315,6 @@
+     } else {
+ 	puts $fp "xblast.allowColorMode: True"
+     }
+-    if {$overRide=="-wm"} {
+-	puts $fp "xblast.forceOverride: True"
+-    } else {
+-	puts $fp "xblast.forceOverride: False"
+-    }
+     global hasDspSound
+     if {$hasDspSound} {
+ 	if {$soundOption == "-stereo"} {
+@@ -1375,7 +1368,6 @@
+     global randomPlayer
+     global randomLevel
+     global blackWhite
+-    global overRide
+     global soundOption
+     global forkMode
+     global gameStat
+@@ -1505,14 +1497,6 @@
+ 		    set blackWhite "-bw"
+ 		}
+ 	    }
+-	    {xblast.forceOverride} {
+-		# override WM
+-		if {$value} {
+-		    set overRide "-wm"
+-		} else {
+-		    set overRide "+wm"
+-		}
+-	    }
+ 	    {xblast.bellSound} {
+ 		# toggle bell sound
+ 		global hasDspSound
+@@ -1872,24 +1856,6 @@
+ 	    -font $fontMedium
+     pack $W.o.r.blackWhite.b1 $W.o.r.blackWhite.b0 \
+ 	    -side left -fill y -expand yes -pady 2 
+-    #
+-    # override wm box
+-    #
+-    global overRide
+-    label $W.o.l.overRide -text "Override Window Manager" -font $fontMedium
+-    frame $W.o.r.overRide -relief sunken
+-    radiobutton $W.o.r.overRide.b1 \
+-	    -variable overRide \
+-	    -text "yes " \
+-	    -value "-wm" \
+-	    -font $fontMedium
+-    radiobutton $W.o.r.overRide.b0 \
+-	    -variable overRide \
+-	    -text "no " \
+-	    -value "+wm" \
+-	    -font $fontMedium
+-    pack $W.o.r.overRide.b1 $W.o.r.overRide.b0 \
+-	    -side left -fill y -expand yes -pady 2 
+     
+ 
+     #
+@@ -3393,9 +3359,6 @@
+ global blackWhite
+ set blackWhite "+bw"
+ #
+-global overRide
+-set overRide "+wm"
+-#
+ global soundOption
+ if {$hasDspSound} {
+     set soundOption "-stereo"
+diff -urN XBlast-2.6-sound.orig/Legacy/XBlast.ad XBlast-2.6-sound/Legacy/XBlast.ad
+--- XBlast-2.6-sound.orig/Legacy/XBlast.ad	1999-09-19 16:24:58.000000000 +0200
++++ XBlast-2.6-sound/Legacy/XBlast.ad	2003-09-29 23:34:35.000000000 +0200
+@@ -29,13 +29,11 @@
+ # global setup (valid for all displays)
+ XBlast.frameRate:      20
+ XBlast.allowColorMode: true
+-XBlast.forceOverride:  false
+ XBlast.bellSound:      true
+ XBlast.fork:           true
+ 
+ # local setup (can be changed by local xresources)
+ XBlast.colorMode: true
+-XBlast.override:  false
+ # color calibration (for Hicolor mode)
+ XBlast.BaseColor: 4096
+ 
+diff -urN XBlast-2.6-sound.orig/Legacy/xblast.man XBlast-2.6-sound/Legacy/xblast.man
+--- XBlast-2.6-sound.orig/Legacy/xblast.man	1999-09-19 16:31:51.000000000 +0200
++++ XBlast-2.6-sound/Legacy/xblast.man	2003-09-29 23:33:18.000000000 +0200
+@@ -231,15 +231,6 @@
+ .B -v \fInumber
+ This option sets the number of victories to win game to \fInumber\fP.
+ The default value is 5.
+-.TP
+-.B -wm
+-This options allows \fIXBlast\fP to override the reparent request by
+-the window manager, i.e. the \fIXBlast\fP windows will not be managed by 
+-the window managers. This may speed up performance on some systems.
+-.TP
+-.B +wm
+-This options allows the \fIXBlast\fP windows to be managed by the
+-window manager. 
+ .PP
+ .SH LAUNCHING XBLAST 
+ The easiest way to start \fIXBlast\fP is to use \fItkXBlast(1)\fP
+@@ -662,12 +653,6 @@
+ Specifies if the bell is used for explosions and game restart after pause.
+ The default is "true"
+ .TP
+-.B forceOverride (\fPclass\fB ForceOverride)
+-Specifies if reparent by window is overridden for all windows.
+-This means windows will not be managed by the window manager.
+-The default is "false". The may speed up the performance on some
+-systems.
+-.TP
+ .B fork (\fPclass\fB Fork)
+ Specifies is \fIXBlast\fP forks to run one process per served
+ display. When "false" one process serves all displays. The
+@@ -732,11 +717,6 @@
+ Specifies if color mode should be used. This resource
+ is used only for color displays. The default is "true".
+ .TP
+-.B override (\fRclass\fP Override)
+-Specifies if reparenting by window manager is to be overridden.
+-This means the xblast window will not be managed
+-by the window manager. The default is "false".
+-.TP
+ .B largeFont (\fRclass\fP Font)
+ Specifies the font to be used for large sized text.
+ The default is "-*-helvetica-bold-r-*-*-24-*-*-*-*-*-iso8859-*"

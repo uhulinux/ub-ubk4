@@ -1,0 +1,25 @@
+diff -Naurd a/makefile b/makefile
+--- a/makefile	2012-04-28 12:21:28.000000000 +0200
++++ b/makefile	2012-05-13 17:30:06.000000000 +0200
+@@ -1,7 +1,7 @@
+ # Makefile
+ #
+ 
+-INSTALL_PATH = /usr/local
++INSTALL_PATH = /usr
+ 
+ # For SCO
+ CFLAGS = -b elf -O -D_SVID
+@@ -73,9 +73,9 @@
+ 
+ install: shc
+ 	@echo '***	Installing shc and shc.1 on '$(INSTALL_PATH)
+-	@echo -n '***	¿Do you want to continue? '; read ANS; case "$$ANS" in y|Y|yes|Yes|YES) ;; *) exit 1;; esac;
+-	install -c -s shc $(INSTALL_PATH)/bin/
+-	install -c -m 644 shc.1 $(INSTALL_PATH)/man/man1/
++#	@echo -n '***	¿Do you want to continue? '; read ANS; case "$$ANS" in y|Y|yes|Yes|YES) ;; *) exit 1;; esac;
++	install -c -s shc $(DESTDIR)$(INSTALL_PATH)/bin/
++	install -c -m 644 shc.1 $(DESTDIR)$(INSTALL_PATH)/share/man/man1/
+ 
+ clean:
+ 	rm -f *.o *~ *.x.c

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/Golems
+chmod +x,+x,+x Golems.sh
+cp -a * "$UB_INSTALLDIR"/usr/share/Golems/
+ln -s ../share/Golems/Golems.sh "$UB_INSTALLDIR"/usr/bin/golems

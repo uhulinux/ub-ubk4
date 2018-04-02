@@ -1,0 +1,41 @@
+Description: fixes "format not a string" compilation failure
+Author: Anton Gladky <gladk@debian.org>
+Forwarded: https://github.com/sebastianbiallas/ht/commit/c728f0c3bba21d8484c6e67b1137967c6610f86c
+Last-Update: 2015-02-18
+
+Index: ht-2.1.0/asm/x86dis.cc
+===================================================================
+--- ht-2.1.0.orig/asm/x86dis.cc
++++ ht-2.1.0/asm/x86dis.cc
+@@ -1218,15 +1218,15 @@ void x86dis::str_op(char *opstr, int *op
+ 		default: {assert(0);}
+ 		}
+ 		if (!insn->rexprefix) {
+-			sprintf(opstr, x86_regs[j][op->reg]);
++			sprintf(opstr, "%s", x86_regs[j][op->reg]);
+ 		} else {
+-			sprintf(opstr, x86_64regs[j][op->reg]);
++			sprintf(opstr, "%s", x86_64regs[j][op->reg]);
+ 		}
+ 		break;
+ 	}
+ 	case X86_OPTYPE_SEG:
+ 		if (x86_segs[op->seg]) {
+-			sprintf(opstr, x86_segs[op->seg]);
++			sprintf(opstr, "%s", x86_segs[op->seg]);
+ 		}
+ 		break;
+ 	case X86_OPTYPE_CRX:
+Index: ht-2.1.0/htpal.cc
+===================================================================
+--- ht-2.1.0.orig/htpal.cc
++++ ht-2.1.0/htpal.cc
+@@ -305,7 +305,7 @@ void palette_entry::strvalue(char *buf32
+ 		text = "normal";
+ 	}
+ 	p = tag_make_color(p, 32, VCP(fg, bg));
+-	p += sprintf(p, text);
++	p += sprintf(p, "%s", text);
+ 	p = tag_make_default_color(p, 32);
+ 	*p = 0;
+ }

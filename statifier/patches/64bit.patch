@@ -1,0 +1,20 @@
+diff -Naur orig/configs/config.x86_64 patched/configs/config.x86_64
+--- orig/configs/config.x86_64	2015-10-23 11:17:13.134741211 +0200
++++ patched/configs/config.x86_64	2017-06-10 19:33:44.699986432 +0200
+@@ -9,13 +9,13 @@
+ 
+ # ELF32
+    # Have elf32 ?
+-   ELF32             := yes
++   ELF32             := no
+    # Special flags to compile elf32
+-   FLAGS_32          := -m32
++   FLAGS_32          := 
+    # Flags to compile C to asm elf32 (mostly to be sure calling convention)
+    FLAGS_C_TO_ASM_32 := -mregparm=0
+    # Processor name (directory name for assembler sources)
+-   PROCESSOR_32      := i386
++   PROCESSOR_32      := 
+ # End ELF32
+ 
+ # ELF64

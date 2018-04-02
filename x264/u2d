@@ -1,0 +1,1 @@
+urllist ftp://ftp.videolan.org/pub/videolan/x264/snapshots/ | splitver '^x264-snapshot-([0-9-]+).tar.bz2$' | sort -V | tail -n 1 | sed s/-/./

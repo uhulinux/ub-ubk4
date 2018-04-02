@@ -1,0 +1,23 @@
+diff -urN statserial-1.1.orig/Makefile statserial-1.1/Makefile
+--- statserial-1.1.orig/Makefile	1994-12-18 03:16:09.000000000 +0100
++++ statserial-1.1/Makefile	2003-09-04 01:34:10.000000000 +0200
+@@ -7,7 +7,7 @@
+ 
+ # for production code
+ CFLAGS	= -Wall -O3 -fomit-frame-pointer
+-LDFLAGS = -s -N
++LDFLAGS = -s
+ 
+ statserial:	statserial.o
+ 	$(LD) $(LDFLAGS) -o statserial statserial.o -lcurses
+@@ -16,8 +16,8 @@
+ 	$(CC) $(CFLAGS) -c statserial.c
+ 
+ install: statserial
+-	install -m 555 statserial /usr/local/bin/statserial
+-	install -m 444 statserial.1 /usr/local/man/man1/statserial.1
++	install -m 755 statserial $(DESTDIR)/usr/bin/statserial
++	install -m 644 statserial.1 $(DESTDIR)/usr/share/man/man1/statserial.1
+ 
+ clean:
+ 	$(RM) statserial statserial.o core *~

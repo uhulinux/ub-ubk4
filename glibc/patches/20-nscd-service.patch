@@ -1,0 +1,12 @@
+diff -Naur orig/nscd/nscd.service patched/nscd/nscd.service
+--- orig/nscd/nscd.service	2016-02-18 18:54:00.000000000 +0100
++++ patched/nscd/nscd.service	2016-06-17 00:06:22.152969231 +0200
+@@ -13,7 +13,7 @@
+ ExecReload=/usr/sbin/nscd -i services
+ ExecReload=/usr/sbin/nscd -i netgroup
+ Restart=always
+-PIDFile=/run/nscd/nscd.pid
++PIDFile=/var/run/nscd/nscd.pid
+ 
+ [Install]
+ WantedBy=multi-user.target

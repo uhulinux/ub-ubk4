@@ -1,0 +1,22 @@
+diff -Naur groff.orig/groff-utf8/u8_utf8_soelim groff/groff-utf8/u8_utf8_soelim
+--- groff.orig/groff-utf8/u8_utf8_soelim	2005-07-03 01:17:33.000000000 +0200
++++ groff/groff-utf8/u8_utf8_soelim	2005-09-11 13:07:01.000000000 +0200
+@@ -1,17 +1,2 @@
+ #!/bin/sh
+-options=
+-input=-
+-while test $# != 0; do
+-  case $1 in
+-    -I) options="$options $1 $2"; shift; shift;;
+-    -*) options="$options $1"; shift;;
+-    *) input=$1; shift;;
+-  esac
+-done
+-if test "X$input" = X-; then
+-  u8_utf8_prep | soelim $options
+-else
+-  u8_utf8_prep < "$input" | soelim $options
+-fi
+-# Or maybe u8_utf8_prep should be applied after soelim?
+-#   soelim "$@" | u8_utf8_prep
++soelim "$@" | u8_utf8_prep

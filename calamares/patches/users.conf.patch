@@ -1,0 +1,22 @@
+diff -Nur orig/src/modules/users/users.conf mod/src/modules/users/users.conf
+--- orig/src/modules/users/users.conf	2017-11-14 16:18:58.000000000 +0100
++++ mod/src/modules/users/users.conf	2017-11-24 22:42:44.939046180 +0100
+@@ -13,17 +13,12 @@
+ ---
+ defaultGroups:
+     - users
+-    - lp
+-    - video
+-    - network
+-    - storage
+-    - wheel
+     - audio
+ autologinGroup:  autologin
+ doAutologin:     true
+ 
+ # remove the following line to avoid creating /etc/sudoers.d/10-installer
+-sudoersGroup:    wheel
++# sudoersGroup:    wheel
+ 
+ setRootPassword: true
+ doReusePassword: true

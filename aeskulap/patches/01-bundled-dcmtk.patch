@@ -1,0 +1,111 @@
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2016-05-09 18:39:07.000000000 +0200
++++ patched/configure.ac	2016-05-09 23:05:10.007897422 +0200
+@@ -97,15 +97,32 @@
+ fi
+ 
+ 
+-dnl use system dcmtk
+-dnl AC_CHECK_LIB(dcmimage)
+-AC_CHECK_HEADER(dcmtk/config/osconfig.h)
++dnl AC_CONFIG_SUBDIRS(dcmtk)
+ 
+-AC_SUBST(DCMTK_CFLAGS)
+-AC_SUBST(DCMTK_LIBS)
++if test x"$MINGW32" = xyes ; then
+ 
+ DCMTK_CFLAGS="-DHAVE_CONFIG_H -I\$(prefix)/include"
+-DCMTK_LIBS="-L\$(prefix)/lib -ldcmjpeg -lijg8 -lijg12 -lijg16 -ldcmimage -ldcmimgle -ldcmnet -ldcmdata -loflog -lofstd -lwrap"
++DCMTK_LIBS="-L\$(prefix)/lib -ldcmjpeg -lijg8 -lijg12 -lijg16 -ldcmimage -ldcmimgle -ldcmnet -ldcmdata -lofstd -loflog -lwsock32"
++
++else
++
++DCMJPEG_LIBS="-L../dcmtk/dcmjpeg/libijg8 -L../dcmtk/dcmjpeg/libijg12 -L../dcmtk/dcmjpeg/libijg16 -lijg8 -lijg12 -lijg16"
++AC_SUBST(DCMJPEG_LIBS)
++
++DCMTK_CFLAGS="-DHAVE_CONFIG_H -I\$(top_srcdir)/dcmtk/config/include -I\$(top_srcdir)/dcmtk/ofstd/include -I\$(top_srcdir)/dcmtk/dcmdata/include -I\$(top_srcdir)/dcmtk/dcmnet/include -I\$(top_srcdir)/dcmtk/dcmimage/include -I\$(top_srcdir)/dcmtk/dcmimgle/include -I\$(top_srcdir)/dcmtk/dcmjpeg/include -I\$(top_srcdir)/dcmtk/oflog/include"
++DCMTK_LIBS="-L../dcmtk/ofstd/libsrc \
++-L../dcmtk/dcmdata/libsrc \
++-L../dcmtk/dcmnet/libsrc \
++-L../dcmtk/dcmjpeg/libsrc \
++-L../dcmtk/dcmimage/libsrc \
++-L../dcmtk/dcmimgle/libsrc \
++-L../dcmtk/oflog/libsrc \
++\$(DCMJPEG_LIBS) -ldcmjpeg -ldcmimage -ldcmimgle -ldcmnet -ldcmdata -lofstd -loflog -lrt -lpthread"
++
++fi
++
++AC_SUBST(DCMTK_CFLAGS)
++AC_SUBST(DCMTK_LIBS)
+ 
+ dnl set PREFIX
+ if test "x${prefix}" = "xNONE"; then
+@@ -114,13 +131,16 @@
+     packageprefix=${prefix}
+ fi
+ 
++DCMTK_SUBDIR=""
+ if test x"$MINGW32" = xno ; then
+-LDFLAGS_AESKULAP_LIBS="-Wl,-rpath,${prefix}/lib/aeskulap -avoid-version"
++DCMTK_SUBDIR="dcmtk"
++LDFLAGS_AESKULAP_LIBS="-avoid-version"
+ else
+ LDFLAGS_MINGW32="-mwindows"
+ LDFLAGS_AESKULAP_LIBS="-avoid-version -no-undefined"
+ fi
+ 
++AC_SUBST(DCMTK_SUBDIR)
+ AC_SUBST(LDFLAGS_MINGW32)
+ AC_SUBST(LDFLAGS_AESKULAP_LIBS)
+ 
+@@ -144,3 +164,12 @@
+ ])
+ AC_OUTPUT
+ 
++
++if test x"$MINGW32" = xno ; then
++
++cd $srcdir/dcmtk
++export CFLAGS="$CFLAGS"
++export CXXFLAGS="$CXXFLAGS"
++sh ./configure --without-openssl --without-libwrap --prefix=${prefix} --sysconfdir=${sysconfdir} --libdir=${prefix}/lib/aeskulap
++
++fi
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2016-05-09 18:39:07.000000000 +0200
++++ patched/Makefile.am	2016-05-09 23:03:37.759439987 +0200
+@@ -2,6 +2,7 @@
+ 
+ SUBDIRS = \
+ 	po \
++	$(DCMTK_SUBDIR) \
+ 	configuration \
+ 	imagepool \
+ 	widgets \
+@@ -21,6 +22,7 @@
+ 	AUTHORS \
+ 	COPYING \
+ 	COPYING.LIB \
++	COPYING.DCMTK \
+ 	INSTALL \
+ 	README \
+ 	aeskulap.cbp \
+@@ -38,7 +40,18 @@
+ 
+ @INTLTOOL_DESKTOP_RULE@
+ 
++dist-hook:
++	mkdir -p $(distdir)/dcmtk
++	cp -Rf $(top_srcdir)/dcmtk/* $(distdir)/dcmtk
++	cd $(distdir)/dcmtk && make distclean
++	list=`find $(distdir)/dcmtk -name "CVS"` && rm -Rf $$list
++	list=`find $(distdir)/dcmtk -name ".cvsignore"` && rm -f $$list
++	list=`find $(distdir)/dcmtk -name ".#*"` && rm -f $$list
++	list=`find $(distdir)/dcmtk -name "*.a"` && rm -f $$list
++	list=`find $(distdir)/dcmtk -name "*.so"` && rm -f $$list
++
+ distclean: distclean-recursive
++	if test x"" != "x" ; then cd ./dcmtk && make distclean ; fi
+ 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+ 	-rm -f Makefile
+ 

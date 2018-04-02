@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# Copyright (C) 2015  Fabian Greffrath <fabian+debian@greffrath.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+DATADIR=/usr/share/games/wolf3d
+ENGINE=
+
+file_matches()
+{
+  if [ -r "$DATADIR/$1" ] && \
+     [ `cksum "$DATADIR/$1" | cut -d ' ' -f 2` -eq $2 ]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# see game-data-packager/data/wolf3d.yaml
+
+# Wolf3d Full v1.4 GT/ID/Activision
+if `file_matches vgagraph.wl6 275774`
+then
+  ENGINE=wolf4sdl-wl6
+elif `file_matches vgagraph.wl6 276096`
+then
+  ENGINE=wolf4sdl-wl6
+# Wolf3d Full v1.4 Apogee (with ReadThis)
+elif `file_matches vgagraph.wl6 334506`
+then
+  ENGINE=wolf4sdl-wl6a
+# Wolf3d Full v1.1 Apogee (with ReadThis)
+elif `file_matches vgagraph.wl6 302374`
+then
+  ENGINE=wolf4sdl-wl6a1
+# Wolf3d Shareware v1.4
+elif `file_matches vgagraph.wl1 326568`
+then
+  ENGINE=wolf4sdl-wl1
+#Wolf3d Shareware v1.1
+elif `file_matches vgagraph.wl1 296826`
+then
+  ENGINE=wolf4sdl-wl11d
+#Wolf3d Shareware v1.2
+elif `file_matches vgagraph.wl1 296813`
+then
+  ENGINE=wolf4sdl-wl12d
+#Spear shareware
+elif `file_matches vgagraph.sdm 305891`
+then
+  ENGINE=wolf4sdl-sdm
+#Spear full
+elif `file_matches vgagraph.sod 947979`
+then
+  ENGINE=wolf4sdl-sod
+fi
+
+if [ -z "$ENGINE" ]
+then
+  echo "Could not find any supported data files in $DATADIR."
+  return 1
+else
+  cd $DATADIR
+  exec "$ENGINE" "$@"
+fi

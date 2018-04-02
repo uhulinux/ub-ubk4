@@ -1,0 +1,6 @@
+ver="$(_geturl http://www.sqlite.org/cgi/src/taglist | splitver '.*version-([0-9.]+)$' | sort -V | tail -n 1)"
+ver1="$(echo "$ver" | cut -d. -f1)"
+ver2="$(echo "$ver" | cut -d. -f2)"
+ver3="$(echo "$ver" | cut -d. -f3)"
+ver4="$(echo "$ver" | cut -d. -f4)"
+printf %d.%02d.%02d.%02d\\n "$ver1" "$ver2" "$ver3" "$ver4"

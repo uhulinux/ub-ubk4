@@ -1,0 +1,30 @@
+diff -Naur partimage-0.6.9-orig/Makefile.in partimage-0.6.9/Makefile.in
+--- partimage-0.6.9-orig/Makefile.in	2011-09-27 19:53:19.000000000 +0200
++++ partimage-0.6.9/Makefile.in	2011-09-27 19:56:25.000000000 +0200
+@@ -354,26 +354,6 @@
+ 
+ distclean-libtool:
+ 	-rm -f libtool config.lt
+-install-docDATA: $(doc_DATA)
+-	@$(NORMAL_INSTALL)
+-	test -z "$(docdir)" || $(MKDIR_P) "$(DESTDIR)$(docdir)"
+-	@list='$(doc_DATA)'; test -n "$(docdir)" || list=; \
+-	for p in $$list; do \
+-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+-	  echo "$$d$$p"; \
+-	done | $(am__base_list) | \
+-	while read files; do \
+-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(docdir)'"; \
+-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(docdir)" || exit $$?; \
+-	done
+-
+-uninstall-docDATA:
+-	@$(NORMAL_UNINSTALL)
+-	@list='$(doc_DATA)'; test -n "$(docdir)" || list=; \
+-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+-	test -n "$$files" || exit 0; \
+-	echo " ( cd '$(DESTDIR)$(docdir)' && rm -f" $$files ")"; \
+-	cd "$(DESTDIR)$(docdir)" && rm -f $$files
+ 
+ # This directory's subdirectories are mostly independent; you can cd
+ # into them and run `make' without going through this Makefile.

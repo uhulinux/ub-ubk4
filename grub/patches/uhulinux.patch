@@ -1,0 +1,62 @@
+diff -Naur orig/grub/util/grub.d/10_linux.in patched/grub/util/grub.d/10_linux.in
+--- orig/grub/util/grub.d/10_linux.in	2016-08-20 14:46:06.000000000 +0200
++++ patched/grub/util/grub.d/10_linux.in	2016-08-21 17:27:46.064594315 +0200
+@@ -31,7 +31,7 @@
+ if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
+   OS=GNU/Linux
+ else
+-  OS="${GRUB_DISTRIBUTOR} GNU/Linux"
++  OS="${GRUB_DISTRIBUTOR}"
+   CLASS="--class $(echo ${GRUB_DISTRIBUTOR} | tr 'A-Z' 'a-z' | cut -d' ' -f1|LC_ALL=C sed 's,[^[:alnum:]_],_,g') ${CLASS}"
+ fi
+ 
+@@ -82,9 +82,11 @@
+   if [ x$type != xsimple ] ; then
+       case $type in
+ 	  recovery)
+-	      title="$(gettext_printf "%s, with Linux %s (recovery mode)" "${os}" "${version}")" ;;
++	      title="$(gettext_printf "%s, kernel: %s (recovery mode)" "${os}" "${version}")" ;;
++	  nomodeset)
++	      title="$(gettext_printf "%s, kernel: %s (nomodeset)" "${os}" "${version}")" ;;
+ 	  *)
+-	      title="$(gettext_printf "%s, with Linux %s" "${os}" "${version}")" ;;
++	      title="$(gettext_printf "%s, kernel: %s" "${os}" "${version}")" ;;
+       esac
+       if [ x"$title" = x"$GRUB_ACTUAL_DEFAULT" ] || [ x"Previous Linux versions>$title" = x"$GRUB_ACTUAL_DEFAULT" ]; then
+ 	  replacement_title="$(echo "Advanced options for ${OS}" | sed 's,>,>>,g')>$(echo "$title" | sed 's,>,>>,g')"
+@@ -150,12 +152,12 @@
+ case "x$machine" in
+     xi?86 | xx86_64)
+ 	list=
+-	for i in /boot/vmlinuz-* /vmlinuz-* /boot/kernel-* ; do
++	for i in /boot/vmlinuz-* /vmlinuz-* /boot/kernel-* /boot/bzImage-* bzImage-* ; do
+ 	    if grub_file_is_not_garbage "$i" ; then list="$list $i" ; fi
+ 	done ;;
+     *) 
+ 	list=
+-	for i in /boot/vmlinuz-* /boot/vmlinux-* /vmlinuz-* /vmlinux-* /boot/kernel-* ; do
++	for i in /boot/vmlinuz-* /boot/vmlinux-* /vmlinuz-* /vmlinux-* /boot/kernel-* /boot/bzImage-* bzImage-* ; do
+                   if grub_file_is_not_garbage "$i" ; then list="$list $i" ; fi
+ 	done ;;
+ esac
+@@ -196,7 +198,9 @@
+ 	   "initramfs-genkernel-${version}" \
+ 	   "initramfs-genkernel-${alt_version}" \
+ 	   "initramfs-genkernel-${GENKERNEL_ARCH}-${version}" \
+-	   "initramfs-genkernel-${GENKERNEL_ARCH}-${alt_version}"; do
++	   "initramfs-genkernel-${GENKERNEL_ARCH}-${alt_version}" \
++	   "initramfs-${version}.cpio.gz" \
++	   "initramfs-${version}.${GENKERNEL_ARCH}.cpio.gz"; do
+     if test -e "${dirname}/${i}" ; then
+       initrd="$i"
+       break
+@@ -240,6 +244,9 @@
+ 
+   linux_entry "${OS}" "${version}" advanced \
+               "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
++  # nomodeset mód
++  linux_entry "${OS}" "${version}" nomodeset \
++                "nomodeset ${GRUB_CMDLINE_LINUX}"
+   if [ "x${GRUB_DISABLE_RECOVERY}" != "xtrue" ]; then
+     linux_entry "${OS}" "${version}" recovery \
+                 "single ${GRUB_CMDLINE_LINUX}"

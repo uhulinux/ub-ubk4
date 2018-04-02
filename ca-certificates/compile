@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+# mozilla certificates
+mkdir certs
+mv certdata2pem.py certs/certdata2pem.py
+
+cp lib/ckfw/builtins/certdata.txt certs/certdata.txt
+cp lib/ckfw/builtins/nssckbi.h certs/nssckbi.h
+
+cd certs
+python certdata2pem.py

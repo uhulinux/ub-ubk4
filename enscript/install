@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+make \
+	prefix=${UB_INSTALLDIR}/usr \
+	sysconfdir=${UB_INSTALLDIR}/etc \
+	datadir=${UB_INSTALLDIR}/usr/share \
+	mandir=${UB_INSTALLDIR}/usr/share/man \
+	infodir=${UB_INSTALLDIR}/usr/share/info \
+	install
+rm -rf ${UB_INSTALLDIR}/usr/share/info/dir

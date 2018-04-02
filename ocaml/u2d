@@ -1,0 +1,2 @@
+minor=$(urllist http://caml.inria.fr/pub/distrib/ | splitver '^ocaml-([0-9.]+)$' | sort -V | tail -n 1)
+u2d http://caml.inria.fr/pub/distrib/ocaml-"$minor"/ ocaml-

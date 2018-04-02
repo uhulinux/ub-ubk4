@@ -1,0 +1,24 @@
+#!/bin/sh -e
+
+catalog_add ()
+{
+	if [ ! -s /etc/xml/catalog ]; then
+		rm -f /etc/xml/catalog
+		xmlcatalog --noout --create /etc/xml/catalog
+	fi
+	while IFS='"' read x type x orig x replace x; do
+		xmlcatalog --noout --add "$type" "$orig" "$replace" /etc/xml/catalog
+	done <"$i"
+}
+
+shopt -s nullglob
+
+if [ "$1" = "libxml2" -o "$1" = "+" ]; then
+	for i in /etc/xml/catalog.d/*.catalog; do
+		catalog_add "$i"
+	done
+else
+	for i in $(grep '^/etc/xml/catalog.d/' /var/lib/dpkg/info/"$1".list); do
+		catalog_add "$i"
+	done
+fi

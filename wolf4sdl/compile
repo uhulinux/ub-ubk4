@@ -1,0 +1,69 @@
+#!/bin/sh -eux
+
+for i in `ls -1 $UB_SCRDIR/patches`;do
+patch -Np1 --binary -i $UB_SCRDIR/patches/$i
+done
+
+export CFLAGS=" -Wall -Wno-sign-compare -Wno-switch "
+export LDFLAGS=" -Wl,-z,defs -Wl,--as-needed "
+export DATADIR="/usr/share/games/wolf3d"
+export GPL=1
+export Q=
+
+echo compiling Wolf3d Full v1.4 GT/ID/Activision...
+make
+mv wolf3d wolf4sdl-wl6
+make clean
+
+cp version.h version.bak
+sed 's|//#define SPEAR|#define SPEAR|g' -i version.h
+
+echo compiling speardemo...
+make
+mv wolf3d wolf4sdl-sdm
+make clean
+
+sed 's|#define SPEARDEMO|//#define SPEARDEMO|g' -i version.h
+
+echo compiling spear-full..
+make
+mv wolf3d wolf4sdl-sod
+make clean
+
+cp -a version.bak version.h
+sed 's|#define GOODTIMES|//#define GOODTIMES|g' -i version.h
+sed 's|//#define APOGEE_1_1|#define APOGEE_1_1|g' -i version.h
+
+echo compiling Wolf3d Full v1.1 Apogee
+make
+mv wolf3d wolf4sdl-wl6a1
+make clean
+
+sed 's|//#define UPLOAD|#define UPLOAD|g' -i version.h
+
+echo compiling Wolf3d Shareware v1.1 ..
+make
+mv wolf3d wolf4sdl-wl11d
+make clean
+
+sed 's|#define APOGEE_1_1|//#define APOGEE_1_1|g' -i version.h
+
+echo compiling Wolf3d Shareware v1.4 ..
+make
+mv wolf3d wolf4sdl-wl1
+make clean
+
+sed 's|//#define APOGEE_1_2|#define APOGEE_1_2|g' -i version.h
+
+echo compiling Wolf3d Shareware v1.2 ..
+make
+mv wolf3d wolf4sdl-wl12d
+make clean
+
+#sed 's|#define APOGEE_1_2|//#define APOGEE_1_2|g' -i version.h
+#sed 's|//#define APOGEE_1_0|#define APOGEE_1_0|g' -i version.h
+#sed 's|#define CARMACIZED|//#define CARMACIZED|g' -i version.h
+
+#echo compiling Wolf3d Shareware v1.0 ..
+#make
+#mv wolf3d wolf3d-shareware-v10.bin

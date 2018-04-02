@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+mkdir -p $UB_INSTALLDIR/usr/share/{pixmaps,applications,games/sdl-ball}
+
+cp sdl-ball $UB_INSTALLDIR/usr/bin/
+cp sdl-ball.desktop $UB_INSTALLDIR/usr/share/applications
+cp themes/default/icon32.png $UB_INSTALLDIR/usr/share/pixmaps/sdl-ball.png
+cp -r themes $UB_INSTALLDIR/usr/share/games/sdl-ball/
+cp -r leveleditor/gfx $UB_INSTALLDIR/usr/share/games/sdl-ball/leveleditor/

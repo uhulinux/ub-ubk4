@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+# remove \r
+sed -i 's/\r$//' "$UB_INSTALLDIR"/usr/lib/pkgconfig/SDL_Pango.pc

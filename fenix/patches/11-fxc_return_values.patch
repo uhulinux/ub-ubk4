@@ -1,0 +1,42 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxc/src/main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/main.c	2007-08-28 14:40:55.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/main.c	2007-08-28 14:40:58.000000000 +0200
+@@ -260,7 +260,7 @@
+ 			{
+ 				fprintf (stderr, MSG_TOO_MANY_FILES) ;
+ 				fprintf (stderr, "\n") ;
+-				return 0 ;
++				return -2 ;
+ 			}
+ 			filename = argv[i] ;
+ 		}
+@@ -271,7 +271,7 @@
+ 		fprintf (stderr, MSG_USING, argv[0]) ;
+ 		fprintf (stderr, MSG_OPTION_D) ;
+ 		fprintf (stderr, MSG_OPTIONS) ;
+-		return 0 ;
++		return -1 ;
+ 	}
+ 
+ 	if (*outname)
+@@ -330,7 +330,7 @@
+ 				if (!file_exists(stubname))
+ 				{
+ 					compile_error (_("Can't open stub file %s"), stubname);
+-					return -1;
++					return -3;
+ 				}
+ 			}
+ 		}
+@@ -355,6 +355,6 @@
+ 	/* destroy error messages list */
+ 	err_destroyErrorTable() ;
+ 
+-	return 1 ;
++	return 0 ;
+ }
+ 

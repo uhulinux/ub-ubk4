@@ -1,0 +1,152 @@
+### -*-hoc-*-
+### /usr/local/src/hoc/hoc-7.0.0.beta/expm1.hoc, Sat Dec  8 14:25:46 2001
+### Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+### ====================================================================
+### Provide an implementation of, and test package for, Expm1(x).
+### [08-Dec-2001]
+### ====================================================================
+
+func Expm1(x) \
+{
+	### Compute Expm1(x) = exp(x) - 1 accurately.  The cutoffs at
+	### which at least one bit is lost in substraction were
+	### accurately determined in Maple with this code:
+	###
+	###	Digits := 50;
+	###	g := proc(x) return (evalf(exp(x) - 1)); end proc;
+	###	plot(g(x), x = 0.2..0.8);
+	###	fsolve(g(x) = 0.5, x, 0.4..0.6);
+	###		.40546510810816438197801311546434913657199042346249
+	###	plot(g(x), x = -1 .. 0);
+	###	fsolve(g(x) = -0.5, x, -1..0);
+	### 		-.69314718055994530941723212145817656807550013436026
+	###
+	### For positive small values between the cutoffs, we use the
+	### Taylor series expansion, adding terms until they are small
+	### enough to be ignored.  For negative small values, we
+	### compute with the absolute value of the argument, then
+	### invert the formula, to avoid the alternating signs in the
+	### Taylor series for negative x.
+	###
+	### The ___test_expm1() function produces output that looks like
+	### this (on a Sun Solaris 2.7 system, using the vendor's native
+	### expm1() function for comparison):
+	###
+	###     x               # terms         error in Expm1(x)       Ulps
+	###     -0.7            0               0                       0
+	###     -0.69           17              0                       0
+	###     -0.65           16              5.55e-17                0.25
+	###     -0.52           15              0                       0
+	###     -0.41           14              0                       0
+	###     -0.4            15              0                       0
+	###     -0.39           14              0                       0
+	###     -0.3            13              5.55e-17                0.25
+	###     -0.2            12              -2.78e-17              -0.125
+	###     -0.14           11              0                       0
+	###     -0.08           10              1.39e-17                0.0625
+	###     -0.04           9               0                       0
+	###     -0.02           8               6.94e-18                0.0312
+	###     5.31e-16        3               0                       0
+	###     0.01            8               0                       0
+	###     0.03            9               0                       0
+	###     0.05            10              6.94e-18                0.0312
+	###     0.09            11              1.39e-17                0.0625
+	###     0.15            12              0                       0
+	###     0.21            13              2.78e-17                0.125
+	###     0.31            14              0                       0
+	###     0.4             15              -5.55e-17              -0.25
+	###     0.41            0               -1.11e-16              -0.5
+	###
+	###     -0.693          17              0                       0
+	###     0.405           15              0                       0
+	###
+	### Thus, we need from 1 (x near 0) to 17 (x near cutoffs)
+	### terms of the Taylor series.  A polynomial appoximation
+	### would be faster, and more efficient, but this code is
+	### simple and acceptable for now.
+
+	global k
+	k = 0
+
+	### Give names to the cutoff values:
+	xcutneg = -0.69314718055994530941723212145817656807550013436026
+	xcutpos = +0.40546510810816438197801311546434913657199042346249
+
+	### Handle easy special cases first:
+	if (isnan(x)) \
+		return (x) \
+	else if (x == 0) \
+		return (0) \
+	else if (x >= xcutpos) \
+		return (exp(x) - 1) \
+	else if (x <= xcutneg) \
+		return (exp(x) - 1)
+
+	xabs = abs(x)
+
+	k = 1
+	sum = 0
+	term = xabs
+	while ((sum + term) != sum) \
+	{
+		sum += term
+		k++
+		term = xabs * term / k
+		## print k, term, sum
+		## print "\n"
+	}
+	if (x < 0) \
+		return (-(sum/(1 + sum))) \
+	else \
+		return (sum)
+}
+
+func expm1_err(x) return (Expm1(x) - expm1(x))
+
+proc ___test_expm1_print() \
+{
+	global xx, k, e, epsilon
+	printf "%7.2e\t%7d\t%15.2e\t%15.2f\n", xx, k, e, e/epsilon
+}
+
+proc ___test_expm1() \
+{
+	global xx, k, e, epsilon
+	k = 0
+	epsilon = macheps(1)
+	PREC = 3
+	print "x\t\t# terms\t\terror in Expm1(x)\tUlps\n"
+	last_k = -1
+	for (xx = -0.7; xx < 0.6; xx += 0.01) \
+	{
+		e = expm1_err(xx)
+		if (k != last_k) ___test_expm1_print()
+		last_k = k
+	}
+	xx = xcutneg + epsilon
+	e = expm1_err(xx)
+	___test_expm1_print()
+
+	xx = xcutpos - epsilon
+	e = expm1_err(xx)
+	___test_expm1_print()
+}
+
+proc help_Expm1() \
+{
+	print "\tExpm1(x) returns the exponential function of x, less 1: E^x - 1.\n\n"
+
+	print "\tFor small x, exp(x) is approximately 1, so there is serious\n"
+	print "\tsubtraction loss in directly using exp(x) - 1; Expm1(x) avoids\n"
+	print "\tthis loss.\n\n"
+
+	print "\tFrom Sun Solaris documentation: ``The Expm1() and log1p()\n"
+	print "\tfunctions are useful for financial calculations of\n"
+	print "\t((1 + x)^n - 1) / x, namely:\n\n"
+
+	print "\t	Expm1(n * log1p(x))/x\n\n"
+
+	print "\twhen x is very small (for example, when performing calculations\n"
+	print "\twith a small daily interest rate).  These functions also\n"
+	print "\tsimplify writing accurate inverse hyperbolic functions.''\n\n"
+}

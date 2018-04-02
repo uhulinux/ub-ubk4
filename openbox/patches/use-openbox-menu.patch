@@ -1,0 +1,20 @@
+diff -Naur orig/data/menu.xml mod/data/menu.xml
+--- orig/data/menu.xml	2015-07-01 11:30:11.000000000 +0200
++++ mod/data/menu.xml	2015-07-19 20:57:53.000000000 +0200
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
+ <openbox_menu xmlns="http://openbox.org/3.4/menu">
+-
++<menu id="desktop-app-menu" label="Alkalmazások" execute="openbox-menu lxde-applications.menu" />
+ <menu id="apps-accessories-menu" label="Accessories">
+   <item label="Calculator">
+     <action name="Execute">
+@@ -373,6 +373,7 @@
+ 
+ <menu id="root-menu" label="Openbox 3">
+   <separator label="Applications" />
++  <menu id="desktop-app-menu"/>
+   <menu id="apps-accessories-menu"/>
+   <menu id="apps-editors-menu"/>
+   <menu id="apps-graphics-menu"/>

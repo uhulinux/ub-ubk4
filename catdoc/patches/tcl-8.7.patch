@@ -1,0 +1,12 @@
+diff -Nur orig/src/wordview.tcl mod/src/wordview.tcl
+--- orig/src/wordview.tcl	2016-05-25 06:57:56.000000000 +0200
++++ mod/src/wordview.tcl	2018-03-14 22:43:13.225833736 +0100
+@@ -62,7 +62,7 @@
+     -yscrollcommand ".ys set"   -wrap word \
+      -spacing3 2m 
+ .text tag configure sel -relief flat -borderwidth 0
+-.text tag configure doc -lmargin1 0.2i -lmargin2 0
++.text tag configure doc -lmargin1 1 -lmargin2 0
+ scrollbar .ys -orient vert -command ".text yview"
+ scrollbar .xs -orient horiz -command ".text xview"
+ bind .text <F3> { if [info exists FindPattern] DoFind}

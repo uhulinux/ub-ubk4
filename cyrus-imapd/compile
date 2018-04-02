@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_replace sphinx-build sphinx-build2 configure
+
+rm -rf et
+rm -rf syslog
+
+UB_MAKE_PROCS=1 \
+ub_compile \
+	--enable-murder \
+	--with-com_err=/usr \
+	--with-syslogfacility=MAIL

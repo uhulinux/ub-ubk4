@@ -1,0 +1,397 @@
+From 463dead99d6530c565bf658d5829acd2d5b7cdad Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Mon, 21 Nov 2016 02:49:02 +0100
+Subject: [PATCH 1/3] Fix build with old (< 1.19.2) and new (>= 1.19.2) lightdm
+
+---
+ configure.ac    |  6 +++++-
+ src/Makefile.am |  3 ++-
+ src/main.c      | 33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index b01ab3b..68c1c43 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,7 +37,6 @@ AC_ARG_ENABLE(ido-calendar,
+ # Dependencies
+ 
+ PKG_CHECK_MODULES(GREETER, [
+-    liblightdm-gobject-1
+     gtk+-3.0
+     gthread-2.0
+     x11
+@@ -45,6 +44,11 @@ PKG_CHECK_MODULES(GREETER, [
+     libxklavier
+ ])
+ 
++PKG_CHECK_MODULES([LIGHTDMGOBJECT], [liblightdm-gobject-1 >= 1.19.2],
++  [AC_DEFINE([HAVE_LIBLIGHTDMGOBJECT_1_19_2], [1], [Building with liblightdmgobject 1.19.2])],
++  [PKG_CHECK_MODULES([LIGHTDMGOBJECT], [liblightdm-gobject-1 >= 1.3.5])]
++)
++
+ AS_IF([test "x$enable_ido_calendar" = "xyes"], [
+     PKG_CHECK_MODULES(IDO, [libido3-0.1])
+ ])
+diff --git a/src/Makefile.am b/src/Makefile.am
+index b4a8e99..8a312a1 100755
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -29,8 +29,9 @@ lightdm_another_gtk_greeter_CFLAGS = \
+ 	-DGREETER_DATA_DIR=\""$(datadir)/lightdm-another-gtk-greeter"\" \
+ 	-DCONFIG_FILE=\""$(sysconfdir)/lightdm/lightdm-another-gtk-greeter.conf"\" \
+ 	$(GREETER_CFLAGS) \
++	$(LIGHTDMGOBJECT_CFLAGS) \
+ 	$(IDO_CFLAGS) \
+ 	$(WARN_CFLAGS)
+ 
+ lightdm_another_gtk_greeter_LDADD = \
+-	$(GREETER_LIBS) $(IDO_LIBS)
++	$(GREETER_LIBS) $(LIGHTDMGOBJECT_LIBS) $(IDO_LIBS)
+diff --git a/src/main.c b/src/main.c
+index 81d53a7..2d31ab2 100755
+--- a/src/main.c
++++ b/src/main.c
+@@ -29,6 +29,7 @@
+ #include <X11/Xatom.h>
+ #include <lightdm.h>
+ 
++#include "config.h"
+ #include "shares.h"
+ #include "composite_widgets.h"
+ #include "configuration.h"
+@@ -1129,13 +1130,25 @@ static void start_authentication(const gchar* user_name)
+ 
+     LightDMUser* user = NULL;
+     if(g_strcmp0(user_name, USER_OTHER) == 0)
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++        lightdm_greeter_authenticate(greeter.greeter, NULL, NULL);
++#else
+         lightdm_greeter_authenticate(greeter.greeter, NULL);
++#endif
+     else if(g_strcmp0(user_name, USER_GUEST) == 0)
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++        lightdm_greeter_authenticate_as_guest(greeter.greeter, NULL);
++#else
+         lightdm_greeter_authenticate_as_guest(greeter.greeter);
++#endif
+     else
+     {
+         user = lightdm_user_list_get_user_by_name(lightdm_user_list_get_instance(), user_name);
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++        lightdm_greeter_authenticate(greeter.greeter, user_name, NULL);
++#else
+         lightdm_greeter_authenticate(greeter.greeter, user_name);
++#endif
+     }
+     load_user_options(user);
+     set_login_button_state(user && lightdm_user_get_logged_in(user));
+@@ -1151,7 +1164,11 @@ static void cancel_authentication(void)
+     if(lightdm_greeter_get_in_authentication(greeter.greeter))
+     {
+         greeter.state.cancelling = TRUE;
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++        lightdm_greeter_cancel_authentication(greeter.greeter, NULL);
++#else
+         lightdm_greeter_cancel_authentication(greeter.greeter);
++#endif
+         set_message_text(NULL);
+     }
+ 
+@@ -1173,7 +1190,11 @@ static void start_session(void)
+     gchar* language = get_language();
+     if(language)
+     {
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++        lightdm_greeter_set_language(greeter.greeter, language, NULL);
++#else
+         lightdm_greeter_set_language(greeter.greeter, language);
++#endif 
+         g_free(language);
+     }
+ 
+@@ -1430,7 +1451,11 @@ static void on_authentication_complete(LightDMGreeter* greeter_ptr)
+         if(greeter.state.prompted)
+         {
+             set_message_text(_("Incorrect password, please try again"));
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++            lightdm_greeter_authenticate(greeter.greeter, lightdm_greeter_get_authentication_user(greeter.greeter), NULL);
++#else
+             lightdm_greeter_authenticate(greeter.greeter, lightdm_greeter_get_authentication_user(greeter.greeter));
++#endif
+         }
+         else
+         {
+@@ -1446,7 +1471,11 @@ static void on_authentication_complete(LightDMGreeter* greeter_ptr)
+ static void on_autologin_timer_expired(LightDMGreeter* greeter_ptr)
+ {
+     g_debug("LightDM signal: autologin-timer-expired");
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++    lightdm_greeter_authenticate_autologin(greeter_ptr, NULL);
++#else
+     lightdm_greeter_authenticate_autologin(greeter_ptr);
++#endif
+ }
+ 
+ static void on_user_added(LightDMUserList* user_list,
+@@ -1495,7 +1524,11 @@ void on_login_clicked(GtkWidget* widget,
+     else if(lightdm_greeter_get_in_authentication(greeter.greeter))
+     {
+         const gchar* text = gtk_entry_get_text(GTK_ENTRY(greeter.ui.prompt_entry));
++#ifdef HAVE_LIBLIGHTDMGOBJECT_1_19_2
++        lightdm_greeter_respond(greeter.greeter, text, NULL);
++#else
+         lightdm_greeter_respond(greeter.greeter, text);
++#endif
+         gtk_widget_show(greeter.ui.cancel_box);
+         if(get_user_type() == USER_TYPE_OTHER  && gtk_entry_get_visibility(GTK_ENTRY(greeter.ui.prompt_entry)))
+         {
+-- 
+2.8.1
+
+
+From a07ca2b3939230d5b5ae746ba42fc53817c8f368 Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Mon, 21 Nov 2016 02:54:23 +0100
+Subject: [PATCH 2/3] Disable -Werror by default; remove obsoleted gnome-common
+ macros
+
+---
+ autogen.sh   | 4 ----
+ configure.ac | 2 +-
+ 2 files changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/autogen.sh b/autogen.sh
+index 3b0d68a..2f30402 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -4,7 +4,6 @@
+ srcdir=`dirname $0`
+ test -z "$srcdir" && srcdir=.
+ 
+-PKG_NAME="lightdm-another-gtk-greeter"
+ REQUIRED_AUTOMAKE_VERSION=1.7
+ 
+ (test -f $srcdir/configure.ac && test -d $srcdir/src) || {
+@@ -18,8 +17,5 @@ which gnome-autogen.sh || {
+     exit 1
+ }
+ 
+-USE_GNOME2_MACROS=1
+-USE_COMMON_DOC_BUILD=yes
+-
+ . gnome-autogen.sh
+ 
+diff --git a/configure.ac b/configure.ac
+index 68c1c43..ae92cb2 100755
+--- a/configure.ac
++++ b/configure.ac
+@@ -15,7 +15,7 @@ LT_INIT
+ AC_DEFINE_UNQUOTED(PACKAGE_VERSION, "_PACKAGE_VERSION")
+ 
+ GOBJECT_INTROSPECTION_CHECK(0.9.5)
+-GNOME_COMPILE_WARNINGS(maximum)
++GNOME_COMPILE_WARNINGS(minimum)
+ 
+ # #############################################################################
+ # Checks
+-- 
+2.8.1
+
+
+From cb93b0127edbce78d12e6708d7de40e398794811 Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Mon, 21 Nov 2016 02:57:03 +0100
+Subject: [PATCH 3/3] fixed file permissions
+
+---
+ AUTHORS                                  | 0
+ Makefile.am                              | 0
+ NEWS                                     | 0
+ README                                   | 0
+ configure.ac                             | 0
+ data/Makefile.am                         | 0
+ data/lightdm-another-gtk-greeter.conf    | 0
+ data/lightdm-another-gtk-greeter.desktop | 0
+ data/themes/Makefile.am                  | 0
+ data/themes/default/Makefile.am          | 0
+ data/themes/default/greeter.ui           | 0
+ data/themes/default/styles.css           | 0
+ data/themes/default/theme.conf           | 0
+ data/themes/gtk-greeter-150/Makefile.am  | 0
+ data/themes/gtk-greeter-150/greeter.ui   | 0
+ data/themes/gtk-greeter-150/theme.conf   | 0
+ data/themes/sample.css.dark/Makefile.am  | 0
+ data/themes/sample.css.dark/greeter.ui   | 0
+ data/themes/sample.css.dark/styles.css   | 0
+ data/themes/sample.css.dark/theme.conf   | 0
+ po/POTFILES.in                           | 0
+ po/es.po                                 | 0
+ po/ru.po                                 | 0
+ src/Makefile.am                          | 0
+ src/configuration.c                      | 0
+ src/configuration.h                      | 0
+ src/indicator_a11y.c                     | 0
+ src/indicator_a11y.h                     | 0
+ src/indicator_clock.c                    | 0
+ src/indicator_clock.h                    | 0
+ src/indicator_layout.c                   | 0
+ src/indicator_layout.h                   | 0
+ src/indicator_power.c                    | 0
+ src/indicator_power.h                    | 0
+ src/main.c                               | 0
+ src/shares.c                             | 0
+ src/shares.h                             | 0
+ 37 files changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 AUTHORS
+ mode change 100755 => 100644 Makefile.am
+ mode change 100755 => 100644 NEWS
+ mode change 100755 => 100644 README
+ mode change 100755 => 100644 configure.ac
+ mode change 100755 => 100644 data/Makefile.am
+ mode change 100755 => 100644 data/lightdm-another-gtk-greeter.conf
+ mode change 100755 => 100644 data/lightdm-another-gtk-greeter.desktop
+ mode change 100755 => 100644 data/themes/Makefile.am
+ mode change 100755 => 100644 data/themes/default/Makefile.am
+ mode change 100755 => 100644 data/themes/default/greeter.ui
+ mode change 100755 => 100644 data/themes/default/styles.css
+ mode change 100755 => 100644 data/themes/default/theme.conf
+ mode change 100755 => 100644 data/themes/gtk-greeter-150/Makefile.am
+ mode change 100755 => 100644 data/themes/gtk-greeter-150/greeter.ui
+ mode change 100755 => 100644 data/themes/gtk-greeter-150/theme.conf
+ mode change 100755 => 100644 data/themes/sample.css.dark/Makefile.am
+ mode change 100755 => 100644 data/themes/sample.css.dark/greeter.ui
+ mode change 100755 => 100644 data/themes/sample.css.dark/styles.css
+ mode change 100755 => 100644 data/themes/sample.css.dark/theme.conf
+ mode change 100755 => 100644 po/POTFILES.in
+ mode change 100755 => 100644 po/es.po
+ mode change 100755 => 100644 po/ru.po
+ mode change 100755 => 100644 src/Makefile.am
+ mode change 100755 => 100644 src/configuration.c
+ mode change 100755 => 100644 src/configuration.h
+ mode change 100755 => 100644 src/indicator_a11y.c
+ mode change 100755 => 100644 src/indicator_a11y.h
+ mode change 100755 => 100644 src/indicator_clock.c
+ mode change 100755 => 100644 src/indicator_clock.h
+ mode change 100755 => 100644 src/indicator_layout.c
+ mode change 100755 => 100644 src/indicator_layout.h
+ mode change 100755 => 100644 src/indicator_power.c
+ mode change 100755 => 100644 src/indicator_power.h
+ mode change 100755 => 100644 src/main.c
+ mode change 100755 => 100644 src/shares.c
+ mode change 100755 => 100644 src/shares.h
+
+diff --git a/AUTHORS b/AUTHORS
+old mode 100755
+new mode 100644
+diff --git a/Makefile.am b/Makefile.am
+old mode 100755
+new mode 100644
+diff --git a/NEWS b/NEWS
+old mode 100755
+new mode 100644
+diff --git a/README b/README
+old mode 100755
+new mode 100644
+diff --git a/configure.ac b/configure.ac
+old mode 100755
+new mode 100644
+diff --git a/data/Makefile.am b/data/Makefile.am
+old mode 100755
+new mode 100644
+diff --git a/data/lightdm-another-gtk-greeter.conf b/data/lightdm-another-gtk-greeter.conf
+old mode 100755
+new mode 100644
+diff --git a/data/lightdm-another-gtk-greeter.desktop b/data/lightdm-another-gtk-greeter.desktop
+old mode 100755
+new mode 100644
+diff --git a/data/themes/Makefile.am b/data/themes/Makefile.am
+old mode 100755
+new mode 100644
+diff --git a/data/themes/default/Makefile.am b/data/themes/default/Makefile.am
+old mode 100755
+new mode 100644
+diff --git a/data/themes/default/greeter.ui b/data/themes/default/greeter.ui
+old mode 100755
+new mode 100644
+diff --git a/data/themes/default/styles.css b/data/themes/default/styles.css
+old mode 100755
+new mode 100644
+diff --git a/data/themes/default/theme.conf b/data/themes/default/theme.conf
+old mode 100755
+new mode 100644
+diff --git a/data/themes/gtk-greeter-150/Makefile.am b/data/themes/gtk-greeter-150/Makefile.am
+old mode 100755
+new mode 100644
+diff --git a/data/themes/gtk-greeter-150/greeter.ui b/data/themes/gtk-greeter-150/greeter.ui
+old mode 100755
+new mode 100644
+diff --git a/data/themes/gtk-greeter-150/theme.conf b/data/themes/gtk-greeter-150/theme.conf
+old mode 100755
+new mode 100644
+diff --git a/data/themes/sample.css.dark/Makefile.am b/data/themes/sample.css.dark/Makefile.am
+old mode 100755
+new mode 100644
+diff --git a/data/themes/sample.css.dark/greeter.ui b/data/themes/sample.css.dark/greeter.ui
+old mode 100755
+new mode 100644
+diff --git a/data/themes/sample.css.dark/styles.css b/data/themes/sample.css.dark/styles.css
+old mode 100755
+new mode 100644
+diff --git a/data/themes/sample.css.dark/theme.conf b/data/themes/sample.css.dark/theme.conf
+old mode 100755
+new mode 100644
+diff --git a/po/POTFILES.in b/po/POTFILES.in
+old mode 100755
+new mode 100644
+diff --git a/po/es.po b/po/es.po
+old mode 100755
+new mode 100644
+diff --git a/po/ru.po b/po/ru.po
+old mode 100755
+new mode 100644
+diff --git a/src/Makefile.am b/src/Makefile.am
+old mode 100755
+new mode 100644
+diff --git a/src/configuration.c b/src/configuration.c
+old mode 100755
+new mode 100644
+diff --git a/src/configuration.h b/src/configuration.h
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_a11y.c b/src/indicator_a11y.c
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_a11y.h b/src/indicator_a11y.h
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_clock.c b/src/indicator_clock.c
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_clock.h b/src/indicator_clock.h
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_layout.c b/src/indicator_layout.c
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_layout.h b/src/indicator_layout.h
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_power.c b/src/indicator_power.c
+old mode 100755
+new mode 100644
+diff --git a/src/indicator_power.h b/src/indicator_power.h
+old mode 100755
+new mode 100644
+diff --git a/src/main.c b/src/main.c
+old mode 100755
+new mode 100644
+diff --git a/src/shares.c b/src/shares.c
+old mode 100755
+new mode 100644
+diff --git a/src/shares.h b/src/shares.h
+old mode 100755
+new mode 100644
+-- 
+2.8.1
+

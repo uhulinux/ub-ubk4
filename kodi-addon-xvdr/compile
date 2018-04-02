@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+sh ./autogen.sh
+unset LDFLAGS; LDFLAGS="-Wl,--hash-style=gnu"
+./configure --prefix=/usr/lib/xbmc
+ub_make

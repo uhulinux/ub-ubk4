@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+cd src
+if [ "$UB_ARCH" == "amd64" ];then
+make build ARCH=x86-64
+else
+make build ARCH=x86-32
+fi

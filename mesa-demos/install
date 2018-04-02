@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/egl/opengles2/es2_info ${UB_INSTALLDIR}/usr/bin/
+# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/egl/opengles1/es1_info ${UB_INSTALLDIR}/usr/bin/
+# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/demos/{glinfo,glxinfo} ${UB_INSTALLDIR}/usr/bin/
+# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/xdemos/{glxgears,pbinfo} ${UB_INSTALLDIR}/usr/bin/
+mkdir -p ${UB_INSTALLDIR}/usr/share/pixmaps
+mv icon.png ${UB_INSTALLDIR}/usr/share/pixmaps/mesa-demos.png

@@ -1,0 +1,30 @@
+#! /bin/bash
+
+export MAIN_DIALOG='
+ <vbox>
+  <frame Radiobuttons>
+    <radiobutton>
+      <label>First radiobutton in the group...</label>
+    </radiobutton>
+    <radiobutton>
+      <label>This one is needed for OK button.</label>
+      <action>if true enable:OKBUTTON</action>
+      <action>if false disable:OKBUTTON</action>
+    </radiobutton>
+    <radiobutton>
+      <label>Third radiobutton...</label>
+    </radiobutton>
+  </frame>
+  <hbox>
+   <button ok>
+     <variable>OKBUTTON</variable>
+     <visible>disabled</visible>
+   </button>
+   <button cancel></button>
+  </hbox>
+ </vbox>
+'
+
+gtkdialog --program MAIN_DIALOG
+
+

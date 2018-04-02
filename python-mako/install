@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+python setup.py install --root="$UB_INSTALLDIR"
+mv "$UB_INSTALLDIR"/usr/bin/mako-render{,2}
+
+python3 setup.py install --root="$UB_INSTALLDIR"
+mv "$UB_INSTALLDIR"/usr/bin/mako-render{,3}
+mv "$UB_INSTALLDIR"/usr/bin/mako-render{2,}

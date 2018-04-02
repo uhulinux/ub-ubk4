@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+./waf configure \
+	--prefix=/usr \
+	--with-optionals=python,launcher,xmmsclient++,xmmsclient++-glib,perl,nycli \
+	--with-default-output-plugin=pulse
+
+patch -p1 < "$UB_SRCDIR"/patches/16-ruby2-multiarch.patch.skip
+patch -p1 < "$UB_SRCDIR"/patches/17-ruby2.2-RbConfig.patch.skip
+
+./waf configure \
+	--prefix=/usr \
+	--with-optionals=python,launcher,xmmsclient++,xmmsclient++-glib,perl,ruby,nycli \
+	--with-default-output-plugin=pulse
+
+./waf build

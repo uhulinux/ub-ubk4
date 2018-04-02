@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+# pdf: nincs pdflatex parancs a texlive csomagban
+# info: document type does not allow element "TAG" here
+
+./configure \
+	--prefix=/usr \
+	--mandir=/usr/share/man \
+	--infodir=/usr/share/info \
+	--enable-docs="txt html rtf"
+
+ub_make

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+for i in $(ls -1 /lib/modules); do
+	KSRC="/lib/modules/$i/build" KVERS="$i" ARCH=${i##*.} ub_compile
+	KSRC="/lib/modules/$i/build" KVERS="$i" ARCH=${i##*.} ub_install DISTDIR="$UB_INSTALLDIR"
+done

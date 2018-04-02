@@ -1,0 +1,224 @@
+Description: Added option to auto detect radio device.
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+
+Index: gnomeradio-1.8/src/prefs.c
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.c
++++ gnomeradio-1.8/src/prefs.c
+@@ -30,6 +30,8 @@
+ #include "rb_gst_media_types.h"
+ #include "rb_missing_plugins.h"
+ 
++extern int autodetect;
++
+ extern GtkWidget *preset_combo;
+ extern GtkAdjustment *adj;
+ 
+@@ -67,7 +69,10 @@ gboolean save_settings(void)
+ 		return FALSE;
+ 	
+ 	/* Store general settings */
+-	gconf_client_set_string(client, "/apps/gnomeradio/device", settings.device, NULL);
++	if (autodetect)
++		gconf_client_set_string(client, "/apps/gnomeradio/device", "auto", NULL);
++	else
++		gconf_client_set_string(client, "/apps/gnomeradio/device", settings.device, NULL);
+ 	gconf_client_set_string(client, "/apps/gnomeradio/driver", settings.driver, NULL);
+ 	gconf_client_set_string(client, "/apps/gnomeradio/mixer", settings.mixer, NULL);
+ 	gconf_client_set_bool(client, "/apps/gnomeradio/muted", settings.muted, NULL);
+@@ -128,7 +133,7 @@ gboolean load_settings(void)
+ 	/* Load general settings */
+ 	settings.device = gconf_client_get_string(client, "/apps/gnomeradio/device" , NULL);
+ 	if (!settings.device)
+-		settings.device = g_strdup("/dev/radio0");
++		settings.device = g_strdup("auto");
+ 	settings.driver = gconf_client_get_string(client, "/apps/gnomeradio/driver" , NULL);
+ 	if (!settings.driver)
+ 		settings.driver = g_strdup("any");
+@@ -223,6 +228,24 @@ static gboolean device_entry_activate_cb
+ 	return FALSE;
+ }
+ 
++static void
++device_entry_auto_activate_cb(GtkEntry* entry, const gchar* text, gpointer data)
++{
++	GtkEditable *editable;
++
++	editable = GTK_EDITABLE (entry);
++
++	text = gtk_entry_get_text(GTK_ENTRY(device_entry));
++
++	autodetect = 0;
++	if (0 == strcmp(text, "auto")) {
++		g_signal_emit_by_name(G_OBJECT (editable), "activate");
++		autodetect = 1;
++
++		gtk_widget_grab_focus(add_button);
++	}
++}
++
+ static gboolean mixer_entry_activate_cb(GtkWidget *widget, gpointer data)
+ {
+ 	const gchar *text;
+@@ -1246,7 +1269,10 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
+ 
+ 	device_entry = gtk_entry_new();
+-	gtk_entry_set_text(GTK_ENTRY(device_entry), settings.device);
++	if (autodetect)
++		gtk_entry_set_placeholder_text(GTK_ENTRY(device_entry), "auto");
++	else
++		gtk_entry_set_text(GTK_ENTRY(device_entry), settings.device);
+ 	gtk_grid_attach(GTK_GRID(grid), device_entry, 2, 1, 1, 1);
+ 
+ 	label = gtk_label_new (_("Mixer Source:"));
+@@ -1264,6 +1290,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 
+ 	g_signal_connect(G_OBJECT(device_entry), "hide", G_CALLBACK(device_entry_activate_cb), app);
+ 	g_signal_connect(G_OBJECT(device_entry), "activate", G_CALLBACK(device_entry_activate_cb), NULL);
++	g_signal_connect(G_OBJECT(device_entry), "changed", G_CALLBACK(device_entry_auto_activate_cb), NULL);
+ 	g_signal_connect(G_OBJECT(mixer_entry), "hide", G_CALLBACK(mixer_entry_activate_cb), app);
+ 	g_signal_connect(G_OBJECT(mixer_entry), "activate", G_CALLBACK(mixer_entry_activate_cb), NULL);
+ 	g_signal_connect(G_OBJECT(mute_on_exit_cb), "toggled", G_CALLBACK(mute_on_exit_toggled_cb), NULL);
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -59,6 +59,8 @@
+    USB radio devices benefit from a larger default latency */
+ #define DEFAULT_LATENCY 500
+ 
++int autodetect;
++
+ int alsa_loopback = 1;
+ char *alsa_playback = NULL;
+ char *alsa_capture = NULL;
+@@ -387,10 +389,22 @@ void start_radio(gboolean restart, GtkWi
+ 			driver = DRIVER_V4L2;
+ 	}
+ 
++	autodetect = 0;
++	if (0 == strcmp(settings.device, "auto"))
++		autodetect = 1;
++
+ 	if (!radio_init(settings.device, driver)) {
+-		char *caption = g_strdup_printf(_("Could not open radio device \"%s\"!"), settings.device);
+-		char *detail = g_strdup_printf(_("Check your settings and make sure that no other program is using %s.\n"
+-						 "Also make sure that you have read access to it."), settings.device);
++		char *caption, *detail;
++
++		if (autodetect) {
++			caption = g_strdup_printf (_("Could not detect radio device!"));
++			detail = g_strdup_printf (_("To listen to the FM radio, you will need an FM tuner connected to or installed "
++						    "in the computer, and an antenna connected to the tuner to receive a signal."));
++		} else {
++			caption = g_strdup_printf (_("Could not open radio device \"%s\"!"), settings.device);
++			detail = g_strdup_printf (_("You can auto detect radio device typing \"auto\" in the device settings field."));
++		}
++
+ 		show_error_message(caption, detail);
+ 		g_free(caption);
+ 		g_free(detail);
+Index: gnomeradio-1.8/src/radio.c
+===================================================================
+--- gnomeradio-1.8.orig/src/radio.c
++++ gnomeradio-1.8/src/radio.c
+@@ -29,6 +29,8 @@
+ #include "alsa_stream.h"
+ #include "get_media_devices.h"
+ 
++extern int autodetect;
++
+ extern int alsa_loopback;
+ extern char *alsa_playback;
+ extern char *alsa_capture;
+@@ -40,11 +42,35 @@ static RadioDev *dev;
+ /*
+  * These functions handle the radio device
+  */
+- 
+ int radio_init(char *device, DriverType driver)
+ {
+ 	int rv = -1;
+ 
++	if (autodetect) {
++		void *md;
++		const char *p = NULL;
++
++		*device = 0;
++		md = discover_media_devices();
++		if (!md) {
++			fprintf (stderr, "open: Failed to open \"auto\" device");
++			if (*device)
++				fprintf (stderr, " at %s\n", device);
++			else
++				fprintf (stderr, "\n");
++			goto failure;
++		}
++
++		while (1) {
++			p = get_associated_device(md, p, MEDIA_V4L_RADIO, NULL, NONE);
++			if (!p)
++				break;
++			asprintf(&device, "/dev/%s", p);
++		}
++
++		free_media_devices(md);
++	}
++
+ 	switch (driver) {
+ 		case DRIVER_ANY:
+ 		case DRIVER_V4L2:
+@@ -58,7 +84,7 @@ try_v4l1:
+ 	dev = v4l1_radio_dev_new();
+ 	rv = dev->init (dev, device);
+ 	if (rv == 0) {
+-        fprintf(stderr, "Initializing v4l1 failed\n");
++        fprintf(stderr, "v4l1: Initialization failed\n");
+ 		dev->finalize (dev);
+ 		dev = NULL;
+ 		if (alsa_loopback)
+@@ -73,7 +99,7 @@ try_v4l2:
+ 	dev = v4l2_radio_dev_new();
+ 	rv = dev->init (dev, device);
+ 	if (rv == 0) {
+-        fprintf(stderr, "Initializing v4l2 failed\n");
++        fprintf(stderr, "v4l2: Initialization failed\n");
+ 		dev->finalize (dev);
+ 		dev = NULL;
+ 		if (alsa_loopback)
+@@ -85,6 +111,9 @@ try_v4l2:
+ 	}
+ 
+ success:
++	if (autodetect)
++		fprintf(stderr, "open: Using radio device: %s\n", device);
++
+ 	if (alsa_loopback) {
+ 		if (alsa_capture == NULL) {
+ 			void *md = discover_media_devices();
+@@ -113,8 +142,10 @@ success:
+ 	}
+ 
+ 	radio_unmute();
+-failure:
+ 
++failure:
++	if (autodetect)
++		free (device);
+ 	return rv;
+ }
+ 
+Index: gnomeradio-1.8/data/gnomeradio.schemas.in
+===================================================================
+--- gnomeradio-1.8.orig/data/gnomeradio.schemas.in
++++ gnomeradio-1.8/data/gnomeradio.schemas.in
+@@ -29,7 +29,7 @@
+       <applyto>/apps/gnomeradio/device</applyto>
+       <owner>gnomeradio</owner>
+       <type>string</type>
+-      <default>/dev/radio0</default>
++      <default>auto</default>
+       <locale name="C">
+ 	<short>Radio device</short>
+ 	<long>The radio device to use (e.g. /dev/radio0)</long>

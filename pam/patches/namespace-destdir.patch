@@ -1,0 +1,12 @@
+diff -urN Linux-PAM-1.1.6.orig/modules/pam_namespace/Makefile.am Linux-PAM-1.1.6/modules/pam_namespace/Makefile.am
+--- Linux-PAM-1.1.6.orig/modules/pam_namespace/Makefile.am	2012-08-15 13:08:43.000000000 +0200
++++ Linux-PAM-1.1.6/modules/pam_namespace/Makefile.am	2013-02-09 12:45:24.377982482 +0100
+@@ -20,7 +20,7 @@
+ 
+ securelibdir = $(SECUREDIR)
+ secureconfdir = $(SCONFIGDIR)
+-namespaceddir = $(SCONFIGDIR)/namespace.d
++namespaceddir = $(DESTDIR)$(SCONFIGDIR)/namespace.d
+ 
+ AM_CFLAGS = -I$(top_srcdir)/libpam/include -I$(top_srcdir)/libpamc/include \
+         -DSECURECONF_DIR=\"$(SCONFIGDIR)/\"

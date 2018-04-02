@@ -1,0 +1,94 @@
+### -*-hoc-*-
+### ====================================================================
+### Implement tcsh/bash style of dirs(), pushd(), popd(), and
+### additionally, xd() (exchange top two directories on stack).
+### [05-Jan-2002]
+### ====================================================================
+
+if (!defined(_____dirstack_depth)) \
+{
+	___dirstack_1 = getenv("PWD")
+	___dirstack_depth = 1
+}
+
+proc dirs() \
+{
+ 	## NB: reverse order, because eval() pushes onto input stream
+
+	eval("println \"\"")
+	for (k = 1; k <= ___dirstack_depth ; ++k) \
+	{
+		eval("if (" string(k) " < ___dirstack_depth) print \" <-- \" \
+			print ___dirstack_" string(k))
+	}
+}
+
+proc popd() \
+{
+	if (___dirstack_depth <= 1) \
+		println msg_translate("popd: directory stack empty") \
+	else \
+	{
+		eval("___n = ___dirstack_depth-- \
+			___s = cd(___dirstack_" string(___dirstack_depth) ") \
+			dirs() \
+			___n = delete(___dirstack_" string(___dirstack_depth) ")")
+	}
+}
+
+proc pushd() \
+{
+	___dirstack_depth++
+ 	eval("___dirstack_" ___dirstack_depth " = cd(\"" $$1 "\"); dirs()")
+}
+
+proc xd() \
+{
+	## exchange top two entries on directory stack, and change to new top entry
+	if (___dirstack_depth < 2) \
+		println msg_translate("pushd: no other directory") \
+	else \
+	{
+		eval("___swap = ___dirstack_" ___dirstack_depth "\
+		     ___dirstack_" ___dirstack_depth \
+		     " = ___dirstack_" string(___dirstack_depth - 1) "\
+		     ___dirstack_" string(___dirstack_depth - 1)  " = ___swap\
+		     dirs()")
+	}
+}
+
+proc help_dirs() \
+{
+	print "\tdirs() prints the current directory stack from top to bottom.\n\n"
+}
+
+proc help_popd() \
+{
+	print "\tpopd() pops and discards the top directory stack entry, then\n"
+	print "\tdoes a cd() to the new top directory, and calls dirs() to\n"
+	print "\treport the updated directory stack.\n\n"
+}
+
+proc help_pushd() \
+{
+	print "\tpushd(dir) pushes dir onto the top of the directory stack,\n"
+	print "\tdoes cd(dir), and calls dirs() to report the updated directory\n"
+	print "\tstack.\n\n"
+}
+
+proc help_xd() \
+{
+	print "\txd() exchanges the top two elements of the directory stack,\n"
+	print "\tcalls cd() with the new top element, and calls dirs() to\n"
+	print "\treport the updated directory stack.\n\n"
+}
+
+if (defined(__DEBUG_PUSHD__)) \
+{
+	__DEBUG_EVAL__ = 0
+	___dirstack_1 = "/tmp"
+	___dirstack_2 = "/var/tmp"
+	___dirstack_3 = "/usr"
+	___dirstack_4 = "/u/sy/beebe"
+	___dirstack_depth = 4
+}

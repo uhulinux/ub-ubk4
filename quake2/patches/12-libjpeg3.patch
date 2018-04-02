@@ -1,0 +1,21 @@
+diff -Naur orig/src/ref_candygl/gl_image.c mod/src/ref_candygl/gl_image.c
+--- orig/src/ref_candygl/gl_image.c	2003-07-22 23:55:42.000000000 +0200
++++ mod/src/ref_candygl/gl_image.c	2012-11-06 21:55:53.000000000 +0100
+@@ -776,7 +776,7 @@
+ 		ri.Con_Printf(PRINT_ALL, "Premature end of JPEG data\n");
+ }
+ 
+-void jpeg_mem_src(j_decompress_ptr cinfo, byte *mem, int len)
++void _jpeg_mem_src(j_decompress_ptr cinfo, byte *mem, int len)
+ {
+     cinfo->src = (struct jpeg_source_mgr *)(*cinfo->mem->alloc_small)((j_common_ptr) cinfo, JPOOL_PERMANENT, sizeof(struct jpeg_source_mgr));
+     cinfo->src->init_source = jpg_null;
+@@ -822,7 +822,7 @@
+ 	jpeg_create_decompress(&cinfo);
+ 	
+ 	// Feed JPEG memory into the libJpeg Object
+-	jpeg_mem_src(&cinfo, rawdata, rawsize);
++	_jpeg_mem_src(&cinfo, rawdata, rawsize);
+ 
+ 	// Process JPEG header
+ 	jpeg_read_header(&cinfo, true);

@@ -1,0 +1,19 @@
+diff -Naur orig/src/layout/drawabletuplet.cpp patched/src/layout/drawabletuplet.cpp
+--- orig/src/layout/drawabletuplet.cpp	2017-05-20 11:58:42.134741211 +0200
++++ patched/src/layout/drawabletuplet.cpp	2017-05-20 22:17:29.877292393 +0200
+@@ -10,13 +10,14 @@
+ #include <QPen>
+ #include <QPainter>
+ #include <QFont>
++#include <math.h>
+ 
+ CADrawableTuplet::CADrawableTuplet( CATuplet *tuplet, CADrawableContext *c, double x1, double y1, double x2, double y2 )
+  : CADrawableMusElement( tuplet, c, x1, 0 ) {
+ 	setDrawableMusElementType( DrawableTuplet );
+ 
+ 	setWidth( x2-x1 );
+-	setHeight( (abs(y2-y1)>5)?abs(y2-y1):8 );
++	setHeight( (abs(y2-y1)>5)?fabs(y2-y1):8 );
+ 	setYPos( (c && qMin(y1, y2)>c->yPos())?qMin(y1, y2):(qMin(y1,y2)-height()) );
+ }
+ 

@@ -1,0 +1,163 @@
+Description: Adds ngettext support for messages strings.
+Origin: upstream, https://bugzilla.gnome.org/attachment.cgi?id=211463&action=diff
+Bug-Ubuntu: http://launchpad.net/bugs/980633
+Author: Daniel Mustieles
+Forwarded: not-needed
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -106,7 +106,14 @@ static gboolean initial_frequency_scan_c
+ 	}
+ 	
+ 	if (radio_check_station(freq)) {
+-		char *text = g_strdup_printf(_("%d stations found"), g_list_length(fsd->stations) + 1);
++		guint num;
++		char *text;
++
++		num = g_list_length (fsd->stations) + 1;
++		text = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE,
++					"%d station found",
++					"%d stations found", num), num);
++
+ 		gfloat *f = g_malloc(sizeof(gfloat));
+ 		gtk_label_set_text(GTK_LABEL(fsd->label), text);
+ 		g_free(text);
+@@ -128,69 +135,95 @@ static gboolean initial_frequency_scan_c
+ static void initial_frequency_scan(GtkWidget *app)
+ {
+ 	FreqScanData data;
+-	GtkWidget *title;
+-	char *title_hdr;
++	GtkWidget *content_area;
++	GtkWidget *box;
++	GtkWidget *label;
++	gchar *markup;
+ 	
+ 	data.stations = NULL;
+ 	
+-	data.dialog = gtk_dialog_new_with_buttons(_("Scanning"),
+-		GTK_WINDOW(app), DIALOG_FLAGS, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+-	/* gtk_dialog_set_has_separator(GTK_DIALOG(data.dialog), FALSE); */
+-	gtk_window_set_resizable(GTK_WINDOW(data.dialog), FALSE);
+-	
+-	title_hdr = g_strconcat("<span weight=\"bold\">", _("Scanning for available stations:"), "</span>", NULL);
+-	title = gtk_label_new(title_hdr);
+-	gtk_misc_set_alignment(GTK_MISC(title), 0, 0.5);
+-	gtk_label_set_use_markup(GTK_LABEL(title), TRUE);
+-	g_free(title_hdr);
+-	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(data.dialog))), title, FALSE, FALSE, 6);
+-	
+-	data.progress = gtk_progress_bar_new();
+-	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(data.dialog))), data.progress, TRUE, FALSE, 6);
+-	
+-	data.label = gtk_label_new(_("No stations found"));
+-	gtk_misc_set_alignment(GTK_MISC(data.label), 0, 0.5);
+-	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(data.dialog))), data.label, TRUE, FALSE, 6);
++	data.dialog = gtk_dialog_new_with_buttons (_("Scanning"),
++						   GTK_WINDOW (app),
++						   DIALOG_FLAGS,
++						   GTK_STOCK_CANCEL,
++						   GTK_RESPONSE_CANCEL,
++						   NULL);
++
++	gtk_window_set_resizable (GTK_WINDOW (data.dialog), FALSE);
++
++	content_area = gtk_dialog_get_content_area (GTK_DIALOG (data.dialog));
++
++	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
++	gtk_container_set_border_width (GTK_CONTAINER (box), 8);
+ 	
+-	gtk_widget_show_all(data.dialog);
++	label = gtk_label_new (NULL);
++	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
++	markup = g_strdup_printf ("<span size=\"larger\" weight=\"bold\">%s</span>", _("Scanning for available stations"));
++	gtk_label_set_markup (GTK_LABEL (label), markup);
++	g_free (markup);
++	gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
++
++	data.progress = gtk_progress_bar_new ();
++	gtk_box_pack_start (GTK_BOX (box), data.progress, FALSE, FALSE, 0);
++
++	data.label = gtk_label_new (_("No stations found"));
++	gtk_misc_set_alignment (GTK_MISC (data.label), 0, 0.5);
++	gtk_box_pack_start (GTK_BOX (box), data.label, FALSE, FALSE, 0);
++
++	gtk_container_add (GTK_CONTAINER (content_area), box);
++	gtk_widget_show_all (data.dialog);
+ 	
+ 	radio_mute();
+-	timeout_id = g_timeout_add(1000/SCAN_SPEED, (GSourceFunc)initial_frequency_scan_cb, (gpointer)&data);	
+-	gtk_dialog_run(GTK_DIALOG(data.dialog));
++	timeout_id = g_timeout_add (1000/SCAN_SPEED, (GSourceFunc)initial_frequency_scan_cb, (gpointer)&data);
++	gtk_dialog_run (GTK_DIALOG (data.dialog));
+ 
+ 	radio_unmute();
+ 	if (timeout_id) {
+-		g_source_remove(timeout_id);
++		g_source_remove (timeout_id);
+ 		timeout_id = 0;
+-		gtk_widget_destroy(data.dialog);
++		gtk_widget_destroy (data.dialog);
+ 	} else {
+-		if (g_list_length(data.stations) > 0) {
++		if (g_list_length (data.stations) > 0) {
++			GtkWidget *dialog;
++			GList *l;
++			guint num;
++			int response;
++			char *text;
++
+ 			gfloat f = *((gfloat*)data.stations->data);
+ 			gtk_adjustment_set_value(adj, f*STEPS);
+ 			radio_set_freq(f);
+ 			
+-			GtkWidget *dialog;
+-			GList *ptr;
+-			char *text;
+-			
+-			text = g_strdup_printf(_("%d stations found. \nDo you want to add them as presets?\n"),
+-					g_list_length(data.stations));
+-			
+-			dialog = gtk_message_dialog_new(GTK_WINDOW(app), DIALOG_FLAGS, GTK_MESSAGE_QUESTION,
+-					GTK_BUTTONS_YES_NO, "%s", text);
+-			g_free(text);
+-			
+-			int response = gtk_dialog_run(GTK_DIALOG(dialog));
+-			gtk_widget_destroy(dialog);
++			num = g_list_length (data.stations);
++			text = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE,
++						"%d station found.",
++						"%d stations found.", num), num);
++
++			dialog = gtk_message_dialog_new (GTK_WINDOW (app),
++							 DIALOG_FLAGS,
++							 GTK_MESSAGE_QUESTION,
++							 GTK_BUTTONS_YES_NO,
++							 "%s", text);
++
++			if (num == 1)
++				gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
++									_("Do you want to add it as preset?"));
++			else
++				gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
++									_("Do you want to add them as presets?"));
++			g_free (text);
++
++			response = gtk_dialog_run (GTK_DIALOG (dialog));
++			gtk_widget_destroy (dialog);
+ 
+-			for (ptr = data.stations; ptr; ptr = ptr->next) {
++			for (l = data.stations; l; l = l->next) {
+ 				if (response == GTK_RESPONSE_YES) {
+ 					preset *ps = g_malloc0(sizeof(preset));
+ 					ps->title = g_strdup(_("unnamed"));
+-					ps->freq = *((gfloat*)ptr->data);
++					ps->freq = *((gfloat*)l->data);
+ 					settings.presets = g_list_append(settings.presets, ps);
+ 				}
+-				g_free(ptr->data);
++				g_free(l->data);
+ 			}	
+ 		}
+ 	}	

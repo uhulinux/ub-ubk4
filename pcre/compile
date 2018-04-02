@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+rm CMakeLists.txt
+sed -i -e "s:-lpcre ::" libpcrecpp.pc.in
+autoreconf -vif
+ub_compile \
+	--enable-pcre32 \
+	--enable-pcre16 \
+	--enable-utf8 \
+	--enable-pcre8 \
+	--enable-unicode-properties \
+	--enable-jit

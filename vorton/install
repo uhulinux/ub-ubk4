@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+datadir="$UB_INSTALLDIR"/usr/share/games/vorton
+mkdir -p $datadir
+cp -r data "$datadir"/
+install -m 755 vorton "$datadir"/
+chmod 0777 "$datadir"

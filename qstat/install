@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+cp qstat "$UB_INSTALLDIR"/usr/bin/
+cp qstat.cfg "$UB_INSTALLDIR"/etc/
+cat contrib.cfg | grep -v "Qstat config file" >> \
+	"$UB_INSTALLDIR"/etc/qstat.cfg
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/qstat
+cp -LpR template "$UB_INSTALLDIR"/usr/share/qstat/

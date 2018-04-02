@@ -1,0 +1,22 @@
+diff -Naur orig/rtf-fix/rtf2rtf.l patched/rtf-fix/rtf2rtf.l
+--- orig/rtf-fix/rtf2rtf.l	2015-10-20 13:22:17.000000000 +0200
++++ patched/rtf-fix/rtf2rtf.l	2016-04-14 11:14:04.509532351 +0200
+@@ -71,14 +71,13 @@
+ int current;
+ int skipnewline = 0;
+ 
+-extern char *yytext;
++// extern char *yytext;
+ 
+ #if   YY_FLEX_MAJOR_VERSION > 2 \
+- ||  (YY_FLEX_MAJOR_VERSION == 2 && YY_FLEX_MINOR_VERSION > 5) \
+- ||  (YY_FLEX_MAJOR_VERSION == 2 && YY_FLEX_MINOR_VERSION == 5 && YY_FLEX_SUBMINOR_VERSION > 35)
+-extern yy_size_t yyleng;
+-#else
++ ||  (YY_FLEX_MAJOR_VERSION == 2 && YY_FLEX_MINOR_VERSION > 5)
+ extern int yyleng;
++#else
++extern yy_size_t yyleng;
+ #endif
+ 
+ #define CHAPTER 1

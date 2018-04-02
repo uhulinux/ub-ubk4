@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cp -a src/boxes "$UB_INSTALLDIR"/usr/bin/
+cp doc/boxes.1 "$UB_INSTALLDIR"/usr/share/man/man1/
+mkdir -p "$UB_INSTALLDIR"/usr/share/boxes
+cp boxes-config "$UB_INSTALLDIR"/usr/share/boxes/

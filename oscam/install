@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+mkdir -p ${UB_INSTALLDIR}/usr/share/man/{man1,man5}
+mkdir -p ${UB_INSTALLDIR}/usr/share/doc/oscam
+cp -R Distribution/doc/{example,html} ${UB_INSTALLDIR}/usr/share/doc/oscam/
+cp Distribution/doc/man/*.1 ${UB_INSTALLDIR}/usr/share/man/man1/
+cp Distribution/doc/man/*.5 ${UB_INSTALLDIR}/usr/share/man/man5/

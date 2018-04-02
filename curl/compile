@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+rm CMakeLists.txt
+ub_compile \
+	--enable-ipv6 \
+	--with-ssl \
+	--enable-ldaps \
+	--with-gssapi \
+	--with-ca-path=/etc/ssl/certs \
+	--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt

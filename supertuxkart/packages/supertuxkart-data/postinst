@@ -1,0 +1,14 @@
+#/bin/sh
+
+version=ubversion
+echo downloading data...
+mkdir -p /usr/share/supertuxkart
+mkdir -p /tmp/install
+cd /tmp/install
+curl -o supertuxkart-$version-src.tar.xz https://netcologne.dl.sourceforge.net/project/supertuxkart/SuperTuxKart/$version/supertuxkart-$version-src.tar.xz
+echo extracting...
+tar -xvf supertuxkart-$version-src.tar.xz -C $hdir/usr/share/
+mv  /usr/share/supertuxkart-$version/data /usr/share/supertuxkart/data
+rm -rf /usr/share/supertuxkart-$version
+cd -
+rm -rf /tmp/install

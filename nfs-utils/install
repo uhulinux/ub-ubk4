@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install \
+	MANDIR="$UB_INSTALLDIR"/usr/share/man \
+	SBINDIR="$UB_INSTALLDIR"/usr/sbin \
+	STATEDIR="$UB_INSTALLDIR"/var/lib/nfs
+
+cp systemd/*.{service,target,mount} "$UB_INSTALLDIR"/usr/lib/systemd/system/

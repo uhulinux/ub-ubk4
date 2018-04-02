@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+# fix encoding of docs
+iconv -f iso-8859-1 -t utf-8 THANKS -o THANKS.utf8 ; mv THANKS.utf8 THANKS
+
+ub_install

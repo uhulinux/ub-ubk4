@@ -1,0 +1,1650 @@
+diff -Naur orig/base/BUILD.gn patched/base/BUILD.gn
+--- orig/base/BUILD.gn	2018-03-13 20:03:49.000000000 +0100
++++ patched/base/BUILD.gn	2018-03-14 22:25:58.807400920 +0100
+@@ -2561,6 +2561,7 @@
+       "memory/weak_ptr_unittest.nc",
+       "metrics/field_trial_params_unittest.nc",
+       "metrics/histogram_unittest.nc",
++      "optional_unittest.nc",
+       "strings/string16_unittest.nc",
+       "task_scheduler/task_traits_unittest.nc",
+     ]
+diff -Naur orig/base/optional.h patched/base/optional.h
+--- orig/base/optional.h	2018-03-13 20:03:49.000000000 +0100
++++ patched/base/optional.h	2018-03-14 22:25:58.819401075 +0100
+@@ -9,6 +9,7 @@
+ #include <utility>
+ 
+ #include "base/logging.h"
++#include "base/template_util.h"
+ 
+ namespace base {
+ 
+@@ -30,6 +31,10 @@
+ // http://en.cppreference.com/w/cpp/utility/optional/nullopt
+ constexpr nullopt_t nullopt(0);
+ 
++// Forward declaration, which is refered by following helpers.
++template <typename T>
++class Optional;
++
+ namespace internal {
+ 
+ template <typename T, bool = std::is_trivially_destructible<T>::value>
+@@ -40,23 +45,32 @@
+ 
+   template <class... Args>
+   constexpr explicit OptionalStorageBase(in_place_t, Args&&... args)
+-      : is_null_(false), value_(std::forward<Args>(args)...) {}
++      : is_populated_(true), value_(std::forward<Args>(args)...) {}
+ 
+   // When T is not trivially destructible we must call its
+   // destructor before deallocating its memory.
++  // Note that this hides the (implicitly declared) move constructor, which
++  // would be used for constexpr move constructor in OptionalStorage<T>.
++  // It is needed iff T is trivially move constructible. However, the current
++  // is_trivially_{copy,move}_constructible implementation requires
++  // is_trivially_destructible (which looks a bug, cf:
++  // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=51452 and
++  // http://cplusplus.github.io/LWG/lwg-active.html#2116), so it is not
++  // necessary for this case at the moment. Please see also the destructor
++  // comment in "is_trivially_destructible = true" specialization below.
+   ~OptionalStorageBase() {
+-    if (!is_null_)
++    if (is_populated_)
+       value_.~T();
+   }
+ 
+   template <class... Args>
+   void Init(Args&&... args) {
+-    DCHECK(is_null_);
++    DCHECK(!is_populated_);
+     ::new (&value_) T(std::forward<Args>(args)...);
+-    is_null_ = false;
++    is_populated_ = true;
+   }
+ 
+-  bool is_null_ = true;
++  bool is_populated_ = false;
+   union {
+     // |empty_| exists so that the union will always be initialized, even when
+     // it doesn't contain a value. Union members must be initialized for the
+@@ -74,21 +88,30 @@
+ 
+   template <class... Args>
+   constexpr explicit OptionalStorageBase(in_place_t, Args&&... args)
+-      : is_null_(false), value_(std::forward<Args>(args)...) {}
++      : is_populated_(true), value_(std::forward<Args>(args)...) {}
+ 
+   // When T is trivially destructible (i.e. its destructor does nothing) there
+-  // is no need to call it. Explicitly defaulting the destructor means it's not
+-  // user-provided. Those two together make this destructor trivial.
+-  ~OptionalStorageBase() = default;
++  // is no need to call it. Implicitly defined destructor is trivial, because
++  // both members (bool and union containing only variants which are trivially
++  // destructible) are trivially destructible.
++  // Explicitly-defaulted destructor is also trivial, but do not use it here,
++  // because it hides the implicit move constructor. It is needed to implement
++  // constexpr move constructor in OptionalStorage iff T is trivially move
++  // constructible. Note that, if T is trivially move constructible, the move
++  // constructor of OptionalStorageBase<T> is also implicitly defined and it is
++  // trivially move constructor. If T is not trivially move constructible,
++  // "not declaring move constructor without destructor declaration" here means
++  // "delete move constructor", which works because any move constructor of
++  // OptionalStorage will not refer to it in that case.
+ 
+   template <class... Args>
+   void Init(Args&&... args) {
+-    DCHECK(is_null_);
++    DCHECK(!is_populated_);
+     ::new (&value_) T(std::forward<Args>(args)...);
+-    is_null_ = false;
++    is_populated_ = true;
+   }
+ 
+-  bool is_null_ = true;
++  bool is_populated_ = false;
+   union {
+     // |empty_| exists so that the union will always be initialized, even when
+     // it doesn't contain a value. Union members must be initialized for the
+@@ -106,7 +129,7 @@
+ // compiler generated constexpr {copy,move} constructors). Note that
+ // placement-new is prohibited in constexpr.
+ template <typename T,
+-          bool = std::is_trivially_copy_constructible<T>::value,
++          bool = is_trivially_copy_constructible<T>::value,
+           bool = std::is_trivially_move_constructible<T>::value>
+ struct OptionalStorage : OptionalStorageBase<T> {
+   // This is no trivially {copy,move} constructible case. Other cases are
+@@ -114,7 +137,7 @@
+ 
+   // Accessing the members of template base class requires explicit
+   // declaration.
+-  using OptionalStorageBase<T>::is_null_;
++  using OptionalStorageBase<T>::is_populated_;
+   using OptionalStorageBase<T>::value_;
+   using OptionalStorageBase<T>::Init;
+ 
+@@ -126,12 +149,12 @@
+   OptionalStorage() = default;
+ 
+   OptionalStorage(const OptionalStorage& other) {
+-    if (!other.is_null_)
++    if (other.is_populated_)
+       Init(other.value_);
+   }
+ 
+   OptionalStorage(OptionalStorage&& other) {
+-    if (!other.is_null_)
++    if (other.is_populated_)
+       Init(std::move(other.value_));
+   }
+ };
+@@ -141,7 +164,7 @@
+                        true /* trivially copy constructible */,
+                        false /* trivially move constructible */>
+     : OptionalStorageBase<T> {
+-  using OptionalStorageBase<T>::is_null_;
++  using OptionalStorageBase<T>::is_populated_;
+   using OptionalStorageBase<T>::value_;
+   using OptionalStorageBase<T>::Init;
+   using OptionalStorageBase<T>::OptionalStorageBase;
+@@ -150,7 +173,7 @@
+   OptionalStorage(const OptionalStorage& other) = default;
+ 
+   OptionalStorage(OptionalStorage&& other) {
+-    if (!other.is_null_)
++    if (other.is_populated_)
+       Init(std::move(other.value_));
+   }
+ };
+@@ -160,7 +183,7 @@
+                        false /* trivially copy constructible */,
+                        true /* trivially move constructible */>
+     : OptionalStorageBase<T> {
+-  using OptionalStorageBase<T>::is_null_;
++  using OptionalStorageBase<T>::is_populated_;
+   using OptionalStorageBase<T>::value_;
+   using OptionalStorageBase<T>::Init;
+   using OptionalStorageBase<T>::OptionalStorageBase;
+@@ -169,7 +192,7 @@
+   OptionalStorage(OptionalStorage&& other) = default;
+ 
+   OptionalStorage(const OptionalStorage& other) {
+-    if (!other.is_null_)
++    if (other.is_populated_)
+       Init(other.value_);
+   }
+ };
+@@ -201,52 +224,150 @@
+   constexpr explicit OptionalBase(in_place_t, Args&&... args)
+       : storage_(in_place, std::forward<Args>(args)...) {}
+ 
++  // Implementation of converting constructors.
++  template <typename U>
++  explicit OptionalBase(const OptionalBase<U>& other) {
++    if (other.storage_.is_populated_)
++      storage_.Init(other.storage_.value_);
++  }
++
++  template <typename U>
++  explicit OptionalBase(OptionalBase<U>&& other) {
++    if (other.storage_.is_populated_)
++      storage_.Init(std::move(other.storage_.value_));
++  }
++
+   ~OptionalBase() = default;
+ 
+   OptionalBase& operator=(const OptionalBase& other) {
+-    if (other.storage_.is_null_) {
+-      FreeIfNeeded();
+-      return *this;
+-    }
+-
+-    InitOrAssign(other.storage_.value_);
++    CopyAssign(other);
+     return *this;
+   }
+ 
+   OptionalBase& operator=(OptionalBase&& other) {
+-    if (other.storage_.is_null_) {
+-      FreeIfNeeded();
+-      return *this;
+-    }
+-
+-    InitOrAssign(std::move(other.storage_.value_));
++    MoveAssign(std::move(other));
+     return *this;
+   }
+ 
+-  void InitOrAssign(const T& value) {
+-    if (storage_.is_null_)
+-      storage_.Init(value);
++  template <typename U>
++  void CopyAssign(const OptionalBase<U>& other) {
++    if (other.storage_.is_populated_)
++      InitOrAssign(other.storage_.value_);
++    else
++      FreeIfNeeded();
++  }
++
++  template <typename U>
++  void MoveAssign(OptionalBase<U>&& other) {
++    if (other.storage_.is_populated_)
++      InitOrAssign(std::move(other.storage_.value_));
+     else
+-      storage_.value_ = value;
++      FreeIfNeeded();
+   }
+ 
+-  void InitOrAssign(T&& value) {
+-    if (storage_.is_null_)
+-      storage_.Init(std::move(value));
++  template <typename U>
++  void InitOrAssign(U&& value) {
++    if (storage_.is_populated_)
++      storage_.value_ = std::forward<U>(value);
+     else
+-      storage_.value_ = std::move(value);
++      storage_.Init(std::forward<U>(value));
+   }
+ 
+   void FreeIfNeeded() {
+-    if (storage_.is_null_)
++    if (!storage_.is_populated_)
+       return;
+     storage_.value_.~T();
+-    storage_.is_null_ = true;
++    storage_.is_populated_ = false;
+   }
+ 
++  // For implementing conversion, allow access to other typed OptionalBase
++  // class.
++  template <typename U>
++  friend class OptionalBase;
++
+   OptionalStorage<T> storage_;
+ };
+ 
++// The following {Copy,Move}{Constructible,Assignable} structs are helpers to
++// implement constructor/assign-operator overloading. Specifically, if T is
++// is not movable but copyable, Optional<T>'s move constructor should not
++// participate in overload resolution. This inheritance trick implements that.
++template <bool is_copy_constructible>
++struct CopyConstructible {};
++
++template <>
++struct CopyConstructible<false> {
++  constexpr CopyConstructible() = default;
++  constexpr CopyConstructible(const CopyConstructible&) = delete;
++  constexpr CopyConstructible(CopyConstructible&&) = default;
++  CopyConstructible& operator=(const CopyConstructible&) = default;
++  CopyConstructible& operator=(CopyConstructible&&) = default;
++};
++
++template <bool is_move_constructible>
++struct MoveConstructible {};
++
++template <>
++struct MoveConstructible<false> {
++  constexpr MoveConstructible() = default;
++  constexpr MoveConstructible(const MoveConstructible&) = default;
++  constexpr MoveConstructible(MoveConstructible&&) = delete;
++  MoveConstructible& operator=(const MoveConstructible&) = default;
++  MoveConstructible& operator=(MoveConstructible&&) = default;
++};
++
++template <bool is_copy_assignable>
++struct CopyAssignable {};
++
++template <>
++struct CopyAssignable<false> {
++  constexpr CopyAssignable() = default;
++  constexpr CopyAssignable(const CopyAssignable&) = default;
++  constexpr CopyAssignable(CopyAssignable&&) = default;
++  CopyAssignable& operator=(const CopyAssignable&) = delete;
++  CopyAssignable& operator=(CopyAssignable&&) = default;
++};
++
++template <bool is_move_assignable>
++struct MoveAssignable {};
++
++template <>
++struct MoveAssignable<false> {
++  constexpr MoveAssignable() = default;
++  constexpr MoveAssignable(const MoveAssignable&) = default;
++  constexpr MoveAssignable(MoveAssignable&&) = default;
++  MoveAssignable& operator=(const MoveAssignable&) = default;
++  MoveAssignable& operator=(MoveAssignable&&) = delete;
++};
++
++// Helper to conditionally enable converting constructors and assign operators.
++template <typename T, typename U>
++struct IsConvertibleFromOptional
++    : std::integral_constant<
++          bool,
++          std::is_constructible<T, Optional<U>&>::value ||
++              std::is_constructible<T, const Optional<U>&>::value ||
++              std::is_constructible<T, Optional<U>&&>::value ||
++              std::is_constructible<T, const Optional<U>&&>::value ||
++              std::is_convertible<Optional<U>&, T>::value ||
++              std::is_convertible<const Optional<U>&, T>::value ||
++              std::is_convertible<Optional<U>&&, T>::value ||
++              std::is_convertible<const Optional<U>&&, T>::value> {};
++
++template <typename T, typename U>
++struct IsAssignableFromOptional
++    : std::integral_constant<
++          bool,
++          IsConvertibleFromOptional<T, U>::value ||
++              std::is_assignable<T&, Optional<U>&>::value ||
++              std::is_assignable<T&, const Optional<U>&>::value ||
++              std::is_assignable<T&, Optional<U>&&>::value ||
++              std::is_assignable<T&, const Optional<U>&&>::value> {};
++
++// Forward compatibility for C++20.
++template <typename T>
++using RemoveCvRefT = std::remove_cv_t<std::remove_reference_t<T>>;
++
+ }  // namespace internal
+ 
+ // base::Optional is a Chromium version of the C++17 optional class:
+@@ -260,24 +381,71 @@
+ // - 'constexpr' might be missing in some places for reasons specified locally.
+ // - No exceptions are thrown, because they are banned from Chromium.
+ // - All the non-members are in the 'base' namespace instead of 'std'.
++//
++// Note that T cannot have a constructor T(Optional<T>) etc. Optional<T> checks
++// T's constructor (specifically via IsConvertibleFromOptional), and in the
++// check whether T can be constructible from Optional<T>, which is recursive
++// so it does not work. As of Feb 2018, std::optional C++17 implementation in
++// both clang and gcc has same limitation. MSVC SFINAE looks to have different
++// behavior, but anyway it reports an error, too.
+ template <typename T>
+-class Optional : public internal::OptionalBase<T> {
++class Optional
++    : public internal::OptionalBase<T>,
++      public internal::CopyConstructible<std::is_copy_constructible<T>::value>,
++      public internal::MoveConstructible<std::is_move_constructible<T>::value>,
++      public internal::CopyAssignable<std::is_copy_constructible<T>::value &&
++                                      std::is_copy_assignable<T>::value>,
++      public internal::MoveAssignable<std::is_move_constructible<T>::value &&
++                                      std::is_move_assignable<T>::value> {
+  public:
+   using value_type = T;
+ 
+   // Defer default/copy/move constructor implementation to OptionalBase.
+-  // TODO(hidehiko): Implement conditional enabling.
+   constexpr Optional() = default;
+   constexpr Optional(const Optional& other) = default;
+   constexpr Optional(Optional&& other) = default;
+ 
+-  constexpr Optional(nullopt_t) {}
++  constexpr Optional(nullopt_t) {}  // NOLINT(runtime/explicit)
++
++  // Converting copy constructor. "explicit" only if
++  // std::is_convertible<const U&, T>::value is false. It is implemented by
++  // declaring two almost same constructors, but that condition in enable_if_t
++  // is different, so that either one is chosen, thanks to SFINAE.
++  template <
++      typename U,
++      std::enable_if_t<std::is_constructible<T, const U&>::value &&
++                           !internal::IsConvertibleFromOptional<T, U>::value &&
++                           std::is_convertible<const U&, T>::value,
++                       bool> = false>
++  Optional(const Optional<U>& other) : internal::OptionalBase<T>(other) {}
++
++  template <
++      typename U,
++      std::enable_if_t<std::is_constructible<T, const U&>::value &&
++                           !internal::IsConvertibleFromOptional<T, U>::value &&
++                           !std::is_convertible<const U&, T>::value,
++                       bool> = false>
++  explicit Optional(const Optional<U>& other)
++      : internal::OptionalBase<T>(other) {}
+ 
+-  constexpr Optional(const T& value)
+-      : internal::OptionalBase<T>(in_place, value) {}
++  // Converting move constructor. Similar to converting copy constructor,
++  // declaring two (explicit and non-explicit) constructors.
++  template <
++      typename U,
++      std::enable_if_t<std::is_constructible<T, U&&>::value &&
++                           !internal::IsConvertibleFromOptional<T, U>::value &&
++                           std::is_convertible<U&&, T>::value,
++                       bool> = false>
++  Optional(Optional<U>&& other) : internal::OptionalBase<T>(std::move(other)) {}
+ 
+-  constexpr Optional(T&& value)
+-      : internal::OptionalBase<T>(in_place, std::move(value)) {}
++  template <
++      typename U,
++      std::enable_if_t<std::is_constructible<T, U&&>::value &&
++                           !internal::IsConvertibleFromOptional<T, U>::value &&
++                           !std::is_convertible<U&&, T>::value,
++                       bool> = false>
++  explicit Optional(Optional<U>&& other)
++      : internal::OptionalBase<T>(std::move(other)) {}
+ 
+   template <class... Args>
+   constexpr explicit Optional(in_place_t, Args&&... args)
+@@ -294,10 +462,33 @@
+                               Args&&... args)
+       : internal::OptionalBase<T>(in_place, il, std::forward<Args>(args)...) {}
+ 
++  // Forward value constructor. Similar to converting constructors,
++  // conditionally explicit.
++  template <
++      typename U = value_type,
++      std::enable_if_t<
++          std::is_constructible<T, U&&>::value &&
++              !std::is_same<internal::RemoveCvRefT<U>, in_place_t>::value &&
++              !std::is_same<internal::RemoveCvRefT<U>, Optional<T>>::value &&
++              std::is_convertible<U&&, T>::value,
++          bool> = false>
++  constexpr Optional(U&& value)
++      : internal::OptionalBase<T>(in_place, std::forward<U>(value)) {}
++
++  template <
++      typename U = value_type,
++      std::enable_if_t<
++          std::is_constructible<T, U&&>::value &&
++              !std::is_same<internal::RemoveCvRefT<U>, in_place_t>::value &&
++              !std::is_same<internal::RemoveCvRefT<U>, Optional<T>>::value &&
++              !std::is_convertible<U&&, T>::value,
++          bool> = false>
++  constexpr explicit Optional(U&& value)
++      : internal::OptionalBase<T>(in_place, std::forward<U>(value)) {}
++
+   ~Optional() = default;
+ 
+   // Defer copy-/move- assign operator implementation to OptionalBase.
+-  // TOOD(hidehiko): Implement conditional enabling.
+   Optional& operator=(const Optional& other) = default;
+   Optional& operator=(Optional&& other) = default;
+ 
+@@ -306,21 +497,49 @@
+     return *this;
+   }
+ 
+-  template <class U>
+-  typename std::enable_if<std::is_same<std::decay_t<U>, T>::value,
+-                          Optional&>::type
++  // Perfect-forwarded assignment.
++  template <typename U>
++  std::enable_if_t<
++      !std::is_same<internal::RemoveCvRefT<U>, Optional<T>>::value &&
++          std::is_constructible<T, U>::value &&
++          std::is_assignable<T&, U>::value &&
++          (!std::is_scalar<T>::value ||
++           !std::is_same<std::decay_t<U>, T>::value),
++      Optional&>
+   operator=(U&& value) {
+     InitOrAssign(std::forward<U>(value));
+     return *this;
+   }
+ 
++  // Copy assign the state of other.
++  template <typename U>
++  std::enable_if_t<!internal::IsAssignableFromOptional<T, U>::value &&
++                       std::is_constructible<T, const U&>::value &&
++                       std::is_assignable<T&, const U&>::value,
++                   Optional&>
++  operator=(const Optional<U>& other) {
++    CopyAssign(other);
++    return *this;
++  }
++
++  // Move assign the state of other.
++  template <typename U>
++  std::enable_if_t<!internal::IsAssignableFromOptional<T, U>::value &&
++                       std::is_constructible<T, U>::value &&
++                       std::is_assignable<T&, U>::value,
++                   Optional&>
++  operator=(Optional<U>&& other) {
++    MoveAssign(std::move(other));
++    return *this;
++  }
++
+   constexpr const T* operator->() const {
+-    DCHECK(!storage_.is_null_);
++    DCHECK(storage_.is_populated_);
+     return &value();
+   }
+ 
+   constexpr T* operator->() {
+-    DCHECK(!storage_.is_null_);
++    DCHECK(storage_.is_populated_);
+     return &value();
+   }
+ 
+@@ -332,27 +551,27 @@
+ 
+   constexpr T&& operator*() && { return std::move(value()); }
+ 
+-  constexpr explicit operator bool() const { return !storage_.is_null_; }
++  constexpr explicit operator bool() const { return storage_.is_populated_; }
+ 
+-  constexpr bool has_value() const { return !storage_.is_null_; }
++  constexpr bool has_value() const { return storage_.is_populated_; }
+ 
+   constexpr T& value() & {
+-    DCHECK(!storage_.is_null_);
++    DCHECK(storage_.is_populated_);
+     return storage_.value_;
+   }
+ 
+   constexpr const T& value() const & {
+-    DCHECK(!storage_.is_null_);
++    DCHECK(storage_.is_populated_);
+     return storage_.value_;
+   }
+ 
+   constexpr T&& value() && {
+-    DCHECK(!storage_.is_null_);
++    DCHECK(storage_.is_populated_);
+     return std::move(storage_.value_);
+   }
+ 
+   constexpr const T&& value() const && {
+-    DCHECK(!storage_.is_null_);
++    DCHECK(storage_.is_populated_);
+     return std::move(storage_.value_);
+   }
+ 
+@@ -363,8 +582,9 @@
+     //               "T must be copy constructible");
+     static_assert(std::is_convertible<U, T>::value,
+                   "U must be convertible to T");
+-    return storage_.is_null_ ? static_cast<T>(std::forward<U>(default_value))
+-                             : value();
++    return storage_.is_populated_
++               ? value()
++               : static_cast<T>(std::forward<U>(default_value));
+   }
+ 
+   template <class U>
+@@ -374,26 +594,27 @@
+     //               "T must be move constructible");
+     static_assert(std::is_convertible<U, T>::value,
+                   "U must be convertible to T");
+-    return storage_.is_null_ ? static_cast<T>(std::forward<U>(default_value))
+-                             : std::move(value());
++    return storage_.is_populated_
++               ? std::move(value())
++               : static_cast<T>(std::forward<U>(default_value));
+   }
+ 
+   void swap(Optional& other) {
+-    if (storage_.is_null_ && other.storage_.is_null_)
++    if (!storage_.is_populated_ && !other.storage_.is_populated_)
+       return;
+ 
+-    if (storage_.is_null_ != other.storage_.is_null_) {
+-      if (storage_.is_null_) {
+-        storage_.Init(std::move(other.storage_.value_));
+-        other.FreeIfNeeded();
+-      } else {
++    if (storage_.is_populated_ != other.storage_.is_populated_) {
++      if (storage_.is_populated_) {
+         other.storage_.Init(std::move(storage_.value_));
+         FreeIfNeeded();
++      } else {
++        storage_.Init(std::move(other.storage_.value_));
++        other.FreeIfNeeded();
+       }
+       return;
+     }
+ 
+-    DCHECK(!storage_.is_null_ && !other.storage_.is_null_);
++    DCHECK(storage_.is_populated_ && other.storage_.is_populated_);
+     using std::swap;
+     swap(**this, *other);
+   }
+@@ -423,8 +644,10 @@
+  private:
+   // Accessing template base class's protected member needs explicit
+   // declaration to do so.
++  using internal::OptionalBase<T>::CopyAssign;
+   using internal::OptionalBase<T>::FreeIfNeeded;
+   using internal::OptionalBase<T>::InitOrAssign;
++  using internal::OptionalBase<T>::MoveAssign;
+   using internal::OptionalBase<T>::storage_;
+ };
+ 
+diff -Naur orig/base/optional_unittest.cc patched/base/optional_unittest.cc
+--- orig/base/optional_unittest.cc	2018-03-13 20:03:49.000000000 +0100
++++ patched/base/optional_unittest.cc	2018-03-14 22:25:58.819401075 +0100
+@@ -115,6 +115,53 @@
+   int foo_;
+ };
+ 
++class DeletedCopy {
++ public:
++  explicit DeletedCopy(int foo) : foo_(foo) {}
++  DeletedCopy(const DeletedCopy&) = delete;
++  DeletedCopy(DeletedCopy&&) = default;
++
++  DeletedCopy& operator=(const DeletedCopy&) = delete;
++  DeletedCopy& operator=(DeletedCopy&&) = default;
++
++  int foo() const { return foo_; }
++
++ private:
++  int foo_;
++};
++
++class DeletedMove {
++ public:
++  explicit DeletedMove(int foo) : foo_(foo) {}
++  DeletedMove(const DeletedMove&) = default;
++  DeletedMove(DeletedMove&&) = delete;
++
++  DeletedMove& operator=(const DeletedMove&) = default;
++  DeletedMove& operator=(DeletedMove&&) = delete;
++
++  int foo() const { return foo_; }
++
++ private:
++  int foo_;
++};
++
++class NonTriviallyDestructibleDeletedCopyConstructor {
++ public:
++  explicit NonTriviallyDestructibleDeletedCopyConstructor(int foo)
++      : foo_(foo) {}
++  NonTriviallyDestructibleDeletedCopyConstructor(
++      const NonTriviallyDestructibleDeletedCopyConstructor&) = delete;
++  NonTriviallyDestructibleDeletedCopyConstructor(
++      NonTriviallyDestructibleDeletedCopyConstructor&&) = default;
++
++  ~NonTriviallyDestructibleDeletedCopyConstructor() {}
++
++  int foo() const { return foo_; }
++
++ private:
++  int foo_;
++};
++
+ class DeleteNewOperators {
+  public:
+   void* operator new(size_t) = delete;
+@@ -169,6 +216,15 @@
+   }
+ 
+   {
++    const Optional<std::string> first("foo");
++    Optional<std::string> other(first);
++
++    EXPECT_TRUE(other);
++    EXPECT_EQ(other.value(), "foo");
++    EXPECT_EQ(first, other);
++  }
++
++  {
+     Optional<TestObject> first(TestObject(3, 0.1));
+     Optional<TestObject> other(first);
+ 
+@@ -210,33 +266,67 @@
+     constexpr Optional<float> first(0.1f);
+     constexpr Optional<float> second(std::move(first));
+ 
+-    EXPECT_TRUE(second);
++    EXPECT_TRUE(second.has_value());
+     EXPECT_EQ(second.value(), 0.1f);
+ 
+-    EXPECT_TRUE(first);
++    EXPECT_TRUE(first.has_value());
+   }
+ 
+   {
+     Optional<std::string> first("foo");
+     Optional<std::string> second(std::move(first));
+ 
+-    EXPECT_TRUE(second);
++    EXPECT_TRUE(second.has_value());
+     EXPECT_EQ("foo", second.value());
+ 
+-    EXPECT_TRUE(first);
++    EXPECT_TRUE(first.has_value());
+   }
+ 
+   {
+     Optional<TestObject> first(TestObject(3, 0.1));
+     Optional<TestObject> second(std::move(first));
+ 
+-    EXPECT_TRUE(!!second);
++    EXPECT_TRUE(second.has_value());
+     EXPECT_EQ(TestObject::State::MOVE_CONSTRUCTED, second->state());
+     EXPECT_TRUE(TestObject(3, 0.1) == second.value());
+ 
+-    EXPECT_TRUE(!!first);
++    EXPECT_TRUE(first.has_value());
+     EXPECT_EQ(TestObject::State::MOVED_FROM, first->state());
+   }
++
++  // Even if copy constructor is deleted, move constructor needs to work.
++  // Note that it couldn't be constexpr.
++  {
++    Optional<DeletedCopy> first(in_place, 42);
++    Optional<DeletedCopy> second(std::move(first));
++
++    EXPECT_TRUE(second.has_value());
++    EXPECT_EQ(42, second->foo());
++
++    EXPECT_TRUE(first.has_value());
++  }
++
++  {
++    Optional<DeletedMove> first(in_place, 42);
++    Optional<DeletedMove> second(std::move(first));
++
++    EXPECT_TRUE(second.has_value());
++    EXPECT_EQ(42, second->foo());
++
++    EXPECT_TRUE(first.has_value());
++  }
++
++  {
++    Optional<NonTriviallyDestructibleDeletedCopyConstructor> first(in_place,
++                                                                   42);
++    Optional<NonTriviallyDestructibleDeletedCopyConstructor> second(
++        std::move(first));
++
++    EXPECT_TRUE(second.has_value());
++    EXPECT_EQ(42, second->foo());
++
++    EXPECT_TRUE(first.has_value());
++  }
+ }
+ 
+ TEST(OptionalTest, MoveValueConstructor) {
+@@ -274,6 +364,65 @@
+   }
+ }
+ 
++TEST(OptionalTest, ConvertingCopyConstructor) {
++  {
++    Optional<int> first(1);
++    Optional<double> second(first);
++    EXPECT_TRUE(second.has_value());
++    EXPECT_EQ(1.0, second.value());
++  }
++
++  // Make sure explicit is not marked for convertible case.
++  {
++    Optional<int> o(1);
++    ignore_result<Optional<double>>(o);
++  }
++}
++
++TEST(OptionalTest, ConvertingMoveConstructor) {
++  {
++    Optional<int> first(1);
++    Optional<double> second(std::move(first));
++    EXPECT_TRUE(second.has_value());
++    EXPECT_EQ(1.0, second.value());
++  }
++
++  // Make sure explicit is not marked for convertible case.
++  {
++    Optional<int> o(1);
++    ignore_result<Optional<double>>(std::move(o));
++  }
++
++  {
++    class Test1 {
++     public:
++      explicit Test1(int foo) : foo_(foo) {}
++
++      int foo() const { return foo_; }
++
++     private:
++      int foo_;
++    };
++
++    // Not copyable but convertible from Test1.
++    class Test2 {
++     public:
++      Test2(const Test2&) = delete;
++      explicit Test2(Test1&& other) : bar_(other.foo()) {}
++
++      double bar() const { return bar_; }
++
++     private:
++      double bar_;
++    };
++
++    Optional<Test1> first(in_place, 42);
++    Optional<Test2> second(std::move(first));
++    EXPECT_TRUE(second.has_value());
++    EXPECT_EQ(42.0, second->bar());
++  }
++}
++
+ TEST(OptionalTest, ConstructorForwardArguments) {
+   {
+     constexpr Optional<float> a(base::in_place, 0.1f);
+@@ -316,6 +465,83 @@
+   }
+ }
+ 
++TEST(OptionalTest, ForwardConstructor) {
++  {
++    Optional<double> a(1);
++    EXPECT_TRUE(a.has_value());
++    EXPECT_EQ(1.0, a.value());
++  }
++
++  // Test that default type of 'U' is value_type.
++  {
++    struct TestData {
++      int a;
++      double b;
++      bool c;
++    };
++
++    Optional<TestData> a({1, 2.0, true});
++    EXPECT_TRUE(a.has_value());
++    EXPECT_EQ(1, a->a);
++    EXPECT_EQ(2.0, a->b);
++    EXPECT_TRUE(a->c);
++  }
++
++  // If T has a constructor with a param Optional<U>, and another ctor with a
++  // param U, then T(Optional<U>) should be used for Optional<T>(Optional<U>)
++  // constructor.
++  {
++    enum class ParamType {
++      DEFAULT_CONSTRUCTED,
++      COPY_CONSTRUCTED,
++      MOVE_CONSTRUCTED,
++      INT,
++      IN_PLACE,
++      OPTIONAL_INT,
++    };
++    struct Test {
++      Test() : param_type(ParamType::DEFAULT_CONSTRUCTED) {}
++      Test(const Test& param) : param_type(ParamType::COPY_CONSTRUCTED) {}
++      Test(Test&& param) : param_type(ParamType::MOVE_CONSTRUCTED) {}
++      explicit Test(int param) : param_type(ParamType::INT) {}
++      explicit Test(in_place_t param) : param_type(ParamType::IN_PLACE) {}
++      explicit Test(Optional<int> param)
++          : param_type(ParamType::OPTIONAL_INT) {}
++
++      ParamType param_type;
++    };
++
++    // Overload resolution with copy-conversion constructor.
++    {
++      const Optional<int> arg(in_place, 1);
++      Optional<Test> testee(arg);
++      EXPECT_EQ(ParamType::OPTIONAL_INT, testee->param_type);
++    }
++
++    // Overload resolution with move conversion constructor.
++    {
++      Optional<Test> testee(Optional<int>(in_place, 1));
++      EXPECT_EQ(ParamType::OPTIONAL_INT, testee->param_type);
++    }
++
++    // Default constructor should be used.
++    {
++      Optional<Test> testee(in_place);
++      EXPECT_EQ(ParamType::DEFAULT_CONSTRUCTED, testee->param_type);
++    }
++  }
++
++  {
++    struct Test {
++      Test(int a) {}  // NOLINT(runtime/explicit)
++    };
++    // If T is convertible from U, it is not marked as explicit.
++    static_assert(std::is_convertible<int, Test>::value,
++                  "Int should be convertible to Test.");
++    ([](Optional<Test> param) {})(1);
++  }
++}
++
+ TEST(OptionalTest, NulloptConstructor) {
+   constexpr Optional<int> a(base::nullopt);
+   EXPECT_FALSE(a);
+@@ -403,6 +629,57 @@
+     EXPECT_TRUE(a.value() == TestObject(3, 0.1));
+     EXPECT_TRUE(a == b);
+   }
++
++  {
++    Optional<DeletedMove> a(in_place, 42);
++    Optional<DeletedMove> b;
++    b = a;
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(a->foo(), b->foo());
++  }
++
++  {
++    Optional<DeletedMove> a(in_place, 42);
++    Optional<DeletedMove> b(in_place, 1);
++    b = a;
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(a->foo(), b->foo());
++  }
++
++  // Converting assignment.
++  {
++    Optional<int> a(in_place, 1);
++    Optional<double> b;
++    b = a;
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(1, a.value());
++    EXPECT_EQ(1.0, b.value());
++  }
++
++  {
++    Optional<int> a(in_place, 42);
++    Optional<double> b(in_place, 1);
++    b = a;
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(42, a.value());
++    EXPECT_EQ(42.0, b.value());
++  }
++
++  {
++    Optional<int> a;
++    Optional<double> b(in_place, 1);
++    b = a;
++    EXPECT_FALSE(!!a);
++    EXPECT_FALSE(!!b);
++  }
+ }
+ 
+ TEST(OptionalTest, AssignObject_rvalue) {
+@@ -451,6 +728,56 @@
+     EXPECT_EQ(TestObject::State::MOVE_ASSIGNED, a->state());
+     EXPECT_EQ(TestObject::State::MOVED_FROM, b->state());
+   }
++
++  {
++    Optional<DeletedMove> a(in_place, 42);
++    Optional<DeletedMove> b;
++    b = std::move(a);
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(42, b->foo());
++  }
++
++  {
++    Optional<DeletedMove> a(in_place, 42);
++    Optional<DeletedMove> b(in_place, 1);
++    b = std::move(a);
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(42, b->foo());
++  }
++
++  // Converting assignment.
++  {
++    Optional<int> a(in_place, 1);
++    Optional<double> b;
++    b = std::move(a);
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(1.0, b.value());
++  }
++
++  {
++    Optional<int> a(in_place, 42);
++    Optional<double> b(in_place, 1);
++    b = std::move(a);
++
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(42.0, b.value());
++  }
++
++  {
++    Optional<int> a;
++    Optional<double> b(in_place, 1);
++    b = std::move(a);
++
++    EXPECT_FALSE(!!a);
++    EXPECT_FALSE(!!b);
++  }
+ }
+ 
+ TEST(OptionalTest, AssignNull) {
+@@ -479,6 +806,190 @@
+   }
+ }
+ 
++TEST(OptionalTest, AssignOverload) {
++  struct Test1 {
++    enum class State {
++      CONSTRUCTED,
++      MOVED,
++    };
++    State state = State::CONSTRUCTED;
++  };
++
++  // Here, Optional<Test2> can be assigned from Optioanl<Test1>.
++  // In case of move, marks MOVED to Test1 instance.
++  struct Test2 {
++    enum class State {
++      DEFAULT_CONSTRUCTED,
++      COPY_CONSTRUCTED_FROM_TEST1,
++      MOVE_CONSTRUCTED_FROM_TEST1,
++      COPY_ASSIGNED_FROM_TEST1,
++      MOVE_ASSIGNED_FROM_TEST1,
++    };
++
++    Test2() = default;
++    explicit Test2(const Test1& test1)
++        : state(State::COPY_CONSTRUCTED_FROM_TEST1) {}
++    explicit Test2(Test1&& test1) : state(State::MOVE_CONSTRUCTED_FROM_TEST1) {
++      test1.state = Test1::State::MOVED;
++    }
++    Test2& operator=(const Test1& test1) {
++      state = State::COPY_ASSIGNED_FROM_TEST1;
++      return *this;
++    }
++    Test2& operator=(Test1&& test1) {
++      state = State::MOVE_ASSIGNED_FROM_TEST1;
++      test1.state = Test1::State::MOVED;
++      return *this;
++    }
++
++    State state = State::DEFAULT_CONSTRUCTED;
++  };
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test2> b;
++
++    b = a;
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::CONSTRUCTED, a->state);
++    EXPECT_EQ(Test2::State::COPY_CONSTRUCTED_FROM_TEST1, b->state);
++  }
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test2> b(in_place);
++
++    b = a;
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::CONSTRUCTED, a->state);
++    EXPECT_EQ(Test2::State::COPY_ASSIGNED_FROM_TEST1, b->state);
++  }
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test2> b;
++
++    b = std::move(a);
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::MOVED, a->state);
++    EXPECT_EQ(Test2::State::MOVE_CONSTRUCTED_FROM_TEST1, b->state);
++  }
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test2> b(in_place);
++
++    b = std::move(a);
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::MOVED, a->state);
++    EXPECT_EQ(Test2::State::MOVE_ASSIGNED_FROM_TEST1, b->state);
++  }
++
++  // Similar to Test2, but Test3 also has copy/move ctor and assign operators
++  // from Optional<Test1>, too. In this case, for a = b where a is
++  // Optional<Test3> and b is Optional<Test1>,
++  // Optional<T>::operator=(U&&) where U is Optional<Test1> should be used
++  // rather than Optional<T>::operator=(Optional<U>&&) where U is Test1.
++  struct Test3 {
++    enum class State {
++      DEFAULT_CONSTRUCTED,
++      COPY_CONSTRUCTED_FROM_TEST1,
++      MOVE_CONSTRUCTED_FROM_TEST1,
++      COPY_CONSTRUCTED_FROM_OPTIONAL_TEST1,
++      MOVE_CONSTRUCTED_FROM_OPTIONAL_TEST1,
++      COPY_ASSIGNED_FROM_TEST1,
++      MOVE_ASSIGNED_FROM_TEST1,
++      COPY_ASSIGNED_FROM_OPTIONAL_TEST1,
++      MOVE_ASSIGNED_FROM_OPTIONAL_TEST1,
++    };
++
++    Test3() = default;
++    explicit Test3(const Test1& test1)
++        : state(State::COPY_CONSTRUCTED_FROM_TEST1) {}
++    explicit Test3(Test1&& test1) : state(State::MOVE_CONSTRUCTED_FROM_TEST1) {
++      test1.state = Test1::State::MOVED;
++    }
++    explicit Test3(const Optional<Test1>& test1)
++        : state(State::COPY_CONSTRUCTED_FROM_OPTIONAL_TEST1) {}
++    explicit Test3(Optional<Test1>&& test1)
++        : state(State::MOVE_CONSTRUCTED_FROM_OPTIONAL_TEST1) {
++      // In the following senarios, given |test1| should always have value.
++      DCHECK(test1.has_value());
++      test1->state = Test1::State::MOVED;
++    }
++    Test3& operator=(const Test1& test1) {
++      state = State::COPY_ASSIGNED_FROM_TEST1;
++      return *this;
++    }
++    Test3& operator=(Test1&& test1) {
++      state = State::MOVE_ASSIGNED_FROM_TEST1;
++      test1.state = Test1::State::MOVED;
++      return *this;
++    }
++    Test3& operator=(const Optional<Test1>& test1) {
++      state = State::COPY_ASSIGNED_FROM_OPTIONAL_TEST1;
++      return *this;
++    }
++    Test3& operator=(Optional<Test1>&& test1) {
++      state = State::MOVE_ASSIGNED_FROM_OPTIONAL_TEST1;
++      // In the following senarios, given |test1| should always have value.
++      DCHECK(test1.has_value());
++      test1->state = Test1::State::MOVED;
++      return *this;
++    }
++
++    State state = State::DEFAULT_CONSTRUCTED;
++  };
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test3> b;
++
++    b = a;
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::CONSTRUCTED, a->state);
++    EXPECT_EQ(Test3::State::COPY_CONSTRUCTED_FROM_OPTIONAL_TEST1, b->state);
++  }
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test3> b(in_place);
++
++    b = a;
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::CONSTRUCTED, a->state);
++    EXPECT_EQ(Test3::State::COPY_ASSIGNED_FROM_OPTIONAL_TEST1, b->state);
++  }
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test3> b;
++
++    b = std::move(a);
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::MOVED, a->state);
++    EXPECT_EQ(Test3::State::MOVE_CONSTRUCTED_FROM_OPTIONAL_TEST1, b->state);
++  }
++
++  {
++    Optional<Test1> a(in_place);
++    Optional<Test3> b(in_place);
++
++    b = std::move(a);
++    EXPECT_TRUE(!!a);
++    EXPECT_TRUE(!!b);
++    EXPECT_EQ(Test1::State::MOVED, a->state);
++    EXPECT_EQ(Test3::State::MOVE_ASSIGNED_FROM_OPTIONAL_TEST1, b->state);
++  }
++}
++
+ TEST(OptionalTest, OperatorStar) {
+   {
+     Optional<float> a(0.1f);
+diff -Naur orig/base/optional_unittest.nc patched/base/optional_unittest.nc
+--- orig/base/optional_unittest.nc	1970-01-01 01:00:00.000000000 +0100
++++ patched/base/optional_unittest.nc	2018-03-14 22:25:58.815401023 +0100
+@@ -0,0 +1,65 @@
++// Copyright 2018 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// This is a "No Compile Test" suite.
++// http://dev.chromium.org/developers/testing/no-compile-tests
++
++#include <type_traits>
++
++#include "base/optional.h"
++
++namespace base {
++
++#if defined(NCTEST_EXPLICIT_CONVERTING_COPY_CONSTRUCTOR)  // [r"fatal error: no matching function for call to object of type"]
++
++// Optional<T>(const Optional<U>& arg) constructor is marked explicit if
++// T is not convertible from "const U&".
++void WontCompile() {
++  struct Test {
++    // Declares as explicit so that Test is still constructible from int,
++    // but not convertible.
++    explicit Test(int a) {}
++  };
++
++  static_assert(!std::is_convertible<const int&, Test>::value,
++                "const int& to Test is convertible");
++  const Optional<int> arg(in_place, 1);
++  ([](Optional<Test> param) {})(arg);
++}
++
++#elif defined(NCTEST_EXPLICIT_CONVERTING_MOVE_CONSTRUCTOR)  // [r"fatal error: no matching function for call to object of type"]
++
++// Optional<T>(Optional<U>&& arg) constructor is marked explicit if
++// T is not convertible from "U&&".
++void WontCompile() {
++  struct Test {
++    // Declares as explicit so that Test is still constructible from int,
++    // but not convertible.
++    explicit Test(int a) {}
++  };
++
++  static_assert(!std::is_convertible<int&&, Test>::value,
++                "int&& to Test is convertible");
++  ([](Optional<Test> param) {})(Optional<int>(in_place, 1));
++}
++
++#elif defined(NCTEST_EXPLICIT_VALUE_FORWARD_CONSTRUCTOR)  // [r"fatal error: no matching function for call to object of type"]
++
++// Optional<T>(U&&) constructor is marked explicit if T is not convertible
++// from U&&.
++void WontCompile() {
++  struct Test {
++    // Declares as explicit so that Test is still constructible from int,
++    // but not convertible.
++    explicit Test(int a) {}
++  };
++
++  static_assert(!std::is_convertible<int&&, Test>::value,
++                "int&& to Test is convertible");
++  ([](Optional<Test> param) {})(1);
++}
++
++#endif
++
++}  // namespace base
+diff -Naur orig/base/template_util.h patched/base/template_util.h
+--- orig/base/template_util.h	2018-03-13 20:03:49.000000000 +0100
++++ patched/base/template_util.h	2018-03-14 22:25:58.695399480 +0100
+@@ -10,6 +10,7 @@
+ #include <iterator>
+ #include <type_traits>
+ #include <utility>
++#include <vector>
+ 
+ #include "build/build_config.h"
+ 
+@@ -127,6 +128,23 @@
+ using is_trivially_copyable = std::is_trivially_copyable<T>;
+ #endif
+ 
++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ <= 7
++// Workaround for g++7 and earlier family.
++// Due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80654, without this
++// Optional<std::vector<T>> where T is non-copyable causes a compile error.
++// As we know it is not trivially copy constructible, explicitly declare so.
++template <typename T>
++struct is_trivially_copy_constructible
++    : std::is_trivially_copy_constructible<T> {};
++
++template <typename... T>
++struct is_trivially_copy_constructible<std::vector<T...>> : std::false_type {};
++#else
++// Otherwise use std::is_trivially_copy_constructible as is.
++template <typename T>
++using is_trivially_copy_constructible = std::is_trivially_copy_constructible<T>;
++#endif
++
+ }  // namespace base
+ 
+ #undef CR_USE_FALLBACKS_FOR_GCC_WITH_LIBCXX
+diff -Naur orig/base/template_util_unittest.cc patched/base/template_util_unittest.cc
+--- orig/base/template_util_unittest.cc	2018-03-13 20:03:49.000000000 +0100
++++ patched/base/template_util_unittest.cc	2018-03-14 22:25:58.707399634 +0100
+@@ -92,6 +92,15 @@
+               "TrivialCopyButWithDestructor should not be detected as "
+               "trivially copyable");
+ 
++class NoCopy {
++ public:
++  NoCopy(const NoCopy&) = delete;
++};
++
++static_assert(
++    !base::is_trivially_copy_constructible<std::vector<NoCopy>>::value,
++    "is_trivially_copy_constructible<std::vector<T>> must be compiled.");
++
+ }  // namespace
+ 
+ }  // namespace base
+diff -Naur orig/cc/raster/playback_image_provider.cc patched/cc/raster/playback_image_provider.cc
+--- orig/cc/raster/playback_image_provider.cc	2018-03-13 20:03:49.000000000 +0100
++++ patched/cc/raster/playback_image_provider.cc	2018-03-14 22:25:58.839401332 +0100
+@@ -92,7 +92,6 @@
+ }
+ 
+ PlaybackImageProvider::Settings::Settings() = default;
+-PlaybackImageProvider::Settings::Settings(const Settings& other) = default;
+ PlaybackImageProvider::Settings::~Settings() = default;
+ 
+ }  // namespace cc
+diff -Naur orig/cc/raster/playback_image_provider.h patched/cc/raster/playback_image_provider.h
+--- orig/cc/raster/playback_image_provider.h	2018-03-13 20:03:49.000000000 +0100
++++ patched/cc/raster/playback_image_provider.h	2018-03-14 22:25:58.847401435 +0100
+@@ -20,7 +20,6 @@
+  public:
+   struct CC_EXPORT Settings {
+     Settings();
+-    Settings(const Settings& other);
+     ~Settings();
+ 
+     // The set of image ids to skip during raster.
+diff -Naur orig/components/assist_ranker/ranker_example_util.cc patched/components/assist_ranker/ranker_example_util.cc
+--- orig/components/assist_ranker/ranker_example_util.cc	2018-03-13 20:03:58.000000000 +0100
++++ patched/components/assist_ranker/ranker_example_util.cc	2018-03-14 22:25:58.975403081 +0100
+@@ -2,6 +2,8 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
++#include <math.h>
++
+ #include "components/assist_ranker/ranker_example_util.h"
+ #include "base/bit_cast.h"
+ #include "base/format_macros.h"
+diff -Naur orig/components/policy/core/browser/browser_policy_connector_base.h patched/components/policy/core/browser/browser_policy_connector_base.h
+--- orig/components/policy/core/browser/browser_policy_connector_base.h	2018-03-13 20:03:59.000000000 +0100
++++ patched/components/policy/core/browser/browser_policy_connector_base.h	2018-03-14 22:25:58.967402978 +0100
+@@ -12,13 +12,13 @@
+ #include "base/macros.h"
+ #include "base/optional.h"
+ #include "components/policy/core/browser/configuration_policy_handler_list.h"
++#include "components/policy/core/common/configuration_policy_provider.h"
+ #include "components/policy/core/common/schema.h"
+ #include "components/policy/core/common/schema_registry.h"
+ #include "components/policy/policy_export.h"
+ 
+ namespace policy {
+ 
+-class ConfigurationPolicyProvider;
+ class PolicyService;
+ class PolicyServiceImpl;
+ 
+diff -Naur orig/content/browser/appcache/appcache_request_handler.cc patched/content/browser/appcache/appcache_request_handler.cc
+--- orig/content/browser/appcache/appcache_request_handler.cc	2018-03-13 20:04:01.000000000 +0100
++++ patched/content/browser/appcache/appcache_request_handler.cc	2018-03-14 22:25:58.855401538 +0100
+@@ -639,7 +639,7 @@
+ 
+   SubresourceLoaderParams params;
+   params.loader_factory_info = factory_ptr.PassInterface();
+-  return params;
++  return base::Optional<SubresourceLoaderParams>(std::move(params));
+ }
+ 
+ void AppCacheRequestHandler::MaybeCreateSubresourceLoader(
+diff -Naur orig/content/browser/service_worker/service_worker_controllee_request_handler.cc patched/content/browser/service_worker/service_worker_controllee_request_handler.cc
+--- orig/content/browser/service_worker/service_worker_controllee_request_handler.cc	2018-03-13 20:04:02.000000000 +0100
++++ patched/content/browser/service_worker/service_worker_controllee_request_handler.cc	2018-03-14 22:25:58.863401641 +0100
+@@ -271,7 +271,7 @@
+   controller_info->object_info = provider_host_->GetOrCreateServiceWorkerHandle(
+       provider_host_->controller());
+   params.controller_service_worker_info = std::move(controller_info);
+-  return params;
++  return base::Optional<SubresourceLoaderParams>(std::move(params));
+ }
+ 
+ void ServiceWorkerControlleeRequestHandler::PrepareForMainResource(
+diff -Naur orig/services/preferences/tracked/pref_hash_filter.h patched/services/preferences/tracked/pref_hash_filter.h
+--- orig/services/preferences/tracked/pref_hash_filter.h	2018-03-13 20:04:10.000000000 +0100
++++ patched/services/preferences/tracked/pref_hash_filter.h	2018-03-14 22:25:58.731399943 +0100
+@@ -21,9 +21,9 @@
+ #include "services/preferences/public/interfaces/preferences.mojom.h"
+ #include "services/preferences/tracked/hash_store_contents.h"
+ #include "services/preferences/tracked/interceptable_pref_filter.h"
++#include "services/preferences/tracked/pref_hash_store.h"
+ #include "services/preferences/tracked/tracked_preference.h"
+ 
+-class PrefHashStore;
+ class PrefService;
+ 
+ namespace base {
+diff -Naur orig/third_party/WebKit/Source/bindings/modules/v8/V8BindingForModules.cpp patched/third_party/WebKit/Source/bindings/modules/v8/V8BindingForModules.cpp
+--- orig/third_party/WebKit/Source/bindings/modules/v8/V8BindingForModules.cpp	2018-03-13 20:04:41.000000000 +0100
++++ patched/third_party/WebKit/Source/bindings/modules/v8/V8BindingForModules.cpp	2018-03-14 22:25:58.899402104 +0100
+@@ -68,7 +68,7 @@
+     case IDBKeyPath::kNullType:
+       return v8::Null(isolate);
+     case IDBKeyPath::kStringType:
+-      return V8String(isolate, value.String());
++      return V8String(isolate, value.GetString());
+     case IDBKeyPath::kArrayType:
+       return ToV8(value.Array(), creation_context, isolate);
+   }
+@@ -97,7 +97,7 @@
+     case IDBKey::kNumberType:
+       return v8::Number::New(isolate, key->Number());
+     case IDBKey::kStringType:
+-      return V8String(isolate, key->String());
++      return V8String(isolate, key->GetString());
+     case IDBKey::kBinaryType:
+       // https://w3c.github.io/IndexedDB/#convert-a-value-to-a-key
+       return ToV8(DOMArrayBuffer::Create(key->Binary()), creation_context,
+@@ -379,7 +379,7 @@
+   }
+ 
+   DCHECK_EQ(key_path.GetType(), IDBKeyPath::kStringType);
+-  return CreateIDBKeyFromValueAndKeyPath(isolate, value, key_path.String(),
++  return CreateIDBKeyFromValueAndKeyPath(isolate, value, key_path.GetString(),
+                                          exception_state);
+ }
+ 
+@@ -483,7 +483,7 @@
+   DCHECK(isolate->InContext());
+ 
+   DCHECK_EQ(key_path.GetType(), IDBKeyPath::kStringType);
+-  Vector<String> key_path_elements = ParseKeyPath(key_path.String());
++  Vector<String> key_path_elements = ParseKeyPath(key_path.GetString());
+ 
+   // The conbination of a key generator and an empty key path is forbidden by
+   // spec.
+@@ -569,7 +569,7 @@
+                                     const IDBKeyPath& key_path) {
+   IDB_TRACE("canInjectIDBKeyIntoScriptValue");
+   DCHECK_EQ(key_path.GetType(), IDBKeyPath::kStringType);
+-  Vector<String> key_path_elements = ParseKeyPath(key_path.String());
++  Vector<String> key_path_elements = ParseKeyPath(key_path.GetString());
+ 
+   if (!key_path_elements.size())
+     return false;
+diff -Naur orig/third_party/WebKit/Source/modules/exported/WebIDBKey.cpp patched/third_party/WebKit/Source/modules/exported/WebIDBKey.cpp
+--- orig/third_party/WebKit/Source/modules/exported/WebIDBKey.cpp	2018-03-13 20:04:43.000000000 +0100
++++ patched/third_party/WebKit/Source/modules/exported/WebIDBKey.cpp	2018-03-14 22:25:58.911402258 +0100
+@@ -56,7 +56,7 @@
+ }
+ 
+ WebString WebIDBKeyView::String() const {
+-  return private_->String();
++  return private_->GetString();
+ }
+ 
+ double WebIDBKeyView::Date() const {
+diff -Naur orig/third_party/WebKit/Source/modules/indexeddb/IDBDatabase.cpp patched/third_party/WebKit/Source/modules/indexeddb/IDBDatabase.cpp
+--- orig/third_party/WebKit/Source/modules/indexeddb/IDBDatabase.cpp	2018-03-13 20:04:43.000000000 +0100
++++ patched/third_party/WebKit/Source/modules/indexeddb/IDBDatabase.cpp	2018-03-14 22:25:58.935402567 +0100
+@@ -297,7 +297,7 @@
+   }
+ 
+   if (auto_increment && ((key_path.GetType() == IDBKeyPath::kStringType &&
+-                          key_path.String().IsEmpty()) ||
++                          key_path.GetString().IsEmpty()) ||
+                          key_path.GetType() == IDBKeyPath::kArrayType)) {
+     exception_state.ThrowDOMException(
+         kInvalidAccessError,
+diff -Naur orig/third_party/WebKit/Source/modules/indexeddb/IDBKey.h patched/third_party/WebKit/Source/modules/indexeddb/IDBKey.h
+--- orig/third_party/WebKit/Source/modules/indexeddb/IDBKey.h	2018-03-13 20:04:43.000000000 +0100
++++ patched/third_party/WebKit/Source/modules/indexeddb/IDBKey.h	2018-03-14 22:25:58.935402567 +0100
+@@ -106,7 +106,7 @@
+     return binary_;
+   }
+ 
+-  const String& String() const {
++  const String& GetString() const {
+     DCHECK_EQ(type_, kStringType);
+     return string_;
+   }
+diff -Naur orig/third_party/WebKit/Source/modules/indexeddb/IDBKeyPath.h patched/third_party/WebKit/Source/modules/indexeddb/IDBKeyPath.h
+--- orig/third_party/WebKit/Source/modules/indexeddb/IDBKeyPath.h	2018-03-13 20:04:43.000000000 +0100
++++ patched/third_party/WebKit/Source/modules/indexeddb/IDBKeyPath.h	2018-03-14 22:25:58.935402567 +0100
+@@ -65,7 +65,7 @@
+     return array_;
+   }
+ 
+-  const String& String() const {
++  const String& GetString() const {
+     DCHECK_EQ(type_, kStringType);
+     return string_;
+   }
+diff -Naur orig/third_party/WebKit/Source/modules/indexeddb/InspectorIndexedDBAgent.cpp patched/third_party/WebKit/Source/modules/indexeddb/InspectorIndexedDBAgent.cpp
+--- orig/third_party/WebKit/Source/modules/indexeddb/InspectorIndexedDBAgent.cpp	2018-03-13 20:04:43.000000000 +0100
++++ patched/third_party/WebKit/Source/modules/indexeddb/InspectorIndexedDBAgent.cpp	2018-03-14 22:25:58.935402567 +0100
+@@ -399,7 +399,7 @@
+     case IDBKeyPath::kStringType:
+       key_path = KeyPath::create()
+                      .setType(KeyPath::TypeEnum::String)
+-                     .setString(idb_key_path.String())
++                     .setString(idb_key_path.GetString())
+                      .build();
+       break;
+     case IDBKeyPath::kArrayType: {
+diff -Naur orig/third_party/WebKit/Source/modules/webdatabase/SQLTransactionBackend.h patched/third_party/WebKit/Source/modules/webdatabase/SQLTransactionBackend.h
+--- orig/third_party/WebKit/Source/modules/webdatabase/SQLTransactionBackend.h	2018-03-13 20:04:43.000000000 +0100
++++ patched/third_party/WebKit/Source/modules/webdatabase/SQLTransactionBackend.h	2018-03-14 22:25:58.731399943 +0100
+@@ -30,6 +30,7 @@
+ 
+ #include <memory>
+ #include "modules/webdatabase/DatabaseBasicTypes.h"
++#include "modules/webdatabase/SQLError.h"
+ #include "modules/webdatabase/SQLStatement.h"
+ #include "modules/webdatabase/SQLStatementBackend.h"
+ #include "modules/webdatabase/SQLTransactionStateMachine.h"
+@@ -41,7 +42,6 @@
+ namespace blink {
+ 
+ class Database;
+-class SQLErrorData;
+ class SQLiteTransaction;
+ class SQLTransaction;
+ class SQLTransactionBackend;
+diff -Naur orig/third_party/WebKit/Source/platform/heap/TraceTraits.h patched/third_party/WebKit/Source/platform/heap/TraceTraits.h
+--- orig/third_party/WebKit/Source/platform/heap/TraceTraits.h	2018-03-13 20:04:44.000000000 +0100
++++ patched/third_party/WebKit/Source/platform/heap/TraceTraits.h	2018-03-14 22:25:58.739400046 +0100
+@@ -18,6 +18,7 @@
+ #include "platform/wtf/HashTable.h"
+ #include "platform/wtf/LinkedHashSet.h"
+ #include "platform/wtf/ListHashSet.h"
++#include "platform/wtf/Optional.h"
+ #include "platform/wtf/TypeTraits.h"
+ 
+ namespace blink {
+@@ -325,6 +326,23 @@
+   }
+ };
+ 
++// While using Optional<T> with garbage-collected types is generally disallowed
++// by the OptionalGarbageCollected check in blink_gc_plugin, garbage-collected
++// containers such as HeapVector are allowed and need to be traced.
++template <typename T>
++class TraceTrait<WTF::Optional<T>> {
++  STATIC_ONLY(TraceTrait);
++
++ public:
++  template <typename VisitorDispatcher>
++  static void Trace(VisitorDispatcher visitor, WTF::Optional<T>* optional) {
++    if (*optional != WTF::nullopt) {
++      TraceIfEnabled<T, WTF::IsTraceable<T>::value>::Trace(visitor,
++                                                           optional->value());
++    }
++  }
++};
++
+ // If eager tracing leads to excessively deep |trace()| call chains (and
+ // the system stack usage that this brings), the marker implementation will
+ // switch to using an explicit mark stack. Recursive and deep object graphs
+diff -Naur orig/third_party/WebKit/Source/platform/wtf/Optional.h patched/third_party/WebKit/Source/platform/wtf/Optional.h
+--- orig/third_party/WebKit/Source/platform/wtf/Optional.h	2018-03-13 20:04:44.000000000 +0100
++++ patched/third_party/WebKit/Source/platform/wtf/Optional.h	2018-03-14 22:25:58.763400354 +0100
+@@ -6,20 +6,16 @@
+ #define Optional_h
+ 
+ #include "base/optional.h"
+-#include "platform/wtf/TypeTraits.h"
++#include "platform/wtf/TemplateUtil.h"
+ 
+ namespace WTF {
+ 
+ // WTF::Optional is base::Optional. See base/optional.h for documentation.
+ //
+ // A clang plugin enforces that garbage collected types are not allocated
+-// outside of the heap, similarly we enforce that one doesn't create garbage
+-// collected types nested inside an Optional.
++// outside of the heap. GC containers such as HeapVector are allowed though.
+ template <typename T>
+-using Optional =
+-    typename std::enable_if<!IsGarbageCollectedType<T>::value ||
+-                                IsPersistentReferenceType<T>::value,
+-                            base::Optional<T>>::type;
++using Optional = base::Optional<T>;
+ 
+ constexpr base::nullopt_t nullopt = base::nullopt;
+ constexpr base::in_place_t in_place = base::in_place;
+diff -Naur orig/third_party/WebKit/Source/platform/wtf/TemplateUtil.h patched/third_party/WebKit/Source/platform/wtf/TemplateUtil.h
+--- orig/third_party/WebKit/Source/platform/wtf/TemplateUtil.h	1970-01-01 01:00:00.000000000 +0100
++++ patched/third_party/WebKit/Source/platform/wtf/TemplateUtil.h	2018-03-14 22:25:58.763400354 +0100
+@@ -0,0 +1,27 @@
++// Copyright 2018 The Chromium Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++#ifndef TemplateUtil_h
++#define TemplateUtil_h
++
++#include "base/template_util.h"
++#include "platform/wtf/Vector.h"
++
++namespace base {
++
++#if defined(__GNUC__) && !defined(__clang__) && __GNUC__ <= 7
++// Workaround for g++7 and earlier family.
++// Due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80654, without this
++// Optional<WTF::Vector<T>> where T is non-copyable causes a compile error.
++// As we know it is not trivially copy constructible, explicitly declare so.
++//
++// It completes the declaration in base/template_util.h that was provided
++// for std::vector
++template <typename T>
++struct is_trivially_copy_constructible<WTF::Vector<T>> : std::false_type {};
++#endif
++
++}  // namespace base
++
++#endif  // TemplateUtil_h

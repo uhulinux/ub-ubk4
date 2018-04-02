@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install \
+	docdir=/usr/share/doc \
+	pixmapsdir=/usr/share/pixmaps \
+	applicationsdir=/usr/share/applications\
+	localedir=/usr/share/locale
+chgrp users $UB_INSTALLDIR/var/games/toppler
+chgrp users $UB_INSTALLDIR/var/games/toppler/toppler.hsc

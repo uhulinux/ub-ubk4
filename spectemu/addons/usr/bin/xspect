@@ -1,0 +1,8 @@
+#!/bin/sh --
+
+if [ -t 0 -a -t 1 ]; then
+	exec xspect.bin "$@"
+else
+	exec xterm -title 'xspect - xterm' -e xspect.bin "$@"
+fi
+

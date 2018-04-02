@@ -1,0 +1,97 @@
+diff -Naur fbgetty-0.1.698.orig/include/fbgetty/global.h fbgetty-0.1.698/include/fbgetty/global.h
+--- fbgetty-0.1.698.orig/include/fbgetty/global.h	2001-12-17 21:48:50.000000000 +0100
++++ fbgetty-0.1.698/include/fbgetty/global.h	2004-11-26 17:38:00.000000000 +0100
+@@ -69,4 +69,6 @@
+ # define TRUE (!FALSE)
+ #endif
+ 
++void load_login_into_memory_cache(void);
++
+ #endif /* _FBGETTY_GLOBAL_H_ */
+diff -Naur fbgetty-0.1.698.orig/src/main.c fbgetty-0.1.698/src/main.c
+--- fbgetty-0.1.698.orig/src/main.c	2001-12-29 17:24:30.000000000 +0100
++++ fbgetty-0.1.698/src/main.c	2004-11-26 17:38:00.000000000 +0100
+@@ -31,6 +31,9 @@
+ #include <syslog.h>
+ #include <string.h>
+ #include <errno.h>
++#include <fcntl.h>
++#include <sys/wait.h>
++#include <time.h>
+ 
+ #include <fbgetty/options.h>
+ #include <fbgetty/init.h>
+@@ -47,6 +50,40 @@
+ int wait_for_gdb = 1;
+ #endif /* DEBUGGER_SUPPORT */
+ 
++void
++load_login_into_memory_cache (void)
++{
++  static int init = 0;
++  static time_t last;
++  time_t now;
++  pid_t pid, i;
++
++  now = time(NULL);
++  if (init && now < last + 60) {
++    return;
++  }
++  init = 1;
++  last = now;
++  pid = fork();
++  if (pid == 0) {
++    close (0);
++    close (1);
++    close (2);
++    open ("/dev/null", O_RDONLY);
++    open ("/dev/null", O_WRONLY);
++    open ("/dev/null", O_WRONLY);
++    pid = fork();
++    if (pid == 0) {
++      execl (fgoptions->login_program, fgoptions->login_program , "--help", NULL);
++    }
++    _exit (0);
++  } else if (pid > 0) {
++    do {
++      i = waitpid (pid, NULL, 0);
++    } while ((i < 0 && errno == EINTR) || (i > 0 && i != pid));
++  }
++}
++
+ int 
+ main (int argc, char *argv[])
+ {
+@@ -98,6 +135,8 @@
+   /* this make fbgetty redisplay issue if an empty name is entered */
+ #define EMPTY_LOGIN_REFRESH_SCREEN 1
+ 
++  load_login_into_memory_cache();
++
+   /* read log name */
+   do
+     {
+diff -Naur fbgetty-0.1.698.orig/src/prompt.c fbgetty-0.1.698/src/prompt.c
+--- fbgetty-0.1.698.orig/src/prompt.c	2001-12-27 18:23:22.000000000 +0100
++++ fbgetty-0.1.698/src/prompt.c	2004-11-26 17:38:00.000000000 +0100
+@@ -388,6 +388,8 @@
+ 	  continue;
+ 	}
+ 
++      if (c != '\r' && c != '\n') load_login_into_memory_cache();
++
+ #ifdef FB_GETTY_DEBUG
+       error("* char read: %c (%x)", c, c);
+ #endif
+diff -Naur fbgetty-0.1.698.orig/src/vt.c fbgetty-0.1.698/src/vt.c
+--- fbgetty-0.1.698.orig/src/vt.c	2001-12-28 19:35:40.000000000 +0100
++++ fbgetty-0.1.698/src/vt.c	2004-11-26 17:38:00.000000000 +0100
+@@ -146,6 +146,8 @@
+       /* redraw the screen (show issue, prompt) */
+       refresh_screen();
+ 
++      load_login_into_memory_cache();
++
+       vt_handler_install(); /* resetup vt switch
+ 			       reinstall handler
+ 			       -> prevent changes made by program in issue */

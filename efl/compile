@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+# luajit kell
+
+# profile: release, debug, dev
+ub_compile \
+	--with-profile=release \
+	--with-x11=xlib \
+	--disable-tslib \
+	--enable-wayland \
+	--enable-systemd \
+	--enable-fb \
+	--enable-image-loader-webp

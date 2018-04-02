@@ -1,0 +1,10 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2003-01-11 10:33:05.000000000 +0100
++++ mod/Makefile	2009-11-05 23:15:44.000000000 +0100
+@@ -1,5 +1,5 @@
+-CC = gcc
+-LDFLAGS= -L/usr/lib -lalleg-4.0.2 -lalleg_unsharable
++CC = g++
++LDFLAGS= -L/usr/lib `allegro-config --libs`
+ OBJS= init.o game.o boot.o animator.o comix.o menu.o sound.o texts.o variable.o Winmain.o
+ 

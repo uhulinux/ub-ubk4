@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_configure \
+	--libdir=/lib \
+	--with-gnu-ld \
+	--with-libcrack \
+	--with-libpam \
+	--without-selinux \
+	--with-group-name-max-length=32
+
+make CFLAGS=-fPIC

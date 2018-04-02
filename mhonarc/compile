@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+set -u
+PERL_MM_USE_DEFAULT=1 perl 'Makefile.PL' INSTALLDIRS='vendor' PREFIX="${UB_INSTALLDIR}/usr/"
+make
+set +u

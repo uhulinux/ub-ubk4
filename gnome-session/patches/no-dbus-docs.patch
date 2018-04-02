@@ -1,0 +1,21 @@
+diff -Nur orig/doc/Makefile.in mod/doc/Makefile.in
+--- orig/doc/Makefile.in	2017-10-03 22:40:10.000000000 +0200
++++ mod/doc/Makefile.in	2017-12-23 19:38:15.935508233 +0100
+@@ -155,7 +155,7 @@
+   done | $(am__uniquify_input)`
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = dbus man
++DIST_SUBDIRS = man
+ am__DIST_COMMON = $(srcdir)/Makefile.in
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ am__relativize = \
+@@ -383,7 +383,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = dbus $(am__append_1)
++SUBDIRS = $(am__append_1)
+ all: all-recursive
+ 
+ .SUFFIXES:

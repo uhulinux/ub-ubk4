@@ -1,0 +1,47 @@
+#!/bin/sh -eux
+
+# csak az apxs keresi
+mkdir -p "$UB_INSTALLDIR"/etc/apache/
+cp /etc/apache/httpd.conf "$UB_INSTALLDIR"/etc/apache/
+make \
+	INSTALL_ROOT="$UB_INSTALLDIR" \
+	install
+
+install -m 644 php.ini-production "$UB_INSTALLDIR"/etc/php.ini
+install -m 644 php.ini-development "$UB_INSTALLDIR"/etc/
+
+# ütközés az apache csomaggal
+rm -f "$UB_INSTALLDIR"/etc/apache/httpd.conf*
+
+mkdir -p "$UB_INSTALLDIR"/etc/php.d
+modok=$(ls -1 ${UB_INSTALLDIR}/usr/lib/php/*.so | sed s/\\.so*//g | sed s/.*php\\///g)
+for mod in $modok;do
+	if [ ! -f "$UB_INSTALLDIR"/usr/lib/php/"$mod".so ]; then
+		echo "/usr/lib/php/$mod.so is missing!"
+		exit 1
+	fi
+	{
+		echo "; Enable $mod extension module"
+		echo "extension=$mod.so"
+	} > "$UB_INSTALLDIR"/etc/php.d/"$mod".ini
+done
+
+for mod in "$UB_INSTALLDIR"/usr/lib/php/*.so; do
+	mod="${mod##*/}"
+	mod="${mod%.so}"
+	if [ ! -f "$UB_INSTALLDIR"/etc/php.d/"$mod".ini ]; then
+		echo "No ini file for $mod!"
+		exit 1
+	fi
+done
+
+mv "$UB_INSTALLDIR"/usr/lib/apache/{lib,mod_}php$UB_VERSION_MAJOR.so
+
+ln -s php "$UB_INSTALLDIR"/usr/bin/php$UB_VERSION_MAJOR
+
+rm -rf "$UB_INSTALLDIR"/.channels
+rm -rf "$UB_INSTALLDIR"/.registry
+rm "$UB_INSTALLDIR"/.filemap
+rm "$UB_INSTALLDIR"/.lock
+rm "$UB_INSTALLDIR"/.depdblock
+rm "$UB_INSTALLDIR"/.depdb

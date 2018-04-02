@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+verzio=$(echo $UB_VERSION | sed s/~/-/g)
+sed "s/ubversion/$verzio/" -i $UB_SRCDIR/packages/0ad-data/postinst

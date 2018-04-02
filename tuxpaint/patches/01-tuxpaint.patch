@@ -1,0 +1,21 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2014-08-19 09:28:33.000000000 +0200
++++ patched/Makefile	2016-07-12 01:26:02.497299628 +0200
+@@ -109,7 +109,7 @@
+ osx_PREFIX:=/usr/local
+ 
+ beos_PREFIX=$(shell finddir B_APPS_DIRECTORY)/TuxPaint
+-linux_PREFIX:=/usr/local
++linux_PREFIX:=/usr
+ PREFIX:=$($(OS)_PREFIX)
+ 
+ # Root directory to place files when creating packages.
+@@ -163,7 +163,7 @@
+ 
+ # Icons and launchers:
+ ICON_PREFIX:=$(DESTDIR)$(PREFIX)/share/pixmaps
+-X11_ICON_PREFIX:=$(DESTDIR)$(PREFIX)/X11R6/include/X11/pixmaps
++X11_ICON_PREFIX:=$(DESTDIR)$(PREFIX)/share/pixmaps
+ GNOME_PREFIX:=$(shell gnome-config --prefix 2> /dev/null)
+ KDE_PREFIX:=$(shell kde-config --install apps --expandvars 2> /dev/null)
+ KDE_ICON_PREFIX:=$(shell kde-config --install icon --expandvars 2> /dev/null)

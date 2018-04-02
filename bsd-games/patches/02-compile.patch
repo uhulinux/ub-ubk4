@@ -1,0 +1,15 @@
+diff -Naur bsd-games-2.16.orig/include/stdio.h bsd-games-2.16/include/stdio.h
+--- bsd-games-2.16.orig/include/stdio.h	2000-08-04 02:24:39.000000000 +0200
++++ bsd-games-2.16/include/stdio.h	2004-08-13 23:00:33.529030705 +0200
+@@ -35,5 +35,11 @@
+ #include_next <stdio.h>
+ 
+ #ifndef HAVE_fgetln
++#ifdef __cplusplus
++extern "C" {
++#endif
+ extern char *fgetln(FILE *stream, size_t *len);
++#ifdef __cplusplus
++}
++#endif
+ #endif

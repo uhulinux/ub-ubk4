@@ -1,0 +1,20 @@
+diff -Naur lrzsz-0.12.20.orig/man/Makefile.in lrzsz-0.12.20/man/Makefile.in
+--- lrzsz-0.12.20.orig/man/Makefile.in	1998-12-30 17:31:48.000000000 +0100
++++ lrzsz-0.12.20/man/Makefile.in	2004-07-30 17:24:07.963483105 +0200
+@@ -135,6 +135,16 @@
+ 	  echo " $(INSTALL_DATA) $$file $(DESTDIR)$(man1dir)/$$inst"; \
+ 	  $(INSTALL_DATA) $$file $(DESTDIR)$(man1dir)/$$inst; \
+ 	done
++	ln -s lrz.1 $(DESTDIR)$(man1dir)/lrb.1
++	ln -s lrz.1 $(DESTDIR)$(man1dir)/lrx.1
++	ln -s lsz.1 $(DESTDIR)$(man1dir)/lsb.1
++	ln -s lsz.1 $(DESTDIR)$(man1dir)/lsx.1
++	ln -s lrz.1 $(DESTDIR)$(man1dir)/rz.1
++	ln -s lrb.1 $(DESTDIR)$(man1dir)/rb.1
++	ln -s lrx.1 $(DESTDIR)$(man1dir)/rx.1
++	ln -s lsz.1 $(DESTDIR)$(man1dir)/sz.1
++	ln -s lsb.1 $(DESTDIR)$(man1dir)/sb.1
++	ln -s lsx.1 $(DESTDIR)$(man1dir)/sx.1
+ 
+ uninstall-man1:
+ 	@list='$(man1_MANS)'; \

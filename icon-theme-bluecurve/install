@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+ub_install
+
+# 22x22
+cp -a "$UB_INSTALLDIR"/usr/share/icons/Bluecurve/{24x24/.,22x22}
+cp -a "$UB_INSTALLDIR"/usr/share/icons/Bluecurve/{96x96/.,22x22}
+
+find "$UB_INSTALLDIR"/usr/share/icons/Bluecurve/22x22 -type f -iname "*.png" | while read i; do
+	dir="`dirname $i`"
+	file="`basename $i`"
+	convert -resize 22x22 "$dir/$file" "$dir/x-uhu-mini_$file"
+	mv "$dir/x-uhu-mini_$file" "$dir/$file"
+done

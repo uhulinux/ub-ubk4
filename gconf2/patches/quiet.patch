@@ -1,0 +1,43 @@
+diff -Naurdp GConf-2.19.1.orig/gconf/gconftool.c GConf-2.19.1/gconf/gconftool.c
+--- GConf-2.19.1.orig/gconf/gconftool.c	2007-06-23 13:54:06.000000000 +0200
++++ GConf-2.19.1/gconf/gconftool.c	2007-08-22 17:24:59.000000000 +0200
+@@ -78,6 +78,7 @@ static int ignore_schema_defaults = FALS
+ static int default_source_mode = FALSE;
+ static int recursive_unset_mode = FALSE;
+ static int do_version = FALSE;
++static int quiet = FALSE;
+ static const gchar **args = NULL;
+ 
+ static const GOptionEntry client_entries[] = {
+@@ -494,6 +495,15 @@ static const GOptionEntry main_entries[]
+     NULL
+   },
+   {
++    "quiet",
++    'q',
++    0,
++    G_OPTION_ARG_NONE,
++    &quiet,
++    N_("Be quiet"),
++    NULL
++  },
++  {
+     G_OPTION_REMAINING,
+     '\0',
+     0,
+@@ -3572,6 +3582,7 @@ process_key_list(GConfEngine* conf, gboo
+       else
+         {
+           g_assert(error == NULL);
++          if (!quiet)
+           g_print (_("Attached schema `%s' to key `%s'\n"),
+ 		   schema_name, (gchar*)tmp->data);
+         }
+@@ -3689,6 +3700,7 @@ hash_install_foreach(gpointer key, gpoin
+       else
+ 	{
+ 	  g_assert(error == NULL);
++	  if (!quiet)
+ 	  g_print (_("Installed schema `%s' for locale `%s'\n"),
+ 		   info->key, gconf_schema_get_locale(schema));
+ 	}

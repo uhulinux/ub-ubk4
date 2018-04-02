@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+for i in *; do
+	cd $i
+	ub_compile \
+	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
+	-DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
+	-DBUILD_TESTING=OFF
+	cd ..
+done

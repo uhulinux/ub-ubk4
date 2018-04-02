@@ -1,0 +1,31 @@
+diff -Naur orig/config.layout patched/config.layout
+--- orig/config.layout	2012-04-17 16:01:41.000000000 +0200
++++ patched/config.layout	2013-03-07 18:11:38.172368413 +0100
+@@ -370,3 +370,27 @@
+     logfiledir:      ${localstatedir}/log/httpd
+     proxycachedir:   ${localstatedir}/cache/httpd
+ </Layout>
++
++# UHU layout
++<Layout UHU>
++    prefix:        /usr
++    exec_prefix:   ${prefix}
++    bindir:        ${prefix}/bin
++    sbindir:       ${prefix}/sbin
++    libdir:        ${prefix}/lib
++    libexecdir:    ${prefix}/lib/apache
++    mandir:        ${prefix}/share/man
++    sysconfdir:    /etc/apache
++    datadir:       /srv/www
++    installbuilddir: /usr/lib/apache/build
++    errordir:      ${datadir}/error
++    iconsdir:      ${datadir}/icons
++    htdocsdir:     ${datadir}/html
++    manualdir:     ${datadir}/manual
++    cgidir:        ${datadir}/cgi-bin
++    includedir:    ${prefix}/include/apache
++    localstatedir: /var
++    runtimedir:    ${localstatedir}/run
++    logfiledir:    ${localstatedir}/log/apache
++    proxycachedir: ${localstatedir}/cache/apache
++</Layout>     

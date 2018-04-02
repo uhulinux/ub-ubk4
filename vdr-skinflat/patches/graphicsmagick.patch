@@ -1,0 +1,17 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2013-09-22 12:40:24.000000000 +0200
++++ mod/Makefile	2016-10-19 14:47:53.286999441 +0200
+@@ -48,11 +48,11 @@
+ 
+ ### Includes and Defines and Dependencies (add further entries here):
+ 
+-INCLUDES += $(shell pkg-config --cflags Magick++)
++INCLUDES += $(shell pkg-config --cflags GraphicsMagick++)
+ 
+ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
+ 
+-LIBS += $(shell pkg-config --libs Magick++)
++LIBS += $(shell pkg-config --libs GraphicsMagick++)
+ 
+ ### The object files (add further files here):
+ 

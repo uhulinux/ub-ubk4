@@ -1,0 +1,14 @@
+diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
+--- orig/misc/mc.ext.in	2011-07-26 14:55:53.000000000 +0200
++++ patched/misc/mc.ext.in	2011-07-29 17:11:12.000000000 +0200
+@@ -286,6 +286,10 @@
+ 
+ ### Documentation ###
+ 
++# mo
++regex/\.([mM][oO])$
++	View=%view{ascii} msgunfmt %f
++
+ # Texinfo
+ regex/\.(te?xi|texinfo)$
+ 

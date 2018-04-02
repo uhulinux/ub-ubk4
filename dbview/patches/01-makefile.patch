@@ -1,0 +1,14 @@
+diff -Naur dbview-1.0.4-orig/Makefile dbview-1.0.4/Makefile
+--- dbview-1.0.4-orig/Makefile	2006-11-19 20:37:41.000000000 +0100
++++ dbview-1.0.4/Makefile	2009-09-20 20:36:19.000000000 +0200
+@@ -46,8 +46,8 @@
+ install: all
+ 	$(INSTALL) -d -o root -g root -m 755 $(bindir)
+ 	$(INSTALL) -s -o root -g root -m 755 dbview $(bindir)
+-	$(INSTALL) -d -o $(MAN) -g $(MAN) -m 755 $(mandir)/man1
+-	$(INSTALL) -o $(MAN) -g $(MAN) -m 644 dbview.1 $(mandir)/man1
++	$(INSTALL) -d -o root -g root -m 755 $(mandir)/man1
++	$(INSTALL) -o root -g root -m 644 dbview.1 $(mandir)/man1
+ 
+ clean:
+ 	rm -f dbview *.o *.log *~ *.orig Makefile.bak;

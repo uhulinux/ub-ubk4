@@ -1,0 +1,38 @@
+diff -Nur orig/data/professor/pinball.pbl mod/data/professor/pinball.pbl
+--- orig/data/professor/pinball.pbl	2003-11-20 19:42:50.000000000 +0100
++++ mod/data/professor/pinball.pbl	2018-02-14 20:55:33.510735555 +0100
+@@ -7379,7 +7379,7 @@
+   0 0 0
+   1 1 1
+   module {
+-      libModuleProfessor.la
++      libModuleProfessor.so
+   }
+   properties {
+     group_1
+diff -Nur orig/data/tux/pinball.pbl mod/data/tux/pinball.pbl
+--- orig/data/tux/pinball.pbl	2003-11-20 18:53:25.000000000 +0100
++++ mod/data/tux/pinball.pbl	2018-02-14 20:55:50.466706820 +0100
+@@ -15599,7 +15599,7 @@
+   0 0 0
+   1 1 1
+   module {
+-      libModuleTux.la
++      libModuleTux.so
+   }
+   properties {
+     transform_once
+diff -Nur orig/src/LoaderModule.cpp mod/src/LoaderModule.cpp
+--- orig/src/LoaderModule.cpp	2003-11-20 17:46:17.000000000 +0100
++++ mod/src/LoaderModule.cpp	2018-02-14 20:56:16.491088701 +0100
+@@ -45,8 +45,8 @@
+ LoaderModule::LoaderModule()
+ {
+   lt_dlinit();
+-  m_hMods["libModuleTux.la"] = new TuxBehavior;
+-  m_hMods["libModuleProfessor.la"] = new ProfessorBehavior;
++  m_hMods["libModuleTux.so"] = new TuxBehavior;
++  m_hMods["libModuleProfessor.so"] = new ProfessorBehavior;
+ }
+ LoaderModule::~LoaderModule()
+ {

@@ -1,0 +1,16 @@
+diff -Naur postgresql-9.1.1-orig/src/bin/pg_ctl/pg_ctl.c postgresql-9.1.1/src/bin/pg_ctl/pg_ctl.c
+--- postgresql-9.1.1-orig/src/bin/pg_ctl/pg_ctl.c	2011-09-22 23:57:57.000000000 +0200
++++ postgresql-9.1.1/src/bin/pg_ctl/pg_ctl.c	2011-09-27 20:32:16.000000000 +0200
+@@ -2130,10 +2130,8 @@
+ 	if (pg_data == NULL &&
+ 		ctl_command != KILL_COMMAND && ctl_command != UNREGISTER_COMMAND)
+ 	{
+-		write_stderr(_("%s: no database directory specified and environment variable PGDATA unset\n"),
+-					 progname);
+-		do_advice();
+-		exit(1);
++		pg_data = strdup("/var/lib/postgres/data");
++		setenv("PGDATA", "/var/lib/postgres/data", 1);
+ 	}
+ 
+ 	if (!wait_set)

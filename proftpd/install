@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp contrib/ftpquota "$UB_INSTALLDIR/usr/bin/"
+cp contrib/dist/rpm/proftpd.service "$UB_INSTALLDIR"/usr/lib/systemd/system/

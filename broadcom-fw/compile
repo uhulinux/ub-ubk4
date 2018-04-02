@@ -1,0 +1,9 @@
+#!/bin/bash -eux
+
+mkdir -p ${UB_INSTALLDIR}/lib/firmware
+
+b43-fwcutter -w ${UB_INSTALLDIR}/lib/firmware wl_apsta.o
+rm wl_apsta.o
+
+b43-fwcutter -w ${UB_INSTALLDIR}/lib/firmware wl_apsta-3.130.20.0.o
+rm wl_apsta-3.130.20.0.o

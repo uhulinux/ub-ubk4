@@ -1,0 +1,294 @@
+diff -Naur orig/tsc/cmake/modules/FindLibXmlPP.cmake patched/tsc/cmake/modules/FindLibXmlPP.cmake
+--- orig/tsc/cmake/modules/FindLibXmlPP.cmake	2017-05-24 22:52:19.134741211 +0200
++++ patched/tsc/cmake/modules/FindLibXmlPP.cmake	2017-05-24 23:01:24.139838528 +0200
+@@ -14,14 +14,14 @@
+ 
+ pkg_check_modules(PKG_LibXmlPP_Glib QUIET glib-2.0)
+ pkg_check_modules(PKG_LibXmlPP_GlibMM QUIET glibmm-2.4)
+-pkg_check_modules(PKG_LibXmlPP QUIET libxml++-2.6)
++pkg_check_modules(PKG_LibXmlPP QUIET libxml++-3.0)
+ 
+ # Note we use a subdirectory find (libxml++/document.h) since that is what
+ # we include. Many other libs may have a document.h file, so one definitely
+ # does not want that subdirectory into the compiler include search path
+ # (prevents conflicts).
+ find_path(LibXmlPP_INCLUDE_DIR libxml++/document.h
+-  HINTS ${PKG_LibXmlPP_INCLUDE_DIRS} /usr/include/libxml++-2.6)
++  HINTS ${PKG_LibXmlPP_INCLUDE_DIRS} /usr/include/libxml++-3.0)
+ 
+ # libxml++'s headers include glibmm headers, which is irritating.
+ # When including libxml++'s headers, these need to be in the compiler
+@@ -44,11 +44,11 @@
+ 
+ # libxml++'s headers also include a config header.
+ find_path(LibXmlPP_Config_INCLUDE_DIR libxml++config.h
+-  HINTS ${PKG_LibXmlPP_INCLUDE_DIRS} /usr/lib/libxml++-2.6/include)
++  HINTS ${PKG_LibXmlPP_INCLUDE_DIRS} /usr/lib/libxml++-3.0/include)
+ 
+ # Now for the actual libraries.
+ find_library(LibXmlPP_LIBRARY
+-  NAMES xml++ xml++-2.6
++  NAMES xml++ xml++-3.0
+   HINTS ${PKG_LibXmlPP_LIBRARY_DIRS})
+ find_library(LibXmlPP_GlibMM_LIBRARY
+   NAMES glibmm-2.4 glibmm
+diff -Naur orig/tsc/CMakeLists.txt patched/tsc/CMakeLists.txt
+--- orig/tsc/CMakeLists.txt	2017-05-24 22:52:19.134741211 +0200
++++ patched/tsc/CMakeLists.txt	2017-05-24 23:00:10.746990935 +0200
+@@ -114,7 +114,7 @@
+   pkg_check_modules(OPENGL REQUIRED gl)
+   pkg_check_modules(PNG REQUIRED libpng)
+   pkg_check_modules(PCRE REQUIRED libpcre)
+-  pkg_check_modules(LibXmlPP REQUIRED libxml++-2.6)
++  pkg_check_modules(LibXmlPP REQUIRED libxml++-3.0)
+ else()
+   find_package(SFML COMPONENTS audio graphics window system REQUIRED)
+   find_package(CEGUI COMPONENTS OpenGL REQUIRED)
+diff -Naur orig/tsc/src/campaign/campaign_manager.cpp patched/tsc/src/campaign/campaign_manager.cpp
+--- orig/tsc/src/campaign/campaign_manager.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/campaign/campaign_manager.cpp	2017-05-25 00:26:58.997109525 +0200
+@@ -50,14 +50,14 @@
+     xmlpp::Element* p_node = NULL;
+ 
+     // <information>
+-    p_node = p_root->add_child("information");
++    p_node = p_root->add_child_element("information");
+     Add_Property(p_node, "name", m_name);
+     Add_Property(p_node, "description", m_description);
+     Add_Property(p_node, "save_time", static_cast<uint64_t>(time(NULL)));
+     // </information>
+ 
+     // <target>
+-    p_node = p_root->add_child("target");
++    p_node = p_root->add_child_element("target");
+     Add_Property(p_node, "name", m_target);
+     Add_Property(p_node, "is_level", m_is_target_level);
+     // </target>
+diff -Naur orig/tsc/src/core/editor/editor.cpp patched/tsc/src/core/editor/editor.cpp
+--- orig/tsc/src/core/editor/editor.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/core/editor/editor.cpp	2017-05-25 00:51:32.995172614 +0200
+@@ -900,9 +900,9 @@
+     parser.parse_file(menu_file);
+ 
+     xmlpp::Element* p_root = parser.get_document()->get_root_node();
+-    xmlpp::NodeSet items = p_root->find("item");
++    xmlpp::Node::NodeSet items = p_root->find("item");
+ 
+-    xmlpp::NodeSet::const_iterator iter;
++    xmlpp::Node::NodeSet::const_iterator iter;
+     for (iter=items.begin(); iter != items.end(); iter++) {
+         xmlpp::Element* p_node = dynamic_cast<xmlpp::Element*>(*iter);
+ 
+@@ -911,7 +911,7 @@
+ 
+         // Set color if available (---header--- elements have no color property)
+         std::string colorstr = "FFFFFFFF";
+-        xmlpp::NodeSet results = p_node->find("property[@name='color']");
++        xmlpp::Node::NodeSet results = p_node->find("property[@name='color']");
+         if (!results.empty())
+             colorstr = dynamic_cast<xmlpp::Element*>(results[0])->get_attribute("value")->get_value();
+ 
+diff -Naur orig/tsc/src/core/game_core.cpp patched/tsc/src/core/game_core.cpp
+--- orig/tsc/src/core/game_core.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/core/game_core.cpp	2017-05-25 00:55:30.906204193 +0200
+@@ -612,7 +612,7 @@
+ 
+ void Add_Property(xmlpp::Element* p_element, const Glib::ustring& name, const Glib::ustring& value)
+ {
+-    xmlpp::Element* p_propnode = p_element->add_child("property");
++    xmlpp::Element* p_propnode = p_element->add_child_element("property");
+     p_propnode->set_attribute("name", name);
+     p_propnode->set_attribute("value", value);
+ }
+diff -Naur orig/tsc/src/level/level_background.cpp patched/tsc/src/level/level_background.cpp
+--- orig/tsc/src/level/level_background.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/level/level_background.cpp	2017-05-25 01:06:20.510003528 +0200
+@@ -108,7 +108,7 @@
+         return;
+ 
+     // <background>
+-    xmlpp::Element* p_node = p_parent->add_child("background");
++    xmlpp::Element* p_node = p_parent->add_child_element("background");
+     Add_Property(p_node, "type", m_type);
+ 
+     // gradient
+diff -Naur orig/tsc/src/level/level.cpp patched/tsc/src/level/level.cpp
+--- orig/tsc/src/level/level.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/level/level.cpp	2017-05-25 01:01:21.458413344 +0200
+@@ -291,14 +291,14 @@
+     xmlpp::Element* p_node = NULL;
+ 
+     // <information>
+-    p_node = p_root->add_child("information");
++    p_node = p_root->add_child_element("information");
+     Add_Property(p_node, "game_version", int_to_string(TSC_VERSION_MAJOR) + "." + int_to_string(TSC_VERSION_MINOR) + "." + int_to_string(TSC_VERSION_PATCH));
+     Add_Property(p_node, "engine_version", level_engine_version);
+     Add_Property(p_node, "save_time", static_cast<uint64_t>(time(NULL)));
+     // </information>
+ 
+     // <settings>
+-    p_node = p_root->add_child("settings");
++    p_node = p_root->add_child_element("settings");
+     Add_Property(p_node, "lvl_author", m_author);
+     Add_Property(p_node, "lvl_version", m_version);
+     Add_Property(p_node, "lvl_music", Get_Music_Filename().generic_string());
+@@ -319,7 +319,7 @@
+         (*iter)->Save_To_XML_Node(p_root);
+ 
+     // <player>
+-    p_node = p_root->add_child("player");
++    p_node = p_root->add_child_element("player");
+     Add_Property(p_node, "posx", static_cast<int>(pLevel_Player->m_start_pos_x));
+     Add_Property(p_node, "posy", static_cast<int>(pLevel_Player->m_start_pos_y));
+     Add_Property(p_node, "direction", Get_Direction_Name(pLevel_Player->m_start_direction));
+@@ -339,7 +339,7 @@
+ 
+     // MRuby script code
+     // <script>
+-    p_node = p_root->add_child("script");
++    p_node = p_root->add_child_element("script");
+     p_node->add_child_text(m_script);
+     // </script>
+ 
+diff -Naur orig/tsc/src/objects/sprite.cpp patched/tsc/src/objects/sprite.cpp
+--- orig/tsc/src/objects/sprite.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/objects/sprite.cpp	2017-05-25 01:09:44.824800120 +0200
+@@ -493,7 +493,7 @@
+ */
+ xmlpp::Element* cSprite::Save_To_XML_Node(xmlpp::Element* p_element)
+ {
+-    xmlpp::Element* p_node = p_element->add_child(m_type_name);
++    xmlpp::Element* p_node = p_element->add_child_element(m_type_name);
+ 
+     // position
+     Add_Property(p_node, "posx", static_cast<int>(m_start_pos_x));
+diff -Naur orig/tsc/src/overworld/overworld.cpp patched/tsc/src/overworld/overworld.cpp
+--- orig/tsc/src/overworld/overworld.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/overworld/overworld.cpp	2017-05-25 01:13:11.883567348 +0200
+@@ -77,7 +77,7 @@
+ {
+     xmlpp::Document doc;
+     xmlpp::Element* p_root = doc.create_root_node("description");
+-    xmlpp::Element* p_node = p_root->add_child("world");
++    xmlpp::Element* p_node = p_root->add_child_element("world");
+ 
+     Add_Property(p_node, "name", m_name);
+     Add_Property(p_node, "visible", m_visible);
+@@ -263,23 +263,23 @@
+     xmlpp::Element* p_node = NULL;
+ 
+     // General information
+-    p_node = p_root->add_child("information");
++    p_node = p_root->add_child_element("information");
+     Add_Property(p_node, "game_version", int_to_string(TSC_VERSION_MAJOR) + "." + int_to_string(TSC_VERSION_MINOR) + "." + int_to_string(TSC_VERSION_PATCH));
+     Add_Property(p_node, "engine_version", world_engine_version);
+     Add_Property(p_node, "save_time", static_cast<uint64_t>(time(NULL))); // seconds since 1970
+ 
+     // Settings (currently only music)
+-    p_node = p_root->add_child("settings");
++    p_node = p_root->add_child_element("settings");
+     Add_Property(p_node, "music", m_musicfile);
+ 
+     // Background color
+-    p_node = p_root->add_child("background");
++    p_node = p_root->add_child_element("background");
+     Add_Property(p_node, "color_red", static_cast<int>(m_background_color.red));
+     Add_Property(p_node, "color_green", static_cast<int>(m_background_color.green));
+     Add_Property(p_node, "color_blue", static_cast<int>(m_background_color.blue));
+ 
+     // Player
+-    p_node = p_root->add_child("player");
++    p_node = p_root->add_child_element("player");
+     Add_Property(p_node, "waypoint", m_player_start_waypoint);
+     Add_Property(p_node, "moving_state", static_cast<int>(m_player_moving_state));
+ 
+diff -Naur orig/tsc/src/overworld/world_layer.cpp patched/tsc/src/overworld/world_layer.cpp
+--- orig/tsc/src/overworld/world_layer.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/overworld/world_layer.cpp	2017-05-25 01:15:43.053525238 +0200
+@@ -378,7 +378,7 @@
+     LayerLineList::const_iterator iter;
+     for (iter=objects.begin(); iter != objects.end(); iter++) {
+         cLayer_Line_Point_Start* p_line = *iter;
+-        xmlpp::Element* p_node = p_root->add_child("line");
++        xmlpp::Element* p_node = p_root->add_child_element("line");
+ 
+         // start
+         Add_Property(p_node, "X1", static_cast<int>(p_line->Get_Line_Pos_X()));
+diff -Naur orig/tsc/src/user/savegame/save.cpp patched/tsc/src/user/savegame/save.cpp
+--- orig/tsc/src/user/savegame/save.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/user/savegame/save.cpp	2017-05-25 01:22:22.274538936 +0200
+@@ -115,7 +115,7 @@
+     xmlpp::Element* p_node = NULL;
+ 
+     // <information>
+-    p_node = p_root->add_child("information");
++    p_node = p_root->add_child_element("information");
+     Add_Property(p_node, "version", m_version);
+     Add_Property(p_node, "level_engine_version", m_level_engine_version);
+     Add_Property(p_node, "save_time", static_cast<uint64_t>(m_save_time));
+@@ -123,7 +123,7 @@
+     // </information>
+ 
+     // <player>
+-    p_node = p_root->add_child("player");
++    p_node = p_root->add_child_element("player");
+     Add_Property(p_node, "lives", m_lives);
+     Add_Property(p_node, "points", m_points);
+     Add_Property(p_node, "goldpieces", m_goldpieces);
+@@ -148,7 +148,7 @@
+     for (return_iter = m_return_entries.begin(); return_iter != m_return_entries.end(); return_iter++) {
+         cSave_Player_Return_Entry item = *return_iter;
+ 
+-        p_node = p_root->add_child("return");
++        p_node = p_root->add_child_element("return");
+         if (!item.m_level.empty())
+             Add_Property(p_node, "level", item.m_level);
+         if (!item.m_entry.empty())
+@@ -168,7 +168,7 @@
+         cSave_Overworld* p_overworld = *oiter;
+ 
+         // <overworld>
+-        p_node = p_root->add_child("overworld");
++        p_node = p_root->add_child_element("overworld");
+         Add_Property(p_node, "name", p_overworld->m_name);
+ 
+         Save_Overworld_WaypointList::const_iterator wpiter;
+@@ -180,7 +180,7 @@
+                 continue;
+ 
+             // <waypoint>
+-            xmlpp::Element* p_waypoint_node = p_node->add_child("waypoint");
++            xmlpp::Element* p_waypoint_node = p_node->add_child_element("waypoint");
+             Add_Property(p_waypoint_node, "destination", p_wp->m_destination);
+             Add_Property(p_waypoint_node, "access", p_wp->m_access);
+ 
+diff -Naur orig/tsc/src/user/savegame/save_level.cpp patched/tsc/src/user/savegame/save_level.cpp
+--- orig/tsc/src/user/savegame/save_level.cpp	2017-05-24 22:52:22.134741211 +0200
++++ patched/tsc/src/user/savegame/save_level.cpp	2017-05-25 01:24:36.084187335 +0200
+@@ -81,7 +81,7 @@
+ void cSave_Level::Save_To_Node(xmlpp::Element* p_parent_node)
+ {
+     // <level>
+-    xmlpp::Element* p_node = p_parent_node->add_child("level");
++    xmlpp::Element* p_node = p_parent_node->add_child_element("level");
+     Add_Property(p_node, "level_name", m_name);
+ 
+     // Player position. Only save that for the active level.
+@@ -98,7 +98,7 @@
+ 
+     // The regular objects.
+     // <objects_data>
+-    xmlpp::Element* p_objects_data_node = p_node->add_child("objects_data");
++    xmlpp::Element* p_objects_data_node = p_node->add_child_element("objects_data");
+     std::vector<const cSprite*>::const_iterator iter;
+     for(iter=m_regular_objects.begin(); iter != m_regular_objects.end(); iter++) {
+         xmlpp::Document subdoc;
+@@ -117,7 +117,7 @@
+ 
+     // The spawned objects. These have always to be saved.
+     // <spawned_objects>
+-    xmlpp::Element* p_spawned_node = p_node->add_child("spawned_objects");
++    xmlpp::Element* p_spawned_node = p_node->add_child_element("spawned_objects");
+     cSprite_List::iterator iter2; // TODO: Should be const_iterator
+     for(iter2=m_spawned_objects.begin(); iter2 != m_spawned_objects.end(); iter2++) {
+         cSprite* p_sprite = (*iter2);

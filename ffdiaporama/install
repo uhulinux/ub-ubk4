@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+cd ffDiaporama_rsc
+ub_install \
+	INSTALL_ROOT="$UB_INSTALLDIR"
+cd ..
+ub_install \
+	INSTALL_ROOT="$UB_INSTALLDIR"
+
+find "$UB_INSTALLDIR"/usr/share -type f -exec chmod 644 {} +

@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cd fuse
+ub_install
+mv "$UB_INSTALLDIR"/usr/bin/fuse "$UB_INSTALLDIR"/usr/bin/fuse-sdl
+cd ../fuse-gtk
+ub_install

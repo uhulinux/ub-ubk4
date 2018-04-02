@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+aclocal
+autoconf
+UB_UPDATELIBTOOL=1 ub_compile \
+	--disable-rpath \
+	--disable-assembly

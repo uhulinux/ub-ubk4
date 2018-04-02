@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+ln -s avahi-compat-howl.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig/howl.pc
+ln -s avahi-compat-libdns_sd/dns_sd.h "$UB_INSTALLDIR"/usr/include/dns_sd.h

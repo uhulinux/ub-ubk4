@@ -1,0 +1,12 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2005-05-04 22:55:52.000000000 +0200
++++ mod/Makefile	2013-07-04 23:07:22.000000000 +0200
+@@ -13,7 +13,7 @@
+ CC=gcc
+ DEFS=-DVIDMODEXT_GAMMA_RAMP -DSOUND
+ INCLUDES= -I. -I/usr/X11R6/include -I/usr/include/SDL
+-CFLAGS=$(DEFS) $(INCLUDES) -O3 -march=i486 -ffast-math -fexpensive-optimizations
++CFLAGS=$(DEFS) $(INCLUDES) -O2  -ffast-math -fexpensive-optimizations
+ 
+ GL_LDFLAGS=-L/usr/X11R6/lib -lGL -lXxf86dga -lXxf86vm -lX11 -lXext -lm
+ LDFLAGS=$(GL_LDFLAGS) -ldl -lSDL -lSDL_mixer -lpthread

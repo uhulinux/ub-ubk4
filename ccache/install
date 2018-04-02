@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR/usr/lib/ccache"
+for i in \
+	cc	\
+	c++	\
+	gcc	\
+	g++	\
+	i586-uhu-linux-c++	\
+	i586-uhu-linux-gcc	\
+	i586-uhu-linux-g++
+do
+	ln -s ../../bin/ccache "$UB_INSTALLDIR/usr/lib/ccache/$i"
+done

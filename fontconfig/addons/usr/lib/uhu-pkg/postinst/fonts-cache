@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+setup_fonts_cache ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Running fc-cache ..."
+	fc-cache -s -n
+	if [ "$1" != "may_need_one_more_run" ]; then
+		true > /var/lib/uhu-pkg/fonts-cache
+		while [ ! /var/lib/uhu-pkg/fonts-cache -ot /var/lib/dpkg/info \
+		     -a ! /var/lib/uhu-pkg/fonts-cache -nt /var/lib/dpkg/info ]; do
+			sleep 0.1
+			true > /var/lib/uhu-pkg/fonts-cache
+		done
+	fi
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ -f /var/lib/uhu-pkg/fonts-cache -a /var/lib/uhu-pkg/fonts-cache -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "fontconfig" ]; then
+	# make sure to run fc-cache once again when a font package is configured,
+	# so that font cache is updated after touching files (fonts.dir and friends)
+	# and the font directory itself
+	setup_fonts_cache may_need_one_more_run
+elif [ "$1" = "x.org-server" -o "$1" = "+" ]; then
+	setup_fonts_cache
+elif grep -q '^/usr/share/fonts/' /var/lib/dpkg/info/"$1".list; then
+	setup_fonts_cache
+fi

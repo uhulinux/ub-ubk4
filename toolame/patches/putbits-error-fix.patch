@@ -1,0 +1,12 @@
+diff -Naur orig/bitstream.h mod/bitstream.h
+--- orig/bitstream.h	2003-02-22 06:42:57.000000000 +0100
++++ mod/bitstream.h	2016-03-07 09:02:14.120505779 +0100
+@@ -9,7 +9,7 @@
+ void put1bit (Bit_stream_struc *, int);
+ unsigned long look_ahead (Bit_stream_struc *, int);
+ unsigned long getbits (Bit_stream_struc *, int);
+-INLINE void putbits (Bit_stream_struc *, unsigned int, int);
++extern INLINE void putbits (Bit_stream_struc *, unsigned int, int);
+ void byte_ali_putbits (Bit_stream_struc *, unsigned int, int);
+ unsigned long byte_ali_getbits (Bit_stream_struc *, int);
+ unsigned long sstell (Bit_stream_struc *);

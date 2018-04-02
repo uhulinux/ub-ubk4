@@ -1,0 +1,29 @@
+#!/bin/sh -eux
+
+jobs="-j${UB_MAKE_PROCS:-$(_procs)}"
+
+sed -e '/using python/ s@;@: /usr/include/python${PYTHON_VERSION/3*/${PYTHON_VERSION}m} ;@' \
+	-i bootstrap.sh
+
+./bootstrap.sh \
+	--with-toolset=gcc \
+	--with-icu \
+	--with-python=/usr/bin/python3 \
+	--with-libraries=python
+
+./b2 clean
+./b2 \
+	variant=release \
+	debug-symbols=off \
+	threading=multi \
+	runtime-link=shared \
+	link=shared,static \
+	toolset=gcc \
+	python=3.6 \
+	cflags="-fPIC" \
+	cxxflags="-std=c++14 -fPIC" \
+	$jobs \
+	--layout=system \
+	--prefix="$UB_INSTALLDIR"/usr \
+	--with-python \
+	install

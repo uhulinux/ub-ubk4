@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+python3 setup.py install --root=${UB_INSTALLDIR}
+
+rm -f "$UB_INSTALLDIR"/usr/share/glib-2.0/schemas/gschemas.compiled
+rm -f "$UB_INSTALLDIR"/usr/share/icons/hicolor/icon-theme.cache

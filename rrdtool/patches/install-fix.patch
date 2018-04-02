@@ -1,0 +1,24 @@
+diff -Naur orig/examples/Makefile.in mod/examples/Makefile.in
+--- orig/examples/Makefile.in	2015-11-10 17:59:27.000000000 +0100
++++ mod/examples/Makefile.in	2016-03-01 23:34:15.533766440 +0100
+@@ -420,7 +420,7 @@
+ top_srcdir = @top_srcdir@
+ SUBDIRS = rrdcached
+ EXTRA_DIST = cgi-demo.cgi.in stripes.py
+-examplesdir = $(pkgdatadir)/examples
++examplesdir = $(prefix)/share/doc/Packages/rrdtool/examples
+ examples_SCRIPTS = cgi-demo.cgi piped-demo.pl shared-demo.pl \
+ 	stripes.pl bigtops.pl minmax.pl 4charts.pl perftest.pl \
+         stripes.py
+diff -Naur orig/Makefile.in mod/Makefile.in
+--- orig/Makefile.in	2015-11-10 17:59:26.000000000 +0100
++++ mod/Makefile.in	2016-03-01 23:32:51.465769780 +0100
+@@ -357,7 +357,7 @@
+ PYTHON_PREFIX = @PYTHON_PREFIX@
+ PYTHON_VERSION = @PYTHON_VERSION@
+ RANLIB = @RANLIB@
+-RRDDOCDIR = @RRDDOCDIR@
++RRDDOCDIR = $(prefix)/share/doc/Packages/rrdtool
+ RRDGRAPH_YLEGEND_ANGLE = @RRDGRAPH_YLEGEND_ANGLE@
+ RRD_DEFAULT_FONT = @RRD_DEFAULT_FONT@
+ RRD_GETOPT_LONG = @RRD_GETOPT_LONG@

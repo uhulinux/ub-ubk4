@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+cd po
+msgfmt -o hu.gmo hu.po
+cd ..
+
+autoreconf -vif
+ub_compile \
+	--with-curses=ncursesw \
+	--disable-alsaconf \
+	--with-udev-rules-dir=/usr/lib/udev/rules.d \
+	--with-systemdsystemunitdir=/usr/lib/systemd/system
+cd alsactl
+make 90-alsa-restore.rules

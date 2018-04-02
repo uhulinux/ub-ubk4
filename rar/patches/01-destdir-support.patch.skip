@@ -1,0 +1,19 @@
+diff -Naur rar-orig/makefile rar/makefile
+--- rar-orig/makefile	2009-08-16 13:20:48.000000000 +0200
++++ rar/makefile	2009-12-08 16:36:00.000000000 +0100
+@@ -6,8 +6,8 @@
+ PREFIX=/usr/local
+ 
+ install:
+-	mkdir -p $(PREFIX)/bin
+-	mkdir -p $(PREFIX)/lib
+-	cp rar unrar $(PREFIX)/bin
+-	cp rarfiles.lst /etc
+-	cp default.sfx $(PREFIX)/lib
+\ No newline at end of file
++	mkdir -p $(DESTDIR)$(PREFIX)/bin
++	mkdir -p $(DESTDIR)$(PREFIX)/lib
++	cp rar unrar $(DESTDIR)$(PREFIX)/bin
++	cp rarfiles.lst $(DESTDIR)/etc
++	cp default.sfx $(DESTDIR)$(PREFIX)/lib
+\ No newline at end of file

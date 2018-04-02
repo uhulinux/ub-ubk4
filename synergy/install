@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+# ub_install
+
+install -D -p -m 0755 bin/synergyc "$UB_INSTALLDIR"/usr/bin/synergyc
+install -D -p -m 0755 bin/synergys "$UB_INSTALLDIR"/usr/bin/synergys
+install -D -p -m 0755 bin/integtests "$UB_INSTALLDIR"/usr/bin/integtests
+install -D -p -m 0755 bin/unittests "$UB_INSTALLDIR"/usr/bin/unittests
+mkdir "$UB_INSTALLDIR"/usr/include/synergy
+install -D -p -m 0644 config.h "$UB_INSTALLDIR"/usr/include/synergy/
+install -D -p -m 0644 doc/synergyc.man "$UB_INSTALLDIR"/usr/share/man/man1/synergyc.1
+install -D -p -m 0644 doc/synergys.man "$UB_INSTALLDIR"/usr/share/man/man1/synergys.1

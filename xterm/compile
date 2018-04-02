@@ -1,0 +1,30 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--with-app-defaults=/usr/share/X11/app-defaults \
+	--disable-setgid \
+	--disable-setuid \
+	--disable-full-tgetent \
+	--disable-imake \
+	--enable-wide-chars \
+	--enable-i18n \
+	--enable-doublechars \
+	--enable-luit \
+	--enable-ansi-color \
+	--enable-88-color \
+	--enable-256-color \
+	--disable-tek4014 \
+	--enable-freetype \
+	--enable-exec-xterm \
+	--with-x \
+	--enable-broken-osc \
+	--enable-broken-st \
+	--enable-load-vt-fonts \
+	--enable-warnings \
+	--enable-tcap-query \
+	--enable-logging \
+	--enable-dabbrev \
+	--enable-freetype \
+	--enable-mini-luit \
+	--enable-narrowproto \
+	--with-tty-group=tty

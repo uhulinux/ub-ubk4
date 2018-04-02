@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/chessx/bin
+mkdir -p "$UB_INSTALLDIR"/usr/lib/chessx/data
+cp -a release/chessx "$UB_INSTALLDIR"/usr/lib/chessx/bin/chessx
+cp -a data "$UB_INSTALLDIR"/usr/lib/chessx/
+mkdir -p "$UB_INSTALLDIR"/usr/share/pixmaps
+install -Dm644 data/images/chessx.png $UB_INSTALLDIR/usr/share/pixmaps/chessx.png
+install -Dm644 unix/chessx.desktop $UB_INSTALLDIR/usr/share/applications/chessx.desktop

@@ -1,0 +1,47 @@
+diff -Naur lesspipe-1.82-orig/lesspipe.sh lesspipe-1.82/lesspipe.sh
+--- lesspipe-1.82-orig/lesspipe.sh	2013-02-04 11:25:31.000000000 +0100
++++ lesspipe-1.82/lesspipe.sh	2013-02-19 16:56:35.000000000 +0100
+@@ -654,7 +654,7 @@
+       mp3info2 "$2"
+     elif cmd_exist mp3info; then
+       msg "append $sep to filename to view the raw data"
+-      mp3info "$2"
++      id3info "$2"
+     fi
+   elif [[ "$1" = *perl\ Storable* ]]; then
+     msg "append $sep to filename to view the raw data"
+diff -Naur lesspipe-1.82-orig/lesspipe.sh.in lesspipe-1.82/lesspipe.sh.in
+--- lesspipe-1.82-orig/lesspipe.sh.in	2013-02-04 11:23:52.000000000 +0100
++++ lesspipe-1.82/lesspipe.sh.in	2013-02-19 17:08:27.000000000 +0100
+@@ -894,21 +894,21 @@
+     if cmd_exist id3v2; then
+       msg "append $sep to filename to view the raw data"
+       istemp "id3v2 -l" "$2"
+-    elif cmd_exist mp3info2; then
++    elif cmd_exist id3info2; then
+       msg "append $sep to filename to view the raw data"
+-      mp3info2 "$2"
+-    elif cmd_exist mp3info; then
++      id3info2 "$2"
++    elif cmd_exist id3info; then
+       msg "append $sep to filename to view the raw data"
+-      mp3info "$2"
++      id3info "$2"
+     fi
+-#elif mp3info2
+-  elif [[ "$1" = *MPEG\ *layer\ 3\ audio* || "$1" = *MPEG\ *layer\ III* || "$1" = *mp3\ file* || "$1" = *MP3* ]] && cmd_exist mp3info2; then
++#elif id3info2
++  elif [[ "$1" = *MPEG\ *layer\ 3\ audio* || "$1" = *MPEG\ *layer\ III* || "$1" = *mp3\ file* || "$1" = *MP3* ]] && cmd_exist id3info2; then
+     msg "append $sep to filename to view the raw data"
+-    mp3info2 "$2"
+-#elif mp3info
+-  elif [[ "$1" = *MPEG\ *layer\ 3\ audio* || "$1" = *MPEG\ *layer\ III* || "$1" = *mp3\ file* || "$1" = *MP3* ]] && cmd_exist mp3info; then
++    id3info2 "$2"
++#elif id3info
++  elif [[ "$1" = *MPEG\ *layer\ 3\ audio* || "$1" = *MPEG\ *layer\ III* || "$1" = *mp3\ file* || "$1" = *MP3* ]] && cmd_exist id3info; then
+     msg "append $sep to filename to view the raw data"
+-    mp3info "$2"
++    id3info "$2"
+ #endif
+ #ifdef lsbom
+   elif [[ "$1" = *bill\ of\ materials* ]] && cmd_exist lsbom; then

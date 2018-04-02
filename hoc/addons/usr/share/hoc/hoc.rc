@@ -1,0 +1,489 @@
+### -*-hoc-*-
+### /usr/local/src/hoc/hoc-7.0.4.beta/hoc.rc, Sat Jun 15 16:36:36 2002
+### Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+### /usr/local/src/hoc/hoc-7.0.1.beta/hoc.rc, Sun Jan  6 08:39:02 2002
+### Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+### ====================================================================
+###
+### This is hoc.rc, the main hoc (rc == run command) initialization
+### file.  Some of the documented functionality of hoc is provided by
+### functions and procedures defined here, when they can be implemented
+### entirely in the hoc language, since that is more flexible than
+### having them hard coded in the hoc source.
+###
+### To support internationalization, hoc will load after this file a
+### XX/hoc.rc file, where XX is the current language, determined by
+### the environment variables LC_ALL, LC_MESSAGES, and LANG, in that
+### order.  That file can provide replacement versions of any
+### functions or procedures that print English text.  Apart from the
+### text replacement, the operation of those modules must not change.
+###
+### [16-Dec-2001]
+### ====================================================================
+
+### Supplementary trigonometric functions with arguments in degrees:
+
+func cosd(x) return cos(x / DEG)
+func sind(x) return sin(x / DEG)
+func tand(x) return tan(x / DEG)
+
+### factorial(n) = n*(n-1)*(n-2)*...*1
+func factorial(n) \
+{
+	n = int(n)
+	if (n < 0) \
+		abort("factorial() called with illegal negative argument\n") \
+	if (n == 0) \
+		return (1) \
+	else \
+	{
+		return (n * factorial(n - 1))
+	}
+}
+
+### Adapted from UNIX manual pages (hoc.1)
+### gcd(x,y): return the greatest common denominator of integer x and integer y
+func gcd(x,y) \
+{
+	__temp__ = abs(x) % abs(y)
+	if (__temp__ == 0) return abs(y)
+	return gcd(y, __temp__)
+}
+
+### lcm(x,y): return the least common multiple of integer x and integer y
+func lcm(x,y) \
+{
+	x = int(x)
+	y = int(y)
+	if ((x == 0) || (y == 0)) return (0)
+	return ((x * y)/gcd(x,y))
+}
+
+### logb(b,x) = log to base b of x
+func logb(b,x) \
+{
+	return (log(x)/log(b))
+}
+
+### matula(nbits): return number of decimal digits needed to ensure
+### correct round-trip conversion between binary and decimal
+func matula(nbits) { return ceil(nbits/log2(10) + 1) }
+
+### max(a,b): maximum of a and b
+func max(a,b) \
+{
+	if (isnan(a)) \
+		return (a)
+	if (isnan(b)) \
+		return (b)
+	if (a > b) \
+		return (a) \
+	else \
+		return (b)
+}
+
+### min(a,b): minimum of a and b
+func min() \
+{
+	if (isnan(a)) \
+		return (a)
+	if (isnan(b)) \
+		return (b)
+	if (a < b) \
+		return (a) \
+	else \
+		return (b)
+}
+
+proc _internal_help_hrule() \
+{
+	print "------------------------------------------------------------------------\n"
+}
+
+proc _internal_help_short_hrule() \
+{
+	print "------------------------------------\n"
+}
+
+proc author() \
+{
+	_internal_help_hrule()
+	print "hoc is described in a series of increasingly powerful versions in this\n"
+	print "book:\n\n"
+
+	print "\tBrian W. Kernighan and Rob Pike\n"
+	print "\tThe UNIX Programming Environment\n"
+	print "\tPrentice-Hall\n"
+	print "\t1984\n"
+	print "\tpp. xii + 357\n"
+	print "\tISBN 0-13-937699-2 (hardcover), 0-13-937681-X (paperback)\n"
+	print "\tLCCN QA76.76.O63 K48 1984\n\n"
+
+	print "Extensions for IEEE 754 arithmetic, help, additional constants,\n"
+	print "statements, and functions, initialization files, internationalization,\n"
+	print "and GNU readline support were added by:\n\n"
+
+	print "\tNelson H. F. Beebe <beebe@math.utah.edu>\n\n"
+
+	print "The extended hoc master Internet source distribution site is at:\n\n"
+
+	print "\tftp://ftp.math.utah.edu/pub/hoc\n"
+	print "\thttp://www.math.utah.edu/pub/hoc/\n"
+	_internal_help_hrule()
+}
+
+proc news_hoc_7_0_0_beta() \
+{
+	print "[26-Nov-2001]--[13-Dec-2001]: hoc-7.0.0.beta\n\n"
+
+	print "\tBegin development work with these goals:\n\n"
+
+	print "\t(1) Repackage 1984-vintage hoc-6 with modern automatic\n"
+	print "\t    configuration and testing.\n\n"
+
+	print "\t(2) Make extensive additions to the language and the\n"
+	print "\t    run-time library, particularly for support of IEEE 754\n"
+	print "\t    floating-point arithmetic.\n\n"
+
+	print "\t(3) Serve as a testbed for work on the on-going revision of\n"
+	print "\t    the 1985 IEEE 754 Standard.\n\n"
+
+	print "\t(4) Provide an extensive help system for the hoc language\n"
+	print "\t    and library.\n\n"
+
+	print "\t(5) Provide a student interactive learning environment that\n"
+	print "\t    introduces a small, easy-to-learn, subset of C/C++.\n\n"
+
+	print "\t(6) Internationalize hoc-7 so that it can be comfortably used\n"
+	print "\t    by school children in any language for which hoc message\n"
+	print "\t    translations have been prepared.  All such translations\n"
+	print "\t    must be external to hoc, and must be dynamically loadable.\n\n"
+
+	print "\t(7) Make hoc-7 trivially portable to virtually all common\n"
+	print "\t    desktop and handheld computing environments.\n\n"
+
+	print "\t(8) Provide an open software development environment for\n"
+	print "\t    students to learn about, and experiment with, lexing and\n"
+	print "\t    parsing techniques for a small clean language.\n\n"
+}
+
+proc news_hoc_7_0_1_beta() \
+{
+	global __READLINE__
+
+	print "[15-Dec-2001]: hoc-7.0.1.beta\n\n"
+	print "The original Kernighan and Pike hoc (high-order calculator) has been\n"
+	print "extended with additional functions, and support for features of IEEE 754\n"
+	print "floating-point arithmetic.\n\n"
+
+	print "New functions:\tacosh(x), asinh(x), atanh(x), cbrt(x), cd(s), ceil(x),\n"
+	print "\t\tcopysign(x,y), cosd(x), cpulimit(x), defined(n),\n"
+	print "\t\tdelete(n), dirs(), eval(s), errbits(x,y), expm1(x),\n"
+	print "\t\texponent(x), factorial(x), floor(x), fmod(x,y),\n"
+	print "\t\tgcd(x,y), getenv(s), hexfp(x), hexint(x), hypot(x,y),\n"
+	print "\t\tilogb(x), index(s,t), isfinite(x), isinf(x), isnan(x),\n"
+	print "\t\tisnormal(x), isqnan(x), issnan(x), issubnormal(x),\n"
+	print "\t\tJ0(x), J1(x), Jn(n,x), Jn(x,y), lcm(x,y), ldexp(x,y),\n"
+	print "\t\tlength(s), lgamma(x), load(file), log1p(x), log2(x)\n"
+	print "\t\tlogfile(file), logoff(), logon(), macheps(x),\n"
+	print "\t\tmax(x,y), maxnormal(), min(x,y), minnormal(),\n"
+	print "\t\tminsubnormal(), msg_translate(s), nearest(x,y),\n"
+	print "\t\tnextafter(x,y), nint(x), now(), number(s), popd(),\n"
+	print "\t\tprintenv(prefix), protect(s), pushd(s), putenv(s,v),\n"
+	print "\t\tpwd(), rand(x), randint(x,y), randl(x),\n"
+	print "\t\tremainder(x,y), rint(x), rsqrt(x), save(file,prefix),\n"
+	print "\t\tscalb(x,y), second(), set_locale(s), setrand(x),\n"
+	print "\t\tsignificand(x), sin(x), sind(x), sinh(x), sqrt(x),\n"
+	print "\t\tstrftime(s,v), string(x), substr(s,start,length),\n"
+	print "\t\tsymnum(s), symstr(s), systime(), tan(x), tand(x),\n"
+	print "\t\ttanh(x), tolower(s), toupper(s), trunc(x), xd(),\n"
+	print "\t\tY0(x), Y1(x), Yn(n,y), and Yn(x,y).\n\n"
+
+	print "New procedures:\tabort(), author(), who().\n\n"
+
+	print "New command-line options:\t--?, --author, --copyright, --Dname,\n"
+	print "\t\t--Dname=number, --Dname=\"string\", --Dname=symbol,\n"
+	print "\t\t--help, --no-banner, --no-cd, --no-help-file,\n"
+	print "\t\t--no-load, --no-logfile, --no-readline, --no-save\n"
+	print "\t\t--no-site-file, --no-translation-file, --no-user-file,\n"
+	print "\t\t--quick, --secure, --silent, --Uname, --version.\n\n"
+
+	print "New constants and variables:\t_, __, __BANNER__, __CPU_LIMIT__, __DATE__,\n"
+	print "\t\t__FILE__, __FILE__[*], __GID__, __HOCRC__, __IEEE_754__,\n"
+	print "\t\t__LINE__, __MAX_xxx__, __PACKAGE_BUGREPORT__,\n"
+	print "\t\t__PACKAGE_DATE__, __PACKAGE_NAME__, __PACKAGE_STRING__,\n"
+	print "\t\t__PACKAGE_VERSION__, __PID__, __PROMPT__, __READLINE__,\n"
+	print "\t\t__SYSHOCDIR__, __SYSHOCHLPBASE__, __SYSHOCHLP__,\n"
+	print "\t\t__SYSHOCPATH__, __SYSHOCRCBASE__, __SYSHOCRC__,\n"
+	print "\t\t__SYSHOCXLTBASE__, __SYSHOCXLT__, __TIME__, __UID__,\n"
+	print "\t\t__VERBOSE__\n\n"
+
+	print "New floating-point constants:\tCATALAN, INF, Inf, Infinity, MAXNORMAL,\n"
+	print "\t\tMINNORMAL, MINSUBNORMAL, NAN, NaN, QNAN, QNaN, SNAN,\n"
+	print "\t\tSNaN\n\n"
+
+	print "New statement:\tprintln\n\n"
+
+	print "An extensive help facility has been implemented.  For each function\n"
+	print "or procedure foo(), there is a corresponding procedure help_foo().\n"
+	print "There are also help_xxx() functions for various topics and language\n"
+	print "features.\n\n"
+
+	print "Limited internationalization of hoc has begun.  Set the LANG or\n"
+	print "LC_MESSAGES or LC_ALL environment variable to a suitable locale code\n"
+	print "before running hoc.  Currently, codes da (Danish), de (German), en\n"
+	print "(English), es (Spanish), fr (French), hr (Croatian), pt (Portuguese),\n"
+	print "and tr (Turkish) are supported.\n\n"
+
+	if (__READLINE__) \
+	{
+		print "GNU readline support is available for convenient command completion,\n"
+		print "editing, and recall.  Visit GNU emacs info node readline\n"
+		print "(C-h i mreadline) for details.\n"
+	}
+
+	_internal_help_short_hrule()
+}
+
+proc news_hoc_7_0_2_beta() \
+{
+	print "[27-Jan-2002]: hoc-7.0.2.beta\n\n"
+
+	print "New binary operator:\t<>\n\n"
+
+	print "New built-in constants:\tBASE, CLASS_xxx, EBIAS, EBITS, EMAX, EMIN, and P.\n\n"
+
+	print "New features:\thoc32, hoc80, and hoc128 now provide access to other\n"
+	print "\tfloating-point precisions.  Internationalization support makes\n"
+	print "\tit straightforward to provide hoc function and procedure\n"
+	print "\tdocumentation in other human languages.  A numeric fortune\n"
+	print "\tcookie library adds amusement.  Better support for string\n"
+	print "\targuments in hoc functions and procedures.\n\n"
+
+	print "New functions:\t__msg_translate(), class(x), find_fortune(), fortune(),\n"
+	print "\tisprime(number), next_prime(number), nth_prime(n),\n"
+	print "\tprev_prime(number), prime_factors(number), primes_between(i,j),\n"
+	print "\tthis_or_next_prime(number), this_or_prev_prime(number),\n"
+	print "\tunordered(x,y), and corresponding help_xxx() functions.\n\n"
+
+	print "New libraries:\tfortune.hoc, primes.hoc\n"
+
+	_internal_help_short_hrule()
+}
+
+proc news_hoc_7_0_3_beta() \
+{
+	print "[30-Jan-2002]: hoc-7.0.3.beta\n\n"
+
+	print "Maintenance release:\tNo user-visible new features.\n"
+
+	_internal_help_short_hrule()
+}
+
+proc news_hoc_7_0_4_beta() \
+{
+	print "[17-Jul-2002]: hoc-7.0.4.beta\n\n"
+
+	print "New built-in constants:\t__NATIVE_xxx__.\n\n"
+
+	print "New built-in variable:\t__INDENT__.\n\n"
+
+	print "New features:\thoc number syntax has been extended to recognize Fortran\n"
+	print "\texponent letters (D, d, Q, and q), C/C++ precision suffixes L\n"
+	print "\tand l, and C/C++/Java precision suffixes F and f.  printenv(),\n"
+	print "\tsave(), and who() now take a UNIX-shell-style pattern instead\n"
+	print "\tof a fixed prefix.\n\n"
+
+	print "New functions:\tdouble(x), matula(nbits), single(x).\n\n"
+
+	print "New operators:\t** (to-the-power: synonym for ^).\n\n"
+
+	print "New statements:\tprintf.\n\n"
+
+	_internal_help_short_hrule()
+}
+
+proc news_hoc_7_0_5_beta() \
+{
+	print "[30-Jul-2002]: hoc-7.0.5.beta\n\n"
+
+	print "New statements:\tbreak, continue, sprintf.\n\n"
+
+	print "New functions:\tchar(), decrypt(), encrypt(), ftoh(), htof(),\n"
+	print "\tand ichar().\n\n"
+
+	print "New features:\tprintf now supports %c format descriptor.\n\n"
+
+	_internal_help_short_hrule()
+}
+
+proc news_hoc_7_0_6_beta() \
+{
+	print "[09-Aug-2002]: hoc-7.0.6.beta\n\n"
+
+	print "New functions:\tsnan()\n\n"
+
+	print "New statement:\tglobal\n\n"
+
+	print "New features:\tFunctions and procedures now take named arguments, and\n"
+	print "\tvariables inside functions and procedures are automatically\n"
+	print "\tlocal, unless declared global.  Functions may return string\n"
+	print "\tvalues.\n\n"
+
+	_internal_help_short_hrule()
+}
+
+proc news() \
+{
+	_internal_help_hrule()
+
+	news_hoc_7_0_6_beta()
+	news_hoc_7_0_5_beta()
+	news_hoc_7_0_4_beta()
+	news_hoc_7_0_3_beta()
+	news_hoc_7_0_2_beta()
+	news_hoc_7_0_1_beta()
+	news_hoc_7_0_0_beta()
+
+	_internal_help_hrule()
+}
+
+proc _internal_welcome() \
+{
+	global __IEEE_754__, __PACKAGE_NAME__, __PACKAGE_VERSION__, __PACKAGE_DATE__
+	_internal_help_hrule()
+	print "Welcome to the extensible high-order calculator, hoc.\n"
+	print "This is", __PACKAGE_NAME__, "version", __PACKAGE_VERSION__, "[" __PACKAGE_DATE__ "].\n"
+	print "Type help() for help, news() for news, and author() for author\n"
+	print "information.\n"
+	if (__IEEE_754__) \
+		print "This system supports IEEE 754 floating-point arithmetic.\n" \
+	else \
+		print "This system does NOT support IEEE 754 floating-point arithmetic.\n"
+	_internal_help_hrule()
+}
+
+### Miscellaneous new functions:
+
+func hassubnormals() return issubnormal(macheps(0))
+
+func errbits(x,y) \
+{
+	## errbits(x,y), with y an approximation to x, returns the
+	## number of bits that y is in error by
+	if (x == y) \
+		return (0) \
+	else \
+		return (ceil(log2(abs((x - y)/max(x,y))/macheps(x))))
+}
+
+### This is now available as MAXNORMAL
+func maxnormal() \
+{
+	global __IEEE_754__
+	## Return the maximum positive normal number
+	if (__IEEE_754__) \
+		return (((1 - 2^(-53)) * 2^1023) * 2) \
+	else \
+		abort("maxnormal() not yet implemented for this platform")
+}
+
+### This is now available as MINNORMAL
+func minnormal() \
+{
+	global __IEEE_754__
+	## Return the minimum positive normal number
+	if (__IEEE_754__) \
+		return (2^(-1022)) \
+	else \
+		abort("minnormal() not yet implemented for this platform")
+}
+
+### This is now available as MINSUBNORMAL
+func minsubnormal() \
+{
+	global __IEEE_754__
+	## Return the minimimum subnormal number.  If subnormals are
+	## not supported, then return the minimim normal number
+	## instead.
+	if (__IEEE_754__) \
+	{
+		if (hassubnormals()) \
+			return (2^(-1074)) \
+		else \
+			return (minnormal())
+	} \
+	else \
+		abort("maxnormal() not yet implemented for this platform")
+}
+
+### Define some convenient functions for switching languages inside hoc
+
+__LANG__ = "en"
+
+proc set_locale() \
+{
+	global __BANNER__, __LANG__
+	__OLD_BANNER__ = __BANNER__
+	__OLD_LANG__ = putenv("LANG",__LANG__)
+	load(__SYSHOCDIR__ "/locale/" __LANG__ "/hoc.rc")
+	load(__SYSHOCDIR__ "/locale/" __LANG__ "/help.hoc")
+	load(__SYSHOCDIR__ "/locale/" __LANG__ "/translations.hoc")
+	__BANNER__ = __OLD_BANNER__
+}
+
+proc danish ()		{ __LANG__ = "da"; set_locale() }
+proc dansk ()		{ danish() }	# da
+proc da()		{ danish() }	# ISO
+
+proc english()		{ __LANG__ = "en"; set_locale() }
+proc anglais()		{ english() }	# fr
+proc en()		{ english() }	# ISO
+proc engelsk()		{ english() }	# da
+proc englisch()		{ english() }	# de
+proc inglés()		{ english() }	# es
+proc inglês()		{ english() }	# pt
+proc ingles()		{ english() }	# simplified es/pt
+proc ingilizce()	{ english() }	# tr
+
+## TO DO: Add Turkish names for English
+
+proc french ()		{ __LANG__ = "fr"; set_locale() }
+proc francais ()	{ french() }	# simplified fr
+proc français ()	{ french() }	# fr
+proc fr()		{ french() }	# ISO
+
+proc german()		{ __LANG__ = "de"; set_locale() }
+proc deutsch()		{ german() }	# de
+proc de()		{ german() }	# ISO
+
+proc croatian()		{ __LANG__ = "hr"; set_locale() }
+proc hr()		{ croatian() }	# ISO
+
+proc portuguese()	{ __LANG__ = "pt"; set_locale() }
+proc portuguesa()	{ portuguese() } # pt
+proc pt()		{ portuguese() } # ISO
+
+proc spanish()		{ __LANG__ = "es"; set_locale() }
+proc espanol()		{ spanish() }	# simplified es
+proc español()		{ spanish() }	# es
+proc es()		{ spanish() }	# ISO
+
+proc turkish()		{ __LANG__ ="tr"; set_locale() }
+proc türkçe()		{ turkish() }	# tr
+proc turkce()		{ turkish() }	# simplified tr
+proc tr()		{ turkish() }	# ISO
+
+### Create some (silly) synonyms for exit()
+proc bailout(msg)	exit($$1)
+proc bye(msg)		exit($$1)
+proc byebye(msg)	exit($$1)
+proc ciao(msg)		exit($$1)
+proc goodbye(msg)	exit($$1)
+proc quit(msg)		exit($$1)
+
+### Support libraries whose code is documented in help.hoc:
+load("pushd")
+
+### Print a welcome banner if option --no-banner was not specified:
+if (__BANNER__) _internal_welcome()

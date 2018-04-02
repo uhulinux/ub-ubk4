@@ -1,0 +1,12 @@
+diff -Nur orig/src/ptlib/unix/channel.cxx mod/src/ptlib/unix/channel.cxx
+--- orig/src/ptlib/unix/channel.cxx	2013-08-15 01:20:26.000000000 +0200
++++ mod/src/ptlib/unix/channel.cxx	2017-09-27 09:12:23.043874734 +0200
+@@ -36,7 +36,7 @@
+ 
+ #include <ptlib.h>
+ #include <sys/ioctl.h>
+-
++#include <sys/uio.h>
+ 
+ #include "../common/pchannel.cxx"
+ 

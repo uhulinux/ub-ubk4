@@ -1,0 +1,12 @@
+diff -Nur orig/setup.py mod/setup.py
+--- orig/setup.py	2014-06-02 18:55:26.000000000 +0200
++++ mod/setup.py	2018-03-12 12:09:33.295884325 +0100
+@@ -61,7 +61,7 @@
+                     line = "data_dir = '%s'\n" % data_dir
+                 elif "doc_base = " in line:
+                     line = "doc_base = '%s'\n" % \
+-                        os.path.join(base, 'doc', 'gourmet')
++                        os.path.join(base, 'doc/Packages', 'gourmet')
+                 elif "icon_base = " in line:
+                     line = "icon_base = '%s'\n" % \
+                         os.path.join(base, 'icons', 'hicolor')

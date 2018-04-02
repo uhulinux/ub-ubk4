@@ -1,0 +1,20 @@
+diff -Nur orig/src/modules/users/CreateUserJob.cpp mod/src/modules/users/CreateUserJob.cpp
+--- orig/src/modules/users/CreateUserJob.cpp	2017-11-14 16:18:58.000000000 +0100
++++ mod/src/modules/users/CreateUserJob.cpp	2017-11-24 22:41:28.815166105 +0100
+@@ -151,7 +151,6 @@
+                               "-m",
+                               "-s",
+                               "/bin/bash",
+-                              "-U",
+                               "-c",
+                               m_fullName,
+                               m_userName } );
+@@ -177,7 +176,7 @@
+                       targetEnvCall( { "chown",
+                                        "-R",
+                                        QString( "%1:%2" ).arg( m_userName )
+-                                                         .arg( m_userName ),
++                                                         .arg( "users" ),
+                                        QString( "/home/%1" ).arg( m_userName ) } );
+     if ( ec )
+         return Calamares::JobResult::error( tr( "Cannot set home directory ownership for user %1." )

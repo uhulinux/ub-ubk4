@@ -1,0 +1,57 @@
+diff -Nur orig/thirdparty/fetch-geoip-db.sh mod/thirdparty/fetch-geoip-db.sh
+--- orig/thirdparty/fetch-geoip-db.sh	2017-10-30 17:35:18.000000000 +0100
++++ mod/thirdparty/fetch-geoip-db.sh	2017-10-30 18:56:54.121517300 +0100
+@@ -13,6 +13,7 @@
+ if [ ! -e $filename ] || [ -n "$(find . -name $filename -mtime +30 -print)" ]; then
+ 	rm -f $filename
+ 	echo "Updating GeoIP country database from MaxMind."
+-	curl -s -L -O http://geolite.maxmind.com/download/geoip/database/$filename
++    mv ../../$filename .
++#	curl -s -L -O http://geolite.maxmind.com/download/geoip/database/$filename
+ fi
+ 
+diff -Nur orig/thirdparty/fetch-thirdparty-deps.sh mod/thirdparty/fetch-thirdparty-deps.sh
+--- orig/thirdparty/fetch-thirdparty-deps.sh	2017-10-30 17:35:18.000000000 +0100
++++ mod/thirdparty/fetch-thirdparty-deps.sh	2017-10-30 18:53:21.973874807 +0100
+@@ -81,19 +81,22 @@
+ 
+ if [ ! -f SDL2-CS.dll -o ! -f SDL2-CS.dll.config ]; then
+ 	echo "Fetching SDL2-CS from GitHub."
+-	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll
+-	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll.config
++	mv ../../SDL2-CS* .
++#	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll
++#	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll.config
+ fi
+ 
+ if [ ! -f OpenAL-CS.dll -o ! -f OpenAL-CS.dll.config ]; then
+ 	echo "Fetching OpenAL-CS from GitHub."
+-	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll
+-	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll.config
++	mv ../../OpenAL-CS* .
++#	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll
++#	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll.config
+ fi
+ 
+ if [ ! -f Eluant.dll ]; then
+ 	echo "Fetching Eluant from GitHub."
+-	curl -s -L -O https://github.com/OpenRA/Eluant/releases/download/20160124/Eluant.dll
++	mv ../../Eluant.dll .
++#	curl -s -L -O https://github.com/OpenRA/Eluant/releases/download/20160124/Eluant.dll
+ fi
+ 
+ if [ ! -f SmarIrc4net.dll ]; then
+diff -Nur orig/thirdparty/noget.sh mod/thirdparty/noget.sh
+--- orig/thirdparty/noget.sh	2017-10-30 17:35:18.000000000 +0100
++++ mod/thirdparty/noget.sh	2017-10-30 18:36:15.647595911 +0100
+@@ -8,6 +8,7 @@
+ 
+ archive="$1"
+ version="$2"
+-curl -o "$archive.zip" -Ls https://nuget.org/api/v2/package/"$archive"/"$version"
++#curl -o "$archive.zip" -Ls https://nuget.org/api/v2/package/"$archive"/"$version"
+ mkdir -p "$archive"
+-unzip -o -qq "$archive.zip" -d "$archive" && rm "$archive.zip"
+\ Nincs új sor a fájl végén
++mv ../../"$archive".zip ./
++unzip -o -qq "$archive.zip" -d "$archive" && rm "$archive.zip"

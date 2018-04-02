@@ -1,0 +1,15 @@
+diff -urN orig/nss.pc.in new/nss.pc.in
+--- orig/nss.pc.in	1970-01-01 01:00:00.000000000 +0100
++++ new/nss.pc.in	2005-12-15 22:50:37.000000000 +0100
+@@ -0,0 +1,11 @@
++prefix=%prefix%
++exec_prefix=%exec_prefix%
++libdir=%libdir%
++includedir=%includedir%
++
++Name: NSS
++Description: Network Security Services
++Version: %NSS_VERSION%
++Requires: nspr >= %NSPR_VERSION%
++Libs: -lssl3 -lsmime3 -lnss3 -lnssutil3
++Cflags: -I${includedir}

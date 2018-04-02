@@ -1,0 +1,51 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/include/files_st.h
+===================================================================
+--- fenix-0.92a.dfsg1.orig/include/files_st.h	2007-08-28 14:38:36.000000000 +0200
++++ fenix-0.92a.dfsg1/include/files_st.h	2007-08-28 14:40:08.000000000 +0200
+@@ -39,6 +39,7 @@
+ #define F_XFILE  1
+ #define F_FILE   2
+ #define F_GZFILE 3
++#define F_STDFILE 4
+ 
+ #include <zlib.h>
+ 
+Index: fenix-0.92a.dfsg1/common/files.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/common/files.c	2007-08-28 14:38:36.000000000 +0200
++++ fenix-0.92a.dfsg1/common/files.c	2007-08-28 14:44:28.000000000 +0200
+@@ -460,6 +460,31 @@
+ 	memset (f, 0, sizeof(file)) ;
+ 	strncpy (f->name, filename, MAX_PATH);
+ 
++	if (strcmp(filename, "-") == 0 && strchr(mode,'r'))
++	{
++		char buffer[1024];
++		size_t buflen;
++		f->type = F_FILE;
++		f->fp = tmpfile();
++		opened_files++;
++
++		while ((buflen = fread(buffer, 1, sizeof(buffer), stdin)))
++		{
++			fwrite(buffer, 1, buflen, f->fp);
++		}
++		fseek (f->fp, 0, SEEK_SET);
++
++		return f ;
++	}
++
++	if (strcmp(filename, "-") == 0 && strchr(mode,'w'))
++	{
++		f->type = F_STDFILE;
++		f->fp = stdout;
++		opened_files++;
++		return f ;
++	}
++
+ 	c = filename ;
+ 	for (n = c+strlen(c) ; n >= c ; n--)
+ 	{

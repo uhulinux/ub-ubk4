@@ -1,0 +1,21 @@
+#!/bin/sh -e
+
+if [ "$#" != "1" ]; then
+	echo "usage: createcert <hostname>" >&2
+	exit 1
+fi
+
+umask 077
+
+openssl genrsa -out "$1".key 2048
+openssl req -new -key "$1".key <<EOF | openssl x509 -req -days 365 -signkey "$1".key -out "$1".crt
+.
+.
+.
+.
+.
+$1
+.
+.
+.
+EOF

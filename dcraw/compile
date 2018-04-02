@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+arch=i386
+if [ "$UB_ARCH" == "amd64" ];then
+export arch="-m64 -march=k8"
+else
+export arch="-m32 -march=pentium"
+fi
+
+gcc	$arch -o dcraw dcraw.c \
+	-lm -ljasper -ljpeg -llcms2

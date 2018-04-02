@@ -1,0 +1,16 @@
+diff -NarU4 groff.orig/groff-utf8/u8_utf8_prep.c groff/groff-utf8/u8_utf8_prep.c
+--- groff.orig/groff-utf8/u8_utf8_prep.c	2005-07-02 23:45:44.000000000 +0200
++++ groff/groff-utf8/u8_utf8_prep.c	2006-03-23 14:58:40.000000000 +0100
+@@ -492,9 +492,11 @@
+             fprintf(stdout,".char \\N'%d' <\\h'-1'U\\h'-1'%c\\h'-1'%c\\h'-1'%c\\h'-1'%c\\h'-1'>\n",
+                     uc, hexdigit[(uc>>12)&0x0f],hexdigit[(uc>>8)&0x0f],hexdigit[(uc>>4)&0x0f],hexdigit[uc&0x0f]);
+             break;
+           case 2:
+-            fprintf(stdout,".char \\N'%d' <\\h'-1'U\\h'-1'%c\\h'-1'%c\\h'-1'%c\\h'-1'%c>\n",
++            /* I don't know what the original code was supposed to do, but apparently it didn't work.
++               This one is the same as the "case 1" branch. */
++            fprintf(stdout,".char \\N'%d' <\\h'-1'U\\h'-1'%c\\h'-1'%c\\h'-1'%c\\h'-1'%c\\h'-1'>\n",
+                     uc, hexdigit[(uc>>12)&0x0f],hexdigit[(uc>>8)&0x0f],hexdigit[(uc>>4)&0x0f],hexdigit[uc&0x0f]);
+             break;
+           default:
+             abort();

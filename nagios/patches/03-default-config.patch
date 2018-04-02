@@ -1,0 +1,24 @@
+diff -Naur nagios-4.0.1-orig/sample-config/nagios.cfg.in nagios-4.0.1/sample-config/nagios.cfg.in
+--- nagios-4.0.1-orig/sample-config/nagios.cfg.in	2013-10-16 01:36:42.000000000 +0200
++++ nagios-4.0.1/sample-config/nagios.cfg.in	2013-11-21 11:46:53.595020620 +0100
+@@ -1091,7 +1091,7 @@
+ #	strict-iso8601	(YYYY-MM-DDTHH:MM:SS)
+ #
+ 
+-date_format=us
++date_format=iso8601
+ 
+ 
+ 
+diff -Naur nagios-4.0.1-orig/sample-config/resource.cfg.in nagios-4.0.1/sample-config/resource.cfg.in
+--- nagios-4.0.1-orig/sample-config/resource.cfg.in	2013-10-16 01:36:42.000000000 +0200
++++ nagios-4.0.1/sample-config/resource.cfg.in	2013-11-21 11:48:23.258862132 +0100
+@@ -22,7 +22,7 @@
+ ###########################################################################
+ 
+ # Sets $USER1$ to be the path to the plugins
+-$USER1$=@libexecdir@
++$USER1$=/usr/lib/nagios
+ 
+ # Sets $USER2$ to be the path to event handlers
+ #$USER2$=@libexecdir@/eventhandlers

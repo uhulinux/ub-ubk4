@@ -1,0 +1,1 @@
+geturl http://sourceforge.net/projects/hardinfo.berlios/files/ | grep hardinfo | grep bz2 | sed s/.*hardinfo-/hardinfo-/g | sed s/bz2.*/bz2/g | parsever | sort -V | tail -n 1

@@ -1,0 +1,65 @@
+#!/bin/sh -eux
+
+# Először a totál bugyuta verzió (leendő /bin/vi): se gpm, se X.
+
+ub_configure \
+	--enable-multibyte \
+	--with-compiledby='UHU-Linux' \
+	--disable-gpm \
+	--with-x=no \
+	--disable-gui
+ub_make \
+	VIMRCLOC=/etc \
+	VIMRUNTIMEDIR='$(VIMRTLOC)' \
+	MAKE="make -e"
+
+mkdir Install
+install src/vim Install/vi
+
+# Utána a kevésbé bugyuta verzió (leendő /usr/bin/vim): gpm-mel, de X nélkül.
+
+ub_configure \
+	--enable-multibyte \
+	--with-compiledby='UHU-Linux' \
+	--with-x=no \
+	--disable-gui \
+	--enable-features=huge \
+	--enable-gpm \
+	--enable-acl \
+	--enable-cscope \
+	--enable-netbeams \
+	--enable-perlinterp=dynamic \
+	--enable-pythoninterp=dynamic \
+	--enable-python3interp=dynamic \
+	--enable-rubyinterp=dynamic \
+	--enable-luainterp=dynamic \
+	--enable-tclinterp=dynamic
+ub_make \
+	VIMRCLOC=/etc \
+	VIMRUNTIMEDIR='$(VIMRTLOC)' \
+	MAKE="make -e"
+
+install src/vim Install/vim
+
+# Végül a komoly verzió (leendő /usr/bin/gvim): gpm, X, gtk.
+
+ub_configure \
+	--enable-multibyte \
+	--with-compiledby='UHU-Linux' \
+	--with-x=yes \
+	--enable-gui=gtk3 \
+	--enable-features=huge \
+	--enable-gpm \
+	--enable-acl \
+	--enable-cscope \
+	--enable-netbeams \
+	--enable-perlinterp=dynamic \
+	--enable-pythoninterp=dynamic \
+	--enable-python3interp=dynamic \
+	--enable-rubyinterp=dynamic \
+	--enable-luainterp=dynamic \
+	--enable-tclinterp=dynamic
+ub_make \
+	VIMRCLOC=/etc \
+	VIMRUNTIMEDIR='$(VIMRTLOC)' \
+	MAKE="make -e"

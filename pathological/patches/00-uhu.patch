@@ -1,0 +1,35 @@
+diff -Naur ORIG/Makefile UHU/Makefile
+--- ORIG/Makefile	2003-07-17 17:05:04.000000000 +0200
++++ UHU/Makefile	2008-02-09 16:26:58.000000000 +0100
+@@ -27,8 +27,8 @@
+ 	-chgrp games $(DESTDIR)/usr/lib/pathological/bin/write-highscores
+ 	-chmod 2755 $(DESTDIR)/usr/lib/pathological/bin/write-highscores
+ 
+-	mkdir -p $(DESTDIR)/usr/X11R6/include/X11/pixmaps
+-	cp pathological.xpm $(DESTDIR)/usr/X11R6/include/X11/pixmaps
++#	mkdir -p $(DESTDIR)/usr/X11R6/include/X11/pixmaps
++#	cp pathological.xpm $(DESTDIR)/usr/X11R6/include/X11/pixmaps
+ 
+ 	mkdir -p $(DESTDIR)/var/games
+ 	cp pathological_scores $(DESTDIR)/var/games
+@@ -47,7 +47,7 @@
+ 	rm -rf $(DATADIR)
+ 	rm -rf $(DESTDIR)/usr/lib/pathological
+ 	rm -f $(DESTDIR)/usr/games/pathological
+-	rm -f $(DESTDIR)/usr/X11R6/include/X11/pixmaps/pathological.xpm
++#	rm -f $(DESTDIR)/usr/X11R6/include/X11/pixmaps/pathological.xpm
+ 	rm -f $(DESTDIR)/usr/share/man/man6/pathological.6.gz
+ 
+ purge: uninstall
+diff -Naur ORIG/pathological.py UHU/pathological.py
+--- ORIG/pathological.py	2003-07-17 16:12:30.000000000 +0200
++++ UHU/pathological.py	2008-02-09 16:33:02.000000000 +0100
+@@ -1847,7 +1847,7 @@
+ 	scroller_font_height = 28
+ 	scroller_rect = (10,550,780,scroller_font_height)
+ 	scroller_text = \
+-		"   Copyright © 2003  John-Paul Gignac.   "+ \
++		"   Copyright (C) 2003  John-Paul Gignac.   "+ \
+ 		"   Soundtrack by Matthias Le Bidan.   "+ \
+ 		"   Board designs contributed by Mike Brenneman and Kim Gignac.   "+ \
+ 		"   To contribute your own board designs, see the website:  "+ \

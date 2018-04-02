@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+mv doc/example .
+mv doc guide
+
+rm -rf "$UB_INSTALLDIR"/usr/share/doc/linuxdoc-tools

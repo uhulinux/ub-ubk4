@@ -1,0 +1,34 @@
+diff -Naur orig/config.template patched/config.template
+--- orig/config.template	2015-01-12 17:09:46.000000000 +0100
++++ patched/config.template	2016-07-23 00:50:12.719665430 +0200
+@@ -8,18 +8,18 @@
+ #BACKEND = opengl
+ #BACKEND = sdl
+ #BACKEND = sdl2
+-#BACKEND = mixer_sdl
++BACKEND = mixer_sdl
+ #BACKEND = posix
+ 
+ #COLOUR_DEPTH = 0
+-#COLOUR_DEPTH = 16
++COLOUR_DEPTH = 16
+ 
+ #OSTYPE = amiga
+ #OSTYPE = beos
+ #OSTYPE = cygwin
+ #OSTYPE = freebsd
+ #OSTYPE = haiku
+-#OSTYPE = linux
++OSTYPE = linux
+ #OSTYPE = mingw
+ #OSTYPE = mac
+ 
+@@ -41,7 +41,7 @@
+ #SDL_CONFIG     = sdl-config
+ #SDL2_CONFIG    = sdl2-config
+ 
+-#VERBOSE = 1
++VERBOSE = 1
+ 
+ # The following useful conditional compilation flags exist
+ #

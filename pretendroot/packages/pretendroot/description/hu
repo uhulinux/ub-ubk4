@@ -1,0 +1,11 @@
+Virtuális &root környezetet alakít ki, felülbírálva több függvényhívást, mint
+például a &chown, &getuid, &stat hívásokat. Ezt úgy teszi, hogy az &LD_PRELOAD
+környezeti változót beállítja a &libpretendroot.so függvénytárra, amely a
+fenti függvények új változatát tartalmazza.
+
+A &pretendroot ezáltal lehetőséget ad arra, hogy sima felhasználó is
+fordíthasson olyan csomagokat, melyekben például a &"make &install" fázis
+tartalmaz egy &"install -o &root -g &man ..." jellegű parancsot.
+
+Az UHU csomagkészítő procedúrája intenzíven használja. A Debian is egy
+hasonló funkciójú, &fakeroot nevű programot használ csomagkészítéshez.

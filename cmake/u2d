@@ -1,0 +1,5 @@
+for i in $(urllist http://www.cmake.org/files/ | grep -E '^v([0-9.]+)');do
+listatag=$(urllist http://www.cmake.org/files/$i/ | splitver '^cmake-([0-9.]+).tar.(gz|bz2|xz)$' | sort -V | tail -n 1)
+lista=$(echo -e "$lista\n$listatag")
+done
+echo "$lista" | sort -V | tail -n 1

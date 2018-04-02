@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+export PREFIX='/usr'
+export CONFIG_SHARED='TRUE'
+
+ub_install
+install -m 755 dcacut "$UB_INSTALLDIR"/usr/bin/

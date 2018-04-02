@@ -1,0 +1,27 @@
+#!/bin/sh -eux
+
+for i in capiinfo capifax; do
+	cd "$i"
+	aclocal
+	libtoolize --force --automake --copy
+	automake --add-missing --copy
+	autoconf
+	cd ..
+done
+for i in eicon isdnlog ipppd; do
+	cd "$i"
+	autoconf
+	cd ..
+done
+
+make subconfig
+
+for i in xisdnload xmonisdn; do
+	cd "$i"
+	sed -i 's,$(EXTRAXAWREQS) ,,' Makefile
+	sed -i 's,$(EXTRAXAWCLIENTDEPLIBS) ,,' Makefile
+	sed -i 's,$(EXTRAXAWCLIENTLIBS) ,,' Makefile
+	cd ..
+done
+
+make

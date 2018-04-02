@@ -1,0 +1,75 @@
+diff -Naurd b/xwin.c c/xwin.c
+--- b/xwin.c	2006-11-22 17:36:36.000000000 +0100
++++ c/xwin.c	2006-11-23 10:28:48.000000000 +0100
+@@ -1963,6 +1963,9 @@
+ xwin_process_events(void)
+ {
+ 	XEvent xevent;
++	static XEvent old_xevent;
++	static BOOL do_old_xevent = False;
++	BOOL doing_old_xevent,set_do_old_xevent;
+ 	KeySym keysym;
+ 	uint32 ev_time;
+ 	char str[256];
+@@ -1970,9 +1973,21 @@
+ 	int events = 0;
+ 	seamless_window *sw;
+ 
+-	while ((XPending(g_display) > 0) && events++ < 20)
++	set_do_old_xevent = False;
++	while ((XPending(g_display) > 0 || do_old_xevent == True) && events++ < 20)
+ 	{
+-		XNextEvent(g_display, &xevent);
++		if ((XPending(g_display) > 0))
++		{
++				XNextEvent(g_display, &xevent);
++				doing_old_xevent = False;
++		}
++		else
++		{
++				xevent = old_xevent;
++				doing_old_xevent = True;
++		}
++		do_old_xevent = False;
++						
+ 
+ 		if ((g_IC != NULL) && (XFilterEvent(&xevent, None) == True))
+ 		{
+@@ -2069,8 +2084,16 @@
+ 
+ 				if (xevent.xmotion.window == g_wnd)
+ 				{
+-					rdp_send_input(time(NULL), RDP_INPUT_MOUSE, MOUSE_FLAG_MOVE,
+-						       xevent.xmotion.x, xevent.xmotion.y);
++					if (doing_old_xevent == True)
++					{
++						rdp_send_input(time(NULL), RDP_INPUT_MOUSE,
++						       MOUSE_FLAG_MOVE, xevent.xmotion.x, xevent.xmotion.y);
++					}
++					else
++					{
++						old_xevent = xevent;
++						set_do_old_xevent = True;
++					}
+ 				}
+ 				else
+ 				{
+@@ -2239,6 +2262,7 @@
+ 				break;
+ 		}
+ 	}
++	do_old_xevent = set_do_old_xevent;
+ 	/* Keep going */
+ 	return 1;
+ }
+@@ -2279,8 +2303,8 @@
+ 		}
+ #endif
+ 		/* default timeout */
+-		tv.tv_sec = 60;
+-		tv.tv_usec = 0;
++		tv.tv_sec = 0;
++		tv.tv_usec = 10000; /* 100 times a sec, adjust as needed */
+ 
+ 		/* add redirection handles */
+ 		rdpdr_add_fds(&n, &rfds, &wfds, &tv, &s_timeout);

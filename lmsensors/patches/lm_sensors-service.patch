@@ -1,0 +1,12 @@
+diff -Naur orig/prog/init/lm_sensors.service patched/prog/init/lm_sensors.service
+--- orig/prog/init/lm_sensors.service	2014-01-19 17:57:33.000000000 +0100
++++ patched/prog/init/lm_sensors.service	2016-04-01 07:46:37.779742277 +0200
+@@ -2,7 +2,7 @@
+ Description=Initialize hardware monitoring sensors
+ 
+ [Service]
+-EnvironmentFile=/etc/sysconfig/lm_sensors
++EnvironmentFile=-/etc/sysconfig/lm_sensors
+ Type=oneshot
+ RemainAfterExit=yes
+ ExecStart=-/sbin/modprobe -qab $BUS_MODULES $HWMON_MODULES

@@ -1,0 +1,2 @@
+minor=$(urllist https://sourceforge.net/projects/djvu/files/DjVuLibre/ | grep '^[0-9]\.' | sort -V | tail -n 1)
+sflist djvu DjVuLibre/"$minor" | parsever | sort -V | tail -n 1

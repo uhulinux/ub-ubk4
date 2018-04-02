@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/trend #/examples
+cp -a src/trend "$UB_INSTALLDIR"/usr/bin/
+cp -a trend.1 "$UB_INSTALLDIR"/usr/share/man/man1/
+cp -a examples/. "$UB_INSTALLDIR"/usr/share/trend #/examples/

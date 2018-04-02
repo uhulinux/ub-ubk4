@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm "$UB_INSTALLDIR"/usr/bin/aclocal
+ln -s aclocal-"$UB_VERSION_HEAD2" "$UB_INSTALLDIR"/usr/bin/aclocal
+rm "$UB_INSTALLDIR"/usr/bin/automake
+ln -s automake-"$UB_VERSION_HEAD2" "$UB_INSTALLDIR"/usr/bin/automake

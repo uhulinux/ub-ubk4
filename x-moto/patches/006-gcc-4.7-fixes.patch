@@ -1,0 +1,14 @@
+Description: Add missing header, allowing building with gcc-4.7
+Author: Stephen Kitt <steve@sk2.org>
+Bug: http://todo.xmoto.tuxfamily.org/index.php?do=details&task_id=800
+
+--- xmoto-0.5.9.orig/src/helpers/System.cpp
++++ xmoto-0.5.9/src/helpers/System.cpp
+@@ -24,6 +24,7 @@
+ #include "Log.h"
+ #include "VExcept.h"
+ #include <sstream>
++#include <unistd.h>
+ 
+ #if defined(WIN32) || defined(__APPLE__)
+ #else

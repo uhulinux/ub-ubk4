@@ -1,0 +1,48 @@
+diff -Nur orig/autogen.sh mod/autogen.sh
+--- orig/autogen.sh	2017-11-20 11:10:50.000000000 +0100
++++ mod/autogen.sh	2017-12-24 17:25:24.458559316 +0100
+@@ -25,7 +25,6 @@
+ mkdir -p m4
+ 
+ glib-gettextize --force --copy || exit 1
+-gtkdocize --copy || exit 1
+ intltoolize --force --copy --automake || exit 1
+ autoreconf --verbose --force --install || exit 1
+ 
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2017-11-20 11:10:50.000000000 +0100
++++ mod/configure.ac	2017-12-24 17:26:49.626427215 +0100
+@@ -72,7 +72,7 @@
+ 
+ dnl ==========================================================================
+ 
+-GTK_DOC_CHECK([1.4])
++
+ 
+ dnl ==========================================================================
+ 
+diff -Nur orig/docs/Makefile.am mod/docs/Makefile.am
+--- orig/docs/Makefile.am	2017-11-20 11:10:50.000000000 +0100
++++ mod/docs/Makefile.am	2017-12-24 17:33:02.425823474 +0100
+@@ -1,6 +1,6 @@
+ NULL = 
+ 
+-SUBDIRS = reference
++SUBDIRS = 
+ 
+ man_MANS = \
+ 	nemo.1 \
+diff -Nur orig/docs/reference/libnemo-extension/Makefile.am mod/docs/reference/libnemo-extension/Makefile.am
+--- orig/docs/reference/libnemo-extension/Makefile.am	2017-11-20 11:10:50.000000000 +0100
++++ mod/docs/reference/libnemo-extension/Makefile.am	2017-12-24 17:40:45.349056978 +0100
+@@ -76,8 +76,8 @@
+ 	$(NULL)
+ 
+ # This includes the standard gtk-doc make rules, copied by gtkdocize.
+-include $(top_srcdir)/gtk-doc.make
++#include $(top_srcdir)/gtk-doc.make
+ 
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in
+-EXTRA_DIST += version.xml.in
++EXTRA_DIST = version.xml.in

@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+# Kiszedjük azokat, amelyek ütközhetnek igazi man oldalakkal.
+# Na persze nem a fájlnév ütközik, de nem akarunk senkit sem félrevezetni.
+rm -f date.* echo.* flame.* rm.* strfry.* xkill.*
+
+for i in *fun; do
+	j="${i%fun}"
+	j="${j##*.}"
+	cp -a "$i" "${UB_INSTALLDIR}/usr/share/man/man${j}/"
+done

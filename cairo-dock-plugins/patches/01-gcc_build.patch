@@ -1,0 +1,12 @@
+diff -urN cairo-dock-plugins-3.3.2.orig/CMakeLists.txt cairo-dock-plugins-3.3.2/CMakeLists.txt
+--- cairo-dock-plugins-3.3.2.orig/CMakeLists.txt	2013-10-29 11:27:30.000000000 +0100
++++ cairo-dock-plugins-3.3.2/CMakeLists.txt	2014-01-27 18:42:56.288763141 +0100
+@@ -13,7 +13,7 @@
+ project ("cairo-dock-plugins")
+ set (VERSION "3.3.2")
+ 
+-add_definitions (-std=c99 -Wall -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
++add_definitions (-std=c99 -Wall) # -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
+ if (NOT DEFINED CMAKE_BUILD_TYPE)
+   	add_definitions (-O3)
+ endif()

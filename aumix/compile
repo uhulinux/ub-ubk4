@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_compile
+
+mkdir Install
+install src/aumix Install/
+
+make clean
+ub_compile \
+	--without-gtk

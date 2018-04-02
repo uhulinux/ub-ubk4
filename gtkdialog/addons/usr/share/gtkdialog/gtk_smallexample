@@ -1,0 +1,27 @@
+#! /bin/bash
+
+export MAIN_DIALOG='
+ <vbox>
+  <frame Checkboxes>
+    <checkbox>
+      <label>First checkbox.</label>
+      <variable>CH1</variable>
+      <action>echo $CH1</action>
+    </checkbox>
+    <checkbox>
+      <label>Check this for button.</label>
+      <action>if true enable:OKBUTTON</action>
+      <action>if false disable:OKBUTTON</action>
+    </checkbox>
+  </frame>
+  <hbox>
+   <button ok> <variable>OKBUTTON</variable>
+               <visible>disabled</visible>   </button>
+   <button cancel></button>
+  </hbox>
+ </vbox>
+'
+
+gtkdialog --program MAIN_DIALOG
+
+

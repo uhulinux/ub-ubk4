@@ -1,0 +1,21 @@
+diff -Naur orig/lib/dpkg/compress.c patched/lib/dpkg/compress.c
+--- orig/lib/dpkg/compress.c	2014-10-11 19:36:42.000000000 +0200
++++ patched/lib/dpkg/compress.c	2014-10-18 22:08:54.588988734 +0200
+@@ -256,7 +256,7 @@
+ #endif
+ 
+ static const struct compressor compressor_gzip = {
+-	.name = "gzip",
++	.name = "pigz",
+ 	.extension = ".gz",
+ 	.default_level = 9,
+ 	.fixup_params = fixup_gzip_params,
+@@ -382,7 +382,7 @@
+ #endif
+ 
+ static const struct compressor compressor_bzip2 = {
+-	.name = "bzip2",
++	.name = "pbzip2",
+ 	.extension = ".bz2",
+ 	.default_level = 9,
+ 	.fixup_params = fixup_bzip2_params,

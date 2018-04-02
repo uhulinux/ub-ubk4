@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+cd "${UB_INSTALLDIR}"/usr/share/games
+mv {applications,pixmaps} ../
+cd xye
+rm {AUTHORS,ChangeLog,NEWS,ReadMe.html}
+cd res
+rm -f DejaVuSans*
+ln -s /usr/share/fonts/truetype/DejaVuSans.ttf DejaVuSans.ttf
+ln -s /usr/share/fonts/truetype/DejaVuSans-Bold.ttf DejaVuSans-Bold.ttf

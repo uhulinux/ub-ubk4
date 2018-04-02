@@ -1,0 +1,27 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+# Thanks to Dann Frazier <dannf@debian.org>
+# See http://bugs.debian.org/437735
+
+#  From SDL_mixer.h:
+#
+#    #ifdef USE_RWOPS /* This hasn't been hooked into music.c yet */
+#    /* Load a music file from an SDL_RWop object (MikMod-specific currently)
+#       Matt Campbell (matt@campbellhome.dhs.org) April 2000 */
+#    extern DECLSPEC Mix_Music * SDLCALL Mix_LoadMUS_RW(SDL_RWops *rw);
+#    #endif
+
+Index: fenix-0.92a.dfsg1/fxi/inc/sound.h
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/inc/sound.h	2007-08-28 13:36:39.000000000 +0000
++++ fenix-0.92a.dfsg1/fxi/inc/sound.h	2007-08-28 13:37:18.000000000 +0000
+@@ -27,7 +27,8 @@
+ #ifndef __SOUND_H
+ #define __SOUND_H
+ 
+-#include "SDL_mixer.h"
++#define USE_RWOPS
++#include <SDL/SDL_mixer.h>
+ 
+ void            sound_init      ();
+ void            sound_close     ();

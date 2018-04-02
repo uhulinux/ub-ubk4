@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+mkdir -p "$UB_INSTALLDIR"/usr/share/games/wolf3d
+
+forraslista=`ls spear/ | grep SDM| tr '\n' ' '`
+for nagybetus in $forraslista ; do
+	kisbetus=`echo $nagybetus | tr [:upper:] [:lower:]`
+	install -m 644 spear/"$nagybetus" "$UB_INSTALLDIR"/usr/share/games/wolf3d/"$kisbetus"
+	done

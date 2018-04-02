@@ -1,0 +1,63 @@
+diff -Naur orig/src/Fl_x.cxx patched/src/Fl_x.cxx
+--- orig/src/Fl_x.cxx	2014-10-29 21:25:46.000000000 +0100
++++ patched/src/Fl_x.cxx	2016-03-30 23:21:03.116367866 +0200
+@@ -46,7 +46,7 @@
+ #  include <X11/Xmd.h>
+ #  include <X11/Xlocale.h>
+ #  include <X11/Xlib.h>
+-#  include <X11/keysym.h>
++#  include <X11/XKBlib.h>
+ #  include "Xutf8.h"
+ #define USE_XRANDR (HAVE_DLSYM && HAVE_DLFCN_H) // means attempt to dynamically load libXrandr.so
+ #if USE_XRANDR
+@@ -1305,14 +1305,6 @@
+   return (long)total;
+ }
+ 
+-/* Internal function to reduce "deprecated" warnings for XKeycodeToKeysym().
+-   This way we get only one warning. The option to use XkbKeycodeToKeysym()
+-   instead would not help much - see STR #2913 for more information.
+-*/
+-static KeySym fl_KeycodeToKeysym(Display *d, KeyCode k, unsigned i) {
+-  return XKeycodeToKeysym(d, k, i);
+-}
+-
+ int fl_handle(const XEvent& thisevent)
+ {
+   XEvent xevent = thisevent;
+@@ -1791,7 +1783,7 @@
+ 	  len = XUtf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+ 			     kp_buffer, kp_buffer_len, &keysym, &status);
+ 	}
+-	keysym = fl_KeycodeToKeysym(fl_display, keycode, 0);
++	keysym = XkbKeycodeToKeysym(fl_display, keycode, 0, 0);
+       } else {
+         //static XComposeStatus compose;
+         len = XLookupString((XKeyEvent*)&(xevent.xkey),
+@@ -1803,7 +1795,7 @@
+           if (len < 1) len = 1;
+           // ignore all effects of shift on the keysyms, which makes it a lot
+           // easier to program shortcuts and is Windoze-compatible:
+-          keysym = fl_KeycodeToKeysym(fl_display, keycode, 0);
++          keysym = XkbKeycodeToKeysym(fl_display, keycode, 0, 0);
+         }
+       }
+       kp_buffer[len] = 0;
+@@ -1846,7 +1838,7 @@
+       event = FL_KEYUP;
+       fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
+       // keyup events just get the unshifted keysym:
+-      keysym = fl_KeycodeToKeysym(fl_display, keycode, 0);
++      keysym = XkbKeycodeToKeysym(fl_display, keycode, 0, 0);
+     }
+ #  ifdef __sgi
+     // You can plug a microsoft keyboard into an sgi but the extra shift
+@@ -1939,7 +1931,7 @@
+     if (keysym >= 0xff91 && keysym <= 0xff9f) {
+       // Map keypad keysym to character or keysym depending on
+       // numlock state...
+-      unsigned long keysym1 = fl_KeycodeToKeysym(fl_display, keycode, 1);
++      unsigned long keysym1 = XkbKeycodeToKeysym(fl_display, keycode, 1, 0);
+       if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))
+         Fl::e_original_keysym = (int)(keysym1 | FL_KP);
+       if ((xevent.xkey.state & Mod2Mask) &&

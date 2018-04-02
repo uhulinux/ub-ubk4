@@ -1,0 +1,24 @@
+diff -Naur ORIG/src/rmd_getzpixmap.c UHU/src/rmd_getzpixmap.c
+--- ORIG/src/rmd_getzpixmap.c	2008-12-13 17:04:10.000000000 +0100
++++ UHU/src/rmd_getzpixmap.c	2009-10-28 12:07:03.000000000 +0100
+@@ -32,7 +32,7 @@
+ 
+ #include <X11/Xlib.h>
+ #include <X11/Xlibint.h>
+-#include <X11/extensions/shmstr.h>
++#include <X11/extensions/shmproto.h>
+ #include <X11/extensions/XShm.h>
+ 
+ 
+diff -Naur ORIG/src/rmd_update_image.c UHU/src/rmd_update_image.c
+--- ORIG/src/rmd_update_image.c	2008-12-13 17:20:49.000000000 +0100
++++ UHU/src/rmd_update_image.c	2009-10-28 12:11:14.000000000 +0100
+@@ -32,7 +32,7 @@
+ #include "rmd_types.h"
+ 
+ #include <X11/Xlibint.h>
+-#include <X11/extensions/shmstr.h>
++#include <X11/extensions/shmproto.h>
+ #include <X11/extensions/XShm.h>
+ 
+ 

@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+
+install -m 644 pkg/pgadmin3.desktop "$UB_INSTALLDIR"/usr/share/applications
+
+install -D -m 644 pgadmin/include/images/pgAdmin3-16.png "$UB_INSTALLDIR"/usr/share/icons/hicolor/16x16/apps/pgAdmin3.png
+install -D -m 644 pgadmin/include/images/pgAdmin3-32.png "$UB_INSTALLDIR"/usr/share/icons/hicolor/32x32/apps/pgAdmin3.png
+install -D -m 644 pgadmin/include/images/pgAdmin3.png "$UB_INSTALLDIR"/usr/share/icons/hicolor/128x128/apps/pgAdmin3.png

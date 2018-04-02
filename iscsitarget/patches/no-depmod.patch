@@ -1,0 +1,12 @@
+diff -Naurd iscsitarget-1.4.19.orig/Makefile iscsitarget-1.4.19/Makefile
+--- iscsitarget-1.4.19.orig/Makefile	2009-10-05 20:19:34.000000000 +0200
++++ iscsitarget-1.4.19/Makefile	2009-11-18 19:23:49.000000000 +0100
+@@ -197,7 +197,7 @@
+ 
+ install-files: install-usr install-etc install-doc install-kernel
+ 
+-install: install-files depmod
++install: install-files
+ 
+ install-kernel: kernel/iscsi_trgt.ko
+ 	@install -vD kernel/iscsi_trgt.ko \

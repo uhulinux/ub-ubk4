@@ -1,0 +1,35 @@
+#summary A list of command-line options for frogatto.
+
+==== For Users: ====
+*--nosound* - Mutes sound. SDL_Mixer is not initialized.
+
+*--fullscreen*  - Sets the game to run in fullscreen mode.
+
+*--width `int`*, *--height `int`*  - Sets the game window to these dimensions, scales the graphics up to that size.
+
+*--level `levelname`*  - Starts the game on the specified level.  The `levelname` is a path to a file; starting in the "~/data/levels/" directory.  It must include the type extension (e.g. .cfg).
+
+*--scale* - turns on a special pixel-art interpolation algorithm (custom, loosely based on 2xSaI) to upscale the game to 2x the size, rather than using the blocky nearest-neighbor interpolation the game currently defaults to.  Currently has some visual issues with text and transparent edges; we want to fix the algorithm to categorically solve them, rather than altering content to work around them.
+
+*--record_replay*  - Makes a new title-screen replay with whatever the user does during the next launch of the program.  This begins recording as soon as you start playing, and finishes when you press "Control-S".  When you press "Control-S", it saves a file called "~/save.cfg".  This can then be renamed and dropped in as a replacement for "~/data/levels/replay.cfg".
+
+*--compiled* - Uses precalculated tile patterns, rather than calculating which individual graphics should be used for each tile on startup.  Requires that you have an up-to-date set of compiled tile data, which is created by running the game with *--utilities=compile_levels*.
+
+==== For Programmers: ====
+*--show_hitboxes*  - Shows the collision boxes for all of the in-game objects.  Useful for tweaking said collision boxes to line up right with the actual graphics.
+
+*--benchmarks* - runs all the game's benchmarks (intended to measure the speed of certain low-level functions), prints the results to the console, and then immediately exits the program.   Generally only useful if you're actually hacking on the engine to optimize the speed of these.
+
+*--benchmarks=name* - runs just the named benchmark, rather than all of them.
+
+*--tests* - runs all of the unit tests, prints the results to the console, and then immediately exits the program.  Unit tests are sanity checks to make sure you're not breaking something already finished in the game when you add something new.
+
+*--notests* -  Normally, our unit tests are run automatically on each launch (although they don't exit the program like in the "--tests" option.  This causes them not to be run at all.
+
+*--utilities=xx* - Allows you to run any chunk of code defined in an instance of `UTILITY(xx) { ...bunch of code... }` in the existing C++ code.
+
+*--utilities=compile_levels* - Precompiles all of our autotiling data into the "~/data/compiled/" directory.
+
+==== Note on directories: ====
+   When I refer to: "~/", I mean the root level of your frogatto folder.  On windows, or unix-built-from-source, this is the same folder the executable is in.  On a mac, this is inside the double-clickable Frogatto application, and can be accessed by right clicking on the application, and selecting the menu option "Show Package Contents".  This shows a secret folder of what's inside the program, and the "~/" folder is the one inside "Contents" called "Resources".
+

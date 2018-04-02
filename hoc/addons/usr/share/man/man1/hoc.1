@@ -1,0 +1,5188 @@
+.\" -*-nroff-*-
+.\" ====================================================================
+.\"  @Troff-man-file{
+.\"     author          = "Nelson H. F. Beebe",
+.\"     version         = "7.0.6.beta",
+.\"     date            = "07 August 2002",
+.\"     time            = "19:22:44 MDT",
+.\"     filename        = "hoc.1",
+.\"     address         = "Center for Scientific Computing
+.\"                        University of Utah
+.\"                        Department of Mathematics, 322 INSCC
+.\"                        155 S 1400 E RM 233
+.\"                        Salt Lake City, UT 84112-0090
+.\"                        USA",
+.\"     telephone       = "+1 801 581 5254",
+.\"     FAX             = "+1 801 585 1640, +1 801 581 4148",
+.\"     URL             = "http://www.math.utah.edu/~beebe",
+.\"     checksum        = "25456 5188 19182 126394",
+.\"     email           = "beebe@math.utah.edu, beebe@acm.org,
+.\"                        beebe@computer.org, beebe@ieee.org
+.\"                        (Internet)",
+.\"     codetable       = "ISO/ASCII",
+.\"     keywords        = "calculator; floating-point arithmetic; hoc
+.\"                        programming language; IEEE 754; software
+.\"                        internationalization",
+.\"     supported       = "yes",
+.\"     docstring       = "This file is the UNIX nroff/troff manual page
+.\"                        documentation for hoc, the extended
+.\"                        high-order calculator.
+.\"
+.\"                        The checksum field above contains a CRC-16
+.\"                        checksum as the first value, followed by the
+.\"                        equivalent of the standard UNIX wc (word
+.\"                        count) utility output of lines, words, and
+.\"                        characters.  This is produced by Robert
+.\"                        Solovay's checksum utility.",
+.\"  }
+.\" ====================================================================
+.TH HOC 1 09-Aug-2002 7.06.beta
+.\" .CT 1 numbers
+.\" ----------------------------------------------
+.SH NAME
+hoc \(em (high-order calculator) [interactive floating-point language]
+.\" ----------------------------------------------
+.SH SYNOPSIS
+.B hoc
+[
+.B \-author
+]
+[
+.B \-copyright
+]
+[
+.BI \-D name
+]
+.if n .ti +\w'\fBhoc\fP 'u
+[
+.BI \-D name=number
+]
+[
+.BI \-D name="string"
+]
+.if t .ti +\w'\fBhoc\fP 'u
+.if n .ti +\w'\fBhoc\fP 'u
+[
+.BI \-D name=symbol
+]
+[
+.B \-?
+]
+[
+.B \-help
+]
+[
+.B \-no-banner
+]
+.if n .ti +\w'\fBhoc\fP 'u
+[
+.B \-no-cd
+]
+[
+.B \-no-help-file
+]
+[
+.B \-no-load
+]
+.if n .ti +\w'\fBhoc\fP 'u
+.if t .ti +\w'\fBhoc\fP 'u
+[
+.B \-no-logfile
+]
+[
+.B \-no-readline
+]
+[
+.B \-no-save
+]
+.if n .ti +\w'\fBhoc\fP 'u
+[
+.B \-no-site-file
+]
+[
+.B \-no-translation-file
+]
+.if n .ti +\w'\fBhoc\fP 'u
+[
+.B \-no-user-file
+]
+.if t .ti +\w'\fBhoc\fP 'u
+[
+.B \-quick
+]
+[
+.B \-secure
+]
+[
+.B \-silent
+]
+.if n .ti +\w'\fBhoc\fP 'u
+[
+.B \-trace-file-opening
+]
+[
+.BI \-U name
+]
+[
+.B \-version
+]
+.if n .ti +\w'\fBhoc\fP 'u
+[
+.I "file .\|.\|."
+]
+.PP
+.B hoc
+can be built in up to three floating-point
+precisions, corresponding to the C/C++ data types
+.IR float ,
+.IR double ,
+and
+.IR "long double" .
+These are conventionally distinguished by suffixes
+indicating the number of bits in the
+floating-point system:
+.BR hoc32 ,
+.B hoc64
+(same as
+.BR hoc ),
+.BR hoc80 ,
+and
+.BR hoc128 .
+Support for precisions other than 64-bit
+.I double
+is deficient, or nonexistent, in C/C++
+implementations on several operating systems, so
+some
+.B hoc
+precisions may be unavailable on your system.
+.\" ----------------------------------------------
+.SH OPTIONS
+.B hoc
+options can be prefixed with either one or two
+hyphens, and can be abbreviated to any unique
+prefix.  Thus,
+.BR \-a ,
+.BR \-author ,
+and
+.B \-\-auth
+are equivalent.
+.PP
+To avoid confusion with options, if a filename
+begins with a hyphen, it must be disguised by a
+leading absolute or relative directory path, e.g.,
+.I /tmp/-foo.hoc
+or
+.IR ./-foo.hoc .
+.\"-----------------------------------------------
+.TP \w'\-no-translation-file'u+3n
+.B \-author
+Display an author credit, and software
+distribution information, on the standard error
+unit,
+.IR stderr ,
+and then terminate with a success return code.
+Sometimes an executable program is separated from
+its documentation and source code; this option
+provides a way to recover from that.
+.\"-----------------------------------------------
+.TP
+.B \-copyright
+Display copyright information on the standard
+error unit,
+.IR stderr ,
+and then terminate with a success return code.
+.\"-----------------------------------------------
+.TP
+.BI \-D name
+Define the numeric variable
+.I name
+to have the value 1.
+.\"-----------------------------------------------
+.TP
+.BI \-D name=number
+Define the numeric variable
+.I name
+to have the value
+.IR number .
+.IP
+If = is changed to :=, the assignment is
+permanent:
+.I name
+cannot then subsequently be redefined.
+.\"-----------------------------------------------
+.TP
+.BI \-D name="string"
+Define the string variable
+.I name
+to have the value
+.IR \&"string" .
+.IP
+If = is changed to :=, the assignment is
+permanent:
+.I name
+cannot then subsequently be redefined.
+.IP
+Since command shells on some operating systems
+interpret quotation marks, it is usually necessary
+to protect them.  On UNIX-like systems, use
+.BI '\-D name="string" '
+or if the value contains no characters that are
+significant to the command shell,
+.BI \-D name=\e"string\e"
+.\"-----------------------------------------------
+.TP
+.BI \-D name=symbol
+Define the numeric or string variable
+.I name
+to have the value of that of
+.IR symbol ,
+which must be an existing named constant or
+variable.
+.IP
+If = is changed to :=, the assignment is
+permanent:
+.I name
+cannot then subsequently be redefined.
+.\"-----------------------------------------------
+.TP
+.BR \-help " or " \-?
+Display a help message on
+.IR stderr ,
+giving a brief usage description, and then
+terminate with a success return code.
+.\"-----------------------------------------------
+.TP
+.B \-no-banner
+Suppress any welcome banners normally printed by
+dynamically-loaded library code.
+.IP
+This option can also be set via the
+.B hoc
+system variable
+.BR _\|_BANNER_\|_ ,
+but it must be set in an initialization file
+before code in that file to print the welcome
+banner is reached.
+.\"-----------------------------------------------
+.TP
+.B \-no-cd
+Disable the change-directory function,
+.BI cd( dir ) ,
+and the print-working-directory function,
+.BR pwd(\|) .
+.IP
+This option is a security feature: it takes effect
+only
+.I after
+all initialization files have been processed.
+.\"-----------------------------------------------
+.TP
+.B \-no-help-file
+Suppress loading of system-wide
+.B hoc
+help files at startup.
+.\"-----------------------------------------------
+.TP
+.B \-no-load
+Disable the
+.B load(\|)
+function.  It will continue to be recognized, but
+when invoked, will simply print a warning that it
+has been disabled.
+.IP
+This option is a security feature: it takes effect
+only
+.I after
+all initialization files have been processed.
+.\"-----------------------------------------------
+.TP
+.B \-no-logfile
+Disable the
+.BR logfile(\|) ,
+.BR logon(\|) ,
+and
+.B logoff(\|)
+functions.  They will continue to be recognized,
+but when invoked, will simply print a warning that
+they have been disabled.
+.IP
+This option is a security feature: it takes effect
+only
+.I after
+all initialization files have been processed.
+.\"-----------------------------------------------
+.TP
+.B \-no-readline
+Suppress use of the GNU
+.I readline
+library: command completion, editing and recall
+are then not available.
+.IP
+On some systems, it may be necessary to use this
+option when
+.B hoc
+is used in international mode (see the
+.B INTERNATIONALIZATION
+section below) in order to get accented letters
+displayed properly.
+.\"-----------------------------------------------
+.TP
+.B \-no-save
+Disable the
+.B save(\|)
+function.  It will continue to be recognized, but
+when invoked, will simply print a warning that it
+has been disabled.
+.IP
+This option is a security feature: it takes effect
+only
+.I after
+all initialization files have been processed.
+.\"-----------------------------------------------
+.TP
+.B \-no-site-file
+Suppress loading of the system-wide non-help
+startup files.
+.\"-----------------------------------------------
+.TP
+.B \-no-translation-file
+Suppress loading of the system-wide message
+translation files.
+.\"-----------------------------------------------
+.TP
+.B \-no-user-file
+Suppress loading of the user-specific startup
+file.
+.\"-----------------------------------------------
+.TP
+.B \-quick
+Suppress loading of all startup files: this option
+is equivalent to
+.B \-no-help-file
+.B \-no-site-file
+.B \-no-translation-file
+.BR \-no-user-file .
+.\"-----------------------------------------------
+.TP
+.B \-secure
+Enable all security features:  this option is
+equivalent to
+.B \-no-cd
+.B \-no-load
+.B \-no-logfile
+.BR \-no-save ,
+and in addition, makes it impossible to trace file
+openings by setting the
+.B _\|_DEBUG_OPEN_\|_
+system variable to a nonzero value.
+.\"-----------------------------------------------
+.TP
+.B \-silent
+Suppress printing of prompts for interactive
+input.
+.B hoc
+never prompts when it is reading noninteractive
+files.
+.IP
+The
+.B hoc
+system variable
+.B _\|_VERBOSE_\|_
+can also be set to zero at run time to turn off
+prompts; setting it to nonzero turns them back on.
+.IP
+The
+.B hoc
+system variable
+.B _\|_PROMPT_\|_
+contains the prompt string: it can be redefined at
+any time.
+.\"-----------------------------------------------
+.TP
+.BI \-trace-file-opening
+Set the
+.B hoc
+variable
+.B _\|_DEBUG_OPEN_\|_
+to a nonzero value to trace input file opening
+attempts.
+.\"-----------------------------------------------
+.TP
+.BI \-U name
+Undefine the variable
+.IR name .
+.\"-----------------------------------------------
+.TP
+.B \-version
+Display the program version number and release
+date on
+.IR stderr ,
+and then terminate with a success return code.
+.\" ----------------------------------------------
+.SH DESCRIPTION
+.B hoc
+interprets a simple language for floating-point
+arithmetic, at about the level of Basic, with
+C-like syntax and functions.
+However, unlike Basic,
+.B hoc
+has particularly rich support for floating-point
+arithmetic, and its facilities are certainly
+better than that standardly provided by most
+programming languages, such as C, C++, and
+Fortran.
+.PP
+.B hoc
+recognizes the three popular line-ending
+conventions in text files: line feed (LF) (UNIX),
+carriage return (CR) (Apple MacOS), and CR LF (PC
+DOS, Microsoft Windows, and several older
+systems).  It also ignores one or more Ctl-Z
+characters at end of file, a horrid relic of some
+legacy desktop operating systems.  Thus, its input
+files should not even require line-terminator
+translation when they are moved between systems.
+.PP
+To get a flavor of what typical
+.B hoc
+code looks like, visit the \&\fC*.hoc\fP and
+\&\fC*.rc\fP files in the
+.B hoc
+installation directory tree: see the
+.B "INITIALIZATION FILES"
+section below for their location.
+.PP
+The named
+.IR file s
+are read and interpreted in order.
+If no
+.I file
+is given or if
+.I file
+is
+.IR \- ,
+.B hoc
+interprets the standard input.
+.PP
+See the
+.B "INPUT FILE SEARCH PATH"
+section below for details on how
+.B hoc
+finds input files.
+.PP
+.B hoc
+input consists of
+.I expressions
+and
+.IR statements .
+Expressions are evaluated and their results
+printed.  Statements, typically assignments and
+function or procedure definitions, produce no
+output unless they explicitly call
+.BR print .
+.\" ..............................................
+.SS "Word completion"
+When
+.B hoc
+has been built with the GNU
+.I readline
+library, word completion can be used to save
+typing effort.  It is normally requested by an
+ESCape character following a prefix of a word in
+.BR hoc 's
+symbol table:
+.B hoc
+will respond with an audible beep, and a list of
+words that match that prefix, or if only one word
+matches, it will silently complete the word:
+.RS
+.nf
+\&\fC\fBhoc>\fP c<ESCape>
+cbrt ceil copysign cos cosd cosh
+\fBhoc>\fP co<ESCape>
+copysign cos cosd cosh
+\fBhoc>\fP cop<ESCape>
+\fBhoc>\fP copysign\fP
+.fi
+.RE
+.\" groff bug: bold mode continues into next line,
+.\" so explicitly reset the font:
+\&\fRThe character used to request completion can
+be changed: see the\fP
+.B "INITIALIZATION FILES"
+section below.
+.\" ..............................................
+.SS "Command history and editing"
+When
+.B hoc
+has been built with the GNU
+.I readline
+library, convenient command history and editing
+support is available, much like it is in the
+UNIX
+.BR bash (1),
+.BR ksh (1)
+and
+.BR tcsh (1)
+shells, and in a few GNU programs, like
+the
+.BR bc (1)
+and
+.BR genius (1)
+calculators.   The default history and editing
+mode is
+.BR emacs (1)-style;
+you can also get
+.BR vi (1)-style
+by suitable customizations: see the
+.B "INITIALIZATION FILES"
+section below.
+.PP
+In the default mode,
+.I C-p
+(hold the Control key down while typing p) moves
+up in the history list,
+.I C-n
+moves down,
+.I C-b
+moves backward in the current line,
+.I C-f
+moves forward,
+.I C-d
+deletes forward,
+.I DELete
+deletes backward,
+.I C-a
+moves to the beginning of the line,
+.I C-e
+moves to the end of the line,
+.I C-l
+repaints the screen, reprinting the current line
+at the top, and
+.I RETurn
+resubmits the line for execution.
+.PP
+For more details, consult the
+.I "GNU Readline Library"
+manual, available online in the
+.I info
+system.  In
+.BR emacs (1);
+type
+.I "C-h i mreadline"
+to get there.
+.\" ..............................................
+.SS Numbers
+All numbers in
+.B hoc
+are stored as double-precision floating-point
+values.
+.PP
+On systems with IEEE 754 arithmetic, such numbers
+are capable of representing integers of up to 53
+bits exactly, excluding the sign bit.  This is an
+integer range of \-(2^53) .\|.\|. 2^53, or
+\-9,007,199,254,740,992
+\&.\|.\|. 9,007,199,254,740,992.
+.PP
+Some systems may have
+.B hoc
+variants named
+.BR hoc32 ,
+.BR hoc64 ,
+.BR hoc80 ,
+or
+.BR hoc128 ,
+in which case,
+.BR hoc 's
+default precision is indicated by the program
+name: 32-bit, 64-bit, 80-bit, or 128-bit.
+.B hoc
+and
+.B hoc64
+are identical on all systems with IEEE 754
+arithmetic.
+.PP
+For
+.BR hoc32 ,
+on systems with IEEE 754 arithmetic, numbers are
+capable of representing integers up to 24 bits
+exactly, excluding the sign bit.  This is an
+integer range of \-(2^24) \&.\|.\|. 2^24, or
+\-16,777,216 \&.\|.\|. +16,777,216.
+.PP
+For
+.BR hoc80 ,
+on systems with IEEE 754 arithmetic, numbers are
+capable of representing integers up to 64 bits
+exactly, excluding the sign bit.  This is an
+integer range of \-(2^64) \&.\|.\|. 2^64, or
+\-18,446,744,073,709,551,616
+\&.\|.\|. +18,446,744,073,709,551,616.
+.PP
+For
+.BR hoc128 ,
+on systems with IEEE 754 arithmetic, numbers are
+capable of representing integers up to 112 bits
+exactly, excluding the sign bit.  This is an
+integer range of \-(2^112) \&.\|.\|. 2^112, or
+\-5,192,296,858,534,827,628,530,496,329,220,096
+\&.\|.\|.
++5,192,296,858,534,827,628,530,496,329,220,096.
+.PP
+Numbers may be signed, and may optionally contain
+a decimal point, a power-of-ten exponent, and a
+precision suffix.  The exponent consists of an
+exponent letter, one of
+.IR d ,
+.IR D ,
+.IR e ,
+.IR E ,
+.IR q ,
+or
+.IR Q
+(supported by one or more of Ada, C, C++, Fortran,
+Java, and Pascal), followed by an
+optionally-signed integer.  The precision suffix
+(used by C, C++, and Java) is one of
+.IR f ,
+.IR F ,
+.IR l ,
+or
+.IR L .
+The suffix does
+.I not
+affect the precision of the constant for
+.BR hoc :
+it is recognized only to simplify incorporation
+into
+.B hoc
+programs of numbers from programs in other
+languages, and their output.
+.PP
+A hexadecimal floating-point number format,
+introduced in the latest ISO C Standard,
+.IR "ISO/IEC 9899:1999 (E) Programming languages \(em C" ,
+usually known by its short name,
+.IR C99 ,
+is also supported, and implemented by portable
+private code in
+.BR hoc .
+This format consists of an optional sign, then
+.I 0x
+or
+.IR 0X ,
+followed by one or more hexadecimal digits
+.RI ( "0\(mi9 A\(miF a\(mif" )
+containing at most one hexadecimal point,
+optionally followed by a binary (power-of-two)
+exponent consisting of
+.I p
+or
+.I P
+followed by an optionally-signed decimal integer.
+If present, the exponent may optionally be
+followed by a precision suffix letter: one of
+.IR f ,
+.IR F ,
+.IR l ,
+or
+.IR L .
+Thus,
+.IR \-0x1.00000p8 ,
+.IR \-0x100 ,
+.IR \-0x100000p-12f ,
+.IR \-0x10p+4L ,
+.IR \-0x1p+8 ,
+.IR \-0x1p00008 ,
+and
+.I \-0x1p8
+all represent the decimal number
+.IR \-256 .
+.PP
+The hexadecimal format, while awkward for humans,
+has the advantage of guaranteeing exact
+input/output conversions on all platforms, and
+.B hoc
+consequently uses this format in files created by
+the
+.B save(\|)
+command.
+.\" ..............................................
+.SS Strings
+String constants are delimited by quotation marks
+(\fC".\|.\|."\fP), and may not span multiple
+lines, unless the embedded line breaks are each
+prefixed with a backslash, which is removed,
+leaving the newline in the string.
+.PP
+All characters in 1 .\|.\|. 255 are representable
+in strings; as in C and C++, character 0 (ASCII
+NUL) is reserved as a string terminator.
+.PP
+In string constants, nonprintable characters may
+be represented by the usual escape sequences
+defined in Standard C and Standard C++, plus one
+extension (\fB\eE\fP):
+.RS
+.TP \w'\fB\eo\ \eoo\ \eooo\fP'u+2n
+.B \e\e
+backslash: ASCII decimal 92.
+.TP
+.B \e"
+quotation mark: ASCII decimal 34.
+.TP
+.B \ea
+alert or bell (ASCII BEL: decimal 7).
+.TP
+.B \eb
+backspace (ASCII BS: decimal 8).
+.TP
+.B \eE
+escape (ASCII ESC: decimal 27).
+.TP
+.B \ef
+formfeed (ASCII FF or NP: decimal 12).
+.TP
+.B \en
+newline (ASCII LF or NL: decimal 10).
+.TP
+.B \er
+carriage return (ASCII CR: decimal 13).
+.TP
+.B \et
+horizontal tab (ASCII HT: decimal 9).
+.TP
+.B \ev
+vertical tab (ASCII VT: decimal 11).
+.TP
+.B "\eo \eoo \eooo"
+octal character number (\fBo\fP = \fI0\(mi7\fP) in
+one to three digits.
+.TP
+.B \exh.\|.\|.
+hexadecimal character (\fBh\fP =
+\&\fI0\(mi9A\(miF\fP or \fI0\(mi9a\(mif\fP) in one
+or more digits.
+.RE
+Backslash followed by any other character than
+those listed is simply discarded: \fB\eW\fP
+reduces to \fBW\fP.
+.\" ..............................................
+.SS Variables
+Variable names consist of an initial letter or
+underscore, followed by any number of letters,
+underscores, or digits.  Lettercase is
+.IR significant .
+Letters are considered to be
+.IR A\(miZ ,
+.IR a\(miz ,
+and any characters in the range 160 \&.\|.\|. 255
+of an 8-bit character set.  Use of characters in
+the latter range is normally not recommended,
+because they are often difficult, or impossible,
+to generate on some computer keyboards.
+Nevertheless, it does permit non-English words to
+be spelled correctly; see the
+.B INTERNATIONALIZATION
+section below.
+.PP
+Underscore
+.RI "(\|" _ "\|)"
+by itself is a reserved variable containing the
+value of the last
+.I numeric
+expression evaluated.  Double underscore
+.RI "(\|" _\|_ "\|)"
+is a reserved variable containing the value of the
+last
+.I string
+expression evaluated.  They cannot be assigned to
+by user code.
+.\" ..............................................
+.SS "Predefined numeric constants and variables"
+Certain immutable named constants are already
+initialized:
+.RS
+.\"-----------------------------------------------
+.TP \w'\fBINF\fP\ or\ \fBInf\fP\ or\ \fBInfinity\fP'u+3n
+.B CATALAN
+.na
+Catalan's constant:
+sum((\-1)^i/(2*i+1)^2, i = 0..infinity) =
+.if n .br
+approximately 0.915965594177219015054603514932.\|.\|.
+.ad
+.\"-----------------------------------------------
+.TP
+.B CLASS_xxx
+One of eleven possible return values from the
+.B class(x)
+function; see the section
+.B "DESCRIPTIONS OF BUILT-IN FUNCTIONS AND PROCEDURES"
+below for details.
+.\"-----------------------------------------------
+.TP
+.B DEG
+180/PI, degrees per radian
+.\"-----------------------------------------------
+.TP
+.B E
+base of natural logarithms
+.\"-----------------------------------------------
+.TP
+.B GAMMA
+Euler's constant:
+.br
+.na
+limit(sum(1/i,i=1.\|.\|.n) \(mi\& ln(n), n \(-> infinity) =
+approximately 0.577215664901532860606512090082.\|.\|.
+.ad
+.\"-----------------------------------------------
+.TP
+.BR INF " or " Inf " or " Infinity
+IEEE-754 floating-point infinity
+.\"-----------------------------------------------
+.TP
+.B MAXNORMAL
+Largest finite normalized floating-point number.
+.\"-----------------------------------------------
+.TP
+.B MINNORMAL
+Smallest (in absolute value) nonzero normalized
+floating-point number.
+.\"-----------------------------------------------
+.TP
+.B MINSUBNORMAL
+Smallest (in absolute value) subnormal
+floating-point number.  If your computer system
+does not support subnormal numbers, this is
+identical to
+.BR MINNORMAL .
+.\"-----------------------------------------------
+.TP
+.BR NAN " or " NaN
+IEEE-754 floating-point not-a-number
+.\"-----------------------------------------------
+.TP
+.B PHI
+.na
+golden ratio:
+.if n .br
+(1 + sqrt(5))/2 =
+.if n .br
+approximately 1.61803398874989484820458683436.\|.\|.
+.ad
+.\"-----------------------------------------------
+.TP
+.B PI
+.na
+ratio of the circumference of a circle to its
+diameter, approximately
+3.14159265358979323846264338327.\|.\|.
+.ad
+.\"-----------------------------------------------
+.TP
+.B PREC
+maximum number of significant digits in output,
+initially 17 on most systems (the precise value is
+computed dynamically, from Matula's 1968 result:
+.IR "ceil(N/log_b(10) + 1)" ,
+for a host floating-point system with
+.I N
+.RI base- b
+digits).
+.B "PREC = 0"
+gives shortest `exact' values.
+.\"-----------------------------------------------
+.TP
+.BR QNAN " or " QNaN
+IEEE-754 floating-point quiet not-a-number
+.\"-----------------------------------------------
+.TP
+.BR SNAN " or " SNaN
+IEEE-754 floating-point signaling not-a-number
+.\"-----------------------------------------------
+.RE
+.PP
+More information on the floating-point constants
+is available in the
+.B "FLOATING-POINT ARITHMETIC"
+section below.
+.\" ..............................................
+.SS "Predefined system constants and variables"
+.B hoc
+also provides a number of system constants and
+variables, adopting the C/C++ convention that
+names beginning with two underscores are reserved
+for the implementation:
+.RS
+.\"-----------------------------------------------
+.TP \w'_\|_PACKAGE_BUGREPORT_\|_'u+3n
+.B "_"
+[immutable number] Value of the last numeric
+expression printed (initialized to 0.0 on
+startup).
+.\"-----------------------------------------------
+.TP
+.B "_\|_"
+[immutable string] Value of the last string
+expression printed (initialized to an empty string
+on startup).
+.\"-----------------------------------------------
+.TP
+.B _\|_BANNER_\|_
+[reassignable number] Nonzero (true) if printing
+of welcome banners is permitted.  It can be
+changed by the
+.B \-no-banner
+option.
+.\"-----------------------------------------------
+.TP
+.B _\|_CPU_LIMIT_\|_
+[immutable number] Current limit on CPU use, in
+seconds.  It is normally infinite, but can be
+reset by the
+.B cpulimit(\|)
+function.
+.\"-----------------------------------------------
+.TP
+.B _\|_DATE_\|_
+[constant string] Date of the start of job
+execution, in the form \&\fC"Dec 16 2001"\fP.  The
+day number has a leading space if only one digit
+is needed, so that the string always has constant
+width.
+.\"-----------------------------------------------
+.TP
+.B _\|_FILE_\|_
+[constant string]
+Name of the current input file.  This is
+\&\fC"/dev/stdin"\fP when
+.B hoc
+is reading from the standard input.
+.\"-----------------------------------------------
+.TP
+.BI _\|_FILE_\|_[ n ]
+[constant string]
+Name of the
+.IR n -th
+input file in the current job.  This provides a
+history of exactly what files have been read.
+Because
+.B hoc
+does not yet support arrays, the only way to
+display these is with the
+.B who(\|)
+function.
+.\"-----------------------------------------------
+.TP
+.B _\|_GID_\|_
+[constant number] Group numeric identifier code.
+.IP
+On operating systems that do not support the
+concept of group and user identifiers, it is set
+to zero.
+.\"-----------------------------------------------
+.TP
+.B _\|_HOCRC_\|_
+[constant string] Pathless filename of the
+optional
+.B hoc
+user startup file; it is stored in the user's home
+directory.
+.\"-----------------------------------------------
+.TP
+.B _\|_IEEE_754_\|_
+[constant number] Nonzero (true) if the host
+system supports IEEE 754 arithmetic.
+.\"-----------------------------------------------
+.TP
+.B _\|_LINE_\|_
+[constant number]
+Number of the current input line in the file named
+by
+.BR _\|_FILE_\|_ .
+.\"-----------------------------------------------
+.TP
+.B _\|_MAX_xxx_\|_
+[immutable number] One of several numeric
+constants that report current sizes of internal
+storage areas in
+.B hoc
+that grow as needed.  See the
+.B "IMPLEMENTATION LIMITS"
+section below for details.
+.\"-----------------------------------------------
+.TP
+.B _\|_PACKAGE_BUGREPORT_\|_
+[constant string] Where to report bugs.
+.\"-----------------------------------------------
+.TP
+.B _\|_PACKAGE_DATE_\|_
+[constant string]
+Date of last modification of the software.
+.\" TO DO: _\|_DATE_\|_ is "Dec 16 2001", while
+.\" _\|_PACKAGE_DATE_\|_ is "15-Dec-2001".  Perhaps
+.\" they should be made consistent?
+.\"-----------------------------------------------
+.TP
+.B _\|_PACKAGE_NAME_\|_
+[constant string] Program name.
+.\"-----------------------------------------------
+.TP
+.B _\|_PACKAGE_STRING_\|_
+[constant string]
+Program name and version number.
+.\"-----------------------------------------------
+.TP
+.B _\|_PACKAGE_VERSION_\|_
+[constant string]
+Program version number.
+.\"-----------------------------------------------
+.TP
+.B _\|_PID_\|_
+[constant number] Numeric process identifier.
+.IP
+On operating systems that do not support such a
+concept, it is set to zero.
+.\"-----------------------------------------------
+.TP
+.B _\|_PROMPT_\|_
+[reassignable string]
+Current prompt string.  Prompting is controlled by
+the setting of
+.B _\|_VERBOSE_\|_
+(see below).
+.IP
+For example,
+.RS
+\&\fC _\|_PROMPT_\|_ = "\en\eE[7mInput:\eE[0m "\fP
+.RE
+.IP
+will produce a blank line followed by a prompt in
+inverse video in terminal emulators, such as
+.BR xterm (1)
+and DEC VT100, that follow the ANSI X3.64-1979 or
+ISO 6429-1983 terminal standards.
+.IP
+If
+.B _\|_PROMPT_\|_
+contains the two-character format string %d, that
+string will be replaced by the prompt count: for
+example, this silly setting
+.RS
+\&\fC _\|_PROMPT_\|_="\eE[4;5;34;43m[%d]\eE[0m:\ "\fP
+.RE
+.IP
+will display the count digits in blue, and
+underlined, on a yellow background, in an
+.BR xterm (1)
+window that supports text color attributes. [Run
+\&\fCdircolors -p\fP for more information on color
+settings.]
+.\"-----------------------------------------------
+.TP
+.B _\|_READLINE_\|_
+[constant number]
+Nonzero (true) if the GNU
+.I readline
+library is in use.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCDIR_\|_
+[constant string] Name of the installation
+directory in which
+.B hoc
+startup files are stored.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCHLPBASE_\|_
+[constant string] Pathless filename of the
+top-level startup help file.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCHLP_\|_
+[constant string] Full filename of the top-level
+startup help file.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCPATH_\|_
+[constant string] System directory search path
+that is substituted for an empty component in the
+.B HOCPATH
+environment variable input file directory search
+list.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCRCBASE_\|_
+[constant string] Pathless filename of the
+top-level startup help file.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCRC_\|_
+[constant string] Full filename of the top-level
+startup file.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCXLTBASE_\|_
+[constant string] Pathless filename of the
+top-level translation file.
+.\"-----------------------------------------------
+.TP
+.B _\|_SYSHOCXLT_\|_
+[constant string] Full filename of the top-level
+translation file.
+.\"-----------------------------------------------
+.TP
+.B _\|_TIME_\|_
+[constant string] Local time-of-day (24-hour
+clock) of the start of job execution, in the usual
+hours, minutes, seconds form \&\fC"14:57:23"\fP.
+.\"-----------------------------------------------
+.TP
+.B _\|_UID_\|_
+[constant number] User numeric identifier code.
+.IP
+On operating systems that do not support the
+concept of group and user identifiers, it is set
+to zero.
+.\"-----------------------------------------------
+.TP
+.B _\|_VERBOSE_\|_
+[reassignable number] Nonzero (true) if
+.B hoc
+should prompt for input from interactive files.
+The actual prompt string is controlled by the
+.B _\|_PROMPT_\|_
+variable.
+.IP
+[NB: A bug in the GNU
+.I readline
+library (version 4.2a) makes this variable
+ineffective; it works correctly with the
+.B \-no-readline
+option.  The bug has been reported to the
+.I readline
+maintainers.]
+.\"-----------------------------------------------
+.RE
+.\" ..............................................
+.SS "Numeric expressions"
+Numeric expressions are formed with these C-like
+operators, listed by decreasing precedence.
+.RS
+.\"-----------------------------------------------
+.TP \w'\fB"=\ \ +=\ \ -=\ \ *=\ \ /=\ \ %=\ \ :="\fP'u+3n
+.B ^
+Exponentiation.
+.\"-----------------------------------------------
+.TP
+.B "!  -  ++  --"
+Logical negation, arithmetic negation,
+increment-by-one, decrement-by-one.  As in
+C and C++, the latter two may be applied
+.I before
+a variable (acting first before taking the value),
+or
+.I after
+(taking the current value first, then acting).
+.\"-----------------------------------------------
+.TP
+.B "*  /  %"
+Multiply, divide, modulus.
+.\"-----------------------------------------------
+.TP
+.B "+  -"
+Add, subtract.
+.\"-----------------------------------------------
+.TP
+.B ">  >=  <  <=  <>  ==  !="
+Greater than, greater than or equal to, less than,
+less than or equal to, less than or greater than,
+equal to, not equal to.
+.IP
+The
+.B <>
+operator is
+.I not
+the same as
+.BR != ;
+they differ when one of the operands is a NaN.
+Since NaNs are unordered, NaN <> NaN is 0 (false),
+while NaN != NaN is 1 (true).
+.\"-----------------------------------------------
+.TP
+.B &&
+Logical and.  Both operands are
+.I always
+evaluated, unlike in C and C++, where the second
+is evaluated only if the first is nonzero (true).
+.\"-----------------------------------------------
+.TP
+.B ||
+Logical or.  Both operands are
+.I always
+evaluated, unlike in C and C++, where the second
+is evaluated only if the first is zero (false).
+.\"-----------------------------------------------
+.TP
+.B "=  +=  -=  *=  /=  %=  :="
+Assignment, assign the left-hand side the (sum,
+difference, product, dividend, or modulus) of its
+current value and the right-hand side, permanent
+assignment.
+The operator
+.B :=
+is a
+.I one-time-only
+assignment operator, used for defining permanent
+constants that cannot be redefined in the same
+.B hoc
+session.
+.IP
+As in C and C++, assignment is a right-associative
+expression whose value is the left-hand side.
+This means that \&\fCx = y = z = 3\fP is
+interpreted as \&\fCx = (y = (z = 3))\fP.  That
+is, \&\fC3\fP is assigned to \&\fCz\fP, then that
+result is assigned to \&\fCy\fP, and finally, that
+result is assigned to \&\fCx\fP, so all three
+variables are assigned the value \&\fC3\fP.
+Similarly, \&\fCsqrt(x = 4)\fP assigns the value
+\&\fC4\fP to \fCx\fP before computing and
+returning its square root.
+.\"-----------------------------------------------
+.RE
+.PP
+Expression lists in
+.BR print -like
+statements, and in argument lists, are evaluated
+in strict
+.I left-to-right
+order.  Thus, the output of expressions with side
+effects, such as
+.RS
+.nf
+\&\fCn = 3
+print ++n, n++\fP
+.fi
+.RE
+is predictable: that example prints
+.RS
+\&\fC4 4\fP
+.RE
+.\" ..............................................
+.SS "String expressions"
+String expressions support only the relational
+operators (\&\fB>\ \ >=\ \ <\ \ <=\ \ ==\ \ !=\fP)
+and the simple assignment operators
+(\&\fB=\ \ :=\fP), plus concatenation, which is
+indicated by two successive string expressions,
+without any specific operator, following the
+practice in C, C++, and
+.BR awk (1).
+These two assignments are equivalent:
+.RS
+.nf
+\&\fCs = "hello"   ", "   "wor"   "ld"
+s = "hello, world"\fP
+.fi
+.RE
+Numbers in string expressions are converted to
+strings according to the current precision
+variable, \fBPREC\fP.
+.RS
+.nf
+\&\fCk = 123
+PREC = 4
+s = "abc" k "def" PI
+println s
+abc123def3.142\fP
+.fi
+.RE
+Several string functions listed below augment
+string expressions.
+.\" ..............................................
+.SS "Built-in functions and procedures"
+Longer documentation of the built-in functions and
+procedures is relegated to the later section,
+.BR "DESCRIPTIONS OF BUILT-IN FUNCTIONS AND PROCEDURES" .
+.PP
+These numeric built-in functions take zero
+arguments:
+.BR rand ,
+.BR second ,
+.BR snan ,
+and
+.BR systime .
+.PP
+These numeric built-in functions take one numeric
+argument:
+.BR abs ,
+.BR acos ,
+.BR acosh ,
+.BR asin ,
+.BR asinh ,
+.BR atan ,
+.BR atanh ,
+.BR cbrt ,
+.BR ceil ,
+.BR cos ,
+.BR cosd ,
+.BR cosh ,
+.BR double ,
+.BR erf ,
+.BR erfc ,
+.BR exp ,
+.BR expm1 ,
+.BR exponent ,
+.BR factorial ,
+.BR floor ,
+.BR gamma ,
+.BR ilogb ,
+.BR int ,
+.BR isfinite ,
+.BR isinf ,
+.BR isnan ,
+.BR isnormal ,
+.BR isqnan ,
+.BR issnan ,
+.BR issubnormal ,
+.BR J0 ,
+.BR J1 ,
+.BR lgamma ,
+.BR ln ,
+.BR log ,
+.BR log10 ,
+.BR log1p ,
+.BR log2 ,
+.BR macheps ,
+.BR nint ,
+.BR number ,
+.BR randl ,
+.BR rint ,
+.BR rsqrt ,
+.BR setrand ,
+.BR significand ,
+.BR sin ,
+.BR sind ,
+.BR single ,
+.BR sinh ,
+.BR sqrt ,
+.BR tan ,
+.BR tand ,
+.BR tanh ,
+.BR trunc ,
+.BR Y0 ,
+and
+.BR Y1 .
+.PP
+These numeric built-in functions take two numeric
+arguments:
+.BR copysign ,
+.BR errbits ,
+.BR fmod ,
+.BR gcd ,
+.BR hypot ,
+.BR Jn ,
+.BR lcm ,
+.BR ldexp ,
+.BR logb ,
+.BR max ,
+.BR min ,
+.BR randint ,
+.BR nearest ,
+.BR nextafter ,
+.BR remainder ,
+.BR scalb ,
+and
+.BR Yn .
+.PP
+These string built-in functions take zero
+arguments:
+.BR logoff ,
+.BR logon ,
+.BR now ,
+and
+.BR pwd .
+.PP
+These string built-in functions take one
+argument:
+.BR cd ,
+.BR char ,
+.BR eval ,
+.BR ftoh ,
+.BR getenv ,
+.BR length ,
+.BR hexfp ,
+.BR hexint ,
+.BR htof ,
+.BR ichar ,
+.BR load ,
+.BR logfile ,
+.BR msg_translate ,
+.BR printenv ,
+.BR protect ,
+.BR set_locale ,
+.BR string ,
+.BR tolower ,
+.BR toupper ,
+and
+.BR who .
+.PP
+These string built-in functions take two
+arguments:
+.BR index ,
+.BR putenv ,
+.BR save ,
+and
+.BR strftime .
+.PP
+This string built-in function takes three
+arguments:
+.BR substr .
+.PP
+These numeric functions take one symbol argument:
+.B defined
+and
+.BR delete .
+.PP
+These symbol functions take one string argument:
+.B symnum
+and
+.BR symstr .
+.PP
+These startup file procedures take no arguments:
+.BR author ,
+.BR dirs ,
+.BR help ,
+.BR help_xxx ,
+.BR news
+.BR popd ,
+and
+.BR xd .
+.PP
+The help system (described later) documents each
+of these functions, and any additional ones
+provided by startup files.  Most have the same
+names as they do in C, C++, and Fortran, so many
+will already be familiar to users who have learned
+any of those programming languages.
+.PP
+Built-in functions and procedures are
+.IR immutable :
+they cannot be redefined by the user in
+.B hoc
+code.  User-defined variables, functions, and
+procedures can be redefined at any time to objects
+of the same type.  Variables can be redefined to
+be functions or procedures.  However, the reverse
+does not hold: once a name has been used as a
+function or procedure, it can only be redefined to
+be a new function or procedure.
+.PP
+The procedure
+.B abort(message)
+prints
+.BR message ,
+immediately terminates evaluation, and returns to
+the top-level interpreter, discarding and clearing
+the function/procedure call stack.  It is
+equivalent to a similar internal function that
+.B hoc
+uses to recover from catastrophic errors.  Use it
+sparingly!
+.PP
+The function
+.B read(x)
+reads a value into the variable
+.BR x .
+The value must be either a number, or a quoted
+string, or an existing variable or named constant.
+The return value is 1 on success, or 0 on
+end-of-file; the function aborts for any other
+error condition.
+.PP
+The function
+.B who(pattern)
+produces a lengthy report of all of the named
+constants and variables with their current values,
+plus the names of all built-in functions and
+procedures, and all user-defined functions and
+procedures.  Only those names which match
+the argument string,
+.BR pattern ,
+are included.
+.PP
+To print all symbols, use
+.BR who("*") .
+The return value is always an empty string.
+.PP
+Symbols with three or more leading underscores are
+for internal use by
+.BR hoc ,
+and are thus considered
+.IR hidden .
+They can only be shown by a suitable
+.B pattern
+argument to
+.BR who(\|) .
+Hidden symbols are used for locale translations of
+embedded strings.  See the
+.B INTERNATIONALIZATION
+section below for further details.
+.\" ..............................................
+.SS Statements
+Control flow statements are
+.BR if \(mi else ,
+.BR while ,
+and
+.BR for ,
+with braces for grouping.
+.PP
+The
+.B break
+statement exits from the body of a
+.B for
+or
+.B while
+loop, skipping evaluation of any post-body
+.BR for -loop
+expression.  Execution resumes with the statement
+that follows the loop body.
+.PP
+The
+.B continue
+statement exits from the current iteration of the
+body of a
+.B for
+or
+.B while
+loop.  Execution resumes with evaluation of any
+post-body
+.BR for -loop
+expression, and the conditional test that governs
+execution of the next iteration.
+.PP
+.B break
+and
+.B continue
+are illegal outside loop bodies.
+.PP
+Newline or semicolon ends a statement.
+Backslash-newline is equivalent to a space.
+.PP
+Functions and procedures are introduced by the
+words
+.B func
+and
+.BR proc ,
+followed by the function/procedure name, a
+parenthesized list of arguments, and the
+function/procedure body, which may be either a
+single statement, or a braced statement group.
+.PP
+The
+.B return
+statement is used to return a value from a
+function.
+.PP
+Variables inside the body are
+.IR local
+by default: they are known only within the body,
+even if they have the same names as variables
+elsewhere.
+.PP
+Variables listed in a
+.B global
+statement are visible outside the body.
+.PP
+Arguments are passed by value, so it is impossible
+for the body to modify their values in the caller.
+.PP
+Here is an example to demonstrate these features:
+.RS
+.nf
+\&\fCproc show(x) \e
+{
+    global last_x, last_xsq
+    println x
+    last_x = x
+    last_xsq = x^2
+    y = x
+    x = 999999999
+}
+x = 5
+show(x)
+5
+last_x
+5
+last_xsq
+25
+y
+0
+x
+5\fP
+.fi
+.RE
+Built-in named constants are always globally
+visible, and thus need not be listed in a
+.B global
+statement; however, some people prefer to do so as
+a matter of documentation.
+.PP
+A
+.B global
+statement may appear outside a function/procedure
+body, but does nothing useful.
+.PP
+Inside a function/procedure body, a
+.B global
+statement affects only variables that follow it,
+so it should generally occur at the start.  Here
+is what happens if you do not follow that
+recommendation:
+.RS
+.nf
+\&\fCy = 3
+proc foo() \e
+{
+    for (k = 1; k < 3; ++k) \e
+    {
+        println y
+        global y
+        println y
+    }
+}
+foo()
+0
+3
+0
+3\fP
+.fi
+.RE
+The first reference to \fCy\fP is to an
+uninitialized, and therefore zero by default,
+variable.  The second one is to the global value.
+This behavior is a feature, not a bug, but you
+probably should not exploit it!
+.PP
+In older versions of
+.BR hoc ,
+function/procedure statement argument lists were
+empty, and within the body, numeric arguments were
+referred to as
+.BR $1 ,
+.BR $2 ,
+etc., and string arguments as
+.BR $$1 ,
+.BR $$2 ,
+etc., and all other variables were global.  This
+practice is now deprecated, though still
+recognized, and the default visibility has changed
+from global to local.
+.PP
+The statement
+.B print
+prints a list of expressions that may include
+string constants such as
+.BR \fC\&\&\&"hello\en"\fP .
+It does
+.I not
+print a final newline: the last expression must
+end with one if a newline is required.
+.PP
+The statement
+.B println
+works like
+.BR print ,
+but always supplies a following newline.
+.PP
+The list items printed by
+.B print
+and
+.B println
+are separated by the current value of
+.BR _\|_OFS_\|_
+(output field separator), normally a single space.
+.PP
+The
+.B printf
+statement is similar to
+.BR print ,
+but its initial argument must be a format string
+conforming to a large subset of the syntax
+supported by Standard C's
+.BR printf (1)
+statement.  List item separation is controlled
+entirely by the format;
+.BR _\|_OFS_\|_
+is not used. Data type length modifiers
+.RI ( h ,
+.IR l ,
+.IR ll ,
+.IR L )
+are not
+permitted, nor are
+.IR n " (dynamic field width)"
+or
+.IR p " (pointer)"
+format descriptors.  Otherwise, the
+.IR % " (literal percent),"
+.IR c " (character),"
+.IR d " (decimal integer),"
+.IR E " (uppercase exponential floating-point),"
+.IR e " (lowercase exponential floating-point),"
+.IR f " (fixed decimal),"
+.IR G " (uppercase generalized floating-point),"
+.IR g " (lowercase generalized floating-point),"
+.IR i " (decimal integer),"
+.IR o " (octal integer),"
+.IR s " (string),"
+.IR u " (unsigned integer),"
+.IR x " (lowercase hexadecimal integer),"
+and
+.IR X " (uppercase hexadecimal integer)"
+format descriptors, with optional sign,
+field-width, and number-of-digits modifiers are
+recognized.  In brief, each format descriptor is
+required to match this regular expression:
+.I "%(%|[-+0 ]?[0-9]*([.][0-9]*)?[cdeEfgGiosuxX])" .
+.PP
+The
+.B sprintf
+statement is similar to
+.B printf ,
+except that its result is returned as a string
+value, instead of being printed.
+.\" ----------------------------------------------
+.SH "INPUT FILE SEARCH PATH"
+Unless input filenames specified on the command
+line, or in
+.BI load( filename )
+function calls, contain a system-dependent
+absolute filename,
+.B hoc
+looks for them in a search path defined by the
+environment variable
+.BR HOCPATH .
+This is an ordered list of file system directories
+in which to look for files.  The list is
+colon-separated on UNIX-like systems, and
+semicolon-separated on systems, like Apple MacOS
+and Microsoft Windows, where colons are used in
+file paths.
+.PP
+For user convenience, and portability across file
+systems, an empty component in the directory path
+list stands for a default system path that
+includes several directories where other
+.B hoc
+are installed.  Thus,
+.B hoc
+assumes a default
+.B HOCPATH
+value, if one is not already defined, of
+.BR \|.\|: ,
+meaning the current directory, followed by the
+default system path.
+.PP
+As a further user convenience, if an attempt
+to open a file fails, and the filename does not
+end in
+.IR .hoc ,
+the open is retried with that ending, allowing
+omission of
+.BR hoc 's
+recommended file extension.
+.\" ----------------------------------------------
+.SH "FLOATING-POINT ARITHMETIC"
+All arithmetic in
+.B hoc
+is done in double-precision floating point (C/C++
+type
+.BR double ) .
+.PP
+On most modern systems, this arithmetic conforms
+closely (or loosely) to the 1985
+.IR "IEEE 754 Standard for Binary Floating-Point Arithmetic" .
+This arithmetic system has numerous advantages
+over older designs, and has helped enormously to
+improve the environment for, and portability and
+reliability of, numerical software.
+.\" ..............................................
+.SS "How floating-point numbers are represented"
+In IEEE 754 arithmetic, double-precision numbers
+are represented as 64-bit values, consisting of a
+sign bit, an 11-bit biased exponent, and a 53-bit
+significand.  That is a total of 65 bits: the
+first significand bit is called a
+.I hidden
+bit, and is not actually stored.  The binary point
+lies between the hidden bit and the stored
+fraction, so that for normal numbers, the
+significand is at least one, but less than two.
+.PP
+Biased, rather than explicitly signed, exponents
+are conventional in floating-point architectures.
+For IEEE 754 64-bit arithmetic, the exponent bias
+is 1023; that is, the true exponent is 1023 less
+than the stored biased value.
+.PP
+The smallest biased exponent (0), and the largest
+biased exponent (2^11 - 1 = 2047), are given
+special interpretation, described below for
+subnormals, and Infinity and NaN, respectively.
+.\" ..............................................
+.SS "Large normal numbers"
+With the IEEE 754 format, the number range is
+approximately \-1.80e+308 .\|. +1.80e+308, with a
+precision of about 15 decimal figures.
+The exact value of the largest floating-point
+number is
+.BR "(1 \(mi 2^(\-53)) * 2^1024" .
+.\" ..............................................
+.SS "Small normal numbers"
+The smallest
+.I normalized
+number that can be represented is about 2.23e-308,
+or more precisely,
+.BR "2^(\-1022)" ,
+and its reciprocal is also representable, being
+almost exactly a quarter of the largest
+representable number.
+.\" ..............................................
+.SS "Smaller subnormal numbers"
+The IEEE 754 Standard defines a numerically useful
+feature called
+.I "gradual underflow"
+that, when the biased exponent reaches its
+smallest value (0), relaxes the normalization
+requirement and drops the hidden bit, permitting
+small numbers to decrease further down to about
+4.94e-324, or more precisely,
+.BR "2^(\-1074)" ,
+but with loss of precision.  Such numbers are
+called
+.I subnormal
+(formerly,
+.IR denormalized ).
+Not all systems support such numbers: the
+.B hoc
+function
+.B issubnormal(x)
+can be used to test whether
+.B x
+is subnormal.  The reciprocal of the largest
+floating-point number is nonzero only if subnormal
+numbers are supported.  Thus, you could define
+this
+.B hoc
+function to find out whether your system has
+subnormals; it returns 1 (true) if that is the
+case:
+.RS
+.nf
+\&\fCfunc hassubnormals(\|) \e
+    return (issubnormal(1/(((1 - 2^(-53)) * 2^1023) * 2)))\fP
+.fi
+.RE
+With a predefined constant, this can also be
+written as
+.RS
+.nf
+\&\fCfunc hassubnormals(\|) return (issubnormal(1/MAXNORMAL))\fP
+.fi
+.RE
+.\" ..............................................
+.SS Underflow
+Numbers below the smallest normalized, or when
+supported, the smallest subnormal, values quietly
+.I underflow
+to zero.
+.\" ..............................................
+.SS "Machine epsilon"
+Another significant quantity in
+.I any
+floating-point system is known as the
+.IR "machine epsilon" .
+This is the smallest positive number that can be
+added to one, and produce a sum still different
+from one.
+.B hoc
+provides a generalization of this, with
+.B x
+replacing
+.B one
+in the last sentence:
+.BR "macheps(x)" .
+.PP
+In IEEE 754 arithmetic,
+.B macheps(1)
+is about 2.22e-16, or more precisely,
+.BR 2^(\-\&52) .
+The negative of its base-10 logarithm is the
+number of decimal digits that can be represented.
+An error of
+.B macheps(x)
+is called an
+.I ULP
+.RI ( U "nit in the " L "ast " P lace).
+If
+.B y
+is an approximation to
+.BR x ,
+then with the definition
+.RS
+.nf
+\&\fCfunc errbits(x,y) \e
+{
+    if (x == y) \e
+        return (0) \e
+    else \e
+        return (ceil(log2(abs((x - y)/max(x,y))/macheps(x))))
+}\fP
+.fi
+.RE
+.B errbits(x,y)
+is the number of bits that are in error in
+.BR y :
+that is, the base-2 logarithm of the relative
+error in ULPs, rounded up to the nearest integer.
+Incidentally, this function behaves as expected if
+either of its arguments are NaN (described below),
+or Infinity of opposite signs, even though there
+are no tests for those values: the result is a
+NaN.
+.PP
+One might reasonably argue for
+.B errbits(x,y)
+that the case of two Infinity arguments of like
+sign should also return a NaN.  The current
+implementation does not include such a test, but
+doing so would require just one additional
+statement:
+\fCif (isinf(x) && isinf(y)) return (NAN)\fP.
+.PP
+.B macheps(0)
+is the smallest representable floating-point
+number, either normalized, or subnormal if
+supported.  Thus, the test function above can be
+written more simply and portably (since it also
+works for non-IEEE 754 systems) as
+.RS
+.nf
+\&\fCfunc hassubnormals(\|) return issubnormal(macheps(0))\fP
+.fi
+.RE
+but it will run somewhat more slowly, since the
+current portable implementation of
+.B macheps(x)
+involves a loop.  Another simple implementation of
+this function uses predefined constants:
+.RS
+.nf
+\&\fCfunc hassubnormals(\|) return (MINNORMAL > MINSUBNORMAL)\fP
+.fi
+.RE
+.\" ..............................................
+.SS "Special values: Infinity and NaN"
+IEEE 754 also defines two special values:
+Infinity, and NaN (not-a-number).  The latter are
+expected to be available in two flavors: quiet and
+signaling, but some architectures provide only one
+kind.  The distinction between the two NaNs is
+rarely significant: the Standard's intent was that
+quiet NaNs should be generated in numerical
+operations, while signaling NaNs could be used to
+initialize numeric variables, so that their use
+before assignment of a normal value could then be
+trapped.
+.PP
+Both Infinity and NaN are signed, but the sign of
+a NaN is usually irrelevant, and may not reflect
+how it was computed: some architectures only
+generate negative NaNs, others generate only
+positive ones, and a few may preserve the expected
+sign in the NaN produced.
+.PP
+.B hoc
+considers the native NaN to be positive, even if
+its binary encoding has a negative sign.  Thus,
+.I copysign(1.0,NaN)
+returns 1.0, and
+.I copysign(1.0,-NaN)
+returns -1.0 on all systems where NaNs are
+available.
+.\" ..............................................
+.SS "Signed zero"
+IEEE 754 has both positive and negative zero, but
+they compare equal.  A positive zero is
+represented by all zero bits.  A negative zero has
+a leading one-bit, followed by 63 zero bits.
+.PP
+Negative zero is generated
+from, e.g.,
+.RS
+.nf
+.B "0 / \-\&Infinity"
+.B "sqrt(\-\&0)"
+.fi
+.RE
+.PP
+In principle, you should be able to get a negative
+zero in any programming language by simply writing
+.BR "\-\&0" ,
+but many compilers will convert this to positive
+zero.  You then have to introduce a variable,
+assign it a zero, and negate the variable,
+possibly hiding the negation in an external
+function that simply returns its value, to foil
+optimizers.
+.PP
+In
+.BR hoc ,
+however,
+.B "\-\&0"
+always works correctly.
+.\" ..............................................
+.SS "Signs of numbers"
+In
+.BR hoc ,
+you can extract the sign of any value,
+.BR x ,
+including negative zero, Infinity, and NaN, like
+this:
+.RS
+.nf
+.B "copysign(1,x)"
+.fi
+.RE
+The result will be either +1 or \-\&1.
+.\" ..............................................
+.SS "Nonstop computing"
+Infinity and NaN are intended to provide
+.I "nonstop computing"
+behavior.  In contrast, older architectures tended
+to abruptly terminate a job that computed a number
+too large to be stored (an
+.IR overflow ),
+or divided by zero.  IEEE 754 arithmetic produces
+Infinity or NaN for these two cases, according to
+well-defined, and obvious, rules discussed below.
+.PP
+On these older systems,
+.B hoc
+tries to prevent generation of exceptional values
+that might otherwise terminate the job: it aborts
+such computations with an error message, and
+returns you to top level, ready for more input.
+On IEEE 754 systems, computation in
+.B hoc
+simply proceeds as the Standard intended.
+.PP
+The IEEE 754 nonstop property is exceedingly
+important in modern heavily-pipelined, or
+parallel, or superscalar, or vector,
+architectures, all of which have multiple
+operations underway at once.  An interrupt to
+handle a floating-point exception in software is
+extremely costly in performance.
+.\" ..............................................
+.SS "Properties of Infinity and NaN"
+Both Infinity and NaN propagate in computations,
+so that if they occur in intermediate results,
+they will usually be visible in the final results
+too, and alert the user to a potential problem.
+.PP
+Infinity behaves somewhat like a mathematical
+infinity:
+.RS
+.nf
+.B "finite / Infinity \(-> 0"
+.B "Infinity * Infinity \(-> Infinity"
+.B "Infinity^(finite or Infinity) \(-> Infinity"
+.fi
+.RE
+.PP
+NaN is produced whenever one or more operands of
+an arithmetic expression is a NaN, or from most
+numerical functions with NaN arguments, or from
+expressions where a limiting value cannot be
+determined:
+.RS
+.nf
+.B "Infinity \(mi Infinity \(-> NaN"
+.B "Infinity / Infinity \(-> NaN"
+.B "0 / 0 \(-> NaN"
+.fi
+.RE
+.PP
+NaN has a unique property not shared by any other
+floating-point values, including Infinity: it is
+not equal to anything, even itself!  This should
+be usable as a completely portable test for a NaN,
+even on older systems that do not have IEEE 754
+arithmetic:
+.RS
+.B "(x != x)"
+is true if, and only if,
+.B x
+is a NaN.
+.RE
+.PP
+Regrettably, compiler writers on several systems
+have failed to grasp this important point, and
+they incorrectly optimize this test to false.
+Thus, portable code needs to use a test function,
+and
+.B hoc
+provides three of them:
+.BR isnan(x) ,
+.BR isqnan(x) ,
+and
+.BR issnan(x) ,
+which return true if
+.B x
+is a NaN (of any flavor, or quiet, or signaling,
+respectively).
+.\" ..............................................
+.SS "What NaNs mean for programmers"
+The presence of NaNs in the arithmetic system has
+an extremely important implication for numerical
+software: comparisons now have
+.I three
+outcomes, not two.  The expression
+.B "(x < y)"
+will be true or false if neither
+.B x
+nor
+.B y
+is a NaN, but it is called
+.I unordered
+if either, or both, is a NaN.  In particular, this
+means that it is almost always
+.I wrong
+to use a computer programming language two-branch
+.B "if \(mi else"
+statement with a numerical test.  Instead, there
+need to be additional initial tests to check for
+NaNs.  Thus, instead of the
+.B hoc
+statement
+.RS
+.nf
+\&\fCif (x > y) \e
+    print "x is greater than y\en" \e
+else \e
+    print "x is less than or equal to y\en"\fP
+.fi
+.RE
+you should instead write
+.RS
+.nf
+\&\fCif (isnan(x)) \e
+    print "x is a NaN\en" \e
+else if (isnan(y)) \e
+    print "y is a NaN\en" \e
+else if (x > y) \e
+    print "x is greater than y\en" \e
+else \e
+    print "x is less than or equal to y\en"\fP
+.fi
+.RE
+.PP
+Since
+.B "if \(mi else"
+statements are very common in software, but most
+programmers, and computer textbook authors, are
+not sufficiently familiar with IEEE 754
+arithmetic, you should expect that most existing
+software, and textbook examples, will fail to
+behave consistently, or correctly, when dealing
+with NaN, and possibly also Infinity.
+.PP
+There have been some major disasters, such as the
+failure of the Ariane satellite launch in West
+Africa, the failure of Patriot missiles in the
+Gulf War, and a U.S. nuclear aircraft carrier
+sitting dead in the water for six hours, all
+attributed to computer programmers who lacked
+sufficiently understanding of computer arithmetic.
+Arithmetic really does matter!
+.PP
+Numerical software often contains convergence
+tests of the form
+.RS
+.nf
+.B "while (tolerance is not reached)"
+.B "    reduce the tolerance"
+.fi
+.RE
+If a NaN ever appears in the
+.B while
+expression, the test will never be satisfied, and
+the program will be in an infinite loop.  Even
+famous libraries like EISPACK and LINPACK have
+routines that will never return because of loops
+caused by NaNs.  [In fairness, both of those
+libraries were developed before IEEE 754
+arithmetic existed, but CDC and Cray machines of
+that era had special values similar to Infinity
+and NaN, so even then, there were systems where
+the code could endlessly loop.]
+.PP
+Vendor-provided floating-point systems and
+run-time libraries are not always entirely
+reliable in their handling of signed zero,
+Infinity, and NaN, and portable programs like
+.B hoc
+can help to ferret out implementation differences,
+and errors that should be reported to the vendors.
+As noted earlier, signed zero is often botched by
+compiler writers, and two functions commonly
+available in most programming languages,
+.B max(x,y)
+and
+.BR min(x,y) ,
+in particular are badly done.  Their simple
+implementations use a two-branch conditional like
+this one for
+.BR max(x,y) :
+\fCif (x > y) return x else return y\fP.
+If either argument is a NaN, then the test will
+fail, and the second argument will be returned,
+leading to inconsistent nonsense like
+.B "max(1,NaN) \(-> NaN"
+but
+.BR "max(NaN,1) \(-> 1" .
+The C and C++ languages lack such functions
+(users are expected to write them as macros), but
+Fortran and many other languages have them.  In
+the fall of 2001, tests of 61 Fortran compilers on
+15 different UNIX platforms showed that
+.I all
+fail to behave consistently for
+.B max(x,y)
+and
+.BR min(x,y) .
+.\" ..............................................
+.SS "Unsupported IEEE 754 features"
+Finally, there are two additional features of IEEE
+754 arithmetic that are not yet supported by this
+version of
+.BR hoc ,
+but will be in future releases:
+.RS
+.\"-----------------------------------------------
+.TP \w'(1)'u+1n
+(1)
+access to floating-point status flags, so that you
+can tell after the fact whether a computation
+encountered any exceptional conditions, and
+.\"-----------------------------------------------
+.TP
+(2)
+access to rounding control, which determines
+whether rounding is to minus Infinity, zero,
+nearest, or plus Infinity.  The default is always
+round-to-nearest.
+.\"-----------------------------------------------
+.RE
+.PP
+Once rounding control is available,
+.B hoc
+could, in principle, be extended to support
+interval arithmetic, in which each numeric
+operation produces upper and lower bounds for the
+result.  Of course, a proper implementation would
+also require such support in all of the
+mathematical functions in the C/C++ run-time
+library, and such support is lacking almost
+everywhere.
+.\" ----------------------------------------------
+.SH "HELP SYSTEM"
+One of the files that
+.B hoc
+normally loads on startup contains an extensive
+help system.  Each named constant, variable,
+function and procedure has an associated function,
+.BR help_NAME(\|) ,
+where
+.B NAME
+is the object name.  Help is also available on
+each of the
+.B hoc
+language statements, and on related topics.  For
+an introduction, run
+.BR help(\|) ,
+and for a detailed list of what help functions are
+available, invoke
+.BR help_help(\|) .
+To display the entire help system, invoke
+.BR help_all(\|) .
+.PP
+Users are encouraged to follow these help
+convention with their own
+.B hoc
+code.
+.PP
+The entire help corpus is intentionally
+.I external
+to
+.B hoc
+itself, to facilitate modification, partial
+replacement, and internationalization, as
+discussed in the next section.
+.\" ----------------------------------------------
+.SH INTERNATIONALIZATION
+The
+.B hoc
+help system can be readily extended to support
+documentation in languages other than English, and
+early releases contain limited prototype text in
+several languages.
+.PP
+Changing the language alters only documentation
+and program messages: the basic
+.B hoc
+language remains unchanged, and English-centric,
+just as do virtually all computer programming
+languages.
+.\" ..............................................
+.SS "Selecting a language"
+An alternate language is selected at run-time by
+defining any one of three environment variables:
+.BR LC_ALL ,
+.BR LC_MESSAGES ,
+or
+.BR LANG ,
+just as described for other programming languages
+in
+.BR locale (1).
+These variables take values of a locale code,
+the values of which you can list by
+.RS
+.nf
+.B "\fClocale -a | sort -f\fP"
+.fi
+.RE
+You could thus launch a German version of
+.B hoc
+like this:
+.RS
+.nf
+.B "\fCenv LANG=de hoc\fP"
+.fi
+.RE
+Environment variables, rather than command-line
+options, control the locale selection, because it
+is likely that most individuals will want to
+choose a fixed locale, and that can be done once
+and for all in user login files, and also because
+several UNIX library functions access the locale
+environment variables to guide their behavior.
+UNIX users could also create convenient shell
+aliases, e.g., in
+.BR csh (1)/
+.BR tcsh (1)
+syntax,
+.RS
+.nf
+\&\fCalias hoc-da 'env LANG=da hoc \e!*'\fP
+\&\fCalias hoc-de 'env LANG=de hoc \e!*'\fP
+\&\fCalias hoc-fr 'env LANG=fr hoc \e!*'\fP
+\&\fC.\|.\|.\fP
+.fi
+.RE
+.\" ..............................................
+.SS "What if you have no locale support?"
+Virtually all UNIX vendors today provide locale
+support, but they usually require installation of
+one or more additional software packages that your
+system manager may have omitted, but is probably
+willing to install on request.
+.PP
+Locale support is usually present in one of these
+directories; besides using the
+.BR locale (1)
+command as shown in the previous subsection, you
+can run
+.BR ls (1)
+on the appropriate one of them to see what locales
+are installed on your system:
+.RS
+.TP \w'\&\fI/usr/lib/nls/loc/locales\fP'u+2n
+\&\fI/usr/share/locale\fP
+Apple Darwin (MacOS X), FreeBSD, GNU/Linux (all
+architectures)
+.TP
+\&\fI/usr/lib/nls/loc\fP
+Compaq/DEC Alpha, IBM AIX
+.TP
+\&\fI/usr/share/i18n/locales\fP
+GNU/Linux (all architectures)
+.TP
+\&\fI/usr/lib/nls/loc/locales\fP
+Hewlett-Packard HP-UX
+.TP
+\&\fI/usr/lib/locale\fP
+SGI IRIX, Sun Solaris
+.RE
+.\" ..............................................
+.SS "What the locale affects"
+Normally, changing the locale affects more than
+just text: dates, monetary formats, numbers, and
+sort order all change.  However, for now, in the
+interests of simplicity, and cross-platform and
+cross-locale consistency,
+.B hoc
+sets the locale categories for
+.BR LC_COLLATE ,
+.BR LC_CTYPE ,
+.BR LC_MESSAGES ,
+.BR LC_MONETARY ,
+.BR LC_NUMERIC ,
+and
+.B LC_TIME
+to their traditional (English/American) values.
+Changes will be needed in future versions of
+.B hoc
+to support other values of these categories; some
+of that support is already available, as shown in
+the next subsection.
+.\" ..............................................
+.SS "Changing the locale inside \fBhoc\fP programs"
+Locale categories can be set in the environment
+from
+.I inside
+.B hoc
+programs to control calendar date and time
+formatting by the
+.B strftime(\|)
+function:
+.RS
+.nf
+\&\fC# Show time in the default locale:
+hoc> strftime("%c",systime())
+Fri Dec 21 15:18:14 2001
+
+# Switch to Portuguese: ISO8859-1 (Latin-1) encoding:
+hoc> old_lc_time = putenv("LC_TIME", "pt")
+hoc> strftime("%c",systime())
+sex 21 dez 2001 03:17:29 PM MST
+
+# Restore the original locale:
+hoc> ignore = putenv("LC_TIME", old_lc_time)\fP
+.fi
+.RE
+The current locale setting can be saved and
+restored as shown.  Less desirably, the value
+\&\fC"C"\fP resets it to the C/C++ default of
+English.
+.PP
+The locale code is interpreted as the name of a
+subdirectory in which to find a localized version
+of any system file that
+.B hoc
+loads at startup time.  For example, in a Danish
+locale, it will load the English file,
+\&\fChelp.hoc\fP, and then the Danish file,
+\&\fCda/help.hoc\fP, from the
+.B hoc
+system installation directory, provided that the
+localized file exists.  Otherwise,
+.B hoc
+is silent about its absence.
+.\" ..............................................
+.SS "Changing the language of internal messages"
+The
+.B hoc
+program contains a number of messages that are
+hard-coded in English.  Any, or all, of these can
+be replaced at run time by assignments to special
+variables named with the reserved seven-character
+prefix
+.BR _\|_\|_msg_
+(yes, there are
+.I three
+leading underscores) used to identify translation
+variables.
+.PP
+These variables are normally only set in the
+.I @SYSHOCXLTBASE@
+files in the
+.B hoc
+system directory tree, but they can also be set by
+user programs as well, unless they have been
+defined as permanent constants.
+.PP
+See the comments in those files for further
+documentation.  Except for translation work, it
+should never be necessary for ordinary users to
+reference or modify these variables.
+.\" ..............................................
+.SS "Character set constraints"
+The significant constraint is that characters must
+be representable in 8-bit character sets, such as
+the dozen or so
+.RI ISO8859- n
+sets that supply characters needed for European
+languages, or the Unicode (also known as
+ISO10646-1) UTF-8 variable-byte-count encoding of
+potentially two million or so symbols used in the
+world's writing systems.  In addition, the
+.B hoc
+user must be running the program in an environment
+capable of such display.
+.\" ..............................................
+.SS "Changing screen display fonts"
+In a UNIX system, you might first scan the
+voluminous output of
+.BR xlsfonts (1)
+to find out what fonts are available for your
+window system, and then launch a terminal window
+like this:
+.RS
+.nf
+\&\fCxterm -fn \e
+    -adobe-courier-medium-r-normal--14-100-100-100-m-90-iso8859-1 &\fP
+.fi
+.RE
+to get a 14pt font with all of the characters
+needed for ISO8859-1 (Latin 1, handling most of
+the languages of Western Europe, and many others,
+such as Hawaiian, Indonesian, and Swahili).
+.PP
+Your system manager may be able to tell you about
+additional window system fonts that may also be
+available, but are not loaded by default.  For
+example, at the maintainer's site, there is a
+large collection of Asian and European fonts
+installed in the
+.BR emacs (1)
+editor tree.  To add, say, the European
+collection, in a shell window type
+.RS
+.nf
+\&\fCxset fp+ /usr/local/share/emacs/fonts/European
+xset fp rehash\fP
+.fi
+.RE
+The new fonts will then be available, and will be
+listable by
+.BR xlsfonts (1).
+You can make those additions permanent by adding
+those two commands to your
+.I $HOME/.xinitrc
+or
+.I $HOME/.xsession
+file; the name is platform-dependent, so the best
+choice is to make them identical, with one a
+symbolic link to the other.
+.PP
+Use
+.RS
+.nf
+\&\fCxset q\fP
+.fi
+.RE
+to find out what font directories are currently
+in the font search path.
+.PP
+Each X Window System font directory has a
+\&\fCfonts.dir\fP text file that maps short file
+names to long font names.  There is sometimes also
+a \&\fCfonts.alias\fP text file to provide short
+aliases for the otherwise rather long font names
+used in the X Window System.  You can scan those
+files to see what is available.
+.PP
+Recent versions of
+.BR xterm (1)
+have a special option,
+.BR \-u8 ,
+to handle UTF-8 multibyte encoding, but you then
+need to use a font with the corresponding
+character repertoire:
+.RS
+.nf
+\&\fCxterm -u8 -fn \e
+    -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646-1 &\fP
+.fi
+.RE
+.\" ..............................................
+.SS "Documentation for \fBhoc\fP in other languages"
+Internationalized documentation will usually
+augment, rather than replace, the English
+documentation.  That way, translations can be
+developed incrementally.  Thus, in a French
+environment,
+.B help(\|)
+responds in English, while output from
+.B aide(\|)
+is in French.  On startup,
+.B hoc
+will then usually display a greeting in two
+languages: English, and the local one.  Here is
+what this looks like in the French locale:
+.PP
+.RS
+.nf
+\&\fC% env LANG=fr hoc
+--------------------------------------------------------------
+Welcome to the extensible high-order calculator, hoc.
+This is hoc version 7.0.0.beta [15-Dec-2001].
+Type help() for help, news() for news, and author() for author
+information.
+This system supports IEEE 754 floating-point arithmetic.
+--------------------------------------------------------------
+--------------------------------------------------------------
+Bienvenue à la calculatrice, hoc.
+C'est la version 7.0 du 15 décembre 2001.
+Taper aide() pour de l'assistance, nouvelles() pour des
+nouvelles, et auteur() pour des renseignements sur les
+auteurs.
+Cet ordinateur supporte l'arithmétique en virgule flottante du
+standard IEEE 754.
+--------------------------------------------------------------\fP
+.fi
+.RE
+.PP
+The maintainer will be grateful for contributions
+of additional translations of
+.B hoc
+help files and internal messages!
+.\" ----------------------------------------------
+.SH "HOC SUPPORT IN GNU EMACS"
+When
+.B hoc
+is installed properly, it adds a new library,
+.IR hoc.el ,
+to the
+.I emacs/site-lisp
+directory, which should always be included in the
+.BR emacs (1)
+.I load-path
+variable (in an editor session, type \fCC-h
+vload-path\fP to display it).
+.PP
+By suitable manual edits to the
+.I site-init.el
+file in that directory, your system manager could
+make
+.B hoc-mode
+support automatically available, but the
+.B hoc
+installation process cannot safely do that
+automatically.
+.PP
+You can test whether this has been done at your
+site by visiting a new file with extension
+.IR .hoc ;
+if the
+.BR emacs (1)
+mode line shows \fC(hoc .\|.\|.)\fP, instead of
+something else, like \fC(fundamental .\|.\|.)\fP,
+then you need do nothing more:
+.B hoc-mode
+is already fully installed.
+.PP
+Otherwise, in order to avoid the need for tedious
+manual loading of the
+.B hoc
+support in
+.BR emacs (1),
+add this snippet of Emacs Lisp code at the end of
+your
+.I $HOME/.emacs
+initialization file:
+.RS
+.nf
+\&\fC(if (string-lessp (substring emacs-version 0 2) "19") ; earlier than 19.x
+    (progn
+      (setq auto-mode-alist
+            (cons (cons "\\.hoc$" 'hoc-mode) auto-mode-alist))
+      (autoload 'hoc-mode "hoc"
+        "Enter hoc mode." t nil))
+  (progn
+    (if (not (assoc "\\.hoc$" auto-mode-alist))
+        (setq auto-mode-alist
+              (cons (cons "\\.hoc$" 'hoc-mode) auto-mode-alist)))
+    (autoload 'hoc-mode "hoc"
+      "Enter hoc (high-order calculator) mode." t nil)))\fP
+.fi
+.RE
+There are two sections in this code, one for (now
+very old)
+.BR emacs (1)
+versions before 19.x, and the other for all newer
+versions.  They add a binding between files with
+extension
+.I .hoc
+and
+.B hoc-mode
+in
+.BR emacs (1),
+and arrange for the
+.I hoc.el
+library to be loaded the first time that it is
+required.
+.PP
+Two additional functions are provided to ease
+the task of creating help procedures:
+.B hoc-printify
+and
+.BR hoc-unprintify .
+Both operate on the region, converting text to
+.B print
+statements, or the reverse.
+.\" ----------------------------------------------
+.SH "DESCRIPTIONS OF BUILT-IN FUNCTIONS AND PROCEDURES"
+These descriptions are taken from the output of
+the corresponding
+.B help_xxx(\|)
+functions, and, apart from font differences, are
+intended to be identical to them.  The
+.B help_xxx(\|)
+functions are considered to be the definitive
+documentation of each function.
+.PP
+In the following descriptions, square brackets on
+number ranges indicate that the endpoint is
+.IR included ;
+parentheses indicate that the endpoint is
+.IR excluded .
+.\" ----------------------------------------------
+.TP \w'\fBstrftime(format,time)\fP'u+2n
+.B abort(message)
+.B abort(message)
+prints
+.BR message ,
+then aborts evaluation of the current expression,
+returning to top-level without further processing
+of the remainder of the current statement or
+function/procedure call chain.  The message should
+include the name of the function calling
+.BR abort(\|) ,
+since there is currently no function call
+traceback, and end with a newline.
+.\" ----------------------------------------------
+.TP
+.B abs(x)
+.B abs(x)
+returns the absolute value of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B acos(x)
+.B acos(x)
+returns the arc cosine of
+.BR x .
+.B x
+must be in [\-1.\|.\|.+1].
+.\" ----------------------------------------------
+.TP
+.B acos(x)
+.B acos(x)
+returns the arc cosine of
+.BR x .
+.B x
+must be in [\-1.\|.\|.+1].
+.\" ----------------------------------------------
+.TP
+.B acosh(x)
+.B acosh(x)
+returns the inverse hyperbolic cosine of
+.BR x .
+.B x
+must be outside the interval (\-1.\|.\|.+1).
+.\" ----------------------------------------------
+.TP
+.B asinh(x)
+.B asinh(x)
+returns the inverse hyperbolic sine of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B atan(x)
+.B atan(x)
+returns the arc tangent of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B atanh(x)
+.B atanh(x)
+returns the inverse hyperbolic tangent of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B author(\|)
+.B author(\|)
+prints information about the program authors.
+.\" ----------------------------------------------
+.TP
+.B cbrt(x)
+.B cbrt(x)
+returns the cube root of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.BI cd( s )
+.BI cd( s )
+changes the current working directory to that
+named by the string
+.IR  s ,
+updates the environment variable
+.B PWD
+to that name, and returns that name.
+.IP
+See also
+.BR help_dirs(\|) ,
+.BR help_popd(\|) ,
+.BR help_pushd(\|) ,
+.BR help_pwd(\|) ,
+and
+.BR help_xd(\|) .
+.\" ----------------------------------------------
+.TP
+.B ceil(x)
+.B ceil(x)
+returns the smallest integer greater than or equal
+to
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B char(n)
+.B char(n)
+returns a one-character string containing the
+character whose ordinal value in the host
+character set is
+.BR n .
+Characters are always considered
+.IR unsigned .
+Thus, in an ASCII or ISO 8859-n or Unicode
+character set,
+.B char(65)
+returns \fB"A"\fP, and both
+.B char(255)
+and
+.B char(-1)
+return \&\fB"\exff"\fP.
+.IP
+.B hoc
+strings are internally terminated by a NUL
+character, so
+.B char(0)
+is equivalent to an empty string, \fB""\fP, and
+\&\fB("X" char(0) "Y")\fP evaluates to
+\&\fB("X" "" "Y")\fP which in turn reduces to
+\&\fB"XY"\fP.
+.\" ----------------------------------------------
+.TP
+.B class(x)
+.B class(x)
+returns a numeric value (available as a predefined
+constant) indicating into which of these ten
+classes
+.B x
+falls:
+.RS
+.RS
+.TP \w'\fBCLASS_NEGSUBNORMAL\fP'u+2n
+.B CLASS_NEGINF
+negative infinity
+.TP
+.B CLASS_NEGNORMAL
+negative normal
+.TP
+.B CLASS_NEGSUBNORMAL
+negative subnormal
+.TP
+.B CLASS_NEGZERO
+negative zero
+.TP
+.B CLASS_POSINF
+positive infinity
+.TP
+.B CLASS_POSNORMAL
+positive normal
+.TP
+.B CLASS_POSSUBNORMAL
+positive subnormal
+.TP
+.B CLASS_POSZERO
+positive zero
+.TP
+.B CLASS_QNAN
+quiet NaN
+.TP
+.B CLASS_SNAN
+signaling NaN
+.RE
+.RE
+.IP
+An eleventh value is reserved to flag
+classification failure:
+.RS
+.RS
+.TP \w'\fBCLASS_NEGSUBNORMAL\fP'u+2n
+.B CLASS_UNKNOWN
+should never happen
+.RE
+.RE
+.\" ----------------------------------------------
+.TP
+.B copysign(x,y)
+.B copysign(x,y)
+returns a value with the magnitude of
+.BR x ,
+and the sign of
+.BR y .
+.\" ----------------------------------------------
+.TP
+.B cos(x)
+.B cos(x)
+returns the cosine of
+.B x
+.RB ( x
+in radians). Expect severe accuracy loss for large
+.BR |x| .
+.\" ----------------------------------------------
+.TP
+.B cosd(x)
+.B cosd(x)
+returns the cosine of
+.B x
+.RB ( x
+in degrees). Expect severe accuracy loss for large
+.BR |x| .
+.\" ----------------------------------------------
+.TP
+.B cosh(x)
+.B cosh(x)
+returns the hyperbolic cosine of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B cpulimit(t)
+.B cpulimit(t)
+sets the CPU time limit from now to an additional
+.B t
+seconds, sets the system variable
+.B _\|_CPU_LIMIT_\|_
+to
+.BR t ,
+and returns the current CPU time limit, which is
+always measured from the
+.I start
+of the job.
+.IP
+If the limit is exceeded, execution of the current
+expression is aborted, control returns to the
+top-level interpreter, and the time limit is
+incremented by the current value of
+.BR _\|_CPU_LIMIT_\|_ .
+.IP
+Although
+.B t
+may be fractional, on most operating systems, the
+time limit is an integer, so
+.B t
+will be rounded up internally to the nearest
+integer before setting the time limit.
+.IP
+If resource usage and limits are not supported on
+the current platform, this function has no effect,
+other than setting
+.BR _\|_CPU_LIMIT_\|_ ,
+and returning Infinity.
+.IP
+By default, there is no time limit for the job
+(although some operating systems may impose such
+limits).
+.IP
+Negative, zero, and NaN arguments are treated like
+Infinity.
+.IP
+NB: This function is
+.IR experimental ,
+and may be withdrawn in future versions.
+.\" ----------------------------------------------
+.TP
+.B defined(symbol)
+.B defined(symbol)
+returns 1 if
+.B symbol
+is defined, and 0 if not.
+.IP
+Programming note: This function can be used in
+.B hoc
+libraries to provide default values of variables,
+for example,
+.RS
+.RS
+\&\fCif (!defined(seed)) seed = 123456789\fP
+.RE
+.RE
+.\" ----------------------------------------------
+.TP
+.B delete(symbol)
+.B delete(symbol)
+returns 1 if
+.B symbol
+was successfully deleted, and 0 if not.  When a
+symbol is deleted, its value is no longer
+available, as if it had never been defined.
+.IP
+Most user-defined symbols can be deleted, but
+.B hoc
+kernel symbols, and user-defined immutable
+symbols, cannot.
+.\" ----------------------------------------------
+.TP
+.B dirs(\|)
+.B dirs(\|)
+prints the current directory stack, with the most
+recent directory first.
+.IP
+See also
+.BR help_cd(\|) ,
+.BR help_popd(\|) ,
+.BR help_pushd(\|) ,
+.BR help_pwd(\|) ,
+and
+.BR help_xd(\|) .
+.\" ----------------------------------------------
+.TP
+.B double(x)
+.B double(x)
+returns the value of
+.B x
+converted to double precision, and then back to
+working precision.
+.\" ----------------------------------------------
+.TP
+.B erf(x)
+.B erf(x)
+returns the error function of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B erfc(x)
+.B erfc(x)
+returns the complementary error function of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B errbits(x,y)
+.BR errbits(x,y) ,
+with
+.B y
+an approximation to
+.BR x ,
+returns the number of bits that
+.B y
+is in error by.
+.\" ----------------------------------------------
+.TP
+.B eval(string)
+.B eval(string)
+pushes its argument string, which must contain
+valid
+.B hoc
+code, onto the input stack so that it will be
+evaluated next.  The size of the input stack is
+limited only by available memory.
+.IP
+This function makes it possible for
+.B hoc
+programs to construct new
+.B hoc
+code on-the-fly and then run it.
+.\" ----------------------------------------------
+.TP
+.B exp(x)
+.B exp(x)
+returns the exponential function of
+.BR x ,
+.BR E^x .
+.\" ----------------------------------------------
+.TP
+.B expm1(x)
+.B expm1(x)
+returns the exponential function of
+.BR x ,
+less 1:
+.BR "E^x \(mi 1" .
+.IP
+For small
+.BR x ,
+.B exp(x)
+is approximately 1, so there is serious
+subtraction loss in directly using
+.BR "exp(x) \(mi 1" ;
+.B expm1(x)
+avoids this loss.
+.IP
+From Sun Solaris documentation:
+.RI `` The
+.B expm1(\|)
+.I and
+.B log1p(\|)
+.I "functions are useful for financial calculations of"
+.BR "((1 + x)^n \(mi 1) / x" ,
+.I namely:
+.IP
+.RS
+.RS
+.B "expm1(n * log1p(x))/x"
+.RE
+.RE
+.IP
+.I when
+.B x
+.I "is very small (for example, when performing"
+.I "calculations with a small daily interest"
+.I "rate). These functions also simplify writing"
+.IR "accurate inverse hyperbolic functions." ''
+.\" ----------------------------------------------
+.TP
+.B exponent(x)
+.B exponent(x)
+returns the base-2 exponent of
+.BR x ,
+such that
+.IP
+.RS
+.RS
+.B "x == significand(x) * 2^exponent(x)"
+.RE
+.RE
+.IP
+where
+.B |significand(x)|
+is in [1...2).
+.IP
+For IEEE 754 arithmetic, normal numbers have
+.B exponent(x)
+in [-1022...1023] and subnormal numbers, if
+supported, have
+.B exponent(x)
+in [-1074...1023].
+.IP
+.IR WARNING :
+The power
+.B 2^exponent(x)
+will underflow to zero for IEEE 754 subnormal
+numbers, so for such numbers, the right-hand side
+must be computed with suitable scaling, like this:
+.IP
+.RS
+.RS
+.B "(significand(x) * 2^(exponent(x) + 52)) * 2^(-52)"
+.RE
+.RE
+.\" ----------------------------------------------
+.TP
+.B factorial(n)
+.B factorial(n)
+returns
+.BR "n! = n*(n\(mi1)*(n\(mi2)*.\|.\|.*1" ,
+where
+.BR "1! == 0! == 1" ,
+by definition.  Negative arguments generate a call
+to
+.BR abort(\|) .
+.\" ----------------------------------------------
+.TP
+.B floor(x)
+.B floor(x)
+returns the greatest integer less than or equal to
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B fmod(x,y)
+.B fmod(x,y)
+returns the remainder of the division of
+.B x
+by
+.BR y .
+.\" ----------------------------------------------
+.TP
+.B ftoh(x)
+.B ftoh(x)
+returns a hexadecimal string containing the native
+floating-point representation of
+.BR x .
+.IP
+For readability, a separating underscore is
+inserted between groups of eight hexadecimal
+digits.
+.IP
+This function is the inverse of
+.BR htof(s) .
+.\" ----------------------------------------------
+.TP
+.B gamma(x)
+.B gamma(x)
+returns the Gamma (generalized factorial) function
+of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B gcd(x,y)
+.B gcd(x,y)
+returns the greatest common divisor of
+.B x
+and
+.BR y .
+.\" ----------------------------------------------
+.TP
+.B getenv(envvar)
+.B getenv(envvar)
+returns the string value of the environment
+variable
+.BR envvar ,
+or an empty string if it is not defined.
+.\" ----------------------------------------------
+.TP
+.B hexfp(x)
+.B hexfp(x)
+returns a string containing the hexadecimal
+floating-point representation of
+.BR x ,
+in the form
+.IP
+.RS
+.RS
+"+0x1.hhhhh...p+ddddd"
+.RE
+.RE
+.IP
+Trailing zeros in the fraction, and leading zeros
+in the exponent, are dropped, and the sign is
+always included.
+.IP
+See also
+.BR help_hexint(\|) ,
+.BR help_number(\|) ,
+and
+.BR help_string(\|) .
+.\" ----------------------------------------------
+.TP
+.B hexint(x)
+.B hexint(x)
+returns a string containing the hexadecimal
+integer representation of
+.BR x ,
+if that is possible, in the form
+.IP
+.RS
+.RS
+"+0xhhhhh..."
+.RE
+.RE
+.IP
+Leading zeros are dropped, and the sign is always
+included.
+.IP
+If
+.B x
+is too big to represent as an exact integer, then
+the floating-point representation,
+.BR hexfp(x) ,
+is returned instead.
+.IP
+See also
+.BR help_hexfp(\|) ,
+.BR help_number(\|) ,
+and
+.BR help_string(\|) .
+.\" ----------------------------------------------
+.TP
+.B htof(s)
+.B htof(s)
+returns a floating-point number corresponding to
+the native representation in the hexadecimal
+string
+.BR s .
+.IP
+Nonhexadecimal digits in
+.B s
+are ignored.
+.IP
+This function is the inverse of
+.BR ftoh(x) .
+.\" ----------------------------------------------
+.TP
+.B hypot(x,y)
+.B hypot(x,y)
+function computes the length of the hypotenuse of
+a right-angled triangle,
+.BR "sqrt(x^2 + y^2)" ,
+but without accuracy loss or range limitation from
+premature overflow or underflow.
+.IP
+This function has possibly unexpected behavior for
+exceptional arguments: when either argument is
+Infinity, then the result is Infinity,
+.I "even if"
+the other argument is a NaN! The explanation is
+found on the 4.3BSD manual page:
+.RS
+.RS
+\&.\|.\|. programmers on machines other than a VAX
+(it has no infinity) might be surprised at first
+to discover that
+.BR "hypot(+infinity,NaN) = +infinity" .
+This is intentional; it happens because
+.B "hypot(infinity,v) = +infinity"
+for all
+.BR v ,
+finite or infinite.  Hence
+.B hypot(infinity,v)
+is independent of
+.BR v .
+Unlike the reserved operand on a VAX, the IEEE NaN
+is designed to disappear when it turns out to be
+irrelevant, as it does in
+.BR hypot(infinity,NaN) .
+\&.\|.\|.
+.RE
+.RE
+.\" ----------------------------------------------
+.TP
+.B ichar(s)
+.B ichar(s)
+returns the ordinal value of the first character
+in the string
+.BR s .
+Characters are always considered
+.IR unsigned .
+Thus, in an ASCII or ISO 8859-n or Unicode
+character set, \&\fBichar("ABC")\fP returns 65,
+and \&\fBichar("\exff")\fP returns 255.
+\&\fBichar("")\fP returns 0, because
+.B hoc
+strings are internally terminated by a NUL
+(zero-valued) character.
+.\" ----------------------------------------------
+.TP
+.B ilogb(x)
+.B ilogb(x)
+returns the exponent part of
+.BR x ,
+that is,
+.BR "int(log2(x))" .
+.\" ----------------------------------------------
+.TP
+.B index(s,t)
+.B index(s,t)
+returns the index of string
+.B t
+in string
+.BR s ,
+counting from 1, or 0 if
+.B t
+is not found in
+.BR s .
+.\" ----------------------------------------------
+.TP
+.B int(x)
+.B int(x)
+returns the integer part (truncated toward zero)
+of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B isfinite(x)
+.B isfinite(x)
+returns 1 (true) if
+.B x
+is finite and otherwise, 0 (false).
+.\" ----------------------------------------------
+.TP
+.B isinf(x)
+.B isinf(x)
+returns 1 (true) if
+.B x
+is Infinite, and otherwise,
+0 (false).
+.\" ----------------------------------------------
+.TP
+.B isnan(x)
+.B isnan(x)
+returns 1 (true) if
+.B x
+is a NaN, and otherwise,
+0 (false).
+.\" ----------------------------------------------
+.TP
+.B isnormal(x)
+.B isnormal(x)
+returns 1 (true) if
+.B x
+is finite and normalized and
+not subnormal, and otherwise, 0 (false).
+.\" ----------------------------------------------
+.TP
+.B isqnan(x)
+.B isqnan(x)
+returns 1 (true) if
+.B x
+is a quiet NaN, and otherwise,
+0 (false).
+.IP
+On some architectures (e.g., Intel x86 and MIPS),
+there is only one type of NaN.
+.B isqnan(x)
+is then defined to return
+.BR isnan(x) .
+.\" ----------------------------------------------
+.TP
+.B issnan(x)
+.B issnan(x)
+returns 1 (true) if
+.B x
+is a signaling NaN, and
+otherwise, 0 (false).
+.IP
+On some architectures (e.g., Intel x86 and MIPS),
+there is only one type of NaN.
+.B issnan(x)
+is then defined to return
+.BR isnan(x) .
+.IP
+You can test whether your system has both quiet
+and signaling NaNs like this:
+.BR issnan(NaN) .
+The result is 0 (false) if distinct NaN types are
+available, and 1 (true) if not.
+.\" ----------------------------------------------
+.TP
+.B issubnormal(x)
+.B issubnormal(x)
+returns 1 (true) if
+.B x
+is subnormal (formerly,
+denormalized), and otherwise, 0 (false).
+.\" ----------------------------------------------
+.TP
+.B J0(x)
+.B J0(x)
+returns the Bessel function of the first kind of
+order 0 of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B J1(x)
+.B J1(x)
+returns the Bessel function of the first kind of
+order 1 of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B Jn(n,x)
+.B Jn(n,x)
+returns the Bessel function of the first kind of
+integral order
+.B n
+of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B lcm(x,y)
+.B lcm(x,y)
+returns the least common multiple of
+.B int(x)
+and
+.BR int(y) .
+.\" ----------------------------------------------
+.TP
+.B ldexp(x,y)
+.B ldexp(x,y)
+returns
+.BR "x * 2^(int(y))" .
+.\" ----------------------------------------------
+.TP
+.B lgamma(x)
+.B lgamma(x)
+returns the natural logarithm of
+.BR gamma(x) .
+.IP
+Because
+.BR gamma(x)
+has poles at zero and at negative integer values,
+and grows factorially with increasing
+.BR x ,
+it reaches the floating-point overflow limit
+fairly quickly.  For 64-bit IEEE 754 arithmetic,
+this happens at approximately
+.BR "x = 206.779" .
+However,
+.B lgamma(x)
+is representable almost to the overflow limit.  In
+64-bit IEEE 754 arithmetic, this happens at
+approximately
+.BR "x = 2.55e+306"
+(the overflow limit is 1.80e+308).
+.IP
+Unfortunately, there is mathematically-unavoidable
+accuracy loss when
+.B gamma(x)
+is computed from
+.BR exp(lgamma(x)) ,
+so you should avoid the logarithmic form unless
+you really need large arguments that would cause
+overflow.
+.\" ----------------------------------------------
+.TP
+.B ln(x)
+.B ln(x)
+returns the natural (base-E) logarithm of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.BI load( \&"filename" )
+.BI load( \&"filename" )
+reads input from the specified file.  The file can
+be prepared by hand, or by the
+.B save(\|)
+command.
+.IP
+See the
+.B "INPUT FILE SEARCH PATH"
+section below for details on how
+.B hoc
+finds input files.
+.IP
+Loaded files can themselves contain
+.B load(\|)
+commands, with nesting up to some unknown limit
+imposed by the host operating system on the
+maximum number of simultaneously-open files for a
+process, user, or the entire system.
+.IP
+This command can be disabled for security reasons
+by the command-line
+.B \-no-load
+or
+.B \-secure
+options.
+.IP
+The return value is an empty string on success,
+and otherwise, an error message.
+.\" ----------------------------------------------
+.TP
+.B log(x)
+.B log(x)
+returns the natural (base-E) logarithm of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B log10(x)
+.B log10(x)
+returns the logarithm to the base 10 of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B log1p(x)
+.B log1p(x)
+returns
+.BR "log(1 + x)" ,
+but without accuracy loss for small
+.BR |x| .
+.B x
+must be in (\-1.\|.\|.infinity].
+.\" ----------------------------------------------
+.TP
+.B log2(x)
+.B log2(x)
+returns the logarithm to the base 2 of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B logfile(filename)
+.B logfile(filename)
+logs the session on the specified file, which, for
+security reasons,
+.I must
+be a new file.  It is a normal text which you can
+edit, print, and view.
+.IP
+Input is recorded verbatim.  Output is recorded in
+comments.  This permits the logfile to be read by
+.B hoc
+later, allowing a session to be replayed.
+.IP
+If a logfile is already opened, it is closed
+before opening the new one.
+.IP
+Logging may be turned on and off with
+.B logon(\|)
+and
+.BR logoff(\|) ,
+and can be entirely disabled for security reasons
+by the command-line
+.B \-no-logfile
+option.
+.IP
+The return value is an empty string on success,
+and otherwise, an error message.
+.\" ----------------------------------------------
+.TP
+.B logoff(\|)
+.B logoff(\|)
+suspends logging to any open log file.  It is
+.I not
+an error if there is no current log file.
+.\" ----------------------------------------------
+.TP
+.B logon(\|)
+.B logon(\|)
+restores logging to any open log file.  It is
+.I not
+an error if there is no current log file.
+.\" ----------------------------------------------
+.TP
+.B macheps(x)
+.B macheps(x)
+returns the generalized machine epsilon of
+.BR x ,
+the
+smallest number which, when added to
+.BR x ,
+produces a sum that still differs from
+.BR x :
+.BR "(x + macheps(x)) != x" .
+.IP
+.B macheps(1)
+is the normal machine epsilon.
+.IP
+.B macheps(\-\&x)
+is
+.BR macheps(x)/base ,
+or equivalently, the smallest number that can be
+subtracted from
+.B x
+with the result still different from
+.BR x .
+.IP
+.B macheps(0)
+is the smallest representable floating-point
+number.  Depending on the host system, it may be a
+normal number, or a subnormal number (invoke
+.B help_subnormal(\|)
+for details).
+.\" ----------------------------------------------
+.TP
+.B max(x,y)
+.B max(x,y)
+returns the larger of
+.B x
+and
+.BR y .
+.IP
+If
+.I either
+argument is a NaN, the result is a NaN.
+.\" ----------------------------------------------
+.TP
+.B maxnormal(\|)
+.B maxnormal(\|)
+returns the maximum positive normal number.
+.\" ----------------------------------------------
+.TP
+.B min(x,y)
+.B min(x,y)
+returns the smaller of
+.B x
+and
+.BR y.
+.IP
+If
+.I either
+argument is a NaN, the result is a NaN.
+.\" ----------------------------------------------
+.TP
+.B minnormal(\|)
+.B minnormal(\|)
+returns the minimum positive normal number.
+.\" ----------------------------------------------
+.TP
+.B minsubnormal(\|)
+.B minsubnormal(\|)
+returns the minimum positive subnormal number.  If
+subnormals are not supported, then it returns the
+minimum normal number instead.
+.\" ----------------------------------------------
+.TP
+.B msg_translate(msg)
+.B msg_translate(msg)
+looks up the message string,
+.BR msg ,
+in
+.BR hoc 's
+translation tables, and if a nonempty translation
+exists, returns that translation; otherwise, it
+returns its argument,
+.BR msg .
+.IP
+Please use this function in your own
+.B hoc
+code to ensure that your messages can be
+translated to other languages without any changes
+whatsoever to your code.
+.\" ----------------------------------------------
+.TP
+.B nearest(x,y)
+.B nearest(x,y)
+returns the next different machine number nearest
+.BR x ,
+in the direction of the infinity with the same
+sign as
+.BR y.
+.\" ----------------------------------------------
+.TP
+.B nextafter(x,y)
+.B nextafter(x,y)
+returns the nearest machine number nearest
+.BR x ,
+in the direction of the infinity with the same
+sign as
+.BR y .
+.\" ----------------------------------------------
+.TP
+.B nint(x)
+.B nint(x)
+returns the nearest integer to
+.BR x ,
+rounding away from zero in case of a tie.
+.\" ----------------------------------------------
+.TP
+.B now(\|)
+.B now(\|)
+returns the current date and time, in the
+standard UNIX form
+.nf
+.\" NB: TWO spaces before day number in this date!
+\&\fC        "Wed Jul\ \ 4 14:57:51 2001"\fP
+.fi
+If the month day has only one digit, then it is
+preceded by an extra space.
+.\" ----------------------------------------------
+.TP
+.B number(s)
+.B number(s)
+converts the string
+.B s
+to a number and returns it.
+.IP
+.B s
+should contain either a hexadecimal floating-point
+number, a hexadecimal integer, a decimal
+floating-point number, a decimal integer, or a
+representation of NaN or Infinity.
+.IP
+If
+.B s
+contains a number followed by unrecognizable text,
+the number is converted and returned, and the
+following text is silently ignored.  Otherwise,
+the return value is 0, and the text is silently
+ignored.  Thus,
+.B number("123abc")
+returns 123, and
+.B number("abc")
+returns 0.
+.IP
+This function is an inverse of
+.BR hexfp(\|) ,
+.BR hexint(\|) ,
+and
+.BR string(\|) :
+.IP
+.RS
+.RS
+.nf
+.BR "number(hexfp(x))  == x"  " [for all numeric " x "]"
+.BR "number(hexint(x)) == x"  " [for all numeric " x "]"
+.BR "number(string(x)) == x"  " [for all numeric " x "]"
+.fi
+.RE
+.RE
+.IP
+See also
+.BR help_hexint(\|) ,
+.BR help_hexfp(\|) ,
+and
+.BR help_string(\|) .
+.\" ----------------------------------------------
+.TP
+.B popd(\|)
+.B popd(\|)
+removes the top-most element from the current
+directory stack, makes it the current directory,
+and calls
+.B dirs(\|)
+to print the updated stack.
+.IP
+See also
+.BR help_cd(\|) ,
+.BR help_dirs(\|) ,
+.BR help_pushd(\|) ,
+.BR help_pwd(\|) ,
+and
+.BR help_xd(\|) .
+.\" ----------------------------------------------
+.TP
+.B printenv(pattern)
+.B printenv(pattern)
+prints the names and values of all environment
+variables whose names match
+.BR pattern ,
+sorted in strict lexicographic order.
+.IP
+Matching is similar to UNIX shell pattern
+matching: asterisk (*) matches zero or more
+characters, and query (?) matches any single
+character.  A square-bracketed list of characters,
+and/or hyphen-separated character ranges, matches
+any character in that list.  A right bracket can
+be in the list only if it appears first. Thus,
+[A-Za-z0-9] matches an English letter or digit,
+and [][] matches a square bracket.
+.IP
+To match all environment variables, use
+.BR printenv("*") .
+.\" ----------------------------------------------
+.TP
+.B protect(s)
+.B protect(s)
+returns a copy of the string
+.B s
+with all nonprintable characters represented as
+escape sequences.
+.\" ----------------------------------------------
+.TP
+.B pushd(s)
+.B pushd(s)
+tries to make the directory named by the string
+.B s
+the new current working directory, and if that was
+successful, makes that directory the new top of
+the current directory stack, and calls
+.B dirs(\|)
+to print the updated stack.
+.IP
+See also
+.BR help_cd(\|) ,
+.BR help_dirs(\|) ,
+.BR help_popd(\|) ,
+.BR help_pwd(\|) ,
+and
+.BR help_xd(\|) .
+.\" ----------------------------------------------
+.TP
+.B putenv(envvar,newval)
+.B putenv(envvar,newval)
+replaces the current string value of the
+environment variable
+.B envvar
+with
+.BR newval ,
+and returns its old value.
+.IP
+This affects subsequent calls to
+.BR getenv(\|) ,
+but does
+.I not
+affect the environment of the parent process.
+.IP
+You can use this function to set locale
+environment variables that control the output of
+dates and times, in order to get internationalized
+output from
+.BR strftime(\|) .
+.\" ----------------------------------------------
+.TP
+.B pwd(\|)
+returns the name of the current working directory.
+That name is also available in the environment as
+.BR getenv("PWD") .
+.IP
+See also
+.BR help_cd(\|) ,
+.BR help_dirs(\|) ,
+.BR help_popd(\|) ,
+.BR help_pushd(\|) ,
+and
+.BR help_xd(\|) .
+.\" ----------------------------------------------
+.TP
+.B rand(\|)
+.B rand(\|)
+returns a pseudo-random number uniformly
+distributed on (0.\|.\|.1). Unless the seed is
+changed (see
+.BR help_setrand(\|) ),
+successive runs of the same program will generate
+the same sequence of pseudo-random numbers.
+.IP
+See
+.B help_randint(\|)
+for uniformly-distributed integers in an interval,
+and
+.B help_randl(\|)
+for logarithmically-distributed pseudo-random
+numbers.
+.IP
+The pseudo-random generator algorithm is
+platform-independent, allowing reproduction of the
+same number sequence on any computer architecture.
+.\" ----------------------------------------------
+.TP
+.B randint(x,y)
+.B randint(x,y)
+returns a pseudo-random integer uniformly
+distributed on
+.BR [int(x).\|.\|.int(y)] .
+Unless the seed is changed (see
+.BR help_setrand(\|) ),
+successive runs of the same program will generate
+the same sequence of pseudo-random numbers.
+.IP
+The pseudo-random generator algorithm is
+platform-independent, allowing reproduction of the
+same number sequence on any computer architecture.
+.\" ----------------------------------------------
+.TP
+.B randl(x)
+.B randl(x)
+returns a pseudo-random number logarithmically
+distributed on
+.BR (1,exp(x)) .
+Unless the seed is changed (see
+.BR help_setrand(\|) ),
+successive runs of the same program will generate
+the same sequence of pseudo-random numbers.
+.IP
+This function can be used to generate logarithmic
+distributions on any interval:
+.B a*randl(ln(b/a))
+is logarithmically distributed on
+.BR (a.\|.\|.b) .
+.IP
+The pseudo-random generator algorithm is
+platform-independent, allowing reproduction of the
+same number sequence on any computer architecture.
+.\" ----------------------------------------------
+.TP
+.B remainder(x,y)
+.B remainder(x,y)
+returns the remainder
+.BR "r =  x \(mi n*y" ,
+where
+.B n
+is the integral value nearest the exact value
+.BR x/y .
+When
+.BR "|n \(mi x/y| = 1/2" ,
+the value of
+.B n
+is chosen to be even.
+.\" ----------------------------------------------
+.TP
+.B rint(x)
+.B rint(x)
+returns the integral value nearest
+.B x
+in the direction of
+the current IEEE 754 rounding mode.
+.\" ----------------------------------------------
+.TP
+.B rsqrt(x)
+.B rsqrt(x)
+returns the reciprocal square root,
+.BR 1/sqrt(x) .
+.\" ----------------------------------------------
+.TP
+.B save(filename,pattern)
+.B save(filename,pattern)
+saves the state of the current session in the
+specified file, which, for security reasons,
+.I must
+be a new file.
+.IP
+Only symbols whose names match
+.B pattern
+are saved.
+.IP
+Matching is similar to UNIX shell pattern
+matching: asterisk (*) matches zero or more
+characters, and query (?) matches any single
+character.  A square-bracketed list of characters,
+and/or hyphen-separated character ranges, matches
+any character in that list.  A right bracket can
+be in the list only if it appears first. Thus,
+[A-Za-z0-9] matches an English letter or digit,
+and [][] matches a square bracket.
+.IP
+To match all symbols, use
+.BR save(filename,"*") .
+.IP
+Symbols are output in strict lexicographic
+order.
+.IP
+Reserved symbol names (those beginning with two or
+more underscores) are not saved.  Predefined
+immutable names are also excluded.
+.IP
+The saved file is a normal text file that can be
+later read by
+.B hoc
+on any platform.
+.IP
+[NB: A temporary implementation restriction also
+excludes user-defined immutable names, and all
+functions and procedures.]
+.IP
+This command can be disabled for security reasons
+by the command-line
+.B \-no-save
+option.
+.IP
+The return value is an empty string on success,
+and otherwise, an error message.
+.\" ----------------------------------------------
+.TP
+.B scalb(x,y)
+.B scalb(x,y)
+returns
+.BR "x * 2^(int(y))" .
+.\" ----------------------------------------------
+.TP
+.B second(\|)
+.B second(\|)
+returns the CPU time in job seconds since some
+fixed time in the past.  Take the difference of
+two bracketing calls to get the elapsed CPU time
+for a block of code.  For example,
+.IP
+.RS
+.nf
+\&\fCPREC = 3
+x = 1
+t = second(\|)
+for (k = 1; k < 1000000; ++k) x *= 1
+second(\|) - t
+4.73\fP
+.fi
+.RE
+.\" ----------------------------------------------
+.TP
+.B set_locale(localecode)
+.B set_locale(localecode)
+loads the locale files for the locale
+identified by
+.BR localecode .
+This must correspond to a subdirectory of the
+.B hoc
+system directory, which is
+.RS
+.RS
+\&\fC@SYSHOCDIR@\fP
+.RE
+.RE
+.IP
+in this installation.
+.IP
+Since
+.B set_locale(\|)
+is a long name, up to three shorthand procedures
+are provided for each language: the two-letter
+country code, the native name for the language,
+and the English name for the language.  Thus,
+.BR da(\|) ,
+.BR dansk(\|) ,
+and
+.B danish(\|)
+all switch to the Danish locale, and
+.BR en(\|) ,
+.BR engelsk(\|) ,
+and
+.B english(\|)
+switch to the default English locale.
+.\" ----------------------------------------------
+.TP
+.B setrand(x)
+.BR setrand(x) ,
+where
+.B x
+should be a large integer, sets the seed of the
+pseudo-random number generator to
+.BR x ,
+and returns the old seed.
+.IP
+As a special case, when
+.B x
+is zero,
+.B x
+is ignored,
+and a new seed is constructed from a random number
+multiplied by either the calendar time (if
+available), or the process number (if available),
+or the next pseudo-random number.
+.IP
+If
+.B setrand(x)
+is never called, then
+.BR rand(\|) ,
+.BR randint(\|) ,
+and
+.B randl(x)
+will each return the same sequence of
+pseudo-random numbers: see
+.BR help_rand(\|) ,
+.BR help_randint(\|) ,
+and
+.BR help_randl(\|) .
+.IP
+The pseudo-random generator algorithm is
+platform-independent, allowing reproduction of the
+same number sequence on any computer architecture.
+.\" ----------------------------------------------
+.TP
+.B significand(x)
+.B significand(x)
+returns the significand of
+.BR x ,
+.BR s,
+such that
+.BR "x = s * 2^n" ,
+with
+.B s
+in [1,2), and
+.B n
+an integer.
+.IP
+See
+.B help_exponent(\|)
+for how to extract the exponent,
+.BR n .
+.\" ----------------------------------------------
+.TP
+.B sin(x)
+.B sin(x)
+returns the sin of
+.B x
+.RB ( x
+in radians).  Expect severe accuracy loss for
+large
+.BR |x| .
+.\" ----------------------------------------------
+.TP
+.B sind(x)
+.B sind(x)
+returns the sin of
+.B x
+.RB ( x
+in degrees).  Expect severe accuracy loss for
+large
+.BR |x| .
+.\" ----------------------------------------------
+.TP
+.B single(x)
+.B single(x)
+returns the value of
+.B x
+converted to single precision, and then back to
+working precision.
+.\" ----------------------------------------------
+.TP
+.B sinh(x)
+.B sinh(x)
+returns the hyperbolic sin of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B snan()
+returns a distinct signaling NaN on each call, up
+to some architectural limit, after which, the
+values cycle.  At least 2^23 different values can
+be returned.  The only way to distinguish between
+them is to examine their bit representations with
+.BR ftoh() .
+.IP
+By contrast, the predefined constants SNAN and
+SNaN have fixed bit patterns.
+.IP
+See also
+.BR ftoh() ,
+.BR htof() ,
+.BR NaN ,
+.BR QNaN ,
+and
+.BR SNaN .
+.\" ----------------------------------------------
+.TP
+.B sqrt(x)
+.B sqrt(x)
+returns the square root of
+.BR x .
+.B x
+must be in [\-0.\|.\|.Infinity].
+.IP
+Special case:
+.BR "sqrt(\-0) \(-> \-0" .
+.\" ----------------------------------------------
+.TP
+.B strftime(format,time)
+.B strftime(format,time)
+converts a numeric time measured in seconds since
+the epoch (usually obtained from
+.BR systime(\|) )
+to a formatted string determined by one or more of
+these format items:
+.RS
+.RS
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP \w'\fB%M\fP'u+2n
+.B %A
+the locale's full weekday name.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %a
+the locale's abbreviated weekday
+name.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %B
+the locale's full month name.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %b
+the locale's abbreviated month
+name.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %c
+the locale's appropriate date and
+time representation.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %d
+the day of the month as a decimal
+number (01\(mi31).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %H
+the hour (24-hour clock) as a
+decimal number (00\(mi23).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %I
+the hour (12-hour clock) as a
+decimal number (01\(mi12).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %j
+the day of the year as a decimal
+number (001\(mi366).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %M
+the minute as a decimal number
+(00\(mi59).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %m
+the month as a decimal number
+(01\(mi12).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %p
+the locale's equivalent of either
+``AM'' or ``PM''.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %S
+the second as a decimal number
+(00\(mi60).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %U
+the week number of the year
+(Sunday as the first day of the week) as a
+decimal number (00\(mi53).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %W
+the week number of the year
+(Monday as the first day of the week) as a
+decimal number (00\(mi53).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %w
+the weekday (Sunday as the first
+day of the week) as a decimal number (0\(mi6).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %X
+the locale's appropriate time
+representation.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %x
+the locale's appropriate date
+representation.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %Y
+the year with century as a
+decimal number.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %y
+the year without century as a
+decimal number (00\(mi99).
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %Z
+the time zone name.
+.\" - - - - - - - - - - - - - - - - - - - - - - -
+.TP
+.B %%
+is replaced by `%'.
+.RE
+.RE
+.\" ----------------------------------------------
+.TP
+.B string(x)
+.B string(x)
+returns a string containing the decimal
+representation of
+.BR x ,
+either in integer form (if
+.B x
+is exactly representable that way), or in
+floating-point form.
+.IP
+See also
+.BR help_hexfp(\|) ,
+.BR help_hexint(\|) ,
+and
+.BR help_number(\|) .
+.\" ----------------------------------------------
+.TP
+.B substr(s,start,len)
+.B substr(s,start,len)
+returns a substring of string
+.B s
+beginning at character
+.B start
+(counting from 1), of length at most
+.BR len .
+If
+.B start
+is outside the string, it is moved to the nearest
+endpoint,
+.I without
+adjusting
+.BR len .
+Fewer than
+.B len
+characters will be returned if the substring
+extends outside the original string.
+.\" ----------------------------------------------
+.TP
+.B symnum(s)
+.B symnum(s)
+converts the string
+.B s
+to a symbol naming a numeric variable, which must
+exist.  It may then be used almost like any
+numeric variable name, wherever its value is
+taken, but it cannot be used to define a symbol,
+such as on the left-hand side of an assignment
+statement.
+.\" ----------------------------------------------
+.TP
+.B symstr(s)
+.B symstr(s)
+converts the string
+.B s
+to a symbol naming a string variable, which must
+exist.  It may then be used almost like any
+string variable name, wherever its value is
+taken, but it cannot be used to define a symbol,
+such as on the left-hand side of an assignment
+statement.
+.\" ----------------------------------------------
+.TP
+.B systime(\|)
+.B systime(\|)
+returns the calendar time in seconds since the
+epoch.  On UNIX systems, the epoch starts on
+January 1, 1970 00:00:00 UTC.  Other operating
+systems make different choices.  It can be
+converted to a formatted time string with
+.BR strftime(\|) .
+.\" ----------------------------------------------
+.TP
+.B tan(x)
+.B tan(x)
+returns the tangent of
+.B x
+.RB ( x
+in radians).  Expect severe accuracy loss for
+large
+.BR |x| .
+.\" ----------------------------------------------
+.TP
+.B tand(x)
+.B tand(x)
+returns the tangent of
+.B x
+.RB ( x
+in degrees).  Expect severe accuracy loss for
+large
+.BR |x| .
+.\" ----------------------------------------------
+.TP
+.B tanh(x)
+.B tanh(x)
+returns the hyperbolic tangent of
+.BR x .
+.\" ----------------------------------------------
+.TP
+.B tolower(s)
+.B tolower(s)
+returns a copy of string
+.B s
+with uppercase letters converted to lowercase, and
+all other characters unchanged.
+.IP
+Which characters are considered uppercase depends
+on the locale.  On UNIX, this is determined by the
+.B LC_CTYPE
+environment variable.
+.\" ----------------------------------------------
+.TP
+.B toupper(s)
+.B toupper(s)
+returns a copy of string
+.B s
+with lowercase letters converted to uppercase, and
+all other characters unchanged.
+.IP
+Which characters are considered lowercase depends
+on the locale.  On UNIX, this is determined by the
+.B LC_CTYPE
+environment variable.
+.\" ----------------------------------------------
+.TP
+.B trunc(x)
+.B trunc(x)
+returns the integer part of
+.BR x ,
+with the fractional part discarded.
+.\" ----------------------------------------------
+.TP
+.B unordered(x,y)
+.B unordered(x,y)
+returns 1 (true) if
+.B x
+or
+.B y
+is unordered with respect to the other (that is,
+at least one of them is a NaN), and otherwise, 0
+(false).
+.\" ----------------------------------------------
+.TP
+.B who(pattern)
+.B who(pattern)
+prints all symbols whose names match
+the
+.B pattern
+string, grouped by category, and sorted
+lexicographically within each category.
+.IP
+Matching is similar to UNIX shell pattern
+matching: asterisk (*) matches zero or more
+characters, and query (?) matches any single
+character.  A square-bracketed list of characters,
+and/or hyphen-separated character ranges, matches
+any character in that list.  A right bracket can
+be in the list only if it appears first. Thus,
+[A-Za-z0-9] matches an English letter or digit,
+and [][] matches a square bracket.
+.IP
+To print all symbols, use
+.BR who("*") .
+.\" ----------------------------------------------
+.TP
+.B xd(\|)
+.B xd(\|)
+exchanges the top two entries in the current
+directory stack, making the new top entry the
+current working directory, and calls
+.B dirs(\|)
+to print the updated stack.
+.B xd(\|)
+raises an error if there are not at least two
+directories in the stack.
+.IP
+See also
+.BR help_cd(\|) ,
+.BR help_dirs(\|) ,
+.BR help_popd(\|) ,
+.BR help_pushd(\|) ,
+and
+.BR help_pwd(\|) .
+.\" ----------------------------------------------
+.TP
+.B Y0(x)
+.B Y0(x)
+returns the Bessel function of the second kind of
+order 0 of
+.BR x ,
+for
+.BR "x >= 0" .
+This function is also called
+.IR "Weber's function" .
+.\" ----------------------------------------------
+.TP
+.B Y1(x)
+.B Y1(x)
+returns the Bessel function of the second kind of
+order 1 of
+.BR x ,
+for
+.BR "x >= 0" .
+This function is also called
+.IR "Weber's function" .
+.\" ----------------------------------------------
+.TP
+.B Yn(n,x)
+.B Yn(n,x)
+returns the Bessel function of the second kind of
+integral order
+.B n
+of
+.BR x ,
+for
+.BR "x >= 0" .
+This function is also called
+.IR "Weber's function" .
+.\" ----------------------------------------------
+.SH "ADDITIONAL LIBRARIES"
+.B hoc
+comes with a small collection of libraries that
+can be loaded with
+.B load(\|)
+commands, possibly placed in your personal startup
+file so that you always have selected libraries
+preloaded.  Each function and procedure provided
+has a corresponding help procedure, so that
+documentation will not be repeated here.
+.RS
+.\" ----------------------------------------------
+.TP \w'\fBshow-strftime\fP'u+2n
+.B annuity
+Simple financial computations with functions
+.B annuity(\|)
+and
+.BR compound(\|) ,
+and procedure
+.BR mortgage(\|) .
+.\" ----------------------------------------------
+.TP
+.B fortune
+Numeric fortune cookies, with procedures
+.B fortune(\|)
+and
+.BR findfortune(\|) .
+.\" ----------------------------------------------
+.TP
+.B primes
+Prime number support, with functions
+.BR isprime(\|) ,
+.BR next_prime(\|) ,
+.BR nth_prime(\|) ,
+.BR prev_prime(\|) ,
+.BR this_or_next_prime(\|) ,
+and
+.BR this_or_prev_prime(\|) ,
+and procedures
+.B prime_factors(\|)
+and
+.BR primes_between(\|) .
+.\" ----------------------------------------------
+.TP
+.B pushd
+Procedures
+.BR dirs(\|) ,
+.BR popd(\|) ,
+.BR pushd(\|) ,
+and
+.BR xd(\|) .
+[This library is useful enough that it is preloaded
+by default.]
+.\" ----------------------------------------------
+.TP
+.B require
+Procedures
+.B provide(\|)
+and
+.B require(\|)
+for loading only libraries that have not already
+been loaded.
+.\" ----------------------------------------------
+.TP
+.B show-strftime
+Procedure
+.B show_strftime_conversions(\|)
+to test all of the format items provided by the
+.B strftime(\|)
+function.
+.\" ----------------------------------------------
+.TP
+.B sunmath
+Additional functions modeled on ones available in
+the Sun Solaris mathematical library:
+.BR exp10(\|) ,
+.BR exp2(\|) ,
+.BR iszero(\|) ,
+.BR max_normal(\|) ,
+.BR max_subnormal(\|) ,
+.BR min_normal(\|) ,
+.BR min_subnormal(\|) ,
+.BR quiet_nan(\|) ,
+.BR signaling_nan(\|) ,
+and
+.BR signbit(\|) .
+.RE
+.\" ----------------------------------------------
+.SH "IMPLEMENTATION LIMITS"
+All internal storage areas in
+.B hoc
+grow as needed.  There are no fixed limits on
+their size, other than the amount of available
+allocatable memory.
+.PP
+The current sizes of these internal storage areas
+are recorded as immutable numeric named constants:
+.RS
+.TP \w'\fB_\|_MAX_PUSHBACK_\|_\fP'u+2n
+.B _\|_MAX_FRAME_\|_
+Function/procedure call stack size.
+.TP
+.B _\|_MAX_LINE_\|_
+Input line buffer size.
+.TP
+.B _\|_MAX_NAME_\|_
+Longest identifier name.
+.TP
+.B _\|_MAX_PROG_\|_
+.B hoc
+virtual machine code size.
+.TP
+.B _\|_MAX_PUSHBACK_\|_
+Input pushback buffer size.
+.TP
+.B _\|_MAX_STACK_\|_
+Argument stack size.
+.TP
+.B _\|_MAX_STRING_\|_
+Longest character string constant.
+.TP
+.B _\|_MAX_TOKEN_\|_
+Longest numeric token.
+.RE
+.PP
+This list may change during
+.B hoc
+development, but will ultimately be stable.
+.PP
+The function
+.B help_limits()
+can be conveniently used to display their current
+values.
+.\" ----------------------------------------------
+.SH EXAMPLES
+.nf
+\&\fCfunc gcd(i,j) {
+        ## gcd(i,j) returns the greatest common denominator of i and j
+        temp = abs(i) % abs(j)
+        if(temp == 0) return abs(j)
+        return gcd(j, temp)
+}\fP
+.PP
+\&\fCfor(i=1; i<12; i++) print gcd(i,12)
+print "\en"
+1 2 3 4 1 6 1 4 3 2 1\fP
+.PP
+\&\fC### Print a table of the representable negative powers of 2
+k = 0
+x = 1
+while (x > 0) \e
+{
+        print "2\^(", k, ") = ", x, "\en"
+        k--
+        x /= 2
+}
+2^(0 ) = 1
+2^(-1 ) = 0.5
+2^(-2 ) = 0.25
+2^(-3 ) = 0.125
+\&\|.\|.\|.
+2^(-1072 ) = 1.9762625833649862e-323
+2^(-1073 ) = 9.8813129168249309e-324
+2^(-1074 ) = 4.9406564584124654e-324\fP
+.fi
+.\" ----------------------------------------------
+.SH "INITIALIZATION FILES"
+On startup, after processing any command-line
+options that suppress initialization files,
+.B hoc
+checks for the existence of local system-wide
+initialization files,
+.RS
+.\"-----------------------------------------------
+.TP \w'\(bu'u+2n
+\(bu
+.BR \fC@SYSHOCRC@\fP ,
+.\"-----------------------------------------------
+.TP
+\(bu
+.BR \fC@SYSHOCDIR@/locale/LN/@SYSHOCRCBASE@\fP ,
+.\"-----------------------------------------------
+.TP
+\(bu
+.BR \fC@SYSHOCHLP@\fP ,
+.\"-----------------------------------------------
+.TP
+\(bu
+.BR \fC@SYSHOCDIR@/locale/LN/@SYSHOCHLPBASE@\fP ,
+.\"-----------------------------------------------
+.TP
+\(bu
+.BR \fC@SYSHOCXLT@\fP ,
+.\"-----------------------------------------------
+.TP
+\(bu
+.BR \fC@SYSHOCDIR@/locale/LN/@SYSHOCXLTBASE@\fP ,
+.\"-----------------------------------------------
+.RE
+(LN is replaced by the locale name (see the
+.B INTERNATIONALIZATION
+section above), if one is defined, and otherwise,
+that file is omitted), and a private
+initialization file,
+.RS
+.\"-----------------------------------------------
+.TP \w'\(bu'u+2n
+\(bu
+.BR \fC$HOME/.hocrc\fP ,
+.\"-----------------------------------------------
+.RE
+in that order.  Any that exist are automatically
+processed before the remaining command-line
+options are handled.
+.PP
+This feature allows for local customization of
+.BR hoc ,
+usually for additional constants and functions, as
+well as for locale-specific translations of output
+strings.
+.PP
+In initialization files, the
+.BR load(\|) ,
+.BR logfile(\|) ,
+and
+.B save(\|)
+commands are
+.I always
+available, even if command-line options disable
+them from use later in the job.
+.PP
+If GNU
+.I readline
+library support is available in
+.BR hoc ,
+then its initialization file,
+\&\fC$HOME/.inputrc\fP, (overriddable by setting
+an alternate filename in the value of the
+.B INPUTRC
+environment variable), can be used for
+customization of key bindings for command
+completion, editing, and recall.  To restrict
+any such bindings to
+.BR hoc ,
+put them in a conditional like this:
+.RS
+.nf
+\&\fC$if @PACKAGE_NAME@
+\&    .\|.\|.
+$endif\fP
+.fi
+.RE
+.\" ----------------------------------------------
+.SH "ENVIRONMENT VARIABLES"
+.\"-----------------------------------------------
+.TP \w'LC_MESSAGES'u+2n
+.B HOCPATH
+Colon-separated list of directories in which to
+search for input files.  An empty component in the
+directory path list stands for the default
+.B hoc
+system path.
+.\"-----------------------------------------------
+.TP
+.B HOME
+User's home directory, where any private
+.B hoc
+startup file is stored.
+.\"-----------------------------------------------
+.TP
+.B INPUTRC
+Name of an alternate
+.I readline
+initialization file, overriding the default file,
+\&\fC$HOME/.inputrc\fP.
+.\"-----------------------------------------------
+.TP
+.B LC_ALL
+Primary variable defining the locale name.  The
+name defines a component in the local
+installation's
+.B hoc
+library directory path in which are found
+localized files to support use of
+.B hoc
+in non-English environments.
+.\"-----------------------------------------------
+.TP
+.B LC_MESSAGES
+Secondary variable defining the locale name.  It
+is ignored if
+.B LC_ALL
+is set.
+.\"-----------------------------------------------
+.TP
+.B LANG
+Tertiary variable defining the locale name.  It is
+ignored if
+.B LC_ALL
+or
+.B LC_MESSAGES
+is set.
+.\" ----------------------------------------------
+.SH "SEE ALSO"
+.BR awk (1),
+.BR bc (1),
+.BR dc (1),
+.BR dircolors (1),
+.BR emacs (1),
+.BR expr (1),
+.BR genius (1),
+.BR locale (1),
+.BR readline (3),
+.BR vi (1),
+.BR xlsfonts (1),
+.BR xterm (1).
+.\" ----------------------------------------------
+.SH "FURTHER READING"
+This version of
+.B hoc
+grew out of the six generations presented in
+.RS
+.nf
+Brian W. Kernighan and Rob Pike,
+.IR "The UNIX Programming Environment"
+Prentice-Hall, Upper Saddle River, NJ (1984)
+ISBN 0-13-937699-2 (hardcover), 0-13-937681-X (paperback),
+LCCN: QA76.76.O63 K48 1984.
+.fi
+.RE
+.PP
+Sadly, most programming language textbooks have
+little or no coverage of floating-point
+arithmetic, and programming language standards,
+besides being hard to read, have generally
+provided inadequate support for IEEE 754
+arithmetic.
+.PP
+An early draft of the IEEE 754 Standard was
+published in an October 1979 special issue of
+.IR "ACM SIGNUM Newsletter" .
+The January 1980 and March 1981 issues of the IEEE
+journal
+.I Computer
+contain several papers about the then-developing
+IEEE 754 proposal, including a draft of the
+Standard.
+.PP
+The official IEEE 754 Standard is available as:
+.RS
+.nf
+.I "ANSI/IEEE 754-1985, Standard for Binary Floating-Point Arithmetic"
+IEEE, New York, NY (1985)
+20 pp.
+ISBN 1-55937-653-8
+.fi
+.RE
+Work on a revision of that Standard began about
+2000, and is expected to take several years.
+.PP
+An interestingly account of the early development
+of the IEEE 754 arithmetic system can be found in
+the Web document
+.RS
+.nf
+Charles Severance
+.I "An Interview with the Old Man of Floating-Point: Reminiscences elicited from William Kahan"
+URL \fChttp://www.cs.berkeley.edu/~wkahan/ieee754status/754story.html\fP
+.fi
+.RE
+.PP
+The IEEE sponsors symposia on computer arithmetic
+that are held approximately every other year; the
+15th was held in 2001.  Most of the papers deal
+with low-level hardware issues of computer
+arithmetic.
+.PP
+The journal
+.I "Communications of the ACM"
+began publishing computer algorithms in 1960, and
+in 1974, that function was moved to a new journal,
+.IR "ACM Transactions on Mathematical Software" .
+That journal,
+.I TOMS
+for short, has become the principal publication
+source for computer software that implements
+numerical algorithms.  Other important journals in
+this area include
+.IR "Computing" ,
+.IR "Mathematics of Computation" ,
+and
+.I "Numerische Mathematik"
+(whose articles are mostly in English, despite the
+German title); their emphasis is often heavily
+theoretical.
+.PP
+A recent short book that discusses IEEE 754
+arithmetic exclusively is:
+.RS
+Michael Overton
+.br
+.I "Numerical Computing with IEEE Floating Point Arithmetic, Including"
+.I "One Theorem, One Rule of Thumb, and One Hundred and One Exercises"
+.nf
+xiv + 104 pp.
+SIAM, Philadelphia, PA (2001)
+ISBN 0-89871-482-6
+LCCN QA76.9.M35 O94 2001
+.fi
+.RE
+.PP
+Two recent books about hardware implementation of
+computer arithmetic are:
+.RS
+.nf
+Amos R. Omondi
+.I "Computer Arithmetic Systems --- Algorithms, Architecture, Implementation"
+Prentice-Hall, Upper Saddle River, NJ (1994)
+xvi + 520 pp.
+ISBN 0-13-334301-4
+LCCN QA76.9.C62 O46 1994
+
+Behrooz Parhami
+.I "Computer Arithmetic: Algorithms and Hardware Designs"
+Oxford University Press, Oxford, UK (2000)
+xx + 490 pp.
+ISBN 0-19-512583-5
+LCCN QA76.9.C62P37 1999
+.fi
+.RE
+.PP
+The older book
+.RS
+.nf
+William J. Cody, Jr. and William Waite
+.I "Software Manual for the Elementary Functions"
+Prentice-Hall, Upper Saddle River, NJ (1980)
+x + 269 pp.
+ISBN 0-13-822064-6
+LCCN QA331 .C635 1980
+.fi
+.RE
+remains a good reference for the accurate
+computation of the elementary functions, and is
+one of the few to address the related issue of
+.I decimal
+floating-point systems (such as used in some hand
+calculators).  Its elementary function test
+package,
+.IR ELEFUNT ,
+exposed serious flaws in a great many vendor
+implementations, and thanks to ELEFUNT, today, the
+accuracy and reliability of the revised
+implementations is very much better.  Although the
+book was written before IEEE 754 arithmetic became
+available, in many cases, only simple tests for
+NaN and Infinity arguments need to be inserted
+into the start of each algorithm to generalize the
+code for current systems.
+.PP
+A excellent recent book that addresses computation
+of the elementary functions on a particular
+extended implementation of IEEE 754 arithmetic,
+that in the HP/Intel IA-64 architecture, is
+.RS
+.nf
+Peter Markstein
+.I "IA-64 and Elementary Functions: Speed and Precision"
+xix + 298 pp.
+Prentice-Hall, Upper Saddle River, NJ (2000)
+ISBN 0-13-018348-2
+LCCN QA76.9.A73 M365 2000
+.fi
+.RE
+Markstein's book also contains algorithms for the
+correctly-rounded computation of floating-point
+division and square-root, and of integer division,
+starting from low-precision reciprocal
+approximations.
+.\" ----------------------------------------------
+.SH BUGS
+All components of a
+.B for
+statement must be non-empty.
+.PP
+Error recovery is imperfect within function and
+procedure definitions.
+.PP
+The treatment of newlines is not exactly
+user-friendly.
+.PP
+Function/procedure arguments, whether named or
+numbered (\fC$1\fP, \fC$2\fP, .\|.\|.) are not
+really variables and thus won't work in constructs
+like, for instance,
+\&\fC$1++\fP.
+.PP
+Functions and procedures typically have to be
+declared before use, which makes mutual recursion
+at first sight impossible.  The workaround is to
+first define a dummy version of one of them.  For
+example, here is an unusual implementation of a
+pair of functions, each of which returns the
+factorial of its argument:
+.RS
+.nf
+\&\fCfunc foo() return 0
+func bar(n) {if (n > 0) return n * foo(n-1) else return 1}
+func foo(n) {if (n > 0) return n * bar(n-1) else return 1}\fP
+.fi
+.RE
+.\" ----------------------------------------------
+.SH AVAILABILITY
+.B hoc
+is highly portable, and vastly smaller than a
+compiler for a major programming language, so it
+should be usable on all computing platforms.  When
+a C or C++ compiler is available,
+.B hoc
+can be easily built, validated, and installed
+using the distribution source code from its master
+archive:
+.RS
+.nf
+\&\fCftp://ftp.math.utah.edu/pub/hoc
+http://www.math.utah.edu/pub/hoc/\fP
+.fi
+.RE
+For platforms where suitable compilers are often
+not installed, there may be binary distributions
+available at those locations.
+.PP
+.\" ----------------------------------------------
+.SH COPYRIGHT
+.nf
+.\" This copyright notice is extracted verbatim
+.\" from the README file, and set in a fixed-width
+.\" font to be distinctive.
+\&\fCCopyright (C) AT&T 1995
+All Rights Reserved
+
+Permission to use, copy, modify, and distribute this software and
+its documentation for any purpose and without fee is hereby
+granted, provided that the above copyright notice appear in all
+copies and that both that the copyright notice and this
+permission notice and warranty disclaimer appear in supporting
+documentation, and that the name of AT&T or any of its entities
+not be used in advertising or publicity pertaining to
+distribution of the software without specific, written prior
+permission.
+
+AT&T DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS.
+IN NO EVENT SHALL AT&T OR ANY OF ITS ENTITIES BE LIABLE FOR ANY
+SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+THIS SOFTWARE.\fP
+.fi
+.\" ----------------------------------------------
+.SH ACKNOWLEDGEMENTS
+The
+.B hoc
+version 7 developer and maintainer (Nelson
+H. F. Beebe \&\fC<beebe@math.utah.edu>\fP) thanks
+the AT&T/Lucent Bell Labs people (current and
+former), notably Ken Thompson, Dennis Ritchie,
+Brian Kernighan, Rob Pike, John Bentley, Bill
+Plauger, Stu Feldman, David Gay, Norm Schryer, and
+Bjarne Stroustrup for developing the wonderful
+UNIX and C/C++ programming environment, for being
+a constant source of inspiration for software
+development, and for their superb book authoring.
+.PP
+He also thanks the many people at the Free
+Software Foundation, for enriching UNIX with
+GNUware, and most notably, Richard Stallman for
+.BR emacs (1)
+and
+.BR gcc (1),
+for founding the FSF and the GNU Project, and for
+vigorous campaigning to keep software freely
+distributable.
+.PP
+Finally, he thanks friends and colleagues on the
+.B hoc
+help facility translation team for assistance in
+internationalization:
+Hugo Bertete-Aguirre (Portuguese),
+Andrej Cherkaev (Russian),
+Tanya Damjanovic (Serbian),
+Michel Debar (French),
+Miguel Dumett (Spanish),
+Henryk Hecht (Polish),
+Michael Hohn (German),
+Ismail Kk (Turkish),
+Young Seon Lee (Korean),
+Dragan Milicic (Croatian),
+and
+Jingyi Zhu (Chinese).
+[The English and Danish, and part of the French,
+help facilities were written by the maintainer.]
+.\"=====================================================================
+.\" This is for GNU Emacs file-specific customization:
+.\" Local Variables:
+.\" fill-column: 50
+.\" End:

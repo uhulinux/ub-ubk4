@@ -1,0 +1,11 @@
+diff -Nur orig/Makefile.in mod/Makefile.in
+--- orig/Makefile.in	2017-12-28 16:02:39.000000000 +0100
++++ mod/Makefile.in	2018-01-05 17:20:46.866775106 +0100
+@@ -94,7 +94,6 @@
+ 	$(INSTALL) -d $(_includedir)/t3/highlight/t3highlight
+ 	$(INSTALL) -m0644 src/highlight.h src/highlight_api.h src/highlight_errors.h $(_includedir)/t3/highlight/t3highlight
+ 	$(INSTALL) -d $(_docdir)
+-	$(INSTALL) -m0644 COPYING README Changelog $(_docdir)
+ 	$(INSTALL) -d $(_datadir)/libt3highlight2/def
+ 	find src/data -type f | while read X ; do $(INSTALL) -m0644 $${X} $(_datadir)/libt3highlight2/$${X#src/data} ; done
+ 	$(INSTALL) -d $(_pkgconfigdir)

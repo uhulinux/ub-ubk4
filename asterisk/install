@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/etc/asterisk/samples/
+make samples \
+	DESTDIR="$UB_INSTALLDIR" \
+	ASTETCDIR="/etc/asterisk/samples"
+
+#cd addons
+#ub_install

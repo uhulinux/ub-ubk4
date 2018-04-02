@@ -1,0 +1,28 @@
+diff -Nur orig/latexmk.1 mod/latexmk.1
+--- orig/latexmk.1	2017-11-20 17:58:34.000000000 +0100
++++ mod/latexmk.1	2017-12-22 22:06:23.868325920 +0100
+@@ -1138,6 +1138,7 @@
+    "/opt/local/share/latexmk/LatexMk",
+    "/usr/local/share/latexmk/LatexMk",
+    "/usr/local/lib/latexmk/LatexMk".
++   On an UHU-UBK-Linux system, it only looks for "/etc/latexmk.conf".
+    On a MS-Windows system it looks for "C:\\latexmk\\LatexMk".
+    On a cygwin system (i.e., a MS-Windows system in which Perl is
+ that of cygwin), \fIlatexmk\fR reads the first it finds of
+diff -Nur orig/latexmk.pl mod/latexmk.pl
+--- orig/latexmk.pl	2017-11-20 18:33:53.000000000 +0100
++++ mod/latexmk.pl	2017-12-22 22:08:31.736059414 +0100
+@@ -832,11 +832,12 @@
+     ## In addition, we need to add the same set of possible locations as with
+     ## unix, so that the user use a unix-style setup.
+     @rc_system_files = ();
+-    foreach ( 'LatexMk', 'latexmkrc' ) {
++    foreach ( 'LatexMk', 'latexmkrc' 'latexmk.conf') {
+        push @rc_system_files,
+             ( "/cygdrive/c/latexmk/$_", 
+               "/opt/local/share/latexmk/$_", 
+               "/usr/local/share/latexmk/$_",
++              "/etc/latexmk/$_",
+               "/usr/local/lib/latexmk/$_" );
+     }
+     $search_path_separator = ';';  # Separator of elements in search_path

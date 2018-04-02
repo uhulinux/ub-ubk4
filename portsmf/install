@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+make DESTDIR="${UB_INSTALLDIR}" includedir=/usr/include/portsmf install
+install -D -m644 portSMF.pc "${UB_INSTALLDIR}/usr/lib/pkgconfig/portSMF.pc"

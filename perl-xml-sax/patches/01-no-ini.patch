@@ -1,0 +1,11 @@
+diff -Naur XML-SAX-0.15.orig/Makefile.PL XML-SAX-0.15/Makefile.PL
+--- XML-SAX-0.15.orig/Makefile.PL	2006-04-24 02:14:03.000000000 +0200
++++ XML-SAX-0.15/Makefile.PL	2007-05-31 20:03:09.000000000 +0200
+@@ -42,7 +42,6 @@
+         $script .= <<"INSTALL";
+ 
+ install_sax_pureperl :
+-\t\@\$(PERL) -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
+ 
+ INSTALL
+ 

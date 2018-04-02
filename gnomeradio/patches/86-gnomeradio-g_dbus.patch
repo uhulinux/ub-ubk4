@@ -1,0 +1,131 @@
+Description: Migrate from dbus-glib to glib's GDBus.
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1258518
+Index: gnomeradio-1.8/configure.ac
+===================================================================
+--- gnomeradio-1.8.orig/configure.ac
++++ gnomeradio-1.8/configure.ac
+@@ -44,7 +44,7 @@ PKG_CHECK_MODULES(ALSA, alsa >= 1.0.25)
+ AC_SUBST(ALSA_CFLAGS)
+ AC_SUBST(ALSA_LIBS)
+ 
+-PKG_CHECK_MODULES(GNOME, dbus-glib-1 gtk+-3.0 libxml-2.0 glib-2.0 gio-2.0)
++PKG_CHECK_MODULES(GNOME, gtk+-3.0 libxml-2.0 glib-2.0 gio-2.0)
+ AC_SUBST(GNOME_CFLAGS)
+ AC_SUBST(GNOME_LIBS)
+ 
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -22,9 +22,8 @@
+ 
+ #include <config.h>
+ #include <glib/gi18n.h>
++#include <gio/gio.h>
+ #include <gtk/gtk.h>
+-#include <dbus/dbus-glib.h>
+-#include <dbus/dbus-glib-bindings.h>
+ #include <math.h>
+ #include <stdlib.h>
+ #include "gui.h"
+@@ -98,7 +97,7 @@ static gint mode;
+ 
+ static gboolean do_scan;
+ 
+-static DBusGProxy *proxy;
++static GDBusProxy *proxy;
+ 
+ static void connect_to_session (void);
+ 
+@@ -1212,14 +1211,16 @@ GtkWidget* gnome_radio_gui (void)
+ }
+ 
+ static void
+-session_die_cb(void)
++session_die_cb (GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data)
+ {
+-	if (settings.mute_on_exit)
+-		radio_stop();
++	if (g_strcmp0 (signal_name, "SessionOver") == 0) {
++		if (settings.mute_on_exit)
++			radio_stop();
+ 
+-	mixer->close_device();
+-	gtk_widget_destroy (GTK_WIDGET (app));
+-	exit (0);
++		mixer->close_device();
++		gtk_widget_destroy (GTK_WIDGET (app));
++		exit (0);
++	}
+ }
+ 
+ /*
+@@ -1490,14 +1491,8 @@ int main (int argc, char **argv)
+ 
+ 	g_object_unref (application);
+ 
+-	if (proxy) {
+-		DBusGConnection *conn;
+-		conn = (DBusGConnection *)g_object_get_data (G_OBJECT (proxy), "connection");
+-		if (conn)
+-			dbus_g_connection_unref (conn);
+-
++	if (proxy != NULL)
+ 		g_object_unref (proxy);
+-	}
+ 
+ #ifdef HAVE_LIRC
+ 	my_lirc_deinit();
+@@ -1508,32 +1503,34 @@ int main (int argc, char **argv)
+ 
+ static void connect_to_session (void)
+ {
+-	DBusGConnection *connection;
++	GDBusConnection *connection;
+ 	GError *error = NULL;
+ 
+-	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
++	connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+ 
+-	if (error) {
++	if (connection == NULL) {
+ 		g_warning ("Could not connect to system bus: %s", error->message);
+-		g_error_free(error);
++		g_error_free (error);
+ 		return;
+ 	}
+ 
+-	proxy = dbus_g_proxy_new_for_name (connection,
+-					   "org.gnome.SessionManager",
+-					   "/org/gnome/SessionManager",
+-					   "org.gnome.SessionManager");
+-
+-	if (!proxy) {
+-		g_warning ("Unable to get the SessionManager.");
+-		dbus_g_connection_unref (connection);
+-		return;
++	proxy = g_dbus_proxy_new_sync (connection,
++                                       G_DBUS_PROXY_FLAGS_NONE,
++                                       NULL,
++                                       "org.gnome.SessionManager",
++                                       "/org/gnome/SessionManager",
++                                       "org.gnome.SessionManager",
++                                       NULL,
++                                       &error);
++	g_object_unref (connection);
++
++	if (proxy == NULL) {
++                g_warning ("Could not connect to the Session manager: %s", error->message);
++                g_error_free (error);
++                return;
+ 	}
+ 
+-	dbus_g_proxy_add_signal (proxy, "SessionOver", G_TYPE_INVALID, G_TYPE_INVALID);
+-	dbus_g_proxy_connect_signal (proxy, "SessionOver", G_CALLBACK (session_die_cb), NULL, NULL);
+-
+-	g_object_set_data (G_OBJECT (proxy), "connection", connection);
++	g_signal_connect (G_OBJECT (proxy), "g-signal", G_CALLBACK (session_die_cb), NULL);
+ }
+ 
+ static void show_message(GtkMessageType type, const char* text, const char* details)

@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+aspelldir=$(echo /usr/lib/aspell*)
+mkdir -p "$UB_INSTALLDIR$aspelldir"
+install -m 0644 hu.* "$UB_INSTALLDIR$aspelldir"

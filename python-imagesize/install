@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+python setup.py install --root="$UB_INSTALLDIR"
+
+python3 setup.py install --root="$UB_INSTALLDIR"
+mkdir -p ${UB_INSTALLDIR}/usr/share/doc/Packages/python3-imagesize
+cp LICENSE.rst README.rst ${UB_INSTALLDIR}/usr/share/doc/Packages/python3-imagesize/

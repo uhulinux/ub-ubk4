@@ -1,0 +1,312 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/map/map.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/map/map.c	2007-08-28 14:38:38.000000000 +0200
++++ fenix-0.92a.dfsg1/map/map.c	2007-08-28 14:40:03.000000000 +0200
+@@ -43,6 +43,14 @@
+ #include <png.h>
+ #include <gif_lib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ typedef unsigned int	Uint32 ;
+ typedef signed   int	Sint32 ;
+ typedef unsigned short	Uint16 ;
+@@ -113,10 +121,11 @@
+ 
+ void help ()
+ {
+-	printf ("MAP Utility v0.75\nCopyright (C) 1999 José Luis Cebrián Pagüe\nCopyright (C) 2002 Fenix Team\n"
+-		"This utility comes with ABSOLUTELY NO WARRANTY; map -h for details\n\n") ;
++	printf (_("MAP Utility v0.75\nCopyright (C) 1999 Jose Luis Cebrian Pague\n"
++		"Copyright (C) 2002 Fenix Team\n"
++		"This utility comes with ABSOLUTELY NO WARRANTY; map -h for details\n\n")) ;
+ 
+-	printf ("Usage: map [option] file \n"
++	printf (_("Usage: map [option] file \n"
+ 		"\n"
+ 		"    -l      Describes MAP file (default option)\n"
+ 		"    -p      Extract palette file (.PAL) from the graphic\n"
+@@ -136,7 +145,7 @@
+  		"    +animation=...  Animation sequence for ANIMATED MAPS\n"
+ 		"    +speed=#        Frame duration (ms) for each animation frame\n"
+ 		"    +#=[#,#]        Control point definition\n"
+-		"\n") ;
++		"\n")) ;
+ }
+ 
+ /* ----------------------------------------------------------------- */
+@@ -186,7 +195,7 @@
+ 	long   len ;
+ 	gzFile * file = gzopen (filename, policy) ;
+ 
+-	if (!file) fatal_error ("%s: error al crear", filename) ;
++	if (!file) fatal_error (_("'%s': error creating file"), filename) ;
+ 	gzwrite (file, &map->header, sizeof(MAP_HEADER)) ;
+ 	if (map->depth == 8) gzwrite (file, map->palette, PALETTE_SIZE) ;
+ 	gzwrite (file, &map->n_flags, 2) ;
+@@ -234,9 +243,9 @@
+ 	if (!pal)
+ 		pal = file->SavedImages[0].ImageDesc.ColorMap ;
+ 	if (!pal)
+-		fatal_error ("El GIF no contiene una paleta de colores") ;
++		fatal_error (_("GIF file does not contain a colour palette")) ;
+ 	if (pal->ColorCount > 255)
+-		fatal_error ("El GIF tiene más de 256 colores") ;
++		fatal_error (_("GIF file has more than 256 colours")) ;
+ 
+ 	memset (map->palette, 0, PALETTE_SIZE) ;
+ 	for (i = 0 ; i < pal->ColorCount ; i++)
+@@ -292,7 +301,7 @@
+ 					(((int)ext->Bytes[2] << 8) + ext->Bytes[1]) ;
+ 			}
+ 			else
+-				printf ("Unknown function 0x%02X at frame %d\n", ext->Function, x) ;
++				printf (_("Unknown function 0x%02X at frame %d\n"), ext->Function, x) ;
+ 		}
+ 
+ 		map->palette[bg*3  ] = map->palette[0] ;
+@@ -351,7 +360,7 @@
+ 	MAP * map ;
+ 	int error = 0, len, clen ;
+ 
+-	if (!file) fatal_error ("%s: fichero no encontrado", filename) ;
++	if (!file) fatal_error (_("'%s': file does not exist"), filename) ;
+ 
+ 	map = (MAP *) malloc(sizeof(MAP)) ;
+ 	gzread (file, &map->header, sizeof(map->header)) ;
+@@ -368,7 +377,7 @@
+ 	else
+ 	{
+ 		if (strcmp (map->header.magic, MAP_MAGIC) != 0)
+-			fatal_error ("%s: no es un fichero MAP", filename) ;
++			fatal_error (_("'%s': not a MAP file"), filename) ;
+ 
+ 		len          = map->header.width * map->header.height ;
+ 		map->depth   = 8 ;
+@@ -403,7 +412,7 @@
+ 	if (gzread (file, map->data,    len ) < len ) error = 1 ;
+ 	gzclose (file) ;
+ 
+-	if (error) fatal_error ("%s: fichero truncado", filename) ;
++	if (error) fatal_error (_("'%s': file is truncated\n"), filename) ;
+ 	return map ;
+ }
+ 
+@@ -419,7 +428,7 @@
+ 	Uint32      * data, * ptr ;
+ 	Uint16		* orig ;
+ 
+-	if (!file) fatal_error ("%s: error al crear", filename) ;
++	if (!file) fatal_error (_("'%s': error creating file"), filename) ;
+ 
+     rowpointers = malloc( sizeof(png_bytep) * map->header.height );
+     if ( !rowpointers ) {
+@@ -432,7 +441,7 @@
+ 
+ 	if (!png_ptr || !info_ptr) {
+         free ( rowpointers ) ;
+-	    fatal_error ("Sin memoria") ;
++	    fatal_error (_("Out of memory")) ;
+ 	}
+ 
+ 	if (setjmp(png_ptr->jmpbuf))
+@@ -440,7 +449,7 @@
+         free ( rowpointers ) ;
+ 		fclose (file) ;
+ 		png_destroy_write_struct (&png_ptr, NULL) ;
+-		fatal_error ("%s: error al escribir", filename) ;
++		fatal_error (_("'%s': error writing file"), filename) ;
+ 	}
+ 
+ 	png_init_io (png_ptr, file) ;
+@@ -456,7 +465,7 @@
+ 		if (!palette) {
+             free ( rowpointers ) ;
+             fclose (file);
+-		    fatal_error ("Sin memoria") ;
++		    fatal_error (_("Out of memory")) ;
+ 		}
+ 		for (k = 0 ; k < 256 ; k++)
+ 		{
+@@ -484,7 +493,7 @@
+ 		if (!data) {
+             free ( rowpointers ) ;
+             fclose (file);
+-		    fatal_error ("Sin memoria") ;
++		    fatal_error (_("Out of memory")) ;
+ 		}
+ 		for (k = 0 ; k < map->header.height ; k++)
+ 		{
+@@ -543,15 +552,15 @@
+ 	/* Abre el fichero y se asegura de que screen está inicializada */
+ 
+ 	png = fopen (filename, "rb") ;
+-	if (!png) fatal_error ("No existe %s\n", filename) ;
++	if (!png) fatal_error (_("'%s': file does not exist\n"), filename) ;
+ 
+ 	/* Prepara las estructuras internas */
+ 
+ 	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, 0, 0, 0) ;
+-	if (!png_ptr) fatal_error ("Error al cargar PNG") ;
++	if (!png_ptr) fatal_error (_("Error loading PNG file")) ;
+ 	info_ptr = png_create_info_struct (png_ptr) ;
+ 	end_info = png_create_info_struct (png_ptr) ;
+-	if (!info_ptr || !end_info) fatal_error ("Error al cargar PNG") ;
++	if (!info_ptr || !end_info) fatal_error (_("Error loading PNG file")) ;
+ 
+ 	/* Rutina de error */
+ 
+@@ -582,7 +591,7 @@
+     }
+ 
+ 	if (color == PNG_COLOR_TYPE_GRAY || color == PNG_COLOR_TYPE_GRAY_ALPHA)
+-		fatal_error ("No se soportan PNG en escala de grises") ;
++		fatal_error (_("Grayscale PNG files are not supported")) ;
+ 
+ 	/* Configura los distintos modos disponibles */
+ 
+@@ -628,7 +637,7 @@
+ 		bitmap->depth = 8 ;
+ 
+ 		palette = (png_colorp) png_malloc (png_ptr, 256*sizeof(png_color)) ;
+-		if (!palette) fatal_error ("Sin memoria") ;
++		if (!palette) fatal_error (_("Out of memory")) ;
+ 		png_get_PLTE (png_ptr, info_ptr, &palette, &k) ;
+ 		for (k-- ; k >= 0 ; k--)
+ 		{
+@@ -754,7 +763,7 @@
+ 	int    n, r, g, b ;
+ 
+ 	buffer = (Uint16 *) malloc (len * 2) ;
+-	if (!buffer) fatal_error ("Error: sin memoria") ;
++	if (!buffer) fatal_error (_("Error: out of memory")) ;
+ 	for (n = 1 ; n < 256 ; n++)
+ 	{
+ 		r = ((palette[n*3] >> 1) << 11) ;
+@@ -794,7 +803,7 @@
+ {
+ 	FILE * file = fopen (filename, "wb") ;
+ 
+-	if (!file) fatal_error ("%s: error al crear", filename) ;
++	if (!file) fatal_error (_("Error creating file"), filename) ;
+ 	fwrite (PAL_MAGIC, 8, 1, file) ;
+ 	fwrite (palette, PALETTE_SIZE, 1, file) ;
+ 	fclose (file) ;
+@@ -807,8 +816,8 @@
+ 	char header[8] ;
+ 	char * here = malloc (PALETTE_SIZE) ;
+ 
+-	if (!file) fatal_error ("%s: fichero no existente", filename) ;
+-	if (!here) fatal_error ("Sin memoria") ;
++	if (!file) fatal_error (_("'%s': file does not exist"), filename) ;
++	if (!here) fatal_error (_("Out of memory")) ;
+ 
+ 	gzread (file, header, 8) ;
+ 	if (strcmp (header, MAP_MAGIC) == 0)
+@@ -816,7 +825,7 @@
+ 	else if (strcmp (header, FPG_MAGIC) != 0 &&
+ 	    strcmp (header, FNT_MAGIC) != 0 &&
+ 	    strcmp (header, PAL_MAGIC) != 0)
+-		fatal_error ("%s: no es un fichero de paleta válido", filename) ;
++		fatal_error (_("'%s': not a valid colour palette file"), filename) ;
+ 
+ 	gzread (file, here, PALETTE_SIZE) ;
+ 	gzclose (file) ;
+@@ -897,7 +906,7 @@
+  		range[4] = range[1] ;
+  		range[5] = range[2] ;
+  	}
+- 	printf ("Rango de color: #%02X%02X%02X - #%02X%02X%02X\n",
++ 	printf (_("Colour range: #%02X%02X%02X - #%02X%02X%02X\n"),
+  		range[0], range[1], range[2], range[3], range[4], range[5]) ;
+ }
+ 
+@@ -907,10 +916,10 @@
+ 
+ 	if (!*text) { *x = *y = -1 ; return ; }
+ 	comma = strchr (text, ',') ;
+-	if (!comma) fatal_error ("Se requieren dos coordenadas") ;
++	if (!comma) fatal_error (_("Two coordinates are needed")) ;
+ 	*x = atoi(text) ;
+ 	*y = atoi(comma+1) ;
+-	if (*x < 0 || *y < 0) fatal_error ("Coordenadas incorrectas") ;
++	if (*x < 0 || *y < 0) fatal_error (_("Invalid coordinates")) ;
+ }
+ 
+ void parse_animation (char * text, MAP * map)
+@@ -953,7 +962,7 @@
+ 	map->animation = (Sint16 *) malloc(n_frames * 2) ;
+ 	memcpy (map->animation, frames, n_frames * 2) ;
+ 	if ((map->header.width / map->frames) * map->frames != map->header.width)
+-		fatal_error ("El ancho no es múltiplo de %d\n", map->frames) ;
++		fatal_error (_("Width is not a multiple of %d\n"), map->frames) ;
+ 	map->header.width /= map->frames ;
+ }
+ 
+@@ -966,7 +975,7 @@
+ 
+ 	equal = strchr (command, '=') ;
+ 	if (!equal) equal = strchr (command, ':') ;
+-	if (!equal) fatal_error ("Comando '%s' sin signo '='\n", command) ;
++	if (!equal) fatal_error (_("Command '%s' without a '=' symbol\n"), command) ;
+ 	strncpy (name, command, 128) ;
+ 	name[equal-command] = 0 ;
+ 	strncpy (param, equal+1, 128) ;
+@@ -998,7 +1007,7 @@
+ 		parse_coords (param, &x, &y) ;
+ 		set_cpoint (map, atoi(name), x, y) ;
+ 	}
+-	else	fatal_error ("Comando '%s' desconocido", command) ;
++	else	fatal_error (_("'%s': unknown command"), command) ;
+ }
+ 
+ void do_commands (MAP * map)
+@@ -1018,12 +1027,20 @@
+ 	char filename[MAXPATH] ;
+ 	MAP * map ;
+ 
++#ifdef USE_GETTEXT
++	setlocale (LC_MESSAGES, "");
++	setlocale (LC_CTYPE, "");
++	setlocale (LC_COLLATE, "");
++	textdomain ("fenix-fxc");
++	bindtextdomain ("fenix-fxc", NULL);
++#endif
++
+ 	for (i = 1 ; i < argc ; i++)
+ 	{
+ 		if (argv[i][0] == '+')
+ 		{
+ 			if (n_commands == 256)
+-				fatal_error ("Demasiados comandos") ;
++				fatal_error (_("Too many commands")) ;
+ 			commands[n_commands++] = argv[i]+1 ;
+ 
+ 			if (argc > i)
+@@ -1073,7 +1090,7 @@
+ 					while (*ptr) ptr++ ;
+ 					break ;
+ 				default:
+-					fatal_error ("Error: opción -%c no reconocida\n", *ptr) ;
++					fatal_error (_("Error: unknown option -%c\n"), *ptr) ;
+ 			}
+ 
+ 			if (argc > i)
+@@ -1115,7 +1132,7 @@
+ 				if (!map) continue ;
+ 				list_map (argv[i], map, 0) ;
+ 				if (map->depth != 8)
+-					fatal_error (": No contiene ninguna paleta") ;
++					fatal_error (_(": Does not contain any colour palette")) ;
+ 				set_extension (argv[i], ".pal", filename) ;
+ 				save_pal (filename, map->palette) ;
+ 				free_map (map) ;

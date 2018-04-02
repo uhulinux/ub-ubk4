@@ -1,0 +1,22 @@
+Description: Including individual glib headers is no longer supported
+ Include now glib.h directly as including individual glib headers
+ has been deprecated and with glib 2.32 it is now mandatory to
+ include glib.h
+Origin: vendor
+Bug: https://bugzilla.bzatek.net/show_bug.cgi?id=17
+Bug-Debian: http://bugs.debian.org/665622
+Forwarded: yes
+Author: Salvatore Bonaccorso <carnil@debian.org>
+Last-Update: 2012-03-24
+
+--- a/gvfs/gvfs.c
++++ b/gvfs/gvfs.c
+@@ -25,7 +25,7 @@
+ #include <errno.h>
+ 
+ #include <gio/gio.h>
+-#include <glib/gtypes.h>
++#include <glib.h>
+ 
+ #include "vfs_types.h"
+ 

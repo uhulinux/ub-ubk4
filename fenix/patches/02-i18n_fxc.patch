@@ -1,0 +1,921 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxc/src/c_data.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/c_data.c	2007-08-28 14:38:52.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/c_data.c	2007-08-28 14:39:50.000000000 +0200
+@@ -33,6 +33,14 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ #include "messages.c"
+ 
+@@ -664,7 +672,7 @@
+ 
+             members = (VARSPACE *)malloc (sizeof(VARSPACE)) ;
+             if (!members) {
+-                fprintf (stdout, "compile_varspace: out of memory\n") ;
++                fprintf (stderr, _("compile_varspace: out of memory\n")) ;
+                 exit(1) ;
+             }
+             varspace_init (members) ;
+Index: fenix-0.92a.dfsg1/fxc/src/c_main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/c_main.c	2007-08-28 14:38:52.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/c_main.c	2007-08-28 14:45:44.000000000 +0200
+@@ -36,6 +36,14 @@
+ 
+ #include <fnx_loadlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ #include "messages.c"
+ 
+@@ -315,7 +323,7 @@
+     vsprintf(text, fmt, ap);
+     va_end(ap);
+ 
+-    fprintf (stdout, MSG_COMPILE_ERROR, files[current_file], line_count, text) ;
++    fprintf (stderr, MSG_COMPILE_ERROR, files[current_file], line_count, text) ;
+     token_dump () ;
+     exit (2) ;
+ }
+@@ -915,18 +923,18 @@
+ 
+         if (debug)
+         {
+-            printf ("\n\n---------- Process %d (%s)\n\n", proc->typeid, identifier_name(code)) ;
++            fprintf (stderr, _("\n\n---------- Process %d (%s)\n\n"), proc->typeid, identifier_name(code)) ;
+ 
+             if ( proc->privars->count ) {
+-                printf ("---- Private variables\n") ;
++                fprintf (stderr, _("---- Private variables\n")) ;
+                 varspace_dump (proc->privars, 0) ;
+-                printf ("\n") ;
++                fprintf (stderr, "\n") ;
+             }
+ 
+             if ( proc->pubvars->count ) {
+-                printf ("---- Public variables\n") ;
++                fprintf (stderr, _("---- Public variables\n")) ;
+                 varspace_dump (proc->pubvars, 0) ;
+-                printf ("\n") ;
++                fprintf (stderr, "\n") ;
+             }
+ 
+             //segment_dump  (proc->pridata) ;
+@@ -1037,23 +1045,23 @@
+ 
+     if (debug)
+     {
+-        printf ("\n----- Main procedure\n\n") ;
++        fprintf (stderr, _("\n----- Main procedure\n\n")) ;
+         varspace_dump (mainproc->privars, 0) ;
+         //segment_dump  (mainproc->pridata) ;
+-        printf ("\n");
++        fprintf (stderr, "\n");
+         codeblock_dump (&mainproc->code) ;
+-        printf ("\n") ;
++        fprintf (stderr, "\n") ;
+     }
+ 
+     if (global.count && debug)
+     {
+-        printf ("\n---- Global variables\n\n") ;
++        fprintf (stderr, _("\n---- Global variables\n\n")) ;
+         varspace_dump (&global, 0) ;
+     }
+ 
+     if (local.count && debug)
+     {
+-        printf ("\n---- Local variables\n\n") ;
++        fprintf (stderr, _("\n---- Local variables\n\n")) ;
+         varspace_dump (&local, 0) ;
+         //segment_dump (localdata) ;
+     }
+Index: fenix-0.92a.dfsg1/fxc/src/codeblock.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/codeblock.c	2007-08-28 14:38:52.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/codeblock.c	2007-08-28 14:39:51.000000000 +0200
+@@ -32,6 +32,14 @@
+ #include <assert.h>
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ #include "messages.c"
+ 
+@@ -145,7 +153,7 @@
+ 	c->previous2 = 0 ;
+ 	if (!c->data || !c->loops || !c->labels)
+ 	{
+-		fprintf (stdout, "CODEBLOCK: sin memoria\n") ;
++		fprintf (stderr, _("CODEBLOCK: out of memory\n")) ;
+ 		exit (1) ;
+ 	}
+ }
+@@ -173,7 +181,7 @@
+ 	c->data = (int *) realloc (c->data, c->reserved * sizeof(int)) ;
+ 	if (!c->data)
+ 	{
+-		fprintf (stdout, "CODEBLOCK: sin memoria\n") ;
++		fprintf (stderr, _("CODEBLOCK: out of memory\n")) ;
+ 		exit (1) ;
+ 	}
+ }
+@@ -184,7 +192,7 @@
+ 	c->loops = (int *) realloc (c->loops, c->loop_reserved * sizeof(int) * 2) ;
+ 	if (!c->loops)
+ 	{
+-		fprintf (stdout, "CODEBLOCK: sin memoria\n") ;
++		fprintf (stderr, _("CODEBLOCK: out of memory\n")) ;
+ 		exit (1) ;
+ 	}
+ }
+@@ -195,7 +203,7 @@
+ 	c->labels = (int *) realloc (c->labels, c->label_reserved * sizeof(int) * 2) ;
+ 	if (!c->labels)
+ 	{
+-		fprintf (stdout, "CODEBLOCK: sin memoria\n") ;
++		fprintf (stderr, _("CODEBLOCK: out of memory\n")) ;
+ 		exit (1) ;
+ 	}
+ }
+@@ -289,7 +297,7 @@
+ 
+ 	if (MN_PARAMS(code) == 0 && param)
+ 	{
+-		printf ("Aviso: mnemÛnico 0x%02X no recibe par·metros\n", code) ;
++		fprintf (stderr, _("Warning: mnemonic 0x%02X does not receive parameters\n"), code) ;
+ 	}
+ 
+ 	if (c->current > 0)
+Index: fenix-0.92a.dfsg1/fxc/src/constants.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/constants.c	2007-08-28 14:38:52.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/constants.c	2007-08-28 14:39:51.000000000 +0200
+@@ -26,6 +26,14 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ 
+ /* ---------------------------------------------------------------------- */
+@@ -49,7 +57,7 @@
+ 			(constants_reserved += count) * sizeof(CONSTANT)) ;
+ 	if (!constants)
+ 	{
+-		fprintf (stdout, "constants_alloc: sin memoria\n") ;
++		fprintf (stderr, _("constants_alloc: out of memory\n")) ;
+ 		exit (1) ;
+ 	}
+ }
+@@ -79,8 +87,8 @@
+ {
+ 	int i ;
+ 
+-	printf ("---- %d constants of %d ----\n", constants_used, constants_reserved) ;
++	fprintf (stderr, _("---- %d constants of %d ----\n"), constants_used, constants_reserved) ;
+ 	for (i = 0 ; i < constants_used ; i++)
+-		printf ("%4d: %-16s= %d\n", i, 
++		fprintf (stderr, "%4d: %-16s= %d\n", i, 
+ 			identifier_name(constants[i].code), constants[i].value) ;
+ }
+Index: fenix-0.92a.dfsg1/fxc/src/dcbw.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/dcbw.c	2007-08-28 14:38:52.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/dcbw.c	2007-08-28 14:44:29.000000000 +0200
+@@ -33,6 +33,14 @@
+ #include <stdio.h>
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ #include "dcb.h"
+ 
+@@ -191,7 +199,7 @@
+ 
+ 	if (!fp)
+ 	{
+-		fprintf (stdout, "Error: imposible abrir %s\n", filename) ;
++		fprintf (stderr, _("Error: cannot open '%s'\n"), filename) ;
+ 		return 0 ;
+ 	}
+ 
+@@ -202,7 +210,7 @@
+ 
+ 		if (!stub)
+ 		{
+-			fprintf (stdout, "Error: imposible abrir %s\n", stubname);
++			fprintf (stderr, _("Error: cannot open '%s'\n"), stubname);
+ 			return 0;
+ 		}
+ 
+@@ -210,12 +218,12 @@
+ 		stubdata = malloc(stubsize);
+ 		if (stubdata == NULL)
+ 		{
+-			fprintf (stdout, "Error: Stub %s demasiado grande\n", stubname);
++			fprintf (stderr, _("Error: Stub '%s' too big\n"), stubname);
+ 			return 0;
+ 		}
+ 		if (file_read(stub, stubdata, stubsize) != stubsize)
+ 		{
+-			fprintf (stdout, "Error leyendo stub %s\n", stubname);
++			fprintf (stderr, _("Error: reading stub '%s'\n"), stubname);
+ 			return 0;
+ 		}
+ 		file_write (fp, stubdata, stubsize);
+@@ -479,7 +487,7 @@
+ 		}
+ 		dcb.file[n].SFile = file_pos(fp) - dcb.file[n].OFile ;
+ 
+-        printf ("File added: %32s (%10d bytes)\n", dcb.file[n].Name, dcb.file[n].SFile) ;
++		fprintf (stderr, _("File added: %32s (%10d bytes)\n"), dcb.file[n].Name, dcb.file[n].SFile) ;
+ 
+ 		file_close (fp_r) ;
+ 	}
+@@ -514,27 +522,27 @@
+ 
+ 	/* 6. Mostrar estadÌsticas */
+ 
+-	printf ("\nFichero %s grabado (%ld bytes):\n\n", filename, offset) ;
+-	printf ("          Procesos:   %8d procesos\n", dcb.data.NProcs) ;
+-	printf ("    Datos globales:   %8d bytes \n", dcb.data.SGlobal) ;
+-	printf ("     Datos locales:   %8d bytes\n", dcb.data.SLocal) ;
+-	printf ("    Datos privados:   %8d bytes\n", SPrivate) ;
+-	printf ("    Datos publicos:   %8d bytes\n", SPublic) ;
+-	printf ("            Codigo:   %8d bytes\n", SCode) ;
+-
+-    printf ("Variables globales:   %8d variables \n", dcb.data.NGloVars) ;
+-    printf (" Variables locales:   %8d variables \n", dcb.data.NLocVars) ;
+-    printf ("Variables privadas:   %8d variables\n", NPriVars) ;
+-    printf ("Variables publicas:   %8d variables\n", NPubVars) ;
+-    printf ("   Identificadores:   %8d identificadores\n", dcb.data.NID) ;
+-    printf ("       Estructuras:   %8d estructuras\n", dcb.data.NVarSpaces) ;
+-    printf ("           Cadenas:   %8d cadenas  (%d bytes)\n", dcb.data.NStrings, dcb.data.SText) ;
++	fprintf (stderr, _("\nFile %s saved (%ld bytes):\n\n"), filename, offset) ;
++	fprintf (stderr, _("         Processes:   %8d processes\n"), dcb.data.NProcs) ;
++	fprintf (stderr, _("       Global Data:   %8d bytes \n"), dcb.data.SGlobal) ;
++	fprintf (stderr, _("        Local Data:   %8d bytes\n"), dcb.data.SLocal) ;
++	fprintf (stderr, _("      Private Data:   %8d bytes\n"), SPrivate) ;
++	fprintf (stderr, _("       Public Data:   %8d bytes\n"), SPublic) ;
++	fprintf (stderr, _("              Code:   %8d bytes\n"), SCode) ;
++
++	fprintf (stderr, _("  Global Variables:   %8d variables \n"), dcb.data.NGloVars) ;
++	fprintf (stderr, _("   Local Variables:   %8d variables \n"), dcb.data.NLocVars) ;
++	fprintf (stderr, _(" Private Variables:   %8d variables\n"), NPriVars) ;
++	fprintf (stderr, _("  Public Variables:   %8d variables\n"), NPubVars) ;
++	fprintf (stderr, _("       Identifiers:   %8d identifiers\n"), dcb.data.NID) ;
++	fprintf (stderr, _("        Structures:   %8d structures\n)"), dcb.data.NVarSpaces) ;
++	fprintf (stderr, _("           Strings:   %8d strings (%d bytes)\n"), dcb.data.NStrings, dcb.data.SText) ;
+ 
+ 	if (dcb.data.NFiles) {
+-    	printf ("          Ficheros:   %8d ficheros (%ld bytes)\n", dcb.data.NFiles, offset - dcb.data.OFilesTab) ;
++		fprintf (stderr, _("             Files:   %8d files (%ld bytes)\n"), dcb.data.NFiles, offset - dcb.data.OFilesTab) ;
+ 	}
+ 
+-	printf ("\n") ;
++	fprintf (stderr, "\n") ;
+ 
+ 	return 1 ;
+ }
+Index: fenix-0.92a.dfsg1/fxc/src/identifier.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/identifier.c	2007-08-28 14:38:52.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/identifier.c	2007-08-28 14:39:51.000000000 +0200
+@@ -32,6 +32,15 @@
+ #else
+ #include <assert.h>
+ #endif
++
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "token.h"
+ #include "identifiers.h"
+ #include "compiler.h"
+@@ -97,7 +106,7 @@
+ 	int i, ii ;
+ 	identifier * ptr ;
+ 
+-	printf ("---- %d identifiers ----\n", identifier_count) ;
++	fprintf (stderr, _("---- %d identifiers ----\n"), identifier_count) ;
+ 	for (i = 0 ; i < 64 ; i++)
+ 	{
+ 		ptr = identifier_hash[i] ;
+@@ -105,7 +114,7 @@
+ 		while (ptr)
+ 		{
+ 			ii++;
+-			printf ("%4d: %-32s [%04d] [%3d]\n", ptr->code, ptr->name, i, ii) ;
++			fprintf (stderr, "%4d: %-32s [%04d] [%3d]\n", ptr->code, ptr->name, i, ii) ;
+ 			ptr = ptr->next ;
+ 		}
+ 	}
+@@ -118,14 +127,14 @@
+ 
+ 	if (!w)
+ 	{
+-		fprintf (stdout, "identifier_add: sin memoria\n") ;
++		fprintf (stderr, _("identifier_add: out of memory\n")) ;
+ 		exit(1);
+ 	}
+ 
+ 	w->name = strdup(string) ;
+ 	if (!w->name)
+ 	{
+-		fprintf (stdout, "identifier_add: sin memoria\n") ;
++		fprintf (stderr, _("identifier_add: out of memory\n")) ;
+ 		exit(1);
+ 	}
+ 	w->line = line_count ; // Save First appearance
+Index: fenix-0.92a.dfsg1/fxc/src/main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/main.c	2007-08-28 14:38:53.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/main.c	2007-08-28 14:46:13.000000000 +0200
+@@ -38,6 +38,14 @@
+ 	#include "Shlwapi.h"
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ 
+ #define FXC_VERSION "FXC " VERSION " (" __DATE__ " " __TIME__ ")"
+@@ -76,7 +84,8 @@
+ 
+ 	if (!fp)
+ 	{
+-		fprintf (stdout, MSG_FILE_NOT_FOUND "\n", filename) ;
++		fprintf (stderr, MSG_FILE_NOT_FOUND, filename) ;
++		fprintf (stderr, "\n") ;
+ 		exit (1) ;
+ 	}
+ 
+@@ -85,18 +94,21 @@
+ 	source = (char *) malloc(size+1) ;
+ 	if (!source)
+ 	{
+-		fprintf (stdout, MSG_FILE_TOO_BIG "\n", filename) ;
++		fprintf (stderr, MSG_FILE_TOO_BIG, filename) ;
++		fprintf (stderr, "\n") ;
+ 		exit (1) ;
+ 	}
+ 	if (size == 0)
+ 	{
+-		fprintf (stdout, MSG_FILE_EMPTY "\n", filename) ;
++		fprintf (stderr, MSG_FILE_EMPTY, filename) ;
++		fprintf (stderr, "\n") ;
+ 		exit (1) ;
+ 	}
+ 
+ 	if (!file_read (fp, source, size))
+ 	{
+-		fprintf (stdout, MSG_READ_ERROR "\n", filename) ;
++		fprintf (stderr, MSG_READ_ERROR, filename) ;
++		fprintf (stderr, "\n") ;
+ 		exit (1) ;
+ 	}
+ 	source[size] = 0 ;
+@@ -117,8 +129,16 @@
+ 	char stubname[256] = "";
+ 	int i, j ;
+ 
+-	printf (FXC_VERSION " - Copyright (C) 1999 Jos√© Luis Cebri√°n Pag√ºe\n") ;
+-	printf ("Fenix comes with ABSOLUTELY NO WARRANTY; see COPYING for details\n\n") ;
++#ifdef USE_GETTEXT
++	setlocale (LC_MESSAGES, "");
++	setlocale (LC_CTYPE, "");
++	setlocale (LC_COLLATE, "");
++	textdomain ("fenix-fxc");
++	bindtextdomain ("fenix-fxc", NULL);
++#endif
++
++	fprintf (stderr, _("Fenix 0.92 FXC - Copyright (C) 1999 Jose Luis Cebrian Pague\n")) ;
++	fprintf (stderr, _("Fenix comes with ABSOLUTELY NO WARRANTY; see COPYING for details\n\n")) ;
+ 
+ 	// Default lang to EN
+ 	strcpy(langinfo,"EN") ;
+@@ -138,7 +158,7 @@
+ 
+ 	if ( SDL_Init (SDL_INIT_VIDEO) < 0 )
+ 	{
+-		printf ("SDL Init Error: %s\n", SDL_GetError()) ;
++		fprintf (stderr, _("SDL Init Error: %s\n"), SDL_GetError()) ;
+ 		exit(1) ;
+ 	}
+ 
+@@ -198,7 +218,8 @@
+ 					{
+ 						if (i == argc-1)
+ 						{
+-							printf (MSG_DIRECTORY_MISSING "\n") ;
++							fprintf (stderr, MSG_DIRECTORY_MISSING) ;
++							fprintf (stderr, "\n") ;
+ 							exit (1) ;
+ 						}
+ 						file_addp (argv[i+1]);
+@@ -233,7 +254,8 @@
+ 		{
+ 			if (filename)
+ 			{
+-				printf (MSG_TOO_MANY_FILES "\n") ;
++				fprintf (stderr, MSG_TOO_MANY_FILES) ;
++				fprintf (stderr, "\n") ;
+ 				return 0 ;
+ 			}
+ 			filename = argv[i] ;
+@@ -242,7 +264,9 @@
+ 
+ 	if (!filename)
+ 	{
+-		printf (MSG_USING MSG_OPTION_D MSG_OPTIONS, argv[0]) ;
++		fprintf (stderr, MSG_USING, argv[0]) ;
++		fprintf (stderr, MSG_OPTION_D) ;
++		fprintf (stderr, MSG_OPTIONS) ;
+ 		return 0 ;
+ 	}
+ 
+@@ -294,7 +318,7 @@
+ 				strcat (stubname, ".exe");
+ 				if (!file_exists(stubname))
+ 				{
+-					compile_error ("Can't open stub file %s", stubname);
++					compile_error (_("Can't open stub file %s"), stubname);
+ 					return -1;
+ 				}
+ 			}
+Index: fenix-0.92a.dfsg1/fxc/src/messages.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/messages.c	2007-08-28 14:38:53.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/messages.c	2007-08-28 14:39:52.000000000 +0200
+@@ -24,16 +24,22 @@
+  *
+  */
+ 
+-#ifdef ENGLISH
+-#define MSG_FILE_NOT_FOUND      "%s: file not found"
+-#define MSG_FILE_TOO_BIG        "%s: file too big"
+-#define MSG_FILE_EMPTY			"%s: file is empty"
+-#define MSG_READ_ERROR          "%s: file reading error"
+-#define MSG_DIRECTORY_MISSING   "You must specify a directory"
+-#define MSG_TOO_MANY_FILES      "Too many files specified"
+-#define MSG_USING               "Use: %s [options] filename\n\n"
+-#define MSG_OPTION_D            "   -d       Debugging mode\n"
+-#define MSG_OPTIONS             "   -i dir   Adds the directory to the PATH\n" \
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
++#define MSG_FILE_NOT_FOUND      _("'%s': file not found")
++#define MSG_FILE_TOO_BIG        _("'%s': file too big")
++#define MSG_FILE_EMPTY          _("'%s': file is empty")
++#define MSG_READ_ERROR          _("'%s': file reading error")
++#define MSG_DIRECTORY_MISSING   _("You must specify a directory")
++#define MSG_TOO_MANY_FILES      _("Too many files specified")
++#define MSG_USING               _("Usage: %s [options] filename\n\n")
++#define MSG_OPTION_D            _("   -d       Debugging mode\n")
++#define MSG_OPTIONS             _("   -i dir   Adds the directory to the PATH\n" \
+                                 "   -a       Automaticaly adds all files to the DCB\n"  \
+                                 "   -f file  Adds a single file to the DCB\n"  \
+ 								"   -l lang  Specify locale settings\n"  \
+@@ -44,70 +50,70 @@
+                                 "under the terms of the GNU General Public License as published by the\n" \
+                                 "Free Software Foundation; either the version 2 of the license or\n" \
+                                 "(at your will) any later version.\n\n" \
+-                                "Read the file COPYING for details\n\n"
+-#define MSG_COMPILE_ERROR       "Error in file %s at line %d: %s "
+-#define MSG_CONSTANT_NAME_EXP   "Constant name expected"
+-#define MSG_INVALID_IDENTIFIER  "Invalid identifier"
+-#define MSG_EXPECTED            "\"%s\" expected"
+-#define MSG_PROCNAME_EXP        "Procedure name expected"
+-#define MSG_INVALID_PARAM       "Parameter name invalid"
+-#define MSG_INVALID_PARAMT      "Parameter type invalid"
+-#define MSG_TOO_MANY_PARAMS     "Too many parameters in a definition"
+-#define MSG_INCORRECT_PARAMC    "Incorrect number of parameters. Function: %s MinParams: %d."
+-#define MSG_NO_BEGIN            "BEGIN expected"
+-#define MSG_NO_END              "END expected"
+-#define MSG_ELSE_WOUT_IF        "ELSE without IF"
+-#define MSG_PROGRAM_NAME_EXP    "Program name expected"
+-#define MSG_PROCESS_NAME_EXP    "Procedure name expected"
+-#define MSG_INVALID_TYPE        "Invalid data type"
+-#define MSG_UNEXPECTED_TOKEN    "Unexpected token (too many ENDs?)"
+-#define MSG_UNEXPECTED_TOKEN_GENERIC    "Unexpected token"
+-#define MSG_NO_MAIN             "Main procedure was not defined"
+-#define MSG_INTEGER_REQUIRED    "Integer type required"
+-#define MSG_NUMBER_REQUIRED     "Numeric type required"
+-#define MSG_INCOMP_TYPES        "Data types not compatible with operation"
+-#define MSG_INCOMP_TYPE         "Data type not accepted here"
+-#define MSG_UNKNOWN_IDENTIFIER  "Unknown identifier"
+-#define MSG_NOT_AN_ARRAY        "Not an array or struct array"
+-#define MSG_BOUND               "Index out of range"
+-#define MSG_IDENTIFIER_EXP      "Identifier expected"
+-#define MSG_NOT_AN_LVALUE       "Can't get the address of an inmediate value"
+-#define MSG_NOT_A_POINTER       "Pointer required"
+-#define MSG_VARIABLE_REQUIRED   "Variable required"
+-#define MSG_STRUCT_REQUIRED     "Struct required"
+-#define MSG_DIVIDE_BY_ZERO      "Division by zero"
+-#define MSG_TYPES_NOT_THE_SAME  "Values are of incompatible type"
+-#define MSG_CONSTANT_EXP        "Constant value expected"
+-#define MSG_STRING_EXP          "String expected"
+-#define MSG_NO_LOOP             "Out of loop"
+-#define MSG_INVALID_STEP        "Invalid STEP"
+-#define MSG_INVALID_SENTENCE    "Invalid sentence"
+-#define MSG_VTA                 "Can't create an array of undefined multiple sizes"
+-#define MSG_TOO_MANY_AL         "Too many array levels"
+-#define MSG_VARIABLE_ALREADY    "Variable already declared"
+-#define MSG_IDENTIFIER_EXP      "Identifier expected"
+-#define MSG_CANT_INIT_STR       "This struct can't be initialized"
+-#define MSG_TOO_MANY_INIT       "Too many initializers"
+-#define MSG_TOO_MANY_INCLUDES   "Too many nested includes"
+-#define MSG_IDENTIFIER_TOO_LONG "Identifier too long"
+-#define MSG_INVALID_CHAR        "Invalid Character"
+-#define MSG_TOO_MANY_TYPES      "Too many user-defined types"
+-#define MSG_UNDEFINED_PROC      "Undefined procedure"
+-#define MSG_NO_COMPATIBLE_DLL	"The library is not Fenix compatible"
+-#define MSG_TOO_MANY_SYSPROCS	"Too many system functions"
+-#define MSG_INCORRECT_PTR_INIT	"A pointer can only be initialized to 0"
+-#define MSG_NOT_ENOUGH_INIT		"Not enough initializers"
+-#define MSG_MULTIPLE_PROCS_FOUND "Various conflicting versions of %s found"
+-#define MSG_QUESTION_INC		"Incompatible types at the sides of ? operator"
+-#define MSG_UNKNOWN_PREP		"Unknown preprocessor directive"
+-#define MSG_PTR_CONVERSION		"Invalid conversion of non-pointer to pointer"
+-#define MSG_CONVERSION			"Unsupported data type cast"
+-#define MSG_PROC_ALREADY_DEFINED "Process already defined"
+-#define MSG_FRAME_REQUIRES_INT  "FRAME requires an INT return value type"
+-#define MSG_VARIABLE_ERROR      "Variable already defined as process, expected type or variable name"
+-#define MSG_PROTO_ERROR         "Conflict with previous declaration"
++                                "Read the file COPYING for details\n\n")
++#define MSG_COMPILE_ERROR       _("Error in file '%s' at line %d: %s ")
++#define MSG_CONSTANT_NAME_EXP   _("Constant name expected")
++#define MSG_INVALID_IDENTIFIER  _("Invalid identifier")
++#define MSG_EXPECTED            _("'%s' expected")
++#define MSG_PROCNAME_EXP        _("Procedure name expected")
++#define MSG_INVALID_PARAM       _("Parameter name invalid")
++#define MSG_INVALID_PARAMT      _("Parameter type invalid")
++#define MSG_TOO_MANY_PARAMS     _("Too many parameters in a definition")
++#define MSG_INCORRECT_PARAMC    _("Incorrect number of parameters. Function: %s MinParams: %d.")
++#define MSG_NO_BEGIN            _("BEGIN expected")
++#define MSG_NO_END              _("END expected")
++#define MSG_ELSE_WOUT_IF        _("ELSE without IF")
++#define MSG_PROGRAM_NAME_EXP    _("Program name expected")
++#define MSG_PROCESS_NAME_EXP    _("Procedure name expected")
++#define MSG_INVALID_TYPE        _("Invalid data type")
++#define MSG_UNEXPECTED_TOKEN    _("Unexpected token (too many ENDs?)")
++#define MSG_UNEXPECTED_TOKEN_GENERIC    _("Unexpected token")
++#define MSG_NO_MAIN             _("Main procedure was not defined")
++#define MSG_INTEGER_REQUIRED    _("Integer type required")
++#define MSG_NUMBER_REQUIRED     _("Numeric type required")
++#define MSG_INCOMP_TYPES        _("Data types not compatible with operation")
++#define MSG_INCOMP_TYPE         _("Data type not accepted here")
++#define MSG_UNKNOWN_IDENTIFIER  _("Unknown identifier")
++#define MSG_NOT_AN_ARRAY        _("Not an array or struct array")
++#define MSG_BOUND               _("Index out of range")
++#define MSG_IDENTIFIER_EXP      _("Identifier expected")
++#define MSG_NOT_AN_LVALUE       _("Can't get the address of an inmediate value")
++#define MSG_NOT_A_POINTER       _("Pointer required")
++#define MSG_VARIABLE_REQUIRED   _("Variable required")
++#define MSG_STRUCT_REQUIRED     _("Struct required")
++#define MSG_DIVIDE_BY_ZERO      _("Division by zero")
++#define MSG_TYPES_NOT_THE_SAME  _("Values are of incompatible type")
++#define MSG_CONSTANT_EXP        _("Constant value expected")
++#define MSG_STRING_EXP          _("String expected")
++#define MSG_NO_LOOP             _("Out of loop")
++#define MSG_INVALID_STEP        _("Invalid STEP")
++#define MSG_INVALID_SENTENCE    _("Invalid sentence")
++#define MSG_VTA                 _("Can't create an array of undefined multiple sizes")
++#define MSG_TOO_MANY_AL         _("Too many array levels")
++#define MSG_VARIABLE_ALREADY    _("Variable already declared")
++#define MSG_IDENTIFIER_EXP      _("Identifier expected")
++#define MSG_CANT_INIT_STR       _("This struct can't be initialized")
++#define MSG_TOO_MANY_INIT       _("Too many initializers")
++#define MSG_TOO_MANY_INCLUDES   _("Too many nested includes")
++#define MSG_IDENTIFIER_TOO_LONG _("Identifier too long")
++#define MSG_INVALID_CHAR        _("Invalid Character")
++#define MSG_TOO_MANY_TYPES      _("Too many user-defined types")
++#define MSG_UNDEFINED_PROC      _("Undefined procedure")
++#define MSG_NO_COMPATIBLE_DLL   _("The library is not Fenix compatible")
++#define MSG_TOO_MANY_SYSPROCS   _("Too many system functions")
++#define MSG_INCORRECT_PTR_INIT  _("A pointer can only be initialized to 0")
++#define MSG_NOT_ENOUGH_INIT     _("Not enough initializers")
++#define MSG_MULTIPLE_PROCS_FOUND _("Various conflicting versions of %s found")
++#define MSG_QUESTION_INC        _("Incompatible types at the sides of ? operator")
++#define MSG_UNKNOWN_PREP        _("Unknown preprocessor directive")
++#define MSG_PTR_CONVERSION      _("Invalid conversion of non-pointer to pointer")
++#define MSG_CONVERSION          _("Unsupported data type cast")
++#define MSG_PROC_ALREADY_DEFINED _("Process already defined")
++#define MSG_FRAME_REQUIRES_INT  _("FRAME requires an INT return value type")
++#define MSG_VARIABLE_ERROR      _("Variable already defined as process, expected type or variable name")
++#define MSG_PROTO_ERROR         _("Conflict with previous declaration")
+ 
+-#else
++/*
+ 
+ #define MSG_FILE_NOT_FOUND      "%s: fichero no encontrado"
+ #define MSG_FILE_TOO_BIG        "%s: fichero demasiado grande"
+@@ -191,4 +197,4 @@
+ #define MSG_VARIABLE_ERROR      "Variable definida como proceso, se espera tipo o nombre de variable"
+ #define MSG_PROTO_ERROR         "Conflicto con declaracion previa"
+ 
+-#endif
++*/
+Index: fenix-0.92a.dfsg1/fxc/src/procedure.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/procedure.c	2007-08-28 14:38:53.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/procedure.c	2007-08-28 14:39:52.000000000 +0200
+@@ -33,6 +33,14 @@
+ #include <assert.h>
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ 
+ /* ---------------------------------------------------------------------- */
+@@ -60,7 +68,7 @@
+ 
+     if (!proc)
+     {
+-        fprintf (stdout, "procdef_new: sin memoria\n") ;
++        fprintf (stderr, _("procdef_new: out of memory\n")) ;
+         exit (1) ;
+     }
+ 
+@@ -87,7 +95,7 @@
+         procs = (PROCDEF **) realloc (procs, sizeof(PROCDEF **) * procs_allocated) ;
+         if (!procs)
+         {
+-            fprintf (stdout, "procdef_new: sin memoria\n") ;
++            fprintf (stderr, _("procdef_new: out of memory\n")) ;
+             exit (1) ;
+         }
+     }
+Index: fenix-0.92a.dfsg1/fxc/src/segment.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/segment.c	2007-08-28 14:38:53.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/segment.c	2007-08-28 14:39:52.000000000 +0200
+@@ -28,6 +28,14 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ #include "messages.c"
+ 
+@@ -185,8 +193,8 @@
+ 	int i ;
+ 
+ 	for (i = 0 ; i < s->current ; i++)
+-		printf ("%02X  ", *((Uint8*)s->bytes + i)) ;
+-	printf ("\n") ;
++		fprintf (stderr, "%02X  ", *((Uint8*)s->bytes + i)) ;
++	fprintf (stderr, "\n") ;
+ }
+ 
+ void segment_copy(segment *s, int base_offset, int total_length) 
+Index: fenix-0.92a.dfsg1/fxc/src/strings.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/strings.c	2007-08-28 14:38:53.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/strings.c	2007-08-28 14:39:52.000000000 +0200
+@@ -33,6 +33,14 @@
+ #include <assert.h>
+ #endif
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ 
+ /* ---------------------------------------------------------------------- */
+@@ -66,7 +74,7 @@
+ 	string_mem = (char *) realloc (string_mem, string_allocated += bytes) ;
+ 	if (!string_mem)
+ 	{
+-		fprintf (stdout, "string_alloc: sin memoria\n") ;
++		fprintf (stderr, _("string_alloc: out of  memory\n")) ;
+ 		exit(1) ;
+ 	}
+ }
+@@ -74,9 +82,9 @@
+ void string_dump ()
+ {
+ 	int i ;
+-	printf ("---- %d strings ----\n", string_count) ;
++	fprintf (stderr, _("---- %d strings ----\n"), string_count) ;
+ 	for (i = 0 ; i < string_count ; i++)
+-		printf ("%4d: %s\n", i, string_mem + string_offset[i]) ;
++		fprintf (stderr, "%4d: %s\n", i, string_mem + string_offset[i]) ;
+ }
+ 
+ int string_new (const char * text)
+@@ -90,7 +98,7 @@
+ 			string_max * sizeof(int)) ;
+ 		if (string_offset == 0)
+ 		{
+-			fprintf (stdout, "Demasiadas cadenas\n") ;
++			fprintf (stderr, _("Too many strings\n")) ;
+ 			exit(1) ;
+ 		}
+ 	}
+@@ -115,7 +123,7 @@
+ 		string_offset = (int *) realloc (string_offset, string_max * sizeof(int)) ;
+ 		if (string_offset == 0)
+ 		{
+-			fprintf (stdout, "Demasiadas cadenas\n") ;
++			fprintf (stderr, _("Too many strings\n")) ;
+ 			exit(1) ;
+ 		}
+ 	}
+Index: fenix-0.92a.dfsg1/fxc/src/token.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/token.c	2007-08-28 14:38:53.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/token.c	2007-08-28 14:39:52.000000000 +0200
+@@ -29,6 +29,14 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ #include "messages.c"
+ 
+@@ -490,7 +498,7 @@
+ 
+ 	if (!source)
+ 	{
+-		fprintf (stdout, "token_init: no source\n") ;
++		fprintf (stderr, _("token_init: no source\n")) ;
+ 		exit (1) ;
+ 	}
+ 
+@@ -550,14 +558,14 @@
+ 
+ void token_dump ()
+ {
+-	fprintf (stdout, "(") ;
+-	if (token.type == NUMBER) fprintf (stdout, "%d", token.code) ;
+-	else if (token.type == FLOAT) fprintf (stdout, "%f", token.value) ;
+-	else if (token.type == STRING) fprintf (stdout, "\"%s\"", string_get(token.code)) ;
+-	else if (token.type == IDENTIFIER) fprintf (stdout, "\"%s\"", identifier_name(token.code)) ;
+-	else if (token.type == NOTOKEN) fprintf (stdout, "EOF") ;
+-	else fprintf (stdout, "unknown\n") ;
+-	fprintf (stdout, ")\n") ;
++	fprintf (stderr, "(") ;
++	if (token.type == NUMBER) fprintf (stderr, "%d", token.code) ;
++	else if (token.type == FLOAT) fprintf (stderr, "%f", token.value) ;
++	else if (token.type == STRING) fprintf (stderr, "\"%s\"", string_get(token.code)) ;
++	else if (token.type == IDENTIFIER) fprintf (stderr, "\"%s\"", identifier_name(token.code)) ;
++	else if (token.type == NOTOKEN) fprintf (stderr, "EOF") ;
++	else fprintf (stderr, "unknown\n") ;
++	fprintf (stderr, ")\n") ;
+ }
+ 
+ extern void load_file (const char * filename) ;
+@@ -909,7 +917,7 @@
+ {
+ 	if (use_saved)
+ 	{
+-		fprintf (stdout, "Error: two token_back in a row\n") ;
++		fprintf (stderr, _("Error: two token_back in a row\n")) ;
+ 		exit(1) ;
+ 	}
+ 
+Index: fenix-0.92a.dfsg1/fxc/src/varspace.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/varspace.c	2007-08-28 14:38:53.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/varspace.c	2007-08-28 14:39:52.000000000 +0200
+@@ -28,6 +28,14 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
++
+ #include "fxc.h"
+ 
+ /* ---------------------------------------------------------------------- */
+@@ -64,11 +72,11 @@
+ 		else
+ 			to = n->last_offset - 1 ;
+ 
+-		printf ("[%04d:%04d]\t", n->vars[i].offset, to) ;
++		fprintf (stderr, "[%04d:%04d]\t", n->vars[i].offset, to) ;
+ 		for (t = 0 ; t < indent ; t++) 
+-			printf (" + ") ;
++			fprintf (stderr, " + ") ;
+ 		typedef_describe (buffer, n->vars[i].type) ;
+-		printf ("%s %s", buffer, identifier_name(n->vars[i].code)) ;
++		fprintf (stderr, "%s %s", buffer, identifier_name(n->vars[i].code)) ;
+ 
+ 		// Describe arrays of structs
+ 
+@@ -79,22 +87,22 @@
+ 				r = typedef_reduce(r);
+ 			if (typedef_is_struct(r))
+ 			{
+-				printf (":\n") ;
++				fprintf (stderr, ":\n") ;
+ 				varspace_dump (typedef_members(r), indent+1) ;
+ 			}
+ 			else
+-				printf ("\n");
++				fprintf (stderr, "\n");
+ 		}
+ 
+ 		// Describe structs
+ 
+ 		else if (typedef_is_struct(n->vars[i].type))
+ 		{
+-			printf (":\n") ;
++			fprintf (stderr, ":\n") ;
+ 			varspace_dump (typedef_members(n->vars[i].type), indent+1) ;
+ 		}
+ 
+-		else	printf ("\n") ;
++		else fprintf (stderr, "\n") ;
+ 	}
+ }
+ 

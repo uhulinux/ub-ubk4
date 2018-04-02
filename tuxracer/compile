@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+find html -type f | xargs chmod 644
+
+. /usr/lib/tclConfig.sh
+
+CFLAGS="-DGLX_GLXEXT_PROTOTYPES" \
+ub_configure \
+	--with-tcl-lib-name="tcl$TCL_VERSION" \
+	--with-data-dir=/usr/share/tuxracer
+ub_make

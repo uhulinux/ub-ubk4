@@ -1,0 +1,479 @@
+Description: Removed useless calls to the G_OBJECT() macro.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1267306
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -284,9 +284,9 @@ set_volume (gdouble volume)
+ {
+ 	mixer->set_volume (volume);
+ 
+-	g_signal_handler_block (G_OBJECT(volume_button), volume_value_changed_id);
++	g_signal_handler_block (volume_button, volume_value_changed_id);
+ 	gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), volume / 100);
+-	g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
++	g_signal_handler_unblock (volume_button, volume_value_changed_id);
+ 
+ 	tray_menu_enable_mute_button (mixer->is_muted());
+ 
+@@ -339,9 +339,9 @@ toggle_volume (void)
+ 	}
+ 
+ 	volume = (gdouble) mixer->get_volume();
+-	g_signal_handler_block (G_OBJECT(volume_button), volume_value_changed_id);
++	g_signal_handler_block (volume_button, volume_value_changed_id);
+ 	gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), volume / 100);
+-	g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
++	g_signal_handler_unblock (volume_button, volume_value_changed_id);
+ 
+ 	tray_menu_enable_mute_button (mixer->is_muted());
+ }
+@@ -446,9 +446,9 @@ void start_mixer(gboolean restart, GtkWi
+ 
+ 	if (mixer_set_device(settings.mixer)) {
+ 		mixer->set_state (settings.muted, settings.unmute_volume);
+-		g_signal_handler_block (G_OBJECT(volume_button), volume_value_changed_id);
++		g_signal_handler_block (volume_button, volume_value_changed_id);
+ 		gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), settings.unmute_volume);
+-		g_signal_handler_unblock (G_OBJECT(volume_button), volume_value_changed_id);
++		g_signal_handler_unblock (volume_button, volume_value_changed_id);
+ 
+ 		tray_menu_enable_mute_button (mixer->is_muted());
+ 
+@@ -555,7 +555,7 @@ static gboolean redraw_status_window(voi
+ 	/* gdk_draw_drawable(real_window, gc, window, 0, 0, 0, 0, win_width + 5, win_height); */
+ 	
+ 	cairo_destroy (cr);
+-	/* g_object_unref(G_OBJECT(window)); */
++	/* g_object_unref (window); */
+ 	
+ 	return TRUE;	
+ }
+@@ -832,14 +832,14 @@ static int start_recording(const gchar *
+ 			g_free (caption);
+ 			g_free (detail);
+ 
+-			g_object_unref(info);
+-			g_object_unref(file);
++			g_object_unref (info);
++			g_object_unref (file);
+ 
+ 			return -1;
+ 		}
+-		g_object_unref(info);
++		g_object_unref (info);
+ 	}
+-	g_object_unref(file);
++	g_object_unref (file);
+ 
+ 	if (rb_gst_check_missing_plugins (rb_gst_get_encoding_profile (rec_settings.profile), NULL, NULL)) {
+ 		gchar *extension, *format;
+@@ -970,8 +970,8 @@ static void about_button_clicked_cb(GtkB
+ 							app_icon);
+ 
+ 	gtk_widget_show(about);
+-	g_object_add_weak_pointer(G_OBJECT(about), (gpointer)&about);
+-	g_object_add_weak_pointer(G_OBJECT(about), (gpointer)&app_icon); */
++	g_object_add_weak_pointer (G_OBJECT (about), (gpointer) &about);
++	g_object_add_weak_pointer (G_OBJECT (about) &app_icon); */
+ }
+ 
+ static gint delete_event_cb(GtkWidget* window, GdkEventAny* e, gpointer data)
+@@ -1131,8 +1131,8 @@ GtkWidget* gnome_radio_gui (void)
+ 	gtk_box_pack_start (GTK_BOX (box), vseparator, FALSE, FALSE, 2);
+ 
+ 	volume_button = gtk_volume_button_new();
+-	g_object_set (G_OBJECT (volume_button), "size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+-	g_object_set (G_OBJECT (volume_button), "use-symbolic", FALSE, NULL);
++	g_object_set (volume_button, "size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
++	g_object_set (volume_button, "use-symbolic", FALSE, NULL);
+ 	gtk_button_set_relief (GTK_BUTTON (volume_button), GTK_RELIEF_NONE);
+ 	gtk_widget_set_sensitive(volume_button, FALSE);
+ 
+@@ -1172,23 +1172,23 @@ GtkWidget* gnome_radio_gui (void)
+ 
+ 	gtk_box_pack_start (GTK_BOX (vbox), box, FALSE, FALSE, 4);
+ 
+-	g_signal_connect (G_OBJECT (app), "delete_event", G_CALLBACK (delete_event_cb), NULL);
+-	g_signal_connect (G_OBJECT (drawing_area), "draw", G_CALLBACK (draw_cb), NULL);
+-	g_signal_connect (G_OBJECT (preset_combo), "changed", G_CALLBACK (preset_combo_change_cb), NULL);
+-	g_signal_connect (G_OBJECT (adj), "value-changed", G_CALLBACK (adj_value_changed_cb), (gpointer) app);
+-	g_signal_connect (G_OBJECT (scbw_button), "clicked", G_CALLBACK (scbw_button_clicked_cb), NULL);
+-	g_signal_connect (G_OBJECT (stbw_button), "pressed", G_CALLBACK (step_button_pressed_cb), (gpointer) FALSE);
+-	g_signal_connect (G_OBJECT (stbw_button), "clicked", G_CALLBACK (step_button_clicked_cb), (gpointer) FALSE);
+-	g_signal_connect (G_OBJECT (stbw_button), "released", G_CALLBACK (step_button_released_cb), NULL);
+-	g_signal_connect (G_OBJECT (stfw_button), "pressed", G_CALLBACK (step_button_pressed_cb), (gpointer) TRUE);
+-	g_signal_connect (G_OBJECT (stfw_button), "clicked", G_CALLBACK (step_button_clicked_cb), (gpointer) TRUE);
+-	g_signal_connect (G_OBJECT (stfw_button), "released", G_CALLBACK (step_button_released_cb), NULL);
+-	g_signal_connect (G_OBJECT (scfw_button), "clicked", G_CALLBACK (scfw_button_clicked_cb), NULL);
+-	volume_value_changed_id = g_signal_connect (G_OBJECT (volume_button), "value-changed", G_CALLBACK (volume_value_changed_cb), NULL);
+-	g_signal_connect (G_OBJECT (rec_button), "clicked", G_CALLBACK (rec_button_clicked_cb), (gpointer) app);
+-	g_signal_connect (G_OBJECT (prefs_button), "clicked", G_CALLBACK (prefs_button_clicked_cb), (gpointer) app);
+-	g_signal_connect (G_OBJECT (about_button), "clicked", G_CALLBACK (about_button_clicked_cb), NULL);
+-/*	g_signal_connect (G_OBJECT (quit_button), "clicked", G_CALLBACK (quit_button_clicked_cb), NULL); */
++	g_signal_connect (app, "delete_event", G_CALLBACK (delete_event_cb), NULL);
++	g_signal_connect (drawing_area, "draw", G_CALLBACK (draw_cb), NULL);
++	g_signal_connect (preset_combo, "changed", G_CALLBACK (preset_combo_change_cb), NULL);
++	g_signal_connect (adj, "value-changed", G_CALLBACK (adj_value_changed_cb), (gpointer) app);
++	g_signal_connect (scbw_button, "clicked", G_CALLBACK (scbw_button_clicked_cb), NULL);
++	g_signal_connect (stbw_button, "pressed", G_CALLBACK (step_button_pressed_cb), (gpointer) FALSE);
++	g_signal_connect (stbw_button, "clicked", G_CALLBACK (step_button_clicked_cb), (gpointer) FALSE);
++	g_signal_connect (stbw_button, "released", G_CALLBACK (step_button_released_cb), NULL);
++	g_signal_connect (stfw_button, "pressed", G_CALLBACK (step_button_pressed_cb), (gpointer) TRUE);
++	g_signal_connect (stfw_button, "clicked", G_CALLBACK (step_button_clicked_cb), (gpointer) TRUE);
++	g_signal_connect (stfw_button, "released", G_CALLBACK (step_button_released_cb), NULL);
++	g_signal_connect (scfw_button, "clicked", G_CALLBACK (scfw_button_clicked_cb), NULL);
++	volume_value_changed_id = g_signal_connect (volume_button, "value-changed", G_CALLBACK (volume_value_changed_cb), NULL);
++	g_signal_connect (rec_button, "clicked", G_CALLBACK (rec_button_clicked_cb), (gpointer) app);
++	g_signal_connect (prefs_button, "clicked", G_CALLBACK (prefs_button_clicked_cb), (gpointer) app);
++	g_signal_connect (about_button, "clicked", G_CALLBACK (about_button_clicked_cb), NULL);
++/*	g_signal_connect (quit_button, "clicked", G_CALLBACK (quit_button_clicked_cb), NULL); */
+ 
+ 	gtk_widget_set_tooltip_text (scbw_button, _("Scan Backwards"));
+ 	gtk_widget_set_tooltip_text (stbw_button, _("0.05 MHz Backwards"));
+@@ -1430,7 +1430,7 @@ startup_cb (GApplication *application, g
+ 
+ 	connect_to_session ();
+ 
+-	g_signal_connect (G_OBJECT (app), "key-press-event", G_CALLBACK (key_press_event_cb), NULL);
++	g_signal_connect (app, "key-press-event", G_CALLBACK (key_press_event_cb), NULL);
+ 
+ 	g_timeout_add_seconds (3, (GSourceFunc)redraw_status_window, NULL);
+ }
+@@ -1530,7 +1530,7 @@ static void connect_to_session (void)
+                 return;
+ 	}
+ 
+-	g_signal_connect (G_OBJECT (proxy), "g-signal", G_CALLBACK (session_die_cb), NULL);
++	g_signal_connect (proxy, "g-signal", G_CALLBACK (session_die_cb), NULL);
+ }
+ 
+ static void show_message(GtkMessageType type, const char* text, const char* details)
+Index: gnomeradio-1.8/src/prefs.c
+===================================================================
+--- gnomeradio-1.8.orig/src/prefs.c
++++ gnomeradio-1.8/src/prefs.c
+@@ -239,7 +239,7 @@ device_entry_auto_activate_cb(GtkEntry*
+ 
+ 	autodetect = 0;
+ 	if (0 == strcmp(text, "auto")) {
+-		g_signal_emit_by_name(G_OBJECT (editable), "activate");
++		g_signal_emit_by_name (editable, "activate");
+ 		autodetect = 1;
+ 
+ 		gtk_widget_grab_focus(add_button);
+@@ -272,7 +272,7 @@ static gboolean mixer_entry_activate_cb(
+ 	gchar *bitrate;
+ 
+ 	g_assert(combo);
+-	bitrates = g_object_get_data(G_OBJECT(combo), "bitrates");
++	bitrates = g_object_get_data (combo, "bitrates");
+ 	active = gtk_combo_box_get_active(combo);
+ 	g_assert(active > -1);
+ 	
+@@ -292,7 +292,7 @@ static gboolean mixer_entry_activate_cb(
+ 	gchar *encoder;
+ 	
+ 	g_assert(combo);
+-	encoders = g_object_get_data(G_OBJECT(combo), "encoders");
++	encoders = g_object_get_data (combo, "encoders");
+ 	active = gtk_combo_box_get_active(combo);
+ 	g_assert(active > -1);
+ 	
+@@ -1301,13 +1301,13 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mute_on_exit), settings.mute_on_exit);
+ 	gtk_grid_attach(GTK_GRID(grid), mute_on_exit, 0, 4, 2, 1);
+ 
+-	g_signal_connect(G_OBJECT(device_entry), "hide", G_CALLBACK(device_entry_activate_cb), app);
+-	g_signal_connect(G_OBJECT(device_entry), "activate", G_CALLBACK(device_entry_activate_cb), NULL);
+-	g_signal_connect(G_OBJECT(device_entry), "changed", G_CALLBACK(device_entry_auto_activate_cb), NULL);
+-	g_signal_connect(G_OBJECT(mixer_entry), "hide", G_CALLBACK(mixer_entry_activate_cb), app);
+-	g_signal_connect(G_OBJECT(mixer_entry), "activate", G_CALLBACK(mixer_entry_activate_cb), NULL);
+-	g_signal_connect(G_OBJECT(audio_switch), "notify::active", G_CALLBACK(audio_switch_activate_cb), NULL);
+-	g_signal_connect(G_OBJECT(mute_on_exit), "toggled", G_CALLBACK(mute_on_exit_toggled_cb), NULL);
++	g_signal_connect (device_entry, "hide", G_CALLBACK (device_entry_activate_cb), app);
++	g_signal_connect (device_entry, "activate", G_CALLBACK (device_entry_activate_cb), NULL);
++	g_signal_connect (device_entry, "changed", G_CALLBACK (device_entry_auto_activate_cb), NULL);
++	g_signal_connect (mixer_entry, "hide", G_CALLBACK (mixer_entry_activate_cb), app);
++	g_signal_connect (mixer_entry, "activate", G_CALLBACK (mixer_entry_activate_cb), NULL);
++	g_signal_connect (audio_switch, "notify::active", G_CALLBACK (audio_switch_activate_cb), NULL);
++	g_signal_connect (mute_on_exit, "toggled", G_CALLBACK (mute_on_exit_toggled_cb), NULL);
+ 
+ 	gtk_widget_set_tooltip_text(device_entry, _("The radio device to use (e.g. /dev/radio0)"));
+ 	gtk_widget_set_tooltip_text(mixer_entry, _("The mixer device and channel to use (e.g. hw:0/Line)"));
+@@ -1336,35 +1336,35 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+ 	gtk_container_add(GTK_CONTAINER(scrolled_window), tree_view);
+ 
+-	g_signal_connect(G_OBJECT(tree_view), "button-release-event", G_CALLBACK(button_release_cb), NULL);
+-	g_signal_connect(G_OBJECT(tree_view), "key-press-event", G_CALLBACK(tree_view_key_press_event_cb), NULL);
+-	g_signal_connect(G_OBJECT(tree_view), "cursor-changed", G_CALLBACK(tree_view_cursor_changed_cb), NULL);
++	g_signal_connect (tree_view, "button-release-event", G_CALLBACK (button_release_cb), NULL);
++	g_signal_connect (tree_view, "key-press-event", G_CALLBACK (tree_view_key_press_event_cb), NULL);
++	g_signal_connect (tree_view, "cursor-changed", G_CALLBACK (tree_view_cursor_changed_cb), NULL);
+ 
+-	g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(tree_view_selection_changed_cb), tree_view);
++	g_signal_connect (selection, "changed", G_CALLBACK (tree_view_selection_changed_cb), tree_view);
+ 
+ 	/*gtk_tree_selection_select_path(selection, gtk_tree_path_new_from_string("0"));
+ 	gtk_tree_selection_set_select_function(selection, (GtkTreeSelectionFunc)tree_view_select_cb, NULL, NULL);*/
+ 	
+ 	cellrenderer = gtk_cell_renderer_text_new();
+-	g_object_set(G_OBJECT(cellrenderer), "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
+-	g_object_set(G_OBJECT(GTK_CELL_RENDERER_TEXT(cellrenderer)), "editable", TRUE, NULL);
++	g_object_set (cellrenderer, "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
++	g_object_set (cellrenderer, "editable", TRUE, NULL);
+ 	list_column = gtk_tree_view_column_new_with_attributes(NULL, cellrenderer, "text", 0, NULL);
+ 	gtk_tree_view_column_set_reorderable(list_column, TRUE);
+ 	gtk_tree_view_column_set_expand(list_column, TRUE);
+ 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), list_column);
+ 
+-	g_signal_connect(G_OBJECT(cellrenderer), "edited", G_CALLBACK(name_cell_edited_cb), NULL);
++	g_signal_connect (cellrenderer, "edited", G_CALLBACK (name_cell_edited_cb), NULL);
+ 
+ 	cellrenderer = gtk_cell_renderer_text_new();
+-	g_object_set(G_OBJECT(cellrenderer), "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
+-	g_object_set(G_OBJECT(cellrenderer), "xalign", 1.0, NULL);
+-	g_object_set(G_OBJECT(GTK_CELL_RENDERER_TEXT(cellrenderer)), "editable", TRUE, NULL);
++	g_object_set (cellrenderer, "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
++	g_object_set (cellrenderer, "xalign", 1.0, NULL);
++	g_object_set (cellrenderer, "editable", TRUE, NULL);
+ 	list_column = gtk_tree_view_column_new_with_attributes(NULL, cellrenderer, "text", 1, NULL);
+ 	gtk_tree_view_column_set_reorderable(list_column, TRUE);
+ 	gtk_tree_view_column_set_expand(list_column, FALSE);
+ 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), list_column);
+ 
+-	g_signal_connect(G_OBJECT(cellrenderer), "edited", G_CALLBACK(freq_cell_edited_cb), NULL);
++	g_signal_connect (cellrenderer, "edited", G_CALLBACK (freq_cell_edited_cb), NULL);
+ 
+ 	for (l = settings.presets; l != NULL; l = l->next) {
+ 		GtkTreeIter iter = {0};
+@@ -1387,7 +1387,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_widget_set_sensitive(move_up_button, FALSE);
+ 	gtk_widget_set_tooltip_text(move_up_button, _("Move preset up"));
+ 
+-	g_signal_connect(G_OBJECT(move_up_button), "clicked", G_CALLBACK(move_up_button_clicked_cb), NULL);
++	g_signal_connect (move_up_button, "clicked", G_CALLBACK (move_up_button_clicked_cb), NULL);
+ 
+ 	move_down_button = gtk_button_new();
+ 	image = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_MENU);
+@@ -1396,7 +1396,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_widget_set_sensitive(move_down_button, FALSE);
+ 	gtk_widget_set_tooltip_text(move_down_button, _("Move preset down"));
+ 
+-	g_signal_connect(G_OBJECT(move_down_button), "clicked", G_CALLBACK(move_down_button_clicked_cb), NULL);
++	g_signal_connect (move_down_button, "clicked", G_CALLBACK (move_down_button_clicked_cb), NULL);
+ 
+ 	add_button = gtk_button_new();
+ 	image = gtk_image_new_from_icon_name ("list-add", GTK_ICON_SIZE_MENU);
+@@ -1404,7 +1404,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_button_set_relief (GTK_BUTTON (add_button), GTK_RELIEF_NONE);
+ 	gtk_widget_set_tooltip_text(add_button, _("Add preset"));
+ 
+-	g_signal_connect(G_OBJECT(add_button), "clicked", G_CALLBACK(add_button_clicked_cb), NULL);
++	g_signal_connect (add_button, "clicked", G_CALLBACK (add_button_clicked_cb), NULL);
+ 
+  	remove_button = gtk_button_new();
+ 	image = gtk_image_new_from_icon_name ("list-remove", GTK_ICON_SIZE_MENU);
+@@ -1413,7 +1413,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_widget_set_tooltip_text(remove_button, _("Remove preset"));
+  	gtk_widget_set_sensitive(remove_button, FALSE);
+ 
+-	g_signal_connect(G_OBJECT(remove_button), "clicked", G_CALLBACK(remove_button_clicked_cb), NULL);
++	g_signal_connect (remove_button, "clicked", G_CALLBACK (remove_button_clicked_cb), NULL);
+ 
+  	save_button = gtk_button_new();
+ 	image = gtk_image_new_from_icon_name ("document-save", GTK_ICON_SIZE_MENU);
+@@ -1426,7 +1426,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	else
+ 		gtk_widget_set_sensitive (save_button, TRUE);
+ 
+-	g_signal_connect(G_OBJECT(save_button), "clicked", G_CALLBACK(save_to_file_cb), NULL);
++	g_signal_connect (save_button, "clicked", G_CALLBACK (save_to_file_cb), NULL);
+ 
+  	open_button = gtk_button_new();
+ 	image = gtk_image_new_from_icon_name ("document-open", GTK_ICON_SIZE_MENU);
+@@ -1435,7 +1435,7 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 	gtk_widget_set_tooltip_text(open_button, _("Load from file\xE2\x80\xA6"));
+ 	gtk_widget_set_sensitive(open_button, TRUE);
+ 
+-	g_signal_connect(G_OBJECT(open_button), "clicked", G_CALLBACK(load_from_file_cb), NULL);
++	g_signal_connect (open_button, "clicked", G_CALLBACK (load_from_file_cb), NULL);
+ 
+ 	gtk_box_pack_end(GTK_BOX(button_box), move_down_button, FALSE, FALSE, 0);
+ 	gtk_box_pack_end(GTK_BOX(button_box), move_up_button, FALSE, FALSE, 0);
+@@ -1485,9 +1485,9 @@ GtkWidget* prefs_window(GtkWidget *app)
+ 		gtk_widget_set_visible (install_button, FALSE);
+ 	}
+ 
+-	g_signal_connect(GTK_FILE_CHOOSER(destination_button), "selection-changed", G_CALLBACK(destination_button_clicked_cb), NULL);
+-	g_signal_connect(G_OBJECT(audio_profile_combo), "changed", G_CALLBACK(audio_profile_combo_change_cb), NULL);
+-	g_signal_connect(G_OBJECT(install_button), "clicked", G_CALLBACK(audio_profile_install_plugins_cb), NULL);
++	g_signal_connect (destination_button, "selection-changed", G_CALLBACK (destination_button_clicked_cb), NULL);
++	g_signal_connect (audio_profile_combo, "changed", G_CALLBACK (audio_profile_combo_change_cb), NULL);
++	g_signal_connect (install_button, "clicked", G_CALLBACK (audio_profile_install_plugins_cb), NULL);
+ 
+ 	gtk_widget_set_tooltip_text(destination_button, _("The default location to use for the recorded files"));
+ 	gtk_widget_set_tooltip_text(audio_profile_combo, _("The media type for encoding audio when recording"));
+Index: gnomeradio-1.8/src/rec_tech.c
+===================================================================
+--- gnomeradio-1.8.orig/src/rec_tech.c
++++ gnomeradio-1.8/src/rec_tech.c
+@@ -164,7 +164,7 @@ recording_start(const char* filename)
+ 
+ 	level = gst_element_factory_make ("level", NULL);
+ 	g_return_val_if_fail (level != NULL, NULL);
+-	g_object_set(G_OBJECT(level), "message", TRUE, NULL);
++	g_object_set (level, "message", TRUE, NULL);
+ 
+ 	filesink = gst_element_factory_make ("filesink", NULL);
+ 	g_return_val_if_fail (filesink != NULL, NULL);
+@@ -173,10 +173,10 @@ recording_start(const char* filename)
+ 	encodebin = gst_element_factory_make ("encodebin", NULL);
+ 	g_return_val_if_fail (encodebin != NULL, NULL);
+ 
+-	g_object_set (G_OBJECT (encodebin),
+-				"profile", profile,
+-				"queue-time-max", 120 * GST_SECOND,
+-				NULL);
++	g_object_set (encodebin,
++		      "profile", profile,
++		      "queue-time-max", 120 * GST_SECOND,
++		      NULL);
+ 
+ 	gst_bin_add_many (GST_BIN (pipeline), source, level, encodebin, filesink, NULL);
+ 
+@@ -188,7 +188,7 @@ recording_start(const char* filename)
+ 	extension = rb_gst_media_type_to_extension(rec_settings.profile);
+ 	path = g_strdup_printf("%s.%s", filename, extension);
+ 
+-	g_object_set (G_OBJECT(filesink), "location", path, NULL);
++	g_object_set (filesink, "location", path, NULL);
+ 
+ 	file = g_file_new_for_path (path);
+ 	g_free (path);
+Index: gnomeradio-1.8/src/record.c
+===================================================================
+--- gnomeradio-1.8.orig/src/record.c
++++ gnomeradio-1.8/src/record.c
+@@ -308,9 +308,9 @@ GtkWidget* record_status_window(Recordin
+ 	gtk_container_add(GTK_CONTAINER(status_dialog), vbox);
+ 	gtk_widget_grab_focus (button);
+ 
+-	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(stop_rec_button_clicked_cb), recording);
+-	g_signal_connect(G_OBJECT(status_dialog), "delete_event", G_CALLBACK(delete_event_cb), recording);
+-	g_signal_connect(G_OBJECT(status_dialog), "key-press-event", G_CALLBACK(key_press_event_cb), recording);
++	g_signal_connect (button, "clicked", G_CALLBACK (stop_rec_button_clicked_cb), recording);
++	g_signal_connect (status_dialog, "delete_event", G_CALLBACK (delete_event_cb), recording);
++	g_signal_connect (status_dialog, "key-press-event", G_CALLBACK (key_press_event_cb), recording);
+ 
+ 	gtk_window_set_position(GTK_WINDOW(status_dialog), GTK_WIN_POS_CENTER);
+ 
+Index: gnomeradio-1.8/src/trayicon.c
+===================================================================
+--- gnomeradio-1.8.orig/src/trayicon.c
++++ gnomeradio-1.8/src/trayicon.c
+@@ -73,9 +73,9 @@ void tray_menu_items_set_sensible(gboole
+ void tray_menu_enable_mute_button (gboolean enable)
+ {
+ 	if (tray_menu) {
+-		g_signal_handler_block(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
+-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), enable);
+-		g_signal_handler_unblock(G_OBJECT(mute_menuitem), mute_menuitem_toggled_cb_id);
++		g_signal_handler_block (mute_menuitem, mute_menuitem_toggled_cb_id);
++		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (mute_menuitem), enable);
++		g_signal_handler_unblock (mute_menuitem, mute_menuitem_toggled_cb_id);
+ 	}
+ }
+ 
+@@ -86,7 +86,7 @@ void tray_menu_add_preset (preset* ps, g
+ 	menuitem = gtk_menu_item_new_with_label(ps->title);
+ 
+ 	gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, index);
+-	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index));
++	g_signal_connect (menuitem, "activate", G_CALLBACK (preset_menuitem_activate_cb), GINT_TO_POINTER (index));
+ 	gtk_widget_show(menuitem);
+ }
+ 
+@@ -111,11 +111,11 @@ void tray_menu_move_up_preset (preset* p
+ 	menuitem = g_list_nth_data(menuitems, index);
+ 
+ 	gtk_menu_reorder_child (GTK_MENU(tray_menu), menuitem, GPOINTER_TO_INT (index + 1));
+-	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index + 1));
++	g_signal_connect (menuitem, "activate", G_CALLBACK (preset_menuitem_activate_cb), GINT_TO_POINTER (index + 1));
+ 
+ 	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+ 	menuitem = g_list_nth_data(menuitems, index);
+-	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index));
++	g_signal_connect (menuitem, "activate", G_CALLBACK (preset_menuitem_activate_cb), GINT_TO_POINTER (index));
+ }
+ 
+ void tray_menu_move_down_preset (preset* ps, gint index)
+@@ -128,11 +128,11 @@ void tray_menu_move_down_preset (preset*
+ 	menuitem = g_list_nth_data(menuitems, index);
+ 
+ 	gtk_menu_reorder_child (GTK_MENU(tray_menu), menuitem, GPOINTER_TO_INT (index - 1));
+-	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index - 1));
++	g_signal_connect (menuitem, "activate", G_CALLBACK (preset_menuitem_activate_cb), GINT_TO_POINTER (index - 1));
+ 
+ 	menuitems = gtk_container_get_children(GTK_CONTAINER(tray_menu));
+ 	menuitem = g_list_nth_data(menuitems, index);
+-	g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (index));
++	g_signal_connect (menuitem, "activate", G_CALLBACK (preset_menuitem_activate_cb), GINT_TO_POINTER (index));
+ }
+ 
+ void tray_menu_update_preset (preset* ps, gint index)
+@@ -179,7 +179,7 @@ void create_tray_menu(GtkWidget *app) {
+ 		menuitem = gtk_menu_item_new_with_label(ps->title);
+ 		
+ 		gtk_menu_shell_insert(GTK_MENU_SHELL(tray_menu), menuitem, i);		
+-		g_signal_connect(G_OBJECT(menuitem), "activate", (GCallback)preset_menuitem_activate_cb, GINT_TO_POINTER (i));
++		g_signal_connect (menuitem, "activate", G_CALLBACK (preset_menuitem_activate_cb), GINT_TO_POINTER (i));
+ 		gtk_widget_show(menuitem);
+ 	}
+ 	
+@@ -188,12 +188,12 @@ void create_tray_menu(GtkWidget *app) {
+ 	mute_menuitem = gtk_check_menu_item_new_with_label(_("Muted"));
+ 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(mute_menuitem), mixer->get_volume() == 0);
+ 	gtk_menu_shell_append(GTK_MENU_SHELL(tray_menu), mute_menuitem);
+-	mute_menuitem_toggled_cb_id = g_signal_connect(G_OBJECT(mute_menuitem), "toggled", (GCallback)mute_menuitem_toggled_cb, (gpointer)app);
++	mute_menuitem_toggled_cb_id = g_signal_connect (mute_menuitem, "toggled", G_CALLBACK (mute_menuitem_toggled_cb), (gpointer) app);
+ 	gtk_widget_show(mute_menuitem);
+ 
+ 	menuitem = gtk_menu_item_new_with_mnemonic (_("_Record"));
+ 	gtk_menu_shell_append (GTK_MENU_SHELL (tray_menu), menuitem);
+-	g_signal_connect (G_OBJECT (menuitem), "activate", (GCallback)record_menuitem_activate_cb, app);
++	g_signal_connect (menuitem, "activate", G_CALLBACK (record_menuitem_activate_cb), app);
+ 	gtk_widget_show (menuitem);
+ 
+ 	gtk_menu_shell_append(GTK_MENU_SHELL(tray_menu), gtk_separator_menu_item_new());
+@@ -202,12 +202,12 @@ void create_tray_menu(GtkWidget *app) {
+ 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(showwindow_menuitem), TRUE);
+ 	/*gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(showwindow_menuitem), GTK_WIDGET_VISIBLE(app));*/
+ 	gtk_menu_shell_append(GTK_MENU_SHELL(tray_menu), showwindow_menuitem);
+-	g_signal_connect(G_OBJECT(showwindow_menuitem), "activate", (GCallback)showwindow_menuitem_toggled_cb, (gpointer)app);
++	g_signal_connect (showwindow_menuitem, "activate", G_CALLBACK (showwindow_menuitem_toggled_cb), (gpointer) app);
+ 	gtk_widget_show(showwindow_menuitem);
+ 
+ 	menuitem = gtk_menu_item_new_with_mnemonic (_("_Quit"));
+ 	gtk_menu_shell_append (GTK_MENU_SHELL (tray_menu), menuitem);
+-	g_signal_connect (G_OBJECT (menuitem), "activate", (GCallback)quit_menuitem_activate_cb, NULL);
++	g_signal_connect (menuitem, "activate", G_CALLBACK (quit_menuitem_activate_cb), NULL);
+ 	gtk_widget_show (menuitem);
+ 
+ 	gtk_widget_show_all(tray_menu);
+@@ -233,9 +233,9 @@ void create_tray_icon(GtkWidget *app)
+ 	icontheme = gtk_icon_theme_get_default();
+ 	pixbuf = gtk_icon_theme_load_icon(icontheme, "gnomeradio", 22, 0, NULL);
+ 	g_return_if_fail(pixbuf);
+-	tray_icon = G_OBJECT(gtk_status_icon_new_from_pixbuf(pixbuf));
+-	g_object_unref(pixbuf);
++	tray_icon = G_OBJECT (gtk_status_icon_new_from_pixbuf (pixbuf));
++	g_object_unref (pixbuf);
+ 
+-	g_signal_connect (G_OBJECT(tray_icon), "activate", G_CALLBACK (tray_activate_cb), (gpointer)app);
+-	g_signal_connect (G_OBJECT(tray_icon), "popup-menu", G_CALLBACK (tray_popup_menu), (gpointer)app);
++	g_signal_connect (tray_icon, "activate", G_CALLBACK (tray_activate_cb), (gpointer) app);
++	g_signal_connect (tray_icon, "popup-menu", G_CALLBACK (tray_popup_menu), (gpointer) app);
+ }

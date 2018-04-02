@@ -1,0 +1,12 @@
+diff -urN jumpnbump-1.41.orig/jnbmenu.pre jumpnbump-1.41/jnbmenu.pre
+--- jumpnbump-1.41.orig/jnbmenu.pre	2002-09-22 21:03:26.000000000 +0200
++++ jumpnbump-1.41/jnbmenu.pre	2003-04-06 22:57:00.000000000 +0200
+@@ -49,7 +49,7 @@
+ 
+ 	set file ""
+ 	if { [ .top17.lis26 curselection ] != "" } then {
+-		set file "%%PREFIX%%/games/jumpnbump/[ .top17.lis26 get [.top17.lis26 curselection] ].dat"
++		set file "%%PREFIX%%/share/jumpnbump/[ .top17.lis26 get [.top17.lis26 curselection] ].dat"
+ 	}
+ 	
+ 	exec jumpnbump $str_fullscreen $str_nosound $str_scaleup $str_mirror $str_nogore $str_fireworks -dat $file &

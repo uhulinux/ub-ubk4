@@ -1,0 +1,33 @@
+diff -Nur orig/CMakeLists.txt mod/CMakeLists.txt
+--- orig/CMakeLists.txt	2017-12-21 21:27:33.000000000 +0100
++++ mod/CMakeLists.txt	2018-01-09 22:51:31.689951402 +0100
+@@ -186,7 +186,7 @@
+ 
+ IF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+   MESSAGE(STATUS "final adjustments for an Intel or AMD GNU/Linux host")
+-  SET(CONFIG_CXXOPTIMIZE "-O3 -fexpensive-optimizations")
++  SET(CONFIG_CXXOPTIMIZE "-O2 -fexpensive-optimizations")
+ ENDIF(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+ 
+ IF(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
+diff -Nur orig/configure mod/configure
+--- orig/configure	2017-12-21 21:27:37.000000000 +0100
++++ mod/configure	2018-01-09 22:52:33.121843848 +0100
+@@ -5521,7 +5521,7 @@
+ 
+       CONFIG_OS="GNU_LINUX"
+       CONFIG_OS_SUFFIX="i386-pc-linux-gnu"
+-      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
++      CONFIG_CXXOPTIMIZE="-O2 -fexpensive-optimizations"
+       CONFIG_QTPIPES="yes"
+ 
+ $as_echo "#define STACK_SIZE 0x1000000" >>confdefs.h
+@@ -5709,7 +5709,7 @@
+ $as_echo "#define OS_GNU_LINUX 1" >>confdefs.h
+ 
+       CONFIG_OS="GNU_LINUX"
+-      CONFIG_CXXOPTIMIZE="-O3 -fexpensive-optimizations"
++      CONFIG_CXXOPTIMIZE="-O2 -fexpensive-optimizations"
+       CONFIG_WORD_LENGTH="8"
+       CONFIG_WORD_LENGTH_INC="7"
+       CONFIG_WORD_MASK="0xfffffff8"

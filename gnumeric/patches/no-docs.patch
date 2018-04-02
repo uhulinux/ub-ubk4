@@ -1,0 +1,28 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2017-12-10 23:41:36.000000000 +0100
++++ mod/configure.ac	2018-01-07 17:18:30.861242369 +0100
+@@ -73,7 +73,6 @@
+ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
+ 
+ dnl AX_REQUIRE_DEFINED([GTK_DOC_CHECK])
+-GTK_DOC_CHECK
+ 
+ dnl We use a LINGUAS file, so we need intltool >= 0.35:
+ IT_PROG_INTLTOOL([0.35.0])
+@@ -1152,7 +1151,6 @@
+ src/widgets/Makefile
+ src/tools/Makefile
+ src/cut-n-paste-code/Makefile
+-doc/Makefile
+ plugins/Makefile
+ plugins/fn-christian-date/Makefile
+ plugins/fn-complex/Makefile
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2016-08-25 03:00:39.000000000 +0200
++++ mod/Makefile.am	2018-01-07 17:19:12.137165451 +0100
+@@ -1,4 +1,4 @@
+-SUBDIRS = . po po-functions src plugins icons @COMPONENT_DIR@ templates doc tools schemas test
++SUBDIRS = . po po-functions src plugins icons @COMPONENT_DIR@ templates tools schemas test
+ 
+ XML_I18N_XML_KIND = --pass-through
+ 

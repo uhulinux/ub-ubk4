@@ -1,0 +1,20 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ]; then
+	export CTARGET="x86_64-gnu-linux"
+	export CHOST="x86_64-gnu-linux"
+	export CBUILD="x86_64-gnu-linux"
+else
+	export CTARGET="i686-gnu-linux"
+	export CHOST="i686-gnu-linux"
+	export CBUILD="i686-gnu-linux"
+fi
+
+cd build/workspaces
+./update-workspaces.sh \
+	--bindir=/usr/bin \
+    --libdir=/usr/lib/0ad \
+    --datadir=/usr/share/0ad/data
+
+cd gcc
+ub_make

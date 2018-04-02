@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
+cat >"$UB_INSTALLDIR"/usr/lib/pkgconfig/id3tag.pc <<EOF
+prefix=/usr
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: id3tag
+Description: ID3 tag reading library
+Requires:
+Version: $UB_VERSION
+Libs: -L\${libdir} -lid3tag -lz
+Cflags: -L\${includedir}
+EOF

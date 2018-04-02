@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+export DEBUG=-DNDEBUG
+
+autoconf
+ub_compile \
+	--bindir=/bin \
+	--libdir=/lib \
+	--sbindir=/sbin \
+	--libexecdir=/usr/lib

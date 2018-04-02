@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+install -m 755 safe_finger "$UB_INSTALLDIR"/usr/sbin/
+install -m 755 tcpd "$UB_INSTALLDIR"/usr/sbin/
+install -m 755 try-from "$UB_INSTALLDIR"/usr/sbin/
+
+install -m 644 *.3 "$UB_INSTALLDIR"/usr/share/man/man3/
+install -m 644 *.5 "$UB_INSTALLDIR"/usr/share/man/man5/
+install -m 644 *.8 "$UB_INSTALLDIR"/usr/share/man/man8/
+ln -sf hosts_access.5 "$UB_INSTALLDIR"/usr/share/man/man5/hosts.allow.5
+ln -sf hosts_access.5 "$UB_INSTALLDIR"/usr/share/man/man5/hosts.deny.5
+
+install -m 644 *.h "$UB_INSTALLDIR"/usr/include/
+install -m 644 *.a "$UB_INSTALLDIR"/usr/lib/
+cp -a *.so* "$UB_INSTALLDIR"/usr/lib/
+
+# XXX remove utilities that expect /etc/inetd.conf (redhat #16059).
+rm -f "$UB_INSTALLDIR"/usr/share/man/man8/tcpd{chk,match}.*

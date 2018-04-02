@@ -1,0 +1,50 @@
+diff -Naur orig/BUILD.sh patched/BUILD.sh
+--- orig/BUILD.sh	2017-07-10 10:22:17.134739579 +0200
++++ patched/BUILD.sh	2017-07-15 22:45:54.291345045 +0200
+@@ -24,8 +24,8 @@
+ 	echo "Texmaker compilation:"
+ 	echo "----------------------------------------"
+ 	while [[ -z ${QTDIR} ]]; do # loop until input is provided
+-		read -p "Enter full path to QT (qmake): " QTDIR # get path to qmake
+-			if [[ ! -f ${QTDIR}/qmake ]]; then # check if gmake is present in the provided path
++		QTDIR=/usr/lib/qt5
++			if [[ ! -f ${QTDIR}/bin/qmake ]]; then # check if gmake is present in the provided path
+ 				echo -ne "${txtred}Error${txtrst}: Unable to find qmake in \"${QTDIR}\"\n"
+ 				QTDIR=""
+ 			fi
+@@ -44,7 +44,7 @@
+ 	else
+ 		echo -ne "\rUnable to detect system automatically!\n"
+ 		while [[ -z ${SYSTEM} ]]; do
+-			read -p "Enter System type (1: UNIX ; 2: MACOSX): " SYSTEM
++			SYSTEM="1"
+ 		done
+ 	fi
+ 	echo -ne "\n" # just print a space to make a nicer output
+@@ -55,13 +55,13 @@
+ 
+ 	if [[ ${SYSTEM} == "1" ]]; then # run if linux is detected
+ 		while [[ -z ${PREFIX} ]]; do # get installation path for Texmaker
+-			read -p "Enter installation path (example: /usr , /usr/local or /opt): " PREFIX
++			PREFIX=/usr
+ 		done
+ 		while [[ -z ${DESKTOPDIR} ]]; do # get installation path for .desktop file
+-			read -p "Enter directory for the desktop file (example: /usr/share/applications): " DESKTOPDIR
++			DESKTOPDIR=/usr/share/applications
+ 		done
+ 		while [[ -z ${ICONDIR} ]]; do # get installation path for Desktop-icon
+-			read -p "Enter directory for the icon file (example: /usr/share/pixmaps): " ICONDIR
++			ICONDIR=/usr/share/pixmaps
+ 		done
+ 		${QTDIR}/qmake PREFIX=${PREFIX} DESKTOPDIR=${DESKTOPDIR} ICONDIR=${ICONDIR} texmaker.pro # run qmake
+ 		QMAKE_EXIT="$?" # get exit code of qmake
+diff -Naur orig/utilities/texmaker.desktop patched/utilities/texmaker.desktop
+--- orig/utilities/texmaker.desktop	2017-07-14 01:16:02.134739579 +0200
++++ patched/utilities/texmaker.desktop	2017-07-15 22:40:06.454884889 +0200
+@@ -1,5 +1,5 @@
+ [Desktop Entry]
+-Categories=Office;Publishing;Qt;X-SuSE-Core-Office;X-Mandriva-Office-Publishing;X-Misc;
++Categories=Office;Publishing;Qt;X-Misc;
+ Exec=texmaker %F
+ GenericName=LaTeX Editor
+ GenericName[fr]=Editeur LaTeX

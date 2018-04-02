@@ -1,0 +1,38 @@
+#! /bin/bash
+
+export MAIN_DIALOG='
+ <vbox>
+  <hbox>
+    <text>
+      <label>Input:</label>
+      <variable>TEXT</variable>
+      <visible>Disabled</visible>
+    </text>
+    <entry>
+      <default>Default value</default>
+      <visible>Disabled</visible>
+      <variable>ENTRY</variable>
+    </entry>
+  </hbox>
+  <hbox>
+    <button>
+      <label>Enable</label>
+      <action>Enable:ENTRY</action>
+      <action>Enable:TEXT</action>
+    </button>
+    <button>
+      <label>Disable</label>
+      <action>Disable:ENTRY</action>
+      <action>Disable:TEXT</action>
+    </button>
+  </hbox>
+  <hbox>
+   <button ok></button>
+   <button cancel></button>
+  </hbox>
+ </vbox>
+'
+
+gtkdialog --program MAIN_DIALOG
+
+

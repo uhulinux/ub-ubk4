@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for module in ${@//_/ }; do
+	/sbin/modprobe pnp:d"$module"
+done

@@ -1,0 +1,12 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2013-11-04 13:55:25.000000000 +0100
++++ mod/configure.ac	2016-10-21 14:40:24.893206932 +0200
+@@ -83,7 +83,7 @@
+ 
+ # Checks for libraries.
+ PKG_CHECK_MODULES([liblua], [lua >= 5.1], [], [
+-  PKG_CHECK_MODULES([liblua], [lua51 >= 5.1], [], [
++  PKG_CHECK_MODULES([liblua], [lua52 >= 5.1], [], [
+     PKG_CHECK_MODULES([liblua], [lua5.1 >= 5.1], [], [
+       PKG_CHECK_MODULES(liblua, [lua-5.1 >= 5.1])])
+   ])

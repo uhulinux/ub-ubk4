@@ -1,0 +1,11 @@
+diff -Naur orig/scripts/squid_redirect-nodata mod/scripts/squid_redirect-nodata
+--- orig/scripts/squid_redirect-nodata	2011-10-19 11:56:41.000000000 +0200
++++ mod/scripts/squid_redirect-nodata	2016-04-09 09:08:49.174935780 +0200
+@@ -116,6 +116,7 @@
+ }
+ 
+ # use the "clear" versions if ZAP_MODE is "CLEAR"
++$ENV{ZAP_MODE} |= "CLEAR";
+ if (defined $ENV{ZAP_MODE} && $ENV{ZAP_MODE} eq CLEAR)
+ { for my $type (keys %::StubURLs)
+   { $::StubURLs{$type} =~ s/\.[^.]+$/-clear$&/;

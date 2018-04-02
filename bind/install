@@ -1,0 +1,19 @@
+#!/bin/sh -eux
+
+UB_MAKEINSTALL_USE_DESTDIR=yes ub_install
+
+ln -s host "$UB_INSTALLDIR"/usr/bin/aaa
+ln -s host "$UB_INSTALLDIR"/usr/bin/mx
+ln -s host "$UB_INSTALLDIR"/usr/bin/ns
+ln -s host "$UB_INSTALLDIR"/usr/bin/soa
+ln -s host "$UB_INSTALLDIR"/usr/bin/zone
+ln -s host.1 "$UB_INSTALLDIR"/usr/share/man/man1/aaaa.1
+ln -s host.1 "$UB_INSTALLDIR"/usr/share/man/man1/mx.1
+ln -s host.1 "$UB_INSTALLDIR"/usr/share/man/man1/ns.1
+ln -s host.1 "$UB_INSTALLDIR"/usr/share/man/man1/soa.1
+ln -s host.1 "$UB_INSTALLDIR"/usr/share/man/man1/zone.1
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/doc/bind
+mkdir -p "$UB_INSTALLDIR"/etc/bind
+ln -s /var/cache/bind "$UB_INSTALLDIR"/etc/bind/slave
+mv doc/arm/Bv9ARM*.html ${UB_INSTALLDIR}/usr/share/doc/bind/

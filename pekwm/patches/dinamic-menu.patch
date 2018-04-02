@@ -1,0 +1,77 @@
+diff -Naur orig/data/menu mod/data/menu
+--- orig/data/menu	2013-05-26 14:01:18.000000000 +0200
++++ mod/data/menu	2015-05-09 15:06:20.596972940 +0200
+@@ -9,72 +9,7 @@
+ 
+ 	Separator {}
+ 
+-	Submenu = "Editors" {
+-		Entry = "emacs" { Actions = "Exec emacs" }
+-		Entry = "emacs terminal" { Actions = "Exec $TERM -title emacs -e emacs -nw" }
+-		Entry = "gedit" { Actions = "Exec gedit" }
+-		Entry = "gvim" { Actions = "Exec gvim" }
+-		Entry = "kate" { Actions = "Exec kate" }
+-		Entry = "vim" { Actions = "Exec $TERM -title vim -e vim" }
+-	}
+-	Submenu = "eMail" {
+-		Entry = "claws-mail" { Actions = "Exec claws-mail" }
+-		Entry = "evolution" { Actions = "Exec evolution" }
+-		Entry = "kmail" { Actions = "Exec kmail" }
+-		Entry = "mutt" { Actions = "Exec $TERM -e mutt" }
+-		Entry = "thunderbird" { Actions = "Exec thunderbird" }
+-	}
+-	Submenu = "Filemanager" {
+-		Entry = "dolphin" { Actions = "Exec dolphin" }
+-		Entry = "mc" { Actions = "Exec $TERM -e mc" }
+-		Entry = "nautilus" { Actions = "Exec nautilus" }
+-		Entry = "pcmanfm" { Actions = "Exec pcmanfm" }
+-		Entry = "rox" { Actions = "Exec rox" }
+-		Entry = "thunar" { Actions = "Exec thunar" }
+-	}
+-	Submenu = "Graphics" {
+-		Entry = "gimp" { Actions = "Exec gimp" }
+-		Entry = "digikam" { Actions = "Exec digikam" }
+-		Entry = "display" { Actions = "Exec display" }
+-		Entry = "eog" { Actions = "Exec eog" }
+-		Entry = "gwenview" { Actions = "Exec gwenview" }
+-		Entry = "shotwell" { Actions = "Exec shotwell" }
+-	}
+-	Submenu = "IDE" {
+-		Entry = "anjuta" { Actions = "Exec anjuta" }
+-		Entry = "eclipse" { Actions = "Exec eclipse" }
+-		Entry = "kdevelop" { Actions = "Exec kdevelop" }
+-	}
+-	Submenu = "IM" {
+-		Entry = "empathy" { Actions = "Exec empathy" }
+-		Entry = "kopete" { Actions = "Exec kopete" }
+-		Entry = "pidgin" { Actions = "Exec pidgin" }
+-		Entry = "psi" { Actions = "Exec psi" }
+-	}
+-	Submenu = "Multimedia" {
+-		Entry = "vlc" { Actions = "Exec vlc" }
+-		Entry = "amarok" { Actions = "Exec amarok" }
+-		Entry = "banshee" { Actions = "Exec banshee" }
+-		Entry = "rhythmbox" { Actions = "Exec rhythmbox" }
+-		Entry = "smplayer" { Actions = "Exec smplayer" }
+-		Entry = "alsamixer" { Actions = "Exec $TERM -title alsamixer -e alsamixer" }
+-	}
+-	Submenu = "Office" {
+-		Entry = "LOffice - Calc" { Actions = "Exec libreoffice --calc" }
+-		Entry = "LOffice - Draw" { Actions = "Exec libreoffice --draw" }
+-		Entry = "LOffice - Impress" { Actions = "Exec libreoffice --impress" }
+-		Entry = "LOffice - Writer" { Actions = "Exec libreoffice --writer" }
+-	}
+-	Submenu = "VoIP" {
+-		Entry = "ekiga" { Actions = "Exec ekiga" }
+-		Entry = "jitsi" { Actions = "Exec jitsi" }
+-		Entry = "sflphone" { Actions = "Exec sflphone" }
+-}
+-	Submenu = "WWW" {
+-		Entry = "firefox" { Actions = "Exec firefox" }
+-		Entry = "chromium" { Actions = "Exec chromium" }
+-		Entry = "opera" { Actions = "Exec opera" }
+-	}
++	Entry = "" { Actions = "Dynamic /usr/bin/pekwm-menu -g -k lxde-applications.menu" }
+ 
+ 	Separator {}
+ 

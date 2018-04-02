@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/usr/lib
+mkdir -p ${UB_INSTALLDIR}/usr/include/fmodex
+mkdir -p ${UB_INSTALLDIR}/usr/share/doc/fmodex
+cp -d api/lib/* "$UB_INSTALLDIR"/usr/lib/
+cp -d api/inc/* "$UB_INSTALLDIR"/usr/include/fmodex
+cp -r documentation examples ${UB_INSTALLDIR}/usr/share/doc/fmodex/
+if [ "$UB_ARCH" == "amd64" ];then
+arch=64
+else
+arch=""
+fi
+ln -s "$UB_INSTALLDIR"/usr/lib/libfmodex${arch}-${UB_VERSION}.so "$UB_INSTALLDIR"/usr/lib/libfmodex.so.4
+ln -s "$UB_INSTALLDIR"/usr/lib/libfmodexL${arch}-${UB_VERSION}.so "$UB_INSTALLDIR"/usr/lib/libfmodexL.so.4
+ln -sf libfmodex.so.4 "$UB_INSTALLDIR"/usr/lib/libfmodex.so
+ln -sf libfmodexL.so.4 "$UB_INSTALLDIR"/usr/lib/libfmodexL.so

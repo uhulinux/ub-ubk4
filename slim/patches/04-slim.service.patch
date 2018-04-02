@@ -1,0 +1,14 @@
+diff -Naur orig/slim.service mod/slim.service
+--- orig/slim.service	2013-10-02 00:38:05.000000000 +0200
++++ mod/slim.service	2015-02-01 17:48:23.197073322 +0100
+@@ -3,7 +3,9 @@
+ After=systemd-user-sessions.service
+ 
+ [Service]
+-ExecStart=/usr/bin/slim -nodaemon
++ExecStart=/usr/bin/slim
++Restart=always
++IgnoreSIGPIPE=no
+ 
+ [Install]
+ Alias=display-manager.service

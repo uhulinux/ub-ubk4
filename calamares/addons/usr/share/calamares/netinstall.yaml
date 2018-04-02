@@ -1,0 +1,980 @@
+- name: "Base vegyes"
+  description: "Base vegyes"
+  critical: false
+  selected: false
+  packages:
+    - libftdi1
+    - libasyncns
+    - json-c
+    - gconf2
+    - fftw3
+    - libwacom
+    - libinput
+    - qt5
+    - tslib
+    - tdb
+    - luit
+    - neon
+    - openipmi
+    - xzoom
+
+  subgroups:
+    -   name: "Konsole"
+        description: "Konsole vegyes"
+        critical: false
+        selected: false
+        packages:
+        - antiword
+        - bchunk
+        - open-iscsi
+        - pv
+        - words
+        - ytalk
+
+    -   name: "bootloaders"
+        description: "bootloaders vegyes"
+        critical: false
+        selected: false
+        packages:
+        - syslinux
+        - sbm
+
+- name: "Base unsorted"
+  description: "Base unsorted"
+  critical: false
+  selected: true
+  subgroups:
+
+    -   name: "Artwork"
+        description: "Base artwork"
+        critical: false
+        selected: true
+        packages:
+        - cursor-theme-bluecurve
+
+    -   name: "GNOME"
+        description: "Base GNOME"
+        critical: false
+        selected: true
+        packages:
+        - notification-daemon
+
+    -   name: "tools"
+        description: "Base tools"
+        critical: false
+        selected: true
+        packages:
+        - xbindkeys
+        - xdg-user-dirs-gtk
+        - cdtest
+
+    -   name: "Filesystems"
+        description: "Base filesystems"
+        critical: false
+        selected: true
+        packages:
+        - gparted
+        - gptfdisk
+        - gvfs
+        - nfs4-utils
+        - nrg2iso
+        - smartmontools
+
+    -   name: "systemtools"
+        description: "Base systemtools"
+        critical: false
+        selected: true
+        packages:
+        - numlockx
+        - pcmciautils
+        - sysklogd
+        - uhu-zeroconf
+
+    -   name: "internet + connections"
+        description: "Base internet + connections"
+        critical: false
+        selected: true
+        packages:
+        - isdn4k-utils
+        - curlftpfs
+        - bluez
+        - bluez-firmware
+        - bluez-hcidump
+        - apache
+        - apache-mod-fcgid
+        - apache-mod-php
+        - fuse-smbnetfs
+        - fuse-sshfs
+        - tigervnc
+        - networkmanager-openvpn
+        - networkmanager-pptp
+        - nmap
+        - opensshd
+        - openvpn
+        - php
+        - rdesktop
+        - w3m
+        - wvdial
+        - usb-modeswitch
+        - x11vnc 
+
+- name: "Graphics"
+  description: "Graphics"
+  critical: false
+  selected: true
+  packages:
+    - exif
+    - xsane
+    - gimp
+    - gqview
+    - imagemagick
+    - jpeg-turbo-tools
+    - gphoto2
+    - sane-frontends
+    - simple-scan
+
+- name: "Printing"
+  description: "Printing"
+  critical: false
+  selected: true
+  packages:
+    - foomatic-db
+    - foomatic-db-engine
+    - gutenprint
+    - ghostscript
+    - hplip
+    - system-config-printer
+- name: "Package managers"
+  description: "Package managers"
+  critical: false
+  selected: true
+  packages:
+    - dselect
+    - synaptic
+    - gtk-stock-icons
+
+- name: "Multimedia libs"
+  description: "Multimedia libs"
+  critical: false
+  selected: true
+  packages:
+    - alsa-lib
+    - celt
+    - cdparanoia
+    - gstreamer
+    - gst-plugins-base
+    - libogg
+    - libtheora
+    - libvisual
+    - libvorbis
+    - libsndfile
+    - libsamplerate
+    - lirc
+    - opus
+    - orc
+    - jack
+    - flac
+    - libsoxr
+    - portaudio
+    - pulseaudio
+    - sbc
+    - speexdsp
+    - bladeenc
+    - dvd+rw-tools
+    - cdrdao
+    - cdrkit
+    - enscript
+    - lame
+    - sox
+    - mp3info
+    - vorbis-tools
+    - zvbi
+
+- name: "X-org base"
+  description: "X-org base"
+  critical: false
+  selected: true
+  subgroups:
+  
+    -   name: "X-org base"
+        description: "X-org base"
+        critical: false
+        selected: true
+        packages:
+        - x.org-server
+        - xinit
+        - libxv
+        - xauth
+        subgroups:
+
+        -   name: "X-org fonts, themes"
+            description: "X-org base fonts, themes"
+            critical: false
+            selected: true       
+            packages:
+            - fonts-x.org-base
+            - fonts-x.org-iso-10646
+            - fonts-x.org-iso-8859-1
+            - fonts-x.org-other
+            - fonts-x.org-ttf
+            - fonts-x.org-type1
+            - cursor-theme-x.org
+            - x.org-bitmaps
+
+        -   name: "X-org inputs"
+            description: "X-org input drivers"
+            critical: false
+            selected: true       
+            packages:
+            - x.org-input-evdev
+            - x.org-input-keyboard
+            - x.org-input-mouse
+            - x.org-input-synaptics
+            - libevdev
+            - mtdev
+
+        -   name: "X-org video drivers"
+            description: "X-org base video drivers"
+            critical: false
+            selected: true       
+            packages:
+            - x.org-video-amd
+            - x.org-video-ati
+            - x.org-video-i128
+            - x.org-video-i740
+            - x.org-video-i810
+            - x.org-video-nouveau
+            - x.org-video-vesa
+            - x.org-video-openchrome
+
+        -   name: "X-org base utils"
+            description: "X-org base base utils"
+            critical: false
+            selected: true       
+            packages:
+            - x.org-font-utils
+            - x.org-utils
+            - xcb-util
+            - xcb-util-image
+            - xcb-util-keysyms
+            - xcb-util-renderutil
+            - xcb-util-wm
+            - xkb-utils
+            - xkeyboard-config
+
+        -   name: "X-org base apps"
+            description: "X-org base base applications"
+            critical: false
+            selected: true       
+            packages:
+            - xterm
+
+    -   name: "Xorg old drivers"
+        description: "Xorg old drivers"
+        critical: false
+        selected: false
+        packages:
+        - x.org-input-acecad
+        - x.org-input-aiptek
+        - x.org-input-elographics
+        - x.org-input-fpit
+        - x.org-input-hyperpen
+        - x.org-input-joystick
+        - x.org-input-mutouch
+        - x.org-input-penmount
+        - x.org-input-vmmouse
+        - x.org-input-void
+        - x.org-video-apm
+        - x.org-video-ark
+        - x.org-video-ast
+        - x.org-video-chips
+        - x.org-video-cirrus
+        - x.org-video-dummy
+        - x.org-video-fbdev
+        - x.org-video-glint
+        - x.org-video-neomagic
+        - x.org-video-nv
+        - x.org-video-rendition
+        - x.org-video-s3
+        - x.org-video-s3virge
+        - x.org-video-savage
+        - x.org-video-siliconmotion
+        - x.org-video-sis
+        - x.org-video-sisusb
+        - x.org-video-tdfx
+        - x.org-video-tga
+        - x.org-video-trident
+        - x.org-video-tseng
+        - x.org-video-v4l
+        - x.org-video-voodoo
+
+- name: "Window managers"
+  description: "Simple window managers"
+  critical: false
+  selected: false
+  subgroups:
+
+    -   name: "Icewm"
+        description: "Icewm windowmanager"
+        critical: false
+        selected: false
+        subgroups:
+
+            -   name: "Icewm base"
+                description:    "Icewm base packages"
+                critical: false
+                selected: false
+                packages:
+                - icewm
+                - icewm-xdgmenu
+                - slim
+                - icon-theme-gnome
+
+            -   name: "Icewm-themes"
+                description: "Icewm extra themes"
+                critical: false
+                selected: false
+                packages:
+                - icewm-themes
+                - icewm-theme-winclassic2
+                - icewm-theme-win7
+                - icewm-theme-win31
+                - icewm-theme-ubuntu
+                - icewm-theme-nitrogen
+
+    -   name: "Openbox"
+        description: "Openbox windowmanager"
+        critical: false
+        selected: false
+        packages:
+        - openbox
+        - openbox-debian-themes
+        - openbox-menu
+        - slim
+
+    -   name: "Fluxbox"
+        description: "Fluxbox windowmanager"
+        critical: false
+        selected: false
+        packages:
+        - fluxbox
+        - slim
+
+    -   name: "Pekwm"
+        description: "Pekwm windowmanager"
+        critical: false
+        selected: false
+        packages:
+        - pekwm
+        - pekwm-themes
+        - slim
+
+    -   name: "WindowMaker"
+        description: "Windowmaker windowmanager"
+        critical: false
+        selected: false
+        packages:
+        - windowmaker
+        - slim
+
+- name: "Light desktops"
+  description: "Simple desktops"
+  critical: false
+  selected: false
+  subgroups:
+
+    -   name: "Lumina"
+        description: "Lumina DE"
+        critical: false
+        selected: false
+        packages:
+        - lumina
+        - sddm
+
+    -   name: "Enlightenment"
+        description: "enlightenment DE"
+        critical: false
+        selected: false
+        packages:
+        - enlightenment
+        - slim
+
+    -   name: "LXDE"
+        description: "Lxde desktop"
+        critical: false
+        selected: false
+        subgroups:
+
+            -   name: "LXDE base"
+                description: "LXDE base packages"
+                critical: false
+                selected: false
+                packages:
+                -   lxpanel
+                -   lxsession
+                -   lxtask
+                -   lxde-common
+                -   icon-theme-adwaita
+                -   lxappearance
+                -   lxappearance-obconf
+                -   libfm
+                -   pcmanfm
+                -   xscreensaver
+                -   lxinput
+                -   lxmenu-data
+                -   menu-cache
+                -   obconf
+                -   openbox
+                -   lxdm
+
+            -   name: "LXDE extra"
+                description: "LXDE extra packages"
+                critical: false
+                selected: false
+                packages:
+                -   gpicview
+                -   lxmusic
+                -   lxrandr
+                -   lxterminal
+
+    -   name: "LXQT"
+        description: "Lxqt desktop"
+        critical: false
+        selected: false
+        subgroups:
+
+            -   name: "LXQT base"
+                description: "LXQT base packages"
+                critical: false
+                selected: false
+                packages:
+                - compton-conf
+                - lxqt-about
+                - lxqt-admin
+                - lxqt-config
+                - lxqt-l10n
+                - lxqt-notificationd
+                - lxqt-panel
+                - lxqt-policykit
+                - lxqt-powermanagement
+                - lxqt-qtplugin
+                - lxqt-runner
+                - lxqt-session
+                - lxqt-sudo
+                - obconf-qt
+                - pavucontrol-qt
+                - pcmanfm-qt
+                - sddm
+                - icon-theme-adwaita
+
+            -   name: "LXQT extra"
+                description: "LXQT extra packages"
+                critical: false
+                selected: false
+                packages:
+                - lximage-qt
+                - lxqt-openssh-askpass
+                - lxqt-themes
+                - qterminal
+                - qtermwidget
+                - xarchiver
+                - qpdfview
+
+- name: "Big Desktops"
+  description: "Desktop environments"
+  critical: false
+  selected: false
+  subgroups:
+
+    -   name: "Mate"
+        description: "Mate desktop"
+        critical: false
+        selected: false
+        subgroups:
+
+            -   name: "MATE base"
+                description: "MATE base packages"
+                critical: false
+                selected: false
+                packages:
+                - caja
+                - caja-extensions
+                - marco
+                - mate-control-center
+                - mate-desktop
+                - mate-menu
+                - mate-menus
+                - mate-notification-daemon
+                - mate-panel
+                - mate-polkit
+                - mate-power-manager
+                - mate-screensaver
+                - mate-session-manager
+                - mate-settings-daemon
+                - mate-icon-theme
+                - mate-system-monitor
+                - mate-terminal
+                - mate-backgrounds
+                - mate-applets
+                - atril
+                - caja-extension-atril
+                - engrampa
+                - caja-extension-engrampa
+                - pluma
+                - sddm
+
+            -   name: "MATE extra"
+                description: "MATE extra apps, applets and themes"
+                critical: false
+                selected: false
+                packages:
+                - brisk-menu
+                - eom
+                - mate-calc
+                - mate-media
+                - mate-applet-lockkeys
+                - mate-applet-uptime
+                - mate-indicator-applet
+                - mate-sensors-applet
+                - mate-themes
+                - mate-icon-theme-faenza
+                - mate-tweak
+                - mate-user-guide
+                - mate-user-share
+                - mate-utils
+
+    -   name: "Xfce"
+        description: "Xfce desktop"
+        critical: false
+        selected: false
+        packages:
+        - xfce
+        - atril
+        - lightdm
+        - lightdm-gtk-greeter
+
+    -   name: "KDE"
+        description: "KDE Plasma desktop"
+        critical: false
+        selected: false
+        subgroups:
+
+            -   name: "Plasma base"
+                description: "Plasma base packages"
+                critical: false
+                selected: false
+                packages:
+                - kde
+                - sddm
+
+            -   name: "KDE apps"
+                description: "KDE applications"
+                critical: false
+                selected: false
+                packages:
+                - ark
+                - calligra
+                - digikam
+                - dolphin
+                - dolphin-plugins
+                - filelight
+                - gwenview
+                - k3b
+                - k9copy
+                - kaffeine
+                - kate
+                - kcalc
+                - kdiff3
+                - khelpcenter
+                - konqueror
+                - konsole
+                - kpartitionmanager
+                - krusader
+                - ksystemlog
+                - marble-apps
+                - okular
+                - spectacle
+                - tellico
+
+            -   name: "KDE apps-pim"
+                description: "KDE pim applications"
+                critical: false
+                selected: false
+                packages:
+                - kde-apps-pim
+
+    -   name: "Cinnamon"
+        description: "Cinnamon desktop"
+        critical: false
+        selected: false
+        packages:
+        - cinnamon
+        - gnome-terminal
+        - sddm
+        - pix
+        - xreader
+
+    -   name: "Budgie"
+        description: "Budgie desktop"
+        critical: false
+        selected: false
+        packages:
+        - budgie-desktop
+        - gnome-terminal
+        - gdm
+        
+    -   name: "Gnome"
+        description: "Gnome desktop"
+        critical: false
+        selected: false
+        subgroups:
+
+            -   name: "Gnome base"
+                description: "Gnome base packages"
+                critical: false
+                selected: false
+                packages:
+                - gnome-core
+                - gdm
+                - blueman
+                - gnome-screensaver
+                - gnome-session
+                - evolution
+                - gnome-tweak-tool
+                - gedit
+                - gksu
+                - gnome-power-manager
+                - gnome2-mime-data
+
+            -   name: "Gnome apps"
+                description: "Gnome applications"
+                critical: false
+                selected: false
+                packages:
+                - gnome-packagekit
+                - gnome-weather
+                - gthumb
+                - planner
+                - sound-juicer
+                - vinagre
+                - kino
+                - accerciser
+                - anjuta
+                - bijiben
+                - brasero
+                - gitg
+                - gnome-boxes
+                - gnome-builder
+                - gnome-calendar
+                - gnome-clocks
+                - gnome-dictionary
+                - gnome-maps
+                - gnome-music
+                - gnome-nettool
+                - gnome-photos
+                - gnome-sound-recorder
+                - gnome-todo
+                - gnome-color-manager
+                - gnome-devel-docs
+                - gnome-documents
+                - gnomeradio
+                - polari
+                - rygel
+                - seahorse
+                - nautilus-sendto
+                - dconf-editor
+                - gconf-editor
+
+            -   name: "Gnome games"
+                description: "Games for gnome"
+                critical: false
+                selected: false
+                packages:
+                - aisleriot
+                - five-or-more
+                - four-in-a-row
+                - hitori
+                - iagno
+                - lightsoff
+                - tali
+                - swell-foop
+                - gnome-klotski
+                - gnome-mahjongg
+                - gnome-mines
+                - gnome-nibbles
+                - gnome-sudoku
+                - gnome-taquin
+                - gnome-tetravex
+                - gnome-chess
+                - gnome-robots
+                - quadrapassel
+
+- name: "Display Managers"
+  description: "Graphical Display Managers"
+  critical: false
+  selected: false
+  subgroups:
+
+    -   name: "sddm"
+        description: "QT5 Display Manager"
+        critical: false
+        selected: false
+        packages:
+        - sddm
+        - sddm-config-editor
+        - sddm-theme-solarized
+        - sddm-theme-urbanlifestyle
+
+    -   name: "lightdm"
+        description: "GTK Light Display Manager"
+        critical: false
+        selected: false
+        packages:
+        - lightdm
+        - lightdm-gtk-greeter
+        - lightdm-gtk-greeter-settings
+
+    -   name: "slim"
+        description: "GTK Simple Display Manager"
+        critical: false
+        selected: false
+        packages:
+        - slim
+        - slim-themes
+
+    -   name: "gdm"
+        description: "Gnome Display Manager"
+        critical: false
+        selected: false
+        packages:
+        - gdm
+
+- name: "Office"
+  description: "Office apps"
+  critical: false
+  selected: false
+  packages:
+    - libreoffice
+    - scribus
+    - abevjava
+    - abiword
+    - gnucash
+    - efax-gtk
+
+-   name:   "Internet apps"
+    description:    "Internet appications"
+    critical:   false
+    selected:   false
+    subgroups:
+
+    -   name:   "Browsers"
+        description:    "Internet browsers"
+        critical:   false
+        selected:   false
+        packages:
+        -   firefox
+        -   opera
+        -   chromium
+        -   midori
+        -   otter
+        -   dillo
+        -   falkon
+        -   links
+        -   links-x11
+        -   epiphany
+
+    -   name:   "Email"
+        description:    "Internet mail"
+        critical:   false
+        selected:   false
+        packages:
+        -   thunderbird
+        -   balsa
+        -   claws-mail     
+        -   kmail
+        -   evolution
+
+    -   name:   "File transfer"
+        description:    "File transfer"
+        critical:   false
+        selected:   false
+        packages:
+        -   gftp
+        -   gftp-gtk
+        -   filezilla
+        
+    -   name:   "Other"
+        description:    "Other internet applications"
+        critical:   false
+        selected:   false
+        packages:
+        -   pidgin
+        -   ekiga
+        -   seamonkey
+
+- name: "Multimedia"
+  description: "Multimedia apps"
+  critical: false
+  selected: false
+  subgroups:
+
+    -   name: "Video & audio players"
+        description: "Video & audio players"
+        critical: false
+        selected: false
+        packages:
+        - ffmpeg
+        - bino
+        - mplayer
+        - smplayer
+        - smtube
+        - vlc
+        - kaffeine
+        - kodi
+        - gxine
+        - xine-ui
+        
+    -   name: "Youtube players & downloaders"
+        description: "Youtube players & downloaders"
+        critical: false
+        selected: false
+        packages:
+        - flashplayer
+        - minitube
+        - smtube
+        - youtube-dl
+        
+    -   name: "Audio players"
+        description: "Audio players"
+        critical: false
+        selected: false
+        packages:
+        - playmidi
+        - exaile
+        - rhythmbox
+        - xmms2
+        - deadbeef
+        - clementine
+        - aqualung
+        - audacious
+        - dmcradio
+        - mpg123
+        - radiotray
+        
+    -   name: "Editors"
+        description: "Video & audio editors"
+        critical: false
+        selected: false
+        packages:
+        - avidemux
+        - handbrake
+        - lives
+        - audacity
+        - lmms
+        - bombono-dvd
+        - canorus
+        - devede
+        - dvdstyler
+        - dvdrip
+        - dvdauthor
+
+    -   name: "TV"
+        description: "Analog & DVB TV players"
+        critical: false
+        selected: false
+        subgroups:
+
+        -   name: "Analog TV player"
+            description: "Analog TV players"
+            critical: false
+            selected: false
+            packages:
+            - tvtime
+            - xawtv
+
+        -   name: "DVB"
+            description: "DVB players"
+            critical: false
+            selected: false
+            packages:
+            - kaffeine
+            subgroups:
+
+            -   name: "VDR"
+                description: "Video Disk Recorder"
+                critical: false
+                selected: false
+                subgroups:
+
+                -   name: "VDR base"
+                    description: "VDR base packages"
+                    critical: false
+                    selected: false
+                    packages:
+                    - vdr
+
+                -   name: "VDR plugins"
+                    description: "VDR plugins"
+                    critical: false
+                    selected: false
+                    packages:
+                    - vdr-dvbapi
+                    - vdr-epgfixer
+                    - vdr-femon
+                    - vdr-live
+                    - vdr-osdteletext
+                    - vdr-plugin-chanman
+                    - vdr-plugin-channellists
+                    - vdr-plugin-sc
+                    - vdr-plugin-streamdev
+                    - vdr-plugin-xvdr
+                    - vdr-plugin-zappilot
+                    - vdr-remote
+                    - vdr-screenshot
+                    - vdr-softhddevice
+                    - vdr-tvguide
+                    - vdr-wirbelscan
+                    - vdr-xine
+                    - vdr-xineliboutput
+                    - kodi-addon-xvdr
+
+                -   name: "VDR tools"
+                    description: "VDR tools"
+                    critical: false
+                    selected: false
+                    packages:
+                    - w-scan
+                    - vdrctl
+                    - oscam
+            
+- name: "Editors"
+  description: "Editors"
+  critical: false
+  selected: false
+  packages:
+    - leafpad
+    - mousepad
+    - emacs
+    - nano
+    - yudit
+
+- name: "Filemanagers"
+  description: "Filemanagers"
+  critical: false
+  selected: false
+  packages:
+    - tuxcmd
+    - doublecmd
+    - gentoo
+    - worker
+    - emelfm2
+    - eaglemode
+
+- name: "Games"
+  description: "Games"
+  critical: false
+  selected: false
+  packages:
+    - fortune
+    - fortune-hu
+    - spider

@@ -1,0 +1,27 @@
+diff -urN fbgetty-0.1.698.orig/src/init.c fbgetty-0.1.698/src/init.c
+--- fbgetty-0.1.698.orig/src/init.c	2001-12-29 21:26:22.000000000 +0100
++++ fbgetty-0.1.698/src/init.c	2003-01-06 22:06:30.000000000 +0100
+@@ -343,6 +343,7 @@
+ {
+   struct termios term;
+   struct stat st;
++  struct winsize ws;
+ 
+   pid_t pid,sid,pgid, pgrp;
+ 
+@@ -663,6 +664,15 @@
+       fatal_error("tcsetattr: %s", strerror(errno));
+     }
+ 
++  if (ioctl(1, TIOCGWINSZ, &ws) == 0)
++    {
++      int i;
++      for (i = 0; i < ws.ws_row; i++)
++        {
++	  putchar('\n');
++        }
++    }
++
+   init_kbd();  /* init kbd state */
+ 
+ #ifdef USE_FRAME_BUFFER

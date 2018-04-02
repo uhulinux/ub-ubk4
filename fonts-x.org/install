@@ -1,0 +1,99 @@
+#!/bin/sh -eux
+
+for i in *; do
+	cd $i
+	ub_install
+	cd ..
+done
+
+mv "$UB_INSTALLDIR"/usr/share/fonts/X11/* "$UB_INSTALLDIR"/usr/share/fonts
+rmdir "$UB_INSTALLDIR"/usr/share/fonts/X11
+
+# gunzip all the stupid .gz files. They shouldn't be gzipped at the first place, but it is much harder to patch all the Makefiles.
+find "$UB_INSTALLDIR"/usr/share/fonts -name "*.gz" -print0 | xargs -r0 gunzip --
+for i in fonts.{dir,scale}; do
+	find "$UB_INSTALLDIR"/usr/share/fonts -name "$i" | while read f; do
+		sed -e 's/\.gz / /' -i "$f"
+	done
+done
+
+fontdir="$UB_INSTALLDIR"/usr/share/fonts
+for type in 75dpi 100dpi misc; do
+	touch $fontdir/$type/fonts.{dir,scale,alias}
+	grep -v '^!' $fontdir/$type/fonts.dir | grep $'[ \t]' | sort > $fontdir/$type/fonts.dir.new
+	mv $fontdir/$type/fonts.dir{.new,}
+	grep -v '^!' $fontdir/$type/fonts.scale | grep $'[ \t]' | sort > $fontdir/$type/fonts.scale.new
+	mv $fontdir/$type/fonts.scale{.new,}
+	grep -v '^!' $fontdir/$type/fonts.alias | grep $'[ \t]' | sort > $fontdir/$type/fonts.alias.new
+	mv $fontdir/$type/fonts.alias{.new,}
+	for enc in \
+	  "iso-10646:iso10646-1" \
+	  "iso-8859-1:iso8859-1" \
+	  "iso-8859-2:iso8859-2" \
+	  "iso-8859-3:iso8859-3" \
+	  "iso-8859-4:iso8859-4" \
+	  "iso-8859-5:iso8859-5" \
+	  "iso-8859-7:iso8859-7" \
+	  "iso-8859-8:iso8859-8" \
+	  "iso-8859-9:iso8859-9" \
+	  "iso-8859-10:iso8859-10" \
+	  "iso-8859-11:iso8859-11" \
+	  "iso-8859-13:iso8859-13" \
+	  "iso-8859-14:iso8859-14" \
+	  "iso-8859-15:iso8859-15" \
+	  "iso-8859-16:iso8859-16" \
+	  "koi-8:koi8-r"; do
+		uhuenc="${enc%:*}"
+		xorgenc="${enc#*:}"
+		egrep -- "-${xorgenc}\$" $fontdir/$type/fonts.dir \
+		  > $fontdir/$type/fonts.dir.$uhuenc || true
+		egrep -v -- "-${xorgenc}\$" $fontdir/$type/fonts.dir \
+		  > $fontdir/$type/fonts.dir.new || true
+		mv $fontdir/$type/fonts.dir{.new,}
+		egrep -- "-${xorgenc}\$" $fontdir/$type/fonts.scale \
+		  > $fontdir/$type/fonts.scale.$uhuenc || true
+		egrep -v -- "-${xorgenc}\$" $fontdir/$type/fonts.scale \
+		  > $fontdir/$type/fonts.scale.new || true
+		mv $fontdir/$type/fonts.scale{.new,}
+		egrep -- "-${xorgenc}\$" $fontdir/$type/fonts.alias \
+		  > $fontdir/$type/fonts.alias.$uhuenc || true
+		egrep -v -- "-${xorgenc}\$" $fontdir/$type/fonts.alias \
+		  > $fontdir/$type/fonts.alias.new || true
+		mv $fontdir/$type/fonts.alias{.new,}
+		[ -s $fontdir/$type/fonts.dir.$uhuenc ] || rm $fontdir/$type/fonts.dir.$uhuenc
+		[ -s $fontdir/$type/fonts.scale.$uhuenc ] || rm $fontdir/$type/fonts.scale.$uhuenc
+		[ -s $fontdir/$type/fonts.alias.$uhuenc ] || rm $fontdir/$type/fonts.alias.$uhuenc
+	done
+	if [ $type = misc ]; then
+		egrep -- "^cursor\.pcf.*cursor\$" $fontdir/$type/fonts.dir \
+		  > $fontdir/$type/fonts.dir.cursor
+		egrep -v -- "^cursor\.pcf.*cursor\$" $fontdir/$type/fonts.dir \
+		  > $fontdir/$type/fonts.dir.new
+		mv $fontdir/$type/fonts.dir{.new,}
+	fi
+	mv $fontdir/$type/fonts.dir{,.other}
+	mv $fontdir/$type/fonts.scale{,.other}
+	mv $fontdir/$type/fonts.alias{,.other}
+	[ -s $fontdir/$type/fonts.dir.other ] || rm $fontdir/$type/fonts.dir.other
+	[ -s $fontdir/$type/fonts.scale.other ] || rm $fontdir/$type/fonts.scale.other
+	[ -s $fontdir/$type/fonts.alias.other ] || rm $fontdir/$type/fonts.alias.other
+done
+for type in \
+  "cyrillic:cyrillic" \
+  "OTF:OTF" \
+  "truetype:TTF" \
+  "type1:Type1"; do
+	uhutype="${type%:*}"
+	xfreetype="${type#*:}"
+	touch $fontdir/$xfreetype/fonts.{dir,scale,alias}
+	grep -v '^!' $fontdir/$xfreetype/fonts.dir | grep $'[ \t]' | sort > $fontdir/$xfreetype/fonts.dir.$uhutype
+	grep -v '^!' $fontdir/$xfreetype/fonts.scale | grep $'[ \t]' | sort > $fontdir/$xfreetype/fonts.scale.$uhutype
+	grep -v '^!' $fontdir/$xfreetype/fonts.alias | grep $'[ \t]' | sort > $fontdir/$xfreetype/fonts.alias.$uhutype
+	rm -f $fontdir/$xfreetype/fonts.{dir,scale,alias}
+	[ -s $fontdir/$xfreetype/fonts.dir.$uhutype ] || rm $fontdir/$xfreetype/fonts.dir.$uhutype
+	[ -s $fontdir/$xfreetype/fonts.scale.$uhutype ] || rm $fontdir/$xfreetype/fonts.scale.$uhutype
+	[ -s $fontdir/$xfreetype/fonts.alias.$uhutype ] || rm $fontdir/$xfreetype/fonts.alias.$uhutype
+done
+find "$fontdir" -name fonts.cache-1 -print0 | xargs -0 -r rm -f
+
+mv "$UB_INSTALLDIR"/usr/share/fonts/TTF "$UB_INSTALLDIR"/usr/share/fonts/truetype

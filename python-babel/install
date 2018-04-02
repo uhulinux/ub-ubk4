@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+python setup.py install --root="$UB_INSTALLDIR"
+mv ${UB_INSTALLDIR}/usr/bin/pybabel ${UB_INSTALLDIR}/usr/bin/pybabel2
+
+python3 setup.py install --root="$UB_INSTALLDIR"
+mkdir -p ${UB_INSTALLDIR}/usr/share/doc/Packages/python3-babel/
+cp AUTHORS CHANGES LICENSE ${UB_INSTALLDIR}/usr/share/doc/Packages/python3-babel/

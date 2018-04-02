@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+# az /usr/share/icons/hicolor/"$size"x"$size"/stock/data talán a legjobb hely
+# ezeknek az ikonoknak bár igazából egyik létező stock kategóriába sem tartoznak,
+# egy új kategóriához viszont a „hicolor” index.theme fájlját is módosítani kellene
+
+for size in 16 20 24 32 48; do
+	mkdir -p "$UB_INSTALLDIR"/usr/share/icons/hicolor/"$size"x"$size"/stock/data
+	cp -R gtk/stock-icons/$size/. "$UB_INSTALLDIR"/usr/share/icons/hicolor/"$size"x"$size"/stock/data
+done

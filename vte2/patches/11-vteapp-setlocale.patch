@@ -1,0 +1,12 @@
+diff -Naur vte-0.11.10.orig/src/vteapp.c vte-0.11.10/src/vteapp.c
+--- vte-0.11.10.orig/src/vteapp.c	2003-05-30 02:35:35.000000000 +0200
++++ vte-0.11.10/src/vteapp.c	2004-10-27 14:28:13.000000000 +0200
+@@ -418,6 +418,8 @@
+ 	tint.red = tint.green = tint.blue = 0;
+ 	tint = back;
+ 
++	setlocale(LC_ALL, "");
++
+ 	/* Have to do this early. */
+ 	if (getenv("VTE_PROFILE_MEMORY")) {
+ 		if (atol(getenv("VTE_PROFILE_MEMORY")) != 0) {

@@ -1,0 +1,23 @@
+diff -Naur rsync-3.1.0-orig/loadparm.c rsync-3.1.0/loadparm.c
+--- rsync-3.1.0-orig/loadparm.c	2013-01-19 20:05:53.000000000 +0100
++++ rsync-3.1.0/loadparm.c	2013-11-22 16:24:13.589134769 +0100
+@@ -53,7 +53,7 @@
+ #define LOG_DAEMON 0
+ #endif
+ 
+-#define DEFAULT_DONT_COMPRESS "*.gz *.zip *.z *.rpm *.deb *.iso *.bz2" \
++#define DEFAULT_DONT_COMPRESS "*.gz *.zip *.z *.rpm *.deb *.uhu *.iso *.bz2" \
+ 	" *.t[gb]z *.7z *.mp[34] *.mov *.avi *.ogg *.jpg *.jpeg *.png" \
+ 	" *.lzo *.rzip *.lzma *.rar *.ace *.gpg *.xz *.txz *.lz *.tlz"
+ 
+diff -Naur rsync-3.1.0-orig/rsync.yo rsync-3.1.0/rsync.yo
+--- rsync-3.1.0-orig/rsync.yo	2013-09-28 22:55:54.000000000 +0200
++++ rsync-3.1.0/rsync.yo	2013-11-22 16:25:43.308529013 +0100
+@@ -1890,6 +1890,7 @@
+ bf(avi)
+ bf(bz2)
+ bf(deb)
++bf(uhu)
+ bf(gpg)
+ bf(gz)
+ bf(iso)

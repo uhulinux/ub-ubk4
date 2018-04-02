@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+if [ -d "$UB_INSTALLDIR"/usr/lib64/q4wine ]; then
+	mkdir -p "$UB_INSTALLDIR"/usr/lib/q4wine;
+	cp -a "$UB_INSTALLDIR"/usr/lib64/q4wine/*.* "$UB_INSTALLDIR"/usr/lib/q4wine/;
+	rm "$UB_INSTALLDIR"/usr/lib64/q4wine/*.*
+	rmdir "$UB_INSTALLDIR"/usr/lib64/q4wine
+	rmdir "$UB_INSTALLDIR"/usr/lib64
+fi

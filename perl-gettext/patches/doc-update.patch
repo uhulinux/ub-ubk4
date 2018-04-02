@@ -1,0 +1,16 @@
+diff -Naur Locale-gettext-1.07-orig/gettext.pm Locale-gettext-1.07/gettext.pm
+--- Locale-gettext-1.07-orig/gettext.pm	2015-09-28 18:45:07.000000000 +0200
++++ Locale-gettext-1.07/gettext.pm	2016-01-29 20:06:19.459262513 +0100
+@@ -255,6 +255,12 @@
+ functions to translate the returned messages to the character encoding
+ given by B<codeset> if the encoding of the message catalog is known.
+ 
++=head1 WARNING
++
++When setting the textdomain you must be aware that the libc will only
++check for files named <domain>.mo (note the .mo extension) found in the
++locale path (defined either by the default path or by bindtextdomain).
++
+ =head1 NOTES
+ 
+ Not all platforms provide all of the functions. Functions that are

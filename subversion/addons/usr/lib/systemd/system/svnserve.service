@@ -1,0 +1,10 @@
+[Unit]
+Description=Subversion protocol daemon
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/svnserve
+ExecStart=/usr/bin/svnserve --daemon $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

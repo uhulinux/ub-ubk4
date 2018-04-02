@@ -1,0 +1,1 @@
+urllist ftp://ftp.info-zip.org/pub/infozip/src/ | splitver '^zip([0-9]+).tgz' | sed  -e 's/\([0-9]\)\([0-9]\{1\}\)/\1\.\2/' | sort -V | tail -n 1

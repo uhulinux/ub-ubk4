@@ -1,0 +1,17 @@
+diff -Naur orig/contrib/irman2lirc mod/contrib/irman2lirc
+--- orig/contrib/irman2lirc	2016-05-23 19:18:48.000000000 +0200
++++ mod/contrib/irman2lirc	2016-06-17 12:02:37.622549904 +0200
+@@ -7,11 +7,11 @@
+   echo
+   echo "usage: ${progname} [file]"
+   echo "       where \`file' is the full file name of your irman.conf"
+-  echo "       (default /usr/local/etc/irman.conf)"
++  echo "       (default /etc/irman.conf)"
+   exit 0
+ fi
+ 
+-irmanconf=${1:-/usr/local/etc/irman.conf}
++irmanconf=${1:-/etc/irman.conf}
+ if [ ! -f ${irmanconf} ]; then
+   echo "cannot find ${irmanconf}.  try ${progname} --help"
+   exit 1;

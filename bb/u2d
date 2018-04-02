@@ -1,0 +1,1 @@
+sflist aa-project bb | grep -E '^([0-9.rc]+)$' | sort -V | tail -n 1 | sed s/rc/~rc/g

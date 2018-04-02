@@ -1,0 +1,45 @@
+diff -Naurd libofa.orig//configure.in libofa//configure.in
+--- libofa.orig//configure.in	2006-05-10 20:00:19.000000000 +0200
++++ libofa//configure.in	2011-10-10 21:32:33.000000000 +0200
+@@ -27,7 +27,9 @@
+ dnl Checks for programs.
+ AC_PREREQ(2.52)
+ AC_PROG_AWK
+-AC_PROG_CC
++AC_PROG_CC_STDC
++AC_USE_SYSTEM_EXTENSIONS
++AC_SYS_LARGEFILE
+ AC_LIBLTDL_CONVENIENCE
+ AM_PROG_LIBTOOL
+ AC_SUBST(LIBTOOL_DEPS)  
+@@ -61,7 +63,9 @@
+ 
+ dnl libcurl check
+ AC_CHECK_LIB(curl, curl_global_init,
+-	[CURL_LIBS="-lcurl"], [
++	[CURL_LIBS="-lcurl"
++	AC_CHECK_HEADERS([curl/types.h])
++	], [
+ 	echo "*"
+ 	echo "*  libcurl is needed to build this library. It is either not"
+ 	echo "*  installed on your system or it is too old."
+diff -Naurd libofa.orig//examples/protocol.cpp libofa//examples/protocol.cpp
+--- libofa.orig//examples/protocol.cpp	2006-05-10 20:05:42.000000000 +0200
++++ libofa//examples/protocol.cpp	2011-10-10 21:35:00.000000000 +0200
+@@ -6,13 +6,16 @@
+    No rights reserved.
+ 
+ -------------------------------------------------------------------*/
++#include "config.h"
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <cstring>
+ #include <map>
+ #include <expat.h>
+ #include <curl/curl.h>
++#ifdef HAVE_CURL_TYPES_H
+ #include <curl/types.h>
++#endif
+ #include <curl/easy.h>
+ 
+ using namespace std;

@@ -1,0 +1,13 @@
+diff -Naur orig/systemd/lxdm.service patched/systemd/lxdm.service
+--- orig/systemd/lxdm.service	2012-10-03 09:27:02.000000000 +0200
++++ patched/systemd/lxdm.service	2015-10-11 18:57:30.657297949 +0200
+@@ -1,7 +1,7 @@
+ [Unit]
+ Description=LXDE Display Manager
+-Conflicts=getty@tty1.service plymouth-quit.service
+-After=systemd-user-sessions.service getty@tty1.service plymouth-quit.service
++Conflicts=getty@tty7.service plymouth-quit.service
++After=systemd-user-sessions.service getty@tty7.service plymouth-quit.service
+ 
+ [Service]
+ ExecStart=/usr/sbin/lxdm

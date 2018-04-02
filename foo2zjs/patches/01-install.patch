@@ -1,0 +1,113 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2016-06-03 18:49:14.000000000 +0200
++++ patched/Makefile	2016-07-28 22:54:14.411096905 +0200
+@@ -17,7 +17,6 @@
+ VERSION=0.0
+ 
+ # Installation prefix...
+-PREFIX=/usr/local
+ PREFIX=/usr
+ PREFIX=$(DESTDIR)/usr
+ 
+@@ -114,7 +113,7 @@
+ 		archhiperc.fig \
+ 		c3400n.png \
+ 		$(NULL)
+-	
++
+ FILES	=	\
+ 		README \
+ 		README.in \
+@@ -293,7 +292,7 @@
+ 
+ # Compiler flags
+ #CFLAGS +=	-O2 -Wall -Wno-unused-but-set-variable
+-CFLAGS +=	-O2 -Wall 
++CFLAGS +=	-O2 -Wall
+ #CFLAGS +=	-g
+ 
+ #
+@@ -601,7 +600,7 @@
+ #
+ # Installation rules
+ #
+-install: all install-test install-prog install-icc2ps install-osx-hotplug \
++install: all install-prog install-icc2ps install-osx-hotplug \
+ 	    install-extra install-crd install-foo install-ppd \
+ 	    install-gui install-desktop install-filter \
+ 	    install-man install-doc
+@@ -640,7 +639,7 @@
+ 	fi
+ 	# ... OK!
+ 	#
+-    
++
+ 
+ UDEVBIN=$(DESTDIR)/bin/
+ 
+@@ -923,11 +922,11 @@
+ 	#
+ 	$(INSTALL) -c -m 644 hplj1020_icon.gif $(SHAREZJS)
+ 	$(INSTALL) -c -m 755 hplj10xx_gui.tcl $(SHAREZJS)
+-	
+ 
+-USBDIR=/etc/hotplug/usb
+-UDEVDIR=/etc/udev/rules.d
+-LIBUDEVDIR=/lib/udev/rules.d
++
++USBDIR=$(DESTDIR)/etc/hotplug/usb
++UDEVDIR=$(DESTDIR)/etc/udev/rules.d
++LIBUDEVDIR=$(DESTDIR)/lib/udev/rules.d
+ RULES=hplj10xx.rules
+ #UDEVD=/sbin/udevd
+ # For FreeBSD 8.0
+@@ -1376,7 +1375,7 @@
+ 
+ #
+ #	PPD files
+-#	
++#
+ #	Don't edit the PPD files.  Instead, change the
+ #	foomatic/{device,printer,opt}/*.xml files or the "modify-ppd" script.
+ #
+@@ -1459,7 +1458,7 @@
+ man-osx-hotplug:
+ 	cd osx-hotplug; $(MAKE) man
+ 
+-.1in.1: 
++.1in.1:
+ 	-rm -f $*.1
+ 	modtime() { $(MODTIME); }; \
+ 	MODpage=`modtime $*.1in`; \
+@@ -1521,14 +1520,13 @@
+ 	cd osx-hotplug; $(MAKE) install-man
+ endif
+ 
+-doc: README INSTALL manual.pdf
++doc: README INSTALL
+ 
+ install-doc: doc
+ 	#
+ 	# Install documentation
+ 	#
+ 	$(INSTALL) -d -m 755 $(DOCDIR)
+-	$(INSTALL) -c -m 644 manual.pdf $(DOCDIR)
+ 	$(INSTALL) -c -m 644 COPYING $(DOCDIR)
+ 	$(INSTALL) -c -m 644 INSTALL $(DOCDIR)
+ 	$(INSTALL) -c -m 644 INSTALL.osx $(DOCDIR)
+@@ -1595,13 +1593,13 @@
+ #
+ # Create tarball
+ #
+-tar:	
++tar:
+ 	HERE=`basename $$PWD`; \
+ 	/bin/ls $(FILES) | \
+ 	sed -e "s?^?$$HERE/?" | \
+ 	(cd ..; tar -c -z -f $$HERE/$$HERE.tar.gz -T-)
+ 
+-tarver:	
++tarver:
+ 	HERENO=`basename $$PWD`; \
+ 	HERE=`basename $$PWD-$(VERSION)`; \
+ 	ln -sf $$HERENO ../$$HERE; \

@@ -1,0 +1,44 @@
+From b5ed9878d60bf2c6764ce8e1de4f69e64c4bdfaf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 6 Sep 2017 16:25:09 +0200
+Subject: [PATCH] Install rquota(3) only if RPC is enabled
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+rquote(3) documents rpcsvc header files. Thus it should be installed
+only if the the header files are installed and that is only if RPC
+configure feature is enabled.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.am | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 8d80bee..9b852d2 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -27,7 +27,6 @@ man_MANS = \
+ 	quota.1 \
+ 	quot.8 \
+ 	repquota.8 \
+-	rquota.3 \
+ 	setquota.8 \
+ 	warnquota.conf.5 \
+ 	warnquota.8 \
+@@ -69,7 +68,10 @@ librpcclient_a_CFLAGS = -Wno-unused
+ RPCLIBS = librpcclient.a
+ BUILT_SOURCES = rquota.h rquota.c rquota_clnt.c
+ CLEANFILES = rquota.c rquota.h rquota_clnt.c
+-man_MANS += rpc.rquotad.8
++man_MANS += \
++	rpc.rquotad.8 \
++	rquota.3
++
+ endif
+ 
+ libquota_a_SOURCES = \
+-- 
+2.13.5
+

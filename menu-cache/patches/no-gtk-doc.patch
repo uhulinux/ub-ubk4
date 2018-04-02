@@ -1,0 +1,41 @@
+diff -Nur orig/autogen.sh mod/autogen.sh
+--- orig/autogen.sh	2017-11-02 19:55:27.000000000 +0100
++++ mod/autogen.sh	2018-01-02 17:53:01.163948116 +0100
+@@ -29,14 +29,6 @@
+ 
+ test -d m4 || mkdir m4
+ 
+-if gtkdocize --copy; then
+-    echo "Files needed by gtk-doc are generated."
+-else
+-    echo "You need gtk-doc to build this package."
+-    echo "http://www.gtk.org/gtk-doc/"
+-    exit 1
+-fi
+-
+ set -x
+ 
+ ${ACLOCAL:-aclocal$AM_VERSION} ${ACLOCAL_ARG}
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2017-11-02 19:55:27.000000000 +0100
++++ mod/configure.ac	2018-01-02 17:53:19.019915068 +0100
+@@ -89,7 +89,4 @@
+ libmenu-cache/menu-cache.h
+ menu-cache-gen/Makefile
+ menu-cache-daemon/Makefile
+-docs/Makefile
+-docs/reference/Makefile
+-docs/reference/libmenu-cache/Makefile
+ ])
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2017-11-02 19:55:27.000000000 +0100
++++ mod/Makefile.am	2018-01-02 17:54:01.419836591 +0100
+@@ -4,7 +4,7 @@
+ 
+ NULL =
+ 
+-SUBDIRS_DOCS = docs
++SUBDIRS_DOCS =
+ 
+ EXTRA_DIST_DOCS = \
+ 	gtk-doc.make \

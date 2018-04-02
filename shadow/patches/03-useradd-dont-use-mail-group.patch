@@ -1,0 +1,30 @@
+diff -Naur orig/src/useradd.c patched/src/useradd.c
+--- orig/src/useradd.c	2017-06-26 16:36:35.597776660 +0200
++++ patched/src/useradd.c	2017-06-26 17:08:53.585792310 +0200
+@@ -1999,7 +1999,6 @@
+ 		const char *spool;
+ 		char *file;
+ 		int fd;
+-		struct group *gr;
+ 		gid_t gid;
+ 		mode_t mode;
+ 
+@@ -2015,16 +2014,8 @@
+ 			return;
+ 		}
+ 
+-		gr = getgrnam ("mail"); /* local, no need for xgetgrnam */
+-		if (NULL == gr) {
+-			fputs (_("Group 'mail' not found. Creating the user mailbox file with 0600 mode.\n"),
+-			       stderr);
+-			gid = user_gid;
+-			mode = 0600;
+-		} else {
+-			gid = gr->gr_gid;
+-			mode = 0660;
+-		}
++		gid = user_gid;
++		mode = 0600;
+ 
+ 		if (   (fchown (fd, user_id, gid) != 0)
+ 		    || (fchmod (fd, mode) != 0)) {

@@ -1,0 +1,66 @@
+diff -Naurd xjig-2.4.orig/gif_image.C xjig-2.4/gif_image.C
+--- xjig-2.4.orig/gif_image.C	1996-07-04 23:43:12.000000000 +0200
++++ xjig-2.4/gif_image.C	2009-12-07 17:47:46.000000000 +0100
+@@ -54,7 +54,7 @@
+ 	data=hdata;
+ }
+ 
+-GifImage::GifImage(const char *filename, int autocrop )
++GifImage::GifImage(char *filename, int autocrop )
+ : lockcount(0) {
+ 	first=0;
+ 	LoadGIF( filename );
+diff -Naurd xjig-2.4.orig/gif_image.H xjig-2.4/gif_image.H
+--- xjig-2.4.orig/gif_image.H	1996-07-03 18:40:01.000000000 +0200
++++ xjig-2.4/gif_image.H	2009-12-07 17:48:00.000000000 +0100
+@@ -32,7 +32,7 @@
+ 
+ class GifImage {
+ 	public:
+-		GifImage( const char *filename, int autocrop=1 );
++		GifImage( char *filename, int autocrop=1 );
+ 		GifImage();
+ 		~GifImage();
+ 
+diff -Naurd xjig-2.4.orig/gifx_image.C xjig-2.4/gifx_image.C
+--- xjig-2.4.orig/gifx_image.C	1996-07-24 09:12:55.000000000 +0200
++++ xjig-2.4/gifx_image.C	2009-12-07 17:51:18.000000000 +0100
+@@ -10,7 +10,7 @@
+ #include "gifx_image.H"
+ #include "color_mapper.H"
+ 
+-GifXImage::GifXImage(class Port *port,const char *filename,int autocrop)
++GifXImage::GifXImage(class Port *port,char *filename,int autocrop)
+ : p(port), GifImage(filename,autocrop) {
+ 	xwidth  = Width();
+ 	xheight = Height();
+@@ -116,7 +116,7 @@
+ 
+ // ========================================================================
+ 
+-GifPixmap::GifPixmap( Port *port, const char *filename, int autocrop )
++GifPixmap::GifPixmap( Port *port, char *filename, int autocrop )
+ : GifXImage(port,filename,autocrop) {
+ int w, h;
+ 
+diff -Naurd xjig-2.4.orig/gifx_image.H xjig-2.4/gifx_image.H
+--- xjig-2.4.orig/gifx_image.H	1996-07-15 21:59:11.000000000 +0200
++++ xjig-2.4/gifx_image.H	2009-12-07 17:51:27.000000000 +0100
+@@ -5,7 +5,7 @@
+ 
+ class GifXImage : public GifImage {
+ 	public:
+-		GifXImage( class Port *port, const char *filename, int autocrop=0);
++		GifXImage( class Port *port, char *filename, int autocrop=0);
+ 		~GifXImage();
+ 
+ 	// Size Information
+@@ -44,7 +44,7 @@
+ 
+ class GifPixmap : public GifXImage {
+ 	public:
+-		GifPixmap( class Port *port, const char *filename, int autocrop=0);
++		GifPixmap( class Port *port, char *filename, int autocrop=0);
+ 		~GifPixmap();
+ 
+ 		Pixmap	GetPixmap();

@@ -1,0 +1,20 @@
+If you use "use utf8" in your code, utf8 flag will be set on $buf and the binary data will be corrupted
+diff -urN libwww-perl-5.833.orig/lib/HTTP/Request/Common.pm libwww-perl-5.833/lib/HTTP/Request/Common.pm
+--- libwww-perl-5.833.orig/lib/HTTP/Request/Common.pm	2009-06-15 15:20:06.000000000 +0200
++++ libwww-perl-5.833/lib/HTTP/Request/Common.pm	2012-05-24 15:57:48.345589246 +0200
+@@ -12,6 +12,7 @@
+ 
+ require HTTP::Request;
+ use Carp();
++use Encode;
+ 
+ $VERSION = "5.824";
+ 
+@@ -238,6 +239,7 @@
+ 		    return $p;
+ 		}
+ 		my($buf, $fh) = @$p;
++		Encode::_utf8_off($buf);
+                 unless (ref($fh)) {
+                     my $file = $fh;
+                     undef($fh);

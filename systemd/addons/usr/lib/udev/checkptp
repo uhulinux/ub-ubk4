@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+[ "$(</sys$PHYSDEVPATH/$(basename $PHYSDEVPATH):1.0/bInterfaceClass)" == "06" ]
+[ "$(</sys$PHYSDEVPATH/$(basename $PHYSDEVPATH):1.0/bInterfaceSubClass)" == "01" ]
+[ "$(</sys$PHYSDEVPATH/$(basename $PHYSDEVPATH):1.0/bInterfaceProtocol)" == "01" ]

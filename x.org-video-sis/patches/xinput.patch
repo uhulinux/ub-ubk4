@@ -1,0 +1,20 @@
+diff -Naur xf86-video-sis-0.10.7-orig/src/sis_driver.c xf86-video-sis-0.10.7/src/sis_driver.c
+--- xf86-video-sis-0.10.7-orig/src/sis_driver.c	2012-07-17 07:20:28.000000000 +0200
++++ xf86-video-sis-0.10.7/src/sis_driver.c	2013-03-31 18:54:04.000000000 +0200
+@@ -9352,7 +9352,15 @@
+      }
+      if(doit) {
+ 	sigstate = xf86BlockSIGIO();
+-#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 15
++#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 18
++        {
++            double dx = x, dy = y;
++            miPointerSetPosition(inputInfo.pointer, Absolute, &dx, &dy,
++                NULL, NULL);
++            x = (int)dx;
++            y = (int)dy;
++        }
++#elif GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 15
+         {
+             double dx = x, dy = y;
+             miPointerSetPosition(inputInfo.pointer, Absolute, &dx, &dy);

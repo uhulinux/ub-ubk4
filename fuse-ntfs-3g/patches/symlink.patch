@@ -1,0 +1,11 @@
+diff -Naur ntfs-3g_ntfsprogs-2012.1.15-orig/src/Makefile.in ntfs-3g_ntfsprogs-2012.1.15/src/Makefile.in
+--- ntfs-3g_ntfsprogs-2012.1.15-orig/src/Makefile.in	2012-01-15 14:26:24.000000000 +0100
++++ ntfs-3g_ntfsprogs-2012.1.15/src/Makefile.in	2012-03-13 10:52:22.000000000 +0100
+@@ -834,6 +834,7 @@
+ @ENABLE_MOUNT_HELPER_TRUE@@ENABLE_NTFS_3G_TRUE@install-exec-local:	install-rootbinPROGRAMS
+ @ENABLE_MOUNT_HELPER_TRUE@@ENABLE_NTFS_3G_TRUE@	$(MKDIR_P) "$(DESTDIR)/sbin"
+ @ENABLE_MOUNT_HELPER_TRUE@@ENABLE_NTFS_3G_TRUE@	$(LN_S) -f "$(rootbindir)/ntfs-3g" "$(DESTDIR)/sbin/mount.ntfs-3g"
++@ENABLE_MOUNT_HELPER_TRUE@	$(LN_S) -f "$(rootbindir)/ntfs-3g" "$(DESTDIR)/sbin/mount.ntfs"
+ @ENABLE_MOUNT_HELPER_TRUE@@ENABLE_NTFS_3G_TRUE@	$(LN_S) -f "$(rootbindir)/lowntfs-3g" "$(DESTDIR)/sbin/mount.lowntfs-3g"
+ 
+ @ENABLE_NTFS_3G_TRUE@install-data-local:	install-man8

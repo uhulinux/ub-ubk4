@@ -1,0 +1,21 @@
+diff -Nur orig/Makefile.in mod/Makefile.in
+--- orig/Makefile.in	2017-01-13 03:33:03.000000000 +0100
++++ mod/Makefile.in	2017-02-02 18:29:11.626984331 +0100
+@@ -480,7 +480,7 @@
+ builddir = @builddir@
+ datadir = @datadir@
+ datarootdir = @datarootdir@
+-docdir = "$(prefix)/share/doc/$(PACKAGE)-$(VERSION)"
++docdir = "$(prefix)/share/doc/Packages/$(PACKAGE)"
+ dvidir = @dvidir@
+ exec_prefix = @exec_prefix@
+ host = @host@
+@@ -1094,7 +1094,7 @@
+ 	$(MKDIR_P) "$(DESTDIR)$(sharedir)/applications/"
+ 	cp -f "$(srcdir)/menu-entries/LiVES.desktop" "$(DESTDIR)$(sharedir)/applications/"
+ 	$(MKDIR_P) "$(DESTDIR)$(sharedir)/pixmaps/"
+-	cp -f "$(srcdir)/menu-entries/lives.xpm" "$(DESTDIR)$(sharedir)/pixmaps/"
++	cp -f "$(srcdir)/menu-entries/lives.png" "$(DESTDIR)$(sharedir)/pixmaps/"
+ 	$(MKDIR_P) "$(DESTDIR)$(sharedir)/icons/hicolor/48x48/apps/"
+ 	cp -f "$(srcdir)/menu-entries/lives.png" "$(DESTDIR)$(sharedir)/icons/hicolor/48x48/apps/"
+ 

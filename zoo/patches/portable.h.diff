@@ -1,0 +1,15 @@
+--- zoo-2.10.orig/portable.h
++++ zoo-2.10/portable.h
+@@ -90,6 +90,12 @@
+ #define  MKDIR(x)       mkdir(x, 0777)
+ #endif
+ 
++/* Linux */
++#ifdef LINUX
++#define NIX_IO       /* standard **IX I/O */
++#define  MKDIR(x)       mkdir(x, 0777)
++#endif
++
+ /* Amiga */
+ #ifdef MCH_AMIGA
+ # include "MCH_AMIGA NEEDS REVISION"

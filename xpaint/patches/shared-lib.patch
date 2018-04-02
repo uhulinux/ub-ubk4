@@ -1,0 +1,33 @@
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2016-12-10 11:37:40.134741323 +0100
++++ patched/Makefile.am	2017-05-19 10:49:05.254712802 +0200
+@@ -77,7 +77,7 @@
+ 
+ xpaint_SOURCES = $(BASE_HDRS) $(BASE_SRCS)
+ 
+-xpaint_LDADD = xpaintrw/.libs/libxpaintrw.a @X_LIBS@ @X_LIBS_EXTRA@
++xpaint_LDADD = xpaintrw/.libs/libxpaintrw.so @X_LIBS@ @X_LIBS_EXTRA@
+ 
+ docs: INSTALL README TODO ChangeLog
+ .PHONY:
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2016-12-10 11:38:41.134741323 +0100
++++ patched/Makefile.in	2017-05-19 10:49:45.275214641 +0200
+@@ -122,7 +122,7 @@
+ 	texture.$(OBJEXT) typeConvert.$(OBJEXT)
+ am_xpaint_OBJECTS = $(am__objects_1) $(am__objects_2)
+ xpaint_OBJECTS = $(am_xpaint_OBJECTS)
+-xpaint_DEPENDENCIES = xpaintrw/.libs/libxpaintrw.a
++xpaint_DEPENDENCIES = xpaintrw/.libs/libxpaintrw.so
+ AM_V_P = $(am__v_P_@AM_V@)
+ am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+ am__v_P_0 = false
+@@ -416,7 +416,7 @@
+ 
+ SUBDIRS = xpaintrw
+ xpaint_SOURCES = $(BASE_HDRS) $(BASE_SRCS)
+-xpaint_LDADD = xpaintrw/.libs/libxpaintrw.a @X_LIBS@ @X_LIBS_EXTRA@
++xpaint_LDADD = xpaintrw/.libs/libxpaintrw.so @X_LIBS@ @X_LIBS_EXTRA@
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+ 

@@ -1,0 +1,22 @@
+diff -Naur orig/src/Makefile.am patched/src/Makefile.am
+--- orig/src/Makefile.am	2013-12-23 22:04:24.000000000 +0100
++++ patched/src/Makefile.am	2013-12-24 12:36:23.207010670 +0100
+@@ -23,6 +23,3 @@
+ gsettingsdir = $(datadir)/glib-2.0/schemas
+ gsettings_DATA = org.mate.panel.applet.UptimeApplet.gschema.xml
+ 
+-install-data-hook:
+-	glib-compile-schemas $(DESTDIR)$(datadir)/glib-2.0/schemas 2>/dev/null
+-
+diff -Naur orig/src/Makefile.in patched/src/Makefile.in
+--- orig/src/Makefile.in	2013-12-23 22:04:35.000000000 +0100
++++ patched/src/Makefile.in	2013-12-24 12:36:49.871256763 +0100
+@@ -657,7 +657,7 @@
+ install-data-am: install-appletDATA install-gsettingsDATA \
+ 	install-serviceDATA
+ 	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
++	$(MAKE) $(AM_MAKEFLAGS)
+ install-dvi: install-dvi-am
+ 
+ install-dvi-am:

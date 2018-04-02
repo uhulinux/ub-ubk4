@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+export LC_ALL=hu_HU.UTF-8
+cat hu/* \
+  | tr '\n' '' | sed 's/%/\n/g' \
+  | sort | uniq \
+  | sed 's/$/\n%/g' | tr '' '\n' \
+  > fortunes

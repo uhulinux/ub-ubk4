@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if [ ! -f /etc/iscsi/initiatorname.iscsi ]; then
+	/sbin/iscsi-iname > /etc/iscsi/initiatorname.iscsi
+fi

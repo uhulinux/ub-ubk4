@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm -f $UB_INSTALLDIR/usr/bin/lives
+ln -s $UB_INSTALLDIR/usr/bin/lives-exe $UB_INSTALLDIR/usr/bin/lives

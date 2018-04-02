@@ -1,0 +1,12 @@
+diff -Naur orig/src/Makefile mod/src/Makefile
+--- orig/src/Makefile	2010-05-25 04:11:52.000000000 +0200
++++ mod/src/Makefile	2012-09-25 14:20:09.000000000 +0200
+@@ -36,7 +36,7 @@
+ 	 ai/autoray.o ai/gotpoints.o sdl/keydrv.o sdl/snddrv.o sdl/timedrv.o \
+ 	 sdl/viddrv.o scale2x/scalebit.o scale2x/scale2x.o scale2x/scale3x.o scale2x/pixel.o \
+ 	 platform.o \
+-	 -lSDL -lSDLmain -lstdc++
++	 -lSDL -lSDLmain -lstdc++ -lm
+ 
+ main.o:	main.c main.fdh keen.h osparam.h \
+ 		sounds.h latch.h game.h \

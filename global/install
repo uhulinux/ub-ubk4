@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_install
+mkdir -p "$UB_INSTALLDIR"/usr/share/emacs/site-lisp
+ln -s ../../gtags/gtags.el "$UB_INSTALLDIR"/usr/share/emacs/site-lisp/gtags.el

@@ -1,0 +1,18 @@
+--- ext/imap/php_imap.h.mdk	2003-01-04 04:20:22.000000000 -0400
++++ ext/imap/php_imap.h	2003-01-04 04:20:32.000000000 -0400
+@@ -32,7 +32,8 @@
+ #ifndef PHP_IMAP_H
+ #define PHP_IMAP_H
+ 
+-#if HAVE_IMAP
++/* cbelisle@mandrakesoft : Don't know why, but this condition is never met. So I remove it */ 
++/* #if HAVE_IMAP */
+ 
+ #if defined(HAVE_IMAP2000) || defined(HAVE_IMAP2001)
+  /* these are used for quota support */
+@@ -218,4 +219,4 @@
+ 
+ #define phpext_imap_ptr imap_module_ptr
+ 
+-#endif /* PHP_IMAP_H */
++/* #endif PHP_IMAP_H */

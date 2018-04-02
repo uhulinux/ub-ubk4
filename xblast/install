@@ -1,0 +1,40 @@
+#!/bin/sh -eux
+
+# install TNT version with 16 players
+cd TNT-SMPF
+ub_install
+mv "$UB_INSTALLDIR"/usr/bin/xblast{,-tnt-smpf}
+cd ..
+
+# install TNT version
+cd TNT
+ub_install
+mv "$UB_INSTALLDIR"/usr/bin/xblast{,-tnt}
+mv "$UB_INSTALLDIR"/usr/bin/xbsndsrv{,-tnt}
+cd ..
+
+# install legacy xblast
+cd Legacy
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	XBLASTDIR=/usr/share/xblast \
+	install
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	XBLASTDIR=/usr/share/xblast \
+	install.man
+mv "$UB_INSTALLDIR"/usr/bin/xblast "$UB_INSTALLDIR"/usr/bin/xblast.bin
+
+# install tk frontend for legacy xblast
+cd tkXBlast
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	XBLASTDIR=/usr/share/xblast \
+	install
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	XBLASTDIR=/usr/share/xblast \
+	install.man
+
+# final cleanup
+find "$UB_INSTALLDIR"/usr/share/xblast -type f -print0 | xargs -0 chmod 644

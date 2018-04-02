@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+for i in docbook-xsl dblatex stylesheets javascripts images doc; \
+	do mkdir -p "$UB_INSTALLDIR"/usr/share/doc/asciidoc/$i; done;
+cp -a docbook-xsl/asciidoc-docbook-xsl.txt "$UB_INSTALLDIR"/usr/share/doc/asciidoc/docbook-xsl/
+cp -a dblatex/dblatex-readme.txt "$UB_INSTALLDIR"/usr/share/doc/asciidoc/dblatex/
+cp -a stylesheets/*.css "$UB_INSTALLDIR"/usr/share/doc/asciidoc/stylesheets/
+cp -a javascripts/*.js "$UB_INSTALLDIR"/usr/share/doc/asciidoc/javascripts/
+( cd images && cp -R * "$UB_INSTALLDIR"/usr/share/doc/asciidoc/images/ )
+( cd doc && cp -R * "$UB_INSTALLDIR"/usr/share/doc/asciidoc/doc/ )

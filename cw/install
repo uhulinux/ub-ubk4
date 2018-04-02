@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+
+for file in `ls -1 $UB_INSTALLDIR/usr/lib/cw`; do
+	if [ ! -d $file ]; then
+		sed -i -e "s,$UB_INSTALLDIR,,g" $UB_INSTALLDIR/usr/lib/cw/$file
+	fi
+done

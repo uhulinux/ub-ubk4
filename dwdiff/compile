@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+export CC="gcc"
+./configure \
+	--prefix=/usr \
+	--mandir=/usr/share/man \
+	--without-dwfilter
+make all

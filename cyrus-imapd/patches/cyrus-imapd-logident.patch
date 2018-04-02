@@ -1,0 +1,12 @@
+diff -Naur orig/master/master.c patched/master/master.c
+--- orig/master/master.c	2016-05-20 07:52:44.000000000 +0200
++++ patched/master/master.c	2016-07-04 11:39:15.397955728 +0200
+@@ -2089,7 +2089,7 @@
+     if (daemon_mode && !close_std)
+ 	fatal("Unable to be both debug and daemon mode", EX_CONFIG);
+ 
+-    masterconf_init("master", alt_config);
++    masterconf_init("cyrus-master", alt_config);
+ 
+     if (close_std || error_log) {
+ 	/* close stdin/out/err */

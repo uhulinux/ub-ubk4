@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/efte/config
+cd src
+ub_install
+cd ..
+cp -a config/. "$UB_INSTALLDIR"/usr/share/efte/config/
+cp -a packaging/debian/*.1 "$UB_INSTALLDIR"/usr/share/man/man1/
+cp -a packaging/shared/efte.desktop "$UB_INSTALLDIR"/usr/share/applications/
+cp -a packaging/shared/efte32x32.xpm "$UB_INSTALLDIR"/usr/share/pixmaps/
+ln -s efte32x32.xpm "$UB_INSTALLDIR"/usr/share/pixmaps/efte.xpm

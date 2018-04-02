@@ -1,0 +1,19 @@
+diff -Nur orig/writepng.c mod/writepng.c
+--- orig/writepng.c	2017-07-18 20:48:25.000000000 +0200
++++ mod/writepng.c	2017-10-15 18:12:12.522859909 +0200
+@@ -240,6 +240,7 @@
+      double skewsin = sin(skew), skewcos = cos(skew);
+      REAL minoverlay = 0, maxoverlay = 0;
+      png_byte mask_byte;
++     png_colorp palette = NULL;
+ 
+      /* we must use direct color for translucent overlays */
+      if (overlay)
+@@ -334,7 +335,6 @@
+ 		       PNG_INTERLACE_NONE,
+ 		       PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+      else {
+-	  png_colorp palette;
+ 	  png_set_IHDR(png_ptr, info_ptr, width, height, 8 /* bit_depth */ ,
+ 		       PNG_COLOR_TYPE_PALETTE,
+ 		       PNG_INTERLACE_NONE,

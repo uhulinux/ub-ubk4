@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+
+#külön csomag lesz a data
+rm -rf ${UB_INSTALLDIR}/usr/share/supertuxkart/data
+
+#verzió a supertuxkart-data letöltő postinstbe
+sed "s/ubversion/$UB_VERSION/" -i $UB_SRCDIR/packages/supertuxkart-data/postinst

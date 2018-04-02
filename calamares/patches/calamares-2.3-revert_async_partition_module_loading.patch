@@ -1,0 +1,33 @@
+--- calamares-2.3/src/modules/partition/gui/PartitionViewStep.cpp	2016-07-15 14:46:49.695147964 +0100
++++ calamares-2.3/src/modules/partition/gui/PartitionViewStep.cpp	2016-07-15 14:51:39.617756544 +0100
+@@ -70,6 +70,7 @@
+     CALAMARES_RETRANSLATE( qobject_cast< WaitingWidget* >( m_waitingWidget )->setText( tr( "Gathering system information..." ) ); )
+ 
+     // We're not done loading, but we need the configuration map first.
++    initPartitionCoreModule();
+ }
+ 
+ 
+@@ -508,20 +509,8 @@
+     }
+ 
+ 
+-    // Now that we have the config, we load the PartitionCoreModule in the background
+-    // because it could take a while. Then when it's done, we can set up the widgets
+-    // and remove the spinner.
+-    QFutureWatcher< void >* watcher = new QFutureWatcher< void >();
+-    connect( watcher, &QFutureWatcher< void >::finished,
+-             this, [ this, watcher ]
+-    {
+-        continueLoading();
+-        watcher->deleteLater();
+-    } );
+-
+-    QFuture< void > future =
+-            QtConcurrent::run( this, &PartitionViewStep::initPartitionCoreModule );
+-    watcher->setFuture( future );
++    QTimer::singleShot( 0, this, &PartitionViewStep::continueLoading );
++
+ }
+ 
+ 

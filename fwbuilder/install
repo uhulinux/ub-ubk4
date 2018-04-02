@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+INSTALL_ROOT="$UB_INSTALLDIR" \
+QTDIR="/usr/lib/qt" \
+ub_install
+rm -rf ${UB_INSTALLDIR}/usr/share/doc

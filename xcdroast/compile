@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_compile \
+	--disable-nonrootmode \
+	--enable-gtk2 \
+	--with-xcdroast-libdir-prefix=/usr/lib/xcdroast \
+	--disable-dependency-tracking

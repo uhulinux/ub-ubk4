@@ -1,0 +1,80 @@
+.\" Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.\" Please adjust this date whenever revising the manpage.
+.\" 
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.TH "atris" "1" "September 4, 2004" "Pascal Giard" ""
+.SH "NAME"
+.LP 
+atris \- Tetris\-like game with a twist for Unix
+.SH "SYNOPSIS"
+.LP 
+atris [\fIoptions\fR]
+
+.SH "DESCRIPTION"
+Alizarin Tetris includes multi\-player support, user\-extensible color, shape and sound styles, can use TCP/IP networking and features a few different AI opponents.
+.SH "OPTIONS"
+.LP 
+.TP 
+\fB\-h, \-\-help\fR
+Command line help.
+
+.TP 
+\fB\-b, \-\-bg\fR
+Flaming background (default).
+
+.TP 
+\fB\-n, \-\-noflame\fR
+No flaming background.
+
+.TP 
+\fB\-s, \-\-sound\fR              
+Enable sound effects (default).
+
+.TP 
+\fB\-q, \-\-quiet\fR
+No sound effects.
+
+.TP 
+\fB\-w, \-\-window\fR
+Windowed display (default).
+
+.TP 
+\fB\-f, \-\-fullscreen\fR         
+Full\-screen display.
+
+.TP 
+\fB\-d=<\fIX\fP>, \-\-depth=<\fIX\fP>\fR          
+Set color depth (bpp) to X.
+
+.TP 
+\fB\-r=<\fIX\fP>, \-\-repeat=<\fIX\fP>\fR
+Set the keyboard repeat delay to X (1 = Slow Repeat, 16 = Fast Repeat).
+.SH "EXAMPLES"
+.LP 
+To run this game the standard way, type:
+.LP 
+# atris &
+.LP 
+To run this game in fullscreen mode, type:
+.LP 
+# atris \-\-fullscreen &
+.SH "AUTHOR"
+.TP 
+This manual page was written by Pascal Giard <evilynux@yahoo.com> for the Debian GNU/Linux system (but may be used by others).
+.SH "SEE ALSO"
+.LP 
+.TP 
+Atris home page
+http://www.cs.berkeley.edu/~weimer/atris/

@@ -1,0 +1,12 @@
+diff -Naur orig/tools/lirc-setup/mvc_model.py mod/tools/lirc-setup/mvc_model.py
+--- orig/tools/lirc-setup/mvc_model.py	2016-05-23 19:18:48.000000000 +0200
++++ mod/tools/lirc-setup/mvc_model.py	2016-06-19 20:22:18.897339353 +0200
+@@ -24,7 +24,7 @@
+ _OPTIONS_PATH = "/etc/lirc/lirc_options.conf"
+ _REMOTES_BASE_URI = "http://sf.net/p/lirc-remotes/code/ci/master/tree/remotes"
+ _MANUAL_REMOTE_INSTALL = '(manual install)'
+-
++BINDIR = "/usr/bin"
+ _DEBUG = 'LIRC_DEBUG' in os.environ
+ 
+ README = """

@@ -1,0 +1,23 @@
+diff -Naurdp a/lib/et/com_err.pc.in b/lib/et/com_err.pc.in
+--- a/lib/et/com_err.pc.in	2012-05-14 18:36:45.000000000 +0200
++++ b/lib/et/com_err.pc.in	2012-05-15 20:52:58.737088614 +0200
+@@ -7,6 +7,6 @@ Name: com_err
+ Description: Common error description library
+ Version: @E2FSPROGS_VERSION@
+ Requires:
+-Cflags: -I${includedir}/et -I${includedir}
+-Libs: -L${libdir} -lcom_err
++Cflags: -I${includedir}/et -I${includedir} -pthread
++Libs: -L${libdir} -lcom_err -pthread
+ Libs.private: @SEM_INIT_LIB@
+diff -Naurdp a/lib/et/error_message.c b/lib/et/error_message.c
+--- a/lib/et/error_message.c	2012-03-18 19:18:33.000000000 +0100
++++ b/lib/et/error_message.c	2012-05-15 20:52:05.914967162 +0200
+@@ -21,6 +21,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
++#include <pthread.h>
+ #ifdef HAVE_SYS_PRCTL_H
+ #include <sys/prctl.h>
+ #else

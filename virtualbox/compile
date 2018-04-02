@@ -1,0 +1,35 @@
+#!/bin/bash -eux
+
+if [ $UB_ARCH = "amd64" ]; then
+	hostflags=(
+		--target-arch=amd64
+		--target-cpu=k8
+		--with-linux="$(echo /lib/modules/*.x86_64/build/)"
+	)
+else
+	hostflags=(
+		--target-arch=x86
+		--target-cpu=i686
+		--with-linux="$(echo /lib/modules/*.i386/build/)" \
+	)
+fi
+
+# --disable-vmmraw: disable building 32-bit guest additions iso
+./configure \
+	--disable-hardening \
+	--disable-java \
+	--disable-docs \
+	--disable-vmmraw \
+	${hostflags[@]}
+
+source ./env.sh
+kmk all
+
+if [ $UB_ARCH = "amd64" ]; then
+	cd ./out/linux.amd64/release/bin/src
+else
+	cd ./out/linux.x86/release/bin/src
+fi
+
+ub_make \
+	KERN_DIR="/usr/src/`readlink /usr/src/linux`"

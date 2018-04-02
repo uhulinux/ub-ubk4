@@ -1,0 +1,20 @@
+#!/bin/sh -eux
+
+# hdsp{conf,mixer}: fltk kellene neki
+for i in \
+	echomixer     \
+	envy24control \
+	ld10k1        \
+	rmedigicontrol\
+	sb16_csp      \
+	seq/sbiload   \
+	sscape_ctl    \
+	us428control  \
+	usx2yloader
+do
+	cd "$i"
+	ub_install
+	cd -
+done
+
+rm "$UB_INSTALLDIR"/etc/hotplug/usb/tascam_*

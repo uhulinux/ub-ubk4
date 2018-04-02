@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	BINDIR=/usr/sbin \
+	MANDIR=/usr/share/man \
+	install
+mkdir -p ${UB_INSTALLDIR}/usr/lib/systemd/system/multi-user.target.wants
+ln -s ../logrotate.timer ${UB_INSTALLDIR}/usr/lib/systemd/system/multi-user.target.wants/logrotate.timer

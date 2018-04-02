@@ -1,0 +1,14 @@
+diff -Naurd a/include/libnetlink.h b/include/libnetlink.h
+--- a/include/libnetlink.h	2005-01-18 23:11:58.000000000 +0100
++++ b/include/libnetlink.h	2007-03-01 20:45:56.000000000 +0100
+@@ -5,6 +5,10 @@
+ #include <linux/netlink.h>
+ #include <linux/rtnetlink.h>
+ 
++#define NDA_RTA(r)  ((struct rtattr*)(((char*)(r)) + NLMSG_ALIGN(sizeof(struct ndmsg))))
++#define NDTA_RTA(r) ((struct rtattr*)(((char*)(r)) + \
++		     NLMSG_ALIGN(sizeof(struct ndtmsg))))
++#define NDTA_PAYLOAD(n) NLMSG_PAYLOAD(n,sizeof(struct ndtmsg))
+ struct rtnl_handle
+ {
+ 	int			fd;

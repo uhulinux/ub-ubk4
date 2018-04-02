@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+# Ouch!
+ln -s libexpat.so.1 "$UB_INSTALLDIR"/usr/lib/libexpat.so.0

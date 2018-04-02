@@ -1,0 +1,44 @@
+diff -Naur canorus-0.7.3rc1-orig/src/CMakeLists.txt canorus-0.7.3rc1/src/CMakeLists.txt
+--- canorus-0.7.3rc1-orig/src/CMakeLists.txt	2017-05-21 15:04:40.000000000 +0200
++++ canorus-0.7.3rc1/src/CMakeLists.txt	2017-06-02 22:10:01.114895322 +0200
+@@ -706,26 +706,20 @@
+ ###############
+ # Translation #
+ ###############
+-qt5_create_translation(CANORUS_QM_FILES ${Canorus_UIC_Srcs} ${Canorus_Srcs} ${Canorus_Translation_Srcs} lang/template.ts)
+-# Workaround for issue of duplicate ts files getting generated
+-# Please write on the Canorus Dev List for a better
+-SET(TSFOLDER ${CMAKE_SOURCE_DIR}/src/lang)
+-FILE(REMOVE ${TSFOLDER}/*_*.ts)
+-qt5_add_translation(CANORUS_QM_FILES ${Canorus_Translation_Srcs} )
+-ADD_CUSTOM_TARGET(canorus_qm DEPENDS ${CANORUS_QM_FILES})
+-ADD_DEPENDENCIES(canorus canorus_qm)
+-
+-###############
+-# Dev Install #
+-###############
+-message("CANORUS_DEV_INSTALL " ${CANORUS_DEV_INSTALL} " CANORUS_INSTALL_PREFIX " ${CANORUS_INSTALL_PREFIX})
+-IF(${CANORUS_DEV_INSTALL} MATCHES True)
+-    ADD_CUSTOM_COMMAND(
+-        TARGET canorus
+-        POST_BUILD
+-        COMMAND make install
+-    )
+-ENDIF(${CANORUS_DEV_INSTALL} MATCHES True)
++ADD_CUSTOM_COMMAND(
++	TARGET canorus
++	PRE_BUILD
++	#COMMAND ${QT_BINARY_DIR}/lupdate
++  COMMAND lupdate
++	ARGS -noobsolete ${Canorus_UIC_Srcs} ${Canorus_Srcs} -ts ${Canorus_Translation_Srcs} lang/template.ts
++)
++ADD_CUSTOM_COMMAND(
++	TARGET canorus
++	PRE_BUILD
++	#COMMAND ${QT_BINARY_DIR}/lrelease
++  COMMAND lrelease
++	ARGS ${Canorus_Translation_Srcs}
++)
+ 
+ ################
+ # Installation #

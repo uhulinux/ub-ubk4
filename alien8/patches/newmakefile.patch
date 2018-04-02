@@ -1,0 +1,42 @@
+diff -Naur orig/makefile mod/makefile
+--- orig/makefile	1970-01-01 01:00:00.000000000 +0100
++++ mod/makefile	2010-07-10 11:12:00.000000000 +0200
+@@ -0,0 +1,38 @@
++# Suggested by GNU Coding Stardards
++SHELL = /bin/sh
++# Target binary name without extension
++BINARY = alien8
++# Source directory
++SRCDIR = ./
++# Include directory
++INCDIR = ./
++# Source code suffix (.c, .cpp, etc)
++SRCSUF = .c
++PLATFORMDIR=linux
++GCC = g++
++# Binary file suffix
++BINSUF = 
++OBJSUF = .o
++# If you need extra link options (like more librarys, add to LFLAGS var)
++LFLAGS = -s -lfmodex `allegro-config --libs` -lcurl
++# Compiler flags
++CFLAGS = -I/usr/include/fmodex -I$(INCDIR) -w -O2
++# Dirs
++OBJDIR = ./
++BINDIR = ./
++# -- The rules for build are in this file --
++
++TEMP = $(wildcard $(SRCDIR)/*$(SRCSUF))
++FILES = $(if $(TEMP), $(TEMP), $(error No source code found!))
++OBJS = $(addprefix $(OBJDIR)/,$(addsuffix $(OBJSUF), $(basename $(notdir $(FILES) ) ) ) )
++
++# main target, all project
++.PHONY: all
++all: $(BINDIR)/$(BINARY)$(BINSUF)
++
++$(BINDIR)/$(BINARY)$(BINSUF) : $(OBJS) 
++	$(GCC) $^ -o $@ $(LFLAGS)
++	@echo The $(BINDIR)/$(BINARY)$(BINSUF) is ready!
++
++$(OBJDIR)/%$(OBJSUF) : $(SRCDIR)/%$(SRCSUF)
++	$(GCC) $(CFLAGS) -c $< -o $@

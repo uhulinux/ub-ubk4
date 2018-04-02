@@ -1,0 +1,62 @@
+--- a/Makefile.orig	2013-04-23 19:26:07.000000000 +0200
++++ a/Makefile	2013-04-23 19:28:32.000000000 +0200
+@@ -25,7 +25,7 @@
+ PAM_USB_OBJS	:= $(PAM_USB_SRCS:.c=.o)
+ PAM_USB			:= pam_usb.so
+ PAM_USB_LDFLAGS	:= -shared
+-PAM_USB_DEST	:= $(DESTDIR)/lib/security
++PAM_USB_DEST	:= /lib/security
+ 
+ # pamusb-check
+ PAMUSB_CHECK_SRCS	:= src/pamusb-check.c
+@@ -35,20 +35,20 @@
+ # Tools
+ PAMUSB_CONF		:= pamusb-conf
+ PAMUSB_AGENT	:= pamusb-agent
+-TOOLS_DEST		:= $(DESTDIR)/usr/bin
++TOOLS_DEST		:= /usr/bin
+ TOOLS_SRC		:= tools
+ 
+ # Conf
+ CONFS			:= doc/pamusb.conf
+-CONFS_DEST		:= $(DESTDIR)/etc
++CONFS_DEST		:= /etc
+ 
+ # Doc
+ DOCS		:= doc/QUICKSTART doc/CONFIGURATION doc/UPGRADING doc/FAQ
+-DOCS_DEST	:= $(DESTDIR)/usr/share/doc/pamusb
++DOCS_DEST	:= /usr/share/doc/pamusb
+ 
+ # Man
+ MANS		:= doc/pamusb-conf.1.gz doc/pamusb-agent.1.gz doc/pamusb-check.1.gz
+-MANS_DEST	:= $(DESTDIR)/usr/share/man/man1
++MANS_DEST	:= /usr/share/man/man1
+ 
+ # Binaries
+ RM		:= rm
+@@ -74,15 +74,15 @@
+ 		$(RM) -f $(PAM_USB) $(PAMUSB_CHECK) $(OBJS) $(PAMUSB_CHECK_OBJS) $(PAM_USB_OBJS)
+ 
+ install		: all
+-		$(MKDIR) -p $(CONFS_DEST) $(DOCS_DEST) $(MANS_DEST) $(TOOLS_DEST) $(PAM_USB_DEST)
+-		$(INSTALL) -m755 $(PAM_USB) $(PAM_USB_DEST)
+-		$(INSTALL) -m755 $(PAMUSB_CHECK) $(TOOLS_SRC)/$(PAMUSB_CONF) $(TOOLS_SRC)/$(PAMUSB_AGENT) $(TOOLS_DEST)
+-		$(INSTALL) -b -m644 $(CONFS) $(CONFS_DEST)
+-		$(INSTALL) -m644 $(DOCS) $(DOCS_DEST)
+-		$(INSTALL) -m644 $(MANS) $(MANS_DEST)
++		$(MKDIR) -p $(DESTDIR)$(CONFS_DEST) $(DESTDIR)$(DOCS_DEST) $(DESTDIR)$(MANS_DEST) $(DESTDIR)$(TOOLS_DEST) $(DESTDIR)$(PAM_USB_DEST)
++		$(INSTALL) -m755 $(PAM_USB) $(DESTDIR)$(PAM_USB_DEST)
++		$(INSTALL) -m755 $(PAMUSB_CHECK) $(TOOLS_SRC)/$(PAMUSB_CONF) $(TOOLS_SRC)/$(PAMUSB_AGENT) $(DESTDIR)$(TOOLS_DEST)
++		$(INSTALL) -b -m644 $(CONFS) $(DESTDIR)$(CONFS_DEST)
++		$(INSTALL) -m644 $(DOCS) $(DESTDIR)$(DOCS_DEST)
++		$(INSTALL) -m644 $(MANS) $(DESTDIR)$(MANS_DEST)
+ 
+ deinstall	:
+-		$(RM) -f $(PAM_USB_DEST)/$(PAM_USB)
+-		$(RM) -f $(TOOLS_DEST)/$(PAMUSB_CHECK) $(TOOLS_DEST)/$(PAMUSB_CONF) $(TOOLS_DEST)/$(PAMUSB_AGENT)
+-		$(RM) -rf $(DOCS_DEST)
+-		$(RM) -f $(MANS_DEST)/pusb_*
++		$(RM) -f $(DESTDIR)$(PAM_USB_DEST)/$(PAM_USB)
++		$(RM) -f $(DESTDIR)$(TOOLS_DEST)/$(PAMUSB_CHECK) $(DESTDIR)$(TOOLS_DEST)/$(PAMUSB_CONF) $(DESTDIR)$(TOOLS_DEST)/$(PAMUSB_AGENT)
++		$(RM) -rf $(DESTDIR)$(DOCS_DEST)
++		$(RM) -f $(DESTDIR)$(MANS_DEST)/pusb_*

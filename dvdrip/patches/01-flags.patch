@@ -1,0 +1,16 @@
+diff -Naur orig/src/Makefile mod/src/Makefile
+--- orig/src/Makefile	2009-02-28 19:27:59.000000000 +0100
++++ mod/src/Makefile	2014-06-07 18:54:01.000000000 +0200
+@@ -3,10 +3,10 @@
+ all:	../bin/dvdrip-splitpipe ../bin/dvdrip-progress
+ 
+ ../bin/dvdrip-splitpipe:	dvdrip-splitpipe.c
+-	$(CC) $(CFLAGS) -o dvdrip-splitpipe dvdrip-splitpipe.c && mv dvdrip-splitpipe ../bin
++	$(CC) $(OTHERLDFLAGS) $(CFLAGS) -o dvdrip-splitpipe dvdrip-splitpipe.c && mv dvdrip-splitpipe ../bin
+ 
+ ../bin/dvdrip-progress:	dvdrip-progress.c
+-	$(CC) $(CFLAGS) -o dvdrip-progress dvdrip-progress.c && mv dvdrip-progress ../bin
++	$(CC) $(OTHERLDFLAGS) $(CFLAGS) -o dvdrip-progress dvdrip-progress.c && mv dvdrip-progress ../bin
+ 
+ clean:
+ 	rm -f dvdrip-splitpipe ../bin/dvdrip-splitpipe dvdrip-progress ../bin/dvdrip-progress

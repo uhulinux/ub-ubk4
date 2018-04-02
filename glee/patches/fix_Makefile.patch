@@ -1,0 +1,16 @@
+--- a/Makefile.in.orig	2012-06-06 20:03:53.000000000 +0200
++++ a/Makefile.in	2012-06-06 20:12:06.000000000 +0200
+@@ -41,11 +41,9 @@
+ 		${CXXFLAGS} ${DEFS} -o ${SRCDIR}/${LIBNAME}
+ 
+ install:
+-	${INSTALLD} ${HEADER} ${INCLUDEDIR}/GL
++	${MKDIR} -p ${INCLUDEDIR}/GL
++	${INSTALLD} ${HEADER} ${INCLUDEDIR}/GL/
+ 	${INSTALLP} ${LIBNAME} ${LIBDIR}
+-	${MKDIR} -p ${DATADIR}/doc/GLee
+-	${INSTALLD} ${README} ${DATADIR}/doc/GLee
+-	${LDCONFIG}
+ 
+ dists: dist bindist redist
+ 

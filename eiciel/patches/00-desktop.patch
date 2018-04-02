@@ -1,0 +1,20 @@
+diff -Nur orig/src/eiciel.desktop.in mod/src/eiciel.desktop.in
+--- orig/src/eiciel.desktop.in	2018-01-16 20:49:23.000000000 +0100
++++ mod/src/eiciel.desktop.in	2018-02-21 16:26:55.459818189 +0100
+@@ -3,13 +3,14 @@
+ GenericName=Access control list editor
+ GenericName[ca]=Editor de llistes de control d'accés
+ GenericName[es]=Editor de listas de control de acceso
++GenericName[hu]=Hozzáférési lista szerkesztő
+ Comment=View or change ACL and User Extended Attributes on files and directories
+ Comment[ca]=Visualitza o canvia la llista de control d'accés i els atributs d'usuari en fitxers i directoris
+ Comment[es]=Visualiza o cambia la lista de control de acceso y los atributos de usuario en ficheros y directorios
+-Exec=@DSK_bindir@/eiciel
++Comment[hu]=Kiterjesztett fájlattribútumok megjelenítése és módosítása
++Exec=eiciel
+ Icon=eiciel
+ Terminal=false
+ Type=Application
+ Categories=GTK;GNOME;System;FileTools;
+-Version=@DSK_VERSION@
+ Keywords=ACL;permissions;editor;

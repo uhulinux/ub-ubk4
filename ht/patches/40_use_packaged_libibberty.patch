@@ -1,0 +1,70 @@
+Description: Use packaged version of libiberty
+Author: Anton Gladky <gladk@debian.org>
+Bug-Debian: https://bugs.debian.org/840358
+Last-Update: 2016-10-13
+
+Index: ht-2.1.0/Makefile.am
+===================================================================
+--- ht-2.1.0.orig/Makefile.am
++++ ht-2.1.0/Makefile.am
+@@ -13,11 +13,11 @@ SUBDIRS		= tools analyser asm doc info i
+ 
+ AM_CPPFLAGS = ${my_CPPFLAGS} -I$(srcdir)/$(ANALYSER_DIR) -I$(srcdir)/$(ASM_DIR) \
+               -I$(srcdir)/$(INFO_DIR) -I$(srcdir)/$(IO_DIR) -I$(srcdir)/$(COMIO_DIR) \
+-              -I$(srcdir)/$(OUTPUT_DIR) -I$(srcdir)/$(EVAL_DIR) -I$(srcdir)
++              -I$(srcdir)/$(OUTPUT_DIR) -I$(srcdir)/$(EVAL_DIR) -I$(srcdir) -I/usr/include/libiberty/ -I/usr/include
+ AM_CFLAGS   = ${my_CFLAGS}
+ AM_CXXFLAGS = ${my_CXXFLAGS}
+ 
+-ht_LDADD	= $(ANALYSER_DIR)/libanalyser.a $(ASM_DIR)/libasm.a $(INFO_DIR)/libinfo.a $(IO_DIR)/libhtio.a $(OUTPUT_DIR)/liboutput.a $(COMIO_DIR)/libcomio.a $(EVAL_DIR)/libhteval.a @HT_LIBS@ @LZO_LIBS@
++ht_LDADD	= $(ANALYSER_DIR)/libanalyser.a $(ASM_DIR)/libasm.a $(INFO_DIR)/libinfo.a $(IO_DIR)/libhtio.a $(OUTPUT_DIR)/liboutput.a $(COMIO_DIR)/libcomio.a $(EVAL_DIR)/libhteval.a @HT_LIBS@ @LZO_LIBS@ $(libdir)/libiberty.a
+ ht_LDFLAGS	= @HT_LDFLAGS@
+ 
+ if ENABLE_INCLUDED_LZO
+@@ -49,7 +49,7 @@ htperes.h htreg.cc htreg.h htsearch.cc h
+ httag.cc httag.h httree.cc \
+ httree.h lestruct.h main.cc mzstruct.h nestruct.h pestruct.h \
+ store.cc store.h stream.cc stream.h tools.cc tools.h vxd.cc vxd.h \
+-vxdserv.cc vxdserv.h cplus-dem.c demangle.h regex.c regex.h \
++vxdserv.cc vxdserv.h regex.c regex.h \
+ syntax.cc syntax.h textfile.cc textfile.h textedit.cc textedit.h \
+ classread.cc classview.cc class.h httext.cc httext.h hteval.cc hteval.h \
+ relfile.cc relfile.h htprocess.cc htprocess.h mfile.cc mfile.h elfstruc.cc \
+@@ -64,7 +64,7 @@ htflthd.h htfltimg.cc htfltimg.h xbestru
+ htxbehead.h htxbe.cc htxbe.h htxbeimg.cc htxbeimg.h htxbeimp.cc htxbeimp.h \
+ pefstruc.cc pefstruc.h htpef.cc htpef.h htpefhd.cc htpefhd.h htpefimg.cc htpefimg.h \
+ htpefimp.cc htpefimp.h htxex.cc htxex.h htxexhead.cc htxexhead.h xexstruct.cc \
+-cp-demangle.c cp-demangle.h xexstruct.h htxeximg.cc htxeximg.h safe-ctype.h
++xexstruct.h htxeximg.cc htxeximg.h
+ 
+ dist2: distdir
+ 	$(AMTAR) chof - $(distdir) | BZIP2=$(BZIP2_ENV) bzip2 -c >$(distdir).tar.bz2
+Index: ht-2.1.0/analyser/Makefile.am
+===================================================================
+--- ht-2.1.0.orig/analyser/Makefile.am
++++ ht-2.1.0/analyser/Makefile.am
+@@ -2,9 +2,9 @@ AUTOMAKE_OPTIONS = foreign
+ 
+ AM_CPPFLAGS = ${my_CPPFLAGS} -I$(top_srcdir) -I$(top_srcdir)/asm \
+               -I$(top_srcdir)/io/@IO_DIR@ -I$(top_srcdir)/io \
+-              -I$(top_srcdir)/output -I$(top_srcdir)/eval
++              -I$(top_srcdir)/output -I$(top_srcdir)/eval -I/usr/include/libiberty/ -I/usr/include
+ AM_CFLAGS   = ${my_CFLAGS}
+-AM_CXXFLAGS = ${my_CXXFLAGS}
++AM_CXXFLAGS = ${my_CXXFLAGS} -DHAVE_DECL_BASENAME=1
+ 
+ noinst_LIBRARIES = libanalyser.a
+ 
+Index: ht-2.1.0/analyser/elf_analy.cc
+===================================================================
+--- ht-2.1.0.orig/analyser/elf_analy.cc
++++ ht-2.1.0/analyser/elf_analy.cc
+@@ -38,7 +38,7 @@
+ #include "x86asm.h"
+ 
+ extern "C" {
+-#include "demangle.h"
++#include <demangle.h>
+ }
+ 
+ #include <stdio.h>

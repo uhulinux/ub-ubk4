@@ -1,0 +1,14 @@
+diff -Naurd oki4linux.orig/src/Makefile oki4linux/src/Makefile
+--- oki4linux.orig/src/Makefile	2000-10-27 00:43:19.000000000 +0200
++++ oki4linux/src/Makefile	2004-01-12 04:44:45.000000000 +0100
+@@ -5,8 +5,8 @@
+ 	$(CC) $(CFLAGS) -g main.c -o oki4drv
+ 
+ install: oki4drv
+-	install -m4755 oki4drv /usr/local/sbin
+-	install -m644 oki4drv.man /usr/local/man/man8/oki4drv.8
++	install -m4755 oki4drv $(DESTDIR)/usr/sbin
++	install -m644 oki4drv.man $(DESTDIR)/usr/share/man/man8/oki4drv.8
+ 
+ clean::
+ 	rm -f *.bak *~ oki4drv *.xbm	

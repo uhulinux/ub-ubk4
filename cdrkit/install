@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_install
+
+ln -s wodim "$UB_INSTALLDIR"/usr/bin/cdrecord
+ln -s genisoimage "$UB_INSTALLDIR"/usr/bin/mkisofs
+ln -s icedax "$UB_INSTALLDIR"/usr/bin/cdda2wav
+
+ln -s wodim.1 "$UB_INSTALLDIR"/usr/share/man/man1/cdrecord.1
+ln -s genisoimage.1 "$UB_INSTALLDIR"/usr/share/man/man1/mkisofs.1
+ln -s cdda2ogg.1 "$UB_INSTALLDIR"/usr/share/man/man1/cdda2mp3.1
+ln -s icedax.1 "$UB_INSTALLDIR"/usr/share/man/man1/cdda2wav.1

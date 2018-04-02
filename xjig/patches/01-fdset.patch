@@ -1,0 +1,12 @@
+diff -urN xjig-2.4.orig/xjig.C xjig-2.4/xjig.C
+--- xjig-2.4.orig/xjig.C	1996-07-24 22:14:28.000000000 +0200
++++ xjig-2.4/xjig.C	2003-01-12 22:05:29.000000000 +0100
+@@ -668,7 +668,7 @@
+ 			XSync(dpy,0);
+ 			while (!XPending(dpy)) {
+ 				struct timeval timeout;
+-				struct fd_set readfds;
++				fd_set readfds;
+ 				int		nfds;
+ 	
+ 				FD_ZERO( &readfds );

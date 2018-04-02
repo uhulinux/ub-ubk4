@@ -1,0 +1,34 @@
+diff -Naur orig/config/default/e.src patched/config/default/e.src
+--- orig/config/default/e.src	2016-08-19 06:09:50.000000000 +0200
++++ patched/config/default/e.src	2017-01-08 15:18:02.698225203 +0100
+@@ -21,6 +21,7 @@
+   value "show_desktop_icons" int: 1;
+   value "edge_flip_dragging" int: 0;
+   value "use_shaped_win" int: 0;
++  value "language" string: "hu_HU.UTF-8";
+   value "no_module_delay" int: 1;
+   group "modules" list {
+     group "E_Config_Module" struct {
+diff -Naur orig/config/standard/e.src patched/config/standard/e.src
+--- orig/config/standard/e.src	2016-08-19 06:09:50.000000000 +0200
++++ patched/config/standard/e.src	2017-01-08 15:14:43.555560655 +0100
+@@ -21,7 +21,7 @@
+     value "show_desktop_icons" int: 1;
+     value "edge_flip_dragging" int: 1;
+     value "use_shaped_win" int: 0;
+-    value "language" string: "en_US.UTF-8";
++    value "language" string: "hu_HU.UTF-8";
+     value "window_placement_policy" int: 0;
+     value "window_grouping" int: 0;
+     value "focus_policy" int: 2;
+@@ -1092,8 +1092,8 @@
+         }
+         group "E_Config_Module" struct {
+             value "name" string: "connman";
+-            value "enabled" uchar: 1;
+-            value "delayed" uchar: 1;
++            value "enabled" uchar: 0
++            value "delayed" uchar: 0
+             value "priority" int: 0;
+         }
+     }

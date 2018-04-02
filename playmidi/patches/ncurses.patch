@@ -1,0 +1,15 @@
+diff -Naurd playmidi-2.4.orig/io_ncurses.c playmidi-2.4/io_ncurses.c
+--- playmidi-2.4.orig/io_ncurses.c	1997-05-11 23:37:03.000000000 +0200
++++ playmidi-2.4/io_ncurses.c	2003-12-11 00:18:48.000000000 +0100
+@@ -14,11 +14,7 @@
+    Kelly Drive, Lackland AFB, TX 78236-5128, USA.
+  *************************************************************************/
+ #include "playmidi.h"
+-#ifdef linux
+-#include <ncurses/curses.h>
+-#else
+ #include <ncurses.h>
+-#endif
+ #include "gsvoices.h"
+ #include <sys/time.h>
+ #include <unistd.h>

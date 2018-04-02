@@ -1,0 +1,26 @@
+diff -Naurd orig/Makefile mod/Makefile
+--- orig/Makefile	2005-08-17 00:14:10.000000000 +0200
++++ mod/Makefile	2009-07-13 23:35:14.000000000 +0200
+@@ -1,15 +1,15 @@
+ CFLAGS		+=	-O3 -lbz2
+ 
+-PREFIX		?=	/usr/local
+-INSTALL_PROGRAM	?=	${INSTALL} -c -s -m 555
+-INSTALL_MAN	?=	${INSTALL} -c -m 444
++PREFIX		?=	/usr
++INSTALL_PROGRAM	?=	install -D -m755
++INSTALL_MAN	?=	install -D -m644
+ 
+ all:		bsdiff bspatch
+ bsdiff:		bsdiff.c
+ bspatch:	bspatch.c
+ 
+ install:
+-	${INSTALL_PROGRAM} bsdiff bspatch ${PREFIX}/bin
+-.ifndef WITHOUT_MAN
+-	${INSTALL_MAN} bsdiff.1 bspatch.1 ${PREFIX}/man/man1
+-.endif
++	$(INSTALL_PROGRAM) bsdiff $(DESTDIR)$(PREFIX)/bin/bsdiff
++	$(INSTALL_PROGRAM) bspatch $(DESTDIR)$(PREFIX)/bin/bspatch
++	$(INSTALL_MAN) bsdiff.1 $(DESTDIR)$(PREFIX)/share/man/man1/bsdiff.1
++	$(INSTALL_MAN) bspatch.1 $(DESTDIR)$(PREFIX)/share/man/man1/bspatch.1

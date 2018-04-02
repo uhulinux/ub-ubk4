@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+# export CFLAGS+="-Wno-error"
+
+ub_configure \
+	--enable-64-bit-bfd \
+	--enable-ld=default \
+	--enable-gold \
+	--enable-plugins \
+	--disable-werror
+
+make -e \
+	tooldir=/usr

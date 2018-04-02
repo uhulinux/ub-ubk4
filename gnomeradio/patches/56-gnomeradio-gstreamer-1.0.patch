@@ -1,0 +1,179 @@
+Description: Port to GStreamer 1.0 API.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1085118
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/configure.in
+===================================================================
+--- gnomeradio-1.8.orig/configure.in	2013-09-28 11:13:18.441641316 +0000
++++ gnomeradio-1.8/configure.in	2013-09-28 11:13:18.433641317 +0000
+@@ -28,10 +28,14 @@
+ AC_SUBST(GNOME_LIBS)
+ AC_SUBST(LIRC)
+ 
+-PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10 gstreamer-plugins-base-0.10)
++PKG_CHECK_MODULES(GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0)
+ AC_SUBST(GSTREAMER_CFLAGS)
+ AC_SUBST(GSTREAMER_LIBS)
+ 
++PKG_CHECK_MODULES(XML, libxml-2.0 >= 2.4)
++AC_SUBST(XML_CFLAGS)
++AC_SUBST(XML_LIBS)
++
+ GNOME_DOC_INIT
+ 
+ AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
+Index: gnomeradio-1.8/src/record.c
+===================================================================
+--- gnomeradio-1.8.orig/src/record.c	2013-09-28 11:13:18.441641316 +0000
++++ gnomeradio-1.8/src/record.c	2013-09-28 11:13:18.433641317 +0000
+@@ -191,13 +191,12 @@
+ 
+ 	/* length */
+ 	GstElement *pipeline;
+-	GstFormat fmt = GST_FORMAT_TIME;
+ 	gint64 val = -1;
+ 	gint secs;
+ 
+ 	pipeline = recording->pipeline;
+ 
+-	if (gst_element_query_position (pipeline, &fmt, &val) && val != -1) {
++	if (gst_element_query_position (pipeline, GST_FORMAT_TIME, &val) && val != -1) {
+ 		gchar* length;
+ 		secs = val / GST_SECOND;
+ 
+Index: gnomeradio-1.8/src/rec_tech.c
+===================================================================
+--- gnomeradio-1.8.orig/src/rec_tech.c	2013-09-28 11:13:18.441641316 +0000
++++ gnomeradio-1.8/src/rec_tech.c	2013-09-28 11:13:18.437641316 +0000
+@@ -25,7 +25,10 @@
+ #include <fcntl.h>
+ #include <math.h>
+ 
++#define DECAY_STEP .15
++
+ GtkWidget *level;
++static gdouble last_input_peak;
+ 
+ static void
+ show_error_dialog (GtkWindow *win, const gchar *dbg, const gchar * format, ...)
+@@ -62,7 +65,7 @@
+ 		_("Could not create the GStreamer %s element.\n"
+ 		  "Please install the '%s' plugin from the '%s' module.\n"
+ 		  "Verify that the installation is correct by running\n"
+-		  "    gst-inspect-0.10 %s\n"
++		  "		gst-inspect-1.0 %s\n"
+ 		  "and then restart gnomeradio."),
+ 		description, plugin, module, element);
+ }
+@@ -95,34 +98,49 @@
+ }
+ 
+ static gboolean
+-level_message_handler_cb (GstBus *bus, GstMessage *message, gpointer user_data)
++level_message_cb (GstBus *bus, GstMessage *message, gpointer user_data)
+ {
+ 	if (message->type == GST_MESSAGE_ELEMENT) {
+ 		const GstStructure *s = gst_message_get_structure (message);
+ 		const gchar *name = gst_structure_get_name (s);
+ 
+-		if (g_str_equal (name, "level")) {
++		if (g_strcmp0 (name, "level") == 0) {
+ 			gint channels;
+ 			gdouble peak_dB;
+-			gdouble norm_peak;
+-			const GValue *list;
++			gdouble peak;
++			const GValue *array_val;
+ 			const GValue *value;
+ 
++			GValueArray *rms_arr, *peak_arr;
+ 			gint i;
+-			list = gst_structure_get_value (s, "rms");
+-			channels = gst_value_list_get_size (list);
++
++			array_val = gst_structure_get_value (s, "rms");
++			rms_arr = (GValueArray *) g_value_get_boxed (array_val);
++
++			array_val = gst_structure_get_value (s, "peak");
++			peak_arr = (GValueArray *) g_value_get_boxed (array_val);
++
++			channels = rms_arr->n_values;
+ 
+ 			for (i = 0; i < channels; ++i) {
+-				list = gst_structure_get_value (s, "peak");
+-				value = gst_value_list_get_value (list, i);
++				value = peak_arr->values + i;
+ 				peak_dB = g_value_get_double (value);
+-				norm_peak = exp (peak_dB / 20);
+-				if (norm_peak > 1.0)
+-					norm_peak = 1.0;
+-				gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(level), norm_peak);
++
++				peak = pow (10, peak_dB / 20);
+ 			}
++
++			if (last_input_peak >= DECAY_STEP) {
++				if (peak < last_input_peak - DECAY_STEP) {
++					peak = last_input_peak - DECAY_STEP;
++				}
++			}
++
++			last_input_peak = peak;
++
++			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (level), peak);
+ 		}
+ 	}
++
+ 	return TRUE;
+ }
+ 
+@@ -137,10 +155,10 @@
+ 	gchar *pipeline_desc;
+ 	const char *name;
+ 
+-	source = gst_element_factory_make ("gconfaudiosrc", "gconfaudiosource");
++	source = gst_element_factory_make ("autoaudiosrc", "autoaudiosource");
+ 	if (source == NULL) {
+ 		show_missing_known_element_error (NULL,
+-		    _("GConf audio recording"), "gconfaudiosrc",
++		    _("GConf audio recording"), "autoaudiosrc",
+ 		      "gconfelements", "gst-plugins-good");
+ 		return FALSE;
+ 	}
+@@ -226,7 +244,7 @@
+ 	gst_bus_add_signal_watch(bus);
+ 
+ 	g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(pipeline_error_cb), pipeline);
+-	g_signal_connect (G_OBJECT(bus), "message::element", G_CALLBACK (level_message_handler_cb), pipeline);
++	g_signal_connect (G_OBJECT(bus), "message::element", G_CALLBACK (level_message_cb), pipeline);
+ 
+ 	char* path = g_strdup_printf("%s.%s", filename, gm_audio_profile_get_extension(profile));	
+ 	g_object_set(G_OBJECT(filesink), "location", path, NULL);
+Index: gnomeradio-1.8/src/Makefile.am
+===================================================================
+--- gnomeradio-1.8.orig/src/Makefile.am	2013-09-28 11:13:18.441641316 +0000
++++ gnomeradio-1.8/src/Makefile.am	2013-09-28 11:13:18.437641316 +0000
+@@ -1,5 +1,5 @@
+ INCLUDES = -I$(top_srcdir) -I$(includedir) \
+-           $(GNOME_CFLAGS) $(GSTREAMER_CFLAGS) \
++           $(GNOME_CFLAGS) $(GSTREAMER_CFLAGS) $(XML_CFLAGS)\
+            -DG_LOG_DOMAIN=\"gnomeradio\" \
+            -DGNOMELOCALEDIR=\""$(datadir)/locale"\" \
+            -DDATADIR=\""$(datadir)/"\" \
+@@ -32,4 +32,4 @@
+             v4l1.c \
+             v4l2.c
+ 
+-gnomeradio_LDADD = $(GNOME_LIBS) $(GSTREAMER_LIBS) $(LIRC)
++gnomeradio_LDADD = $(GNOME_LIBS) $(GSTREAMER_LIBS) $(XML_LIBS) $(LIRC)
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c	2013-09-28 11:13:18.441641316 +0000
++++ gnomeradio-1.8/src/gui.c	2013-09-28 11:13:18.437641316 +0000
+@@ -27,6 +27,7 @@
+ #include <dbus/dbus-glib.h>
+ #include <dbus/dbus-glib-bindings.h>
+ #include <math.h>
++#include <stdlib.h>
+ #include "gui.h"
+ #include "trayicon.h"
+ #include "tech.h"

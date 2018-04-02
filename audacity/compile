@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+export WX_CONFIG=/usr/bin/wx-config
+UB_CONFIGURE_NO_DISABLE_STATIC=yes \
+ub_compile \
+	--disable-dynamic-loading

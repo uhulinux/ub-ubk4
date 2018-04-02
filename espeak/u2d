@@ -1,0 +1,2 @@
+almappa=$(sflist espeak espeak | grep espeak-| sort -V | tail -n 1)
+sflist espeak espeak/"$almappa"/ | splitver '^espeak-([0-9.]+).source.zip$' | sort -V | tail -n 1

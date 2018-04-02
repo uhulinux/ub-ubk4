@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+autoreconf -i
+
+export LDFLAGS=' -lm '
+export LIBMIKMOD_LIBS=/usr/lib
+ub_compile \
+	--with-sdl \
+	--with-sdl-mixer \
+	--disable-heroes-debug \
+	--disable-optimizations

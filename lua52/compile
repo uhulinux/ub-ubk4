@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+make \
+    MYCFLAGS="-fPIC" \
+    TO_BIN='lua5.2 luac5.2' \
+    TO_LIB="liblua5.2.a liblua5.2.so liblua5.2.so.5.2 liblua5.2.so.$UB_VERSION" \
+linux

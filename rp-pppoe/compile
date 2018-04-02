@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+cd src
+ub_configure --enable-plugin
+make PLUGIN_DIR="/usr/lib/rp-pppoe" all rp-pppoe.so

@@ -1,0 +1,2 @@
+version=$(urllist http://sourceforge.net/projects/nagios/files/ | splitver '^nagios-([0-9.]+)' | sort -V | tail -n 1 )
+sflist nagios nagios-"$version" | splitver '^nagios-([0-9.]+)$' | sort -V | tail -n 1

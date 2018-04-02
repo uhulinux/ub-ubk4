@@ -1,0 +1,26 @@
+#! /bin/bash
+
+export DIALOG='
+<vbox>
+  <entry>
+    <variable>ENTRY</variable>
+  </entry>
+  <hbox>
+    <button ok></button>
+    <button cancel></button>
+  </hbox>
+</vbox>
+'
+
+I=$IFS; IFS=""
+for STATEMENTS in  $(gtkdialog --program DIALOG); do
+  eval $STATEMENTS
+done
+IFS=$I
+
+if [ "$EXIT" = "OK" ]; then 
+  echo "You entered: $ENTRY."
+else
+  echo "You pressed the Cancel button."
+fi
+

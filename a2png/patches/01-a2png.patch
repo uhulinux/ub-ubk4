@@ -1,0 +1,39 @@
+diff -Naur orig/configure mod/configure
+--- orig/configure	2006-10-05 14:39:58.000000000 +0200
++++ mod/configure	2008-04-11 11:58:26.000000000 +0200
+@@ -3620,11 +3620,11 @@
+ 
+ if test "x$enable_gd" != "xno" ; then
+ 
+-{ echo "$as_me:$LINENO: checking for gdImageCreate in -lgd" >&5
+-echo $ECHO_N "checking for gdImageCreate in -lgd... $ECHO_C" >&6; }
+-if test "${ac_cv_lib_gd_gdImageCreate+set}" = set; then
+-  echo $ECHO_N "(cached) $ECHO_C" >&6
+-else
++#{ echo "$as_me:$LINENO: checking for gdImageCreate in -lgd" >&5
++#echo $ECHO_N "checking for gdImageCreate in -lgd... $ECHO_C" >&6; }
++#if test "${ac_cv_lib_gd_gdImageCreate+set}" = set; then
++#  echo $ECHO_N "(cached) $ECHO_C" >&6
++#else
+   ac_check_lib_save_LIBS=$LIBS
+ LIBS="-lgd  $LIBS"
+ cat >conftest.$ac_ext <<_ACEOF
+@@ -3707,12 +3707,12 @@
+ fi
+ 
+ 
+-	if test "x$ac_cv_lib_gd_gdImageCreate" != "xyes" ; then
+-		{ { echo "$as_me:$LINENO: error: you need a working GD library to compile a2png, see http://www.boutell.com/gd/\"" >&5
+-echo "$as_me: error: you need a working GD library to compile a2png, see http://www.boutell.com/gd/\"" >&2;}
+-   { (exit 1); exit 1; }; }
+-	fi
+-fi
++#	if test "x$ac_cv_lib_gd_gdImageCreate" != "xyes" ; then
++#		{ { echo "$as_me:$LINENO: error: you need a working GD library to compile a2png, see http://www.boutell.com/gd/\"" >&5
++#echo "$as_me: error: you need a working GD library to compile a2png, see http://www.boutell.com/gd/\"" >&2;}
++#   { (exit 1); exit 1; }; }
++#	fi
++#fi
+ 
+ # Checks for header files.
+ ac_ext=c

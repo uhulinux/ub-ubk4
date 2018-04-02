@@ -1,0 +1,12 @@
+diff -Naur orig/dpkg-deb/build.c patched/dpkg-deb/build.c
+--- orig/dpkg-deb/build.c	2016-07-03 21:02:20.000000000 +0200
++++ patched/dpkg-deb/build.c	2016-07-21 10:14:18.148345956 +0200
+@@ -529,7 +529,7 @@
+     pkg = check_control_area(ctrldir, dir);
+     if (debar == NULL)
+       debar = gen_dest_pathname_from_pkg(dest, pkg);
+-    info(_("building package '%s' in '%s'."), pkg->set->name, debar);
++//    info(_("building package '%s' in '%s'."), pkg->set->name, debar);
+   }
+   m_output(stdout, _("<standard output>"));
+ 

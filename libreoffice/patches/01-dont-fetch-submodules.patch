@@ -1,0 +1,11 @@
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2017-10-17 20:42:39.134739579 +0200
++++ patched/Makefile.in	2017-10-21 22:37:30.002065773 +0200
+@@ -222,7 +222,6 @@
+ ifneq ($(DO_FETCH_TARBALLS),)
+ include $(SRCDIR)/Makefile.fetch
+ fetch: download
+-fetch: get-submodules
+ 
+ ifneq (,$(wildcard $(SRCDIR)/.git))
+ get-submodules:

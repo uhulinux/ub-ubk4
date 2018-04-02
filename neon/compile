@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+./autogen.sh
+ub_configure \
+	--with-libxml2 \
+	--with-expat \
+	--with-ssl=openssl \
+    --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
+    --disable-nls
+ub_make
+make docs

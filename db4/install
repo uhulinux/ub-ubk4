@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+cd build_unix
+ub_install \
+	docdir=/usr/share/doc/Packages/db4
+
+ln -s libdb-4.so "$UB_INSTALLDIR"/usr/lib/libdb4.so
+
+ln -sf libdb-"$UB_VERSION_HEAD2".a "$UB_INSTALLDIR"/usr/lib/libdb.a
+
+for i in "$UB_INSTALLDIR"/usr/lib/lib*.la; do
+	ub_replace "dependency_libs=''" "dependency_libs='-lpthread'" "$i"
+done
+
+chmod 755 "$UB_INSTALLDIR"/usr/bin/*

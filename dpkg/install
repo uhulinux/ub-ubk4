@@ -1,0 +1,19 @@
+#!/bin/sh -eux
+
+# prepare installation
+mkdir -p "$UB_INSTALLDIR/etc/dpkg/origins"
+mkdir -p "$UB_INSTALLDIR/usr/share/doc/dpkg"
+mkdir -p "$UB_INSTALLDIR/var/lib/dpkg"
+
+# install
+ub_install
+
+# dselect config file
+touch "$UB_INSTALLDIR/etc/dpkg/dselect.cfg"
+
+# remove docs, they are installed via the "doc" file
+rm -r "$UB_INSTALLDIR/usr/share/doc/dpkg"
+
+# move the most important files to /bin
+mv "$UB_INSTALLDIR"/usr/bin/dpkg{,-deb,-split} "$UB_INSTALLDIR/bin/"
+ln -s ../../bin/dpkg{,-deb,-split} "$UB_INSTALLDIR/usr/bin/"

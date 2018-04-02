@@ -1,0 +1,12 @@
+diff -Naur orig/buildtools/third_party/libc++/trunk/include/__locale patched/buildtools/third_party/libc++/trunk/include/__locale
+--- orig/buildtools/third_party/libc++/trunk/include/__locale	2017-11-13 21:11:10.000000000 +0100
++++ patched/buildtools/third_party/libc++/trunk/include/__locale	2017-11-30 00:38:02.074093078 +0100
+@@ -36,7 +36,7 @@
+ # include <support/newlib/xlocale.h>
+ #elif (defined(__GLIBC__) || defined(__APPLE__)      || defined(__FreeBSD__) \
+     || defined(__EMSCRIPTEN__) || defined(__IBMCPP__))
+-# include <xlocale.h>
++# include <locale.h>
+ #elif defined(__Fuchsia__)
+ # include <support/fuchsia/xlocale.h>
+ #elif defined(_LIBCPP_HAS_MUSL_LIBC)

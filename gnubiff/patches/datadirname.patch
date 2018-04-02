@@ -1,0 +1,13 @@
+diff -Naur orig/po/Makefile.in.in patched/po/Makefile.in.in
+--- orig/po/Makefile.in.in	2015-02-28 21:48:28.000000000 +0100
++++ patched/po/Makefile.in.in	2016-07-05 04:43:16.156594025 +0200
+@@ -33,8 +33,7 @@
+ datadir = @datadir@
+ datarootdir = @datarootdir@
+ libdir = @libdir@
+-DATADIRNAME = @DATADIRNAME@
+-itlocaledir = $(prefix)/$(DATADIRNAME)/locale
++itlocaledir = $(datadir)/locale
+ subdir = po
+ install_sh = @install_sh@
+ # Automake >= 1.8 provides @mkdir_p@.

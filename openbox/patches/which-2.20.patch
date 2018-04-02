@@ -1,0 +1,12 @@
+diff -Naurd a/data/autostart/autostart.in b/data/autostart/autostart.in
+--- a/data/autostart/autostart.in	2013-08-12 03:33:24.000000000 +0200
++++ b/data/autostart/autostart.in	2013-08-13 18:16:44.000000000 +0200
+@@ -8,7 +8,7 @@
+ #
+ #if test -x @libexecdir@/gnome-settings-daemon >/dev/null; then
+ #  @libexecdir@/gnome-settings-daemon &
+-#elif which gnome-settings-daemon >/dev/null; then
++#elif which gnome-settings-daemon >/dev/null 2>&1; then
+ #  gnome-settings-daemon &
+ #fi
+ 

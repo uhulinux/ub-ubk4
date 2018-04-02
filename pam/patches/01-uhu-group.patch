@@ -1,0 +1,16 @@
+diff -Naur Linux-PAM-0.99.3.0.orig/modules/pam_group/group.conf Linux-PAM-0.99.3.0/modules/pam_group/group.conf
+--- Linux-PAM-0.99.3.0.orig/modules/pam_group/group.conf	2005-12-19 11:38:17.000000000 +0100
++++ Linux-PAM-0.99.3.0/modules/pam_group/group.conf	2006-02-07 13:48:10.000000000 +0100
+@@ -95,5 +95,12 @@
+ #xsh; tty* ;*;Al0900-1800;floppy
+ 
+ #
++# Default of UHU-Linux: grant access to several groups when the user
++# logs in on the console or local X.
++#
++
++* ; tty*|vc/*|:* ; * ; Al0000-2400 ; audio video media lp
++
++#
+ # End of group.conf file
+ #

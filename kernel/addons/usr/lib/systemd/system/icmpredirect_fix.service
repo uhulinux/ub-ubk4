@@ -1,0 +1,12 @@
+[Unit]
+Description=Disable ICMP redirects
+DefaultDependencies=no
+Before=systemd-sysctl.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/systemd/scripts/icmpredirectfix.sh
+
+[Install]
+WantedBy=sysinit.target

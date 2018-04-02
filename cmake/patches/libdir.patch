@@ -1,0 +1,15 @@
+diff -Naur orig/Modules/GNUInstallDirs.cmake patched/Modules/GNUInstallDirs.cmake
+--- orig/Modules/GNUInstallDirs.cmake	2017-12-13 14:25:23.134739579 +0100
++++ patched/Modules/GNUInstallDirs.cmake	2017-12-21 12:26:19.765333602 +0100
+@@ -239,9 +239,9 @@
+           "Please enable at least one language before including GNUInstallDirs.")
+       else()
+         if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+-          set(_LIBDIR_DEFAULT "lib64")
++          set(_LIBDIR_DEFAULT "lib")
+           if(DEFINED _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX)
+-            set(__LAST_LIBDIR_DEFAULT "lib64")
++            set(__LAST_LIBDIR_DEFAULT "lib")
+           endif()
+         endif()
+       endif()

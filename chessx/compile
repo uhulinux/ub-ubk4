@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+export QTDIR=/usr/lib/qt5
+
+if [ $UB_ARCH == "i386" ]; then
+qmake -set QMAKE_XSPEC linux-g++-32
+fi
+
+qmake -recursive
+ub_make

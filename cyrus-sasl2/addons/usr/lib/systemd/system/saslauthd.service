@@ -1,0 +1,10 @@
+[Unit]
+Description=SASL authentication daemon.
+
+[Service]
+Type=forking
+PIDFile=/var/run/saslauthd/saslauthd.pid
+ExecStart=/usr/sbin/saslauthd -a pam
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+install -d -m 0755 "$UB_INSTALLDIR"/usr/{lib,include,lib/pkgconfig}
+install -m 0755 libtinyxml.so.0.${UB_VERSION} "$UB_INSTALLDIR"/usr/lib/
+install -m 0644 tinyxml.h tinystr.h "$UB_INSTALLDIR"/usr/include
+install -m 0644 tinyxml.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig
+
+cd "$UB_INSTALLDIR"/usr/lib
+ln -s libtinyxml.so.0.${UB_VERSION} libtinyxml.so.0
+ln -s libtinyxml.so.0.${UB_VERSION} libtinyxml.so

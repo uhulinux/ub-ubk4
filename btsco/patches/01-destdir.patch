@@ -1,0 +1,12 @@
+diff -urN btsco-0.42.orig/contrib/skype_bt_hijacker/Makefile btsco-0.42/contrib/skype_bt_hijacker/Makefile
+--- btsco-0.42.orig/contrib/skype_bt_hijacker/Makefile	2005-09-14 06:53:37.000000000 +0200
++++ btsco-0.42/contrib/skype_bt_hijacker/Makefile	2006-05-21 12:01:31.000000000 +0200
+@@ -7,7 +7,7 @@
+ 	skype_bt_hijacker_onclose skype_bt_hijacker_onopen \
+ 	skype_bt_hijacker
+ 
+-PREFIX=/usr/local
++PREFIX=$(DESTDIR)/usr
+ BINDIR=$(PREFIX)/bin
+ LIBDIR=$(PREFIX)/lib
+ 

@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+./makeconf.sh
+export MOUNT_FUSE_PATH=/usr/bin
+ub_compile --libdir=/usr/lib --enable-lib --enable-util --disable-example

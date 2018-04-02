@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+target="$UB_INSTALLDIR"/usr
+cp -a {buildctf,ctcompare,detok,twoctcompare} "$target"/bin/
+cp -a libctf.h "$target"/include/
+cp -a libctf.a "$target"/lib/

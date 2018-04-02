@@ -1,0 +1,134 @@
+diff -Naurd orig/src/Makefile mod/src/Makefile
+--- orig/src/Makefile	2009-03-11 19:00:44.000000000 +0100
++++ mod/src/Makefile	2009-06-14 21:42:23.000000000 +0200
+@@ -10,7 +10,7 @@
+ CC = gcc
+ PLATFORM = UNIX
+ RMCOM = rm -f
+-NOX11 = -DNOX11
++#NOX11 = -DNOX11
+ NOSWF = -DNOSWF
+ EXE = pl
+ 
+@@ -25,20 +25,20 @@
+ 
+ 
+ ############ Option 1: build the pl executable (unix), no X11 ....
+-NOX11 = -DNOX11
++#NOX11 = -DNOX11
+ 
+ 
+ 
+ ############ Option 2: build the pl executable (unix), with X11 enabled .... 
+-# NOX11 = 
+-# XOBJ = x11.o interact.o
++#NOX11 = 
++XOBJ = x11.o interact.o
+ 
+ ############ ...AND... activate the lines below for your platform... (X11 libs & header files)
+ #### linux
+ # XLIBS = -L/usr/X11R6/lib -lX11
+ # XINCLUDEDIR = -I/usr/X11R6/include
+ #### alt linux
+-# XLIBS = -lX11
++XLIBS = -lX11
+ # XINCLUDEDIR = -I/usr/include/X11
+ #### 64bit linux
+ # XLIBS = -L/usr/X11R6/lib64 -lX11
+@@ -63,19 +63,19 @@
+ 
+ 
+ ############ Option 4: build static libploticus (unix) with png support (remember to also select setting 2 option 2)
+-# LIBEXT = a
+-# ARCOM = ar r
+-# target: libploticus-static
++LIBEXT = a
++ARCOM = ar r
++target: libploticus-static plgd18 libploticus-so
+ 
+ 
+ 
+ ############ Option 5: build shared libploticus (unix)
+ ############ Note: untested by me ... suggestions welcome -sg
+ # LIBEXT = a
+-# FPIC = -fPIC
+-# SONAME = libploticus.so.0
+-# SHAREFLAG = -shared -Wl,-soname,$(SONAME)
+-# target: libploticus-so
++FPIC = -fPIC
++SONAME = libploticus.so.0
++SHAREFLAG = -shared -Wl,-soname,$(SONAME)
++#target: libploticus-so
+ 
+ 
+ 
+@@ -89,10 +89,10 @@
+ 
+ 
+ ########### Option 1: use bundled GD16 (PNG only).  Requires libpng and zlib.
+-exetarget: plpng 
+-GD16LIBS = -lpng -lz
+-GD16H = 
+-ZFLAG = -DWZ
++#exetarget: plpng 
++#GD16LIBS = -lpng -lz
++#GD16H = 
++#ZFLAG = -DWZ
+ 
+ ########### Option 2: use bundled GD13 (pseudoGIF only). No additional lib dependencies.
+ # exetarget: pl 
+@@ -106,11 +106,11 @@
+ 
+ ########### Option 4: use your own GD resource with FreeType2 fonts enabled.  
+ ###########           Requires GD 1.84+, libpng, zlib, libjpeg and libfreetype
+-# exetarget: plgd18 
+-# GD18LIBS = -lgd -lpng -lz -ljpeg -lfreetype
+-# GD18H = 
+-# GDFREETYPE = -DGDFREETYPE
+-# ZFLAG = -DWZ
++exetarget: plgd18 
++GD18LIBS = -lgd -lpng -lz -ljpeg -lfreetype
++GD18H = 
++GDFREETYPE = -DGDFREETYPE
++ZFLAG = -DWZ
+ 
+ ########### Option 5: don't use GD at all.
+ # exetarget: plnogd 
+@@ -137,7 +137,7 @@
+ 
+ 
+ #### If you do a "make install", where do you want the executable(s) to be moved to?
+-INSTALLBIN = /usr/local/bin
++INSTALLBIN = /usr/bin
+ 
+ 
+ #### For LOCALE support (non-roman alphabets & collation), uncomment the following..
+@@ -147,8 +147,8 @@
+ #### SVG output is always available by default.
+ #### If you want compressed SVG (.svgz), and you selected GD13 or no GD above, 
+ #### uncomment the following.  You need to have zlib.  If necessary change -lz to location of zlib.
+-# ZLIB = -lz
+-# ZFLAG = -DWZ
++ZLIB = -lz
++ZFLAG = -DWZ
+ 
+ #### To completely remove PostScript / EPS output capability, uncomment the following..
+ # NOPS = -DNOPS 
+@@ -227,7 +227,7 @@
+ # this one needs work... suggestions welcome
+ libploticus-so: $(OBJ) $(GDOBJ)
+ 	$(RMCOM) libploticus.$(LIBEXT)
+-	$(CC) $(SHAREFLAG) -o libploticus.$(LIBEXT) $(OBJ) $(GDOBJ)
++	$(CC) $(SHAREFLAG) -o libploticus.so $(OBJ) $(GDOBJ)
+ 
+ 
+ gd00files: 
+@@ -260,7 +260,7 @@
+ 
+ 
+ install:
+-	cp $(EXE) $(INSTALLBIN)
++	cp $(EXE) $(DESTDIR)$(INSTALLBIN)
+ 
+ clean:
+ 	$(RMCOM) *.o gd??files 

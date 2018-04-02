@@ -1,0 +1,114 @@
+#!/usr/bin/perl
+
+sub _chomp {
+	$_ and chomp $_ for @_;
+	wantarray ? @_ : join '', @_;
+}
+
+sub cat1 {
+	local @ARGV = @_;
+
+	if (-f $_[0]) {
+		my $str = <>;
+		return _chomp $str;
+	} else {
+		return 0;
+	}
+}
+
+sub _detectVideoDriver($$$$) {
+	my $id = "$_[0] $_[1] $_[2] $_[3]";
+
+	my @mapping = (
+		[ "0x1142" => "apm" ],
+		[ "0xedd8" => "ark" ],
+		[ "0x1002" => ["fglrx", "ati"] ],
+		[ "0x100b" => "amd" ], # NSC
+		[ "0x1022" => "amd" ], # AMD
+		[ "0x102c" => "chips" ],
+		[ "0x1013" => "cirrus" ],
+		[ "0x8086 0x00d1" => "i740" ],
+		[ "0x8086 0x7800" => "i740" ],
+		[ "0x8086" => "intel" ],
+		[ "0x102b" => "mga" ],
+		[ "0x10c8" => "neomagic" ],
+		[ "0x105d" => "i128" ],
+		[ "0x10de" => ["nvidia", "nouveau", "nv"] ],
+		[ "0x12d2" => ["nvidia", "nouveau", "nv"] ],
+		[ "0x5333 0x88d0" => "s3" ],
+		[ "0x5333 0x88d1" => "s3" ],
+		[ "0x5333 0x88f0" => "s3" ],
+		[ "0x5333 0x8811" => "s3" ],
+		[ "0x5333 0x8812" => "s3" ],
+		[ "0x5333 0x8814" => "s3" ],
+		[ "0x5333 0x8901" => "s3" ],
+		[ "0x5333 0x5631" => "s3virge" ],
+		[ "0x5333 0x883d" => "s3virge" ],
+		[ "0x5333 0x8904" => "s3virge" ],
+		[ "0x5333 0x8a01" => "s3virge" ],
+		[ "0x5333 0x8a10" => "s3virge" ],
+		[ "0x5333 0x8a13" => "s3virge" ],
+		[ "0x5333 0x8c01" => "s3virge" ],
+		[ "0x5333 0x8c03" => "s3virge" ],
+		[ "0x5333 0x8a20" => "savage" ],
+		[ "0x5333 0x8a21" => "savage" ],
+		[ "0x5333 0x8a22" => "savage" ],
+		[ "0x5333 0x8a25" => "savage" ],
+		[ "0x5333 0x8a26" => "savage" ],
+		[ "0x5333 0x8c10" => "savage" ],
+		[ "0x5333 0x8c11" => "savage" ],
+		[ "0x5333 0x8c12" => "savage" ],
+		[ "0x5333 0x8c13" => "savage" ],
+		[ "0x5333 0x8c22" => "savage" ],
+		[ "0x5333 0x8c24" => "savage" ],
+		[ "0x5333 0x8c26" => "savage" ],
+		[ "0x5333 0x8c2a" => "savage" ],
+		[ "0x5333 0x8c2b" => "savage" ],
+		[ "0x5333 0x8c2c" => "savage" ],
+		[ "0x5333 0x8c2d" => "savage" ],
+		[ "0x5333 0x8c2e" => "savage" ],
+		[ "0x5333 0x8c2f" => "savage" ],
+		[ "0x5333 0x8d01" => "savage" ],
+		[ "0x5333 0x8d02" => "savage" ],
+		[ "0x5333 0x8d03" => "savage" ],
+		[ "0x5333 0x8d04" => "savage" ],
+		[ "0x5333 0x9102" => "savage" ],
+		[ "0x1039" => "sis" ],
+		[ "0x126f" => "siliconmotion" ],
+		[ "0x121a" => "tdfx" ],
+		[ "0x3d3d" => "glint" ],
+		[ "0x1023" => "trident" ],
+		[ "0x100c" => "tseng" ],
+		[ "0x1106" => "via" ],
+		[ "0x15ad" => "vmware" ],
+	);
+
+	foreach (@mapping) {
+		if ($id =~ /^$_->[0]/) {
+			if (ref $_->[1] eq "ARRAY") {
+				foreach (@{$_->[1]}) {
+					return $_ if -f "/usr/lib/xorg/modules/drivers/$_"."_drv.so";
+				}
+			} else {
+				return $_->[1];
+			}
+		}
+	}
+
+	"vesa";
+}
+
+sub detectVideoDriver() {
+	for (</sys/bus/pci/devices/*>) {
+		if ("0x030000" eq cat1 "$_/class") {
+			my $vendor = cat1("$_/vendor");
+			my $device = cat1("$_/device");
+			my $subvendor = cat1("$_/subsystem_vendor");
+			my $subdevice = cat1("$_/subsystem_device");
+			return _detectVideoDriver($vendor, $device, $subvendor, $subdevice);
+		}
+	}
+	undef;
+}
+
+print ((detectVideoDriver() or "vesa")."\n");

@@ -1,0 +1,12 @@
+diff -Naurdp grep-2.20.orig/src/grep.c grep-2.20/src/grep.c
+--- grep-2.20.orig/src/grep.c	2014-05-31 16:35:34.000000000 +0200
++++ grep-2.20/src/grep.c	2014-06-26 08:00:22.238208531 +0200
+@@ -72,7 +72,7 @@ static int show_version;
+ static int suppress_errors;
+ 
+ /* If nonzero, use color markers.  */
+-static int color_option;
++static int color_option = 2;
+ 
+ /* If nonzero, show only the part of a line matching the expression. */
+ static int only_matching;

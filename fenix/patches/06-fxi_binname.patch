@@ -1,0 +1,28 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxi/src/main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/main.c	2007-08-28 14:39:59.000000000 +0200
++++ fenix-0.92a.dfsg1/fxi/src/main.c	2007-08-28 14:46:00.000000000 +0200
+@@ -174,7 +174,8 @@
+  	ptr = argv[0] + strlen(argv[0]) ;
+  	while (ptr > argv[0] && ptr[-1] != '\\' && ptr[-1] != '/')
+  		ptr-- ;
+- 	fxi = (strncmp(ptr,"fxi",3) == 0) || (strncmp(ptr,"FXI",3) == 0) ;
++ 	fxi = (strncasecmp(ptr,"fenix-fxi",9) == 0) \
++		|| (strncasecmp(ptr,"fxi",3) == 0) ;
+ 
+ 	/* Init RAND generator */
+ 
+@@ -236,8 +237,10 @@
+ 			/* No embedded DCB; search for a DCB with similar name */
+ 
+ 			filename = ptr ;
++#ifdef WIN32
+ 	 		while (*ptr && *ptr != '.') ptr++ ;
+ 	 		*ptr = 0 ;
++#endif
+ 		}
+ 	}
+ 

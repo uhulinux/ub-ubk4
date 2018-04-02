@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/java/basex
+cp -a basex/BaseX.jar "$UB_INSTALLDIR"/usr/share/java/basex/
+#cp -a *.1 "$UB_INSTALLDIR"/usr/share/man/man1/
+#cp -a basex.png "$UB_INSTALLDIR"/usr/share/pixmaps/
+chmod 0755 basex/bin/basex*
+cp -a basex/bin/basex "$UB_INSTALLDIR"/usr/bin/
+cp -a basex/bin/basexclient "$UB_INSTALLDIR"/usr/bin/
+cp -a basex/bin/basexserver "$UB_INSTALLDIR"/usr/bin/
+cp -a basex/bin/basexgui "$UB_INSTALLDIR"/usr/bin/

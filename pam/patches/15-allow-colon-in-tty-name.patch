@@ -1,0 +1,12 @@
+diff -Naur Linux-PAM-0.99.8.1.orig/modules/pam_group/pam_group.c Linux-PAM-0.99.8.1/modules/pam_group/pam_group.c
+--- Linux-PAM-0.99.8.1.orig/modules/pam_group/pam_group.c	2006-06-16 08:35:16.000000000 +0200
++++ Linux-PAM-0.99.8.1/modules/pam_group/pam_group.c	2007-08-14 16:56:44.000000000 +0200
+@@ -500,7 +500,7 @@
+ 
+           default:
+                if (isalpha(c) || isdigit(c) || c == '_' || c == '*'
+-                    || c == '-') {
++                    || c == '-' || c == '.' || c == '/' || c == ':') {
+                     token = 1;
+                } else if (token) {
+                     --to;

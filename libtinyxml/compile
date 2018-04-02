@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+export CXXFLAGS=""
+
+# A -O3 veszélyes
+ub_replace -O3 -O2 Makefile
+
+# Fix Makefile
+sed -i \
+    -e '/^TINYXML_USE_STL/ s|=.*|= YES|' \
+    -e "s|^RELEASE_CFLAGS.*|& ${CXXFLAGS} -fPIC|" Makefile
+
+# library version in .pc
+sed -i -e "s|@PKGVER@|${UB_VERSION}|" tinyxml.pc
+
+make
+
+g++ -fPIC ${CXXFLAGS} -shared -o libtinyxml.so.0.${UB_VERSION} -Wl,-soname,libtinyxml.so.0 *.o

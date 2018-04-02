@@ -1,0 +1,12 @@
+diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
+--- orig/misc/mc.ext.in	2011-12-12 10:15:38.000000000 +0100
++++ patched/misc/mc.ext.in	2011-12-15 16:51:20.000000000 +0100
+@@ -206,7 +206,7 @@
+ 	Open=%cd %p/patchfs://
+ 	View=%view{ascii} gzip -dc %f 2>/dev/null
+ 
+-regex/\.(diff|patch)$
++regex/\.(diff|patch|skip|txt)$
+ 	Open=%cd %p/patchfs://
+ 	View=%view{ascii} /bin/cat %f 2>/dev/null
+ 

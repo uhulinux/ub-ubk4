@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/etc/ppp
+
+ub_makeinstall \
+	MAN1EXT=.1 \
+	MAN2EXT=.2 \
+	MAN3EXT=.3 \
+	MAN4EXT=.4 \
+	MAN5EXT=.5 \
+	MAN6EXT=.6 \
+	MAN7EXT=.7 \
+	MAN8EXT=.8
+
+touch "$UB_INSTALLDIR"/etc/ppp/ioptions

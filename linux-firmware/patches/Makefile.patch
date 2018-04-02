@@ -1,0 +1,9 @@
+diff -Naur orig/linux-firmware/Makefile patched/linux-firmware/Makefile
+--- orig/linux-firmware/Makefile	2016-11-01 17:29:03.000000000 +0100
++++ patched/linux-firmware/Makefile	2016-11-01 19:01:39.370041755 +0100
+@@ -12,5 +12,3 @@
+ 	mkdir -p $(DESTDIR)$(FIRMWAREDIR)
+ 	cp -r * $(DESTDIR)$(FIRMWAREDIR)
+ 	rm -rf $(DESTDIR)$(FIRMWAREDIR)/usbdux
+-	find $(DESTDIR)$(FIRMWAREDIR) \( -name 'WHENCE' -or -name 'LICENSE.*' -or \
+-		-name 'LICENCE.*' \) -exec rm -- {} \;

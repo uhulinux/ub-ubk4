@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+  for i in *.{wav,Sound}; do
+    install -D -m 644 "$i" "$UB_INSTALLDIR/usr/share/games/atris/sounds/$i"
+  done

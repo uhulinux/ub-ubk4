@@ -1,0 +1,35 @@
+diff -Naur traceroute-2.0.13-orig/default.rules traceroute-2.0.13/default.rules
+--- traceroute-2.0.13-orig/default.rules	2008-04-18 13:10:33.000000000 +0200
++++ traceroute-2.0.13/default.rules	2009-12-22 18:01:00.000000000 +0100
+@@ -185,8 +185,8 @@
+ 	@true
+ ifneq ($(install_manuals),)
+ define inst_man
+-@mkdir -p $(DESTDIR)$(mandir)/man$(patsubst .%,%,$(suffix $(1)))
+-	cp -f $(1) $(DESTDIR)$(mandir)/man$(patsubst .%,%,$(suffix $(1)))
++@mkdir -p $(DESTDIR)$(mandir)/man8
++	cp -f $(1) $(DESTDIR)$(mandir)/man8
+ 	
+ endef
+ 	$(foreach man,$(install_manuals),$(call inst_man,$(man)))
+diff -Naur traceroute-2.0.13-orig/Make.rules traceroute-2.0.13/Make.rules
+--- traceroute-2.0.13-orig/Make.rules	2008-04-18 13:22:05.000000000 +0200
++++ traceroute-2.0.13/Make.rules	2009-12-22 18:02:15.000000000 +0100
+@@ -53,7 +53,7 @@
+ 
+ 
+ #  install stuff
+-prefix = /usr/local
++prefix = /usr
+ 
+ exec_prefix = $(prefix)
+ bindir = $(exec_prefix)/bin
+@@ -63,7 +63,7 @@
+ sysconfdir = $(prefix)/etc
+ includedir = $(prefix)/include
+ datadir = $(prefix)/share
+-mandir = $(datadir)/man
++mandir = $(prefix)/share/man
+ infodir = $(datadir)/info
+ localstatedir = $(prefix)/var
+ sharedstatedir = $(prefix)/com

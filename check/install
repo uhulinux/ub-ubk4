@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_install
+
+find "$UB_INSTALLDIR"/usr/share/doc/check -maxdepth 1 ! -type d -exec rm {} +

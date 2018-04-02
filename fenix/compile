@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+chmod +x configure
+export LIBS="-lm -ldl"
+ub_compile \
+  --enable-fxc \
+  --enable-fxi \
+  --enable-map \
+  --enable-fpg \
+  --enable-dependency-tracking

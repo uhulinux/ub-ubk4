@@ -1,0 +1,93 @@
+diff -Nur orig/CMakeLists.txt mod/CMakeLists.txt
+--- orig/CMakeLists.txt	2017-08-17 12:05:38.000000000 +0200
++++ mod/CMakeLists.txt	2017-08-22 21:31:37.313327034 +0200
+@@ -459,10 +459,6 @@
+ #INSTALL_DOCUMENTATION(${CMAKE_BINARY_DIR}/Docs/INFO_SRC
+ #                      ${CMAKE_BINARY_DIR}/Docs/INFO_BIN)
+ 
+-IF(UNIX)
+-  INSTALL_DOCUMENTATION(Docs/INSTALL-BINARY Docs/README-wsrep COMPONENT Readme)
+-ENDIF()
+-
+ INCLUDE(CPack)
+ 
+ IF(NON_DISTRIBUTABLE_WARNING)
+diff -Nur orig/man/CMakeLists.txt mod/man/CMakeLists.txt
+--- orig/man/CMakeLists.txt	2017-08-17 12:05:38.000000000 +0200
++++ mod/man/CMakeLists.txt	2017-08-22 21:32:36.977745370 +0200
+@@ -15,7 +15,7 @@
+ 
+ SET(MAN1_SERVER innochecksum.1 my_print_defaults.1 myisam_ftdump.1 myisamchk.1
+                 aria_chk.1 aria_dump_log.1 aria_ftdump.1 aria_pack.1 aria_read_log.1
+-		myisamlog.1 myisampack.1 mysql.server.1
++		myisamlog.1 myisampack.1
+ 		mysql_convert_table_format.1 mysql_fix_extensions.1
+ 		mysql_install_db.1
+ 		mysql_secure_installation.1 mysql_setpermission.1
+diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
+--- orig/support-files/CMakeLists.txt	2017-08-17 12:05:42.000000000 +0200
++++ mod/support-files/CMakeLists.txt	2017-08-22 21:38:57.899921661 +0200
+@@ -50,8 +50,8 @@
+ 
+ IF(UNIX)
+   SET(prefix ${CMAKE_INSTALL_PREFIX})
+-  FOREACH(script mysqld_multi.server mysql-log-rotate binary-configure wsrep_notify)
+-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${script}.sh 
++  FOREACH(script mysql-log-rotate binary-configure wsrep_notify)
++    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${script}.sh
+                    ${CMAKE_CURRENT_BINARY_DIR}/${script} @ONLY )
+     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script}
+       DESTINATION ${inst_location} COMPONENT Server_Scripts)
+@@ -59,29 +59,10 @@
+ 
+   IF(INSTALL_SUPPORTFILESDIR)
+     INSTALL(FILES magic DESTINATION ${inst_location} COMPONENT SupportFiles)
+-    INSTALL(DIRECTORY policy DESTINATION ${inst_location} COMPONENT SupportFiles)
+-    FIND_PROGRAM(CHECKMODULE checkmodule)
+-    FIND_PROGRAM(SEMODULE_PACKAGE semodule_package)
+-    MARK_AS_ADVANCED(CHECKMODULE SEMODULE_PACKAGE)
+-
+-    # Build pp files in policy/selinux
+-    IF(CHECKMODULE AND SEMODULE_PACKAGE)
+-      FOREACH(pol mariadb)
+-        SET(src ${CMAKE_CURRENT_SOURCE_DIR}/policy/selinux/${pol}.te)
+-        SET(tmp ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${pol}-pp.dir/${pol}.mod)
+-        SET(out ${CMAKE_CURRENT_BINARY_DIR}/${pol}.pp)
+-        ADD_CUSTOM_COMMAND(OUTPUT ${out}
+-          COMMAND ${CHECKMODULE} -M -m ${src} -o ${tmp}
+-          COMMAND ${SEMODULE_PACKAGE} -m ${tmp} -o ${out}
+-        DEPENDS ${src})
+-        ADD_CUSTOM_TARGET(${pol}-pp ALL DEPENDS ${out})
+-        INSTALL(FILES ${out} DESTINATION ${inst_location}/policy/selinux COMPONENT SupportFiles)
+-      ENDFOREACH()
+-    ENDIF()
+   ENDIF()
+ 
+   CONFIGURE_FILE(mariadb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc @ONLY)
+-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc DESTINATION ${INSTALL_SHAREDIR}/pkgconfig COMPONENT Development)
++  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc DESTINATION ${INSTALL_LIBDIR}/pkgconfig COMPONENT Development)
+ 
+   INSTALL(FILES mysql.m4 DESTINATION ${INSTALL_SHAREDIR}/aclocal COMPONENT Development)
+   
+@@ -133,9 +114,6 @@
+   IF (INSTALL_SYSCONFDIR)
+     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mysql-log-rotate DESTINATION ${INSTALL_SYSCONFDIR}/logrotate.d
+             RENAME mysql COMPONENT SupportFiles)
+-    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/mysql.server
+-            DESTINATION  ${INSTALL_SYSCONFDIR}/init.d
+-            RENAME mysql COMPONENT SupportFiles)
+ 
+     INSTALL(FILES rpm/my.cnf DESTINATION ${INSTALL_SYSCONFDIR}
+             COMPONENT Common)
+@@ -151,11 +129,5 @@
+               COMPONENT IniFiles)
+     ENDIF()
+ 
+-    # This is for SuSE:
+-    INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                   ${INSTALL_SYSCONFDIR}/init.d/mysql
+-                   ${INSTALL_SBINDIR}/rcmysql
+-                   WORKING_DIRECTORY \$ENV{DESTDIR}${prefix})"
+-                   COMPONENT SupportFiles)
+   ENDIF(INSTALL_SYSCONFDIR)
+ ENDIF()

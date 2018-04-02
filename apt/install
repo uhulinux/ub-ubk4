@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+ub_install
+
+# sources.list
+DIST=${UB_DISTRIBUTION##* } # remove "UHU-Linux "
+DIST=${DIST,,} # convert to lowercase
+
+cat > "$UB_INSTALLDIR"/etc/apt/sources.list <<END
+# /etc/apt/sources.list
+
+deb [arch=$UB_ARCH] ftp://ftp.ubk.hu/pkg/$DIST/main/$UB_ARCH ./
+# deb [arch=$UB_ARCH] ftp://download.ubk.hu/pkg/$DIST/main/$UB_ARCH ./
+# deb [arch=$UB_ARCH] http://download.ubk.hu/pkg/$DIST/main/$UB_ARCH ./
+
+END

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+mv "$UB_INSTALLDIR"/usr/bin/xspect "$UB_INSTALLDIR"/usr/bin/xspect.bin
+
+rm "$UB_INSTALLDIR"/usr/share/man/man1/tapeout.1
+rm "$UB_INSTALLDIR"/usr/share/man/man1/vgaspect.1

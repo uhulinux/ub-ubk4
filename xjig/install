@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	BINDIR=/usr/bin \
+	MANDIR=/usr/share/man/man1 \
+	install \
+	install.man
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/xjig
+install -m 644 tina.gif "$UB_INSTALLDIR"/usr/share/xjig/
+ln -s tina.gif "$UB_INSTALLDIR"/usr/share/xjig/xjig.gif

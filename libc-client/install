@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+install -m 644 ./c-client/c-client.a "$UB_INSTALLDIR"/usr/lib/
+ln -s c-client.a  "$UB_INSTALLDIR"/usr/lib/libc-client.a
+
+install -m 755 ./c-client/libc-client.so.1.0.0 $UB_INSTALLDIR/usr/lib/
+ln -s libc-client.so.1.0.0 $UB_INSTALLDIR/usr/lib/libc-client.so.1
+ln -s libc-client.so.1 $UB_INSTALLDIR/usr/lib/libc-client.so
+
+mkdir -p $UB_INSTALLDIR/usr/include/imap
+install -m 644 ./c-client/*.h $UB_INSTALLDIR/usr/include/imap
+
+install -m 644 ./c-client/linkage.c $UB_INSTALLDIR/usr/include/imap
+install -m 644 ./src/osdep/tops-20/shortsym.h $UB_INSTALLDIR/usr/include/imap

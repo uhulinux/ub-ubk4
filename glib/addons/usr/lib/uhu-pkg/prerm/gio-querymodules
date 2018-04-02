@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+if [ ! -f /var/lib/uhu-pkg/gio-querymodules ]; then
+	exit 0
+fi
+
+if grep -q '^/usr/lib/gio/modules/' /var/lib/dpkg/info/"$1".list; then
+	rm -f /var/lib/uhu-pkg/gio-querymodules
+fi

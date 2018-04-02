@@ -1,0 +1,12 @@
+diff -Naur orig/bashhist.c patched/bashhist.c
+--- orig/bashhist.c	2016-04-13 14:40:43.134739579 +0200
++++ patched/bashhist.c	2017-07-29 16:06:52.285741396 +0200
+@@ -305,7 +305,7 @@
+      Note that the history file is automatically truncated to the
+      size of HISTSIZE if the user does not explicitly set the size
+      differently. */
+-  set_if_not ("HISTSIZE", "500");
++  set_if_not ("HISTSIZE", "100000");
+   sv_histsize ("HISTSIZE");
+ 
+   set_if_not ("HISTFILESIZE", get_string_value ("HISTSIZE"));

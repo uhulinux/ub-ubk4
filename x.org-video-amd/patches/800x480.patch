@@ -1,0 +1,24 @@
+diff -Naurd a/src/gfx/gfx_disp.c b/src/gfx/gfx_disp.c
+--- a/src/gfx/gfx_disp.c	2007-06-14 17:19:26.000000000 +0200
++++ b/src/gfx/gfx_disp.c	2007-06-18 12:37:29.000000000 +0200
+@@ -267,6 +267,20 @@
+             0x002B29BA,                /* freq = 43.163 MHz  */
+         },
+ 
++/* 800x480 */
++
++    {
++            GFX_MODE_60HZ |           /* refresh rate = 100 */
++            GFX_MODE_8BPP | GFX_MODE_12BPP | GFX_MODE_15BPP |
++            /* all BPP valid      */
++            GFX_MODE_16BPP | GFX_MODE_24BPP,
++            0x0320, 0x0320, 0x0340, 0x03E8, 0x0408, 0x0408,
++            /* horizontal timings */
++            0x01E0, 0x01E0, 0x01E9, 0x01F0, 0x01F9, 0x01F9,
++            /* vertical timings   */
++            0x002C51EB,                /* freq = 44.32 MHz  */
++        },
++
+ /* 800x600 */
+ 
+     {

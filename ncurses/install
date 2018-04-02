@@ -1,0 +1,34 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp -a Install/lib/.         "$UB_INSTALLDIR"/lib/
+cp -a Install/usr/include/. "$UB_INSTALLDIR"/usr/include/
+
+rm "$UB_INSTALLDIR"/lib/lib*_g.a
+mv "$UB_INSTALLDIR"/lib/*.a "$UB_INSTALLDIR"/usr/lib/
+chmod 755 "$UB_INSTALLDIR"/lib/lib*.so.*
+
+ln -sf libncurses.a  "$UB_INSTALLDIR"/usr/lib/libcurses.a
+ln -sf libncursesw.a "$UB_INSTALLDIR"/usr/lib/libcursesw.a
+
+ln -sf ../../lib/libcurses.so   "$UB_INSTALLDIR"/usr/lib/
+# ln -sf ../../lib/libcursesw.so  "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libform.so     "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libformw.so    "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libmenu.so     "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libmenuw.so    "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libncurses.so  "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libncursesw.so "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libpanel.so    "$UB_INSTALLDIR"/usr/lib/
+ln -sf ../../lib/libpanelw.so   "$UB_INSTALLDIR"/usr/lib/
+
+#freepascal igényli
+ln -s ../../lib/libncursesw.so "$UB_INSTALLDIR"/usr/lib/libtinfo.so.5
+ln -s "$UB_INSTALLDIR"/usr/lib/libtinfo.so.5  "$UB_INSTALLDIR"/usr/lib/libtinfo.so
+
+for lib in ncurses form panel menu ; do
+    ln -s ${lib}w.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig/${lib}.pc
+    ln -s lib${lib}.so.6 "$UB_INSTALLDIR"/lib/lib${lib}.so.5
+    ln -s lib${lib}w.so.6 "$UB_INSTALLDIR"/lib/lib${lib}w.so.5
+done

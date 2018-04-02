@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+install -Dm755 src/scratch "$UB_INSTALLDIR"/usr/bin/scratch
+install -Dm644 Scratch.image "$UB_INSTALLDIR"/usr/lib/scratch/Scratch.image
+install -m644 Scratch.ini "$UB_INSTALLDIR"/usr/lib/scratch/Scratch.ini
+install -Dm644 src/scratch.desktop "$UB_INSTALLDIR"/usr/share/applications/scratch.desktop
+install -Dm644 src/man/scratch.1.gz "$UB_INSTALLDIR"/usr/share/man/man1/scratch.1.gz
+install -dm755 "$UB_INSTALLDIR"/usr/share/{scratch,icons/hicolor}
+cp -rp Help locale Media Projects README "$UB_INSTALLDIR"/usr/share/scratch/
+cp -rp src/icons/* "$UB_INSTALLDIR"/usr/share/icons/hicolor/
+cp -rp Plugins "$UB_INSTALLDIR"/usr/lib/scratch/
+ln -s ../icons/hicolor/48x48/scratch.png "$UB_INSTALLDIR"/usr/share/pixmaps

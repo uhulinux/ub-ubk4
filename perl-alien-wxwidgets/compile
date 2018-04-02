@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_replace "wx-config" "wx-config2" Build.PL
+ub_replace "wx-config" "wx-config2" inc/My/Build/Any_wx_config.pm
+ub_compile

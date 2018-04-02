@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	PREFIX=/usr \
+	QMAKE=qmake-qt5 \
+	LRELEASE=/usr/lib/qt5/bin/lrelease \
+install

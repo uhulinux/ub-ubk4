@@ -1,0 +1,43 @@
+diff -Nur orig/services/sddm-autologin.pam mod/services/sddm-autologin.pam
+--- orig/services/sddm-autologin.pam	2017-08-31 14:59:49.000000000 +0200
++++ mod/services/sddm-autologin.pam	2017-09-25 08:05:04.753839955 +0200
+@@ -3,11 +3,11 @@
+ auth        required    pam_tally.so file=/var/log/faillog onerr=succeed
+ auth        required    pam_shells.so
+ auth        required    pam_nologin.so
++auth        [success=1 default=ignore]  pam_succeed_if.so user ingroup users
++auth        required    pam_unix.so
+ auth        required    pam_permit.so
+--auth       optional    pam_gnome_keyring.so
++account     include     system-auth
++password    include     system-auth
++session     include     system-auth
+ -auth       optional    pam_kwallet5.so
+-account     include     system-local-login
+-password    include     system-local-login
+-session     include     system-local-login
+--session    optional    pam_gnome_keyring.so auto_start
+ -session    optional    pam_kwallet5.so auto_start
+diff -Nur orig/services/sddm.pam mod/services/sddm.pam
+--- orig/services/sddm.pam	2017-08-31 14:59:49.000000000 +0200
++++ mod/services/sddm.pam	2017-09-25 08:06:29.561703684 +0200
+@@ -1,15 +1,15 @@
+ #%PAM-1.0
+ 
+-auth		include		system-login
++auth		include		system-auth
+ -auth		optional	pam_gnome_keyring.so
+ -auth   optional  pam_kwallet5.so
+ 
+-account		include		system-login
++account		include		system-auth
+ 
+-password	include		system-login
++password	include		system-auth
+ -password	optional	pam_gnome_keyring.so use_authtok
+ 
+ session		optional	pam_keyinit.so force revoke
+-session		include		system-login
++session		include		system-auth
+ -session		optional	pam_gnome_keyring.so auto_start
+ -session  optional  pam_kwallet5.so auto_start

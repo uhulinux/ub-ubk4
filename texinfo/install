@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_install
+
+make \
+	TEXMF="$UB_INSTALLDIR"/usr/share/texmf \
+	install-tex
+
+# teTeX
+rm "$UB_INSTALLDIR"/usr/share/texmf/tex/generic/epsf/epsf.tex

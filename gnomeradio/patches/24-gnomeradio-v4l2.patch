@@ -1,0 +1,59 @@
+## Description: Changed defaults autodetection driver for using v4l2
+## Origin: upstream, http://pkgs.fedoraproject.org/gitweb/?p=gnomeradio.git;a=blob_plain;f=gnomeradio-v4l2.patch;hb=3a4a46b5247f04184e25e25e84d3b10a7e9dfc5a
+## Bug-Ubuntu: http://launchpad.net/bugs/958030
+## Bug-Debian: 
+## Author: Dominik Mierzejewski
+## Forwarded: not-needed
+Index: b/src/prefs.c
+===================================================================
+--- a/src/prefs.c	2012-12-03 10:14:54.530899819 +0000
++++ b/src/prefs.c	2012-12-03 10:14:55.122899801 +0000
+@@ -114,7 +114,7 @@
+ 	/* Load general settings */
+ 	settings.device = gconf_client_get_string(client, "/apps/gnomeradio/device" , NULL);
+ 	if (!settings.device)
+-		settings.device = g_strdup("/dev/radio");
++		settings.device = g_strdup("/dev/radio0");
+ 	settings.driver = gconf_client_get_string(client, "/apps/gnomeradio/driver" , NULL);
+ 	if (!settings.driver)
+ 		settings.driver = g_strdup("any");
+@@ -623,7 +623,7 @@
+ 	g_signal_connect(G_OBJECT(mixer_combo), "changed", G_CALLBACK(mixer_combo_change_cb), app);
+ 	g_signal_connect(G_OBJECT(mute_on_exit_cb), "toggled", G_CALLBACK(mute_on_exit_toggled_cb), NULL);
+ 
+-	gtk_widget_set_tooltip_text(device_entry, _("Specify the radio-device (in most cases /dev/radio)"));
++	gtk_widget_set_tooltip_text(device_entry, _("Specify the radio-device (in most cases /dev/radio0)"));
+ 	gtk_widget_set_tooltip_text(mixer_eb, 
+ 	_("Choose the mixer source (line, line1, etc.) that is able to control the volume of your radio"));
+ 	gtk_widget_set_tooltip_text(mute_on_exit_cb, _("If unchecked, gnomeradio won't mute after exiting"));
+Index: b/src/radio.c
+===================================================================
+--- a/src/radio.c	2012-12-03 10:14:49.366899972 +0000
++++ b/src/radio.c	2012-12-03 10:14:55.122899801 +0000
+@@ -41,11 +41,11 @@
+ 	}
+ 
+ 	switch (driver) {
++		case DRIVER_ANY:
+ 		case DRIVER_V4L2:
++		default:
+ 			goto try_v4l2;
+-		case DRIVER_ANY:
+ 		case DRIVER_V4L1:
+-		default:
+ 			goto try_v4l1;
+ 	}
+ 
+Index: b/data/gnomeradio.schemas.in
+===================================================================
+--- a/data/gnomeradio.schemas.in	2012-12-03 10:14:49.366899972 +0000
++++ b/data/gnomeradio.schemas.in	2012-12-03 10:14:55.122899801 +0000
+@@ -29,7 +29,7 @@
+       <applyto>/apps/gnomeradio/device</applyto>
+       <owner>gnomeradio</owner>
+       <type>string</type>
+-      <default>/dev/radio</default>
++      <default>/dev/radio0</default>
+       <locale name="C">
+ 	<short>Radio device</short>
+ 	<long>Specify the radio-device (in most cases /dev/radio)</long>

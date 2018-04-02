@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+if [ $UB_ARCH = "amd64" ]; then
+ub_replace ecx rcx misc/mathlib.c
+ub_replace eax rax misc/mathlib.c
+fi
+ub_compile

@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+rm -rf man?p
+
+cd man7
+for i in iso_8859-* koi8-*; do
+	if iconv -f ${i%.*} -t UTF-8 <$i >$i.new;
+	then
+		touch -r $i $i.new
+		mv $i.new $i
+	fi
+done

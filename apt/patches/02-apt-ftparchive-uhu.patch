@@ -1,0 +1,12 @@
+diff -Naur orig/ftparchive/writer.cc patched/ftparchive/writer.cc
+--- orig/ftparchive/writer.cc	2017-07-13 23:45:39.134739579 +0200
++++ patched/ftparchive/writer.cc	2017-08-13 01:44:37.922501586 +0200
+@@ -364,7 +364,7 @@
+       string const &Arch, bool const IncludeArchAll) :
+    FTWScanner(GivenOutput, Arch, IncludeArchAll), Db(DB), Stats(Db.Stats), TransWriter(transWriter)
+ {
+-   SetExts(".deb .ddeb .udeb");
++   SetExts(".uhu .deb .ddeb .udeb");
+    DeLinkLimit = 0;
+ 
+    // Process the command line options

@@ -1,0 +1,23 @@
+diff -Naur orig/macros/mate-autogen patched/macros/mate-autogen
+--- orig/macros/mate-autogen	2015-04-05 19:06:04.000000000 +0200
++++ patched/macros/mate-autogen	2015-10-17 19:16:18.518194238 +0200
+@@ -336,7 +336,7 @@
+ 
+     # check that AM_MAINTAINER_MODE is used
+     if grep "^AM_MAINTAINER_MODE" $configure_ac >/dev/null; then
+-	want_maintainer_mode=true
++	want_maintainer_mode=false
+     fi
+ 
+     if grep "^APPDATA_XML" $configure_ac >/dev/null; then
+@@ -484,6 +484,10 @@
+     conf_flags="--enable-maintainer-mode"
+ fi
+ 
++if $want_gtk_doc; then
++    conf_flags="--disable-gtk-doc"
++fi
++
+ if test x$NOCONFIGURE = x; then
+     printbold Running $srcdir/configure $conf_flags "$@" ...
+     $srcdir/configure $conf_flags "$@" \

@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+sed -i 's/lookandfeel = default/lookandfeel = gtk/' \
+        freemind.properties
+
+sed -ri 's/(<java(do)?c)/\1 encoding="UTF-8"/g' `find -name 'build*.xml'`
+
+chmod +x *.sh
+/usr/lib/apache-ant/bin/ant all \
+	-Dtest.reports='reports' \
+	-Ddist='dist' \
+	-Dbuild='build/calsses' \
+	-Dtestbuild='build/testclasses' \
+	-Dsrc_base_for_post='.' \
+	-Dpost='post'

@@ -1,0 +1,31 @@
+#!/bin/sh -eux
+
+# radio, radio-capture: libv4l
+
+opts=""
+if [ "$UB_ARCH" == "i386" ];then
+opts="-march=i686"
+fi
+CFLAGS="-O2 $opts -mtune=generic -fomit-frame-pointer -I/usr/include/directfb" \
+./configure \
+	--prefix=/usr \
+	--datadir=/usr/share/mplayer \
+	--confdir=/etc/mplayer \
+	--codecsdir=/usr/lib/codecs \
+	--disable-termcap \
+	--enable-runtime-cpudetection \
+	--language="hu bg cs de dk el en es fr it ja ko mk nb nl pl ro ru sk sv tr uk pt_BR zh_CN zh_TW" \
+	--enable-menu \
+	--enable-fribidi \
+	--enable-bl \
+	--enable-xvmc \
+	--enable-mga \
+	--enable-xmga \
+	--enable-vdpau \
+	--enable-libgsm \
+	--disable-radio \
+	--disable-radio-capture \
+	--disable-directfb \
+	--enable-gui \
+	--extra-ldflags="-lfribidi"
+ub_make

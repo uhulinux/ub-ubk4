@@ -1,0 +1,2 @@
+pythonver=$(curl -s -k https://raw.githubusercontent.com/llvm-mirror/libclc/master/configure.py | grep version_ | grep =)
+echo $pythonver | sed 's/.*major *= *//g' | sed 's/;.*minor *= */\./g' | sed 's/;.*= */\./g' | sed 's/;//g'

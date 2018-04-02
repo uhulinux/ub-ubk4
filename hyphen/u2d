@@ -1,0 +1,2 @@
+minor=$(sflist hunspell Hyphen | splitver '^([0-9.]+)' | sort -V | tail -n 1)
+sflist hunspell Hyphen/"$minor" | splitver '^hyphen-([0-9.]+).tar.(gz|bz2|xz)$' | sort -V | tail -n 1

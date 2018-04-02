@@ -1,0 +1,24 @@
+#!/bin/sh -eux
+
+jobs="-j${UB_MAKE_PROCS:-$(_procs)}"
+
+./bootstrap.sh \
+	--prefix="$UB_INSTALLDIR"/usr \
+	--with-toolset=gcc \
+	--with-icu \
+	--with-python=/usr/bin/python2
+
+./b2 \
+	variant=release \
+	debug-symbols=off \
+	threading=multi \
+	runtime-link=shared \
+	link=shared,static \
+	toolset=gcc \
+	python=2.7 \
+	cflags="-fPIC" \
+	cxxflags="-std=c++14 -fPIC" \
+	$jobs \
+	--layout=system \
+	--prefix="$UB_INSTALLDIR"/usr \
+	install

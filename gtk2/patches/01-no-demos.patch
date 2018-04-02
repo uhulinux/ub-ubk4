@@ -1,0 +1,24 @@
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2015-12-28 16:42:28.134739579 +0100
++++ patched/Makefile.am	2017-08-24 15:10:21.401748872 +0200
+@@ -1,7 +1,7 @@
+ ## Makefile.am for GTK+
+ include $(top_srcdir)/Makefile.decl
+ 
+-SRC_SUBDIRS = gdk gtk modules demos tests perf
++SRC_SUBDIRS = gdk gtk modules tests perf
+ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
+ 
+ # require automake 1.4
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2016-09-09 21:33:07.134739579 +0200
++++ patched/Makefile.in	2017-08-24 15:10:38.149556734 +0200
+@@ -564,7 +564,7 @@
+ 	|| { echo "Gtk+Tests:ERROR: Failed to start Xvfb environment for X11 target tests."; exit 1; } \
+ 	&& DISPLAY=:$$XID && export DISPLAY
+ 
+-SRC_SUBDIRS = gdk gtk modules demos tests perf
++SRC_SUBDIRS = gdk gtk modules tests perf
+ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
+ 
+ # require automake 1.4

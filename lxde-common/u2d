@@ -1,0 +1,2 @@
+alap=$(urllist http://sourceforge.net/projects/lxde/files/lxde-common%20%28default%20config%29/ | grep -E 'lxde-common '| sed s/" "/\%20/g | sort -V | tail -n 1)
+geturl http://sourceforge.net/projects/lxde/files/lxde-common%20%28default%20config%29/"$alap"/ | grep -E .tar.xz | sed s/.*lxde-common-//g |sed s/\.tar.*//g |sort -V | tail -n 1

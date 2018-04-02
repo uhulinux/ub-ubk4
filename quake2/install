@@ -1,0 +1,33 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+arch="x86_64"
+else
+arch="i386"
+fi
+
+celdir="$UB_INSTALLDIR"/usr/share/games/quake2
+basedir="$celdir"/baseq2
+ctfdir="$celdir"/ctf
+bindir="$UB_INSTALLDIR"/usr/bin
+install -d -m 755 $celdir $basedir $ctfdir
+install -d -m 755 $celdir/{baseq2,ctf,xatrix,rogue}
+cp maxpak.pak $basedir/
+for i in {10,11,12,13,14,16,17,19}; do
+        cp pak${i}.pak $basedir/
+done;
+mkdir q2
+mv q2-3.20-x86-full-ctf.exe q2/
+cd q2
+unzip -L q2-3.20-x86-full-ctf.exe
+cp baseq2/pak1.pak baseq2/pak2.pak $basedir/
+cp -r baseq2/players $basedir/
+cp ctf/* $ctfdir/
+
+cd ../release${arch}
+
+install -m 755 sdlquake2 quake2 q2ded $bindir/
+cp ref*.so $celdir/
+install -m 755 game${arch}.so $basedir/
+install -m 755 ctf/game${arch}.so $ctfdir/
+ln -s /usr/lib/libGL.so.1 "$celdir"/libGL.so

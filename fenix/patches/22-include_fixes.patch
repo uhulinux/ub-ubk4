@@ -1,0 +1,54 @@
+# Copyright (C) 2008,  Darren Salt <linux@youmustbejoking.demon.co.uk>
+# See: #485062
+
+diff -ur fenix-0.92a.dfsg1.orig/fxi/inc/g_pal.h fenix-0.92a.dfsg1/fxi/inc/g_pal.h
+--- fenix-0.92a.dfsg1.orig/fxi/inc/g_pal.h	2008-06-07 22:06:44.000000000 +0100
++++ fenix-0.92a.dfsg1/fxi/inc/g_pal.h	2008-06-07 22:06:44.000000000 +0100
+@@ -30,5 +30,6 @@
+ int pal_get (PALETTE * spal, int color, int num, Uint8 * pal);
+ int pal_set (PALETTE * spal, int color, int num, Uint8 * pal);
+ int pal_map_assign (int libid, int mapcode, PALETTE * palid);
++int pal_map_remove (int libid, int mapcode);
+ 
+ #endif
+diff -ur fenix-0.92a.dfsg1.orig/fxi/inc/grlib.h fenix-0.92a.dfsg1/fxi/inc/grlib.h
+--- fenix-0.92a.dfsg1.orig/fxi/inc/grlib.h	2008-06-07 22:13:05.000000000 +0100
++++ fenix-0.92a.dfsg1/fxi/inc/grlib.h	2008-06-07 22:13:05.000000000 +0100
+@@ -143,6 +143,7 @@
+ 
+ extern void pal_destroy(PALETTE * pal);
+ extern void pal_refresh(PALETTE * pal);
++extern void pal_use(PALETTE * pal);
+ 
+ extern PALETTE    * gr_read_pal             (file * fp) ;
+ extern PALETTE    * gr_read_pal_with_gamma  (file * fp);
+@@ -305,6 +306,7 @@
+ 
+ extern void gr_clear     (GRAPH * dest) ;
+ extern void gr_clear_as  (GRAPH * dest, int color) ;
++extern void gr_clear_region (GRAPH * dest, REGION * region);
+ extern void gr_put_pixel (GRAPH * dest, int x, int y, int color) ;
+ extern int  gr_get_pixel (GRAPH * dest, int x, int y) ;
+ 
+diff -ur fenix-0.92a.dfsg1.orig/fxi/src/fgc.c fenix-0.92a.dfsg1/fxi/src/fgc.c
+--- fenix-0.92a.dfsg1.orig/fxi/src/fgc.c	2008-06-07 22:34:42.000000000 +0100
++++ fenix-0.92a.dfsg1/fxi/src/fgc.c	2008-06-07 22:34:42.000000000 +0100
+@@ -49,6 +49,7 @@
+ #include "fxi.h"
+ #include "fbm.h"
+ #include "fgc.h"
++#include "g_pal.h"
+ 
+ const char * fgc_error = "";
+
+diff -ur fenix-0.92a.dfsg1.orig/fxi/src/g_fpg.c fenix-0.92a.dfsg1/fxi/src/g_fpg.c
+--- fenix-0.92a.dfsg1.orig/fxi/src/g_fpg.c	2008-06-07 22:29:46.000000000 +0100
++++ fenix-0.92a.dfsg1/fxi/src/g_fpg.c	2008-06-07 22:29:46.000000000 +0100
+@@ -46,6 +46,7 @@
+ #endif
+ 
+ #include "fxi.h"
++#include "g_pal.h"
+ 
+ #define MAXLIBS 128
+ static GRLIB * libs[MAXLIBS] ;

@@ -1,0 +1,12 @@
+diff -Naur spectemu-0.99.3.orig/Makefile.in spectemu-0.99.3/Makefile.in
+--- spectemu-0.99.3.orig/Makefile.in	2004-01-12 13:19:35.000000000 +0100
++++ spectemu-0.99.3/Makefile.in	2004-09-05 11:56:55.604255194 +0200
+@@ -3,6 +3,8 @@
+ prefix = @prefix@
+ exec_prefix = @exec_prefix@
+ 
++install_root = $(DESTDIR)
++
+ i_bindir = $(install_root)@bindir@
+ i_mandir = $(install_root)@mandir@/man1
+ 

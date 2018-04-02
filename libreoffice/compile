@@ -1,0 +1,47 @@
+#!/bin/sh -eux
+
+if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 12 ]; then
+	echo "At least 12 GB free space is required!"
+	exit 1
+fi
+
+ccache --max-size=12G
+
+# átpakolunk az /src alá mindent, mert
+# ott fogja keresni a letöltött forráscsomagokat
+# if [ ! -d src ]; then
+# mkdir src
+# fi
+# mv *.{gz,zip,bz2,xz} src/
+
+# hostflags 32 és 64 bithez
+if [ "$UB_ARCH" == "amd64" ]; then
+	hostflags=(
+	--build=x86_64-linux
+	--host=x86_64-linux
+	--target=x86_64-linux
+	)
+else
+	hostflags=(
+	--build=i686-linux
+	--host=i686-linux
+	--target=i686-linux
+	)
+fi
+
+export QT5DIR=/usr/lib/qt5
+
+# ha van a distro-configs alatt megfelelő tartalmú .conf fájl, ekkor az
+# ./autogen.sh --with-distro=<conffile> is használható
+# a LibreOfficeUHU.conf fájlhoz
+# ./autogen.sh --with-distro=LibreOfficeUHU
+# egyébként az autogen.input a preferált (ebben felsorolni az opciókat),
+# csak ne legyenek idézőjelek az opciókban (pl. --prefix="/usr"), attól kiakad!
+
+# opciók a distro-configs/LibreOfficeUHU.conf-ból
+./autogen.sh \
+	${hostflags[@]} \
+	--with-distro=LibreOfficeUHU
+
+# az unitcheck és a slowcheck nem kell
+make build-nocheck

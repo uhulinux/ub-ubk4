@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+# Increase NAMELEN (redhat bug #36058, redhat bug #159382).
+sed -e's,\(NAMELEN\s\+\)44\(\s\*\)\?,\1256,' -i.namelen */docbook.dcl
+
+chmod -R a+rX,g-w,o-w .

@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cd src
+CFLAGS="-I/usr/include/et" \
+ub_compile \
+	--with-system-et \
+	--without-tcl

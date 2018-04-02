@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+ln -s system-auth "$UB_INSTALLDIR"/etc/pam.d/sudo
+ln -s system-auth-rootok "$UB_INSTALLDIR"/etc/pam.d/sudo-i

@@ -1,0 +1,383 @@
+<!-- -*-html-*- -->
+<!-- /usr/local/src/hoc/hoc-7.0.0.beta/index.html, Mon Dec 17 10:08:47 2001 -->
+<!-- Edit by Nelson H. F. Beebe <beebe@math.utah.edu> -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+    <HEAD>
+        <TITLE>
+            hoc: extended high-order calculator
+        </TITLE>
+        <LINK REV="made" HREF="mailto:beebe@math.utah.edu">
+    </HEAD>
+    <BODY>
+        <H1>
+            <B>hoc</B>: extended high-order calculator
+        </H1>
+        <P>
+            Last update: <B>
+            <FONT COLOR="#ff0000">
+                Tue Jul 30 14:40:40 2002
+            </FONT>
+            </B>
+        </P>
+        <P>
+            <B>hoc</B> interprets a simple language for floating-point
+            arithmetic, at about the level of Basic, with C-like
+            syntax and functions.  However, unlike Basic, <B>hoc</B>
+            version 7 has particularly rich support for floating-point
+            arithmetic, and its facilities are certainly better than
+            that standardly provided by most programming languages,
+            such as C, C++, and Fortran.
+        </P>
+        <P>
+            <B>hoc</B> is succinctly described in UNIX manual pages,
+            available in several convenient formats:
+        </P>
+        <UL>
+            <LI>
+                <A HREF="hoc.html">
+                    HTML,
+                </A>
+            </LI>
+            <LI>
+                <A HREF="hoc.pdf">
+                    PDF (Portable Document Format),
+                </A>
+            </LI>
+            <LI>
+                <A HREF="hoc.txt">
+                    plain text.
+                </A>
+            </LI>
+            <LI>
+                <A HREF="hoc.ps">
+                    PostScript,
+                </A>
+            </LI>
+            <LI>
+                <A HREF="hoc.ps.gz">
+                    gzipped PostScript,
+                </A>
+                and
+            </LI>
+            <LI>
+                <A HREF="/usr/share/man/man1/hoc.1">
+                    raw nroff/troff input.
+                </A>
+            </LI>
+        </UL>
+        <P>
+            The source distribution is available in these formats:
+        </P>
+        <TABLE BORDER=2>
+            <TR>
+                <TD>
+                    hoc-7.0.0.beta
+                </TD>
+                <TD>
+                    <UL>
+                        <LI>
+                            <A HREF="hoc-7.0.0.beta.jar">
+                                Java jar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.0.beta.tar.gz">
+                                gzipped UNIX tar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.0.beta.zip">
+                                InfoZip archive,
+                            </A>
+                            and
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.0.beta.zoo">
+                                zoo archive.
+                            </A>
+                        </LI>
+                     </UL>                
+                <TD>
+            </TR>
+            <TR>
+                <TD>
+                    hoc-7.0.1.beta
+                </TD>
+                <TD>
+                    <UL>
+                        <LI>
+                            <A HREF="hoc-7.0.1.beta.jar">
+                                Java jar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.1.beta.tar.gz">
+                                gzipped UNIX tar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.1.beta.zip">
+                                InfoZip archive,
+                            </A>
+                            and
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.1.beta.zoo">
+                                zoo archive.
+                            </A>
+                        </LI>
+                     </UL>                
+                <TD>
+            </TR>
+            <TR>
+                <TD>
+                    hoc-7.0.2.beta
+                </TD>
+                <TD>
+                    <UL>
+                        <LI>
+                            <A HREF="hoc-7.0.2.beta.jar">
+                                Java jar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.2.beta.tar.gz">
+                                gzipped UNIX tar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.2.beta.zip">
+                                InfoZip archive,
+                            </A>
+                            and
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.2.beta.zoo">
+                                zoo archive.
+                            </A>
+                        </LI>
+                     </UL>                
+                <TD>
+            </TR>
+            <TR>
+                <TD>
+                    hoc-7.0.3.beta
+                </TD>
+                <TD>
+                    <UL>
+                        <LI>
+                            <A HREF="hoc-7.0.3.beta.jar">
+                                Java jar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.3.beta.tar.gz">
+                                gzipped UNIX tar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.3.beta.zip">
+                                InfoZip archive,
+                            </A>
+                            and
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.3.beta.zoo">
+                                zoo archive.
+                            </A>
+                        </LI>
+                     </UL>                
+                <TD>
+            </TR>
+            <TR>
+                <TD>
+                    hoc-7.0.4.beta
+                </TD>
+                <TD>
+                    <UL>
+                        <LI>
+                            <A HREF="hoc-7.0.4.beta.jar">
+                                Java jar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.4.beta.tar.gz">
+                                gzipped UNIX tar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.4.beta.zip">
+                                InfoZip archive,
+                            </A>
+                            and
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.4.beta.zoo">
+                                zoo archive.
+                            </A>
+                        </LI>
+                     </UL>                
+                <TD>
+            </TR>
+            <TR>
+                <TD>
+                    hoc-7.0.5.beta
+                </TD>
+                <TD>
+                    <UL>
+                        <LI>
+                            <A HREF="hoc-7.0.5.beta.jar">
+                                Java jar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.5.beta.tar.gz">
+                                gzipped UNIX tar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.5.beta.zip">
+                                InfoZip archive,
+                            </A>
+                            and
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.5.beta.zoo">
+                                zoo archive.
+                            </A>
+                        </LI>
+                     </UL>                
+                <TD>
+            </TR>
+            <TR>
+                <TD>
+                    hoc-7.0.6.beta
+                </TD>
+                <TD>
+                    <UL>
+                        <LI>
+                            <A HREF="hoc-7.0.6.beta.jar">
+                                Java jar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.6.beta.tar.gz">
+                                gzipped UNIX tar archive,
+                            </A>
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.6.beta.zip">
+                                InfoZip archive,
+                            </A>
+                            and
+                        </LI>
+                        <LI>
+                            <A HREF="hoc-7.0.6.beta.zoo">
+                                zoo archive.
+                            </A>
+                        </LI>
+                     </UL>                
+                <TD>
+            </TR>
+        </TABLE>
+        <P>
+            Installation instructions are included in all of the
+            source distributions.  You can see them in advance
+            <A HREF="INSTALL">
+                here.
+            </A>
+        </P>
+        <P>
+            <B>hoc</B> has been extensively tested on about 15
+            different UNIX platforms with dozens of C and C++
+            compilers.
+        </P>
+        <P>
+            <B>hoc</B> can be built with any of these parser
+            generators:
+        </P>
+        <UL>
+            <LI>
+                <B>yacc</B> (Steve Johnson's original
+                yet-another-compiler-compiler),
+            </LI>
+            <LI>
+                <B>byacc</B> (Berkeley yacc), and
+            </LI>
+            <LI>
+                <B>bison -y</B> (GNU <B>bison</B> in
+                <B>yacc</B>-compatibility mode).
+            </LI>
+        </UL>
+        <P>
+            Most GNU, POSIX, and UNIX systems have <B>yacc</B>
+            standardly installed.
+        </P>
+        <P>
+            Many also have <B>bison</B>, which is available in the
+            Free Software Foundation's
+            <A HREF="ftp://ftp.gnu.org/pub/gnu/bison">
+                 GNU Project archive.
+            </A>
+        </P>
+        <P>
+            <B>byacc</B> is harder to find, because there is no
+            official distribution site for it, although copies of
+            various provenance can be found at many places on the
+            Internet.  The <B>hoc</B> maintainer has collected several
+            such versions, which seem to have incompatible development
+            lines, and after correspondence with <B>byacc</B>'s
+            original author, who no longer maintains the program, the
+            best, and most modern, choice appears to be this version:
+            <A HREF="../byacc/byacc-990830.tar.gz">
+                byacc-990830.tar.gz
+            </A>
+            It has been GNU autoconfigurized, and thus builds,
+            validates, and installs as easily as GNU <B>bison</B>.
+        </P>
+        <P>
+            All of these parser generators are <EM>highly</EM>
+            reliable, and there is no particular reason to favor one
+            over the other.  Nevertheless, for a computer language
+            developer, it is extremely gratifying to be able to get
+            identical results from three different parser generators,
+            since LALR(1) parser code is effectively impossible to
+            produce by hand.
+        </P>
+        <P>
+            The <B>hoc</B> version 7 LALR(1) grammar is only about 180
+            lines of clear and well-documented code, so one can have a
+            high-degree of confidence in its correctness,
+            <EM>provided</EM> that the parser generator works
+            correctly.
+        </P>
+        <P>
+            An LL(1) parser could be written by hand, and so not
+            require an external parser generator like <B>yacc</B>, but
+            it would take much more than 160 lines of code, and would
+            be much more difficult to verify.
+        </P>
+        <P>
+            The old versions 1 through 6 of <B>hoc</B> that are
+            described in the book cited in the documentation are
+            available at the Bell Labs Web site:
+        </P>
+        <UL>
+            <LI>
+                <A HREF="http://cm.bell-labs.com/who/bwk/hoc.sh">
+                    http://cm.bell-labs.com/who/bwk/hoc.sh:
+                </A>
+                <B>hoc</B> version 6
+            </LI>
+            <LI>
+                <A HREF="http://cm.bell-labs.com/who/bwk/unixprogenv.tar.gz">
+                    http://cm.bell-labs.com/who/bwk/unixprogenv.tar.gz:
+                </A>
+                source code from the entire book.
+            </LI>
+        </UL>
+    </BODY>
+</HTML>

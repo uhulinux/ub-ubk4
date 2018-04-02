@@ -1,0 +1,33 @@
+Author: Mikhail Kshevetskiy <mikhail.kshevetskiy@gmail.com>
+Date: Sat, 31 Oct 2009 08:49:16 +0300
+Description: remove some unwanted files from installation
+
+  Based on patch of Varun Hiremath <vh63@cornell.edu>
+
+Index: smbnetfs-0.6.0/Makefile.in
+===================================================================
+--- smbnetfs-0.6.0.orig/Makefile.in
++++ smbnetfs-0.6.0/Makefile.in
+@@ -285,7 +285,7 @@
+ builddir = @builddir@
+ datadir = @datadir@
+ datarootdir = @datarootdir@
+-docdir = $(datadir)/doc/$(distdir)
++docdir = $(sysconfdir)
+ dvidir = @dvidir@
+ exec_prefix = @exec_prefix@
+ host_alias = @host_alias@
+@@ -312,12 +312,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-doc_DATA = \
+-	conf/smbnetfs.conf \
+-	doc/ENGLISH.FAQ \
+-	doc/RUSSIAN.FAQ \
+-	doc/INSTALL
+-
++doc_DATA = conf/smbnetfs.conf
+ SUBDIRS = src
+ all: all-recursive
+ 

@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+rm -r misc/liblua misc/libphysfs
+export QTDIR=/usr/lib/qt4
+UB_MAKE_PROCS=1
+ub_compile \
+	-DNOSERVER=1 \
+	-DMINIMAL_FLAGS=1 \
+	-DNOVIDEOREC=1 \
+	-DGHFLAGS=-dynamic \
+	-DFONTS_DIRS="/usr/share/fonts/truetype" \
+	-DFPFLAGS="-k/usr/lib/libgcc_s.so.1"

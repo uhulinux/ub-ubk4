@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/include/libavutil/x86  "$UB_INSTALLDIR"/usr/include/libavformat
+cp libavutil/x86/*.h "$UB_INSTALLDIR"/usr/include/libavutil/x86/
+cp libavformat/*.h "$UB_INSTALLDIR"/usr/include/libavformat/
+
+extratools="aviocat graph2dot ismindex pktdumper qt-faststart trasher cws2fws"
+for i in $extratools; do
+	cp "tools/$i" "$UB_INSTALLDIR"/usr/bin/
+done
+
+# ln -s libpostproc "$UB_INSTALLDIR"/usr/include/postproc
+# ln -s postproc/postprocess.h "$UB_INSTALLDIR"/usr/include/
+
+cp config.h "$UB_INSTALLDIR"/usr/include/libavformat/

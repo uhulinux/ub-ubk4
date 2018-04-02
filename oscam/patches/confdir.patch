@@ -1,0 +1,12 @@
+diff -Naur orig/CMakeLists.txt mod/CMakeLists.txt
+--- orig/CMakeLists.txt	2015-02-23 22:33:27.000000000 +0100
++++ mod/CMakeLists.txt	2015-02-24 15:32:40.382230482 +0100
+@@ -126,7 +126,7 @@
+ #----------------------- global options ------------------------------
+ 
+ if (OSCamOperatingSystem MATCHES "Linux")
+-    set (DEFAULT_CS_CONFDIR "/usr/local/etc")
++    set (DEFAULT_CS_CONFDIR "/etc/oscam")
+ elseif (OSCamOperatingSystem MATCHES "Mac OS X")
+     if (NOT HAVE_PCSC EQUAL 0)
+     add_definitions ("-DWITH_PCSC=1")

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+python setup.py install --root="$UB_INSTALLDIR"
+
+python3 setup.py install --root="$UB_INSTALLDIR"
+py3docdir=${UB_INSTALLDIR}/usr/share/doc/Packages/python3-syx
+mkdir -p $py3docdir
+cp CHANGES LICENSE README* $py3docdir/

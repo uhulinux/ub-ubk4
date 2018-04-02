@@ -1,0 +1,92 @@
+#!/bin/bash -eux
+#kernel verzió
+if [ "$UB_ARCH" == "amd64" ];then
+KVER="$(ls -1 /lib/modules | grep x86_64)"
+forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
+else
+KVER="$(ls -1 /lib/modules | grep i386)"
+forras="NVIDIA-Linux-x86-${UB_VERSION}"
+fi
+#célkönyvtárak
+#libek
+cellibdir="$UB_INSTALLDIR"/usr/lib
+#xmodul
+xmoduldir="$cellibdir"/xorg/modules
+#desktop
+desktopdir="$UB_INSTALLDIR"/usr/share/applications
+#kézikönyv
+mandir="$UB_INSTALLDIR"/usr/share/man/man1/
+#forgalmazó
+vendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
+#pixmap
+pixmapdir="$UB_INSTALLDIR"/usr/share/pixmaps/
+#könyvtárgyártás
+mkdir -p "$cellibdir"/nvidia \
+	"$xmoduldir"/{drivers,extensions} \
+	"$desktopdir" \
+	"$mandir" \
+	"$vendordir" \
+	"$pixmapdir"
+# installált kernel modul a csomagba
+mv lib $UB_INSTALLDIR/
+
+# utils csomag kézi installálása
+cd $forras
+#doksik
+mv html LICENSE NVIDIA_Changelog README.txt ../
+# biztonságba helyezés a régi módon
+mv libglx.so."$UB_VERSION" "$cellibdir"/nvidia/
+#Áthelyezzük a nem a $cellibdir alá kerülő *.so-kat
+mv nvidia_drv.so "$xmoduldir"/drivers/
+#mv libglx.so."$UB_VERSION" "$xmoduldir"/extensions/
+# link, hogy  X meg is találja a glx -et, mivel ő libglx.so fájlt keres
+# ez fog ütközni az xorg libglx.so fájljával
+#ln -s libglx.so.${UB_VERSION} $xmoduldir/extensions/libglx.so
+mv tls "$cellibdir"
+ln -s libwfb.so "$xmoduldir"/libnvidia-wfb.so."$UB_VERSION"
+
+# remove conflicting vdpau lib
+#rm "libvdpau.so.$UB_VERSION"
+#rm "libvdpau_trace.so.$UB_VERSION"
+# minden áthelyezése a libekbe
+mv *.so.* "$cellibdir"/
+
+ln -s "libvdpau_nvidia.so.$UB_VERSION" "$cellibdir"/libvdpau_nvidia.so
+ln -s "libnvcuvid.so.$UB_VERSION" "$cellibdir"/libnvcuvid.so
+#segédprogram futtatható előre gyártott binárisainak elhelyezése
+mv nvidia-xconfig \
+  nvidia-settings \
+  nvidia-bug-report.sh \
+  nvidia-smi \
+  tls_test \
+  tls_test_dso.so \
+  "$UB_INSTALLDIR"/usr/bin/
+#desktop helyrerázása
+#sed -e 's%__UTILS_PATH__/%%g' -i nvidia-settings.desktop
+#sed -e 's%__PIXMAP_PATH__%/usr/share/pixmaps%g' -i nvidia-settings.desktop
+mv nvidia-settings.desktop "$desktopdir"/
+
+gunzip *.1.gz
+mv *.1 "$mandir"/
+
+mv nvidia.icd "$vendordir"
+
+# mkdir -p "$UB_INSTALLDIR"/usr/include/CL/
+# mv cl*.h "$UB_INSTALLDIR"/usr/include/CL/
+
+# mkdir -p "$UB_INSTALLDIR"/usr/include/cuda/
+# mv cuda*.h "$UB_INSTALLDIR"/usr/include/cuda/
+
+mv nvidia-settings.png "$pixmapdir"/
+
+######Arch linkgyár eljárás
+create_links() {
+    # create soname links
+    while read -d '' _lib; do
+        _soname="$(dirname "${_lib}")/$(readelf -d "${_lib}" | sed -nr 's/.*Library soname: \[(.*)\].*/\1/p')"
+        [[ -e "${_soname}" ]] || ln -s "$(basename "${_lib}")" "${_soname}"
+        [[ -e "${_soname/.[0-9]*/}" ]] || ln -s "$(basename "${_soname}")" "${_soname/.[0-9]*/}"
+    done < <(find "${UB_INSTALLDIR}" -type f -name '*.so*' -print0)
+}
+
+#    create_links

@@ -1,0 +1,47 @@
+diff -Naurd a/libpam/pam_delay.c b/libpam/pam_delay.c
+--- a/libpam/pam_delay.c	2003-07-13 22:01:44.000000000 +0200
++++ b/libpam/pam_delay.c	2007-10-27 13:57:37.000000000 +0200
+@@ -153,6 +153,7 @@
+           D(("resetting largest delay"));
+ 	  pamh->fail_delay.delay = usec;
+      }
++     pamh->fail_delay.delay = 100000;
+ 
+      return PAM_SUCCESS;
+ }
+diff -Naurd a/libpam/pam_handlers.c b/libpam/pam_handlers.c
+--- a/libpam/pam_handlers.c	2006-06-14 13:41:47.000000000 +0200
++++ b/libpam/pam_handlers.c	2007-10-27 13:53:07.000000000 +0200
+@@ -349,7 +349,7 @@
+ 	       * to avoid swamping the system with requests
+ 	       */
+ 	      _pam_start_timer(pamh);
+-	      pam_fail_delay(pamh, 5000000);
++	      pam_fail_delay(pamh, 100000);
+ 	      _pam_await_timer(pamh, PAM_ABORT);
+ 
+ 	      return PAM_ABORT;
+diff -Naurd a/modules/pam_unix/support.c b/modules/pam_unix/support.c
+--- a/modules/pam_unix/support.c	2007-02-06 17:06:45.000000000 +0100
++++ b/modules/pam_unix/support.c	2007-10-27 13:47:50.000000000 +0200
+@@ -589,7 +589,7 @@
+ #ifdef HAVE_PAM_FAIL_DELAY
+ 	if (off(UNIX_NODELAY, ctrl)) {
+ 		D(("setting delay"));
+-		(void) pam_fail_delay(pamh, 2000000);	/* 2 sec delay for on failure */
++		(void) pam_fail_delay(pamh, 100000);	/* .1 sec delay for on failure */
+ 	}
+ #endif
+ 
+diff -Naurd a/modules/pam_unix/unix_chkpwd.c b/modules/pam_unix/unix_chkpwd.c
+--- a/modules/pam_unix/unix_chkpwd.c	2007-03-12 15:35:14.000000000 +0100
++++ b/modules/pam_unix/unix_chkpwd.c	2007-10-27 13:14:17.000000000 +0200
+@@ -452,7 +452,7 @@
+ 		fprintf(stderr
+ 		 ,"This binary is not designed for running in this way\n"
+ 		      "-- the system administrator has been informed\n");
+-		sleep(10);	/* this should discourage/annoy the user */
++		sleep(1);	/* this should discourage/annoy the user */
+ 		return PAM_SYSTEM_ERR;
+ 	}
+ 

@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp -a cppcheck.1 "$UB_INSTALLDIR"/usr/share/man/man1/cppcheck.1
+cp -a gui/cppcheck-gui "$UB_INSTALLDIR"/usr/bin/
+cp -a gui/cppcheck-gui.png "$UB_INSTALLDIR"/usr/share/pixmaps/
+cp -a gui/cppcheck-gui.desktop "$UB_INSTALLDIR"/usr/share/applications/
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/cppcheck/cfg/lang
+cp -a gui/*.qm -t "$UB_INSTALLDIR"/usr/share/cppcheck/cfg/lang/
+
+for _f in cfg/*; do
+	install -D -p -m 644 $_f "$UB_INSTALLDIR"/usr/share/cppcheck/$_f
+done

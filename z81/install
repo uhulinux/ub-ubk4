@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+make \
+	PREFIX="$UB_INSTALLDIR"/usr \
+	MANDIR="$UB_INSTALLDIR"/usr/share/man/man1 \
+	install
+install -m 644 zx81.rom "$UB_INSTALLDIR"/usr/lib/z81/
+cp -r games-etc "$UB_INSTALLDIR"/usr/lib/z81/

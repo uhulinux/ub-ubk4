@@ -1,0 +1,19 @@
+diff -Naurd a/Makefile b/Makefile
+--- a/Makefile	2011-01-26 11:36:21.000000000 +0100
++++ b/Makefile	2011-01-29 11:53:08.000000000 +0100
+@@ -29,13 +29,13 @@
+ XCFLAGS	= -DTLF_FONTS
+ 
+ # Where to install files
+-prefix	= /usr/local
++prefix	= /usr
+ 
+ # Where the executables should be put
+ BINDIR	= $(prefix)/bin
+ 
+ # Where the man page should be put
+-MANDIR	= $(prefix)/man
++MANDIR	= $(prefix)/share/man
+ 
+ # Where figlet will search first for fonts (the ".flf" files).
+ DEFAULTFONTDIR = $(prefix)/share/figlet

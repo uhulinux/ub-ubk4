@@ -1,0 +1,12 @@
+diff -Naurd a/Makefile b/Makefile
+--- a/Makefile	2007-08-14 12:03:19.000000000 +0200
++++ b/Makefile	2007-08-14 12:03:47.000000000 +0200
+@@ -61,7 +61,7 @@
+ 
+ distclean: clean
+ 
+-install: all
++install: all install-lib
+ # -c is ignored on Linux, but required on FreeBSD
+ 	$(DIRINSTALL) -m 755 $(DESTDIR)$(SBINDIR) $(DESTDIR)$(IDSDIR) $(DESTDIR)$(MANDIR)/man8
+ 	$(INSTALL) -c -m 755 -s lspci setpci $(DESTDIR)$(SBINDIR)

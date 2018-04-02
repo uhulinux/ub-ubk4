@@ -1,0 +1,27 @@
+#!/bin/sh -eux
+
+UB_UPDATELIBTOOL=1 \
+ub_compile \
+	--localstatedir=/var/lock \
+	--enable-dso \
+	--with-shared=\
+mod_ctrls_admin:\
+mod_ifsession:\
+mod_ldap:\
+mod_quotatab:\
+mod_quotatab_file:\
+mod_quotatab_ldap:\
+mod_quotatab_sql:\
+mod_radius:\
+mod_ratio:\
+mod_readme:\
+mod_rewrite:\
+mod_site_misc:\
+mod_sql:\
+mod_sql_mysql:\
+mod_sql_postgres:\
+mod_tls:\
+mod_wrap \
+	--enable-ctrls \
+	--enable-facl \
+	--enable-pam

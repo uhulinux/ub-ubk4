@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+# a make install kevés, az nem telepíti a wrapper scripteket,
+# a .desktop fájlokat, az ikonokat, a man-t és a mime adatokat.
+# ehhez a /bin/distro-install-desktop-integration script kell.
+# ezt a make distro-pack-install hívja meg.
+
+# a /bin/distro-install-desktop-integration
+# és a /sysui/desktop/share/create_tree.sh-nak szükséges értékeket
+# exportáljuk
+
+export DESTDIR="$UB_INSTALLDIR"
+export SRC_ROOT="$UB_COMPILEDIR"
+
+make distro-pack-install

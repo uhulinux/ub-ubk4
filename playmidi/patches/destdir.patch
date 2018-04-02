@@ -1,0 +1,75 @@
+diff -Naurd playmidi-2.4.orig/Makefile playmidi-2.4/Makefile
+--- playmidi-2.4.orig/Makefile	1998-10-01 04:39:18.000000000 +0200
++++ playmidi-2.4/Makefile	2003-12-11 00:33:33.000000000 +0100
+@@ -36,10 +36,10 @@
+ INCVGA	= -I/usr/local/include
+ 
+ # Directory where application defaults files are stored for X11 version
+-XAPPDEFAULTS = /usr/share/X11/app-defaults
++XAPPDEFAULTS = $(DESTDIR)/usr/share/X11/app-defaults
+ 
+ INCLUDES= $(INCNC) $(INCX11) $(INCVGA) $(INCAWE)
+-INSTALLDIR = /usr/bin
++INSTALLDIR = $(DESTDIR)/usr/bin
+ INSTALL = install -s
+ 
+ # if you are using the GUS Ultra driver module, add -DULTRA_DRIVER
+@@ -97,37 +97,42 @@
+ $(INSTALLDIR)/splaymidi: splaymidi
+ 	$(INSTALL) splaymidi $(INSTALLDIR)
+ 
+-/etc/std.o3:
+-	cp -i std.o3 /etc
++$(DESTDIR)/etc/midi/std.o3:
++	mkdir -p $(DESTDIR)/etc/midi
++	cp -i std.o3 $(DESTDIR)/etc/midi/
+ 
+-/etc/drums.o3:
+-	cp -i drums.o3 /etc
++$(DESTDIR)/etc/midi/drums.o3:
++	mkdir -p $(DESTDIR)/etc/midi
++	cp -i drums.o3 $(DESTDIR)/etc/midi/
+ 
+-/etc/std.sb:
+-	cp -i std.sb /etc
++$(DESTDIR)/etc/midi/std.sb:
++	mkdir -p $(DESTDIR)/etc/midi
++	cp -i std.sb $(DESTDIR)/etc/midi/
+ 
+-/etc/drums.sb:
+-	cp -i drums.sb /etc
++$(DESTDIR)/etc/midi/drums.sb:
++	mkdir -p $(DESTDIR)/etc/midi
++	cp -i drums.sb $(DESTDIR)/etc/midi/
+ 
+ $(XAPPDEFAULTS)/XPlaymidi:
++	mkdir -p $(XAPPDEFAULTS)
+ 	cp -i XPlaymidi.ad $(XAPPDEFAULTS)/XPlaymidi
+ 
+ install: $(INSTALLDIR)/playmidi $(INSTALLDIR)/splaymidi \
+-	 $(INSTALLDIR)/xplaymidi /etc/std.o3 /etc/drums.o3 \
+-	 /etc/std.sb /etc/drums.sb $(XAPPDEFAULTS)/XPlaymidi
++	 $(INSTALLDIR)/xplaymidi $(DESTDIR)/etc/midi/std.o3 $(DESTDIR)/etc/midi/drums.o3 \
++	 $(DESTDIR)/etc/midi/std.sb $(DESTDIR)/etc/midi/drums.sb $(XAPPDEFAULTS)/XPlaymidi
+ 
+ install.novga: $(INSTALLDIR)/playmidi \
+-	 $(INSTALLDIR)/xplaymidi /etc/std.o3 /etc/drums.o3 \
+-	 /etc/std.sb /etc/drums.sb $(XAPPDEFAULTS)/XPlaymidi
++	 $(INSTALLDIR)/xplaymidi $(DESTDIR)/etc/midi/std.o3 $(DESTDIR)/etc/midi/drums.o3 \
++	 $(DESTDIR)/etc/midi/std.sb $(DESTDIR)/etc/midi/drums.sb $(XAPPDEFAULTS)/XPlaymidi
+ 
+ install.noX11: $(INSTALLDIR)/playmidi $(INSTALLDIR)/splaymidi \
+-	 /etc/std.o3 /etc/drums.o3 /etc/std.sb /etc/drums.sb
++	 $(DESTDIR)/etc/midi/std.o3 $(DESTDIR)/etc/midi/drums.o3 $(DESTDIR)/etc/midi/std.sb $(DESTDIR)/etc/midi/drums.sb
+ 
+-install.Xonly: $(INSTALLDIR)/xplaymidi /etc/std.o3 /etc/drums.o3 \
+-	 /etc/std.sb /etc/drums.sb $(XAPPDEFAULTS)/XPlaymidi
++install.Xonly: $(INSTALLDIR)/xplaymidi $(DESTDIR)/etc/midi/std.o3 $(DESTDIR)/etc/midi/drums.o3 \
++	 $(DESTDIR)/etc/midi/std.sb $(DESTDIR)/etc/midi/drums.sb $(XAPPDEFAULTS)/XPlaymidi
+ 
+ install.lame: $(INSTALLDIR)/playmidi \
+-	 /etc/std.o3 /etc/drums.o3 /etc/std.sb /etc/drums.sb
++	 $(DESTDIR)/etc/midi/std.o3 $(DESTDIR)/etc/midi/drums.o3 $(DESTDIR)/etc/midi/std.sb $(DESTDIR)/etc/midi/drums.sb
+ 
+ install.man:
+ 	 cp playmidi.1 /usr/man/man1/

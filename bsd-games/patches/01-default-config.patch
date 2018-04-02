@@ -1,0 +1,43 @@
+diff -Naurd bsd-games-2.14.orig/configure bsd-games-2.14/configure
+--- bsd-games-2.14.orig/configure	2003-04-01 18:02:56.000000000 +0200
++++ bsd-games-2.14/configure	2003-04-25 22:16:19.000000000 +0200
+@@ -159,7 +159,7 @@
+ echo "do not want to build and install.  The most likely ones are banner,"
+ echo "factor and fortune."
+ 
+-ask "Games not to build" no_build_dirs ''
++ask "Games not to build" no_build_dirs 'banner factor fortune'
+ 
+ # Normalise white space in no_build_dirs
+ no_build_dirs="`echo $no_build_dirs`"
+@@ -187,15 +187,15 @@
+ echo "*** installation."
+ echo
+ 
+-ask "Games directory" gamesdir /usr/games
++ask "Games directory" gamesdir /usr/bin
+ 
+-# We put huntd in /usr/games by default (instead of /usr/sbin as earlier,
++# We put huntd in /usr/bin by default (instead of /usr/sbin as earlier,
+ # or /usr/lib) since it can reasonably be called by users and counts
+ # properly more as a game than an ordinary user binary.
+ if building_in hunt; then
+     echo
+     echo "Hunt includes a daemon for coordinating games with multiple players"
+-    ask "Daemon directory" sbindir /usr/games
++    ask "Daemon directory" sbindir /usr/bin
+ else
+     sbindir=
+     subst_vars="$subst_vars sbindir"
+@@ -275,9 +275,9 @@
+     askperms "Daemon" daemon root root 0755
+ fi
+ if building_in dm; then
+-    askperms "Directory for hidden games" dmdir root games 0750
++    askperms "Directory for hidden games" dmdir root root 0755
+     install_dmdir=`echo "$install_dmdir"| sed 's/install -c/install -d/'`
+-    askperms "dm" dm root games 2755
++    askperms "dm" dm root root 0755
+ fi
+ askperms "Manpage" manpage root root 0644
+ askperms "Constant data" constdata root root 0644

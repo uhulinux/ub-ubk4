@@ -1,0 +1,31 @@
+diff -Naur hplip-3.13.11-orig/prnt/hpijs/services.cpp hplip-3.13.11/prnt/hpijs/services.cpp
+--- hplip-3.13.11-orig/prnt/hpijs/services.cpp	2013-10-31 12:42:35.000000000 +0100
++++ hplip-3.13.11/prnt/hpijs/services.cpp	2013-11-19 16:52:57.044140388 +0100
+@@ -29,6 +29,7 @@
+     POSSIBILITY OF SUCH DAMAGE.
+ \*****************************************************************************/
+ 
++#include <errno.h>
+ #include <sys/stat.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -385,9 +386,16 @@
+    if (write(OutputPath, pBuffer, *Count) != (ssize_t)*Count) 
+    {
+       static int cnt=0;
+-      if (cnt++ < 5)
+-         BUG("unable to write to output, fd=%d, count=%d: %m\n", OutputPath, *Count);
+-      return IO_ERROR;
++      if (cnt < 5)
++      {
++	 cnt++;
++          BUG("unable to write to output, fd=%d, count=%d: %m\n", OutputPath, *Count);
++      }
++
++      if (errno == EPIPE)
++	 /* The backend has exited.  There's no recovering from that. */
++	 exit (1);
++
+    }
+ 
+    *Count = 0;

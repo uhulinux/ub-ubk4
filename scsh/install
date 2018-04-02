@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+make DESTDIR=$UB_INSTALLDIR install
+rm $UB_INSTALLDIR/usr/lib/scsh-0.7/*.so
+rm -rf $UB_INSTALLDIR/usr/share/scsh-0.7

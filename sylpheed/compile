@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+rm -rf po/*.gmo
+ub_compile \
+	--enable-ldap \
+	--enable-jpilot \
+	--disable-updatecheck

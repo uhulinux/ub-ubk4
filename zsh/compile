@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+# note: --with-tcsetpgrp is required when building without a controlling
+# terminal (e.g. running a full rebuild in our build system)
+ub_compile \
+	--bindir=/bin \
+	--with-tcsetpgrp

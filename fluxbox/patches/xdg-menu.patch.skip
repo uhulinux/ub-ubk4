@@ -1,0 +1,105 @@
+diff -Naur orig/fluxbox-xdg-menu.py mod/fluxbox-xdg-menu.py
+--- orig/fluxbox-xdg-menu.py	2015-10-14 10:55:22.000000000 +0200
++++ mod/fluxbox-xdg-menu.py	2015-10-14 10:50:51.000000000 +0200
+@@ -1,4 +1,5 @@
+ #!/usr/bin/env python
++# coding: utf-8
+ # vim: noexpandtab:ts=4:sts=4
+ 
+ """Menu Generator for Fluxbox
+@@ -29,12 +30,14 @@
+ """
+ 
+ __author__ = "Rudolf Kastl , Antonio Gomes, Michael Rice"
+-__version__ = "$Revision: 1.2 $"
+-__date__ = "$Date: 2006/10/09 23:20:10 $"
++__version__ = "$Revision: 13 $"
++__date__ = "$Date: 2010/01/20 21:50:10 $"
+ __license__ = "GPL"
+ 
+ 
+ import os,re,sys,glob,getopt
++reload(sys)
++sys.setdefaultencoding('utf-8')
+ import xdg.Menu,xdg.DesktopEntry,xdg.IconTheme
+ from os.path import isfile
+ 
+@@ -44,42 +47,41 @@
+ def header(wm="fluxbox"):
+ 	return """
+ [begin] (Fluxbox)
+-	[exec] (Web Browser) {htmlview}
+-	[exec] (Email) {evolution}
+-	[exec] (Terminal) {$TERM}
+-	[exec] (Irc) {xchat}
++	[exec] (Terminál) {xterm} </usr/share/pixmaps/xterm-color_48x48.xpm>
+ 	[separator]\n"""
+ 
+ def footer(wm="fluxbox"):
+ 	return """
+ 	[submenu] (Fluxbox Menu)
+-		[config] (Configure)
+-		[submenu] (System Styles) {Choose a style...}
++		[config] (Beállítás)
++		[submenu] (Rendszer témák) {Choose a style...}
+ 			[stylesdir] (/usr/share/fluxbox/styles)
+ 			[stylesdir] (/usr/share/commonbox/styles/)
+ 		[end]
+-		[submenu] (User Styles) {Choose a style...}
++		[submenu] (Saját témák) {Choose a style...}
+ 			[stylesdir] (~/.fluxbox/styles)
+ 		[end]
+-		[workspaces]   (Workspace List)
+-		[submenu] (Tools)
++		[workspaces]   (Munkaterületek)
++		[submenu] (Eszközök)
+ 			[exec] (Window name) {xprop WM_CLASS|cut -d \" -f 2|xmessage -file - -center}
+ 			[exec] (Screenshot - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg}
+ 			[exec] (Screenshot - PNG) {import screenshot.png && display -resize 50% screenshot.png}
+-			[exec] (Run) {fbrun }
+-			[exec] (Regen Menu) {fluxbox-generate_menu --with-icons}
++			[exec] (Futtatás) {fbrun }
++			[exec] (Menüfrissítés) {fluxbox-xdg-menu --with-icons}
+ 		[end]
+-		[submenu] (Window)
++		[submenu] (Ablakkezelő váltás)
+ 			[restart] (kde) {startkde}
+ 			[restart] (openbox) {openbox}
+ 			[restart] (gnome) {gnome-session}
+ 		[end]
+-		[exec] (Lock screen) {xscreensaver-command -lock}
+-		[commanddialog] (Fluxbox Command)
+-		[reconfig] (Reload config)
+-		[restart] (Restart)
++		[exec] (Képernyő zárolásn) {xscreensaver-command -lock}
++		[commanddialog] (Fluxbox parancs)
++		[reconfig] (Konfiguráció újratöltés)
++		[exec] (Gép kikapcsolás) {systemctl poweroff} </usr/share/icons/gnome/48x48/actions/stop.png>
++		[exec] (Gép újraindítás) {systemctl reboot}  </usr/share/icons/gnome/48x48/actions/redo.png>
++		[restart] (Fluxbox újraindítás)  </usr/share/icons/gnome/48x48/actions/reload.png>
+ 		[separator]
+-		[exit] (Exit)
++		[exit] (Kilépés) </usr/share/icons/gnome/48x48/actions/system-log-out.png> 
+ 	[end]
+ [end]\n"""	
+ 
+@@ -98,7 +100,7 @@
+ 		e.g. gaim --> /usr/share/pixmaps/gaim.png
+ 		e.g. fart.png --> /usr/share/pixmaps/fart.png
+ 	"""
+-	retval=str(xdg.IconTheme.getIconPath(icon, 48, theme))
++	retval=str(xdg.IconTheme.getIconPath(icon, 48, theme,["png","xpm"]))
+ 	if retval == "None":
+ 		retval=""
+ 
+@@ -236,8 +238,8 @@
+ 		fsock = open(file,'w')
+ 		saveout = sys.stdout
+ 		sys.stdout = fsock
+-
+-	menu=xdg.Menu.parse()
++	menufile="lxde-applications.menu"
++	menu=xdg.Menu.parse(menufile)
+ # is done automatically now
+ #	menu.setLocale(lang)
+ 

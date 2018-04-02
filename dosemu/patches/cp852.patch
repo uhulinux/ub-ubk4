@@ -1,0 +1,27 @@
+diff -Naur ORIG/etc/dosemu.conf UHU/etc/dosemu.conf
+--- ORIG/etc/dosemu.conf	2007-05-05 00:28:24.000000000 +0200
++++ UHU/etc/dosemu.conf	2009-03-01 17:01:08.000000000 +0100
+@@ -230,6 +230,7 @@
+ # "cp895", "cp1125", "cp1251", "bg-mik"
+ 
+ # $_internal_char_set = ""
++$_internal_char_set = "cp852"
+ 
+ # terminal with color support. Default: (on)
+ 
+@@ -260,6 +261,7 @@
+ # cz-qwerty, cz-qwertz, ru, tr.
+ 
+ # $_layout = "auto"
++$_layout = "hu"
+ 
+ # bypass normal keyboard input on the Linux console, maybe dangerous
+ # default: (auto), use only with -s or -k, or (0): off, use -k, or (1): on.
+@@ -494,6 +496,7 @@
+ # name of the X font that is used (e.g. "vga") default = "" (bitmap fonts)
+ 
+ # $_X_font = ""
++$_X_font = "-misc-fixed-medium-r-normal--20-200-75-75-c-100-cp852-0"
+ 
+ # Use shared memory extensions. Faster, but problematic with remote X.
+ # Default: on

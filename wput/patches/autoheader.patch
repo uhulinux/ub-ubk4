@@ -1,0 +1,40 @@
+diff -Naur orig/configure.in patched/configure.in
+--- orig/configure.in	2016-07-30 17:27:39.000000000 +0200
++++ patched/configure.in	2016-07-30 18:10:10.000000000 +0200
+@@ -41,12 +41,12 @@
+  CFLAGS="$CFLAGS  -g"
+ fi
+ AC_PROG_CC
+-AC_CHECK_HEADERS([sys/ioctl.h], AC_DEFINE(HAVE_IOCTL))
+-AC_CHECK_HEADERS([sys/termio.h], AC_DEFINE(HAVE_SYSTERMIO))
+-AC_CHECK_HEADERS([termio.h], AC_DEFINE(HAVE_TERMIO))
+-AC_CHECK_HEADERS([sys/winsize.h], AC_DEFINE(HAVE_WINSIZE))
+-AC_CHECK_HEADERS([locale.h], AC_DEFINE(HAVE_LOCALE_H))
+-AC_CHECK_HEADERS([libintl.h], AC_DEFINE(HAVE_LIBINTL_H))
++AC_CHECK_HEADERS([sys/ioctl.h], [AC_DEFINE([HAVE_IOCTL], [1], [have sys/ioctl.h])])
++AC_CHECK_HEADERS([sys/termio.h], [AC_DEFINE([HAVE_SYSTERMIO], [1], [have sys/termio.h])])
++AC_CHECK_HEADERS([termio.h], [AC_DEFINE([HAVE_TERMIO], [1], [have termio.h])])
++AC_CHECK_HEADERS([sys/winsize.h], [AC_DEFINE([HAVE_WINSIZE], [1], [have sys/winsize.h])])
++AC_CHECK_HEADERS([locale.h], [AC_DEFINE([HAVE_LOCALE_H], [1], [have locale.h])])
++AC_CHECK_HEADERS([libintl.h], [AC_DEFINE([HAVE_LIBINTL_H], [1], [have libintl.h])])
+ AC_CHECK_HEADERS(getopt.h, [
+  AC_SEARCH_LIBS(getopt_long, gnugetopt, [],
+      [AC_MSG_ERROR("You need to get libgnugetopt or a newer GNU libc.")]
+@@ -97,7 +97,7 @@
+ 		AC_MSG_RESULT("")
+ 
+ 		CPPFLAGS="$CPPFLAGS -I$with_gnutls_includes"
+-		AC_CHECK_HEADERS([gnutls/gnutls.h, gnutls/openssl.h], [ gnutls_includes="yes" ])
++		AC_CHECK_HEADERS([gnutls/gnutls.h gnutls/openssl.h], [ gnutls_includes="yes" ])
+ 		CPPFLAGS="$CPPFLAGS_save"
+ 
+ 		if test "x$gnutls_includes" != "xno" -a \
+@@ -136,7 +136,7 @@
+ 
+ 		if test "x$gnutls_libs" != "xno"; then
+ 			AC_DEFINE(HAVE_GNUTLS, 1, [Define if you have GNUTLS])
+-			AC_DEFINE(HAVE_SSL)
++			AC_DEFINE(HAVE_SSL, 1, [Define if you have SSL])
+ 			msg_gnutls="GNUTLS"
+ 			GNUTLS_LIBS="$with_gnutls_libs -lgnutls-openssl"
+ 

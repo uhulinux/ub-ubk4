@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+make PREFIX="$UB_INSTALLDIR"/usr install
+
+rm "$UB_INSTALLDIR"/usr/bin/jumpnbump.fbcon
+rm "$UB_INSTALLDIR"/usr/bin/jumpnbump.svgalib
+
+cp sdl/jumpnbump*.xpm "$UB_INSTALLDIR"/usr/share/pixmaps/

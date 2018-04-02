@@ -1,0 +1,2 @@
+version=$(urllist http://lcamtuf.coredump.cx/ | splitver '^p0f([0-9.]+)' | sort -V | tail -n 1 )
+urllist http://lcamtuf.coredump.cx/p0f"$version"/releases/ | splitver '^p0f-([0-9.]+b).(gz|tgz|bz2|xz)' | sort -V | tail -n 1

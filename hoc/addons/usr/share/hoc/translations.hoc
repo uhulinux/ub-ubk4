@@ -1,0 +1,579 @@
+### -*-hoc-*-
+### /usr/local/src/hoc/hoc-7.0.1.beta/translations.hoc, Sat Jan  5 11:56:06 2002
+### Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+### ====================================================================
+### This file contains translations of output strings that are embedded
+### in hoc source code, and thus, less changeable than those in hoc
+### initialization files.
+###
+### A message translation block consists of the original complete string
+### in a comment, followed by an assignment statement for a reduced
+### variable name with the new string value on a separate line.
+###
+### The reduced variable names are constructed by the algorithm
+### embedded in ascii-to-msg.awk:msg_name() and symbol.c:msg_name().
+### The former can be run by "make translations.tmp" (but see the
+### coverage-problem note in the comments in the Makefile for that
+### target).  In English, the algorithm is: convert uppercase to
+### lowercase, remove leading and trailing space and punctuation,
+### replace characters other than letters and digits by underscore,
+### reduce runs of underscores to single underscores, remove leading
+### and trailing underscores, and finally, prefix the result with
+### "___msg_".
+###
+### Three leading underscores are intentional: they avoid collisions
+### with other system names, and provide a convenient prefix for
+### searching the symbol table, and are by default excluded from hoc's
+### who(prefix) command output.
+###
+### Translation variable assignments are sorted alphabetically by
+### variable name, and grouped alphabetically by source file name.
+###
+### If the assigned value is empty, then the variable serves only as a
+### placeholder: the original string will be used.  Otherwise, when the
+### assigned value is not empty, then any use of the original string at
+### run time will be replaced by the new value.
+###
+### To prepare a translation file for another locale, copy this file
+### into the locale directory, preserving the name translations.hoc, and
+### then simply type in message translations for each right-hand-side
+### empty string.  Any that are left empty will remain in English, so
+### you can do the translations a few at a time.
+###
+### [27-Jul-2002] -- update for hoc-7.0.5.beta
+### [05-Jan-2002]
+### ====================================================================
+
+### ====================================================================
+### From code.c:
+
+### "assignment from non-variable"
+___msg_assignment_from_non_variable = \
+	""
+
+### "assignment to non-variable"
+___msg_assignment_to_non_variable = \
+	""
+
+### "attempt to evaluate nonstring variable"
+___msg_attempt_to_evaluate_nonstring_variable = \
+	""
+
+### "attempt to evaluate non-variable"
+___msg_attempt_to_evaluate_non_variable = \
+	""
+
+### "call nested too deeply"
+___msg_call_nested_too_deeply = \
+	""
+
+### "division by zero"
+___msg_division_by_zero = \
+	""
+
+### "execution aborted:"
+___msg_execution_aborted = \
+	""
+
+### "failed to convert to floating-point from string"
+___msg_failed_to_convert_to_floating_point_from_string = \
+	""
+
+### "failed to convert to signed integer from string"
+___msg_failed_to_convert_to_signed_integer_from_string = \
+	""
+
+### "failed to convert to unsigned integer from string"
+___msg_failed_to_convert_to_unsigned_integer_from_string = \
+	""
+
+### "(func) returns no value"
+___msg_func_returns_no_value = \
+	""
+
+### "illegal assignment of number to existing string variable"
+___msg_illegal_assignment_of_number_to_existing_string_variable = \
+	""
+
+### "illegal assignment of string to existing numeric variable"
+___msg_illegal_assignment_of_string_to_existing_numeric_variable = \
+	""
+
+### "illegal outside loop body"
+___msg_illegal_outside_loop_body = \
+	""
+
+### "internal type confusion in read() of"
+___msg_internal_type_confusion_in_read_of = \
+	""
+
+### "invalid format item"
+___msg_invalid_format_item = \
+	""
+
+### "non-number read into"
+___msg_non_number_read_into = \
+	""
+
+### "not enough arguments"
+___msg_not_enough_arguments = \
+	""
+
+### "(proc) returns value"
+___msg_proc_returns_value = \
+	""
+
+### "program too big"
+___msg_program_too_big = \
+	""
+
+### "stack too deep"
+___msg_stack_too_deep = \
+	""
+
+### "stack underflow"
+___msg_stack_underflow = \
+	""
+
+### "undefined variable"
+___msg_undefined_variable = \
+	""
+
+### ====================================================================
+### From hoc.y:
+
+### "and described in their book:\n\n"
+___msg_and_described_in_their_book = \
+	""
+
+### "and GNU readline support were added by:\n\n"
+___msg_and_gnu_readline_support_were_added_by = \
+	""
+
+### "\tBrian W. Kernighan and Rob Pike\n\n"
+___msg_brian_w_kernighan_and_rob_pike = \
+	""
+
+### "deletion failed for symbol"
+___msg_deletion_failed_for_symbol = \
+	""
+
+### "Extensions for IEEE 754 arithmetic, help, additional constants,\n"
+___msg_extensions_for_ieee_754_arithmetic_help_additional_constants = \
+	""
+
+### "floating point exception"
+___msg_floating_point_exception = \
+	""
+
+### "For additional help, try "
+___msg_for_additional_help_try = \
+	""
+
+### "illegal reassignment to immutable named constant"
+___msg_illegal_reassignment_to_immutable_named_constant = \
+	""
+
+### "illegal symbol in definition"
+___msg_illegal_symbol_in_definition = \
+	""
+
+### "\t\tinput-file(s) [ -- ] more-input-file(s)\n\n"
+___msg_input_file_s_more_input_file_s = \
+	""
+
+### "missing quote"
+___msg_missing_quote = \
+	""
+
+### "name too long"
+___msg_name_too_long = \
+	""
+
+### " of "
+___msg_of = \
+	""
+
+### "Options may be prefixed with either one or two hyphens.\n"
+___msg_options_may_be_prefixed_with_either_one_or_two_hyphens = \
+	""
+
+### "Report bugs to "
+___msg_report_bugs_to = \
+	""
+
+### "statements, and functions, initialization files, internationalization,\n"
+___msg_statements_and_functions_initialization_files_internationalization = \
+	""
+
+### "strange $..."
+___msg_strange = \
+	""
+
+### "string too long"
+___msg_string_too_long = \
+	""
+
+### "syntax error"
+___msg_syntax_error = \
+	""
+
+### "%s: can't open %s\n"
+___msg_s_can_t_open_s = \
+	""
+
+### "'s help() command, or in a shell,\n"
+___msg_s_help_command_or_in_a_shell = \
+	""
+
+### "The extended hoc master Internet source distribution site is at:\n\n"
+___msg_the_extended_hoc_master_internet_source_distribution_site_is_at = \
+	""
+
+### "This is "
+___msg_this_is = \
+	""
+
+### "unclosed quotation mark in command-line option"
+___msg_unclosed_quotation_mark_in_command_line_option = \
+	""
+
+### "unknown symbol in definition"
+___msg_unknown_symbol_in_definition = \
+	""
+
+### "unrecognized number in definition"
+___msg_unrecognized_number_in_definition = \
+	""
+
+### "Unrecognized option: [%s]\n"
+___msg_unrecognized_option_s = \
+	""
+
+### "unrecognized string in definition"
+___msg_unrecognized_string_in_definition = \
+	""
+
+### "Usage:\n"
+___msg_usage = \
+	""
+
+### "used outside definition"
+___msg_used_outside_definition = \
+	""
+
+### "use the UNIX manual page command, man "
+___msg_use_the_unix_manual_page_command_man = \
+	""
+
+### " version "
+___msg_version = \
+	""
+
+### " was written by\n\n"
+___msg_was_written_by = \
+	""
+
+### "yacc stack overflow"
+___msg_yacc_stack_overflow = \
+	""
+
+### ====================================================================
+### From ieee754.c:
+
+### "copysign(x,y) is not available on this system"
+___msg_copysign_x_y_is_not_available_on_this_system = \
+	""
+
+### "fmod(x,y) is not available on this system"
+___msg_fmod_x_y_is_not_available_on_this_system = \
+	""
+
+### "Infinity() is not available on this system"
+___msg_infinity_is_not_available_on_this_system = \
+	""
+
+### "int(NaN) is undefined"
+___msg_int_nan_is_undefined = \
+	""
+
+### "internal error at "
+___msg_internal_error_at = \
+	""
+
+### "maximum normal number is not yet programmed in hoc for this system"
+___msg_the_maximum_normal_number_is_not_yet_programmed_in_hoc_for_this_system = \
+	""
+
+### "nextafter(x,y) is not available on this system"
+___msg_nextafter_x_y_is_not_available_on_this_system = \
+	""
+
+### "remainder(x) is not available on this system"
+___msg_remainder_x_is_not_available_on_this_system = \
+	""
+
+### "rint(x) is not available on this system"
+___msg_rint_x_is_not_available_on_this_system = \
+	""
+
+### ====================================================================
+### From init.c:
+
+### ====================================================================
+### From io.c:
+
+### "cd() command is disabled"
+___msg_cd_command_is_disabled = \
+	""
+
+### "### CreationDate:      %s\n"
+___msg_creationdate_s = \
+	""
+
+### "### Creator:           %s version %s [%s]\n"
+___msg_creator_s_version_s_s = \
+	""
+
+### "DEBUG: open of"
+___msg_debug_open_of = \
+	""
+
+### "failed"
+___msg_failed = \
+	""
+
+### "input"
+___msg_input = \
+	""
+
+### "load() command is disabled"
+___msg_load_command_is_disabled = \
+	""
+
+### "load() open failed"
+___msg_load_open_failed = \
+	""
+
+### "logfile() command is disabled"
+___msg_logfile_command_is_disabled = \
+	""
+
+### "logfile() open failed"
+___msg_logfile_open_failed = \
+	""
+
+### "logfile() will not overwrite existing file"
+___msg_logfile_will_not_overwrite_existing_file = \
+	""
+
+### "okay"
+___msg_okay = \
+	""
+
+### "output"
+___msg_output = \
+	""
+
+### "### PackageBugReports: %s\n"
+___msg_packagebugreports_s = \
+	""
+
+### "pwd() command is disabled"
+___msg_pwd_command_is_disabled = \
+	""
+
+### "save() command is disabled"
+___msg_save_command_is_disabled = \
+	""
+
+### "save() open failed"
+___msg_save_open_failed = \
+	""
+
+### "save() will not overwrite existing file"
+___msg_save_will_not_overwrite_existing_file = \
+	""
+
+### "### This is hoc save file %s\n"
+___msg_this_is_hoc_save_file_s = \
+	""
+
+### "### WARNING: This file contains only symbols matching \"%s\"\n"
+___msg_warning_this_file_contains_only_symbols_matching_s = \
+	""
+
+### ====================================================================
+### From math.c:
+
+### "acosh(x) is not available on this system"
+___msg_acosh_x_is_not_available_on_this_system = \
+	""
+
+### "argument out of domain"
+___msg_argument_out_of_domain = \
+	""
+
+### "asinh(x) is not available on this system"
+___msg_asinh_x_is_not_available_on_this_system = \
+	""
+
+### "atanh(x) is not available on this system"
+___msg_atanh_x_is_not_available_on_this_system = \
+	""
+
+### "attempt to concatenate nonstrings"
+___msg_attempt_to_concatenate_nonstrings = \
+	""
+
+### "erf(x) is not available on this system"
+___msg_erf_x_is_not_available_on_this_system = \
+	""
+
+### "erfc(x) is not available on this system"
+___msg_erfc_x_is_not_available_on_this_system = \
+	""
+
+### "exponentiation"
+___msg_exponentiation = \
+	""
+
+### "gamma result out of range"
+___msg_gamma_result_out_of_range = \
+	""
+
+### "interrupt"
+___msg_interrupt = \
+	""
+
+### "J0(x) is not available on this system"
+___msg_j0_x_is_not_available_on_this_system = \
+	""
+
+### "J1(x) is not available on this system"
+___msg_j1_x_is_not_available_on_this_system = \
+	""
+
+### "Jn(n,x) is not available on this system"
+___msg_jn_n_x_is_not_available_on_this_system = \
+	""
+
+### "lgamma(x) is not available on this system"
+___msg_lgamma_x_is_not_available_on_this_system = \
+	""
+
+### "result out of range"
+___msg_result_out_of_range = \
+	""
+
+### "Y0(x) is not available on this system"
+___msg_y0_x_is_not_available_on_this_system = \
+	""
+
+### "Y1(x) is not available on this system"
+___msg_y1_x_is_not_available_on_this_system = \
+	""
+
+### "Yn(n,x) is not available on this system"
+___msg_yn_n_x_is_not_available_on_this_system = \
+	""
+
+### ====================================================================
+### From readline.c:
+
+### "input file stack underflow"
+___msg_input_file_stack_underflow = \
+	""
+
+### "numeric token too long"
+___msg_numeric_token_too_long = \
+	""
+
+### "pushback buffer data lost in irl_pop_input()"
+___msg_pushback_buffer_data_lost_in_irl_pop_input = \
+	""
+
+### "too many input characters pushed back"
+___msg_too_many_input_characters_pushed_back = \
+	""
+
+### ====================================================================
+### From string.c:
+
+### "strtold()->sscanf() failed"
+___msg_strtold_sscanf_failed = \
+	""
+
+### ====================================================================
+### From symbol.c:
+
+### "\n\tBuilt-in numeric functions (one argument):\n"
+___msg_built_in_numeric_functions_one_argument = \
+	""
+
+### "\n\tBuilt-in numeric functions (two arguments):\n"
+___msg_built_in_numeric_functions_two_arguments = \
+	""
+
+### "\n\tBuilt-in numeric functions (zero arguments):\n"
+___msg_built_in_numeric_functions_zero_arguments = \
+	""
+
+### "\n\tBuilt-in string functions (one argument):\n"
+___msg_built_in_string_functions_one_argument = \
+	""
+
+### "\n\tBuilt-in string functions (two arguments):\n"
+___msg_built_in_string_functions_two_arguments = \
+	""
+
+### "\n\tBuilt-in string functions (zero arguments):\n"
+___msg_built_in_string_functions_zero_arguments = \
+	""
+
+### "\n\tMiscellaneous built-in functions:\n"
+___msg_miscellaneous_built_in_functions = \
+	""
+
+### "\n\tNumeric named constants:\n"
+___msg_numeric_named_constants = \
+	""
+
+### "\n\tNumeric variables:\n"
+___msg_numeric_variables = \
+	""
+
+### "out of memory"
+___msg_out_of_memory = \
+	""
+
+### "\n\tString named constants:\n"
+___msg_string_named_constants = \
+	""
+
+### "\n\tString variables:\n"
+___msg_string_variables = \
+	""
+
+### "Symbols:\n"
+___msg_symbols = \
+	""
+
+### "Symbols matching "
+___msg_symbols_matching = \
+	""
+
+### "\n\tUser-defined functions:\n"
+___msg_user_defined_functions = \
+	""
+
+### "\n\tUser-defined procedures:\n"
+___msg_user_defined_procedures = \
+	""
+
+### ====================================================================
+### From time.c:
+
+### "CPU time exceeded"
+___msg_cpu_time_exceeded = \
+        ""

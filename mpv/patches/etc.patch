@@ -1,0 +1,12 @@
+diff -Naur orig/wscript patched/wscript
+--- orig/wscript	2015-09-23 01:13:22.000000000 +0200
++++ patched/wscript	2015-10-10 13:05:33.353822917 +0200
+@@ -818,7 +818,7 @@
+ _INSTALL_DIRS_LIST = [
+     ('bindir',  '${PREFIX}/bin',      'binary files'),
+     ('libdir',  '${PREFIX}/lib',      'library files'),
+-    ('confdir', '${PREFIX}/etc/mpv',  'configuration files'),
++    ('confdir', '/etc/mpv',			  'configuration files'),
+ 
+     ('incdir',  '${PREFIX}/include',  'include files'),
+ 

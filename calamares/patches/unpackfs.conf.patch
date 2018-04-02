@@ -1,0 +1,12 @@
+diff -Nur orig/src/modules/unpackfs/unpackfs.conf mod/src/modules/unpackfs/unpackfs.conf
+--- orig/src/modules/unpackfs/unpackfs.conf	2017-11-24 17:46:36.000000000 +0100
++++ mod/src/modules/unpackfs/unpackfs.conf	2017-12-02 16:28:09.984058794 +0100
+@@ -33,6 +33,6 @@
+ 
+ # You can list filesystem source paths relative to the Calamares run
+ # directory, if you use -d (this is only useful for testing, though).
+-    -   source: ./example.sqfs
+-        sourcefs: squashfs
++    -   source: /dev/loop1
++        sourcefs: ext4
+         destination: ""

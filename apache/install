@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp -alvu build/. "$UB_INSTALLDIR"/usr/lib/apache/build/
+rm -Rf "$UB_INSTALLDIR"/usr/lib/apache/build/{aix,pkg,rpm,win32}
+
+rm -rf "$UB_INSTALLDIR"/etc/apache/original
+
+for module in negotiation slotmem_shm userdir; do
+	sed -i -r "s/^#(LoadModule ${module}_module )/\1/" "$UB_INSTALLDIR"/etc/apache/httpd.conf
+done

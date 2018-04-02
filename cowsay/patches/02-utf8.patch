@@ -1,0 +1,24 @@
+diff -Naur cowsay-3.03.orig/cowsay cowsay-3.03/cowsay
+--- cowsay-3.03.orig/cowsay	2000-05-20 03:29:49.000000000 +0200
++++ cowsay-3.03/cowsay	2004-11-05 18:17:03.000000000 +0100
+@@ -12,6 +12,10 @@
+ use Getopt::Std;
+ use Cwd;
+ 
++use I18N::Langinfo qw(langinfo CODESET);
++use Encode;
++use open ':locale';
++
+ $version = "3.03";
+ $progname = basename($0);
+ $eyes = "oo";
+@@ -96,6 +100,9 @@
+     } else {
+ 	&display_usage if $opts{'n'};
+ 	@message = join(' ', @ARGV);
++	# perl interprets the command line arguments in latin-1,
++	# convert them to the current locale.
++	$_ = decode(langinfo(CODESET()), encode("iso-8859-1", $_)) for (@message);
+     }
+ }
+ 

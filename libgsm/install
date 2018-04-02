@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/usr/include/gsm
+make INSTALL_ROOT="${UB_INSTALLDIR}/usr" \
+    GSM_INSTALL_INC="${UB_INSTALLDIR}/usr/include/gsm" \
+    GSM_INSTALL_MAN="${UB_INSTALLDIR}/usr/share/man/man3" \
+    TOAST_INSTALL_MAN="${UB_INSTALLDIR}/usr/share/man/man1" \
+    install

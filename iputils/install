@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+install ping{,6} "$UB_INSTALLDIR"/bin/
+install tracepath{,6} traceroute6 "$UB_INSTALLDIR"/usr/bin/
+install clockdiff rarpd rdisc "$UB_INSTALLDIR"/usr/sbin/
+install arping "$UB_INSTALLDIR"/sbin/
+ln -s ../../sbin/arping "$UB_INSTALLDIR"/usr/sbin/
+
+rm -f "$UB_INSTALLDIR"/usr/share/man/man8/pg3.8
+rm -f "$UB_INSTALLDIR"/usr/share/man/man8/tftpd.8
+rm -f "$UB_INSTALLDIR"/usr/share/man/man8/ninfod.8

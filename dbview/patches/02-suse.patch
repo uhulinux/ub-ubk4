@@ -1,0 +1,11 @@
+diff -Naur dbview-1.0.4-orig/db_dump.c dbview-1.0.4/db_dump.c
+--- dbview-1.0.4-orig/db_dump.c	2006-11-27 12:51:25.000000000 +0100
++++ dbview-1.0.4/db_dump.c	2009-09-20 20:43:20.000000000 +0200
+@@ -304,6 +304,7 @@
+ {
+     int     bytes;
+  
++    lseek(dbfile, dbhead.header, SEEK_SET);
+     while(cnt) {
+         bytes=fread(Buffer,1,dbhead.lrecl,dbfile);
+         if(bytes!=dbhead.lrecl)

@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+
+
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>Gtkdialog homepage</title> 
+	
+	<link href="main.css" rel="stylesheet" type="text/css">
+	<script language="JavaScript">
+	
+	function openpopup(url,name,options,fullscreen) {
+		fullurl = url;
+  		windowobj = window.open(fullurl,name,options);
+  		if (fullscreen) {
+     			windowobj.moveTo(0,0);
+     			windowobj.resizeTo(screen.availWidth,screen.availHeight); 
+  		}
+  		windowobj.focus();
+  		return false;
+	}
+	</script></head><body>
+<div>
+	
+	<div class="bodyContent">
+		<h3>What is a Gtkdialog?</h3>
+		<p>Gtkdialog is a small utility for fast and easy GUI building. It can
+		be used to create dialog boxes for almost any interpreted and compiled
+		programs which is a very attractive feature since the developer does not
+		have to learn various GUI languages for the miscellaneous programming
+		languages.</p>
+
+		<p>On this page we demostrate some of the most important features.</p>
+
+		<h3>Using Gtkdialog with Glade</h3>
+		<p>The Gtkdialog utility uses the Glade Library to load, parse and execute
+		Glade files. Gtkdialog makes the use of Glade created user interfaces 
+		convenient in a shell script or any other interpreted language.</p>
+
+		<p>The following shell script will load and execute a Glade XML file:</p>
+		<div class="code">
+			<pre>#! /bin/bash 
+
+gtkdialog --glade-xml=glade-01.00-entries_functions.glade \
+          --include=glade-01.00-entries_functions.functions \
+          --program=login_window			
+			</pre>
+		</div>
+
+		<p>As it is clear from the example, it is easy to determine the Glade XML
+		file, the file with the shell functions we use as callbacks and the name 
+		of the first window.</p>
+
+
+		<h3>Event-driven BASH script</h3>
+		<p>
+			<a title="Screenshot" href="http://linux.pte.hu/%7Epipas/gtkdialog/screenshots/dialog-eventdriven.png" target="enlarged" onclick="return openpopup('screenshots/dialog-eventdriven.png',
+			   'Screenshot', 
+			   'resizable=1,scrollbars=1,directories=0,location=0,\
+			   menubar=0,toolbar=0,status=0,height=670,width=630');">
+			   <img src="dialog-eventdriven.png" align="right" border="0">
+			</a>
+		</p><p>The following example program is an event-driven BASH script
+		which contains a dialog description (<i>MAIN_DIALOG</i>) and a
+		function (<i>print_this</i>.  When the script is started the 
+		dialog box is displayed by the gtkdialog program which will call
+		the functions whenever it is necessary. </p><p>
+		
+		</p><p>It is very simple to write event-driven programs by
+		this example. The first line must call the <i>gtkdialog</i>
+		program with the <i>-e</i> option, the script has to
+		be built using BASH functions and dialog descriptions (as
+		environment variables) and one of the dialog descriptions must
+		have the name <i>MAIN_DIALOG</i>. This <i>MAIN_DIALOG</i> will
+		be processed and viewed first because of its name (like the
+		<i>main()</i> function in the programs written in C).</p>
+		
+		<p>The event-driven programming method is useful for larger
+		programs for it is much easier to handle the complexity of the
+		project separating the dialog descriptions and the shell
+		functions.</p>
+
+		<div class="code">
+			<pre>#! /usr/bin/gtkdialog -e
+
+function print_this() {
+  echo "print: $1"
+}
+
+export MAIN_DIALOG='
+&lt;vbox&gt;
+  &lt;button&gt;
+    &lt;label&gt;function&lt;/label&gt;
+    &lt;action&gt;print_this button&lt;/action&gt;
+  &lt;/button&gt;
+  &lt;button&gt;
+    &lt;label&gt;Exit&lt;/label&gt;
+  &lt;/button&gt;
+&lt;/vbox&gt;
+'
+			</pre>
+		</div>
+
+
+		<h3>AWK script with GUI</h3>
+		<p> <img src="dialog-awk.png" align="right" border="0"> The following code is a small AWK script using a
+		simple dialog box to communicate with the user. When the program
+		started a dialog box is displayed and when the user presses the
+		OK button the script is working on the usual manner as a filter
+		program.</p> 
+		
+		<p>There is an AWK function in this program
+		(<i>launchdialog</i>) which can be used as to display any dialog
+		box. The function stores the state of the dialog box in an
+		associative array after the user closed the window so the user
+		input can be easily used in the whole program. It is very easy
+		to GUIfy AWK scripts using the introduced function so please
+		feel free to recycle this piece of code with or without
+		modifications.</p>
+		
+		<div class="code">
+			<pre>#! /usr/bin/awk -f
+
+function launchdialog( dialog, array ){
+  tempfile= "/tmp/awk" PROCINFO["pid"]
+  print dialog &gt;tempfile; close(tempfile)
+  
+  oldfs=FS; FS="="
+  while( (("gtkdialog -f " tempfile) | getline)&gt;0 )
+    array[$1]=substr($2, 2, length($2)-2 )
+ 
+  close("gtkdialog -f " tempfile)
+
+  FS=oldfs
+  system( "rm -f " tempfile )
+}
+
+BEGIN {
+MAIN_DIALOG="\n\
+&lt;vbox&gt;\n\
+  &lt;frame Print fields&gt;\n\
+    &lt;hbox&gt;\n\
+      &lt;text&gt;\n\
+        &lt;label&gt;From:&lt;/label&gt;\n\
+      &lt;/text&gt;\n\
+      &lt;entry&gt;&lt;variable&gt;FROM&lt;/variable&gt;\
+            &lt;default&gt;1&lt;/default&gt; &lt;/entry&gt;\n\
+    &lt;/hbox&gt;\n\
+    &lt;hbox&gt;\n\
+      &lt;text&gt;\n\
+        &lt;label&gt;To:&lt;/label&gt;\n\
+      &lt;/text&gt;\n\
+      &lt;entry&gt;&lt;variable&gt;TO&lt;/variable&gt;\
+             &lt;default&gt;3&lt;/default&gt;&lt;/entry&gt;\n\
+    &lt;/hbox&gt;\n\
+  &lt;/frame&gt;\n\
+  &lt;hbox&gt;\
+    &lt;button ok&gt;&lt;/button&gt;\n\
+    &lt;button cancel&gt;&lt;/button&gt;\n\
+  &lt;/hbox&gt;\
+&lt;/vbox&gt;\n\
+"
+  launchdialog( MAIN_DIALOG, variables)
+  if( variables["EXIT"]=="Cancel" )
+    exit
+}
+
+{
+  for( n=1; n&lt;=NF; ++n )
+    if( n&gt;=strtonum(variables["FROM"]) &amp;&amp; 
+        n&lt;=strtonum(variables["TO"]) )
+      printf "%6.2f ", $n
+
+  printf "\n"
+}
+
+			</pre>
+		</div>
+		<h3>C language program with GUI</h3>
+		<p> <img src="dialog-c.png" align="right" border="0"> The next example is a small program written in C
+		using the Gtkdialog to display a simple dialog box with two
+		buttons.  The program is far from being sophisticated or even
+		nicely written but it is good to demonstrate the simplicity of
+		the idea. The program exports the dialog description using an
+		environment variable and displays the dialog by calling the
+		<i>gtkdialog</i> program as a child process. When the window is
+		closed by the user, the program reads the standard output of the
+		child process to decide what to do.  </p>
+		
+		<p>This method is useful if you want to create simple C programs
+		with GUI in five minutes without learning the use of any of the
+		complex GUI libraries. </p>
+		
+		<div class="code">
+			<pre>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+main(){
+	FILE *stream;
+	char line[256];
+	
+	putenv(
+"MAIN_DIALOG=&lt;hbox&gt;"
+"  &lt;button ok&gt;&lt;/button&gt;"
+"  &lt;button cancel&gt;&lt;/button&gt;"
+"&lt;/hbox&gt;");
+	
+	stream = popen("gtkdialog --program=MAIN_DIALOG", "r");
+	fgets(line, 255, stream);
+	if (strstr(line, "OK") != NULL)
+		printf("You pressed the OK button.\n");
+	else
+		printf("This is not the OK button.\n");
+	pclose(stream);
+	
+}
+
+			</pre>
+		</div>
+
+	<h3>Citation</h3>
+	<p>Please use the following bibtex item to cite Gtkdialog:</p>
+		<div class="code">
+			<pre>@Article{gtkdialog:2004,
+  author =  "L\'aszl\'o Pere and M\'aty\'as Koniorczyk",
+  year   =  "2005",
+  title  =  "A universal fast graphical user interface building\
+            tool for arbitrary interpreters",
+  journal = "Journal of Visual Languages and Computing",
+  volume  = "16",
+  pages   = "231--244",
+  abstract = "We consider an issue of implementing graphical user
+	     interfaces (GUIs): we introduce an easy-to-use fast
+	     GUI building tool, specially designed to be used
+	     with interpreters.  It supports a variety of
+	     communication methods and interaction models,
+	     therefore it can collaborate a huge diversity of
+	     interpreters in a natural way, in POSIX compliant
+	     (or similar) environment. Thus it enables the
+	     programmer to easily create a GUI, no matter what
+	     kind of language or model the actual interpreter
+	     implements.  Event-driven programs in UNIX shells,
+	     and graphical user interfaces in a data oriented
+	     language are presented as example applications.",
+  keywords = "user interface, GUI, interpreters, shells, 
+             event-driven programming"
+}
+			</pre>
+		</div>
+
+	</div>
+	
+</div></body></html>

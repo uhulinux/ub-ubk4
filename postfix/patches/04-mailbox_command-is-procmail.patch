@@ -1,0 +1,11 @@
+diff -Naurd postfix-2.0.9.orig/conf/main.cf postfix-2.0.9/conf/main.cf
+--- postfix-2.0.9.orig/conf/main.cf	2003-02-20 15:44:47.000000000 +0100
++++ postfix-2.0.9/conf/main.cf	2003-04-22 14:25:28.000000000 +0200
+@@ -437,6 +438,7 @@
+ #
+ #mailbox_command = /some/where/procmail
+ #mailbox_command = /some/where/procmail -a "$EXTENSION"
++mailbox_command = /usr/bin/procmail
+ 
+ # The mailbox_transport specifies the optional transport in master.cf
+ # to use after processing aliases and .forward files. This parameter

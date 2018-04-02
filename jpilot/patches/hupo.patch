@@ -1,0 +1,2085 @@
+diff -Naur jpilot-0.99.7.old/po/hu.po jpilot-0.99.7/po/hu.po
+--- jpilot-0.99.7.old/po/hu.po	1970-01-01 01:00:00.000000000 +0100
++++ jpilot-0.99.7/po/hu.po	2004-07-23 21:01:04.000000000 +0200
+@@ -0,0 +1,2081 @@
++# translation of hu.po to hungarian
++# This file is distributed under the same license as the PACKAGE package.
++# Copyright (C) YEAR Judd Montgomery.
++# Gabor Sari <saga@externet.hu>, 2004.
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: hu\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2004-02-29 02:00-0500\n"
++"PO-Revision-Date: 2004-07-23 20:44+0200\n"
++"Last-Translator: Gabor Sari <saga@externet.hu>\n"
++"Language-Team: hungarian <hu@li.org>\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=utf-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++"X-Generator: KBabel 1.3.1\n"
++
++#: address.c:335 datebook.c:331 memo.c:155 todo.c:283
++msgid "error"
++msgstr "hiba"
++
++#: address.c:386 address_gui.c:1554 datebook.c:703 memo.c:220 memo_gui.c:909
++#: todo_gui.c:1246 Expense/expense.c:988 Expense/expense.c:1929
++#, c-format
++msgid "Error reading %s\n"
++msgstr "Hiba %s olvasása közben\n"
++
++#: address_gui.c:436 datebook_gui.c:351 memo_gui.c:267 todo_gui.c:399
++#, c-format
++msgid "Could not open file %s\n"
++msgstr "A %s fájl nem nyitható meg\n"
++
++#: address_gui.c:515
++msgid "File doesn't appear to be address.dat format\n"
++msgstr ""
++
++#: address_gui.c:525 datebook_gui.c:561 memo_gui.c:395 todo_gui.c:525
++#: Expense/expense.c:512 Expense/expense.c:1268
++msgid "Unfiled"
++msgstr "Kategória besorolás nélkül"
++
++#: address_gui.c:664 alarms.c:223 category.c:404 category.c:851 category.c:891
++#: datebook_gui.c:648 datebook_gui.c:1128 export_gui.c:336 jpilot.c:355
++#: jpilot.c:402 jpilot.c:470 jpilot.c:514 jpilot.c:970 memo_gui.c:485
++#: password.c:364 restore_gui.c:292 todo_gui.c:615 utils.c:1073 utils.c:1225
++#: KeyRing/keyring.c:1270
++msgid "OK"
++msgstr ""
++
++#: address_gui.c:665 datebook_gui.c:649 memo_gui.c:486 todo_gui.c:616
++#: utils.c:1243
++msgid "Yes"
++msgstr "Igen"
++
++#: address_gui.c:665 datebook_gui.c:649 memo_gui.c:486 todo_gui.c:616
++#: utils.c:1243
++msgid "No"
++msgstr "Nem"
++
++#: address_gui.c:689 datebook_gui.c:676 memo_gui.c:496 todo_gui.c:642
++#, c-format
++msgid "%s is a directory"
++msgstr "%s egy könyvtár"
++
++#: address_gui.c:691 address_gui.c:708 datebook_gui.c:678 datebook_gui.c:695
++#: memo_gui.c:498 memo_gui.c:515 todo_gui.c:644 todo_gui.c:661
++msgid "Error Opening File"
++msgstr "Hiba fájl megnyitás közben"
++
++#: address_gui.c:695 datebook_gui.c:682 memo_gui.c:502 todo_gui.c:648
++#, c-format
++msgid "Do you want to overwrite file %s?"
++msgstr "Felülírható a %s fájl?"
++
++#: address_gui.c:697 datebook_gui.c:684 memo_gui.c:504 todo_gui.c:650
++msgid "Overwrite File?"
++msgstr "Felülírható a fájl?"
++
++#: address_gui.c:698 datebook_gui.c:685 memo_gui.c:505 todo_gui.c:651
++msgid "Overwrite File"
++msgstr "Fájl felülírása"
++
++#: address_gui.c:1134 address_gui.c:2431
++msgid "Company/Name"
++msgstr "Cég/Név"
++
++#: address_gui.c:1136 address_gui.c:2433
++msgid "Name/Company"
++msgstr "Név/Cég"
++
++#: address_gui.c:1635 Expense/expense.c:1445 Expense/expense.c:1524
++#: KeyRing/keyring.c:1496 KeyRing/keyring.c:1572
++msgid "Category: "
++msgstr "Kategória: "
++
++#: address_gui.c:1667 address_gui.c:2595
++msgid "kana("
++msgstr ""
++
++#: address_gui.c:1855 memo_gui.c:1048 todo_gui.c:1478
++msgid "0 records"
++msgstr "0 rekord"
++
++#: address_gui.c:1953
++msgid "-Unnamed-"
++msgstr "-Névtelen-"
++
++#: address_gui.c:2041 datebook_gui.c:2361 memo_gui.c:1157 todo_gui.c:1631
++#, c-format
++msgid "%d of %d records"
++msgstr "%d. %d rekordból"
++
++#: address_gui.c:2411 category.c:434 category.c:448 category.c:455
++#: category.c:473 category.c:480 category.c:498 category.c:578 category.c:773
++#: memo_gui.c:1369 todo_gui.c:1880 Expense/expense.c:1452
++msgid "Edit Categories"
++msgstr "Kategóriák szerkesztése"
++
++#: address_gui.c:2438
++msgid "Phone"
++msgstr "Telefonkönyv"
++
++#: address_gui.c:2460
++msgid "Quick Find"
++msgstr "Gyorskeresés"
++
++#: address_gui.c:2477 category.c:405 category.c:824 datebook_gui.c:4084
++#: memo_gui.c:1424 todo_gui.c:1992 Expense/expense.c:1486
++#: KeyRing/keyring.c:1531
++msgid "Delete"
++msgstr "Törlés"
++
++#: address_gui.c:2484 datebook_gui.c:4091 memo_gui.c:1430 todo_gui.c:1998
++#: Expense/expense.c:1492 KeyRing/keyring.c:1537
++msgid "Copy"
++msgstr "Másolás"
++
++#: address_gui.c:2491 datebook_gui.c:4098 memo_gui.c:1436 todo_gui.c:2004
++#: Expense/expense.c:1498 KeyRing/keyring.c:1543
++msgid "New Record"
++msgstr "Új rekord rögzítése"
++
++#: address_gui.c:2497 datebook_gui.c:4105 memo_gui.c:1442 todo_gui.c:2010
++#: Expense/expense.c:1504 KeyRing/keyring.c:1549
++msgid "Add Record"
++msgstr "Rekord hozzáadása"
++
++#: address_gui.c:2506 datebook_gui.c:4114 memo_gui.c:1450 todo_gui.c:2018
++#: Expense/expense.c:1512 KeyRing/keyring.c:1557
++msgid "Apply Changes"
++msgstr "Változtatások alkalmazása"
++
++#: address_gui.c:2522 datebook_gui.c:4165 memo_gui.c:1467 todo_gui.c:2081
++msgid "Private"
++msgstr "Bizalmas"
++
++#: address_gui.c:2542 KeyRing/keyring.c:1423
++msgid "Name"
++msgstr "Név"
++
++#: address_gui.c:2550
++msgid "Address"
++msgstr "Cím"
++
++#: address_gui.c:2558 Expense/expense.c:464 Expense/expense.c:1289
++msgid "Other"
++msgstr "Egyéb"
++
++#: address_gui.c:2566 datebook_gui.c:1309 datebook_gui.c:1566 utils.c:2471
++msgid "All"
++msgstr "Minden"
++
++#: address_gui.c:2696 dialer.c:305 dialer.c:330
++msgid "Dial"
++msgstr "Tárcsázás"
++
++#: address_gui.c:2746
++msgid ""
++"Show\n"
++"In List"
++msgstr ""
++
++#: address_gui.c:2754
++msgid "Quick View"
++msgstr "Gyorsnézet"
++
++#: alarms.c:229
++msgid "Remind me"
++msgstr "Emlékeztető"
++
++#: alarms.c:239 datebook_gui.c:4147
++msgid "Minutes"
++msgstr "Perc"
++
++#: alarms.c:241 datebook_gui.c:4151
++msgid "Hours"
++msgstr "Óra"
++
++#: alarms.c:522
++msgid "Appointment Reminder"
++msgstr "Emlékeztető találkozóra"
++
++#: alarms.c:525
++msgid "Past Appointment"
++msgstr "Régebbi találkozó"
++
++#: alarms.c:528
++msgid "Postponed Appointment"
++msgstr "Elhalasztott találkozó"
++
++#: alarms.c:531 datebook_gui.c:3997
++msgid "Appointment"
++msgstr "Találkozó"
++
++#: category.c:199 category.c:256 sync.c:995 sync.c:1001 sync.c:2055
++#: sync.c:2389 sync.c:2625
++#, c-format
++msgid "Unable to open %s\n"
++msgstr ""
++
++#: category.c:215 category.c:272 sync.c:1023 sync.c:2071
++msgid "PC file corrupt?\n"
++msgstr ""
++
++#: category.c:222 category.c:232 category.c:279 category.c:290 category.c:300
++#: sync.c:1066 sync.c:1084 sync.c:1125 sync.c:1135 sync.c:2133 sync.c:2160
++#: sync.c:2211 sync.c:2221
++msgid "fseek failed - fatal error\n"
++msgstr ""
++
++#: category.c:405
++msgid "Move"
++msgstr "Mozgatás"
++
++#: category.c:405 category.c:857 category.c:897 datebook_gui.c:1133
++#: datebook_gui.c:1567 export_gui.c:341 password.c:370 print_gui.c:335
++#: restore_gui.c:297 utils.c:1083 KeyRing/keyring.c:1276
++msgid "Cancel"
++msgstr "Mégsem"
++
++#: category.c:435
++msgid "The maximum number of categories (16) are already used"
++msgstr ""
++
++#: category.c:438
++msgid "Enter New Category"
++msgstr "Új kategória"
++
++#: category.c:449
++msgid "You must select a category to rename"
++msgstr ""
++
++#: category.c:453
++#, c-format
++msgid "You can't edit category %s.\n"
++msgstr ""
++
++#: category.c:460
++msgid "Enter New Category Name"
++msgstr "Adja meg az új kategória nevet"
++
++#: category.c:474
++msgid "You must select a category to delete"
++msgstr ""
++
++#: category.c:478
++#, c-format
++msgid "You can't delete category %s.\n"
++msgstr ""
++
++#: category.c:494
++#, c-format
++msgid ""
++"There are %d records in %s.\n"
++"Do you want to move them to %s, or delete them?"
++msgstr ""
++
++#: category.c:576
++#, c-format
++msgid "The category %s can't be used more than once"
++msgstr ""
++
++#: category.c:812
++msgid "New"
++msgstr "Új"
++
++#: category.c:818
++msgid "Rename"
++msgstr "Átnevezés"
++
++#: category.c:904
++msgid "debug"
++msgstr ""
++
++#: dat.c:671 dat.c:689 dat.c:871 dat.c:884 dat.c:988 dat.c:1007 dat.c:1020
++#: dat.c:1144 dat.c:1157
++msgid "read of file terminated\n"
++msgstr ""
++
++#: datebook_gui.c:201 datebook_gui.c:208 datebook_gui.c:3835
++#: datebook_gui.c:3842
++msgid "Su"
++msgstr "Vasárnap"
++
++#: datebook_gui.c:202 datebook_gui.c:3836
++msgid "Mo"
++msgstr "Hétfő"
++
++#: datebook_gui.c:203 datebook_gui.c:3837
++msgid "Tu"
++msgstr "Kedd"
++
++#: datebook_gui.c:204 datebook_gui.c:3838
++msgid "We"
++msgstr "Szerda"
++
++#: datebook_gui.c:205 datebook_gui.c:3839
++msgid "Th"
++msgstr "Csütörtök"
++
++#: datebook_gui.c:206 datebook_gui.c:3840
++msgid "Fr"
++msgstr "Péntek"
++
++#: datebook_gui.c:207 datebook_gui.c:3841
++msgid "Sa"
++msgstr "Szombat"
++
++#: datebook_gui.c:540 datebook_gui.c:2041
++#, c-format
++msgid "Appointment description text > %d, truncating to %d\n"
++msgstr ""
++
++#: datebook_gui.c:550 datebook_gui.c:965 datebook_gui.c:2100
++#: datebook_gui.c:2107
++msgid "Error"
++msgstr "Hiba"
++
++#: datebook_gui.c:551
++msgid "File doesn't appear to be datebook.dat format\n"
++msgstr ""
++
++#: datebook_gui.c:1074 export_gui.c:255 jpilot.c:547
++msgid "Export"
++msgstr "Exportálás"
++
++#: datebook_gui.c:1091
++msgid "Export All Datebook Records"
++msgstr "Az összes adatkezelő rekord exportálása"
++
++#: datebook_gui.c:1110 export_gui.c:317
++msgid "Save as"
++msgstr "Mentés másként"
++
++#: datebook_gui.c:1120 export_gui.c:328
++msgid "Browse"
++msgstr "Tallózás"
++
++#: datebook_gui.c:1303 import_gui.c:325 install_gui.c:328 prefs_gui.c:739
++#: search_gui.c:540
++msgid "Done"
++msgstr "Rendben"
++
++#: datebook_gui.c:1315 datebook_gui.c:4325
++msgid "None"
++msgstr "Ismétlődés"
++
++#: datebook_gui.c:1427
++msgid "Begin On Date"
++msgstr "A kezdet dátuma"
++
++#: datebook_gui.c:1432
++msgid "End On Date"
++msgstr "A befejezés dátuma"
++
++#: datebook_gui.c:1526 prefs.c:440
++msgid "Sunday"
++msgstr "vasárnap"
++
++#: datebook_gui.c:1527 prefs.c:441
++msgid "Monday"
++msgstr "hétfő"
++
++#: datebook_gui.c:1528
++msgid "Tuesday"
++msgstr "kedd"
++
++#: datebook_gui.c:1529
++msgid "Wednesday"
++msgstr "szerda"
++
++#: datebook_gui.c:1530
++msgid "Thursday"
++msgstr "csütörtök"
++
++#: datebook_gui.c:1531
++msgid "Friday"
++msgstr "péntek"
++
++#: datebook_gui.c:1532
++msgid "Saturday"
++msgstr "szombat"
++
++#: datebook_gui.c:1537
++msgid "4th"
++msgstr ""
++
++#: datebook_gui.c:1537
++msgid "Last"
++msgstr "Kereszt"
++
++#: datebook_gui.c:1559
++msgid ""
++"This is a repeating event.\n"
++"Do you want to apply these\n"
++"changes to just the CURRENT\n"
++"event, or ALL of the\n"
++"occurrences of this event?"
++msgstr ""
++
++#: datebook_gui.c:1565
++msgid "Current"
++msgstr "Aktuális"
++
++#: datebook_gui.c:1810
++msgid "none"
++msgstr "nincs"
++
++#: datebook_gui.c:1811
++msgid "day"
++msgstr "nap"
++
++#: datebook_gui.c:1812
++msgid "week"
++msgstr "hét"
++
++#: datebook_gui.c:1813
++msgid "month"
++msgstr "hónap"
++
++#: datebook_gui.c:1814
++msgid "year"
++msgstr "év"
++
++#: datebook_gui.c:2096 datebook_gui.c:2098
++#, c-format
++msgid "You cannot have an appointment that repeats every %d %s(s)\n"
++msgstr ""
++
++#: datebook_gui.c:2108
++msgid ""
++"You can not have a weekly repeating appointment that doesn't repeat on any "
++"day of the week."
++msgstr ""
++
++#: datebook_gui.c:2255
++msgid "No Time"
++msgstr ""
++
++#: datebook_gui.c:2528
++msgid "Invalid Appointment"
++msgstr "Érvénytelen találkozó"
++
++#: datebook_gui.c:2529
++msgid ""
++"The End Date of this appointment\n"
++"is before the start date."
++msgstr ""
++"A találkozó befejezési dátuma előbbre\n"
++"mutat, mint a kezdeti dátum."
++
++#: datebook_gui.c:2733 datebook_gui.c:4359 datebook_gui.c:4389
++#: datebook_gui.c:4445 datebook_gui.c:4494 todo_gui.c:123 todo_gui.c:2072
++msgid "No Date"
++msgstr "Nincs dátum"
++
++#: datebook_gui.c:3916 datebook_gui.c:4327
++msgid "Week"
++msgstr "Heti"
++
++#: datebook_gui.c:3925
++msgid "View appointments by week"
++msgstr "A találkozók heti megjelenítése"
++
++#: datebook_gui.c:3928 datebook_gui.c:4328
++msgid "Month"
++msgstr "Havi"
++
++#: datebook_gui.c:3937
++msgid "View appointments by month"
++msgstr "A találkozók havi megjelenítése"
++
++#: datebook_gui.c:3942
++msgid "Cats"
++msgstr ""
++
++#: datebook_gui.c:3996
++msgid "Time"
++msgstr "Időpont"
++
++#: datebook_gui.c:4028
++msgid "Show ToDos"
++msgstr "Tennivalók megjelenítése"
++
++#: datebook_gui.c:4043 todo_gui.c:1954
++msgid "Task"
++msgstr ""
++
++#: datebook_gui.c:4044 todo_gui.c:1955
++msgid "Due"
++msgstr ""
++
++#: datebook_gui.c:4132
++msgid "Alarm"
++msgstr "Riasztás"
++
++#: datebook_gui.c:4153
++msgid "Days"
++msgstr "Nap"
++
++#: datebook_gui.c:4176
++msgid "This Event has no particular time"
++msgstr "Ez a bejegyzés nincs időponthoz kötve"
++
++#: datebook_gui.c:4184
++msgid "Starts on"
++msgstr "Kezdő dátum"
++
++#: datebook_gui.c:4198
++msgid "Start Time"
++msgstr "Kezdő időpont "
++
++#: datebook_gui.c:4216
++msgid "End Time"
++msgstr "Záró időpont"
++
++#: datebook_gui.c:4309
++msgid "DateBk Tags"
++msgstr ""
++
++#: datebook_gui.c:4326
++msgid "Day"
++msgstr "Napi"
++
++#: datebook_gui.c:4329
++msgid "Year"
++msgstr "Évi"
++
++#: datebook_gui.c:4333
++msgid "This event will not repeat"
++msgstr "Ez egy nem ismétlődő bejegyzés"
++
++#: datebook_gui.c:4343 datebook_gui.c:4375 datebook_gui.c:4431
++#: datebook_gui.c:4478
++msgid "Frequency is Every"
++msgstr "Ismétlődjön"
++
++#: datebook_gui.c:4348
++msgid "Day(s)"
++msgstr "naponta"
++
++#: datebook_gui.c:4351 datebook_gui.c:4383 datebook_gui.c:4439
++#: datebook_gui.c:4486
++msgid "End on"
++msgstr "Befejezés ekkor"
++
++#: datebook_gui.c:4380
++msgid "Week(s)"
++msgstr "hetenként"
++
++#: datebook_gui.c:4396
++msgid "Repeat on Days:"
++msgstr "Ezeken a napokon:"
++
++#: datebook_gui.c:4436
++msgid "Month(s)"
++msgstr "havonként"
++
++#: datebook_gui.c:4453
++msgid "Repeat by:"
++msgstr "Ismétlődjön:"
++
++#: datebook_gui.c:4457
++msgid "Day of week"
++msgstr "A hét napjain"
++
++#: datebook_gui.c:4466
++msgid "Date"
++msgstr "Dátum"
++
++#: datebook_gui.c:4483
++msgid "Year(s)"
++msgstr "évenként"
++
++#: dialer.c:193
++msgid "Phone Dialer"
++msgstr "Telefonszám"
++
++#: dialer.c:228
++msgid "Prefix 1"
++msgstr "1. előtag"
++
++#: dialer.c:250
++msgid "Prefix 2"
++msgstr "2. előtag"
++
++#: dialer.c:272
++msgid "Prefix 3"
++msgstr "3. előtag"
++
++#: dialer.c:287
++msgid "Phone number:"
++msgstr "Telefonszám:"
++
++#: dialer.c:318
++msgid "Extension"
++msgstr "Mellékállomás"
++
++#: dialer.c:341
++msgid "Dial Command"
++msgstr "Tárcsázási parancs"
++
++#: dialer.c:362
++msgid "Dismiss"
++msgstr "Mégsem"
++
++#: export_gui.c:113
++msgid "File Browser"
++msgstr ""
++
++#: export_gui.c:273
++msgid "Select records to be exported"
++msgstr "Adja meg az exportálandó adatokat"
++
++#: export_gui.c:275
++msgid "Use Ctrl and Shift Keys"
++msgstr "Kijelöléshez használja a Ctrl és Shift billentyűket"
++
++#: import_gui.c:279 import_gui.c:318 import_gui.c:431 import_gui.c:511
++#: jpilot.c:503
++msgid "Import"
++msgstr "Importálás"
++
++#: import_gui.c:312 install_gui.c:308
++msgid "To change to a hidden directory type it below and hit TAB"
++msgstr "Egy rejtett könyvtárba történő belépéshez, adja meg annak nevét, majd nyomja meg a TAB billentyűt"
++
++#: import_gui.c:338
++msgid "Import File Type"
++msgstr "Az importálásra kerülő fájl típusa"
++
++#: import_gui.c:450
++msgid "Record was marked as private"
++msgstr "Ez az adat bizalmasnak van minősítve"
++
++#: import_gui.c:452
++msgid "Record was not marked as private"
++msgstr "Ez az adat nincs bizalmasnak minősítve"
++
++#: import_gui.c:518
++msgid "Import All"
++msgstr ""
++
++#: import_gui.c:525
++msgid "Skip"
++msgstr ""
++
++#: import_gui.c:532
++msgid "Quit"
++msgstr "Kilépés"
++
++#: install_gui.c:255
++msgid "Install"
++msgstr "program telepítés"
++
++#: install_gui.c:285
++msgid "Files to be installed"
++msgstr "Már telepített fájlok"
++
++#: install_gui.c:314
++msgid "Add"
++msgstr "Hozzáadás"
++
++#: install_gui.c:321
++msgid "Remove"
++msgstr "Eltávolítás"
++
++#: jpilot.c:87
++msgid "\n"
++msgstr ""
++
++#: jpilot.c:87
++msgid ""
++" [-v] || [-h] || [-d] || [-a] || [-A] || [-i]\n"
++" -v displays version and compile options and exits.\n"
++" -h displays help and exits.\n"
++" -d displays debug info to stdout.\n"
++" -p do not load plugins.\n"
++" -a ignore missed alarms since the last time this program was run.\n"
++" -A ignore all alarms, past and future.\n"
++" -i makes jpilot iconify itself upon launch\n"
++" The PILOTPORT, and PILOTRATE env variables are used to specify\n"
++" which port to sync on, and at what speed.\n"
++" If PILOTPORT is not set then it defaults to /dev/pilot.\n"
++msgstr ""
++
++#: jpilot.c:379
++msgid "Help"
++msgstr "Súgó"
++
++#: jpilot.c:443 monthview_gui.c:492 print_gui.c:329 weekview_gui.c:318
++msgid "Print"
++msgstr "Nyomtatás"
++
++#: jpilot.c:444
++msgid "There is no print support for this conduit."
++msgstr "A nyomtatás nem támogatott ezen a ponton."
++
++#: jpilot.c:504
++msgid "There is no import support for this conduit."
++msgstr "Az importálás nem támogatott ezen a ponton."
++
++#: jpilot.c:548
++msgid "There is no export support for this conduit."
++msgstr "Az exportálás nem támogatott ezen a ponton."
++
++#: jpilot.c:759
++msgid "Cancel Sync"
++msgstr "Sync megszakítása"
++
++#: jpilot.c:760
++msgid "Sync Anyway"
++msgstr ""
++
++#: jpilot.c:979
++#, c-format
++msgid "About %s"
++msgstr "A %s programról"
++
++#: jpilot.c:1082
++msgid "/_File"
++msgstr "/_Fájl"
++
++#: jpilot.c:1083
++msgid "/File/tear"
++msgstr "/Fájl/tear"
++
++#: jpilot.c:1084
++msgid "/File/_Find"
++msgstr "/Fájl/_Keresés"
++
++#: jpilot.c:1085 jpilot.c:1091 jpilot.c:1093
++msgid "/File/sep1"
++msgstr "/Fájl/sep1"
++
++#: jpilot.c:1086
++msgid "/File/_Install"
++msgstr "/Fájl/_Telepítés"
++
++#: jpilot.c:1087
++msgid "/File/Import"
++msgstr "/Fájl/Importálás"
++
++#: jpilot.c:1088
++msgid "/File/Export"
++msgstr "/Fájl/Exportálás"
++
++#: jpilot.c:1089
++msgid "/File/Preferences"
++msgstr "/Fájl/Beállítások"
++
++#: jpilot.c:1090
++msgid "/File/_Print"
++msgstr "/Fájl/_Nyomtatás"
++
++#: jpilot.c:1092
++msgid "/File/Restore Handheld"
++msgstr "/Fájl/A PDA adatainak visszaállítása"
++
++#: jpilot.c:1094
++msgid "/File/Quit"
++msgstr "/Fájl/Kilépés"
++
++#: jpilot.c:1095
++msgid "/_View"
++msgstr "/_Nézet"
++
++#: jpilot.c:1096
++msgid "/View/Hide-Show-Mask Private Records"
++msgstr "/Nézet/Bizalmas adatok Elrejtése-Megjelenítése-Maszkolása"
++
++#: jpilot.c:1097
++msgid "/View/Datebook"
++msgstr "/Nézet/Adatkezelő"
++
++#: jpilot.c:1098
++msgid "/View/Addresses"
++msgstr "/Nézet/Címjegyzék"
++
++#: jpilot.c:1099
++msgid "/View/Todos"
++msgstr "/Nézet/Tennivalók"
++
++#: jpilot.c:1100
++msgid "/View/Memos"
++msgstr "/Nézet/Feljegyzések"
++
++#: jpilot.c:1101 jpilot.c:1235
++msgid "/_Plugins"
++msgstr "/_Beépülő modulok"
++
++#: jpilot.c:1103
++msgid "/_Web"
++msgstr "/_Web"
++
++#: jpilot.c:1104
++msgid "/Web/Netscape"
++msgstr "/Web/Netscape"
++
++#: jpilot.c:1108
++msgid "/Web/Mozilla"
++msgstr "/Web/Mozilla"
++
++#: jpilot.c:1113
++msgid "/Web/Galeon"
++msgstr "/Web/Galeon"
++
++#: jpilot.c:1118
++msgid "/Web/Opera"
++msgstr "/Web/Opera"
++
++#: jpilot.c:1122
++msgid "/Web/GnomeUrl"
++msgstr "/Web/GnomeUrl"
++
++#: jpilot.c:1124
++msgid "/Web/Lynx"
++msgstr "/Web/Lynx"
++
++#: jpilot.c:1126
++msgid "/Web/Links"
++msgstr "/Web/Links"
++
++#: jpilot.c:1128
++msgid "/Web/W3M"
++msgstr "/Web/W3M"
++
++#: jpilot.c:1130
++msgid "/Web/Konqueror"
++msgstr "/Web/Konqueror"
++
++#: jpilot.c:1133
++msgid "/_Help"
++msgstr "/_Súgó"
++
++#: jpilot.c:1134
++msgid "/Help/PayBack program"
++msgstr "/Súgó/PayBack program"
++
++#: jpilot.c:1135
++msgid "/Help/J-Pilot"
++msgstr "/Súgó/J-Pilot"
++
++#: jpilot.c:1202
++#, c-format
++msgid "/_Plugins/%s"
++msgstr "/_Beépülő modulok/%s"
++
++#: jpilot.c:1213
++#, c-format
++msgid "/_Help/%s"
++msgstr "/Súgó/%s"
++
++#: jpilot.c:2060
++msgid "Clear"
++msgstr "Törlés"
++
++#: jpilot.c:2129
++msgid "Show private records"
++msgstr "Bizalmas adatok megjelenítése"
++
++#: jpilot.c:2131
++msgid "Hide private records"
++msgstr "Bizalmas adatok elrejtése"
++
++#: jpilot.c:2133
++msgid "Mask private records"
++msgstr "Bizalmas adatok eltakarása"
++
++#: jpilot.c:2140
++msgid "Quit!"
++msgstr "Kilépés!"
++
++#: jpilot.c:2146
++msgid "Sync"
++msgstr ""
++
++#: jpilot.c:2153
++msgid "Sync your palm to the desktop"
++msgstr "A PDA és e munkafelület szinkronizálása"
++
++#: jpilot.c:2158
++msgid "Font"
++msgstr "Betűtípus"
++
++#: jpilot.c:2165
++msgid "Backup"
++msgstr "Biztonsági mentés"
++
++#: jpilot.c:2173
++msgid ""
++"Sync your palm to the desktop\n"
++"and then do a backup"
++msgstr ""
++"A PDA és e munkafelület szinkronizálása\n"
++"majd utána az adatok biztonsági mentése"
++
++#: jpilot.c:2271
++msgid "Datebook/Go to Today"
++msgstr "Adatkezelő/Ugrás a mai napra"
++
++#: jpilot.c:2273
++msgid "Address Book"
++msgstr ""
++
++#: jpilot.c:2275
++msgid "ToDo List"
++msgstr ""
++
++#: jpilot.c:2277
++msgid "Memo Pad"
++msgstr ""
++
++#: log.c:112
++#, c-format
++msgid "Cannot open log file, giving up.\n"
++msgstr ""
++
++#: log.c:119
++#, c-format
++msgid "Cannot open log file\n"
++msgstr ""
++
++#: memo_gui.c:378
++msgid "File doesn't appear to be memopad.dat format\n"
++msgstr ""
++
++#: memo_gui.c:1376
++msgid "Use Memo32 (pedit32)"
++msgstr "Memo32 használata (pedit32)"
++
++#: monthview_gui.c:450
++msgid "Monthly View"
++msgstr "Havi nézet"
++
++#: monthview_gui.c:486 weekview_gui.c:312
++msgid "Close"
++msgstr "Bezár"
++
++#: password.c:319
++msgid "Palm Password"
++msgstr "Palm jelszó"
++
++#: password.c:344
++msgid "Incorrect, Reenter PalmOS Password"
++msgstr "Hibás, adja meg újra a jelszót"
++
++#: password.c:346
++msgid "Enter PalmOS Password"
++msgstr "Adja meg a PalmOS jelszavát"
++
++#: prefs_gui.c:331
++msgid "Preferences"
++msgstr "beállítások"
++
++#: prefs_gui.c:353
++msgid "Locale"
++msgstr "Helyi adatok"
++
++#: prefs_gui.c:355
++msgid "Settings"
++msgstr "Beállítások"
++
++#: prefs_gui.c:357
++msgid "Alarms"
++msgstr "Riasztások"
++
++#: prefs_gui.c:359
++msgid "Conduits"
++msgstr "Szinkronizálás"
++
++#: prefs_gui.c:370
++msgid "Character Set "
++msgstr "Karakterkészlet "
++
++#: prefs_gui.c:383
++msgid "Short date format "
++msgstr "Rövid dátum formátum "
++
++#: prefs_gui.c:396
++msgid "Long date format "
++msgstr "Hosszú dátum formátum "
++
++#: prefs_gui.c:410
++msgid "Time format "
++msgstr "Időformátum "
++
++#: prefs_gui.c:424
++msgid "The first day of the week is "
++msgstr "A hét első napja "
++
++#: prefs_gui.c:444
++msgid "My GTK colors file is "
++msgstr "A saját GTK színeket ebből a fájlból kérem beolvasni "
++
++#: prefs_gui.c:458
++msgid "Serial Port (/dev/ttyS0, /dev/pilot)"
++msgstr "Soros port (/dev/ttyS0, /dev/pilot) "
++
++#: prefs_gui.c:473
++msgid "Serial Rate (Does not affect USB)"
++msgstr "Átviteli sebesség (USB esetén nem lényeges) "
++
++#: prefs_gui.c:486
++msgid "Number of backups to be archived"
++msgstr "Biztonsági mentések száma "
++
++#: prefs_gui.c:502
++msgid "Show deleted records (default NO)"
++msgstr "A törölt rekordok jelenjenek meg (alapértelmezésben NEM)"
++
++#: prefs_gui.c:515
++msgid "Show modified deleted records (default NO)"
++msgstr "A módosított, törölt rekordok jelenjenek meg (alapértelmezésben NEM)"
++
++#: prefs_gui.c:529
++msgid "Highlight calendar days with appointments"
++msgstr "Találkozók megjelölése a naptárban"
++
++#: prefs_gui.c:542
++msgid "Use DateBk note tags"
++msgstr ""
++
++#: prefs_gui.c:552
++msgid "DateBk support disabled in this build"
++msgstr ""
++
++#: prefs_gui.c:559
++msgid "Sync datebook"
++msgstr "Az adatkezelő szinkronizálása"
++
++#: prefs_gui.c:570
++msgid "Sync address"
++msgstr "A címek szinkronizálása"
++
++#: prefs_gui.c:581
++msgid "Sync todo"
++msgstr "A tennivalók szinkronizálása"
++
++#: prefs_gui.c:592
++msgid "Sync memo"
++msgstr "A feljegyzések szinkronizálása"
++
++#: prefs_gui.c:604
++msgid "Sync memo32 (pedit32)"
++msgstr "A memo32 (pedit32) adatok szinkronizálása"
++
++#: prefs_gui.c:616
++msgid "Sync Manana"
++msgstr "A Manana szinkronizálása"
++
++#: prefs_gui.c:629
++msgid "Use J-OS (Not Japanese PalmOS:WorkPad/CLIE)"
++msgstr ""
++
++#: prefs_gui.c:671
++msgid "Open alarm windows for appointment reminders"
++msgstr "Figyelmeztető ablak megnyitása találkozó emlékeztető esetén"
++
++#: prefs_gui.c:683
++msgid "Execute this command"
++msgstr "Az alábbi parancs futtatása"
++
++#: prefs_gui.c:694
++msgid "WARNING: executing arbitrary shell commands can be dangerous!!!"
++msgstr "FIGYELMEZTETÉS: ismeretlen shell parancsokat elindítani, veszélyes lehet!!!"
++
++#: prefs_gui.c:702
++msgid "Alarm Command"
++msgstr ""
++
++#: prefs_gui.c:712
++msgid "%t is replaced with the alarm time"
++msgstr "A %t helyére a riasztás időpontja,"
++
++#: prefs_gui.c:716
++#, c-format
++msgid "%d is replaced with the alarm date"
++msgstr "A %d helyére a riasztás napja,"
++
++#: prefs_gui.c:721
++msgid "%D is replaced with the alarm description"
++msgstr "A %D helyére a risztás megnevezése,"
++
++#: prefs_gui.c:725
++msgid "%N is replaced with the alarm note"
++msgstr "A %N helyére a risztás megjegyzése kerül"
++
++#: prefs_gui.c:729
++msgid "%D (description substitution) is disabled in this build"
++msgstr "A %D használata tiltott ebben a binárisban"
++
++#: prefs_gui.c:733
++msgid "%N (note substitution) is disabled in this build"
++msgstr "A %N használata tiltott ebben a binárisban"
++
++#: print_gui.c:175
++msgid "Print Options"
++msgstr "Nyomtatási beállítások"
++
++#: print_gui.c:189
++msgid "Paper Size"
++msgstr "Papírméret "
++
++#: print_gui.c:206
++msgid "Daily Printout"
++msgstr ""
++
++#: print_gui.c:212
++msgid "Weekly Printout"
++msgstr ""
++
++#: print_gui.c:218
++msgid "Monthly Printout"
++msgstr ""
++
++#: print_gui.c:258
++msgid "One record"
++msgstr "Egy rekord"
++
++#: print_gui.c:262
++msgid "All records in this category"
++msgstr "A kategória összes rekordja"
++
++#: print_gui.c:266
++msgid "Print all records"
++msgstr "Az összes rekord kinyomtatása"
++
++#: print_gui.c:289
++msgid "One record per page"
++msgstr "Oldalanként egy rekord"
++
++#: print_gui.c:305
++msgid " Blank lines between each record"
++msgstr " Üres sor a rekordok között"
++
++#: print_gui.c:315
++msgid "Print Command (e.g. lpr, or cat > file.ps)"
++msgstr "Nyomtatási parancs (pl. lpr, vagy cat > file.ps)"
++
++#: restore_gui.c:214
++msgid "Restore Handheld"
++msgstr "A PDA adatok visszaállítása"
++
++#: restore_gui.c:234
++msgid "To restore your handheld:"
++msgstr "A PDA adatainak visszaállítása:"
++
++#: restore_gui.c:237
++msgid "1. Choose all the applications you wish to restore.  The default is all."
++msgstr "1. Válassza ki az összes visszaállítandó alkalmazást. Alapértelmezésként az összes kijelölve van."
++
++#: restore_gui.c:240
++msgid "2. Enter the User Name and User ID."
++msgstr "2. Adja meg a Felhasználói nevet és azonosítót az ablak alsó részén."
++
++#: restore_gui.c:243
++msgid "3. Press the OK button."
++msgstr "3. Nyomja meg az \"OK\" gombot."
++
++#: restore_gui.c:246
++msgid "This will overwrite data that is currently on the handheld."
++msgstr "Ez a funkció felülírja a PDA-n jelenleg lévő adatokat!!!"
++
++#: restore_gui.c:267
++msgid "User Name"
++msgstr "Felhasználói név"
++
++#: restore_gui.c:280
++msgid "User ID"
++msgstr "Felhasználói azonosító (ID)"
++
++#: search_gui.c:93
++msgid "datebook"
++msgstr "adatkezelő"
++
++#: search_gui.c:165
++msgid "address"
++msgstr ""
++
++#: search_gui.c:230
++msgid "ToDo"
++msgstr ""
++
++#: search_gui.c:284
++msgid "memo"
++msgstr ""
++
++#: search_gui.c:340
++msgid "plugin ?"
++msgstr ""
++
++#: search_gui.c:417
++msgid "No records found"
++msgstr ""
++
++#: search_gui.c:493
++msgid "Search"
++msgstr "Keresés"
++
++#: search_gui.c:505
++msgid "Search for: "
++msgstr "Keresés: "
++
++#: search_gui.c:512
++msgid "Case Sensitive"
++msgstr "Kis és nagybetű különbözzön"
++
++#: sync.c:284
++#, c-format
++msgid "Exiting with status %s\n"
++msgstr ""
++
++#: sync.c:285
++msgid "Finished\n"
++msgstr "Befejezve\n"
++
++#: sync.c:475
++#, c-format
++msgid " Syncing on device %s\n"
++msgstr ""
++
++#: sync.c:476
++msgid " Press the HotSync button now\n"
++msgstr " Nyomja meg a HotSync gombot\n"
++
++#: sync.c:565
++msgid "Check your serial port and settings\n"
++msgstr "Soros port és a beállítások ellenőrzése\n"
++
++#: sync.c:620 sync.c:642 sync.c:664
++#, c-format
++msgid "Last Synced Username-->\"%s\"\n"
++msgstr "A legutóbbi Sync \"%s\" felhasználói néven történt\n"
++
++#: sync.c:621 sync.c:643 sync.c:665
++#, c-format
++msgid "Last Synced UserID-->\"%d\"\n"
++msgstr "A legutóbbi Sync \"%d\" ID-vel történt\n"
++
++#: sync.c:622 sync.c:644 sync.c:666
++#, c-format
++msgid " This Username-->\"%s\"\n"
++msgstr "Aktuális felhasználói név --> \"%s\"\n"
++
++#: sync.c:623 sync.c:645 sync.c:667
++#, c-format
++msgid " This User ID-->%d\n"
++msgstr "Aktuális ID --> %d\n"
++
++#: sync.c:688
++#, c-format
++msgid "Username is \"%s\"\n"
++msgstr "Felhasználói név \"%s\"\n"
++
++#: sync.c:689
++#, c-format
++msgid "User ID is %d\n"
++msgstr "Felhasználói ID %d\n"
++
++#: sync.c:691 sync.c:697
++#, c-format
++msgid "lastSyncPC = %d\n"
++msgstr ""
++
++#: sync.c:692
++#, c-format
++msgid "This PC = %lu\n"
++msgstr ""
++
++#: sync.c:693
++#, c-format
++msgid "Last Username = [%s]\n"
++msgstr "A legutóbbi felhasználói név = [%s]\n"
++
++#: sync.c:694
++#, c-format
++msgid "Last UserID = %d\n"
++msgstr "A legutóbbi UserID = [%d]\n"
++
++#: sync.c:695
++#, c-format
++msgid "Username = [%s]\n"
++msgstr "Felhasználói név = [%s]\n"
++
++#: sync.c:696
++#, c-format
++msgid "userID = %d\n"
++msgstr ""
++
++#: sync.c:713
++msgid "Sync canceled\n"
++msgstr "A Sync megszakítva\n"
++
++#: sync.c:736
++msgid "Finished restoring handheld.\n"
++msgstr ""
++
++#: sync.c:737
++msgid "You may need to sync to update J-Pilot.\n"
++msgstr ""
++
++#: sync.c:755
++msgid "Doing a fast sync.\n"
++msgstr ""
++
++#: sync.c:794
++msgid "Doing a slow sync.\n"
++msgstr ""
++
++#: sync.c:895
++msgid "Thank you for using J-Pilot."
++msgstr "Köszönjük, hogy használta a J-Pilot programot."
++
++#: sync.c:937
++msgid "Finished.\n"
++msgstr "Befejezve.\n"
++
++#: sync.c:969 sync.c:2363
++#, c-format
++msgid "Syncing %s\n"
++msgstr "%s szinkronizálása folyik\n"
++
++#: sync.c:975 sync.c:2036 sync.c:2369
++#, c-format
++msgid "Wrote an %s record."
++msgstr ""
++
++#: sync.c:977 sync.c:2038 sync.c:2371
++#, c-format
++msgid "Writing an %s record failed."
++msgstr ""
++
++#: sync.c:979 sync.c:2040 sync.c:2373
++#, c-format
++msgid "Deleting an %s record failed."
++msgstr ""
++
++#: sync.c:981 sync.c:2042 sync.c:2375
++#, c-format
++msgid "Deleted an %s record."
++msgstr ""
++
++#: sync.c:984 sync.c:2045 sync.c:2378
++#, c-format
++msgid "Wrote a %s record."
++msgstr ""
++
++#: sync.c:986 sync.c:2047 sync.c:2380
++#, c-format
++msgid "Writing a %s record failed."
++msgstr ""
++
++#: sync.c:988 sync.c:2049 sync.c:2382
++#, c-format
++msgid "Deleting a %s record failed."
++msgstr ""
++
++#: sync.c:990 sync.c:2051 sync.c:2384
++#, c-format
++msgid "Deleted a %s record."
++msgstr ""
++
++#: sync.c:1009
++#, c-format
++msgid "number of records = %d\n"
++msgstr ""
++
++#: sync.c:1030
++msgid "slow_sync_application(): Out of memory\n"
++msgstr ""
++
++#: sync.c:1056 sync.c:2123
++msgid "dlp_WriteRecord failed\n"
++msgstr ""
++
++#: sync.c:1216 sync.c:1566
++#, c-format
++msgid "%s (Creator ID '%s') is up to date, fetch skipped.\n"
++msgstr ""
++
++#: sync.c:1220 sync.c:1570
++#, c-format
++msgid "Fetching '%s' (Creator ID '%s')... "
++msgstr ""
++
++#: sync.c:1227
++#, c-format
++msgid "Failed, unable to create file %s\n"
++msgstr ""
++
++#: sync.c:1231
++#, c-format
++msgid "Failed, unable to back up database %s\n"
++msgstr ""
++
++#: sync.c:1235 sync.c:1585 sync.c:1740
++msgid "OK\n"
++msgstr ""
++
++#: sync.c:1482
++#, c-format
++msgid "Skipping %s (Creator ID '%s')\n"
++msgstr ""
++
++#: sync.c:1634
++#, c-format
++msgid "Installing %s "
++msgstr "%s telepítése folyik"
++
++#: sync.c:1640
++#, c-format
++msgid ""
++"\n"
++"Unable to open '%s': %s!\n"
++msgstr ""
++
++#: sync.c:1644
++#, c-format
++msgid ""
++"\n"
++"Unable to sync '%s': file corrupted?\n"
++msgstr ""
++
++#: sync.c:1656
++#, c-format
++msgid "(Creator ID is '%s')..."
++msgstr ""
++
++#: sync.c:1672 sync.c:1685 sync.c:1700 sync.c:1713
++#, c-format
++msgid ""
++"\n"
++"Unable to open '%s'!\n"
++msgstr ""
++
++#: sync.c:1725
++#, c-format
++msgid "Install %s failed"
++msgstr "%s telepítése nem sikerült"
++
++#: sync.c:1729
++msgid "Failed.\n"
++msgstr "Hiba.\n"
++
++#: sync.c:1736
++#, c-format
++msgid "Installed %s "
++msgstr "%s telepítve"
++
++#: sync.c:1760
++#, c-format
++msgid "Cannot open %s_to_install file\n"
++msgstr ""
++
++#: sync.c:1766
++#, c-format
++msgid "Cannot open %s_to_install.tmp file\n"
++msgstr ""
++
++#: sync.c:2080
++msgid "fast_sync_local_recs(): Out of memory\n"
++msgstr ""
++
++#: sync.c:2195
++msgid ""
++"dlp_DeleteRecord failed\n"
++"This could be because the record was already deleted on the Palm\n"
++msgstr ""
++
++#: sync.c:2440
++#, c-format
++msgid "palm: number of records = %d\n"
++msgstr ""
++
++#: sync.c:2441
++#, c-format
++msgid "disk: number of records = %d\n"
++msgstr ""
++
++#: sync.c:2605
++#, c-format
++msgid "Error reading at %s : %s %d\n"
++msgstr ""
++
++#: sync.c:2610
++#, c-format
++msgid "%s:%d Error getting app info %s\n"
++msgstr ""
++
++#: sync.c:2616 sync.c:2643
++#, c-format
++msgid "%s:%d Error unpacking app info %s\n"
++msgstr ""
++
++#: sync.c:2635
++#, c-format
++msgid "Error reading appinfo block for %s\n"
++msgstr ""
++
++#: sync.c:2778 sync.c:2782
++#, c-format
++msgid "Could not add category %s to remote.\n"
++msgstr ""
++
++#: sync.c:2779 sync.c:2785
++msgid "Too many categories on remote.\n"
++msgstr ""
++
++#: sync.c:2780 sync.c:2788
++#, c-format
++msgid "All records on desktop in %s will be moved to %s.\n"
++msgstr ""
++
++#: todo.c:245
++#, c-format
++msgid "Warning ToDo description too long, truncating to %d\n"
++msgstr ""
++
++#: todo.c:252
++#, c-format
++msgid "Warning ToDo note too long, truncating to %d\n"
++msgstr ""
++
++#: todo.c:355
++#, c-format
++msgid "%s:%d Error reading category info %s\n"
++msgstr ""
++
++#: todo.c:366
++#, c-format
++msgid "%s:%d Error reading %s\n"
++msgstr ""
++
++#: todo_gui.c:142
++msgid "Due Date"
++msgstr ""
++
++#: todo_gui.c:515
++msgid "File doesn't appear to be todo.dat format\n"
++msgstr ""
++
++#: todo_gui.c:1555
++#, c-format
++msgid "No date"
++msgstr ""
++
++#: todo_gui.c:1892
++msgid "Show Preferences"
++msgstr "Beállítások megjelenítése"
++
++#: todo_gui.c:1901
++msgid "Use Manana database"
++msgstr "Manana adatbázis használata"
++
++#: todo_gui.c:1911
++msgid "Hide Completed ToDos"
++msgstr "A teljes tennivalók elrejtése"
++
++#: todo_gui.c:1919
++msgid "Hide ToDos not yet due"
++msgstr ""
++
++#: todo_gui.c:1927
++msgid "Record Completion Date"
++msgstr "A bejezezés dátumának tárolása"
++
++#: todo_gui.c:2033
++msgid "Completed"
++msgstr "Kész"
++
++#: todo_gui.c:2041
++msgid "Priority: "
++msgstr "Prioritás: "
++
++#: todo_gui.c:2061
++msgid "Date Due:"
++msgstr ""
++
++#: utils.c:89
++msgid "Date compiled"
++msgstr ""
++
++#: utils.c:90
++msgid "Compiled with these options:"
++msgstr ""
++
++#: utils.c:92
++msgid "Installed Path"
++msgstr ""
++
++#: utils.c:94
++msgid "pilot-link version"
++msgstr ""
++
++#: utils.c:98
++msgid "USB support"
++msgstr "USB támogatás"
++
++#: utils.c:100 utils.c:106 utils.c:112 utils.c:118 utils.c:124 utils.c:130
++#: utils.c:136
++msgid "yes"
++msgstr "igen"
++
++#: utils.c:102 utils.c:108 utils.c:114 utils.c:120 utils.c:126 utils.c:132
++#: utils.c:138
++msgid "no"
++msgstr "nem"
++
++#: utils.c:104
++msgid "Private record support"
++msgstr "Bizalmas adatok támogatása"
++
++#: utils.c:110
++msgid "Datebk support"
++msgstr ""
++
++#: utils.c:116
++msgid "Plugin support"
++msgstr ""
++
++#: utils.c:122
++msgid "Manana support"
++msgstr ""
++
++#: utils.c:128
++msgid "NLS support (foreign languages)"
++msgstr ""
++
++#: utils.c:134
++msgid "GTK2 support"
++msgstr ""
++
++#: utils.c:178
++#, c-format
++msgid "Today is %A, %x %X"
++msgstr "Ma %A, %x. %X van"
++
++#: utils.c:180
++#, c-format
++msgid "Today is %%A, %s %s"
++msgstr "Ma %%A, %s. %s van."
++
++#: utils.c:1078
++msgid "Today"
++msgstr "Ugrás a mai napra"
++
++#: utils.c:1252
++msgid "Save Changed Record?"
++msgstr "Módosított adatok elmentése?"
++
++#: utils.c:1253
++msgid "Do you want to save the changes to this record?"
++msgstr "A megváltozott adatokat elmenti?"
++
++#: utils.c:1258
++msgid "Save New Record?"
++msgstr "Új rekord mentése"
++
++#: utils.c:1259
++msgid "Do you want to save this new record?"
++msgstr "Az új adatokat elmenti?"
++
++#: utils.c:1589
++#, c-format
++msgid "Couldn't find empty DB file %s: %s\n"
++msgstr ""
++
++#: utils.c:1592
++msgid " may not be installed.\n"
++msgstr ""
++
++#: utils.c:2250
++msgid "PC ID is 0.\n"
++msgstr ""
++
++#: utils.c:2251
++#, c-format
++msgid "I generated a new PC ID.  It is %lu\n"
++msgstr ""
++
++#: weekview_gui.c:278
++msgid "Weekly View"
++msgstr "Heti nézet"
++
++#: Expense/expense.c:74
++msgid "Australia"
++msgstr "Ausztrália"
++
++#: Expense/expense.c:75
++msgid "Austria"
++msgstr "Ausztria"
++
++#: Expense/expense.c:76
++msgid "Belgium"
++msgstr ""
++
++#: Expense/expense.c:77
++msgid "Brazil"
++msgstr "Brazília"
++
++#: Expense/expense.c:78
++msgid "Canada"
++msgstr "Kanada"
++
++#: Expense/expense.c:79
++msgid "Denmark"
++msgstr "Dánia"
++
++#: Expense/expense.c:80
++msgid "EU (Euro)"
++msgstr ""
++
++#: Expense/expense.c:81
++msgid "Finland"
++msgstr "Finnország"
++
++#: Expense/expense.c:82
++msgid "France"
++msgstr "Franciaország"
++
++#: Expense/expense.c:83
++msgid "Germany"
++msgstr "Németország"
++
++#: Expense/expense.c:84
++msgid "Hong Kong"
++msgstr ""
++
++#: Expense/expense.c:85
++msgid "Iceland"
++msgstr "Izland"
++
++#: Expense/expense.c:86
++msgid "India"
++msgstr ""
++
++#: Expense/expense.c:87
++msgid "Indonesia"
++msgstr "Indonézia"
++
++#: Expense/expense.c:88
++msgid "Ireland"
++msgstr "Írország"
++
++#: Expense/expense.c:89
++msgid "Italy"
++msgstr "Olaszország"
++
++#: Expense/expense.c:90
++msgid "Japan"
++msgstr "Japán"
++
++#: Expense/expense.c:91
++msgid "Korea"
++msgstr ""
++
++#: Expense/expense.c:92
++msgid "Luxembourg"
++msgstr ""
++
++#: Expense/expense.c:93
++msgid "Malaysia"
++msgstr "Malajzia"
++
++#: Expense/expense.c:94
++msgid "Mexico"
++msgstr "Mexikó"
++
++#: Expense/expense.c:95
++msgid "Netherlands"
++msgstr "Hollandia"
++
++#: Expense/expense.c:96
++msgid "New Zealand"
++msgstr "Új Zéland"
++
++#: Expense/expense.c:97
++msgid "Norway"
++msgstr "Norvégia"
++
++#: Expense/expense.c:98
++msgid "P.R.C."
++msgstr ""
++
++#: Expense/expense.c:99
++msgid "Philippines"
++msgstr "Fülöp szigetek"
++
++#: Expense/expense.c:100
++msgid "Singapore"
++msgstr "Szingapúr"
++
++#: Expense/expense.c:101
++msgid "Spain"
++msgstr "Spanyolország"
++
++#: Expense/expense.c:102
++msgid "Sweden"
++msgstr "Svédország"
++
++#: Expense/expense.c:103
++msgid "Switzerland"
++msgstr "Svájc"
++
++#: Expense/expense.c:104
++msgid "Taiwan"
++msgstr "Taiwan"
++
++#: Expense/expense.c:105
++msgid "Thailand"
++msgstr "Thaiföld"
++
++#: Expense/expense.c:106
++msgid "United Kingdom"
++msgstr "Egyesült Királyság"
++
++#: Expense/expense.c:107
++msgid "United States"
++msgstr "Egyesült Államok"
++
++#: Expense/expense.c:398
++msgid "Expense"
++msgstr ""
++
++#: Expense/expense.c:409
++msgid "About Expense"
++msgstr "Az Expense programról"
++
++#: Expense/expense.c:430 Expense/expense.c:1272
++msgid "Airfare"
++msgstr ""
++
++#: Expense/expense.c:432 Expense/expense.c:1273
++msgid "Breakfast"
++msgstr "Reggeli"
++
++#: Expense/expense.c:434 Expense/expense.c:1274
++msgid "Bus"
++msgstr "Busz"
++
++#: Expense/expense.c:436 Expense/expense.c:1275
++msgid "BusinessMeals"
++msgstr ""
++
++#: Expense/expense.c:438 Expense/expense.c:1276
++msgid "CarRental"
++msgstr "Gépkocsi kölcsönzés"
++
++#: Expense/expense.c:440 Expense/expense.c:1277
++msgid "Dinner"
++msgstr "Vacsora"
++
++#: Expense/expense.c:442 Expense/expense.c:1278
++msgid "Entertainment"
++msgstr "Szórakozás"
++
++#: Expense/expense.c:444 Expense/expense.c:1279
++msgid "Fax"
++msgstr ""
++
++#: Expense/expense.c:446 Expense/expense.c:1280
++msgid "Gas"
++msgstr "Gáz"
++
++#: Expense/expense.c:448 Expense/expense.c:1281
++msgid "Gifts"
++msgstr "Ajándék"
++
++#: Expense/expense.c:450 Expense/expense.c:1282
++msgid "Hotel"
++msgstr ""
++
++#: Expense/expense.c:452 Expense/expense.c:1283
++msgid "Incidentals"
++msgstr "Mellékes"
++
++#: Expense/expense.c:454 Expense/expense.c:1284
++msgid "Laundry"
++msgstr "Mosoda"
++
++#: Expense/expense.c:456 Expense/expense.c:1285
++msgid "Limo"
++msgstr "Limuzin"
++
++#: Expense/expense.c:458 Expense/expense.c:1286
++msgid "Lodging"
++msgstr "Bérlemény"
++
++#: Expense/expense.c:460 Expense/expense.c:1287
++msgid "Lunch"
++msgstr "Ebéd"
++
++#: Expense/expense.c:462 Expense/expense.c:1288
++msgid "Mileage"
++msgstr ""
++
++#: Expense/expense.c:466 Expense/expense.c:1290
++msgid "Parking"
++msgstr "Parkolás"
++
++#: Expense/expense.c:468 Expense/expense.c:1291
++msgid "Postage"
++msgstr "Posta"
++
++#: Expense/expense.c:470 Expense/expense.c:1292
++msgid "Snack"
++msgstr "Uzsonna"
++
++#: Expense/expense.c:472 Expense/expense.c:1293
++msgid "Subway"
++msgstr "Földalatti"
++
++#: Expense/expense.c:474 Expense/expense.c:1294
++msgid "Supplies"
++msgstr "Járadék"
++
++#: Expense/expense.c:476 Expense/expense.c:1295
++msgid "Taxi"
++msgstr ""
++
++#: Expense/expense.c:478 Expense/expense.c:1296
++msgid "Telephone"
++msgstr "Telefon"
++
++#: Expense/expense.c:480 Expense/expense.c:1297
++msgid "Tips"
++msgstr "Tippek"
++
++#: Expense/expense.c:482 Expense/expense.c:1298
++msgid "Tolls"
++msgstr "Vámdíj"
++
++#: Expense/expense.c:484 Expense/expense.c:1299
++msgid "Train"
++msgstr "Vonat"
++
++#: Expense/expense.c:498
++msgid "AmEx"
++msgstr ""
++
++#: Expense/expense.c:500 Expense/expense.c:1262
++msgid "Cash"
++msgstr "Készpénz"
++
++#: Expense/expense.c:502 Expense/expense.c:1263
++msgid "Check"
++msgstr "Csekk"
++
++#: Expense/expense.c:504
++msgid "CreditCard"
++msgstr "Hitelkártya"
++
++#: Expense/expense.c:506
++msgid "MasterCard"
++msgstr ""
++
++#: Expense/expense.c:508 Expense/expense.c:1266
++msgid "Prepaid"
++msgstr "Előre fizetés"
++
++#: Expense/expense.c:510 Expense/expense.c:1267
++msgid "VISA"
++msgstr ""
++
++#: Expense/expense.c:1261
++msgid "American Express"
++msgstr ""
++
++#: Expense/expense.c:1264
++msgid "Credit Card"
++msgstr ""
++
++#: Expense/expense.c:1265
++msgid "Master Card"
++msgstr ""
++
++#: Expense/expense.c:1534
++msgid "Type: "
++msgstr "Típus: "
++
++#: Expense/expense.c:1543
++msgid "Payment: "
++msgstr "Fizetési mód: "
++
++#: Expense/expense.c:1552
++msgid "Currency: "
++msgstr "Pénznem"
++
++#: Expense/expense.c:1564
++msgid "Month:"
++msgstr "Hónap:"
++
++#: Expense/expense.c:1578
++msgid "Day:"
++msgstr "Nap:"
++
++#: Expense/expense.c:1592
++msgid "Year:"
++msgstr "Év:"
++
++#: Expense/expense.c:1609
++msgid "Amount: "
++msgstr "Összeg: "
++
++#: Expense/expense.c:1618
++msgid "Vendor: "
++msgstr "Kereskedő: "
++
++#: Expense/expense.c:1627
++msgid "City: "
++msgstr "Város: "
++
++#: Expense/expense.c:1632
++msgid "Attendees"
++msgstr ""
++
++#: Expense/expense.c:1655 KeyRing/keyring.c:1605
++msgid "Note"
++msgstr "Megjegyzés"
++
++#: KeyRing/keyring.c:1248
++msgid "Incorrect, Reenter KeyRing Password"
++msgstr ""
++
++#: KeyRing/keyring.c:1250
++msgid "Enter a NEW KeyRing Password"
++msgstr ""
++
++#: KeyRing/keyring.c:1252
++msgid "Enter KeyRing Password"
++msgstr ""
++
++#: KeyRing/keyring.c:1423
++msgid "Account"
++msgstr ""
++
++#: KeyRing/keyring.c:1440
++msgid ""
++"Change\n"
++"KeyRing\n"
++"Password"
++msgstr ""
++
++#: KeyRing/keyring.c:1578
++msgid "name: "
++msgstr "név: "
++
++#: KeyRing/keyring.c:1585
++msgid "account: "
++msgstr ""
++
++#: KeyRing/keyring.c:1592
++msgid "password: "
++msgstr "jelszó: "
++
++#: KeyRing/keyring.c:1598
++msgid "Generate Password"
++msgstr "Jelszó generálása"
++

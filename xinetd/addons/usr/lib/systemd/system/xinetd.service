@@ -1,0 +1,14 @@
+[Unit]
+Description=Xinetd A Powerful Replacement For Inetd
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/xinetd.pid
+EnvironmentFile=-/etc/sysconfig/xinetd
+ExecStart=/usr/sbin/xinetd -stayalive -pidfile /var/run/xinetd.pid "$EXTRAOPTIONS"
+ExecReload=/usr/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+

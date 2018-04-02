@@ -1,0 +1,12 @@
+diff -Naur orig/include/opkele/tidy.h patched/include/opkele/tidy.h
+--- orig/include/opkele/tidy.h	2009-09-13 13:45:19.134739579 +0200
++++ patched/include/opkele/tidy.h	2017-09-23 13:41:16.004698663 +0200
+@@ -4,7 +4,7 @@
+ #include <cassert>
+ #ifdef HAVE_TIDY_H
+ # include <tidy.h>
+-# include <buffio.h>
++# include <tidybuffio.h>
+ #elif HAVE_TIDY_TIDY_H
+ # include <tidy/tidy.h>
+ # include <tidy/buffio.h>

@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ]; then
+sed -i -e "s/^PROCESSOR=.*$/PROCESSOR=x86_64/g" configure
+else
+sed -i -e "s/^PROCESSOR=.*$/PROCESSOR=i686/g" configure
+fi
+
+chmod +x configure
+ub_compile

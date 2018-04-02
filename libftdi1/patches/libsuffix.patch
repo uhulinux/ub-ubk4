@@ -1,0 +1,12 @@
+diff -Naur orig/CMakeLists.txt mod/CMakeLists.txt
+--- orig/CMakeLists.txt	2014-11-21 17:42:17.000000000 +0100
++++ mod/CMakeLists.txt	2015-03-07 21:26:50.707871199 +0100
+@@ -55,7 +55,7 @@
+       AND NOT EXISTS "/etc/debian_version"
+       AND NOT EXISTS "/etc/arch-release" )
+     if ( "${CMAKE_SIZEOF_VOID_P}" EQUAL "8" )
+-      set ( LIB_SUFFIX 64 )
++      set ( LIB_SUFFIX "" )
+     endif ()
+   endif ()
+ endif ()

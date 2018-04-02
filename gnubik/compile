@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+export GUILE_CFLAGS='-I/usr/include/guile/2.2'
+export GUILE_LIBS='-L/usr/lib -lguile-2.2 -lgc'
+ub_compile

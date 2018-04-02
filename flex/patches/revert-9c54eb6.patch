@@ -1,0 +1,53 @@
+diff -Naur flex-9c54eb6/src/flexint.h flex-7e4d538/src/flexint.h
+--- flex-9c54eb6/src/flexint.h	2017-08-24 12:13:07.000000000 +0200
++++ flex-7e4d538/src/flexint.h	2017-08-24 12:54:57.000000000 +0200
+@@ -58,10 +58,6 @@
+ #define UINT32_MAX             (4294967295U)
+ #endif
+ 
+-#ifndef SIZE_MAX
+-#define SIZE_MAX               (~(size_t)0)
+-#endif
+-
+ #endif /* ! C99 */
+ 
+ #endif /* ! FLEXINT_H */
+diff -Naur flex-9c54eb6/src/misc.c flex-7e4d538/src/misc.c
+--- flex-9c54eb6/src/misc.c	2017-08-24 12:13:07.000000000 +0200
++++ flex-7e4d538/src/misc.c	2017-08-24 12:54:57.000000000 +0200
+@@ -142,14 +142,9 @@
+ void   *allocate_array (int size, size_t element_size)
+ {
+ 	void *mem;
+-#if HAVE_REALLOCARRAY
+-	/* reallocarray has built-in overflow detection */
+-	mem = reallocarray(NULL, (size_t) size, element_size);
+-#else
+-	size_t num_bytes = (size_t) size * element_size;
+-	mem = (size && SIZE_MAX / (size_t) size < element_size) ? NULL :
+-		malloc(num_bytes);
+-#endif
++	size_t  num_bytes = element_size * (size_t) size;
++
++	mem = malloc(num_bytes);
+ 	if (!mem)
+ 		flexfatal (_
+ 			   ("memory allocation failed in allocate_array()"));
+@@ -686,14 +681,9 @@
+ void   *reallocate_array (void *array, int size, size_t element_size)
+ {
+ 	void *new_array;
+-#if HAVE_REALLOCARRAY
+-	/* reallocarray has built-in overflow detection */
+-	new_array = reallocarray(array, (size_t) size, element_size);
+-#else
+-	size_t num_bytes = (size_t) size * element_size;
+-	new_array = (size && SIZE_MAX / (size_t) size < element_size) ? NULL :
+-		realloc(array, num_bytes);
+-#endif
++	size_t  num_bytes = element_size * (size_t) size;
++
++	new_array = realloc(array, num_bytes);
+ 	if (!new_array)
+ 		flexfatal (_("attempt to increase array size failed"));
+ 

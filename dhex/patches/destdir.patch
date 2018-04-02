@@ -1,0 +1,28 @@
+diff -urN dhex_0.68.orig/Makefile dhex_0.68/Makefile
+--- dhex_0.68.orig/Makefile	2012-09-09 19:03:55.000000000 +0200
++++ dhex_0.68/Makefile	2014-02-25 10:45:27.969145558 +0100
+@@ -6,6 +6,7 @@
+ #LDFLAGS+= --gc-sections 
+ LIBS=		-lncurses
+ DESTDIR=	/usr/local/
++PREFIX=$(DESTDIR)/usr/
+ 
+ OFILES=buffers.o \
+ 	configfile.o \
+@@ -28,11 +29,11 @@
+ 
+ install:all
+ 	strip dhex
+-	cp dhex $(DESTDIR)/bin
+-	cp dhex.1 $(DESTDIR)/man/man1
+-	cp dhexrc.5 $(DESTDIR)/man/man5
+-	cp dhex_markers.5 $(DESTDIR)/man/man5
+-	cp dhex_searchlog.5 $(DESTDIR)/man/man5
++	cp dhex $(PREFIX)/bin
++	cp dhex.1 $(PREFIX)/share/man/man1
++	cp dhexrc.5 $(PREFIX)/share/man/man5
++	cp dhex_markers.5 $(PREFIX)/share/man/man5
++	cp dhex_searchlog.5 $(PREFIX)/share/man/man5
+ 
+ 	
+ 

@@ -1,0 +1,16 @@
+diff -Nur libopkele-2.0.4.orig/include/opkele/iterator.h libopkele-2.0.4/include/opkele/iterator.h
+--- libopkele-2.0.4.orig/include/opkele/iterator.h	2009-08-31 05:57:35.000000000 -0600
++++ libopkele-2.0.4/include/opkele/iterator.h	2015-07-05 19:37:07.826245034 -0600
+@@ -159,12 +159,6 @@
+ 			if(!found) empty=true;
+ 			return *this;
+ 		    }
+-		    basic_filterator<IT> operator++(int) {
+-			basic_filterator<IT> rv(*this);
+-			++(*this);
+-			return rv;
+-		    }
+-
+ 		    void prepare() {
+ 			bool found = false;
+ 			for(;!(it==ei || (found=is_interesting()));++it) ;

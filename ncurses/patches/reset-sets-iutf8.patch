@@ -1,0 +1,13 @@
+diff -Naurd a/progs/tset.c b/progs/tset.c
+--- a/progs/tset.c	2010-05-01 23:42:46.000000000 +0200
++++ b/progs/tset.c	2011-02-27 11:02:38.000000000 +0100
+@@ -801,6 +801,9 @@
+ #ifdef IMAXBEL
+ 		     | IMAXBEL
+ #endif
++#ifdef IUTF8
++		     | IUTF8
++#endif
+ 	);
+ 
+     mode.c_oflag &= ~(0

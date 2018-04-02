@@ -1,0 +1,34 @@
+#! /bin/bash
+
+export MAIN_DIALOG='
+ <vbox>
+  <frame Table>
+    <table>
+      <variable>TABLE</variable>
+      <label>First column|Second column</label>
+      <item>First item|column 2</item>
+      <item>Second item|column 2</item>
+      <item>Third item|column 2</item>
+      <action>echo You selected $TABLE</action>
+    </table>
+    <hbox>
+      <button>
+        <action removeselected>TABLE</action>
+        <label>removeselected</label>
+      </button>
+      <button>
+        <action clear>TABLE</action>
+        <label>clear</label>
+      </button>
+    </hbox>
+  </frame>
+  <hbox>
+   <button ok></button>
+   <button cancel></button>
+  </hbox>
+ </vbox>
+'
+
+gtkdialog --program MAIN_DIALOG
+
+

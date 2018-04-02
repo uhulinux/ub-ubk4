@@ -1,0 +1,114 @@
+diff -urN fbgetty-0.1.698.orig/src/prompt.c fbgetty-0.1.698/src/prompt.c
+--- fbgetty-0.1.698.orig/src/prompt.c	2001-12-27 18:23:22.000000000 +0100
++++ fbgetty-0.1.698/src/prompt.c	2002-12-29 23:45:08.000000000 +0100
+@@ -49,6 +49,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/wait.h>
+ #include <sys/poll.h>
++#include <sys/select.h>
+ 
+ #include <termios.h>
+ 
+@@ -79,6 +80,8 @@
+  */
+ static volatile int in_refresh = FALSE;
+ 
++int only_jump_home = 0;
++
+ /* indicates the refresh screen is finished */
+ void
+ refresh_screen_yield(void)
+@@ -226,8 +229,17 @@
+ 
+   /* clear screen (Linux specific) */
+   if (fgoptions->screen_clear != FALSE) 
+-    printf("\033c");  
+-
++    {
++      if (only_jump_home)
++	{
++	  printf("\033[H");
++	}
++      else
++	{
++	  printf("\033c");  
++	}
++    }
++    
+   print_issue();
+ 
+   do_prompt();
+@@ -367,6 +379,73 @@
+ 
+   do
+     {
++      while (1)
++	{
++	  fd_set rfds;
++	  struct timeval tv, tv_now;
++	  struct tm tm_now;
++	  struct timeval *tvp;
++	  int selectretval;
++
++	  FD_ZERO(&rfds);
++	  FD_SET(STDIN_FILENO, &rfds);
++	  if (vt_isactive() == TRUE)
++	    {
++	      gettimeofday(&tv_now, NULL);
++	      localtime_r(&tv_now.tv_sec, &tm_now);
++
++#define UPDATE_EVERY_SECOND /* vagy #undef */
++
++#ifdef UPDATE_EVERY_SECOND
++	      /* Rendesen ugrik a másodperc is, de minden másodpercben
++	         végignyalja az /etc/issue fájlt (csak az az fbgetty,
++	         amelyik az éppen aktuális konzolon fut). */
++	      tv.tv_sec = 0;
++#else
++	      /* Csak percenként frissít. */
++	      tv.tv_sec = 59 - tm_now.tm_sec;
++#endif
++
++	      /* Csalás: egy kicsit többet várunk, mert a kernel néha
++	         korábban felébreszti a select()-et, és akkor egy
++	         (másod)perccel kisebb érték jelenik meg. Persze ez így nem
++	         az igazi megoldás... */
++	      tv.tv_usec = 1010000 - tv_now.tv_usec;
++	      if (tv.tv_usec >= 1000000)
++		{
++		  tv.tv_usec -= 1000000;
++		  tv.tv_sec++;
++		}
++	      if (tv.tv_sec < 0)
++		{
++		  tv.tv_sec = 0;
++		  tv.tv_usec = 0;
++		}
++	      tvp = &tv;
++	    }
++	  else
++	    {
++	      tvp = NULL;
++	    }
++	  selectretval = select(STDIN_FILENO+1, &rfds, NULL, NULL, tvp);
++	  if (selectretval < 0)
++	    {
++	      continue;
++	    }
++	  if (selectretval == 0)
++	    {
++	      only_jump_home = 1;
++	      refresh_screen();
++	      only_jump_home = 0;
++	      continue;
++	    }
++	  if (!FD_ISSET(STDIN_FILENO, &rfds))
++	    {
++	      /* should not reach it */
++	      continue;
++	    }
++	  break;
++	}
+       /* read a char */
+       count = read(STDIN_FILENO, &c, 1);
+ #ifdef FB_GETTY_DEBUG

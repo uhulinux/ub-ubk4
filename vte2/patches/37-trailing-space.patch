@@ -1,0 +1,12 @@
+diff -Naurdp a/src/vte.c b/src/vte.c
+--- a/src/vte.c	2009-06-08 11:17:36.000000000 +0200
++++ b/src/vte.c	2009-06-08 11:18:35.000000000 +0200
+@@ -5948,7 +5948,7 @@ vte_terminal_get_text_range_maybe_wrappe
+ 					attr.strikethrough = pcell->attr.strikethrough;
+ 
+ 					/* Store the cell string */
+-					if (pcell->c == 0) {
++					if (pcell->c == 0 || (!include_trailing_spaces && (pcell->c == ' '))) {
+ 						g_string_append_c (string, ' ');
+ 						last_empty = string->len;
+ 						last_emptycol = col;

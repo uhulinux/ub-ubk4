@@ -1,0 +1,24 @@
+diff -urN apr-1.2.2.orig/config.layout apr-1.2.2/config.layout
+--- apr-1.2.2.orig/config.layout	2004-11-24 23:51:51.000000000 +0100
++++ apr-1.2.2/config.layout	2005-12-05 17:06:00.000000000 +0100
+@@ -229,3 +229,20 @@
+     infodir:       ${exec_prefix}/share/info
+     libsuffix:    -${APR_MAJOR_VERSION}
+ </Layout>
++
++#   UHU-Linux layout
++<Layout UHU>
++    prefix:        /usr
++    exec_prefix:   ${prefix}
++    bindir:        ${prefix}/bin
++    sbindir:       ${prefix}/sbin
++    libdir:        ${prefix}/lib
++    libexecdir:    ${prefix}/lib/apr
++    mandir:        ${prefix}/man
++    sysconfdir:    /etc/apache
++    datadir:       /var/www
++    installbuilddir: ${libdir}/apr/build
++    includedir:    ${prefix}/include/apr
++    localstatedir: /var
++    runtimedir:    ${localstatedir}/run
++</Layout>

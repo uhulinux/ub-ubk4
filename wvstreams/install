@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm "$UB_INSTALLDIR"/usr/lib/pkgconfig/libwvqt.pc
+
+rm "$UB_INSTALLDIR"/etc/uniconf.conf
+rm "$UB_INSTALLDIR"/usr/bin/uni
+rm "$UB_INSTALLDIR"/usr/sbin/uniconfd
+rm "$UB_INSTALLDIR"/usr/share/man/man8/uni.8*
+rm "$UB_INSTALLDIR"/usr/share/man/man8/uniconfd.8*
+rm "$UB_INSTALLDIR"/var/lib/uniconf/uniconfd.ini
+rmdir "$UB_INSTALLDIR"/var/lib/uniconf

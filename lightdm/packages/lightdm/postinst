@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if [ ! -L /etc/systemd/system/display-manager.service ]; then
+	systemctl -f enable lightdm
+fi

@@ -1,0 +1,12 @@
+diff -Nur orig/wvrules.mk mod/wvrules.mk
+--- orig/wvrules.mk	2008-10-22 22:29:29.000000000 +0200
++++ mod/wvrules.mk	2016-11-19 18:10:56.042613007 +0100
+@@ -71,7 +71,7 @@
+ 
+ INCFLAGS=$(addprefix -I,$(WVSTREAMS_INC) $(XPATH))
+ CPPFLAGS+=$(INCFLAGS) \
+-	-D_BSD_SOURCE -D_GNU_SOURCE $(OSDEFINE) \
++	-D_DEFAULT_SOURCE -D_GNU_SOURCE $(OSDEFINE) \
+ 	-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 \
+ 	-DUNSTABLE
+ 

@@ -1,0 +1,75 @@
+diff -Naur orig/modules/libpr0n/decoders/jpeg/nsJPEGDecoder.cpp mod/modules/libpr0n/decoders/jpeg/nsJPEGDecoder.cpp
+--- orig/modules/libpr0n/decoders/jpeg/nsJPEGDecoder.cpp	2009-05-02 18:39:50.000000000 +0200
++++ mod/modules/libpr0n/decoders/jpeg/nsJPEGDecoder.cpp	2016-05-21 16:44:57.663620879 +0200
+@@ -706,7 +706,7 @@
+   case READING_BACK:
+     {
+       if (!new_buffer || new_buflen == 0)
+-        return PR_FALSE; /* suspend */
++        return FALSE; /* suspend */
+ 
+       src->decoder->mBufferLen = 0;
+ 
+@@ -719,7 +719,7 @@
+         } else {
+           /* Still need to skip some more data in the future */
+           src->decoder->mBytesToSkip -= (size_t)new_buflen;
+-          return PR_FALSE; /* suspend */
++          return FALSE; /* suspend */
+         }
+       }
+ 
+@@ -729,7 +729,7 @@
+       src->pub.bytes_in_buffer = (size_t)new_buflen;
+       src->decoder->mFillState = READING_NEW;
+ 
+-      return PR_TRUE;
++      return TRUE;
+     }
+     break;
+ 
+@@ -788,12 +788,12 @@
+     
+       src->decoder->mFillState = READING_BACK;
+ 
+-      return PR_FALSE;
++      return FALSE;
+     }
+     break;
+   }
+ 
+-  return PR_FALSE;
++  return FALSE;
+ }
+ 
+ /******************************************************************************/
+diff -Naur orig/modules/libpr0n/encoders/jpeg/nsJPEGEncoder.cpp mod/modules/libpr0n/encoders/jpeg/nsJPEGEncoder.cpp
+--- orig/modules/libpr0n/encoders/jpeg/nsJPEGEncoder.cpp	2009-05-02 18:39:49.000000000 +0200
++++ mod/modules/libpr0n/encoders/jpeg/nsJPEGEncoder.cpp	2016-05-21 16:39:17.776122128 +0200
+@@ -150,7 +150,7 @@
+   cinfo.data_precision = 8;
+ 
+   jpeg_set_defaults(&cinfo);
+-  jpeg_set_quality(&cinfo, quality, 1); // quality here is 0-100
++  jpeg_set_quality(&cinfo, quality, TRUE); // quality here is 0-100
+ 
+   // set up the destination manager
+   jpeg_destination_mgr destmgr;
+@@ -160,7 +160,7 @@
+   cinfo.dest = &destmgr;
+   cinfo.client_data = this;
+ 
+-  jpeg_start_compress(&cinfo, 1);
++  jpeg_start_compress(&cinfo, TRUE);
+ 
+   // feed it the rows
+   if (aInputFormat == INPUT_FORMAT_RGB) {
+@@ -361,7 +361,7 @@
+ 
+   cinfo->dest->next_output_byte = &that->mImageBuffer[that->mImageBufferUsed];
+   cinfo->dest->free_in_buffer = that->mImageBufferSize - that->mImageBufferUsed;
+-  return 1;
++  return TRUE;
+ }
+ 
+ 

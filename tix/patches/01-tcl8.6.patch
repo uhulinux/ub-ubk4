@@ -1,0 +1,14 @@
+diff -Naur ORIG/generic/tixGrSort.c UHU/generic/tixGrSort.c
+--- ORIG/generic/tixGrSort.c	2008-02-28 04:05:29.000000000 +0000
++++ UHU/generic/tixGrSort.c	2014-05-12 10:41:06.841163105 +0000
+@@ -447,8 +447,8 @@
+ 	 * Parse the result of the command.
+ 	 */
+ 
+-	order = strtol(sortInterp->result, &end, 0);
+-	if ((end == sortInterp->result) || (*end != 0)) {
++	order = strtol(Tcl_GetStringResult(sortInterp), &end, 0);
++	if ((end == Tcl_GetStringResult(sortInterp)) || (*end != 0)) {
+ 	    Tcl_ResetResult(sortInterp);
+ 	    Tcl_AppendResult(sortInterp,
+ 		    "comparison command returned non-numeric result",

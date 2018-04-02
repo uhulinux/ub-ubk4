@@ -1,0 +1,14 @@
+diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
+--- orig/misc/mc.ext.in	2011-07-26 14:55:53.000000000 +0200
++++ patched/misc/mc.ext.in	2011-07-29 16:58:36.000000000 +0200
+@@ -129,6 +129,10 @@
+ 	Open=%cd %p#utar
+ 	View=%view{ascii} xz -dc %f 2>/dev/null | tar tvvf -
+ 
++regex/\.(fpm|fdb)$
++    Open=%cd %p#utar
++    View=%view{ascii} tar tvvf %f
++
+ # .tar.F - used in QNX
+ regex/\.tar\.F$
+ 	# Open=%cd %p#utar

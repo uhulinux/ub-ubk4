@@ -1,0 +1,283 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2013-05-22 23:50:40.000000000 +0200
++++ patched/configure	2015-07-24 22:48:50.373058129 +0200
+@@ -5132,13 +5132,13 @@
+ fi
+ 
+ if test "${USE_LCMS}" = "yes"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cmsOpenProfileFromFile in -llcms" >&5
+-$as_echo_n "checking for cmsOpenProfileFromFile in -llcms... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cmsOpenProfileFromFile in -llcms2" >&5
++$as_echo_n "checking for cmsOpenProfileFromFile in -llcms2... " >&6; }
+ if ${ac_cv_lib_lcms_cmsOpenProfileFromFile+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-llcms  $LIBS"
++LIBS="-llcms2  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -5173,7 +5173,7 @@
+ #define HAVE_LIBLCMS 1
+ _ACEOF
+ 
+-  LIBS="-llcms $LIBS"
++  LIBS="-llcms2 $LIBS"
+ 
+ fi
+ 
+diff -Naur orig/configure.in patched/configure.in
+--- orig/configure.in	2015-07-24 22:24:58.525957983 +0200
++++ patched/configure.in	2015-07-24 22:49:38.881298668 +0200
+@@ -130,7 +130,7 @@
+ fi
+ 
+ if test "${USE_LCMS}" = "yes"; then
+-  AC_CHECK_LIB(lcms, cmsOpenProfileFromFile)
++  AC_CHECK_LIB(lcms2, cmsOpenProfileFromFile)
+ fi
+ 
+ dnl Checks for library functions.
+diff -Naur orig/src/xsane.h patched/src/xsane.h
+--- orig/src/xsane.h	2013-05-22 23:43:46.000000000 +0200
++++ patched/src/xsane.h	2015-07-24 22:43:19.755418685 +0200
+@@ -70,7 +70,7 @@
+ #include <gtk/gtk.h>
+ 
+ #ifdef HAVE_LIBLCMS
+-# include "lcms.h"
++# include "lcms2.h"
+ #else
+ # define cmsHTRANSFORM void *
+ #endif
+diff -Naur orig/src/xsane-preview.c patched/src/xsane-preview.c
+--- orig/src/xsane-preview.c	2013-05-22 23:33:34.000000000 +0200
++++ patched/src/xsane-preview.c	2015-07-24 22:28:04.450879935 +0200
+@@ -6347,8 +6347,8 @@
+  cmsHPROFILE hOutProfile = NULL;
+  cmsHPROFILE hProofProfile = NULL;
+  cmsHTRANSFORM hTransform = NULL;
+- DWORD input_format, output_format;
+- DWORD cms_flags = 0;
++ cmsUInt32Number input_format, output_format;
++ cmsUInt32Number cms_flags = 0;
+  int proof = 0;
+  char *cms_proof_icm_profile = NULL;
+  int linesize = 0;
+@@ -6356,8 +6356,6 @@
+ 
+   DBG(DBG_proc, "preview_do_color_correction\n");
+ 
+-  cmsErrorAction(LCMS_ERROR_SHOW);
+-
+   if (preferences.cms_bpc)
+   {
+     cms_flags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
+diff -Naur orig/src/xsane-save.c patched/src/xsane-save.c
+--- orig/src/xsane-save.c	2010-11-16 22:06:00.000000000 +0100
++++ patched/src/xsane-save.c	2015-07-24 22:31:20.623852704 +0200
+@@ -830,9 +830,9 @@
+  cmsHPROFILE hInProfile = NULL;
+  cmsHPROFILE hOutProfile = NULL;
+  cmsHTRANSFORM hTransform = NULL;
+- DWORD cms_input_format;
+- DWORD cms_output_format;
+- DWORD cms_flags = 0;
++ cmsUInt32Number cms_input_format;
++ cmsUInt32Number cms_output_format;
++ cmsUInt32Number cms_flags = 0;
+ 
+   if (cms_function == XSANE_CMS_FUNCTION_EMBED_SCANNER_ICM_PROFILE)
+   {
+@@ -841,8 +841,6 @@
+ 
+   DBG(DBG_info, "Prepare CMS transform\n");
+ 
+-  cmsErrorAction(LCMS_ERROR_SHOW);
+-
+   if (cms_bpc)
+   {
+     cms_flags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
+@@ -888,10 +886,10 @@
+     if (image_info->channels == 1) /* == 1 (grayscale) */
+     {
+ #if 1 /* xxx oli */
+-     LPGAMMATABLE Gamma = cmsBuildGamma(256, 2.2);
++     cmsToneCurve *Gamma = cmsBuildGamma(NULL, 2.2);
+ 
+       hOutProfile = cmsCreateGrayProfile(cmsD50_xyY(), Gamma);
+-      cmsFreeGamma(Gamma);
++      cmsFreeToneCurve(Gamma);
+ #endif
+     }
+     else
+@@ -2894,7 +2892,7 @@
+     return -1;
+   }
+ 
+-  n = cmsGetPostScriptCSA(hProfile, intent, NULL, 0);
++  n = cmsGetPostScriptCSA(NULL, hProfile, intent, 0, NULL, 0);
+   if (n == 0)
+   {
+     return -2;
+@@ -2906,7 +2904,7 @@
+     return -3;
+   }
+ 
+-  cmsGetPostScriptCSA(hProfile, intent, buffer, n);
++  cmsGetPostScriptCSA(NULL, hProfile, intent, 0, buffer, n);
+   buffer[n] = 0;
+ 
+   fprintf(outfile, "%s", buffer);
+@@ -2925,7 +2923,7 @@
+  cmsHPROFILE hProfile;
+  size_t n;
+  char* buffer;
+- DWORD flags = cmsFLAGS_NODEFAULTRESOURCEDEF;
++ cmsUInt32Number flags = cmsFLAGS_NODEFAULTRESOURCEDEF;
+ 
+   hProfile = cmsOpenProfileFromFile(output_profile, "r");
+   if (!hProfile)
+@@ -2937,8 +2935,8 @@
+   {
+     flags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
+   }
+-
+-  n = cmsGetPostScriptCRDEx(hProfile, intent, flags, NULL, 0);
++  
++  n = cmsGetPostScriptCRD(NULL, hProfile, intent, flags, NULL, 0);
+   if (n == 0)
+   {
+     return -2;
+@@ -2950,7 +2948,8 @@
+     return -3;
+   }
+ 
+-  cmsGetPostScriptCRDEx(hProfile, intent, flags, buffer, n);
++  cmsGetPostScriptCRD(NULL, hProfile, intent, flags, buffer, n);
++
+   buffer[n] = 0;
+ 
+   fprintf(outfile, "%s", buffer);
+@@ -4333,7 +4332,7 @@
+ {
+  FILE *icm_profile;
+  size_t size, embed_len;
+- LPBYTE embed_buffer;
++ cmsUInt8Number *embed_buffer;
+ 
+   DBG(DBG_proc, "xsane_jpeg_embed_scanner_icm_profile(%s)\n", icm_filename);
+ 
+@@ -4347,7 +4346,7 @@
+   size = ftell(icm_profile);
+   fseek(icm_profile, 0, SEEK_SET);
+ 
+-  embed_buffer = (LPBYTE) malloc(size + 1);
++  embed_buffer = (cmsUInt8Number *) malloc(size + 1);
+   if (embed_buffer)
+   {
+     embed_len = fread(embed_buffer, 1, size, icm_profile);
+diff -Naur orig/src/xsane-viewer.c patched/src/xsane-viewer.c
+--- orig/src/xsane-viewer.c	2010-11-16 21:26:34.000000000 +0100
++++ patched/src/xsane-viewer.c	2015-07-24 22:35:48.657181809 +0200
+@@ -1795,6 +1795,7 @@
+ {
+  Viewer *v = (Viewer *) data;
+  int val;
++ cmsUInt16Number alarm_codes[cmsMAXCHANNELS];
+ 
+   g_signal_handlers_block_by_func(GTK_OBJECT(v->cms_gamut_alarm_color_widget[0]), (GtkSignalFunc) xsane_viewer_set_cms_gamut_alarm_color_callback, v);
+   g_signal_handlers_block_by_func(GTK_OBJECT(v->cms_gamut_alarm_color_widget[1]), (GtkSignalFunc) xsane_viewer_set_cms_gamut_alarm_color_callback, v);
+@@ -1815,30 +1816,44 @@
+   {
+     default:
+     case 0: /* black */
+-      cmsSetAlarmCodes(0, 0, 0);
++      alarm_codes[0] = (cmsUInt16Number) 0;
++      alarm_codes[1] = (cmsUInt16Number) 0;
++      alarm_codes[2] = (cmsUInt16Number) 0;
+      break;
+ 
+     case 1: /* gray */
+-      cmsSetAlarmCodes(128, 128, 128);
++      alarm_codes[0] = (cmsUInt16Number) 128;
++      alarm_codes[1] = (cmsUInt16Number) 128;
++      alarm_codes[2] = (cmsUInt16Number) 128;
+      break;
+ 
+     case 2: /* white */
+-      cmsSetAlarmCodes(255, 255, 255);
++      alarm_codes[0] = (cmsUInt16Number) 255;
++      alarm_codes[1] = (cmsUInt16Number) 255;
++      alarm_codes[2] = (cmsUInt16Number) 255;
+      break;
+ 
+     case 3: /* red */
+-      cmsSetAlarmCodes(255, 0, 0);
++      alarm_codes[0] = (cmsUInt16Number) 255;
++      alarm_codes[1] = (cmsUInt16Number) 0;
++      alarm_codes[2] = (cmsUInt16Number) 0;
+      break;
+ 
+     case 4: /* green */
+-      cmsSetAlarmCodes(0, 255, 0);
++      alarm_codes[0] = (cmsUInt16Number) 0;
++      alarm_codes[1] = (cmsUInt16Number) 255;
++      alarm_codes[2] = (cmsUInt16Number) 0;
+      break;
+ 
+     case 5: /* blue */
+-      cmsSetAlarmCodes(0, 0, 255);
++      alarm_codes[0] = (cmsUInt16Number) 0;
++      alarm_codes[1] = (cmsUInt16Number) 0;
++      alarm_codes[2] = (cmsUInt16Number) 255;
+      break;
+   }
+ 
++  cmsSetAlarmCodes(alarm_codes);
++
+   g_signal_handlers_unblock_by_func(GTK_OBJECT(v->cms_gamut_alarm_color_widget[0]), (GtkSignalFunc) xsane_viewer_set_cms_gamut_alarm_color_callback, v);
+   g_signal_handlers_unblock_by_func(GTK_OBJECT(v->cms_gamut_alarm_color_widget[1]), (GtkSignalFunc) xsane_viewer_set_cms_gamut_alarm_color_callback, v);
+   g_signal_handlers_unblock_by_func(GTK_OBJECT(v->cms_gamut_alarm_color_widget[2]), (GtkSignalFunc) xsane_viewer_set_cms_gamut_alarm_color_callback, v);
+@@ -2172,9 +2187,9 @@
+  cmsHTRANSFORM hTransform = NULL;
+  int proof = 0;
+  char *cms_proof_icm_profile = NULL;
+- DWORD cms_input_format;
+- DWORD cms_output_format;
+- DWORD cms_flags = 0;
++ cmsUInt32Number cms_input_format;
++ cmsUInt32Number cms_output_format;
++ cmsUInt32Number cms_flags = 0;
+ #endif
+ 
+   /* open imagefile */
+@@ -2203,7 +2218,6 @@
+ 
+   if ((v->enable_color_management) && (v->cms_enable))
+   {
+-    cmsErrorAction(LCMS_ERROR_SHOW);
+ 
+     if (v->cms_bpc)
+     {
+@@ -2801,6 +2815,7 @@
+  GtkWidget *scrolled_window;
+  GtkWidget *zoom_option_menu, *zoom_menu, *zoom_menu_item;
+  int i, selection;
++ cmsUInt16Number alarm_codes[cmsMAXCHANNELS];
+ 
+   DBG(DBG_proc, "viewer_new(%s)\n", filename);
+ 
+@@ -2830,7 +2845,10 @@
+   v->cms_proofing_intent = INTENT_ABSOLUTE_COLORIMETRIC;
+   v->cms_gamut_check = 0;
+   v->cms_gamut_alarm_color = 3; /* red */
+-  cmsSetAlarmCodes(255, 0, 0);
++  alarm_codes[0] = (cmsUInt16Number) 255;
++  alarm_codes[1] = (cmsUInt16Number) 0;
++  alarm_codes[2] = (cmsUInt16Number) 0;
++  cmsSetAlarmCodes(alarm_codes);
+ #endif
+   if (selection_filetype)
+   {

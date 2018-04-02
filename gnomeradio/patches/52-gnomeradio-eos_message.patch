@@ -1,0 +1,23 @@
+## Description: Send EOS before we stop recording.
+## Origin: upstream, no
+## Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1079625
+## Author: Pojar George <geoubuntu@gmail.com> 
+## Forwarded: no
+Index: b/src/rec_tech.c
+===================================================================
+--- a/src/rec_tech.c	2012-12-03 10:14:56.906899748 +0000
++++ b/src/rec_tech.c	2012-12-03 10:14:58.126899712 +0000
+@@ -250,6 +250,13 @@
+ 	if (state != GST_STATE_PLAYING) {
+ 		GST_DEBUG ("pipeline in wrong state: %s", gst_element_state_get_name (state));
+ 	} else {
++		GstMessage *msg;
++		GST_DEBUG ("Stopping recording source");
++		gst_element_send_event (recording->pipeline, gst_event_new_eos ());
++		/* wait for EOS message on the pipeline bus */
++		msg = gst_bus_timed_pop_filtered (GST_ELEMENT_BUS (recording->pipeline), GST_SECOND, GST_MESSAGE_EOS | GST_MESSAGE_ERROR);
++		gst_message_unref (msg);
++
+ 		gst_element_set_state(recording->pipeline, GST_STATE_NULL);
+ 	}
+ 	gst_object_unref(GST_OBJECT(recording->pipeline));

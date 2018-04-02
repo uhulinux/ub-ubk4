@@ -1,0 +1,11 @@
+--- playmidi-2.3/playmidi.h-dist.orig	Wed Sep  9 15:02:43 1998
++++ playmidi-2.3/playmidi.h-dist	Wed Sep  9 15:02:57 1998
+@@ -53,7 +53,7 @@
+ #include <sys/soundcard.h>
+ #include <sys/ioctl.h>
+ #ifdef linux
+-#include <linux/awe_voice.h>
++#include "awe_voice.h"
+ #else
+ #include <awe_voice.h>
+ #endif

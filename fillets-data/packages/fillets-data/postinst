@@ -1,0 +1,12 @@
+#/bin/sh
+
+echo downloading data
+version=ubversion
+mkdir -p /usr/share/games/fillets-ng
+mkdir -p /tmp/install
+cd /tmp/install
+    curl -o fillets-ng-data-$version.tar.gz https://netcologne.dl.sourceforge.net/project/fillets/Fish%20Fillets%20-%20Next%20Generation/$version/fillets-ng-data-$version.tar.gz
+    tar -xvf fillets-ng-data-$version.tar.gz
+mv fillets-ng-data-$version/{font,images,music,script,sound} $homemappa/usr/share/games/fillets-ng/
+cd -
+rm -rf /tmp/install

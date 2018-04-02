@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+cp -a ipepresenter/ipepresenter "$UB_INSTALLDIR"/usr/bin/
+cp -a pdftoipe/pdftoipe "$UB_INSTALLDIR"/usr/bin/
+cp -a figtoipe/figtoipe "$UB_INSTALLDIR"/usr/bin/
+cp -a svgtoipe/svgtoipe.py "$UB_INSTALLDIR"/usr/bin/
+cp -a ipe5toxml/ipe5toxml "$UB_INSTALLDIR"/usr/bin/
+
+cd src
+INSTALL_ROOT="$UB_INSTALLDIR" \
+	make install \
+	IPEPREFIX=/usr
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/lua
+ln -s ../libipelua.so "$UB_INSTALLDIR"/usr/lib/lua/ipe.so

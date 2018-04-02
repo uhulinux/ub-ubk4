@@ -1,0 +1,12 @@
+diff -Naur libuser-0.59-orig/Makefile.in libuser-0.59/Makefile.in
+--- libuser-0.59-orig/Makefile.in	2013-03-29 15:46:41.000000000 +0100
++++ libuser-0.59/Makefile.in	2013-04-28 17:36:16.539317305 +0200
+@@ -647,7 +647,7 @@
+ VG_ENVIRONMENT = G_SLICE=always-malloc \
+ 	G_DEBUG=gc-friendly,resident-modules
+ 
+-SUBDIRS = po docs
++SUBDIRS = po
+ TESTS = tests/config_test.sh tests/fs_test tests/files_test \
+ 	tests/pwhash_test tests/utils_test $(am__append_1)
+ EXTRA_DIST = \

@@ -1,0 +1,592 @@
+diff -Naurd groff.orig/groff-utf8/u8_utf8_postp.c groff/groff-utf8/u8_utf8_postp.c
+--- groff.orig/groff-utf8/u8_utf8_postp.c	2005-07-02 23:44:12.000000000 +0200
++++ groff/groff-utf8/u8_utf8_postp.c	2005-09-11 11:05:51.312349383 +0200
+@@ -9,6 +9,10 @@
+  * and converts them to the appropriate Unicode character, in UTF-8 encoding.
+  * Supports only Unicode characters from U+0000 to U+FFFF because groff's
+  * \N'...' syntax supports only the BMP.
++ *
++ * Also support the bold and underlined variants, i.e.
++ * < ^H < ^H U ^H U ^H 2 ^H 2 ^H 0 ^H 0 ^H A ^H A ^H C ^H C ^H > ^H >
++ * _ ^H < ^H _ ^H U ^H _ ^H 2 ^H _ ^H 0 ^H _ ^H A ^H _ ^H C ^H _ ^H >
+  */
+ #include <ctype.h>
+ #include <stdio.h>
+@@ -69,7 +73,7 @@
+ 
+ int main (int argc, char *argv[])
+ {
+-  char buf[13];
++  char buf[27];
+ 
+   if (argc != 1)
+     exit(1);
+@@ -173,9 +177,565 @@
+                               fwrite(buf,1,12,stdout);
+                               goto restart1;
+                             }
+-                          } else if (c == '>') {
+-                            /* Found one! */
+-                            output_utf8(hex4_value(buf[4],buf[6],buf[8],buf[10]));
++                          } else {
++                            fwrite(buf,1,11,stdout);
++                            goto restart1;
++                          }
++                        } else {
++                          fwrite(buf,1,10,stdout);
++                          goto restart1;
++                        }
++                      } else {
++                        fwrite(buf,1,9,stdout);
++                        goto restart1;
++                      }
++                    } else {
++                      fwrite(buf,1,8,stdout);
++                      goto restart1;
++                    }
++                  } else {
++                    fwrite(buf,1,7,stdout);
++                    goto restart1;
++                  }
++                } else {
++                  fwrite(buf,1,6,stdout);
++                  goto restart1;
++                }
++              } else {
++                fwrite(buf,1,5,stdout);
++                goto restart1;
++              }
++            } else {
++              fwrite(buf,1,4,stdout);
++              goto restart1;
++            }
++          } else {
++            fwrite(buf,1,3,stdout);
++            goto restart1;
++          }
++        } else if (c == '<') {
++          c = getc(stdin);
++          if (c == EOF) {
++            fwrite(buf,1,3,stdout);
++            break;
++          }
++          buf[3] = c;
++          if (c == 0x08) {
++            c = getc(stdin);
++            if (c == EOF) {
++              fwrite(buf,1,4,stdout);
++              break;
++            }
++            buf[4] = c;
++            if (c == 'U') {
++              c = getc(stdin);
++              if (c == EOF) {
++                fwrite(buf,1,5,stdout);
++                break;
++              }
++              buf[5] = c;
++              if (c == 0x08) {
++                c = getc(stdin);
++                if (c == EOF) {
++                  fwrite(buf,1,6,stdout);
++                  break;
++                }
++                buf[6] = c;
++                if (c == 'U') {
++                  c = getc(stdin);
++                  if (c == EOF) {
++                    fwrite(buf,1,7,stdout);
++                    break;
++                  }
++                  buf[7] = c;
++                  if (c == 0x08) {
++                    c = getc(stdin);
++                    if (c == EOF) {
++                      fwrite(buf,1,8,stdout);
++                      break;
++                    }
++                    buf[8] = c;
++                    if (isxdigit(c)) {
++                      c = getc(stdin);
++                      if (c == EOF) {
++                        fwrite(buf,1,9,stdout);
++                        break;
++                      }
++                      buf[9] = c;
++                      if (c == 0x08) {
++                        c = getc(stdin);
++                        if (c == EOF) {
++                          fwrite(buf,1,10,stdout);
++                          break;
++                        }
++                        buf[10] = c;
++                        if (c == buf[8]) {
++                          c = getc(stdin);
++                          if (c == EOF) {
++                            fwrite(buf,1,11,stdout);
++                            break;
++                          }
++                          buf[11] = c;
++                          if (c == 0x08) {
++                            c = getc(stdin);
++                            if (c == EOF) {
++                              fwrite(buf,1,12,stdout);
++                              break;
++                            }
++                            buf[12] = c;
++                            if (isxdigit(c)) {
++                              c = getc(stdin);
++                              if (c == EOF) {
++                                fwrite(buf,1,13,stdout);
++                                break;
++                              }
++                              buf[13] = c;
++                              if (c == 0x08) {
++                                c = getc(stdin);
++                                if (c == EOF) {
++                                  fwrite(buf,1,14,stdout);
++                                  break;
++                                }
++                                buf[14] = c;
++                                if (c == buf[12]) {
++                                  c = getc(stdin);
++                                  if (c == EOF) {
++                                    fwrite(buf,1,15,stdout);
++                                    break;
++                                  }
++                                  buf[15] = c;
++                                  if (c == 0x08) {
++                                    c = getc(stdin);
++                                    if (c == EOF) {
++                                      fwrite(buf,1,16,stdout);
++                                      break;
++                                    }
++                                    buf[16] = c;
++                                    if (isxdigit(c)) {
++                                      c = getc(stdin);
++                                      if (c == EOF) {
++                                        fwrite(buf,1,17,stdout);
++                                        break;
++                                      }
++                                      buf[17] = c;
++                                      if (c == 0x08) {
++                                        c = getc(stdin);
++                                        if (c == EOF) {
++                                          fwrite(buf,1,18,stdout);
++                                          break;
++                                        }
++                                        buf[18] = c;
++                                        if (c == buf[16]) {
++                                          c = getc(stdin);
++                                          if (c == EOF) {
++                                            fwrite(buf,1,19,stdout);
++                                            break;
++                                          }
++                                          buf[19] = c;
++                                          if (c == 0x08) {
++                                            c = getc(stdin);
++                                            if (c == EOF) {
++                                              fwrite(buf,1,20,stdout);
++                                              break;
++                                            }
++                                            buf[20] = c;
++                                            if (isxdigit(c)) {
++                                              c = getc(stdin);
++                                              if (c == EOF) {
++                                                fwrite(buf,1,21,stdout);
++                                                break;
++                                              }
++                                              buf[21] = c;
++                                              if (c == 0x08) {
++                                                c = getc(stdin);
++                                                if (c == EOF) {
++                                                  fwrite(buf,1,22,stdout);
++                                                  break;
++                                                }
++                                                buf[22] = c;
++                                                if (c == buf[20]) {
++                                                  c = getc(stdin);
++                                                  if (c == EOF) {
++                                                    fwrite(buf,1,23,stdout);
++                                                    break;
++                                                  }
++                                                  buf[23] = c;
++                                                  if (c == 0x08) {
++                                                    c = getc(stdin);
++                                                    if (c == EOF) {
++                                                      fwrite(buf,1,24,stdout);
++                                                      break;
++                                                    }
++                                                    buf[24] = c;
++                                                    if (c == '>') {
++                                                      c = getc(stdin);
++                                                      if (c == EOF) {
++                                                        fwrite(buf,1,25,stdout);
++                                                        break;
++                                                      }
++                                                      buf[25] = c;
++                                                      if (c == 0x08) {
++                                                        c = getc(stdin);
++                                                        if (c == EOF) {
++                                                          fwrite(buf,1,26,stdout);
++                                                          break;
++                                                        }
++                                                        buf[26] = c;
++                                                        if (c == '>') {
++                                                          /* Found a bold one! */
++                                                          output_utf8(hex4_value(buf[10],buf[14],buf[18],buf[22]));
++                                                          fwrite("\b",1,1,stdout);
++                                                          output_utf8(hex4_value(buf[10],buf[14],buf[18],buf[22]));
++                                                        } else {
++                                                          fwrite(buf,1,26,stdout);
++                                                          goto restart1;
++                                                        }
++                                                      } else {
++                                                        fwrite(buf,1,25,stdout);
++                                                        goto restart1;
++                                                      }
++                                                    } else {
++                                                      fwrite(buf,1,24,stdout);
++                                                      goto restart1;
++                                                    }
++                                                  } else {
++                                                    fwrite(buf,1,23,stdout);
++                                                    goto restart1;
++                                                  }
++                                                } else {
++                                                  fwrite(buf,1,22,stdout);
++                                                  goto restart1;
++                                                }
++                                              } else {
++                                                fwrite(buf,1,21,stdout);
++                                                goto restart1;
++                                              }
++                                            } else {
++                                              fwrite(buf,1,20,stdout);
++                                              goto restart1;
++                                            }
++                                          } else {
++                                            fwrite(buf,1,19,stdout);
++                                            goto restart1;
++                                          }
++                                        } else {
++                                          fwrite(buf,1,18,stdout);
++                                          goto restart1;
++                                        }
++                                      } else {
++                                        fwrite(buf,1,17,stdout);
++                                        goto restart1;
++                                      }
++                                    } else {
++                                      fwrite(buf,1,16,stdout);
++                                      goto restart1;
++                                    }
++                                  } else {
++                                    fwrite(buf,1,15,stdout);
++                                    goto restart1;
++                                  }
++                                } else {
++                                  fwrite(buf,1,14,stdout);
++                                  goto restart1;
++                                }
++                              } else {
++                                fwrite(buf,1,13,stdout);
++                                goto restart1;
++                              }
++                            } else {
++                              fwrite(buf,1,12,stdout);
++                              goto restart1;
++                            }
++                          } else {
++                            fwrite(buf,1,11,stdout);
++                            goto restart1;
++                          }
++                        } else {
++                          fwrite(buf,1,10,stdout);
++                          goto restart1;
++                        }
++                      } else {
++                        fwrite(buf,1,9,stdout);
++                        goto restart1;
++                      }
++                    } else {
++                      fwrite(buf,1,8,stdout);
++                      goto restart1;
++                    }
++                  } else {
++                    fwrite(buf,1,7,stdout);
++                    goto restart1;
++                  }
++                } else {
++                  fwrite(buf,1,6,stdout);
++                  goto restart1;
++                }
++              } else {
++                fwrite(buf,1,5,stdout);
++                goto restart1;
++              }
++            } else {
++              fwrite(buf,1,4,stdout);
++              goto restart1;
++            }
++          } else {
++            fwrite(buf,1,3,stdout);
++            goto restart1;
++          }
++        } else {
++          fwrite(buf,1,2,stdout);
++          goto restart1;
++        }
++      } else {
++        fwrite(buf,1,1,stdout);
++        goto restart1;
++      }
++    } else if (c == '_') {
++      c = getc(stdin);
++      if (c == EOF) {
++        fwrite(buf,1,1,stdout);
++        break;
++      }
++      buf[1] = c;
++      if (c == 0x08) {
++        c = getc(stdin);
++        if (c == EOF) {
++          fwrite(buf,1,2,stdout);
++          break;
++        }
++        buf[2] = c;
++        if (c == '<') {
++          c = getc(stdin);
++          if (c == EOF) {
++            fwrite(buf,1,3,stdout);
++            break;
++          }
++          buf[3] = c;
++          if (c == 0x08) {
++            c = getc(stdin);
++            if (c == EOF) {
++              fwrite(buf,1,4,stdout);
++              break;
++            }
++            buf[4] = c;
++            if (c == '_') {
++              c = getc(stdin);
++              if (c == EOF) {
++                fwrite(buf,1,5,stdout);
++                break;
++              }
++              buf[5] = c;
++              if (c == 0x08) {
++                c = getc(stdin);
++                if (c == EOF) {
++                  fwrite(buf,1,6,stdout);
++                  break;
++                }
++                buf[6] = c;
++                if (c == 'U') {
++                  c = getc(stdin);
++                  if (c == EOF) {
++                    fwrite(buf,1,7,stdout);
++                    break;
++                  }
++                  buf[7] = c;
++                  if (c == 0x08) {
++                    c = getc(stdin);
++                    if (c == EOF) {
++                      fwrite(buf,1,8,stdout);
++                      break;
++                    }
++                    buf[8] = c;
++                    if (c == '_') {
++                      c = getc(stdin);
++                      if (c == EOF) {
++                        fwrite(buf,1,9,stdout);
++                        break;
++                      }
++                      buf[9] = c;
++                      if (c == 0x08) {
++                        c = getc(stdin);
++                        if (c == EOF) {
++                          fwrite(buf,1,10,stdout);
++                          break;
++                        }
++                        buf[10] = c;
++                        if (isxdigit(c)) {
++                          c = getc(stdin);
++                          if (c == EOF) {
++                            fwrite(buf,1,11,stdout);
++                            break;
++                          }
++                          buf[11] = c;
++                          if (c == 0x08) {
++                            c = getc(stdin);
++                            if (c == EOF) {
++                              fwrite(buf,1,12,stdout);
++                              break;
++                            }
++                            buf[12] = c;
++                            if (c == '_') {
++                              c = getc(stdin);
++                              if (c == EOF) {
++                                fwrite(buf,1,13,stdout);
++                                break;
++                              }
++                              buf[13] = c;
++                              if (c == 0x08) {
++                                c = getc(stdin);
++                                if (c == EOF) {
++                                  fwrite(buf,1,14,stdout);
++                                  break;
++                                }
++                                buf[14] = c;
++                                if (isxdigit(c)) {
++                                  c = getc(stdin);
++                                  if (c == EOF) {
++                                    fwrite(buf,1,15,stdout);
++                                    break;
++                                  }
++                                  buf[15] = c;
++                                  if (c == 0x08) {
++                                    c = getc(stdin);
++                                    if (c == EOF) {
++                                      fwrite(buf,1,16,stdout);
++                                      break;
++                                    }
++                                    buf[16] = c;
++                                    if (c == '_') {
++                                      c = getc(stdin);
++                                      if (c == EOF) {
++                                        fwrite(buf,1,17,stdout);
++                                        break;
++                                      }
++                                      buf[17] = c;
++                                      if (c == 0x08) {
++                                        c = getc(stdin);
++                                        if (c == EOF) {
++                                          fwrite(buf,1,18,stdout);
++                                          break;
++                                        }
++                                        buf[18] = c;
++                                        if (isxdigit(c)) {
++                                          c = getc(stdin);
++                                          if (c == EOF) {
++                                            fwrite(buf,1,19,stdout);
++                                            break;
++                                          }
++                                          buf[19] = c;
++                                          if (c == 0x08) {
++                                            c = getc(stdin);
++                                            if (c == EOF) {
++                                              fwrite(buf,1,20,stdout);
++                                              break;
++                                            }
++                                            buf[20] = c;
++                                            if (c == '_') {
++                                              c = getc(stdin);
++                                              if (c == EOF) {
++                                                fwrite(buf,1,21,stdout);
++                                                break;
++                                              }
++                                              buf[21] = c;
++                                              if (c == 0x08) {
++                                                c = getc(stdin);
++                                                if (c == EOF) {
++                                                  fwrite(buf,1,22,stdout);
++                                                  break;
++                                                }
++                                                buf[22] = c;
++                                                if (isxdigit(c)) {
++                                                  c = getc(stdin);
++                                                  if (c == EOF) {
++                                                    fwrite(buf,1,23,stdout);
++                                                    break;
++                                                  }
++                                                  buf[23] = c;
++                                                  if (c == 0x08) {
++                                                    c = getc(stdin);
++                                                    if (c == EOF) {
++                                                      fwrite(buf,1,24,stdout);
++                                                      break;
++                                                    }
++                                                    buf[24] = c;
++                                                    if (c == '_') {
++                                                      c = getc(stdin);
++                                                      if (c == EOF) {
++                                                        fwrite(buf,1,25,stdout);
++                                                        break;
++                                                      }
++                                                      buf[25] = c;
++                                                      if (c == 0x08) {
++                                                        c = getc(stdin);
++                                                        if (c == EOF) {
++                                                          fwrite(buf,1,26,stdout);
++                                                          break;
++                                                        }
++                                                        buf[26] = c;
++                                                        if (c == '>') {
++                                                          /* Found an underlined one! */
++                                                          fwrite("_\b",1,2,stdout);
++                                                          output_utf8(hex4_value(buf[10],buf[14],buf[18],buf[22]));
++                                                        } else {
++                                                          fwrite(buf,1,26,stdout);
++                                                          goto restart1;
++                                                        }
++                                                      } else {
++                                                        fwrite(buf,1,25,stdout);
++                                                        goto restart1;
++                                                      }
++                                                    } else {
++                                                      fwrite(buf,1,24,stdout);
++                                                      goto restart1;
++                                                    }
++                                                  } else {
++                                                    fwrite(buf,1,23,stdout);
++                                                    goto restart1;
++                                                  }
++                                                } else {
++                                                  fwrite(buf,1,22,stdout);
++                                                  goto restart1;
++                                                }
++                                              } else {
++                                                fwrite(buf,1,21,stdout);
++                                                goto restart1;
++                                              }
++                                            } else {
++                                              fwrite(buf,1,20,stdout);
++                                              goto restart1;
++                                            }
++                                          } else {
++                                            fwrite(buf,1,19,stdout);
++                                            goto restart1;
++                                          }
++                                        } else {
++                                          fwrite(buf,1,18,stdout);
++                                          goto restart1;
++                                        }
++                                      } else {
++                                        fwrite(buf,1,17,stdout);
++                                        goto restart1;
++                                      }
++                                    } else {
++                                      fwrite(buf,1,16,stdout);
++                                      goto restart1;
++                                    }
++                                  } else {
++                                    fwrite(buf,1,15,stdout);
++                                    goto restart1;
++                                  }
++                                } else {
++                                  fwrite(buf,1,14,stdout);
++                                  goto restart1;
++                                }
++                              } else {
++                                fwrite(buf,1,13,stdout);
++                                goto restart1;
++                              }
++                            } else {
++                              fwrite(buf,1,12,stdout);
++                              goto restart1;
++                            }
+                           } else {
+                             fwrite(buf,1,11,stdout);
+                             goto restart1;

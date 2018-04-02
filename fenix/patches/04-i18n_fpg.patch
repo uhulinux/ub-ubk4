@@ -1,0 +1,423 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fpg/fpg.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fpg/fpg.c	2007-08-28 14:38:39.000000000 +0200
++++ fenix-0.92a.dfsg1/fpg/fpg.c	2007-08-28 14:40:02.000000000 +0200
+@@ -24,6 +24,14 @@
+ #ifndef WIN32
+ #include <unistd.h>
+ #endif
++
++#ifdef USE_GETTEXT
++#include <libintl.h>
++#include <locale.h>
++#define _(String) gettext (String)
++#else
++#define _(String) String
++#endif
+ 
+ #include <png.h>
+ 
+@@ -168,15 +176,15 @@
+ 	/* Abre el fichero y se asegura de que screen está inicializada */
+ 
+ 	png = fopen (filename, "rb") ;
+-	if (!png) fatal_error ("No existe %s\n", filename) ;
++	if (!png) fatal_error (_("'%s': file does not exist\n"), filename) ;
+ 
+ 	/* Prepara las estructuras internas */
+ 
+ 	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, 0, 0, 0) ;
+-	if (!png_ptr) fatal_error ("Error al cargar PNG") ;
++	if (!png_ptr) fatal_error (_("Error loading PNG file")) ;
+ 	info_ptr = png_create_info_struct (png_ptr) ;
+ 	end_info = png_create_info_struct (png_ptr) ;
+-	if (!info_ptr || !end_info) fatal_error ("Error al cargar PNG") ;
++	if (!info_ptr || !end_info) fatal_error (_("Error loading PNG file")) ;
+ 
+ 	/* Rutina de error */
+ 
+@@ -208,7 +216,7 @@
+     }
+ 
+ 	if (color == PNG_COLOR_TYPE_GRAY || color == PNG_COLOR_TYPE_GRAY_ALPHA)
+-		fatal_error ("No se soportan PNG en escala de grises") ;
++		fatal_error (_("Grayscale PNG files are not supported")) ;
+ 
+ 	/* Configura los distintos modos disponibles */
+ 
+@@ -324,7 +332,7 @@
+ 	}
+ 
+ 	file = gzopen (filename, "rb") ;
+-	if (!file) fatal_error ("%s: fichero no encontrado\n", filename) ;
++	if (!file) fatal_error (_("'%s': file does not exist\n"), filename) ;
+ 
+ 	map = (MAP *) malloc(sizeof(MAP)) ;
+ 	gzread (file, &map->header, sizeof(map->header)) ;
+@@ -382,7 +390,7 @@
+ 
+ 	gzclose (file) ;
+ 
+-	if (error) fatal_error ("%s: fichero truncado\n", filename) ;
++	if (error) fatal_error (_("'%s': file is truncated\n"), filename) ;
+ 	if (force_code >= 0) map->header.code = force_code ;
+ 	return map ;
+ }
+@@ -396,7 +404,7 @@
+ 	int    n, r, g, b ;
+ 
+ 	buffer = (Uint16 *) malloc (len * 2) ;
+-	if (!buffer) fatal_error ("Error: out of memory\n") ;
++	if (!buffer) fatal_error (_("Error: out of memory\n")) ;
+ 	for (n = 0 ; n < 256 ; n++)
+ 	{
+ 		r = palette[n*3] ;
+@@ -432,7 +440,7 @@
+ 	gzFile * file = gzopen (filename, "rb") ;
+ 	char   buffer[8] ;
+ 
+-	if (!file) fatal_error ("%s: fichero no encontrado\n", filename) ;
++	if (!file) fatal_error (_("'%s': file does not exist\n"), filename) ;
+ 
+ 	gzread (file, buffer, 8) ;
+ 	if (strcmp (buffer, "f16\x1A\x0D\x0A") == 0)
+@@ -446,7 +454,7 @@
+ 		return file ;
+ 	}
+ 
+-	fatal_error ("%s: no es un fichero fpg\n", filename) ;
++	fatal_error (_("'%s' is not an FPG file\n"), filename) ;
+ 	return file ;
+ }
+ 
+@@ -471,7 +479,7 @@
+ 
+ 	if (!is_16bits) gzseek (file, PALETTE_SIZE, SEEK_CUR) ;
+ 
+-	printf ("# Contenido del fichero %s (%d bits):\n\n",
++	printf (_("# File '%s' contents (%d bits):\n\n"),
+ 			filename, is_16bits ? 16 : 8) ;
+ 
+ 	while (!gzeof(file))
+@@ -579,7 +587,7 @@
+ 		if (*ptr == ':')
+ 			file = gzopen (ptr+1, "rb") ;
+ 		if (!file)
+-			fatal_error ("%s: fichero no existente", filename) ;
++			fatal_error (_("'%s': file does not exist"), filename) ;
+ 	}
+ 
+ 	gzread (file, header, 8) ;
+@@ -588,7 +596,7 @@
+ 	else if (strcmp (header, "fpg\x1A\x0D\x0A") != 0 &&
+ 	    strcmp (header, "fnt\x1A\x0D\x0A") != 0 &&
+ 	    strcmp (header, "pal\x1A\x0D\x0A") != 0)
+-		fatal_error ("%s: no es un fichero de paleta válido", filename) ;
++		fatal_error (_("'%s': not a valid palette file"), filename) ;
+ 
+ 	gzread (file, here, PALETTE_SIZE) ;
+ 	gzclose (file) ;
+@@ -602,12 +610,12 @@
+ 	if (palfile && depth == 8) load_pal (palette, palfile) ;
+ 
+ 	file = fopen (filename, "wb") ;
+-	if (!file) fatal_error ("%s: error al escribir", filename) ;
++	if (!file) fatal_error (_("'%s': error writing file"), filename) ;
+ 
+ 	if (depth == 8)
+ 	{
+ 		fwrite ("fpg\x1A\x0D\x0A", 1, 8, file) ;
+-		if (!palfile) fatal_error ("Necesita una paleta de colores para crear un FPG de 8 bits");
++		if (!palfile) fatal_error (_("A colour palette is needed to create an 8 bit FPG file"));
+ 		fwrite (palette, 1, PALETTE_SIZE, file) ;
+ 	}
+ 	else
+@@ -655,7 +663,7 @@
+ 	}
+ 
+ 	file = fpg_open (filename, &is_16bits) ;
+-	if (!file) fatal_error ("%s: no es un FPG\n", file) ;
++	if (!file) fatal_error (_("'%s': not an FPG file\n"), file) ;
+ 
+ 	/* Carga los .MAP */
+ 
+@@ -674,20 +682,20 @@
+ 					{
+ 						maps[n_maps]->header.code++ ;
+ 						if (maps[n_maps]->header.code == 1000)
+-							fatal_error ("No quedan identificadores disponibles") ;
++							fatal_error (_("There are no identifiers left")) ;
+ 					}
+ 					status[maps[n_maps]->header.code] = ST_TO_ADD ;
+ 				}
+ 				if (is_16bits && maps[n_maps]->depth == 8)
+ 					map_8to16 (maps[n_maps]) ;
+ 				if (!is_16bits && maps[n_maps]->depth == 16)
+-					fatal_error ("Error: intento de añadir un gráfico de 16 bits a un FPG de 8\n") ;
++					fatal_error (_("Error: trying to add a 16 bit graphic to an 8 bit FPG file\n")) ;
+ 				n_maps++ ;
+ 			}
+ 		}
+ 		*nfile = n_files ;
+ 		if (n_maps == 0 && action == AC_ADD)
+-			printf ("Aviso: el fichero FPG se creará vacío\n") ;
++			printf (_("Warning: FPG file will be created empty\n")) ;
+ 	}
+ 
+ 	/* Recupera la paleta de colores */
+@@ -698,7 +706,7 @@
+ 
+ 		if (gzread (file, palette, PALETTE_SIZE) < (int)PALETTE_SIZE)
+ 		{
+-			fatal_error ("%s: fichero truncado\n", filename) ;
++			fatal_error (_("'%s': file is truncated\n"), filename) ;
+ 			gzclose (file) ;
+ 			return ;
+ 		}
+@@ -709,7 +717,7 @@
+ 	if (action == AC_PALETTE)
+ 	{
+ 		if (is_16bits)
+-			fatal_error ("Error: intento de extraer la paleta a un FPG de 16 bits\n") ;
++			fatal_error (_("Error: trying to extract the palette from a 16 bit FPG file\n")) ;
+ 
+ 		set_extension (filename, ".pal", fname2) ;
+ 		ofile2 = fopen (fname2, "wb") ;
+@@ -725,7 +733,7 @@
+ 		}
+ 		else
+ 		{
+-			fatal_error ("%s: error al crear\n", fname2) ;
++			fatal_error (_("'%s': file could not be created\n"), fname2) ;
+ 			return ;
+ 		}
+ 	}
+@@ -737,7 +745,7 @@
+ 	ofile = gzopen (output_filename, policy) ;
+ 	if (!ofile)
+ 	{
+-		fatal_error ("%s: error al crear\n", output_filename) ;
++		fatal_error (_("'%s': file could not be created\n"), output_filename) ;
+ 		gzclose (file) ;
+ 		return ;
+ 	}
+@@ -747,7 +755,7 @@
+ 		gzwrite (ofile, "fpg\x1A\x0D\x0A", 8) ;
+ 		if (gzwrite (ofile, palette, PALETTE_SIZE) < PALETTE_SIZE)
+ 		{
+-			fatal_error ("%s: error de escritura\n", output_filename) ;
++			fatal_error (_("'%s': error writing file\n"), output_filename) ;
+ 			gzclose (file) ;
+ 			gzclose (ofile) ;
+ 			return ;
+@@ -772,7 +780,7 @@
+ 
+ 		if (map.code < 0 || map.code >= 1000)
+ 		{
+-			fatal_error ("Aviso: código %d erróneo\n", map.code) ;
++			fatal_error (_("Warning: wrong code %d\n"), map.code) ;
+ 			map.code = 0 ;
+ 		}
+ 
+@@ -823,7 +831,7 @@
+ 					}
+ 					if (gzread (file, buffer, len) < len)
+ 					{
+-						fatal_error ("%s: fichero truncado\n", filename) ;
++						fatal_error (_("'%s': file is truncated\n"), filename) ;
+ 						break ;
+ 					}
+ 					gzwrite (ofile2, buffer, len) ;
+@@ -859,12 +867,12 @@
+ 				}
+ 				if (gzread (file, buffer, len) < len)
+ 				{
+-					fatal_error ("%s: fichero truncado\n", filename) ;
++					fatal_error (_("'%s': file is truncated\n"), filename) ;
+ 					break ;
+ 				}
+ 				if (gzwrite (ofile2, buffer, len) < len)
+ 				{
+-					fatal_error ("%s: error de escritura\n", output_filename) ;
++					fatal_error (_("'%s': error writing file\n"), output_filename) ;
+ 					break ;
+ 				}
+ 				gzclose (ofile2) ;
+@@ -874,7 +882,7 @@
+ 				goto mainloop ;
+ 			}
+ 			else
+-				fatal_error ("%s: error al abrir", fname2) ;
++				fatal_error (_("'%s': error opening file"), fname2) ;
+ 
+ 			if (n_files < 2) break ;
+ 		}
+@@ -906,7 +914,7 @@
+ 			}
+ 			else
+ 				gzseek (file, (is_16bits?2:1)*map.width*map.height, SEEK_CUR) ;
+-			printf ("  %03d: %-32s ELIMINADO\n", map.code, name) ;
++			printf (_("  %03d: %-32s REMOVED\n"), map.code, name) ;
+ 			continue ;
+ 		}
+ 		else 	status[map.code] = ST_PRESENT ;
+@@ -916,7 +924,7 @@
+ 		if (gzwrite (ofile, &map, sizeof(map))
+ 				< (int)sizeof(map))
+ 		{
+-			fatal_error ("%s: error de escritura\n", output_filename) ;
++			fatal_error (_("'%s': error writing file\n"), output_filename) ;
+ 			break ;
+ 		}
+ 
+@@ -932,12 +940,12 @@
+ 			}
+ 			if (gzread (file, buffer, len) < len)
+ 			{
+-				fatal_error ("%s: fichero truncado %d\n", filename, len) ;
++				fatal_error (_("'%s': file is truncated (%d)\n"), filename, len) ;
+ 				break ;
+ 			}
+ 			if (gzwrite (ofile, buffer, len) < len)
+ 			{
+-				fatal_error ("%s: error de escritura\n", output_filename) ;
++				fatal_error (_("'%s': error writing file\n"), output_filename) ;
+ 				break ;
+ 			}
+ 		}
+@@ -975,7 +983,7 @@
+ 		}
+ 		if (gzread (file, buffer, len) < len)
+ 		{
+-			fatal_error ("%s: fichero truncado\n", filename) ;
++			fatal_error (_("'%s': file is truncated\n"), filename) ;
+ 			break ;
+ 		}
+ 		if (!is_16bits && action == AC_16BITS)
+@@ -994,11 +1002,11 @@
+ 				free (ptr) ;
+ 			}
+ 
+-			printf ("  %03d: %-32s CONVERTIDO\n", map.code, map.name) ;
++			printf (_("  %03d: %-32s CONVERTED\n"), map.code, map.name) ;
+ 		}
+ 		if (gzwrite (ofile, buffer, len) < len)
+ 		{
+-			fatal_error ("%s: error de escritura\n", output_filename) ;
++			fatal_error (_("'%s': error writing file\n"), output_filename) ;
+ 			break ;
+ 		}
+ 	}
+@@ -1041,7 +1049,7 @@
+ 			}
+ 			len = map.width * map.height * bitmap->frames * (is_16bits ? 2:1) ;
+ 			gzwrite (ofile, bitmap->data, len) ;
+-			printf ("  %03d: %-32s AÑADIDO\n", map.code, map.name) ;
++			printf (_("  %03d: %-32s ADDED\n"), map.code, map.name) ;
+ 		}
+ 		*nfile = n_files ;
+ 	}
+@@ -1064,31 +1072,39 @@
+ 
+ void help ()
+ {
+-	printf ("FPG Utility - Copyright (C) 1999 José Luis Cebrián Pagüe\n"
+-		"This utility comes with ABSOLUTELY NO WARRANTY; fpg -h for details\n\n") ;
++	printf (_("FPG Utility - Copyright (C) 1999 Jose Luis Cebrian Pague\n"
++		"This utility comes with ABSOLUTELY NO WARRANTY; fpg -h for details\n\n")) ;
+ 
+-	printf ("Uso: fpg [opcion] fichero [gráfico ...]\n"
++	printf (_("Usage: fpg [option] filename.fpg [image ...]\n"
+ 		"\n"
+-		"    -l      Describe el FPG (opción por defecto): -v más extenso\n"
+-		"    -n      Crea un nuevo FPG, opcionalmente añadiendo MAPs\n"
+-		"    -o      Crea un nuevo FPG de 8 bits, opcionalmente añadiendo MAPs\n"
+-		"    -d      Elimina los gráficos indicados del FPG\n"
+-		"    -p      Extrae la paleta (.PAL) del fichero\n"
+-		"    -e      Extrae gráficos (.MAP) del FPG y los borra del mismo\n"
+-		"    -x      Extrae gráficos (.MAP) del FPG\n"
+-		"    -a      Añade  gráficos (.MAP) al FPG\n"
+-		"    -c      Convierte el .FPG a 16 bits\n"
+-		"    -#      Nivel de compresión (0 a 9)\n"
++		"    -l      Describe the FPG file (default option): -v more verbose\n"
++		"    -n      Create a new FPG file, optionally adding MAP (graphic) files\n"
++		"    -o      Create a new 8-bit FPG file, optionally adding MAP (graphic) files\n"
++		"    -d      Remove the selected files from inside the FPG file\n"
++		"    -p      Extract the colour palette(.PAL) of the file\n"
++		"    -e      Extract graphics (.MAP) from the FPG file and removes them from it\n"
++		"    -x      Extract graphics (.MAP) from the FPG file\n"
++		"    -a      Add graphics (.MAP) to the FPG file\n"
++		"    -c      Convert the .FPG to 16 bits\n"
++		"    -#      Level of compression (0 to 9)\n"
+ 		"\n"
+-		"Las opciones -x y -e admiten indicar los gráficos mediante su código.\n"
+-		"Se pueden utilizar rangos a-b y varios gráficos separados por comas.\n"
+-		"Las opciones -p y -l admiten múltiples ficheros fpg\n\n") ;
++		"Options -x and -e can select the graphics by their code.\n"
++		"Ranges in the form a\-b can be used, as well as comma\-separated graphics references.\n"
++		"Options -p and -l admit multiple FPG files\n\n")) ;
+ }
+ 
+ int main (int argc, char ** argv)
+ {
+ 	int i ;
+ 	char * ptr ;
++
++#ifdef USE_GETTEXT
++	setlocale (LC_MESSAGES, "");
++	setlocale (LC_CTYPE, "");
++	setlocale (LC_COLLATE, "");
++	textdomain ("fenix-fxc");
++	bindtextdomain ("fenix-fxc", NULL);
++#endif
+ 
+ 	for (i = 1 ; i < argc ; i++)
+ 	{
+@@ -1113,7 +1129,7 @@
+ 						action = AC_CREATE ;
+ 						create_16bits = 0 ;
+ 						if (argc <= i+2)
+-							fatal_error ("Especifique nombre de paleta tras -o") ;
++							fatal_error (_("Specify the name of the colour palette after %s"), "-o") ;
+ 						palette_file = argv[i+2] ;
+ 						break ;
+ 					case 'a':
+@@ -1136,7 +1152,7 @@
+ 						if (action == AC_CREATE)
+ 						{
+ 							if (argc == i+1)
+-								fatal_error ("Especifique nombre de paleta tras -p") ;
++								fatal_error (_("Specify the name of the colour palette after %s"), "-p") ;
+ 							palette_file = argv[i+1] ;
+ 							memcpy (&argv[i+1], &argv[i+2], sizeof(char *)*(argc-i)) ;
+ 							argc-- ;
+@@ -1153,7 +1169,7 @@
+ 						help() ;
+ 						return -1 ;
+ 					default:
+-						fatal_error ("Error: opción -%c no reconocida\n", *ptr) ;
++						fatal_error (_("Error: unknown option -%c\n"), *ptr) ;
+ 				}
+ 				ptr++ ;
+ 			}
+@@ -1161,7 +1177,7 @@
+ 		else
+ 		{
+ 			if (n_files == MAXFILES)
+-				fatal_error ("Error: demasiados ficheros\n") ;
++				fatal_error (_("Error: too many files\n")) ;
+ 			strcpy (files[n_files++], argv[i]) ;
+ 		}
+ 	}
+@@ -1188,7 +1204,7 @@
+ 				fpg_process (files[i], &i) ;
+ 				break ;
+ 			default:
+-				fatal_error ("Error: Acción no disponible\n") ;
++				fatal_error (_("Error: action not available\n")) ;
+ 		}
+ 	}
+ 

@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+# libass old
+chmod +x waf-1.9.8
+./waf-1.9.8 configure \
+	--prefix=/usr \
+	--enable-libarchive \
+	--enable-cdda \
+	--enable-encoding
+./waf-1.9.8  build

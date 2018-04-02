@@ -1,0 +1,12 @@
+diff -Naur orig/common/rconfiguration.cc patched/common/rconfiguration.cc
+--- orig/common/rconfiguration.cc	2015-10-16 12:53:01.000000000 +0200
++++ patched/common/rconfiguration.cc	2015-10-24 01:21:15.224739107 +0200
+@@ -205,7 +205,7 @@
+ string RLogDir()
+ {
+    struct stat stbuf;
+-   static string logDir = RConfDir() + string("/log/");
++   static string logDir = "/var/log/synaptic/";
+ 
+    if (stat(logDir.c_str(), &stbuf) < 0) {
+       if (mkdir(logDir.c_str(), 0700) < 0) {

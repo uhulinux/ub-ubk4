@@ -1,0 +1,54 @@
+# Copyright (C) 2007  Dann Frazier <dannf@debian.org>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+# See http://bugs.debian.org/437735
+
+Index: fenix-0.92a.dfsg1/fxi/inc/g_pal.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ fenix-0.92a.dfsg1/fxi/inc/g_pal.h	2007-08-28 13:29:45.000000000 +0000
+@@ -0,0 +1,33 @@
++/*
++ *  Fenix - Videogame compiler/interpreter
++ *  Current release       : FENIX - PROJECT 1.0 - R 0.84
++ *  Last stable release   :
++ *  Project documentation : http://fenix.divsite.net
++ *
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2 of the License, or
++ *  (at your option) any later version.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
++ *
++ *  Copyright © 1999 Jose Luis Cebrian Pague
++ *  Copyright © 2002 Fenix Team
++ *
++ */
++
++#ifndef __G_PAL_H
++#define __G_PAL_H
++
++int pal_set (PALETTE * spal, int color, int num, Uint8 * pal);
++int pal_map_assign (int libid, int mapcode, PALETTE * palid);
++
++#endif
+Index: fenix-0.92a.dfsg1/fxi/src/i_func.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxi/src/i_func.c	2007-08-28 13:29:44.000000000 +0000
++++ fenix-0.92a.dfsg1/fxi/src/i_func.c	2007-08-28 13:29:45.000000000 +0000
+@@ -63,6 +63,7 @@
+ #include "fmath.h"
+ #include "dirs.h"
+ #include "sysprocs_p.h"
++#include "g_pal.h"
+ 
+ /* WIN32 INCLUDES */
+ #ifdef WIN32

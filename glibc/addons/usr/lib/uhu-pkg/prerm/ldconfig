@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+if [ -f /var/lib/dpkg/info/"$1".shlibs ]; then
+	rm -f /var/lib/uhu-pkg/ldconfig
+fi

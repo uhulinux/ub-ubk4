@@ -1,0 +1,58 @@
+#!/bin/sh -eux
+
+cd "$UB_OBJECTDIR"
+
+OPT_FLAGS="-O2 -mtune=generic"
+
+CFLAGS="$OPT_FLAGS" \
+CXXFLAGS="$OPT_FLAGS" \
+XCFLAGS="$OPT_FLAGS" \
+TCFLAGS="$OPT_FLAGS" \
+GCJFLAGS="$OPT_FLAGS" \
+
+if [ "$UB_ARCH" == "amd64" ]; then
+	hostflags=(
+	--build=x86_64-gnu-linux
+	--host=x86_64-gnu-linux
+	--target=x86_64-gnu-linux
+	)
+else
+	hostflags=(
+	--build=i686-gnu-linux
+	--host=i686-gnu-linux
+	--target=i686-gnu-linux
+	)
+fi
+
+SED=sed \
+
+"$UB_COMPILEDIR"/configure \
+	--prefix=/usr \
+	--infodir=/usr/share/info \
+	--mandir=/usr/share/man \
+	--enable-languages=c,c++,objc,fortran \
+	--enable-targets=all \
+	--enable-checking=release \
+	--enable-shared \
+	--enable-threads=posix \
+	--enable-lto \
+	--enable-plugin \
+	--enable-libmpx \
+	--enable-libssp \
+	--enable-tls \
+	--enable-install-libiberty \
+	--disable-multilib \
+	--disable-libstdcxx-pch \
+	--disable-libunwind-exceptions \
+	--disable-werror \
+	--with-gnu-as \
+	--with-gnu-ld \
+	--with-system-zlib \
+	--with-arch-32=i686 \
+	--with-arch-64=k8 \
+	--with-cpu-32=i686 \
+	--with-cpu-64=k8 \
+	--with-tune=generic \
+	${hostflags[@]}
+
+ub_make -j4

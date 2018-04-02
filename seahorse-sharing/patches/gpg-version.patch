@@ -1,0 +1,12 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2013-03-25 12:02:04.000000000 +0100
++++ mod/configure.ac	2017-10-04 10:59:31.460877712 +0200
+@@ -43,7 +43,7 @@
+ 	DO_CHECK=$enableval, DO_CHECK=yes)
+ 
+ if test	"$DO_CHECK" = "yes"; then
+-	accepted_versions="1.2 1.4 2.0"
++	accepted_versions="1.2 1.4 2.0 2.2"
+ 	AC_PATH_PROGS(GNUPG, [gpg gpg2], no)
+ 	ok="no"
+ 	if test "$GNUPG" != "no"; then

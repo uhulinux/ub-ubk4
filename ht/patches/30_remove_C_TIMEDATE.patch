@@ -1,0 +1,18 @@
+Description: remove __TIMEDATE__ C preprocessors
+ in order to make the build reproducible
+Author: Anton Gladky <gladk@debian.org>
+Last-Update: 2015-06-21
+
+Index: ht-2.1.0/main.cc
+===================================================================
+--- ht-2.1.0.orig/main.cc
++++ ht-2.1.0/main.cc
+@@ -47,7 +47,7 @@
+ 
+ const char *htcopyrights[]=
+ {
+-	ht_name" "ht_version" (%s) "__TIME__" on "__DATE__,
++	ht_name" "ht_version,
+ 	ht_copyright1,
+ 	ht_copyright2,
+ 	NULL

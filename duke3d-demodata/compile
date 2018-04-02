@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+rm LICENSE.TXT
+mv DN3DSW13.SHR DN3DSW13.SHR.zip
+unzip DN3DSW13.SHR.zip
+find . \( -iname "*.CON" -o -iname "*.DMO" -o -iname "*.RTS" -o -iname "*.GRP" -o -iname "*.PCK" -o -iname "*.INI" \) \
+	-exec sh -c 'echo "${1}"
+	mv "${1}" "$(echo "${1}" | tr [:upper:] [:lower:])"' - {} \;

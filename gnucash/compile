@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+# cmake-val a konfig az /usr/etc alá kerül az /etc helyett
+rm -f CMakeLists.txt
+
+ub_compile \
+	--with-html-engine=webkit \
+	--enable-locale-specific-tax \
+	--enable-python
+
+cd gnucash-docs
+ub_compile --disable-scrollkeeper

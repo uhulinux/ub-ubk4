@@ -1,0 +1,2 @@
+alap=$(sflist lgames lbreakout2 | grep -E '^([0-9.]+)$' | sort -V | tail -n 1)
+sflist lgames lbreakout2/"$alap" | parsever | sort -V | tail -n 1

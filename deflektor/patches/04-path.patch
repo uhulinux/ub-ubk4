@@ -1,0 +1,118 @@
+diff -Naur orig/audio.c mod/audio.c
+--- orig/audio.c	2006-02-04 18:02:46.000000000 +0100
++++ mod/audio.c	2013-06-25 20:19:50.000000000 +0200
+@@ -42,8 +42,8 @@
+  FMOD_System_Create(&sistema);
+  FMOD_System_Init(sistema, 16, FMOD_INIT_NORMAL, NULL);
+ 
+- f_msc = load_datafile("msc.dat");
+- f_audio = load_datafile("snd.dat");
++ f_msc = load_datafile("/usr/share/games/deflektor/msc.dat");
++ f_audio = load_datafile("/usr/share/games/deflektor/snd.dat");
+ }
+ 
+ //******************************************************************************
+diff -Naur orig/deflektor.c mod/deflektor.c
+--- orig/deflektor.c	2008-06-09 00:16:38.000000000 +0200
++++ mod/deflektor.c	2013-06-25 20:15:04.000000000 +0200
+@@ -132,8 +132,8 @@
+  set_display_switch_mode(SWITCH_AMNESIA);
+  set_trans_blender(0,0,0,240);
+  clear_bitmap(buffer=create_bitmap(RES_X,RES_Y));
+- f_grf=load_datafile("grf.dat");
+- f_fnt=load_datafile("fuentes.dat");
++ f_grf=load_datafile("/usr/share/games/deflektor/grf.dat");
++ f_fnt=load_datafile("/usr/share/games/deflektor/fuentes.dat");
+  for(l=0;l<=IMG_X*IMG_Y;loseta[l++]=NULL);
+ 
+  borde[0]=(BITMAP *)(f_grf[0].dat);
+@@ -165,7 +165,7 @@
+  char no_encontrado=0;
+  PACKFILE *f_dat=NULL;
+ 
+- if(f_dat=pack_fopen("grf.dat",F_READ))
++ if(f_dat=pack_fopen("/usr/share/games/deflektor/grf.dat",F_READ))
+    pack_fclose(f_dat);
+  else
+   {
+@@ -173,7 +173,7 @@
+    allegro_message("ERROR: fichero grf.dat no encontrado\nERROR: file grf.dat not found");
+   }
+ 
+- if(f_dat=pack_fopen("fuentes.dat",F_READ))
++ if(f_dat=pack_fopen("/usr/share/games/deflektor/fuentes.dat",F_READ))
+    pack_fclose(f_dat);
+  else
+   {
+@@ -181,7 +181,7 @@
+    allegro_message("ERROR: fichero fuentes.dat no encontrado\nERROR: file fuentes.dat not found");
+   }
+ 
+- if(f_dat=pack_fopen("intro.dat",F_READ))
++ if(f_dat=pack_fopen("/usr/share/games/deflektor/intro.dat",F_READ))
+    pack_fclose(f_dat);
+  else
+   {
+@@ -189,7 +189,7 @@
+    allegro_message("ERROR: fichero intro.dat no encontrado\nERROR: file intro.dat not found");
+   }
+ 
+- if(f_dat=pack_fopen("msc.dat",F_READ))
++ if(f_dat=pack_fopen("/usr/share/games/deflektor/msc.dat",F_READ))
+    pack_fclose(f_dat);
+  else
+   {
+@@ -197,7 +197,7 @@
+    allegro_message("ERROR: fichero msc.dat no encontrado\nERROR: file msc.dat not found");
+   }
+ 
+- if(f_dat=pack_fopen("snd.dat",F_READ))
++ if(f_dat=pack_fopen("/usr/share/games/deflektor/snd.dat",F_READ))
+    pack_fclose(f_dat);
+  else
+   {
+@@ -965,7 +965,7 @@
+  short x,y,contador;
+  BITMAP *mapa_intro=NULL;
+  char voz=-1;
+- DATAFILE *f_intro=load_datafile("intro.dat");
++ DATAFILE *f_intro=load_datafile("/usr/share/games/deflektor/intro.dat");
+ 
+  parar_musica();
+  mapa_intro=(BITMAP *)(f_intro[0].dat);
+@@ -1190,7 +1190,7 @@
+ //******************************************************************************
+ void leer_cfg(void)
+ {
+- PACKFILE *cfg=pack_fopen("cfg.dat",F_READ);
++ PACKFILE *cfg=pack_fopen("/usr/share/games/deflektor/cfg.dat",F_READ);
+ 
+  if(cfg)
+   {
+@@ -1230,7 +1230,7 @@
+ //******************************************************************************
+ void escribir_cfg(void)
+ {
+- PACKFILE *cfg=pack_fopen("cfg.dat",F_WRITE);
++ PACKFILE *cfg=pack_fopen("/usr/share/games/deflektor/cfg.dat",F_WRITE);
+  pack_fwrite(&idioma, sizeof(char), cfg);
+  pack_fwrite(&volson, sizeof(char), cfg);
+  pack_fwrite(&volmus, sizeof(char), cfg);
+@@ -1247,7 +1247,7 @@
+  short f;
+  int fin, pot;
+  char c;
+- PACKFILE *pnt=pack_fopen("pnt.txt",F_READ);
++ PACKFILE *pnt=pack_fopen("/usr/share/games/deflektor/pnt.txt",F_READ);
+ 
+  for(f=0;f<29*9;max_txt[f++]=0);
+  for(f=0;f<9;   max_pnt[f++]=0);
+@@ -1280,7 +1280,7 @@
+ void escribir_pnt(void)
+ {
+  char f,n;
+- PACKFILE *pnt=pack_fopen("pnt.txt",F_WRITE);
++ PACKFILE *pnt=pack_fopen("/usr/share/games/deflektor/pnt.txt",F_WRITE);
+ 
+  for(f=0;f<9 && max_pnt[f];f++)
+   {

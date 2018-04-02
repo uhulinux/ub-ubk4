@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+cd unix
+make \
+	INSTALL_ROOT="$UB_INSTALLDIR" \
+	install \
+	install-private-headers
+
+for i in tclUnix*.h ../generic/tcl*.h; do
+	sed -e 's,\.\./[^/]*/,,g' <"$i" >"$UB_INSTALLDIR/usr/include/${i##*/}"
+done
+ln -s "tclsh$UB_VERSION_HEAD2" "$UB_INSTALLDIR"/usr/bin/tclsh
+chmod -x "$UB_INSTALLDIR"/usr/lib/*.a

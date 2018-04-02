@@ -1,0 +1,143 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2012-07-21 20:51:33.000000000 +0200
++++ mod/Makefile	2015-02-12 09:23:06.937428666 +0100
+@@ -41,20 +41,23 @@
+ 
+ ### The directory environment:
+ 
+-VDRDIR = ../../..
+-LIBDIR = ../../lib
++# Use package data if installed...otherwise assume we're under the VDR source directory:
++PKGCFG = $(if $(VDRDIR),$(shell pkg-config --variable=$(1) $(VDRDIR)/vdr.pc),$(shell pkg-config --variable=$(1) vdr || pkg-config --variable=$(1) ../../../vdr.pc))
++LIBDIR = $(DESTDIR)$(call PKGCFG,libdir)
++LOCDIR = $(DESTDIR)$(call PKGCFG,locdir)
++#
+ SYSDIR = ./systems
+ PREDIR = ./systems-pre
+ TMPDIR = /tmp
+ 
+ ### The C++ compiler and options:
+ 
+-CXX      ?= g++
+-CXXFLAGS ?= -O2 -g -Wall -Woverloaded-virtual
++export CFLAGS   = $(call PKGCFG,cflags)
++export CXXFLAGS = $(call PKGCFG,cxxflags) -Wno-shift-overflow -Wno-literal-suffix
+ 
+ ### Includes and Defines
+ 
+-INCLUDES      = -I$(VDRDIR)/include
++INCLUDES      =
+ DEFINES       = -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
+ SHAREDDEFINES = -DAPIVERSNUM=$(APIVERSNUM) -D_GNU_SOURCE
+ LIBS          = -lcrypto
+@@ -71,13 +74,9 @@
+ 
+ ### The version number of VDR (taken from VDR's "config.h"):
+ 
+-VDRVERSION := $(shell sed -ne '/define VDRVERSION/ s/^.*"\(.*\)".*$$/\1/p' $(VDRDIR)/include/vdr/config.h)
+-APIVERSION := $(shell sed -ne '/define APIVERSION/ s/^.*"\(.*\)".*$$/\1/p' $(VDRDIR)/include/vdr/config.h)
+-ifeq ($(strip $(APIVERSION)),)
+-   APIVERSION = $(VDRVERSION)
+-endif
+-VDRVERSNUM := $(shell sed -ne '/define VDRVERSNUM/ s/^.[a-zA-Z ]*\([0-9]*\) .*$$/\1/p' $(VDRDIR)/include/vdr/config.h)
+-APIVERSNUM := $(shell sed -ne '/define APIVERSNUM/ s/^.[a-zA-Z ]*\([0-9]*\) .*$$/\1/p' $(VDRDIR)/include/vdr/config.h)
++APIVERSION = $(call PKGCFG,apiversion)
++VDRVERSNUM := $(shell sed -ne '/define VDRVERSNUM/ s/^.[a-zA-Z ]*\([0-9]*\) .*$$/\1/p' $(INCDIR)/config.h)
++APIVERSNUM := $(shell sed -ne '/define APIVERSNUM/ s/^.[a-zA-Z ]*\([0-9]*\) .*$$/\1/p' $(INCDIR)/config.h)
+ ifeq ($(strip $(APIVERSNUM)),)
+    APIVERSNUM = $(VDRVERSNUM)
+ endif
+@@ -91,17 +90,17 @@
+ ### Internationalization (I18N):
+ 
+ PODIR     = po
++I18Npo    = $(wildcard $(PODIR)/*.po)
++I18Nmo    = $(addsuffix .mo, $(foreach file, $(I18Npo), $(basename $(file))))
++I18Nmsgs  = $(addprefix $(LOCDIR)/, $(addsuffix /LC_MESSAGES/vdr-$(PLUGIN).mo, $(notdir $(foreach file, $(I18Npo), $(basename $(file))))))
+ I18Npot   = $(PODIR)/$(PLUGIN).pot
+-I18Nmo    = vdr-$(PLUGIN).mo
+-I18Nmsgs  = $(addprefix $(LOCALEDIR)/,$(addsuffix /LC_MESSAGES/$(I18Nmo),$(notdir $(foreach file, $(wildcard $(PODIR)/*.po), $(basename $(file))))))
+-LOCALEDIR = $(VDRDIR)/locale
+ 
+ ### VDR version dependant
+ 
+ # test VDR version
+ BYVERS = $(strip $(shell if test $(APIVERSNUM) -ge 010703; then echo "*"; fi))
+ # test if PlayTsVideo() exists (e.g. TSplay patch)
+-BYTSPL = $(strip $(shell grep -l 'PlayTsVideo' $(VDRDIR)/include/vdr/device.h))
++BYTSPL = $(strip $(shell grep -l 'PlayTsVideo' $(INCDIR)/device.h))
+ 
+ ifneq ($(BYVERS)$(BYTSPL),)
+   SHAREDDEFINES += -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+@@ -121,15 +120,15 @@
+   LIBS     += -lpcsclite
+ endif
+ 
+-HAVE_SD := $(wildcard ../dvbsddevice/dvbsddevice.c)
++HAVE_SD := $(wildcard $(INCDIR)/PLUGINS/dvbsddevice/dvbsddevice.c)
+ ifneq ($(strip $(HAVE_SD)),)
+   DEFINES += -DWITH_SDDVB
+   DEVPLUGTARGETS += $(LIBDIR)/libsc-dvbsddevice-$(SCAPIVERS).so.$(APIVERSION)
+ endif
+ DEVPLUGOBJS += device-sd.o
+-HAVE_HD := $(wildcard ../dvbhddevice/dvbhddevice.c)
++HAVE_HD := $(wildcard $(INCDIR)/PLUGINS/dvbhddevice/dvbhddevice.c)
+ ifneq ($(strip $(HAVE_HD)),)
+-  HDVERS := $(shell sed -ne '/*VERSION/ s/^.*=.*"\(.*\)".*$$/\1/p' ../dvbhddevice/dvbhddevice.c)
++  HDVERS := $(shell sed -ne '/*VERSION/ s/^.*=.*"\(.*\)".*$$/\1/p' $(INCDIR)/PLUGINS/dvbhddevice/dvbhddevice.c)
+   ifeq ($(findstring dag,$(HDVERS)),)
+     DEFINES += -DWITH_HDDVB
+     DEVPLUGTARGETS += $(LIBDIR)/libsc-dvbhddevice-$(SCAPIVERS).so.$(APIVERSION)
+@@ -138,7 +137,7 @@
+ DEVPLUGOBJS += device-hd.o
+ 
+ # max number of CAIDs per slot
+-MAXCAID := $(shell sed -ne '/define MAXCASYSTEMIDS/ s/^.[a-zA-Z ]*\([0-9]*\).*$$/\1/p' $(VDRDIR)/ci.c)
++MAXCAID := 64
+ ifneq ($(strip $(MAXCAID)),)
+   DEFINES += -DVDR_MAXCAID=$(MAXCAID)
+ endif
+@@ -223,17 +222,23 @@
+ 	xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --package-name=VDR-SC --package-version=$(VERSION) --msgid-bugs-address='<noone@nowhere.org>' -o $@ `ls $^`
+ 
+ %.po: $(I18Npot)
+-	msgmerge -U --no-wrap --no-location --no-fuzzy-matching --backup=none -q $@ $<
++	msgmerge -U --no-wrap --no-location --backup=none -q -N $@ $<
+ 	@touch $@
+ 
+ %.mo: %.po
+ 	msgfmt -c -o $@ $<
+ 
+-$(I18Nmsgs): $(LOCALEDIR)/%/LC_MESSAGES/$(I18Nmo): $(PODIR)/%.mo
+-	@mkdir -p $(dir $@)
+-	cp $< $@
++$(I18Nmsgs): $(LOCDIR)/%/LC_MESSAGES/vdr-$(PLUGIN).mo: $(PODIR)/%.mo
++	install -D -m644 $< $@
++
++i18n: $(I18Nmo) $(I18Npot)
++
++install-i18n: $(I18Nmsgs)
++
++install-lib: $(SOFILE)
++	install -D $^ $(LIBDIR)/$^.$(APIVERSION)
+ 
+-i18n: $(I18Nmsgs)
++install: install-i18n
+ 
+ version.c: FORCE
+ 	@echo >$@.new "/* generated file, do not edit */"; \
+diff -Naur orig/Makefile.system mod/Makefile.system
+--- orig/Makefile.system	2012-07-21 20:51:33.000000000 +0200
++++ mod/Makefile.system	2015-02-12 07:58:32.551434206 +0100
+@@ -18,7 +18,10 @@
+ 
+ ### The directory environment:
+ 
+-LIBDIR = ../../../../lib
++# Use package data if installed...otherwise assume we're under the VDR source directory:
++PKGCFG = $(if $(VDRDIR),$(shell pkg-config --variable=$(1) $(VDRDIR)/vdr.pc),$(shell pkg-config --variable=$(1) vdr || pkg-config --variable=$(1) ../../../vdr.pc))
++LIBDIR = $(DESTDIR)$(call PKGCFG,libdir)
++LOCDIR = $(DESTDIR)$(call PKGCFG,locdir)
+ PREDIR = ../../systems-pre
+ 
+ ### Includes and Defines

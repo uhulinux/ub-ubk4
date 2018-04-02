@@ -1,0 +1,23 @@
+#!/bin/sh -eux
+
+sed -i 's/class Fl_XFont_On_Demand/class FL_EXPORT Fl_XFont_On_Demand/' FL/x.H
+sed -i 's/x-fluid.desktop/fluid.desktop/' -i fluid/Makefile
+
+ub_configure \
+	--enable-threads \
+	--enable-xft \
+	--enable-shared \
+	--enable-cairo \
+	--enable-gl
+
+ub_make
+
+cd documentation
+ub_make
+
+cd src
+for i in fluid fltk-config; \
+	do cp -f $i.man $i.1; done;
+cp -f fltk.man fltk.3
+for i in blocks checkers sudoku; \
+	do cp -f $i.man $i.6; done;

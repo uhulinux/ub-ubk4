@@ -1,0 +1,20 @@
+diff -Naur partimage-0.6.9-orig/Makefile.in partimage-0.6.9/Makefile.in
+--- partimage-0.6.9-orig/Makefile.in	2010-07-25 17:31:54.000000000 +0200
++++ partimage-0.6.9/Makefile.in	2011-09-27 19:41:01.000000000 +0200
+@@ -827,6 +827,8 @@
+ 	rm -f $(DESTDIR)${sysconfdir}/partimaged/partimaged.csr ;\
+ 	chmod 600 $(DESTDIR)${sysconfdir}/partimaged/partimaged.key || true;\
+ 	chmod 600 $(DESTDIR)${sysconfdir}/partimaged/partimaged.cert || true;\
++	chown root:root $(DESTDIR)${sysconfdir}/partimaged/partimaged.key || true;\
++	chown root:root $(DESTDIR)${sysconfdir}/partimaged/partimaged.cert || true;\
+ 	else \
+ 	echo "SSL disabled, no certificate will be generated." ;\
+ 	fi
+@@ -858,6 +860,7 @@
+ 	echo "#sample # user 'sample' is allowed to connect partimaged" >> \
+            $(DESTDIR)${sysconfdir}/partimaged/partimagedusers ;\
+ 	chmod 600 $(DESTDIR)${sysconfdir}/partimaged/partimagedusers || true;\
++	chown root:root $(DESTDIR)${sysconfdir}/partimaged/partimagedusers || true ;\
+ 	fi 
+ 
+ distclean-local:

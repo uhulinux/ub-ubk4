@@ -1,0 +1,37 @@
+diff -Nur orig/lib/dpkg/dpkg.h mod/lib/dpkg/dpkg.h
+--- orig/lib/dpkg/dpkg.h	2017-10-21 19:50:34.000000000 +0200
++++ mod/lib/dpkg/dpkg.h	2017-12-16 17:31:40.780867156 +0100
+@@ -71,6 +71,7 @@
+ #define POSTINSTFILE       "postinst"
+ #define PRERMFILE          "prerm"
+ #define POSTRMFILE         "postrm"
++#define POSTRMCUSTOMFILE   "postrm-custom"
+ /* Debconf config maintainer script. */
+ #define MAINTSCRIPT_FILE_CONFIG		"config"
+ #define TRIGGERSCIFILE     "triggers"
+diff -Nur orig/src/remove.c mod/src/remove.c
+--- orig/src/remove.c	2017-10-21 19:50:34.000000000 +0200
++++ mod/src/remove.c	2017-12-16 17:35:12.472526452 +0100
+@@ -211,7 +211,8 @@
+ {
+   /* We need the postrm and list files for --purge. */
+   if (strcmp(filetype, LISTFILE) == 0 ||
+-      strcmp(filetype, POSTRMFILE) == 0)
++      strcmp(filetype, POSTRMFILE) == 0 ||
++      strcmp(filetype, POSTRMCUSTOMFILE) == 0)
+     return;
+ 
+   debug(dbg_stupidlyverbose, "removal_bulk info not postrm or list");
+@@ -661,6 +662,12 @@
+           filename);
+     if (unlink(filename) && errno != ENOENT)
+       ohshite(_("can't remove old postrm script"));
++      
++    filename = pkg_infodb_get_file(pkg, &pkg->installed, POSTRMCUSTOMFILE);
++    debug(dbg_general, "removal_bulk purge done, removing postrm-custom '%s'",
++          filename);
++    if (unlink(filename) && errno != ENOENT)
++      ohshite(_("can't remove old postrm-custom script"));
+ 
+     pkg_set_status(pkg, PKG_STAT_NOTINSTALLED);
+     pkg_set_want(pkg, PKG_WANT_UNKNOWN);

@@ -1,0 +1,113 @@
+--- fenix-0.92a.dfsg1.orig/fxi/src/img_png.c
++++ fenix-0.92a.dfsg1/fxi/src/img_png.c
+@@ -101,7 +101,11 @@ GRAPH * gr_read_png (const char * filena
+ 
+     /* Rutina de error */
+ 
++#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 4
++    if (setjmp(png_jmpbuf(png_ptr)))
++#else
+     if (setjmp (png_ptr->jmpbuf))
++#endif
+     {
+         png_destroy_read_struct (&png_ptr, &info_ptr, &end_info) ;
+         file_close (png) ;
+@@ -296,8 +300,11 @@ GRAPH * gr_read_png (const char * filena
+     }
+ 
+     /* Fin */
+-
++#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 4
++    if (!setjmp(png_jmpbuf(png_ptr))) png_read_end (png_ptr, 0);
++#else
+     if (!setjmp (png_ptr->jmpbuf)) png_read_end (png_ptr, 0) ;
++#endif
+     file_close (png) ;
+     bitmap->modified = 1 ;
+ 
+@@ -354,7 +361,11 @@ int gr_save_png (GRAPH * gr, const char
+ 
+     /* Error handling... */
+ 
++#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 4
++    if (setjmp(png_jmpbuf(png_ptr))) {
++#else
+     if (setjmp(png_ptr->jmpbuf)) {
++#endif
+         fclose (file) ;
+         png_destroy_write_struct (&png_ptr, NULL) ;
+         free ( rowpointers ) ;
+@@ -398,7 +409,6 @@ int gr_save_png (GRAPH * gr, const char
+ 
+         /* Free allocated palette... */
+         png_free (png_ptr, (png_voidp) pal) ;
+-        info_ptr->palette = NULL ;
+     } else {
+         png_set_IHDR (png_ptr, info_ptr, gr->width,
+                       gr->height, 8, PNG_COLOR_TYPE_RGB_ALPHA,
+--- fenix-0.92a.dfsg1.orig/map/map.c
++++ fenix-0.92a.dfsg1/map/map.c
+@@ -443,8 +443,11 @@ void save_png (const char * filename, MA
+         free ( rowpointers ) ;
+ 	    fatal_error (_("Out of memory")) ;
+ 	}
+-
++#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 4
++	if (setjmp(png_jmpbuf(png_ptr)))
++#else
+ 	if (setjmp(png_ptr->jmpbuf))
++#endif
+ 	{
+         free ( rowpointers ) ;
+ 		fclose (file) ;
+@@ -478,8 +481,14 @@ void save_png (const char * filename, MA
+ 		for (k = 0 ; k < map->header.height ; k++)
+ 			rowpointers[k] = (Uint8 *)map->data + map->header.width*k ;
+ 		png_write_image (png_ptr, rowpointers) ;
+-		free (info_ptr->palette) ;
++
++#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 4
++		png_free(png_ptr, palette);
++		palette = NULL;
++#else
++		free(info_ptr->palette) ;
+ 		info_ptr->palette = NULL ;
++#endif
+ 	}
+ 	else
+ 	{
+@@ -564,7 +573,11 @@ MAP * load_png (const char * filename)
+ 
+ 	/* Rutina de error */
+ 
++#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 4
++	if (setjmp(png_jmpbuf(png_ptr)))
++#else
+ 	if (setjmp (png_ptr->jmpbuf))
++#endif
+ 	{
+ 		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info) ;
+ 		fclose (png) ;
+--- fenix-0.92a.dfsg1.orig/fpg/fpg.c
++++ fenix-0.92a.dfsg1/fpg/fpg.c
+@@ -33,6 +33,7 @@
+ #define _(String) String
+ #endif
+ 
++#include <zlib.h>
+ #include <png.h>
+ 
+ #define MAXPATH  1024
+@@ -187,8 +188,11 @@ MAP * png_load (const char * filename)
+ 	if (!info_ptr || !end_info) fatal_error (_("Error loading PNG file")) ;
+ 
+ 	/* Rutina de error */
+-
++#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 4
++	if (setjmp(png_jmpbuf(png_ptr)))
++#else
+ 	if (setjmp (png_ptr->jmpbuf))
++#endif
+ 	{
+ 		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info) ;
+ 		fclose (png) ;

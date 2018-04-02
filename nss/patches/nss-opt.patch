@@ -1,0 +1,16 @@
+diff -Naur orig/coreconf/Linux.mk patched/coreconf/Linux.mk
+--- orig/coreconf/Linux.mk	2013-06-27 19:58:08.000000000 +0200
++++ patched/coreconf/Linux.mk	2013-07-26 17:34:01.624638501 +0200
+@@ -104,11 +104,7 @@
+ endif
+ 
+ ifdef BUILD_OPT
+-ifeq (11,$(ALLOW_OPT_CODE_SIZE)$(OPT_CODE_SIZE))
+-	OPTIMIZER = -Os
+-else
+-	OPTIMIZER = -O2
+-endif
++	OPTIMIZER = $(OPT_FLAGS)
+ ifdef MOZ_DEBUG_SYMBOLS
+ 	ifdef MOZ_DEBUG_FLAGS
+ 		OPTIMIZER += $(MOZ_DEBUG_FLAGS)

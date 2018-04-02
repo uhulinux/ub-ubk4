@@ -1,0 +1,363 @@
+diff -Naur gnome-mime-data-2.4.2.orig/gnome-vfs.applications gnome-mime-data-2.4.2/gnome-vfs.applications
+--- gnome-mime-data-2.4.2.orig/gnome-vfs.applications	2004-10-25 20:23:00.000000000 +0200
++++ gnome-mime-data-2.4.2/gnome-vfs.applications	2004-10-26 19:22:41.000000000 +0200
+@@ -353,6 +353,15 @@
+ 	requires_terminal=false
+ 	mime_types=video/mpeg
+ 
++mplayer
++	command=mplayer
++	name=mplayer
++	can_open_multiple_files=true
++	expects_uris=non-file
++	requires_terminal=false
++	supported_uri_schemes=http,ftp,file
++	mime_types=audio/*,video/*
++
+ mpg123
+ 	command=mpg123
+ 	name=mpg123
+diff -Naur gnome-mime-data-2.4.2.orig/gnome-vfs.keys.in gnome-mime-data-2.4.2/gnome-vfs.keys.in
+--- gnome-mime-data-2.4.2.orig/gnome-vfs.keys.in	2004-10-25 20:49:26.000000000 +0200
++++ gnome-mime-data-2.4.2/gnome-vfs.keys.in	2004-10-26 19:25:34.552020154 +0200
+@@ -27,9 +27,9 @@
+ application/msword
+ 	_description=Microsoft Word document
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=abiword,openoffice,staroffice,applix
+-	short_list_application_ids_for_intermediate_user_level=abiword,openoffice,staroffice,applix
+-	short_list_application_ids_for_advanced_user_level=abiword,openoffice,staroffice,applix
++	short_list_application_ids_for_novice_user_level=openoffice,abiword,staroffice,applix
++	short_list_application_ids_for_intermediate_user_level=openoffice,abiword,staroffice,applix
++	short_list_application_ids_for_advanced_user_level=openoffice,abiword,staroffice,applix
+ 	_category=Documents/Word Processor
+ 	use_category_default=yes
+ 
+@@ -111,9 +111,9 @@
+ application/rtf
+ 	_description=Rich text document
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=abiword,openoffice,staroffice,applix
+-	short_list_application_ids_for_intermediate_user_level=abiword,openoffice,staroffice,applix
+-	short_list_application_ids_for_advanced_user_level=abiword,openoffice,staroffice,applix
++	short_list_application_ids_for_novice_user_level=openoffice,abiword,staroffice,applix
++	short_list_application_ids_for_intermediate_user_level=openoffice,abiword,staroffice,applix
++	short_list_application_ids_for_advanced_user_level=openoffice,abiword,staroffice,applix
+ 	_category=Documents/Word Processor
+ 	use_category_default=yes
+ 
+@@ -125,9 +125,9 @@
+ 	_description=Lotus 1-2-3 spreadsheet
+ 	icon_filename=i-spreadsheet
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=gnumeric
+-	short_list_application_ids_for_intermediate_user_level=gnumeric
+-	short_list_application_ids_for_advanced_user_level=gnumeric
++	short_list_application_ids_for_novice_user_level=openoffice,gnumeric
++	short_list_application_ids_for_intermediate_user_level=openoffice,gnumeric
++	short_list_application_ids_for_advanced_user_level=openoffice,gnumeric
+ 	_category=Documents/Spreadsheet
+ 	use_category_default=yes
+ 
+@@ -135,9 +135,9 @@
+ 	_description=Microsoft Excel spreadsheet
+ 	icon_filename=i-spreadsheet
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=gnumeric,openoffice,staroffice,applix
+-	short_list_application_ids_for_intermediate_user_level=gnumeric,openoffice,staroffice,applix
+-	short_list_application_ids_for_advanced_user_level=gnumeric,openoffice,staroffice,applix
++	short_list_application_ids_for_novice_user_level=openoffice,gnumeric,staroffice,applix
++	short_list_application_ids_for_intermediate_user_level=openoffice,gnumeric,staroffice,applix
++	short_list_application_ids_for_advanced_user_level=openoffice,gnumeric,staroffice,applix
+ 	_category=Documents/Spreadsheet
+ 	use_category_default=yes
+ 
+@@ -345,9 +345,9 @@
+ application/x-applix-spreadsheet
+ 	_description=Applixware spreadsheet
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=applix,gnumeric
+-	short_list_application_ids_for_intermediate_user_level=applix,gnumeric
+-	short_list_application_ids_for_advanced_user_level=applix,gnumeric
++	short_list_application_ids_for_novice_user_level=openoffice,applix,gnumeric
++	short_list_application_ids_for_intermediate_user_level=openoffice,applix,gnumeric
++	short_list_application_ids_for_advanced_user_level=openoffice,applix,gnumeric
+ 	_category=Documents/Spreadsheet
+ 	use_category_default=yes
+ 
+@@ -1911,18 +1911,18 @@
+ 	_description=Spreadsheet Interchange document
+ 	icon_filename=i-spreadsheet
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=gnumeric
+-	short_list_application_ids_for_intermediate_user_level=gnumeric
+-	short_list_application_ids_for_advanced_user_level=gnumeric
++	short_list_application_ids_for_novice_user_level=openoffice,gnumeric
++	short_list_application_ids_for_intermediate_user_level=openoffice,gnumeric
++	short_list_application_ids_for_advanced_user_level=openoffice,gnumeric
+ 	_category=Documents/Spreadsheet
+ 	use_category_default=yes
+ 
+ text/tab-separated-values
+ 	_description=Tab-separated text document
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=gnumeric
+-	short_list_application_ids_for_intermediate_user_level=gnumeric
+-	short_list_application_ids_for_advanced_user_level=gnumeric
++	short_list_application_ids_for_novice_user_level=openoffice,gnumeric
++	short_list_application_ids_for_intermediate_user_level=openoffice,gnumeric
++	short_list_application_ids_for_advanced_user_level=openoffice,gnumeric
+ 	_category=Documents/Spreadsheet
+ 	use_category_default=yes
+ 
+@@ -1957,9 +1957,9 @@
+ 	_description=Comma-separated text document
+ 	icon_filename=i-spreadsheet
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=gnumeric,kspread
+-	short_list_application_ids_for_intermediate_user_level=gnumeric,kspread
+-	short_list_application_ids_for_advanced_user_level=gnumeric,kspread
++	short_list_application_ids_for_novice_user_level=openoffice,gnumeric,kspread
++	short_list_application_ids_for_intermediate_user_level=openoffice,gnumeric,kspread
++	short_list_application_ids_for_advanced_user_level=openoffice,gnumeric,kspread
+ 	_category=Documents/Spreadsheet
+ 	use_category_default=yes
+ 
+@@ -2192,6 +2192,10 @@
+ 
+ video/dv
+ 	_description=DV video
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/isivideo
+@@ -2201,40 +2205,65 @@
+ video/mpeg
+ 	_description=MPEG video
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=vlc,xmps,plaympeg,omsomi,mpeg_play,gtv
+-	short_list_application_ids_for_intermediate_user_level=vlc,xmps,plaympeg,omsomi,mpeg_play,gtv
+-	short_list_application_ids_for_advanced_user_level=vlc,xmps,plaympeg,omsomi,mpeg_play,gtv
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/msvideo
+ 	_description=MS video
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	icon_filename=gnome-video-x-msvideo
+ 	_category=Video
+ 
+ video/quicktime
+ 	_description=QuickTime movie
+ 	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/vnd.rn-realvideo
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/vnd.vivo
+ 	_description=Vivo video
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/wavelet
+ 	_description=Wavelet video
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-anim
+ 	_description=ANIM animation
+ 	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-avi
+ 	_description=AVI video
+ 	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-flc
+@@ -2249,33 +2278,50 @@
+ 
+ video/x-ms-asf
+ 	_description=MS ASF video
+-	short_list_application_ids_for_novice_user_level=xmps
+-	short_list_application_ids_for_intermediate_user_level=xmps
+-	short_list_application_ids_for_advanced_user_level=xmps
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-ms-wmv
+ 	_description=Microsoft WMV video
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-ms-wvx
+ 	_description=Microsoft WMV playlist
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-msvideo
+ 	_description=Microsoft video
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-nsv
+ 	_description=Nullsoft video
++	default_action_type=application
++	short_list_application_ids_for_novice_user_level=mplayer
++	short_list_application_ids_for_intermediate_user_level=mplayer
++	short_list_application_ids_for_advanced_user_level=mplayer
+ 	_category=Video
+ 
+ video/x-real-video
+ 	_description=RealVideo video
+ 	default_action_type=application
+-	short_list_application_ids_for_novice_user_level=realplayer
+-	short_list_application_ids_for_intermediate_user_level=realplayer
+-	short_list_application_ids_for_advanced_user_level=realplayer
++	short_list_application_ids_for_novice_user_level=realplayer,mplayer
++	short_list_application_ids_for_intermediate_user_level=realplayer,mplayer
++	short_list_application_ids_for_advanced_user_level=realplayer,mplayer
+ 	_category=Video
+ 
+ video/x-sgi-movie
+diff -Naur gnome-mime-data-2.4.2.orig/gnome-vfs.mime gnome-mime-data-2.4.2/gnome-vfs.mime
+--- gnome-mime-data-2.4.2.orig/gnome-vfs.mime	2004-06-10 13:17:31.000000000 +0200
++++ gnome-mime-data-2.4.2/gnome-vfs.mime	2004-10-26 19:22:41.000000000 +0200
+@@ -42,10 +42,10 @@
+ 	ext: oda
+ 
+ application/ogg
+-	ext: ogg
++	ext: ogg Ogg OGG
+ 
+ application/pdf
+-	ext: pdf
++	ext: pdf Pdf PDF
+ 
+ application/pgp
+ 	ext: pgp
+@@ -178,7 +178,7 @@
+ 	ext: dc
+ 
+ application/x-deb
+-	ext: deb
++	ext: deb DEB uhu UHU
+ 
+ application/x-dia-diagram
+ 	ext: dia
+@@ -390,16 +390,16 @@
+ 	ext: zoo
+ 
+ application/zip
+-	ext: zip
++	ext: zip Zip ZIP
+ 
+ audio/ac3
+-	ext: ac3
++	ext: ac3 AC3
+ 
+ audio/basic
+ 	ext: snd
+ 
+ audio/mpeg
+-	ext: mp1 mp3
++	ext: mp1 Mp1 MP1 mp3 Mp3 MP3
+ 
+ audio/prs.sid
+ 	ext: sid psid
+@@ -420,7 +420,7 @@
+ 	ext: midi mid
+ 
+ audio/x-mod
+-	ext: mod MOD
++	ext: mod Mod MOD
+ 
+ audio/x-mpegurl
+ 	ext: m3u
+@@ -450,7 +450,7 @@
+ 	ext: voc
+ 
+ audio/x-wav
+-	ext: wav
++	ext: wav Wav WAV
+ 
+ audio/x-xi
+ 	ext: xi
+@@ -788,13 +788,13 @@
+ 	ext: xml
+ 
+ video/mpeg
+-	ext: mp2 mpe mpeg mpg vob dat
++	ext: mp2 MP2 mpe MPE mpeg Mpeg MPEG mpg Mpg MPG vob Vob VOB dat Dat DAT
+ 
+ video/quicktime
+-	ext: mov qt
++	ext: mov Mov MOV qt Qt QT
+ 
+ video/vnd.vivo
+-	ext: viv vivo
++	ext: viv Viv VIV vivo Vivo VIVO
+ 
+ video/x-anim
+ 	regex: \.anim[1-9j]$
+@@ -806,16 +806,16 @@
+ 	ext: fli
+ 
+ video/x-ms-asf
+-	ext: asf
++	ext: asf Asf ASF
+ 
+ video/x-ms-wmv
+-	ext: wmv
++	ext: wmv Wmv WMV
+ 
+ video/x-ms-wvx
+-	ext: wvx
++	ext: wvx Wvx WVX
+ 
+ video/x-msvideo
+-	ext: avi
++	ext: avi Avi AVI
+ 
+ video/x-nsv
+ 	ext: nsv NSV

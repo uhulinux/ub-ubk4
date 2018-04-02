@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+ub_makeinstall -C contrib/skype_bt_hijacker
+mkdir -p "$UB_INSTALLDIR"/usr/share/doc/Packages/skype-bt-hijacker
+cp -a contrib/skype_bt_hijacker/{README,ChangeLog} "$UB_INSTALLDIR"/usr/share/doc/Packages/skype-bt-hijacker/

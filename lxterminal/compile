@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+./autogen.sh
+export CFLAGS='-Wno-deprecated-declarations -Wno-incompatible-pointer-types'
+ub_compile \
+	--sbindir=/usr/bin \
+	--enable-gtk3 \
+	--enable-man

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+cd windowmaker-extra
+ub_install
+
+ln -s wmaker    "$UB_INSTALLDIR"/usr/bin/windowmaker
+ln -s wmaker.1x "$UB_INSTALLDIR"/usr/share/man/man1/windowmaker.1x

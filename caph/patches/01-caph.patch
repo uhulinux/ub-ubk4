@@ -1,0 +1,149 @@
+diff -Naurd a/doc/caph/README b/doc/caph/README
+--- a/doc/caph/README	2010-10-25 17:40:24.000000000 +0200
++++ b/doc/caph/README	2010-12-07 15:29:00.000000000 +0100
+@@ -85,7 +85,7 @@
+ libpng
+ OpenGL	(optional)
+ 
+-If you do not want compile Caph with OpenGL comment out appropriate line in
++If you do not want compile Caph with OpenGL comment out appropriate lines in
+ 'confg' script.
+ 
+ After, go to the 'src' directory and perform,
+@@ -99,8 +99,17 @@
+ 
+ $ source /etc/make.conf
+ 
++If you have some troubles feel free to change build scripts.
+ 
+-	6. FEEDBACK
+ 
+-Roman Belov <amaora@users.sourceforge.net>
++	6. INSTALLING
++
++One useful option was added. You can explicitly define installation prefix in
++'confg' script. Then, just compile caph as described above. The last step is a
++copying 'bin', 'doc' and 'share' directories to the destination.
++
++
++	7. FEEDBACK
++
++Roman Belov <rbelov@users.sourceforge.net>
+ 
+diff -Naurd a/src/caph.c b/src/caph.c
+--- a/src/caph.c	2010-10-25 17:40:24.000000000 +0200
++++ b/src/caph.c	2010-12-07 15:29:00.000000000 +0100
+@@ -36,8 +36,8 @@
+ # include <sys/types.h>
+ #endif
+ 
+-#define SYS_PRINT	1
+-#define SYS_DATA_DIR	"../share/caph/"
++#define SYS_PRINT		1
++#define SYS_DATA_PATH		"/share/caph/"
+ 
+ #define DATA_CONFIG		"caph.conf"
+ #define HOME_CONFIG		".caph.conf"
+@@ -51,14 +51,18 @@
+ 	static char dir[256];
+ 
+ #if defined(_WIN32)
+-	strcpy(dir, SYS_DATA_DIR);
++	strcpy(dir, ".." SYS_DATA_PATH);
++	return dir;
++#elif defined (_PREFIX)
++	strcpy(dir, _PREFIX);
++	strcat(dir, SYS_DATA_PATH);
+ 	return dir;
+ #else
+ 	int ret = readlink("/proc/self/exe", dir, sizeof(dir));
+ 	if (ret < 0) {
+ 		fprintf(stderr, "%s:%i [ERROR] readlink failed: %s \n",
+ 					__FILE__, __LINE__, strerror(ret));
+-		strcpy(dir, SYS_DATA_DIR);
++		strcpy(dir, ".." SYS_DATA_PATH);
+ 		return dir;
+ 	}
+ 
+@@ -68,7 +72,7 @@
+ 	while (*p != '/') --p;
+ 	*++p = '\0';
+ 
+-	strcat(dir, SYS_DATA_DIR);
++	strcat(dir, ".." SYS_DATA_PATH);
+ 	return dir;
+ #endif
+ }
+@@ -86,7 +90,7 @@
+ }
+ 
+ static const char *
+-sys_get_config()
++sys_get_home_config()
+ {
+ 	static char dir[256];
+ 	const char *home;
+@@ -257,14 +261,19 @@
+ 	int ret;
+ 	FILE *conf;
+ 	const char *conf_name;
++	const char *data_dir;
+ 
+-	sys_chdir(sys_get_data_dir());
+-	conf_name = sys_get_config();
++	data_dir = sys_get_data_dir();
++	sys_chdir(data_dir);
++	fprintf(stderr, "%s:%i [INFO] Data directory = \"%s\"\n",
++			__FILE__, __LINE__, data_dir);
++
++	conf_name = sys_get_home_config();
+ 
+ 	conf = fopen(conf_name, "r");
+ 
+ 	if (conf == NULL) {
+-		fprintf(stderr, "%s:%i [ERROR] fopen(\"%s\") failed: %s \n",
++		fprintf(stderr, "%s:%i [WARNING] fopen(\"%s\") failed: %s \n",
+ 				__FILE__, __LINE__, conf_name, strerror(errno));
+ 
+ 		conf = fopen(DATA_CONFIG, "r");
+diff -Naurd a/src/confg b/src/confg
+--- a/src/confg	2010-10-25 17:40:24.000000000 +0200
++++ b/src/confg	2010-12-07 15:29:00.000000000 +0100
+@@ -5,18 +5,21 @@
+ 
+ CFLAGS+=' -I../include -std=c99 -D_XOPEN_SOURCE=600'
+ CFLAGS+=' -D_OPENGL'
++#CFLAGS+=' -D_PREFIX=\"/usr/local\"'
+ 
+-if which sdl-config > /dev/null; then
++if which sdl-config > /dev/null 2>&1; then
+ 	CFLAGS+=$(sdl-config --cflags | sed 's/^/\ /')
+ 	LFLAGS+=$(sdl-config --libs | sed 's/^/\ /')
+ else
+-	echo confg: libSDL is required && exit 1
++	echo 'confg: fallback configuration is used for libSDL'
++	LFLAGS+=$(echo '-lSDL' | sed 's/^/\ /')
+ fi
+ 
+-if which pkg-config > /dev/null && pkg-config --exists libpng; then
++if which pkg-config > /dev/null 2>&1 && pkg-config --exists libpng; then
+ 	CFLAGS+=$(pkg-config --cflags libpng | sed 's/^/\ /')
+ 	LFLAGS+=$(pkg-config --libs libpng | sed 's/^/\ /')
+ else
++	echo 'confg: fallback configuration is used for libpng'
+ 	LFLAGS+=$(echo '-lpng' | sed 's/^/\ /')
+ fi
+ 
+@@ -24,10 +27,11 @@
+ 	LFLAGS+=$(echo '-lm' | sed 's/^/\ /')
+ fi
+ 
+-if which pkg-config > /dev/null && pkg-config --exists gl; then
++if which pkg-config > /dev/null 2>&1 && pkg-config --exists gl; then
+ 	CFLAGS+=$(pkg-config --cflags gl | sed 's/^/\ /')
+ 	LFLAGS+=$(pkg-config --libs gl | sed 's/^/\ /')
+ else
++	echo 'confg: fallback configuration is used for OpenGL'
+ 	LFLAGS+=$(echo '-lGL' | sed 's/^/\ /')
+ fi
+ 

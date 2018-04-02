@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+export INSTALL_ROOT="$UB_INSTALLDIR"
+
+ub_install
+
+for i in hls icons images manuals palettes text-data translations; \
+	do mkdir -p "$UB_INSTALLDIR"/usr/share/tea/$i; \
+	  cp -a -- $i/. "$UB_INSTALLDIR"/usr/share/tea/$i/; done;

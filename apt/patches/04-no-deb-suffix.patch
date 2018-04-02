@@ -1,0 +1,14 @@
+diff -Naur orig/apt-pkg/deb/dpkgpm.cc patched/apt-pkg/deb/dpkgpm.cc
+--- orig/apt-pkg/deb/dpkgpm.cc	2017-09-24 17:54:41.000000000 +0200
++++ patched/apt-pkg/deb/dpkgpm.cc	2017-12-30 16:29:12.067205686 +0100
+@@ -1813,8 +1813,8 @@
+ 	       if (I->File[0] != '/')
+ 		  return _error->Error("Internal Error, Pathname to install is not absolute '%s'",I->File.c_str());
+ 	       auto file = flNotDir(I->File);
+-	       if (flExtension(file) != "deb")
+-		  file.append(".deb");
++//	       if (flExtension(file) != "deb")
++//		  file.append(".deb");
+ 	       std::string linkpath;
+ 	       if (dpkg_recursive_install_numbered)
+ 		  strprintf(linkpath, "%s/%.*lu-%s", tmpdir_to_free, p, n, file.c_str());

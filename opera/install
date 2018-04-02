@@ -1,0 +1,25 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" == "amd64" ];then
+	arch="x86_64"
+	dpkg-deb -x opera-stable_${UB_VERSION}_amd64.deb .
+else
+	arch=$UB_ARCH
+	curl -O http://get.geo.opera.com/ftp/pub/opera/desktop/45.0.2552.898/linux/opera-stable_45.0.2552.898_i386.deb
+	dpkg-deb -x opera-stable_45.0.2552.898_i386.deb .
+fi
+
+rm -f opera-stable_*.deb
+
+cd usr/share/applications
+patch -i $UB_SRCDIR/patches/desktop.patch.skip
+cd -
+cp -r "$UB_COMPILEDIR"/usr "$UB_INSTALLDIR"/
+
+rm -Rf "$UB_INSTALLDIR"/usr/share/{lintian,menu}
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/opera/
+cp -r "$UB_INSTALLDIR"/usr/lib/${arch}-linux-gnu/opera "$UB_INSTALLDIR"/usr/lib/
+rm -Rf "$UB_INSTALLDIR"/usr/lib/${arch}-linux-gnu
+
+ln -sf /usr/lib/opera/opera "$UB_INSTALLDIR"/usr/bin/opera

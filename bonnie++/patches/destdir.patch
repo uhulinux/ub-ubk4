@@ -1,0 +1,24 @@
+diff -Naurd bonnie++-1.03a.orig/Makefile.in bonnie++-1.03a/Makefile.in
+--- bonnie++-1.03a.orig/Makefile.in	2002-10-13 22:26:36.000000000 +0200
++++ bonnie++-1.03a/Makefile.in	2004-01-25 14:19:03.000000000 +0100
+@@ -33,14 +33,14 @@
+ 	$(CXX) zcav.cpp -o zcav $(ZCAVOBJS) $(LFLAGS)
+ 
+ install-bin: $(EXES)
+-	mkdir -p $(eprefix)/bin $(eprefix)/sbin
+-	@INSTALL_PROGRAM@ @stripping@ $(EXES) $(eprefix)/sbin
+-	@INSTALL_SCRIPT@ $(SCRIPTS) $(eprefix)/bin
++	mkdir -p $(eprefix)/bin $(DESTDIR)$(eprefix)/sbin
++	@INSTALL_PROGRAM@ @stripping@ $(EXES) $(DESTDIR)$(eprefix)/sbin
++	@INSTALL_SCRIPT@ $(SCRIPTS) $(DESTDIR)$(eprefix)/bin
+ 
+ install: install-bin
+-	mkdir -p @mandir@/man1 @mandir@/man8
+-	@INSTALL_DATA@ $(MAN1) @mandir@/man1
+-	@INSTALL_DATA@ $(MAN8) @mandir@/man8
++	mkdir -p @mandir@/man1 $(DESTDIR)@mandir@/man8
++	@INSTALL_DATA@ $(MAN1) $(DESTDIR)@mandir@/man1
++	@INSTALL_DATA@ $(MAN8) $(DESTDIR)@mandir@/man8
+ 
+ %.o: %.cpp %.h bonnie.h port.h
+ 	$(CXX) -c $<

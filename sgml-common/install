@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_install
+mkdir "$UB_INSTALLDIR"/etc/xml
+mkdir "$UB_INSTALLDIR"/usr/share/sgml/docbook
+
+# Create the common DocBook catalog
+/usr/bin/xmlcatalog --noout --create \
+	"$UB_INSTALLDIR"/usr/share/sgml/docbook/xmlcatalog
+
+rm -f "$UB_INSTALLDIR"/usr/share/sgml/xml.dcl
+rm -rf "$UB_INSTALLDIR"/usr/share/xml/*

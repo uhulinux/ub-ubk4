@@ -1,0 +1,66 @@
+#!/bin/bash -eux
+
+source ./env.sh
+
+# we install the kernel module
+if [ $UB_ARCH = "amd64" ]; then
+	cd ./out/linux.amd64/release/bin/src
+	make \
+		DESTDIR="$UB_INSTALLDIR" \
+		INSTALL_MOD_PATH="$UB_INSTALLDIR" \
+		KERN_DIR="/usr/src/`readlink /usr/src/linux`" \
+		MODULE_DIR="${UB_INSTALLDIR}`ls -1d /lib/modules/*.x86_64`/kernel/drivers/misc/" \
+		install
+else
+	cd ./out/linux.x86/release/bin/src
+	make \
+		DESTDIR="$UB_INSTALLDIR" \
+		INSTALL_MOD_PATH="$UB_INSTALLDIR" \
+		KERN_DIR="/usr/src/`readlink /usr/src/linux`" \
+		MODULE_DIR="${UB_INSTALLDIR}`ls -1d /lib/modules/*.i386`/kernel/drivers/misc/" \
+		install
+fi
+
+# install the other files
+cd ..
+mkdir -p "$UB_INSTALLDIR"/usr/lib/virtualbox
+rm -rf sdk src tst* testcase additions/src SUPInstall SUPUninstall
+cp -a . "$UB_INSTALLDIR"/usr/lib/virtualbox
+
+# install desktop file
+mv "$UB_INSTALLDIR"/usr/lib/virtualbox/virtualbox.desktop "$UB_INSTALLDIR"/usr/share/applications/
+
+# install icons
+for i in "$UB_INSTALLDIR/usr/lib/virtualbox/icons/"*; do
+	folder=`expr "${i}/" : '.*/\([^/][^/]*/\)/*'`
+    if test -f "${i}/virtualbox."*; then
+        mkdir -p "$UB_INSTALLDIR/usr/share/icons/hicolor/${folder}/apps"
+        mv "${i}/virtualbox."* "$UB_INSTALLDIR/usr/share/icons/hicolor/${folder}/apps"
+    fi
+    mkdir -p "$UB_INSTALLDIR/usr/share/icons/hicolor/${folder}/mimetypes"
+    mv "${i}/"* "$UB_INSTALLDIR/usr/share/icons/hicolor/${folder}/mimetypes" 2>/dev/null || true
+    rmdir "${i}"
+done
+rm -rf "$UB_INSTALLDIR/usr/lib/virtualbox/icons"
+rm -rf "$UB_INSTALLDIR/usr/share/icons/hicolor/40x40/mimetypes"
+rm -rf "$UB_INSTALLDIR/usr/share/icons/hicolor/scalable/mimetypes"
+mv "$UB_INSTALLDIR"/usr/lib/virtualbox/VBox.png "$UB_INSTALLDIR"/usr/share/pixmaps/VBox.png
+
+# install mime file
+mkdir -p "$UB_INSTALLDIR/usr/share/mime/packages/"
+mv "$UB_INSTALLDIR/usr/lib/virtualbox/virtualbox.xml" "$UB_INSTALLDIR/usr/share/mime/packages/"
+
+# install VBoxAddIF, VBoxDeleteIF and VBoxTunctl
+cd ../../../..
+ln -s ../lib/virtualbox/VBoxTunctl "$UB_INSTALLDIR"/usr/bin/VBoxTunctl
+
+#create wrapper scripts
+for file in VBoxManage VBoxSDL VBoxSVC VirtualBox
+do
+    echo '#!/bin/bash' > "$UB_INSTALLDIR"/usr/bin/$file
+    echo 'export QT_NO_KDE_INTEGRATION=1' >> "$UB_INSTALLDIR"/usr/bin/$file
+    echo "LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH:/usr/lib/virtualbox\" /usr/lib/virtualbox/$file \$@" >> "$UB_INSTALLDIR"/usr/bin/$file
+    chmod +x "$UB_INSTALLDIR"/usr/bin/$file
+done
+
+mv Oracle_VM_VirtualBox_Extension_Pack.vbox-extpack "$UB_INSTALLDIR"/usr/lib/virtualbox/ExtensionPacks/

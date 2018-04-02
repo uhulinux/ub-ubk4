@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+sh postfix-install \
+	-non-interactive \
+	install_root="$UB_INSTALLDIR" \
+	daemon_directory=/usr/lib/postfix \
+	manpage_directory=/usr/share/man
+
+ln -s ../sbin/sendmail "$UB_INSTALLDIR"/usr/lib/sendmail
+
+cp examples/smtpd-policy/greylist.pl "$UB_INSTALLDIR/usr/lib/postfix/"
+
+rm -rf "$UB_INSTALLDIR"/etc/postfix/{LICENSE,TLS_LICENSE}

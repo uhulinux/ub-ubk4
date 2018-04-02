@@ -1,0 +1,18 @@
+diff -Naur orig/zhu3d.pro patched/zhu3d.pro
+--- orig/zhu3d.pro	2013-04-19 05:25:45.134741211 +0200
++++ patched/zhu3d.pro	2017-05-25 08:13:57.451834908 +0200
+@@ -71,10 +71,10 @@
+ !isEmpty(USE_ICPC) { QMAKE_CXXFLAGS_RELEASE += -use-fasm-blocks -Wcheck -ansi }
+ 
+ # Enable -O3 instead of -O2 as default. For ICC -fast may be worth a try
+-QMAKE_CFLAGS_RELEASE   -= -O2
+-QMAKE_CFLAGS_RELEASE   += -O3
+-QMAKE_CXXFLAGS_RELEASE -= -O2
+-QMAKE_CXXFLAGS_RELEASE += -O3
++QMAKE_CFLAGS_RELEASE   += -O2
++QMAKE_CFLAGS_RELEASE   -= -O3
++QMAKE_CXXFLAGS_RELEASE += -O2
++QMAKE_CXXFLAGS_RELEASE -= -O3
+ 
+ # Enable CPU-optimisations
+ # QMAKE_CFLAGS_RELEASE   += -march=native

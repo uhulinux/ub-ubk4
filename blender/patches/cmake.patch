@@ -1,0 +1,14 @@
+diff -Naur orig/source/creator/CMakeLists.txt patched/source/creator/CMakeLists.txt
+--- orig/source/creator/CMakeLists.txt	2013-02-20 13:07:27.000000000 +0100
++++ patched/source/creator/CMakeLists.txt	2013-07-14 01:36:17.591006322 +0200
+@@ -264,10 +264,6 @@
+ 
+ 
+ # important to make a clean  install each time, else old scripts get loaded.
+-install(
+-	CODE
+-	"file(REMOVE_RECURSE ${TARGETDIR_VER})"
+-)
+ 
+ if(WITH_PYTHON)
+ 	# install(CODE "message(\"copying blender scripts...\")")

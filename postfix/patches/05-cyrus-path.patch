@@ -1,0 +1,12 @@
+diff -urN postfix-2.7.0.orig/conf/master.cf postfix-2.7.0/conf/master.cf
+--- postfix-2.7.0.orig/conf/master.cf	2010-02-03 22:01:27.000000000 +0100
++++ postfix-2.7.0/conf/master.cf	2010-02-25 13:14:22.927713999 +0100
+@@ -80,7 +80,7 @@
+ # Also specify in main.cf: cyrus_destination_recipient_limit=1
+ #
+ #cyrus     unix  -       n       n       -       -       pipe
+-#  user=cyrus argv=/cyrus/bin/deliver -e -r ${sender} -m ${extension} ${user}
++#  user=cyrus argv=/usr/libexec/cyrus-imapd/deliver -e -r ${sender} -m ${extension} ${user}
+ #
+ # ====================================================================
+ #

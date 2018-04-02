@@ -1,0 +1,66 @@
+diff -uNr pypoppler-0.12.1-/poppler.defs pypoppler-0.12.1/poppler.defs
+--- pypoppler-0.12.1-/poppler.defs	2013-01-03 21:22:19.182861928 +0000
++++ pypoppler-0.12.1/poppler.defs	2013-01-03 21:25:04.197831737 +0000
+@@ -923,6 +923,7 @@
+ 
+ (define-function document_new_from_file
+   (c-name "poppler_document_new_from_file")
++  (caller-owns-return #t)
+   (return-type "PopplerDocument*")
+   (parameters
+     '("const-char*" "uri")
+@@ -933,6 +934,7 @@
+ 
+ (define-function document_new_from_data
+   (c-name "poppler_document_new_from_data")
++  (caller-owns-return #t)
+   (return-type "PopplerDocument*")
+   (parameters
+     '("char*" "data")
+@@ -971,6 +973,7 @@
+ (define-method get_page
+   (of-object "PopplerDocument")
+   (c-name "poppler_document_get_page")
++  (caller-owns-return #t)
+   (return-type "PopplerPage*")
+   (parameters
+     '("int" "index")
+@@ -980,6 +983,7 @@
+ (define-method get_page_by_label
+   (of-object "PopplerDocument")
+   (c-name "poppler_document_get_page_by_label")
++  (caller-owns-return #t)
+   (return-type "PopplerPage*")
+   (parameters
+     '("const-char*" "label")
+@@ -1001,6 +1005,7 @@
+ (define-method find_dest
+   (of-object "PopplerDocument")
+   (c-name "poppler_document_find_dest")
++  (caller-owns-return #t)
+   (return-type "PopplerDest*")
+   (parameters
+     '("const-gchar*" "link_name")
+@@ -1010,6 +1015,7 @@
+ (define-method get_form_field
+   (of-object "PopplerDocument")
+   (c-name "poppler_document_get_form_field")
++  (caller-owns-return #t)
+   (return-type "PopplerFormField*")
+   (parameters
+     '("gint" "id")
+@@ -1033,6 +1039,7 @@
+ (define-method copy
+   (of-object "PopplerIndexIter")
+   (c-name "poppler_index_iter_copy")
++  (caller-owns-return #t)
+   (return-type "PopplerIndexIter*")
+ )
+ 
+@@ -1057,6 +1064,7 @@
+ (define-method get_action
+   (of-object "PopplerIndexIter")
+   (c-name "poppler_index_iter_get_action")
++  (caller-owns-return #t)
+   (return-type "PopplerAction*")
+ )

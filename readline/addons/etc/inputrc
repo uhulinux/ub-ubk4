@@ -1,0 +1,76 @@
+# /etc/inputrc
+#
+# (C) UHU-Linux 2001
+#	Pozsár Balázs	<pozsy@uhulinux.hu>
+#
+
+# Show all if ambigious.
+set show-all-if-ambiguous on
+
+# 8-bit support
+set convert-meta Off
+set input-meta On
+set output-meta On
+
+# Workaround for bug in libreadline
+#$if mode=emacs
+
+# Keyboard configuration
+"\e[1~":	beginning-of-line	# Home
+"\e[2~":	yank			# Insert
+"\e[3~":	delete-char		# Delete
+"\e[4~":	end-of-line		# End
+"\e[5~":	history-search-backward	# Page Up
+"\e[6~":	history-search-forward	# Page Down
+"\e[7~":	beginning-of-line	# Home (rxvt)
+"\e[8~":	end-of-line		# End (rxvt)
+"\e[H":		beginning-of-line	# Home (xterm)
+"\e[F":		end-of-line		# End (xterm)
+"\e[\C-@":	beginning-of-line	# Home (nxterm)
+"\e[e":		end-of-line		# End (nxterm)
+"\e[1;5D":	backward-word
+"\e[1;5C":	forward-word
+
+$if term=xterm
+#
+# Application keypad and cursor of xterm
+# with NumLock ON
+#
+# Operators
+"\eOo":         "/"
+"\eOj":         "*"
+"\eOm":         "-"
+"\eOk":         "+"
+"\eOl":         "+"
+"\eOM":         accept-line
+
+# Colon and dot
+# "\eOl":	","
+"\eOn":		"."
+
+# Numbers
+"\eOp":         "0"
+"\eOq":         "1"
+"\eOr":         "2"
+"\eOs":         "3"
+"\eOt":         "4"
+"\eOu":         "5"
+"\eOv":         "6"
+"\eOw":         "7"
+"\eOx":         "8"
+"\eOy":         "9"
+$endif
+
+#
+# Application keypad and cursor of xterm
+#
+"\eOA":		previous-history
+"\eOB":		next-history
+"\eOC":		forward-char
+"\eOD":		backward-char
+"\eOE":		re-read-init-file
+"\eOF":		end-of-line
+"\eOH":		beginning-of-line
+
+# emacs mode
+#$endif

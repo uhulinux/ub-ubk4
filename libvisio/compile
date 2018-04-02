@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+# boost 1.59 miatt
+FLAGS="-DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED"
+export CXXFLAGS="$FLAGS"
+export CPPFLAGS="$FLAGS"
+export CFLAGS="$FLAGS"
+
+ub_compile

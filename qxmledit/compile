@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+if [ $UB_ARCH == "i386" ]; then
+qmake -set QMAKE_XSPEC linux-g++-32
+fi
+
+export \
+    QXMLEDIT_INST_DIR="/usr/bin" \
+    QXMLEDIT_INST_LIB_DIR="/usr/lib" \
+    QXMLEDIT_INST_INCLUDE_DIR="/usr/include/qxmledit" \
+    QXMLEDIT_INST_DATA_DIR="/usr/share/qxmledit" \
+    QXMLEDIT_INST_DOC_DIR="/usr/share/doc/qxmledit"
+qmake
+ub_compile

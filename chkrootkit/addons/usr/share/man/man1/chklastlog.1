@@ -1,0 +1,48 @@
+.\"
+.\" Copyright (c) DFN-CERT, Univ. of Hamburg 1994
+.\"
+.\" Univ. Hamburg, Dept. of Computer Science
+.\" DFN-CERT
+.\" Vogt-Koelln-Strasse 30
+.\" 22527 Hamburg
+.\" Germany
+.\"
+.\" @(#) $Header: chklastlog.1,v 
+.TH CHKLASTLOG 1  "Thu Oct 12 1994"
+.AT 3
+.SH NAME
+chklastlog \- check lastlog-file for deleted entries
+.SH SYNOPSIS
+.na
+.B chklastlog
+.ad
+.SH DESCRIPTION
+.LP
+\fIChklastlog\fP is reading all entries from the file \fI/var/adm/wtmp\fP 
+(file with informations about logins and logouts) and checks for every user
+found in this file whether there is an entry in the file 
+\fI/var/adm/lastlog\fP, too. The program will complain about userids with
+logins but no lastlogin information.
+
+To run chklastlog you need read permission on the files /var/adm/wtmp
+and /var/adm/lastlogin. Normally these files are world-readable and
+no special privileges are required to run the checker.
+..
+.HD
+.SH "FILES"
+.PD 0
+.TP 20
+.B /var/adm/wtmp         
+login data base
+.TP
+.B /var/adm/lastlog
+last login times
+.PD
+.SH "SEE ALSO"
+wtmp(4), who(1), last(1)
+.SH "LIMITATIONS"
+This program only works if the user has not logged in after the deletion
+of his lastlog entry.
+
+This program was designed to run on SunOS 4.x systems only. On other
+systems the output is undefined...

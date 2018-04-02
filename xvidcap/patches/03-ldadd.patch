@@ -1,0 +1,23 @@
+diff -Naur orig/src/Makefile.am patched/src/Makefile.am
+--- orig/src/Makefile.am	2008-05-02 16:32:02.000000000 +0200
++++ patched/src/Makefile.am	2012-12-16 18:14:48.042357077 +0100
+@@ -61,6 +61,7 @@
+ xvidcap_LDADD += -lXext -lX11 
+ else
+ xvidcap_LDFLAGS = -export-dynamic
++xvidcap_LDADD += -lXext -lX11 -lz
+ endif
+ 
+ EXTRA_DIST = $(glade_DATA)
+diff -Naur orig/src/Makefile.in patched/src/Makefile.in
+--- orig/src/Makefile.in	2008-07-12 17:09:22.000000000 +0200
++++ patched/src/Makefile.in	2012-12-16 18:14:08.726162123 +0100
+@@ -35,7 +35,7 @@
+ build_triplet = @build@
+ host_triplet = @host@
+ bin_PROGRAMS = xvidcap$(EXEEXT) $(am__EXEEXT_1)
+-@SOLARIS_TRUE@am__append_1 = -lXext -lX11 
++am__append_1 = -lXext -lX11 -lz
+ @USE_DBUS_TRUE@am__append_2 = \
+ @USE_DBUS_TRUE@	dbus-server-object.h \
+ @USE_DBUS_TRUE@	dbus-server-object.c

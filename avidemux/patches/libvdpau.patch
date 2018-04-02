@@ -1,0 +1,15 @@
+diff -Naur orig/avidemux_core/ADM_coreVideoCodec/ADM_hwAccel/ADM_coreVdpau/src/ADM_coreVdpau.cpp mod/avidemux_core/ADM_coreVideoCodec/ADM_hwAccel/ADM_coreVdpau/src/ADM_coreVdpau.cpp
+--- orig/avidemux_core/ADM_coreVideoCodec/ADM_hwAccel/ADM_coreVdpau/src/ADM_coreVdpau.cpp	2013-07-05 08:16:33.000000000 +0200
++++ mod/avidemux_core/ADM_coreVideoCodec/ADM_hwAccel/ADM_coreVdpau/src/ADM_coreVdpau.cpp	2013-11-05 16:14:28.000000000 +0100
+@@ -66,9 +66,9 @@
+ bool admVdpau::init(GUI_WindowInfo *x)
+ {
+     memset(&ADM_coreVdpau::funcs,0,sizeof(ADM_coreVdpau::funcs));
+-    if(false==vdpauDynaLoader.loadLibrary("libvdpau.so"))
++    if(false==vdpauDynaLoader.loadLibrary("libvdpau.so.1"))
+     {
+-        ADM_info("Cannot load libvdpau.so\n");
++        ADM_info("Cannot load libvdpau.so.1\n");
+         return false;
+     }
+     ADM_createVdpX11=(VdpDeviceCreateX11*)vdpauDynaLoader.getSymbol("vdp_device_create_x11");

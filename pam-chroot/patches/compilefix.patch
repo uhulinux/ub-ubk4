@@ -1,0 +1,23 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2007-09-30 20:05:47.000000000 +0200
++++ patched/Makefile	2016-08-21 14:43:05.572869500 +0200
+@@ -4,11 +4,12 @@
+ 
+ # if you are not using gmake, you may need to convert the ":=" variables into
+ # "=" variables.  you cannot have recursive definitions if you do that.
+-CFLAGS   := -fPIC -O2 -Wall -Werror -pedantic $(CFLAGS)
++CFLAGS   := -fPIC -O2 -Wall -pedantic $(CFLAGS)
+ CPPFLAGS := -I.
+ LDFLAGS  := -x --shared $(LDFLAGS)
+ 
+ OUT=pam_chroot.so
++DESTDIR=
+ 
+ all:	$(OUT)
+ 
+@@ -19,4 +20,4 @@
+ 	rm -f *.o $(OUT)
+ 
+ install:
+-	install -s -o0 -g0 -m755 $(OUT) /lib/security
++	install -s -o0 -g0 -m755 $(OUT) $(DESTDIR)/lib/security

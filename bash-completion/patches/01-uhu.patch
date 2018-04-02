@@ -1,0 +1,12 @@
+diff -urN bash-completion-2.1.orig/completions/dpkg bash-completion-2.1/completions/dpkg
+--- bash-completion-2.1.orig/completions/dpkg	2013-04-05 12:55:51.000000000 +0200
++++ bash-completion-2.1/completions/dpkg	2014-03-21 11:28:07.916204689 +0100
+@@ -55,7 +55,7 @@
+         -c|-i|-A|-I|-f|-e|-x|-X|-W|--install|--unpack|--record-avail| \
+         --contents|--info|--fsys-tarfile|--field|--control|--extract| \
+         --show)
+-            _filedir '?(u)deb'
++            _filedir '?(u)deb|uhu'
+             return 0
+             ;;
+         -b|--build)

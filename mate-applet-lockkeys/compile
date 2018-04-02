@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+msgfmt -o po/hu_HU.gmo po/hu_HU.po
+
+ub_compile \
+	--enable-gtk=3 \
+	--enable-settings=gsettings \
+	--libexecdir=/usr/libexec/mate

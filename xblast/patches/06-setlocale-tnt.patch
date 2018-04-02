@@ -1,0 +1,21 @@
+diff -Naur xblast-2.10.4.orig/TNT/xblast.c xblast-2.10.4/TNT/xblast.c
+--- xblast-2.10.4.orig/TNT/xblast.c	2006-02-15 23:30:32.000000000 +0100
++++ xblast-2.10.4/TNT/xblast.c	2006-06-19 12:04:04.000000000 +0200
+@@ -21,6 +21,7 @@
+  * 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  */
+ 
++#include <locale.h>
+ #include "xblast.h"
+ 
+ /*
+@@ -77,8 +78,8 @@
+ 	XBBool nsound;
+ 	XBBool check;
+ 
+-#ifdef ENABLE_NLS
+ 	setlocale (LC_ALL, "");
++#ifdef ENABLE_NLS
+ 	bindtextdomain (PACKAGE, LOCALEDIR);
+ 	textdomain (PACKAGE);
+ #endif

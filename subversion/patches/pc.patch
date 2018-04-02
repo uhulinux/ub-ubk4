@@ -1,0 +1,170 @@
+diff -Naur orig/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in patched/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in
+--- orig/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in	2015-10-23 19:05:32.692956728 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@ gnome-keyring-1
+ Requires.private:  libsvn_subr
+-Libs: -L${libdir}  -lsvn_auth_gnome_keyring
++Libs: -L${libdir}  -lsvn_auth_gnome_keyring-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in patched/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in
+--- orig/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in	2015-10-23 19:05:48.853036862 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_subr
+-Libs: -L${libdir}  -lsvn_auth_kwallet @SVN_KWALLET_LIBS@
++Libs: -L${libdir}  -lsvn_auth_kwallet-1 @SVN_KWALLET_LIBS@
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_client/libsvn_client.pc.in patched/subversion/libsvn_client/libsvn_client.pc.in
+--- orig/subversion/libsvn_client/libsvn_client.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_client/libsvn_client.pc.in	2015-10-23 19:06:21.813200302 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_wc libsvn_ra libsvn_delta libsvn_diff libsvn_subr
+-Libs: -L${libdir}  -lsvn_client
++Libs: -L${libdir}  -lsvn_client-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_delta/libsvn_delta.pc.in patched/subversion/libsvn_delta/libsvn_delta.pc.in
+--- orig/subversion/libsvn_delta/libsvn_delta.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_delta/libsvn_delta.pc.in	2015-10-23 19:06:38.305282082 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_subr
+-Libs: -L${libdir}  -lsvn_delta @SVN_ZLIB_LIBS@
++Libs: -L${libdir}  -lsvn_delta-1 @SVN_ZLIB_LIBS@
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_diff/libsvn_diff.pc.in patched/subversion/libsvn_diff/libsvn_diff.pc.in
+--- orig/subversion/libsvn_diff/libsvn_diff.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_diff/libsvn_diff.pc.in	2015-10-23 19:06:52.425352100 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_subr
+-Libs: -L${libdir}  -lsvn_diff @SVN_ZLIB_LIBS@
++Libs: -L${libdir}  -lsvn_diff-1 @SVN_ZLIB_LIBS@
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_fs/libsvn_fs.pc.in patched/subversion/libsvn_fs/libsvn_fs.pc.in
+--- orig/subversion/libsvn_fs/libsvn_fs.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_fs/libsvn_fs.pc.in	2015-10-23 19:07:13.849458336 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_fs_util libsvn_delta libsvn_subr
+-Libs: -L${libdir}  -lsvn_fs
++Libs: -L${libdir}  -lsvn_fs-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_fs_base/libsvn_fs_base.pc.in patched/subversion/libsvn_fs_base/libsvn_fs_base.pc.in
+--- orig/subversion/libsvn_fs_base/libsvn_fs_base.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_fs_base/libsvn_fs_base.pc.in	2015-10-23 19:07:36.757571932 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_delta libsvn_subr libsvn_fs_util
+-Libs: -L${libdir}  -lsvn_fs_base @SVN_DB_LIBS@
++Libs: -L${libdir}  -lsvn_fs_base-1 @SVN_DB_LIBS@
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in patched/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in
+--- orig/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in	2015-10-23 19:07:55.173663252 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_delta libsvn_subr libsvn_fs_util
+-Libs: -L${libdir}  -lsvn_fs_fs
++Libs: -L${libdir}  -lsvn_fs_fs-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_fs_util/libsvn_fs_util.pc.in patched/subversion/libsvn_fs_util/libsvn_fs_util.pc.in
+--- orig/subversion/libsvn_fs_util/libsvn_fs_util.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_fs_util/libsvn_fs_util.pc.in	2015-10-23 19:08:10.173737633 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_subr
+-Libs: -L${libdir}  -lsvn_fs_util
++Libs: -L${libdir}  -lsvn_fs_util-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_fs_x/libsvn_fs_x.pc.in patched/subversion/libsvn_fs_x/libsvn_fs_x.pc.in
+--- orig/subversion/libsvn_fs_x/libsvn_fs_x.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_fs_x/libsvn_fs_x.pc.in	2015-10-23 19:08:30.857840200 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_delta libsvn_subr libsvn_fs_util
+-Libs: -L${libdir}  -lsvn_fs_x
++Libs: -L${libdir}  -lsvn_fs_x-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_ra/libsvn_ra.pc.in patched/subversion/libsvn_ra/libsvn_ra.pc.in
+--- orig/subversion/libsvn_ra/libsvn_ra.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_ra/libsvn_ra.pc.in	2015-10-23 19:08:46.193916248 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_delta libsvn_subr
+-Libs: -L${libdir}  -lsvn_ra
++Libs: -L${libdir}  -lsvn_ra-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_ra_local/libsvn_ra_local.pc.in patched/subversion/libsvn_ra_local/libsvn_ra_local.pc.in
+--- orig/subversion/libsvn_ra_local/libsvn_ra_local.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_ra_local/libsvn_ra_local.pc.in	2015-10-23 19:09:07.306020937 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_repos libsvn_fs libsvn_delta libsvn_subr
+-Libs: -L${libdir}  -lsvn_ra_local
++Libs: -L${libdir}  -lsvn_ra_local-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in patched/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in
+--- orig/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in	2015-10-23 19:17:42.332574816 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_delta libsvn_subr serf-1
+-Libs: -L${libdir}  -lsvn_ra_serf @SVN_XML_LIBS@ @SVN_ZLIB_LIBS@
++Libs: -L${libdir}  -lsvn_ra_serf-1 @SVN_XML_LIBS@ @SVN_ZLIB_LIBS@
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in patched/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in
+--- orig/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in	2015-10-23 19:09:44.038203082 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_delta libsvn_subr
+-Libs: -L${libdir}  -lsvn_ra_svn @SVN_SASL_LIBS@
++Libs: -L${libdir}  -lsvn_ra_svn-1 @SVN_SASL_LIBS@
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_repos/libsvn_repos.pc.in patched/subversion/libsvn_repos/libsvn_repos.pc.in
+--- orig/subversion/libsvn_repos/libsvn_repos.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_repos/libsvn_repos.pc.in	2015-10-23 19:10:01.050287440 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_fs libsvn_delta libsvn_subr
+-Libs: -L${libdir}  -lsvn_repos
++Libs: -L${libdir}  -lsvn_repos-1
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_subr/libsvn_subr.pc.in patched/subversion/libsvn_subr/libsvn_subr.pc.in
+--- orig/subversion/libsvn_subr/libsvn_subr.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_subr/libsvn_subr.pc.in	2015-10-23 18:53:37.761411574 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  sqlite3
+-Libs: -L${libdir}  -lsvn_subr @SVN_XML_LIBS@ @SVN_ZLIB_LIBS@ @SVN_APR_MEMCACHE_LIBS@ @SVN_MAGIC_LIBS@ @SVN_INTL_LIBS@
++Libs: -L${libdir}  -lsvn_subr-1 @SVN_XML_LIBS@ @SVN_ZLIB_LIBS@ @SVN_APR_MEMCACHE_LIBS@ @SVN_MAGIC_LIBS@ @SVN_INTL_LIBS@
+ Cflags: -I${includedir}
+diff -Naur orig/subversion/libsvn_wc/libsvn_wc.pc.in patched/subversion/libsvn_wc/libsvn_wc.pc.in
+--- orig/subversion/libsvn_wc/libsvn_wc.pc.in	2015-09-18 15:18:36.000000000 +0200
++++ patched/subversion/libsvn_wc/libsvn_wc.pc.in	2015-10-23 19:10:40.122481189 +0200
+@@ -8,5 +8,5 @@
+ Version: @PACKAGE_VERSION@
+ Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_delta libsvn_diff libsvn_subr
+-Libs: -L${libdir}  -lsvn_wc
++Libs: -L${libdir}  -lsvn_wc-1
+ Cflags: -I${includedir}

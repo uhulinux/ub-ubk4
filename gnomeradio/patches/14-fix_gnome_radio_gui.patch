@@ -1,0 +1,12 @@
+Index: b/src/gui.c
+===================================================================
+--- a/src/gui.c	2012-12-03 10:14:53.722899843 +0000
++++ b/src/gui.c	2012-12-03 10:14:54.042899833 +0000
+@@ -1051,6 +1051,7 @@
+ 	gtk_widget_set_tooltip_text(vol_scale, text);
+ 	g_free(text);*/
+ 
++	gtk_container_add (GTK_CONTAINER (app), vbox);
+ 	gtk_widget_show_all (vbox);
+ 
+ 	return app;

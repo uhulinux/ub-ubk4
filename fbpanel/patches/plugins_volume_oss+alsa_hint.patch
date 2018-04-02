@@ -1,0 +1,27 @@
+Author: Ulises Vitulli <dererk@debian.org>
+Description: Drop some hints on plugin/volume handling for ALSA OSS emulation
+Bug-Debian: http://bugs.debian.org/678522
+
+Index: fbpanel-6.1/plugins/volume/volume.c
+===================================================================
+--- fbpanel-6.1.orig/plugins/volume/volume.c	2012-06-26 17:05:55.000000000 -0300
++++ fbpanel-6.1/plugins/volume/volume.c	2012-06-26 17:06:59.000000000 -0300
+@@ -50,7 +50,7 @@
+ 
+     ENTER;
+     if (ioctl(c->fd, MIXER_READ(c->chan), &volume)) {
+-        ERR("volume: can't get volume from /dev/mixer\n");
++        ERR("volume: can't get volume from /dev/mixer\n\n");
+         RET(0);
+     }
+     volume &= 0xFF;
+@@ -254,6 +254,9 @@
+     c = (volume_priv *) p;
+     if ((c->fd = open ("/dev/mixer", O_RDWR, 0)) < 0) {
+         ERR("volume: can't open /dev/mixer\n");
++        ERR("HINT: Do you have ALSA-OSS emulation loaded?\n");
++        ERR("HINT: Check out for 'snd-mixer-oss' kernel module loaded.\n");
++        ERR("HINT: Or disable 'volume' plugin at ~/.config/fbpanel/default.\n");
+         RET(0);
+     }
+     k->set_icons(&c->meter, names);

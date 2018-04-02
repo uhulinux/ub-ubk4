@@ -1,0 +1,18 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2008-10-11 16:34:37.000000000 +0200
++++ mod/Makefile	2009-03-14 05:50:26.000000000 +0100
+@@ -1,11 +1,10 @@
+ 
+ # these are set by config
+ CC = g++
+-DESTDIR ?= /usr
+ LCFLAGS = -g -O2
+-BINDIR = ${DESTDIR}/bin
+-MANDIR = ${DESTDIR}/share/man
+-INCLUDEDIR = ${DESTDIR}/include
++BINDIR = ${DESTDIR}/usr/bin
++MANDIR = ${DESTDIR}/usr/share/man
++INCLUDEDIR = ${DESTDIR}/usr/include
+ NOGNU = /usr/include/nognu
+ 
+ #

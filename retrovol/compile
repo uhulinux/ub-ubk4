@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_configure
+cd po
+make update-po
+cd ..
+ub_make

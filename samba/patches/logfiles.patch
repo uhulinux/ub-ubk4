@@ -1,0 +1,80 @@
+diff -Naur orig/source3/lib/popt_common.c patched/source3/lib/popt_common.c
+--- orig/source3/lib/popt_common.c	2012-10-02 10:24:41.000000000 +0200
++++ patched/source3/lib/popt_common.c	2013-03-29 11:43:16.695167118 +0100
+@@ -53,7 +53,7 @@
+ 	else
+ 		pname++;
+ 
+-	if (asprintf(&lfile, "%s/log.%s", arg, pname) < 0) {
++	if (asprintf(&lfile, "%s/%s.log", arg, pname) < 0) {
+ 		return;
+ 	}
+ 	lp_set_logfile(lfile);
+diff -Naur orig/source3/nmbd/nmbd.c patched/source3/nmbd/nmbd.c
+--- orig/source3/nmbd/nmbd.c	2012-10-02 10:24:43.000000000 +0200
++++ patched/source3/nmbd/nmbd.c	2013-03-29 11:43:16.695167118 +0100
+@@ -836,7 +836,7 @@
+ 
+ 	if (!override_logfile) {
+ 		char *lfile = NULL;
+-		if (asprintf(&lfile, "%s/log.nmbd", get_dyn_LOGFILEBASE()) < 0) {
++		if (asprintf(&lfile, "%s/nmbd.log", get_dyn_LOGFILEBASE()) < 0) {
+ 			exit(1);
+ 		}
+ 		lp_set_logfile(lfile);
+diff -Naur orig/source3/winbindd/winbindd.c patched/source3/winbindd/winbindd.c
+--- orig/source3/winbindd/winbindd.c	2012-10-02 10:24:46.000000000 +0200
++++ patched/source3/winbindd/winbindd.c	2013-03-29 11:43:16.695167118 +0100
+@@ -1379,7 +1379,7 @@
+ 
+ 	if (!override_logfile) {
+ 		char *lfile = NULL;
+-		if (asprintf(&lfile,"%s/log.winbindd",
++		if (asprintf(&lfile,"%s/winbindd.log",
+ 				get_dyn_LOGFILEBASE()) > 0) {
+ 			lp_set_logfile(lfile);
+ 			SAFE_FREE(lfile);
+diff -Naur orig/source3/winbindd/winbindd_domain.c patched/source3/winbindd/winbindd_domain.c
+--- orig/source3/winbindd/winbindd_domain.c	2012-10-02 10:24:46.000000000 +0200
++++ patched/source3/winbindd/winbindd_domain.c	2013-03-29 11:45:24.892350311 +0100
+@@ -74,7 +74,7 @@
+         for (i=0; i<lp_winbind_max_domain_connections(); i++) {
+                 setup_child(domain, &domain->children[i],
+ 			    domain_dispatch_table,
+-                            "log.wb", domain->name);
++                            "wb.log", domain->name);
+ 		domain->children[i].domain = domain;
+ 	}
+ }
+diff -Naur orig/source3/winbindd/winbindd_idmap.c patched/source3/winbindd/winbindd_idmap.c
+--- orig/source3/winbindd/winbindd_idmap.c	2012-10-02 10:24:46.000000000 +0200
++++ patched/source3/winbindd/winbindd_idmap.c	2013-03-29 11:43:16.695167118 +0100
+@@ -52,5 +52,5 @@
+ {
+ 	setup_child(NULL, &static_idmap_child,
+ 		    idmap_dispatch_table,
+-		    "log.winbindd", "idmap");
++		    "winbindd.log", "idmap");
+ }
+diff -Naur orig/source3/winbindd/winbindd_locator.c patched/source3/winbindd/winbindd_locator.c
+--- orig/source3/winbindd/winbindd_locator.c	2012-10-02 10:24:46.000000000 +0200
++++ patched/source3/winbindd/winbindd_locator.c	2013-03-29 11:43:16.695167118 +0100
+@@ -52,5 +52,5 @@
+ {
+ 	setup_child(NULL, &static_locator_child,
+ 		    locator_dispatch_table,
+-		    "log.winbindd", "locator");
++		    "winbindd.log", "locator");
+ }
+diff -Naur orig/source4/lib/cmdline/popt_common.c patched/source4/lib/cmdline/popt_common.c
+--- orig/source4/lib/cmdline/popt_common.c	2012-10-02 10:24:47.000000000 +0200
++++ patched/source4/lib/cmdline/popt_common.c	2013-03-29 11:50:06.926953392 +0100
+@@ -129,7 +129,7 @@
+ 
+ 	case 'l':
+ 		if (arg) {
+-			char *new_logfile = talloc_asprintf(NULL, "%s/log.%s", arg, pname);
++			char *new_logfile = talloc_asprintf(NULL, "%s/%s.log", arg, pname);
+ 			lpcfg_set_cmdline(cmdline_lp_ctx, "log file", new_logfile);
+ 			talloc_free(new_logfile);
+ 		}

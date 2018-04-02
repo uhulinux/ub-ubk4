@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+# alter default font
+sed -i 's/font-family:Times New Roman/font-family:Luxi Serif/g' user/wp/templates/*
+
+autoreconf -fi
+ub_compile \
+	--enable-templates \
+	--enable-clipart

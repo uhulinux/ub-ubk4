@@ -1,0 +1,54 @@
+diff -Naurd a/getweb.in b/getweb.in
+--- a/getweb.in	2009-11-18 14:15:21.000000000 +0100
++++ b/getweb.in	2009-11-18 14:15:40.000000000 +0100
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/sh -ex
+ 
+ #
+ # (c) Copyright Rick Richardson 2008
+@@ -94,15 +94,19 @@
+ }
+ 
+ SYSTEM=`uname -s`
+-WGET=`type wget 2>/dev/null`
+-if [ "$SYSTEM" = Darwin -a "$WGET" = "" ]
+-then
+-    WGETOPTS=
+-    wget() {
+-	shift
+-	curl -o $*
+-    }
+-fi
++
++WGETOPTS=
++wget() {
++	filename=$2
++	url=$3
++	dir="${url%/*}"
++	if [ ! -f "$filename" ]; then
++		echo "$filename" >>acquire.new
++		echo -e "\t$dir/" >>acquire.new
++		echo >>acquire.new
++		echo "missing file: $filename from $url" >&2
++	fi
++}
+ 
+ #
+ #	Download a .EXE file from the web, unzip it, and extract the
+@@ -119,7 +119,6 @@
+     wget $WGETOPTS -O $exefile "$url/$exefile" ||
+ 	error "Couldn't download $url/$exefile"
+     unzip -oj $exefile "$@"
+-    rm $exefile
+ }
+ 
+ #
+@@ -133,7 +132,6 @@
+     wget $WGETOPTS -O $file "$url/$file" ||
+ 	error "Couldn't download $url/$file"
+     gunzip <$file | tar xvf - $what
+-    rm $file
+ }
+ 
+ copyright() {

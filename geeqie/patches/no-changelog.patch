@@ -1,0 +1,26 @@
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2017-12-31 13:31:21.000000000 +0100
++++ patched/Makefile.am	2018-01-07 04:18:26.901865249 +0100
+@@ -10,9 +10,9 @@
+ readmedir = @readmedir@
+ 
+ if HAVE_MARKDOWN
+-readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS README.html ChangeLog.html
++readme_DATA = README.md COPYING TODO README.lirc AUTHORS README.html
+ else
+-readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS ChangeLog.html
++readme_DATA = README.md COPYING TODO README.lirc AUTHORS
+ endif
+ 
+ desktopdir = $(datadir)/applications
+@@ -36,10 +36,3 @@
+ 	cp $(top_builddir)/geeqie.spec $(distdir)
+ 
+ DISTCLEANFILES = config.report
+-
+-.PHONY: ChangeLog
+-ChangeLog.html:
+-	./gen_changelog.sh
+-
+-README.html: README.md
+-	./gen_readme.sh

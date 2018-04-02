@@ -1,0 +1,76 @@
+diff -Naurd bsd-games-2.16.orig/monop/Makefile.bsd bsd-games-2.16/monop/Makefile.bsd
+--- bsd-games-2.16.orig/monop/Makefile.bsd	2003-12-17 03:46:49.000000000 +0100
++++ bsd-games-2.16/monop/Makefile.bsd	2004-07-20 11:53:45.867819619 +0200
+@@ -3,10 +3,10 @@
+ 
+ .include <bsd.own.mk>
+ 
+-PROG=	monop
++PROG=	monopoly
+ SRCS=	monop.c cards.c execute.c getinp.c houses.c jail.c malloc.c misc.c \
+ 	morg.c print.c prop.c rent.c roll.c spec.c trade.c
+-MAN=	monop.6
++MAN=	monopoly.6
+ HIDEGAME=hidegame
+ CLEANFILES+=initdeck initdeck.lo cards.pck
+ .if ${MKSHARE} != "no"
+@@ -18,7 +18,7 @@
+ 
+ initdeck: initdeck.lo
+ 	${_MKTARGET_LINK}
+-	${HOST_LINK.c} -o ${.TARGET} ${.ALLSRC}
++	${HOST_LINK.c} -o monopoly ${.ALLSRC}
+ 
+ cards.pck: initdeck
+ 	${_MKTARGET_CREATE}
+diff -Naurd bsd-games-2.16.orig/monop/Makefrag bsd-games-2.16/monop/Makefrag
+--- bsd-games-2.16.orig/monop/Makefrag	1999-09-26 13:37:19.000000000 +0200
++++ bsd-games-2.16/monop/Makefrag	2004-07-20 11:55:07.823409113 +0200
+@@ -29,13 +29,13 @@
+ monop_CLEANFILES := cards.pck
+ monop_DIRS := $(GAMESDIR) $(MAN6DIR) $(shell dirname $(MONOP_CARDSFILE))
+ 
+-monop_all:	monop/monop monop/cards.pck monop/monop.6
++monop_all:	monop/monop monop/cards.pck monop/monopoly.6
+ 
+ monop/cards.pck:	monop/initdeck monop/cards.inp
+ 	$< monop/cards.inp $@
+ 
+ monop_install:	monop_all
+-	$(INSTALL_BINARY) monop/monop $(INSTALL_PREFIX)$(GAMESDIR)/monop
+-	$(HIDE_GAME) monop
+-	$(INSTALL_MANUAL) monop/monop.6
++	$(INSTALL_BINARY) monop/monop $(INSTALL_PREFIX)$(GAMESDIR)/monopoly
++	$(HIDE_GAME) monopoly
++	$(INSTALL_MANUAL) monop/monopoly.6
+ 	$(INSTALL_DATA) monop/cards.pck $(INSTALL_PREFIX)$(MONOP_CARDSFILE)
+diff -Naurd bsd-games-2.16.orig/monop/monop.6.in bsd-games-2.16/monop/monop.6.in
+--- bsd-games-2.16.orig/monop/monop.6.in	2003-12-17 03:46:49.000000000 +0100
++++ bsd-games-2.16/monop/monop.6.in	2004-07-20 11:44:51.137396171 +0200
+@@ -1,4 +1,4 @@
+-.\"	$NetBSD: monop.6,v 1.16 2003/08/07 09:37:28 agc Exp $
++.\"	$NetBSD: monopoly.6,v 1.16 2003/08/07 09:37:28 agc Exp $
+ .\"
+ .\" Copyright (c) 1980 The Regents of the University of California.
+ .\" All rights reserved.
+@@ -27,7 +27,7 @@
+ .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ .\" SUCH DAMAGE.
+ .\"
+-.\"	@(#)monop.6	6.5 (Berkeley) 3/25/93
++.\"	@(#)monopoly.6	6.5 (Berkeley) 3/25/93
+ .\"
+ .Dd March 25, 1993
+ .Dt MONOP 6
+diff -Naurd bsd-games-2.16.orig/substfiles2 bsd-games-2.16/substfiles2
+--- bsd-games-2.16.orig/substfiles2	2004-02-09 02:37:26.000000000 +0100
++++ bsd-games-2.16/substfiles2	2004-07-20 11:44:59.981456103 +0200
+@@ -39,7 +39,7 @@
+ hangman/hangman.6
+ hunt/hunt/hunt.6
+ hunt/huntd/huntd.6
+-monop/monop.6
++monop/monopoly.6
+ quiz/datfiles/index
+ quiz/quiz.6
+ robots/robots.6

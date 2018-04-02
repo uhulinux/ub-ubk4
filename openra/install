@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+make \
+    prefix=/usr \
+    DESTDIR=${UB_INSTALLDIR} \
+    install
+make \
+    prefix=/usr \
+    DESTDIR=${UB_INSTALLDIR} \
+    install-linux-shortcuts
+make \
+    prefix=/usr \
+    DESTDIR=${UB_INSTALLDIR} \
+    install-linux-mime
+make \
+    prefix=/usr \
+    DESTDIR=${UB_INSTALLDIR} \
+    install-linux-appdata

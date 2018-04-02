@@ -1,0 +1,31 @@
+diff -Naur fbreader-0.99.4-orig/makefiles/arch/desktop.mk fbreader-0.99.4/makefiles/arch/desktop.mk
+--- fbreader-0.99.4-orig/makefiles/arch/desktop.mk	2012-11-30 13:41:25.000000000 +0100
++++ fbreader-0.99.4/makefiles/arch/desktop.mk	2017-05-31 21:43:50.020559714 +0200
+@@ -12,7 +12,7 @@
+ AR = ar rsu
+ LD = g++
+ 
+-CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG
++CFLAGS = -fPIC -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG
+ LDFLAGS =
+ EXTERNAL_INCLUDE = $(shell pkg-config --cflags fribidi) 
+  
+diff -Naur fbreader-0.99.4-orig/makefiles/config.mk fbreader-0.99.4/makefiles/config.mk
+--- fbreader-0.99.4-orig/makefiles/config.mk	2012-11-30 13:41:25.000000000 +0100
++++ fbreader-0.99.4/makefiles/config.mk	2017-05-31 21:41:15.793854656 +0200
+@@ -26,13 +26,13 @@
+ endif
+ 
+ ifeq "$(TARGET_STATUS)" "release"
+-	CFLAGS += -O3
++	CFLAGS += -O2
+ endif
+ ifeq "$(TARGET_STATUS)" "debug"
+ 	CFLAGS += -O0 -g
+ endif
+ ifeq "$(TARGET_STATUS)" "profile"
+-	CFLAGS += -O3 -g -pg
++	CFLAGS += -O2 -g -pg
+ 	LDFLAGS += -pg
+ endif
+ 

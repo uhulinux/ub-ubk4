@@ -1,0 +1,15 @@
+diff -Naur orig/Makefile.good mod/Makefile.good
+--- orig/Makefile.good	2005-03-02 05:33:50.000000000 +0100
++++ mod/Makefile.good	2009-03-26 11:37:15.000000000 +0100
+@@ -3,9 +3,9 @@
+ CXXFILES	= parser.cc lexer.cc expr.cc canvas.cc aamath.cc
+ OBJS		= $(CXXFILES:.cc=.o) 
+ TARGET		= aamath
+-CFLAGS		= -Wall -O2 -g -DUSE_READLINE
++CFLAGS		= -Wall -O2
+ LFLAGS		= -g
+-LIBS		= -lreadline -ltermcap
++LIBS		= 
+ 
+ $(TARGET): $(OBJS)
+ 	$(LD) $(LFLAGS) $(OBJS) -o $@ $(LIBS)

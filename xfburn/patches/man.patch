@@ -1,0 +1,14 @@
+diff -Naur orig/docs/Makefile.am patched/docs/Makefile.am
+--- orig/docs/Makefile.am	2014-09-21 02:53:39.000000000 +0200
++++ patched/docs/Makefile.am	2014-09-21 03:01:10.351215941 +0200
+@@ -4,10 +4,8 @@
+ man_MANS = 					\
+ 	xfburn.1
+ 
+-if MAINTAINER_MODE
+ %.1: %.xml
+ 	xsltproc http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+-endif
+ 
+ EXTRA_DIST =					\
+ 	$(man_MANS)				\

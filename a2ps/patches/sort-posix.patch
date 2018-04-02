@@ -1,0 +1,12 @@
+diff -Naur a2ps-4.13.orig/afm/make_fonts_map.sh a2ps-4.13/afm/make_fonts_map.sh
+--- a2ps-4.13.orig/afm/make_fonts_map.sh	1999-01-20 15:28:27.000000000 +0100
++++ a2ps-4.13/afm/make_fonts_map.sh	2006-02-02 20:52:48.000000000 +0100
+@@ -80,7 +80,7 @@
+ 
+ # Sort them by name, and keep a unique file for each font
+ echo "Sorting entries..." 1>&2
+-sort -u -t' ' +0 -1 fonts.map.new > fonts.map.tmp
++sort -u -t' ' -k 1,1 fonts.map.new > fonts.map.tmp
+ 
+ echo "Finishing." 1>&2
+ cat > fonts.map.new <<EOF

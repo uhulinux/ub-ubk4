@@ -1,0 +1,47 @@
+diff -Naur orig/demos/Makefile.am patched/demos/Makefile.am
+--- orig/demos/Makefile.am	2016-10-22 06:16:42.134739579 +0200
++++ patched/demos/Makefile.am	2017-08-24 15:13:33.228142744 +0200
+@@ -1,6 +1,6 @@
+ ## Makefile.am for gtk+/demos
+ include $(top_srcdir)/Makefile.decl
+ 
+-SUBDIRS = gtk-demo widget-factory icon-browser
++SUBDIRS = icon-browser
+ 
+ -include $(top_srcdir)/git.mk
+diff -Naur orig/demos/Makefile.in patched/demos/Makefile.in
+--- orig/demos/Makefile.in	2017-04-08 21:17:59.134739579 +0200
++++ patched/demos/Makefile.in	2017-08-24 15:14:14.963903656 +0200
+@@ -495,7 +495,7 @@
+ 	|| { echo "Gtk+Tests:ERROR: Failed to start Xvfb environment for X11 target tests."; exit 1; } \
+ 	&& DISPLAY=:$$XID && export DISPLAY
+ 
+-SUBDIRS = gtk-demo widget-factory icon-browser
++SUBDIRS = icon-browser
+ all: all-recursive
+ 
+ .SUFFIXES:
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2016-12-30 15:55:56.134739579 +0100
++++ patched/Makefile.am	2017-08-24 15:12:52.796357101 +0200
+@@ -1,7 +1,7 @@
+ ## Makefile.am for GTK+
+ include $(top_srcdir)/Makefile.decl
+ 
+-SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples
++SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite
+ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
+ 
+ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2017-04-08 21:17:59.134739579 +0200
++++ patched/Makefile.in	2017-08-24 15:13:14.204245889 +0200
+@@ -566,7 +566,7 @@
+ 	|| { echo "Gtk+Tests:ERROR: Failed to start Xvfb environment for X11 target tests."; exit 1; } \
+ 	&& DISPLAY=:$$XID && export DISPLAY
+ 
+-SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples
++SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite
+ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
+ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ MAINTAINERCLEANFILES = \

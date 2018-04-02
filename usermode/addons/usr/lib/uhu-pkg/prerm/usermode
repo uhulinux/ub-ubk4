@@ -1,0 +1,26 @@
+#!/bin/sh -e
+
+remove_suid_wrapper ()
+{
+	link="${1/sbin/bin}"
+	prog="${1##*/}"
+	rm -f "$link"
+	rm -f "/etc/pam.d/$prog"
+	rm -f "/etc/security/console.apps/$prog"
+}
+
+shopt -s nullglob
+
+if [ "$1" = "usermode" ]; then
+	for i in /var/lib/dpkg/info/*.suid_wrapper; do
+		for j in $(cat "$i"); do
+			remove_suid_wrapper "$j"
+		done
+	done
+else
+	if [ -f /var/lib/dpkg/info/"$1".suid_wrapper ]; then
+		for j in $(cat /var/lib/dpkg/info/"$1".suid_wrapper); do
+			remove_suid_wrapper "$j"
+		done
+	fi
+fi

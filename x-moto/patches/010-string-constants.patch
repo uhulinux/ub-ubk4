@@ -1,0 +1,183 @@
+Description: Use string constants where appropriate
+Author: Stephen Kitt <skitt@debian.org>
+
+--- a/src/image/tim.cpp
++++ b/src/image/tim.cpp
+@@ -33,7 +33,7 @@
+   BAD BAD BAD
+   ==============================================================================*/
+ #if !defined(WIN32)
+-static int stricmp(char *pc1,char *pc2) {
++static int stricmp(const char *pc1,const char *pc2) {
+   int s1 = strlen(pc1);
+   int s2 = strlen(pc2);
+   if(s1 != s2) return 1;
+@@ -62,7 +62,7 @@
+   pSession->Memory.tim_callback_free(pvBlock);
+ }
+ 
+-char *tim_strdup(tim_session_t *pSession,char *pcString) {
++char *tim_strdup(tim_session_t *pSession,const char *pcString) {
+   char *pcNewString;
+   int nLen;
+   nLen=(int)strlen(pcString)+1;
+@@ -110,7 +110,7 @@
+   File format management
+   ==============================================================================*/
+ 
+-int tim_add_extension_to_file_format(tim_file_format_t *p,char *pcExtension) {
++int tim_add_extension_to_file_format(tim_file_format_t *p,const char *pcExtension) {
+   /* Room for more extensions? */
+   if(p->nNumExtensions>=TIM_MAX_EXTENSIONS_PER_FILE_FORMAT)
+     return TIM_RV_ERR_INTERNAL_LIMIT;
+@@ -126,7 +126,7 @@
+   return TIM_RV_OK;
+ }
+ 
+-tim_file_format_t *tim_create_file_format(tim_session_t *pSession,char *pcExtension,
++tim_file_format_t *tim_create_file_format(tim_session_t *pSession,const char *pcExtension,
+ 					  tim_callback_save_t SaveCallback,
+ 					  tim_callback_load_t LoadCallback) {					
+   tim_file_format_t *p;
+@@ -153,7 +153,7 @@
+   return p;
+ }
+ 
+-tim_file_format_t *tim_find_file_format(tim_session_t *pSession,char *pcExtension) {
++tim_file_format_t *tim_find_file_format(tim_session_t *pSession,const char *pcExtension) {
+   int i,j;
+ 
+   /* Do we have a file format with this extension? */
+@@ -183,7 +183,7 @@
+   return NULL;
+ }
+ 
+-tim_file_format_hint_t *tim_find_file_format_hint(tim_file_format_t *pFormat,char *pcTag) {
++tim_file_format_hint_t *tim_find_file_format_hint(tim_file_format_t *pFormat,const char *pcTag) {
+   tim_file_format_hint_t *p;
+ 
+   /* Is this hint found? */
+@@ -195,7 +195,7 @@
+ }
+ 
+ tim_file_format_hint_t *tim_add_file_format_hint(tim_session_t *pSession,
+-                                                 char *pcExt,char *pcTag,char *pcValue) {
++                                                 const char *pcExt,const char *pcTag,char *pcValue) {
+   tim_file_format_t *pFormat;
+   tim_file_format_hint_t *p;
+ 	
+@@ -252,7 +252,7 @@
+   return TIM_RV_OK;
+ }
+ 
+-int tim_is_hint(tim_session_t *pSession,char *pcExt,char *pcTag) {
++int tim_is_hint(tim_session_t *pSession,const char *pcExt,const char *pcTag) {
+   tim_file_format_t *pFormat;
+ 	
+   /* Find format */
+@@ -266,7 +266,7 @@
+   return FALSE;
+ }
+ 
+-char *tim_get_hint(tim_session_t *pSession,char *pcExt,char *pcTag,char *pcDefaultValue) {
++const char *tim_get_hint(tim_session_t *pSession,const char *pcExt,const char *pcTag,const char *pcDefaultValue) {
+   tim_file_format_t *pFormat;
+   tim_file_format_hint_t *p;
+ 	
+@@ -282,7 +282,7 @@
+   return p->cValue;
+ }
+ 
+-int tim_set_hint(tim_session_t *pSession,char *pcExt,char *pcTag,char *pcValue) {
++int tim_set_hint(tim_session_t *pSession,const char *pcExt,const char *pcTag,char *pcValue) {
+   /* Set hint */
+   if(!tim_add_file_format_hint(pSession,pcExt,pcTag,pcValue))
+     return TIM_RV_ERR_COULD_NOT_PERFORM;
+@@ -301,7 +301,7 @@
+   return (float)atof(tim_get_hint(pSession,pcExt,pcTag,cTemp));
+ }
+ 
+-int tim_get_hint_int(tim_session_t *pSession,char *pcExt,char *pcTag,int nDefaultValue) {
++int tim_get_hint_int(tim_session_t *pSession,const char *pcExt,const char *pcTag,int nDefaultValue) {
+   char cTemp[256];
+ 
+   /* Make default value string */
+@@ -317,7 +317,7 @@
+   return tim_set_hint(pSession,pcExt,pcTag,cTemp);
+ }
+ 
+-int tim_set_hint_int(tim_session_t *pSession,char *pcExt,char *pcTag,int nValue) {
++int tim_set_hint_int(tim_session_t *pSession,const char *pcExt,const char *pcTag,int nValue) {
+   char cTemp[256];
+   sprintf(cTemp,"%d",nValue);
+   return tim_set_hint(pSession,pcExt,pcTag,cTemp);
+--- a/src/image/tim.h
++++ b/src/image/tim.h
+@@ -244,7 +244,7 @@
+ void *tim_alloc(tim_session_t *pSession,int nSize);
+ void *tim_realloc(tim_session_t *pSession,void *pvBlock,int nSize);
+ void tim_free(tim_session_t *pSession,void *pvBlock);
+-char *tim_strdup(tim_session_t *pSession,char *pcString);
++char *tim_strdup(tim_session_t *pSession,const char *pcString);
+ 
+ /* File I/O */
+ void *tim_open(tim_session_t *pSession,char *pcWhere,tim_io_mode_t IOMode);
+@@ -256,19 +256,19 @@
+ 
+ /* File format management */
+ int tim_remove_hint(tim_session_t *pSession,char *pcExt,char *pcTag);
+-int tim_is_hint(tim_session_t *pSession,char *pcExt,char *pcTag);
+-char *tim_get_hint(tim_session_t *pSession,char *pcExt,char *pcTag,char *pcDefaultValue);
+-int tim_set_hint(tim_session_t *pSession,char *pcExt,char *pcTag,char *pcValue);
++int tim_is_hint(tim_session_t *pSession,const char *pcExt,const char *pcTag);
++const char *tim_get_hint(tim_session_t *pSession,const char *pcExt,const char *pcTag,const char *pcDefaultValue);
++int tim_set_hint(tim_session_t *pSession,const char *pcExt,const char *pcTag,char *pcValue);
+ float tim_get_hint_float(tim_session_t *pSession,char *pcExt,char *pcTag,float fDefaultValue);
+-int tim_get_hint_int(tim_session_t *pSession,char *pcExt,char *pcTag,int nDefaultValue);
++int tim_get_hint_int(tim_session_t *pSession,const char *pcExt,const char *pcTag,int nDefaultValue);
+ int tim_set_hint_float(tim_session_t *pSession,char *pcExt,char *pcTag,float fValue);
+-int tim_set_hint_int(tim_session_t *pSession,char *pcExt,char *pcTag,int nValue);
++int tim_set_hint_int(tim_session_t *pSession,const char *pcExt,const char *pcTag,int nValue);
+ 
+-int tim_add_extension_to_file_format(tim_file_format_t *p,char *pcExtension);
+-tim_file_format_t *tim_create_file_format(tim_session_t *pSession,char *pcExtension,
++int tim_add_extension_to_file_format(tim_file_format_t *p,const char *pcExtension);
++tim_file_format_t *tim_create_file_format(tim_session_t *pSession,const char *pcExtension,
+ 																					tim_callback_save_t SaveCallback,
+ 																					tim_callback_load_t LoadCallback);	
+-tim_file_format_t *tim_find_file_format(tim_session_t *pSession,char *pcExtension);
++tim_file_format_t *tim_find_file_format(tim_session_t *pSession,const char *pcExtension);
+ 
+ /* Image management */
+ tim_image_t *tim_create_image(tim_session_t *pSession,int nWidth,int nHeight,
+--- a/src/image/tim_io_stdio.cpp
++++ b/src/image/tim_io_stdio.cpp
+@@ -30,7 +30,7 @@
+ ==============================================================================*/
+ 
+ void *tim_stdio_open(char *pcWhere,tim_io_mode_t IOMode) {
+-	char *pcIOMode=NULL;
++	const char *pcIOMode=NULL;
+ 
+ 	/* Determine mode of I/O */
+ 	switch(IOMode) {
+--- a/src/image/tim_jpeg.cpp
++++ b/src/image/tim_jpeg.cpp
+@@ -37,7 +37,7 @@
+ Hmm, stricmp() is microsoftish
+ ==============================================================================*/
+ #if !defined(WIN32) && !defined(__amigaos4__)
+-  static int stricmp(char *pc1,char *pc2) {
++  static int stricmp(const char *pc1,const char *pc2) {
+     int s1 = strlen(pc1);
+     int s2 = strlen(pc2);
+     if(s1 != s2) return 1;
+@@ -480,7 +480,7 @@
+   tim_error_mgr_t Err;
+   tim_image_t *pImage;
+   unsigned int nRowStride, nOffset;
+-  char *pc;
++  const char *pc;
+   JSAMPARRAY Buffer;
+   tim_jpeg_pixel_t *pScan;
+   int nRet;

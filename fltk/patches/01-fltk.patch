@@ -1,0 +1,37 @@
+diff -Naur orig/documentation/Makefile patched/documentation/Makefile
+--- orig/documentation/Makefile	2011-10-25 04:17:29.000000000 +0200
++++ patched/documentation/Makefile	2015-01-25 16:31:36.788192625 +0100
+@@ -84,11 +84,6 @@
+ 	  $(INSTALL_DATA) fltk.pdf $(DESTDIR)$(docdir); \
+ 	fi
+ 	echo "Installing man pages in $(DESTDIR)$(mandir) ..."
+-	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/cat1
+-	$(INSTALL_MAN) $(SRC_DOCDIR)/fluid.$(CAT1EXT) $(DESTDIR)$(mandir)/cat1
+-	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk-config.$(CAT1EXT) $(DESTDIR)$(mandir)/cat1
+-	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/cat3
+-	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk.$(CAT3EXT) $(DESTDIR)$(mandir)/cat3
+ 	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/man1
+ 	$(INSTALL_MAN) $(SRC_DOCDIR)/fluid.man $(DESTDIR)$(mandir)/man1/fluid.1
+ 	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk-config.man $(DESTDIR)$(mandir)/man1/fltk-config.1
+@@ -96,10 +91,6 @@
+ 	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk.man $(DESTDIR)$(mandir)/man3/fltk.3
+ 
+ install-linux install-osx:
+-	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/cat6
+-	$(INSTALL_MAN) $(SRC_DOCDIR)/blocks.$(CAT6EXT) $(DESTDIR)$(mandir)/cat6
+-	$(INSTALL_MAN) $(SRC_DOCDIR)/checkers.$(CAT6EXT) $(DESTDIR)$(mandir)/cat6
+-	$(INSTALL_MAN) $(SRC_DOCDIR)/sudoku.$(CAT6EXT) $(DESTDIR)$(mandir)/cat6
+ 	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/man6
+ 	$(INSTALL_MAN) $(SRC_DOCDIR)/blocks.man $(DESTDIR)$(mandir)/man6/blocks.6
+ 	$(INSTALL_MAN) $(SRC_DOCDIR)/checkers.man $(DESTDIR)$(mandir)/man6/checkers.6
+diff -Naur orig/fluid/fluid.desktop patched/fluid/fluid.desktop
+--- orig/fluid/fluid.desktop	2010-11-14 17:37:34.000000000 +0100
++++ patched/fluid/fluid.desktop	2015-01-25 16:32:16.024387187 +0100
+@@ -1,6 +1,7 @@
+ [Desktop Entry]
+ Name=FLUID
+ Comment=FLTK GUI Designer
++Comment[hu]=FLTK felhasználóifelület-szerkesztő
+ TryExec=fluid
+ Exec=fluid %F
+ Icon=fluid

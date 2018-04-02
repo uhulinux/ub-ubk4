@@ -1,0 +1,45 @@
+diff -Naur orig/util/wmgenmenu.c mod/util/wmgenmenu.c
+--- orig/util/wmgenmenu.c	2014-08-30 14:29:09.000000000 +0200
++++ mod/util/wmgenmenu.c	2015-01-01 15:12:32.051850314 +0100
+@@ -112,34 +112,13 @@
+ 	/* Root */
+ 	RMenu = WMCreatePLArray(WMCreatePLString("Window Maker"), NULL);
+ 
+-	/* Root -> Applications */
+-	L1Menu = WMCreatePLArray(WMCreatePLString(_("Applications")), NULL);
+-
+-	/* Root -> Applications -> <category> */
+-	find_and_write(_("Terminals"), Terminals, 1);	/* always keep terminals the top item */
+-	find_and_write(_("Internet"), Internet, 0);
+-	find_and_write(_("Email"), Email, 0);
+-	find_and_write(_("Mathematics"), Mathematics, 0);
+-	find_and_write(_("File Managers"), File_managers, 0);
+-	find_and_write(_("Graphics"), Graphics, 0);
+-	find_and_write(_("Multimedia"), Multimedia, 0);
+-	find_and_write(_("Editors"), Editors, 0);
+-	find_and_write(_("Development"), Development, 0);
+-	find_and_write("Window Maker", WindowMaker, 0);
+-	find_and_write(_("Office"), Office, 0);
+-	find_and_write(_("Astronomy"), Astronomy, 0);
+-	find_and_write(_("Sound"), Sound, 0);
+-	find_and_write(_("Comics"), Comics, 0);
+-	find_and_write(_("Viewers"), Viewers, 0);
+-	find_and_write(_("Utilities"), Utilities, 0);
+-	find_and_write(_("System"), System, 0);
+-	find_and_write(_("Video"), Video, 0);
+-	find_and_write(_("Chat and Talk"), Chat, 0);
+-	find_and_write(_("P2P Network"), P2P, 0);
+-	find_and_write(_("Games"), Games, 0);
+-	find_and_write("OpenSUSE", OpenSUSE, 0);
+-	find_and_write("Mandriva", Mandriva, 0);
+-
++	/* Root -> `xdgmenu */
++	L1Menu = WMCreatePLArray(
++		WMCreatePLString(_("Applications")),
++		WMCreatePLString("OPEN_PLMENU"),
++		WMCreatePLString ("|| find /usr/share/applications -type f -name '*.desktop' | xargs wmmenugen -parser:xdg"),
++		NULL
++	);
+ 	WMAddToPLArray(RMenu, L1Menu);
+ 
+ 	/* Root -> `Run' dialog */

@@ -1,0 +1,16 @@
+diff -Nur orig/src/modules/bootloader/bootloader.conf mod/src/modules/bootloader/bootloader.conf
+--- orig/src/modules/bootloader/bootloader.conf	2017-11-14 16:18:58.000000000 +0100
++++ mod/src/modules/bootloader/bootloader.conf	2017-11-19 14:27:03.000000000 +0100
+@@ -5,9 +5,9 @@
+ 
+ # systemd-boot configuration files settings, set kernel and initramfs file names
+ # and amount of time before default selection boots
+-kernel: "/vmlinuz-linux"
+-img: "/initramfs-linux.img"
+-fallback: "/initramfs-linux-fallback.img"
++kernel: "/kernel"
++img: "/initrd"
++fallback: "/initrd-fallback.img"
+ timeout: "10"
+ # Optionally set the menu entry name and kernel name to use in systemd-boot.
+ # If not specified here, these settings will be taken from branding.desc.

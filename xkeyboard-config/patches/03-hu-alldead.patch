@@ -1,0 +1,319 @@
+diff -Naur xkeyboard-config-0.8.orig/rules/base.xml.in xkeyboard-config-0.8/rules/base.xml.in
+--- xkeyboard-config-0.8.orig/rules/base.xml.in	2006-02-26 17:12:33.000000000 +0100
++++ xkeyboard-config-0.8/rules/base.xml.in	2006-06-09 16:19:52.000000000 +0200
+@@ -1516,6 +1516,12 @@
+         <!-- 101 keys -->
+         <variant>
+           <configItem>
++            <name>101_qwertz_comma_alldead</name>
++            <_description>101/qwertz/comma/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>101_qwertz_comma_dead</name>
+             <_description>101/qwertz/comma/Dead keys</_description>
+           </configItem>
+@@ -1528,6 +1534,12 @@
+         </variant>
+         <variant>
+           <configItem>
++            <name>101_qwertz_dot_alldead</name>
++            <_description>101/qwertz/dot/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>101_qwertz_dot_dead</name>
+             <_description>101/qwertz/dot/Dead keys</_description>
+           </configItem>
+@@ -1540,6 +1552,12 @@
+         </variant>
+         <variant>
+           <configItem>
++            <name>101_qwerty_comma_alldead</name>
++            <_description>101/qwerty/comma/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>101_qwerty_comma_dead</name>
+             <_description>101/qwerty/comma/Dead keys</_description>
+           </configItem>
+@@ -1552,6 +1570,12 @@
+         </variant>
+         <variant>
+           <configItem>
++            <name>101_qwerty_dot_alldead</name>
++            <_description>101/qwerty/dot/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>101_qwerty_dot_dead</name>
+             <_description>101/qwerty/dot/Dead keys</_description>
+           </configItem>
+@@ -1567,6 +1591,12 @@
+         <!-- 102 keys -->
+         <variant>
+           <configItem>
++            <name>102_qwertz_comma_alldead</name>
++            <_description>102/qwertz/comma/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>102_qwertz_comma_dead</name>
+             <_description>102/qwertz/comma/Dead keys</_description>
+           </configItem>
+@@ -1579,6 +1609,12 @@
+         </variant>
+         <variant>
+           <configItem>
++            <name>102_qwertz_dot_alldead</name>
++            <_description>102/qwertz/dot/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>102_qwertz_dot_dead</name>
+             <_description>102/qwertz/dot/Dead keys</_description>
+           </configItem>
+@@ -1591,6 +1627,12 @@
+         </variant>
+         <variant>
+           <configItem>
++            <name>102_qwerty_comma_alldead</name>
++            <_description>102/qwerty/comma/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>102_qwerty_comma_dead</name>
+             <_description>102/qwerty/comma/Dead keys</_description>
+           </configItem>
+@@ -1603,6 +1645,12 @@
+         </variant>
+         <variant>
+           <configItem>
++            <name>102_qwerty_dot_alldead</name>
++            <_description>102/qwerty/dot/All dead keys</_description>
++          </configItem>
++        </variant>
++        <variant>
++          <configItem>
+             <name>102_qwerty_dot_dead</name>
+             <_description>102/qwerty/dot/Dead keys</_description>
+           </configItem>
+diff -Naur xkeyboard-config-0.8.orig/symbols/hu xkeyboard-config-0.8/symbols/hu
+--- xkeyboard-config-0.8.orig/symbols/hu	2005-12-21 01:40:06.000000000 +0100
++++ xkeyboard-config-0.8/symbols/hu	2006-06-09 16:16:55.000000000 +0200
+@@ -50,6 +50,22 @@
+ 
+ // Main layouts
+ 
++// 101_qwertz_comma_alldead
++// 101 key qwertz layout
++// with decimal comma on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "101_qwertz_comma_alldead" {
++    name[Group1] = "Hungary - 101/qwertz/comma/All dead keys";
++    include "latin"
++    include "hu(def_101)"
++    include "hu(def_qwertz)"
++    include "keypad(comma)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 101_qwertz_comma_dead
+ // 101 key qwertz layout
+ // with decimal comma on keypad
+@@ -82,6 +98,22 @@
+     include "level3(ralt_switch)"
+ };
+ 
++// 101_qwertz_dot_alldead
++// 101 key qwertz layout
++// with decimal dot on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "101_qwertz_dot_alldead" {
++    name[Group1] = "Hungary - 101/qwertz/dot/All dead keys";
++    include "latin"
++    include "hu(def_101)"
++    include "hu(def_qwertz)"
++    include "hu(def_dot)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 101_qwertz_dot_dead
+ // 101 key qwertz layout
+ // with decimal dot on keypad
+@@ -114,6 +146,22 @@
+     include "level3(ralt_switch)"
+ };
+ 
++// 101_qwerty_comma_alldead
++// 101 key qwerty layout
++// with decimal comma on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "101_qwerty_comma_alldead" {
++    name[Group1] = "Hungary - 101/qwerty/comma/All dead keys";
++    include "latin"
++    include "hu(def_101)"
++    include "hu(def_qwerty)"
++    include "keypad(comma)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 101_qwerty_comma_dead
+ // 101 key qwerty layout
+ // with decimal comma on keypad
+@@ -146,6 +194,22 @@
+     include "level3(ralt_switch)"
+ };
+ 
++// 101_qwerty_dot_alldead
++// 101 key qwerty layout
++// with decimal dot on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "101_qwerty_dot_alldead" {
++    name[Group1] = "Hungary - 101/qwerty/dot/All dead keys";
++    include "latin"
++    include "hu(def_101)"
++    include "hu(def_qwerty)"
++    include "hu(def_dot)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 101_qwerty_dot_dead
+ // 101 key qwerty layout
+ // with decimal dot on keypad
+@@ -178,6 +242,22 @@
+     include "level3(ralt_switch)"
+ };
+ 
++// 102_qwertz_comma_alldead
++// 102 key qwertz layout
++// with decimal comma on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "102_qwertz_comma_alldead" {
++    name[Group1] = "Hungary - 102/qwertz/comma/All dead keys";
++    include "latin"
++    include "hu(def_102)"
++    include "hu(def_qwertz)"
++    include "keypad(comma)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 102_qwertz_comma_dead
+ // 102 key qwertz layout
+ // with decimal comma on keypad
+@@ -210,6 +290,22 @@
+     include "level3(ralt_switch)"
+ };
+ 
++// 102_qwertz_dot_alldead
++// 102 key qwertz layout
++// with decimal dot on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "102_qwertz_dot_alldead" {
++    name[Group1] = "Hungary - 102/qwertz/dot/All dead keys";
++    include "latin"
++    include "hu(def_102)"
++    include "hu(def_qwertz)"
++    include "hu(def_dot)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 102_qwertz_dot_dead
+ // 102 key qwertz layout
+ // with decimal dot on keypad
+@@ -242,6 +338,22 @@
+     include "level3(ralt_switch)"
+ };
+ 
++// 102_qwerty_comma_alldead
++// 102 key qwerty layout
++// with decimal comma on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "102_qwerty_comma_alldead" {
++    name[Group1] = "Hungary - 102/qwerty/comma/All dead keys";
++    include "latin"
++    include "hu(def_102)"
++    include "hu(def_qwerty)"
++    include "keypad(comma)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 102_qwerty_comma_dead
+ // 102 key qwerty layout
+ // with decimal comma on keypad
+@@ -274,6 +386,22 @@
+     include "level3(ralt_switch)"
+ };
+ 
++// 102_qwerty_dot_alldead
++// 102 key qwerty layout
++// with decimal dot on keypad
++// and with dead key support for all keys
++partial
++xkb_symbols "102_qwerty_dot_alldead" {
++    name[Group1] = "Hungary - 102/qwerty/dot/All dead keys";
++    include "latin"
++    include "hu(def_102)"
++    include "hu(def_qwerty)"
++    include "hu(def_dot)"
++    include "hu(def_alldead)"
++    include "hu(def_common)"
++    include "level3(ralt_switch)"
++};
++
+ // 102_qwerty_dot_dead
+ // 102 key qwerty layout
+ // with decimal dot on keypad
+@@ -351,6 +479,24 @@
+ }; 	 
+  
+ 
++// def_alldead:
++// All the possible keys are dead keys
++hidden partial alphanumeric_keys
++xkb_symbols "def_alldead" {
++    key <AE01>  { [            1,   apostrophe,        dead_tilde,      asciitilde ] };
++    key <AE02>  { [            2,     quotedbl,        dead_caron,           caron ] };
++    key <AE03>  { [            3,         plus,   dead_circumflex,     asciicircum ] };
++    key <AE04>  { [            4,       exclam,        dead_breve,           breve ] };
++    key <AE05>  { [            5,      percent,    dead_abovering,          degree ] };
++    key <AE06>  { [            6,        slash,       dead_ogonek,          ogonek ] };
++    key <AE07>  { [            7,        equal,        dead_grave,           grave ] };
++    key <AE08>  { [            8,    parenleft,     dead_abovedot,        abovedot ] };
++    key <AE09>  { [            9,   parenright,        dead_acute,           acute ] };
++    key <AE10>  { [   odiaeresis,   Odiaeresis,  dead_doubleacute,     doubleacute ] };
++    key <AE11>  { [   udiaeresis,   Udiaeresis,    dead_diaeresis,       diaeresis ] };
++    key <AE12>  { [       oacute,       Oacute,      dead_cedilla,         cedilla ] };
++};
++
+ // def_dead:
+ // Dead keys support part
+ hidden partial alphanumeric_keys

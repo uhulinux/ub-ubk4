@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cp /usr/lib/aspell*/iso-8859-2.* .
+echo -e "name\thu\ncharset\tiso8859-2\nspecial -\t-*-" > hu.dat
+echo "add hu.rws" > hu.multi
+make wordlist
+LC_CTYPE=hu_HU aspell --lang=hu --data-dir=. create master hu.rws < wordlist

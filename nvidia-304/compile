@@ -1,0 +1,30 @@
+#!/bin/bash -eux
+
+#előkészület
+if [ "$UB_ARCH" == "amd64" ];then
+KVER="$(ls -1 /lib/modules | grep x86_64)"
+forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
+else
+KVER="$(ls -1 /lib/modules | grep i386)"
+forras="NVIDIA-Linux-x86-${UB_VERSION}"
+fi
+moduldir="$UB_COMPILEDIR/lib/modules/"$KVER"/kernel/drivers"
+mkdir -p $moduldir
+#kicsomagolás és belépés
+chmod +x $forras.run
+./$forras.run -x
+rm *.run
+cd $forras
+patch -i "$UB_SRCDIR"/patches/menu.patch.skip
+cd kernel
+patch -i "$UB_SRCDIR"/patches/disable-mtrr.patch.skip
+#patch -i "$UB_SRCDIR"/patches/drm-driver-legacy.patch.skip
+#patch -i "$UB_SRCDIR"/patches/linux-4.6.patch.skip
+make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
+#akdályok leküzdése a telepítéshez
+sed -e 's/suser-sanity-check //g' -i Makefile.kbuild
+sed -e 's/depmod -ae/true/g' -i Makefile.kbuild
+#elkészült modul telepítése
+make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module-install
+#ez minek? De legyen..
+make clean

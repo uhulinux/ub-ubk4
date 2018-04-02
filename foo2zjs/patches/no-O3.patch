@@ -1,0 +1,12 @@
+diff -Nur orig/icc2ps/Makefile mod/icc2ps/Makefile
+--- orig/icc2ps/Makefile	2016-12-03 22:20:52.000000000 +0100
++++ mod/icc2ps/Makefile	2017-05-10 13:24:29.377020755 +0200
+@@ -9,7 +9,7 @@
+ LIB=	cmscam97.c cmscnvrt.c cmserr.c cmsgamma.c cmsgmt.c cmsintrp.c cmsio1.c \
+ 	cmslut.c cmsmatsh.c cmsmtrx.c cmsnamed.c cmspack.c cmspcs.c cmsps2.c \
+ 	cmssamp.c cmswtpnt.c cmsxform.c cmsio0.c cmsvirt.c
+-CFLAGS=	-O3
++CFLAGS=	-O2
+ INSTALL=install
+ ifeq ($(UNAME),SunOS)
+     INSTALL=/usr/ucb/install

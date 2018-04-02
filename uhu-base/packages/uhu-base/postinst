@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+for i in /var/log/lastlog /var/log/syslog /var/log/wtmp /var/run/utmp; do
+	if [ ! -f "$i" ]; then
+		: > "$i"
+	fi
+done
+
+umask 0077
+if [ ! -f /var/mail/root ]; then
+	: > /var/mail/root
+fi

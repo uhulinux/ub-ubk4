@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+./waf --destdir="$UB_INSTALLDIR" install
+chmod 755 "$UB_INSTALLDIR"/usr/lib/libxmmsclient-glib.so.1.0.0
+chmod 755 "$UB_INSTALLDIR"/usr/lib/libxmmsclient++-glib.so.1.0.0
+chmod 755 "$UB_INSTALLDIR"/usr/lib/libxmmsclient++.so.4.0.0
+chmod 755 "$UB_INSTALLDIR"/usr/lib/libxmmsclient.so.6.0.0

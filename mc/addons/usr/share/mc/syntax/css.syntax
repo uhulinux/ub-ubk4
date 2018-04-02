@@ -1,0 +1,520 @@
+define element white
+define pseudo brightmagenta
+define property yellow
+define value brightgreen
+define length brightred
+define comment brown
+define specialchar brightcyan
+define semicolon brightmagenta
+
+context default
+	
+# HTML elements
+	keyword whole html element
+    keyword whole body element
+    keyword whole div element
+    keyword whole p element
+    keyword whole a element
+    keyword whole h1 element
+    keyword whole h2 element
+    keyword whole h2 element
+    keyword whole h3 element
+    keyword whole h4 element
+    keyword whole h5 element
+    keyword whole h6 element
+    keyword whole font element
+    keyword whole br element
+	keyword whole hr element
+    keyword whole table element
+	keyword whole thead element
+	keyword whole tbody element
+	keyword whole tfoot element
+    keyword whole td element
+    keyword whole th element
+    keyword whole tr element
+    keyword whole u element
+    keyword whole i element
+    keyword whole b element
+	keyword whole em element
+	keyword whole strong element
+    keyword whole address element
+	keyword whole abbr element
+	keyword whole acronym element
+	keyword whole tt element
+	keyword whole kbd element
+	keyword whole var element
+	keyword whole pre element
+    keyword whole big element
+    keyword whole small element
+    keyword whole sub element
+    keyword whole sup element
+    keyword whole img element
+    keyword whole form element
+    keyword whole textarea element
+    keyword whole input element
+    keyword whole select element
+    keyword whole option element
+    keyword whole optgroup element
+	keyword whole button element
+	keyword whole span element
+	keyword whole ul element
+	keyword whole ol element
+	keyword whole li element
+	keyword whole dl element
+	keyword whole dt element
+	keyword whole dd element
+
+# Pseudo
+    keyword  \:active		 pseudo
+    keyword  \:after 		 pseudo
+    keyword  \:visited		 pseudo
+    keyword  \:before		 pseudo
+    keyword  \:first-child	 pseudo
+    keyword  \:first-letter		pseudo
+    keyword  \:first-line 	 pseudo
+    keyword  \:focus 		 pseudo
+    keyword  \:lang 		 pseudo
+    keyword  \:link 		 pseudo
+    keyword  \:hover 		 pseudo
+
+    keyword whole '.' white
+
+    keyword /\* comment
+    keyword \*/ comment
+
+    keyword { specialchar
+    keyword } specialchar
+    keyword ( specialchar
+    keyword ) specialchar
+    keyword [ specialchar
+    keyword ] specialchar
+    keyword , specialchar
+    keyword : specialchar
+    keyword ; semicolon
+	
+# Properties
+    keyword whole background-attachment 		property
+    keyword whole background-color 			property
+    keyword whole background-image 			property
+    keyword whole background-position 			property
+    keyword whole background-repeat 			property
+    keyword whole background 				property
+    keyword whole bidi-override 			property
+    keyword whole border-bottom 			property
+    keyword whole border-bottom-color 			property
+    keyword whole border-bottom-style 			property
+    keyword whole border-bottom-width 			property
+    keyword whole border-collapse 			property
+    keyword whole border-color 				property
+    keyword whole border-left 				property
+    keyword whole border-left-color 			property
+    keyword whole border-left-style 			property
+    keyword whole border-left-width 			property
+    keyword whole border-right 				property
+    keyword whole border-right-color 			property
+    keyword whole border-right-style 			property
+    keyword whole border-right-width 			property
+    keyword whole border-spacing 			property
+    keyword whole border-style 				property
+    keyword whole border-top 				property
+    keyword whole border-top-color 			property
+    keyword whole border-top-style 			property
+    keyword whole border-top-width 			property
+    keyword whole border-width 				property
+    keyword whole border 				property
+    keyword whole bottom 				property
+    keyword whole caption-side 				property
+    keyword whole clear 				property
+    keyword whole clip 					property
+    keyword whole color 				property
+    keyword whole content 				property
+    keyword whole counter-increment 			property
+    keyword whole cursor 				property
+    keyword whole direction 				property
+    keyword whole display 				property
+    keyword whole empty-cells 				property
+    keyword whole fixed 				property
+    keyword whole float 				property
+    keyword whole font-size-adjust 			property
+    keyword whole font-stretch 				property
+    keyword whole font-family 				property
+    keyword whole font-size 				property
+    keyword whole font-family 				property
+    keyword whole font-style 				property
+    keyword whole font-variant 				property
+    keyword whole font-weight				property
+    keyword whole font	 				property
+    keyword whole generic-family 			property
+    keyword whole height 				property
+    keyword whole identifier 				property
+    keyword whole justify 				property
+    keyword whole left 					property
+    keyword whole length 				property
+    keyword whole letter-spacing 			property
+    keyword whole line-height 				property
+    keyword whole list-style-image 			property
+    keyword whole list-style-position 			property
+    keyword whole list-style-type 			property
+    keyword whole list-style 				property
+    keyword whole margin-left 				property
+    keyword whole margin-top 				property
+    keyword whole margin 				property
+    keyword whole marker-offset 			property
+    keyword whole max-height 				property
+    keyword whole max-width 				property
+    keyword whole min-height 				property
+    keyword whole min-width 				property
+    keyword whole nowrap 				property
+    keyword whole outline-color 			property
+    keyword whole outline-style 			property
+    keyword whole outline-width 			property
+    keyword whole outline 				property
+    keyword whole padding-left 				property
+    keyword whole padding-top 				property
+    keyword whole padding 				property
+    keyword whole position 				property
+    keyword whole quotes 				property
+    keyword whole right 				property
+    keyword whole table-caption 			property
+    keyword whole table-layout 				property
+    keyword whole text-align 				property
+    keyword whole text-decoration 			property
+    keyword whole text-indent 				property
+    keyword whole text-shadow 				property
+    keyword whole text-transform 			property
+    keyword whole top 					property
+    keyword whole unicode-bidi 				property
+    keyword whole vertical-align 			property
+    keyword whole visibility 				property
+    keyword whole white-space 				property
+    keyword whole width 				property
+    keyword whole word-spacing 				property
+
+
+
+# Comments
+context exclusive /\* \*/ comment
+    spellcheck
+
+# Strings
+context " " green
+	spellcheck
+
+context ' ' green
+	spellcheck
+
+## Values: they come after a : and last until a ;
+context exclusive : ;
+	spellcheck
+	
+### Positioning
+    keyword whole left				value
+    keyword whole right				value
+    keyword whole center 			value
+    keyword whole top 				value
+    keyword whole bottom 			value
+	
+### Fonts
+    keyword whole bold 				 value
+    keyword whole small				 value
+    keyword whole smaller			 value
+    keyword whole italic			 value
+	keyword whole oblique			value
+    keyword whole bolder			 value
+    keyword whole underline			 value
+
+    keyword whole none 				 value
+    keyword whole auto 				 value
+    keyword whole blink 			 value
+    keyword whole hide 				 value
+
+    keyword whole thin 				 value
+    keyword whole medium 			 value
+    keyword whole thick 			 value
+
+### list-style-type
+    keyword whole disc 				 value
+    keyword whole circle 			 value
+    keyword whole square 			 value
+    keyword whole decimal 			 value
+    keyword whole decimal-leading-zero 		 value
+    keyword whole lower-roman 			 value
+    keyword whole upper-roman 			 value
+    keyword whole lower-alpha 			 value
+    keyword whole upper-alpha 			 value
+    keyword whole lower-greek 			 value
+    keyword whole lower-latin 			 value
+    keyword whole upper-latin 			 value
+    keyword whole hebrew 			 value
+    keyword whole armenian 			 value
+    keyword whole georgian 			 value
+    keyword whole cjk-ideographic 		 value
+    keyword whole hiragana 			 value
+    keyword whole katakana 			 value
+    keyword whole hiragana-iroha 		 value
+    keyword whole katakana-iroha 		 value 
+
+    keyword whole invert 			 value
+    keyword whole oblique 			 value
+    keyword whole no-close-quote 		 value
+    keyword whole no-repeat 			 value
+    keyword whole small-caps 			 value
+    keyword whole transparent 			 value
+
+    keyword whole visible 			 value
+    keyword whole hidden 			 value
+
+### border-style
+    keyword whole dotted 			 value
+    keyword whole dashed 			 value
+    keyword whole solid 			 value
+    keyword whole double 			 value
+    keyword whole groove 			 value
+    keyword whole ridge 			 value
+    keyword whole inset 			 value
+    keyword whole outset 			 value
+
+### cursor
+    keyword whole auto 				 value
+    keyword whole crosshair 			 value
+    keyword whole default 			 value
+    keyword whole pointer 			 value
+    keyword whole move 				 value
+    keyword whole e-resize 			 value
+    keyword whole ne-resize 			 value
+    keyword whole nw-resize 			 value
+    keyword whole n-resize 			 value
+    keyword whole se-resize 			 value
+    keyword whole sw-resize 			 value
+    keyword whole s-resize 			 value
+    keyword whole w-resize 			 value
+    keyword whole text 				 value
+    keyword whole wait 				 value
+    keyword whole help 				 value
+
+### display
+    keyword whole inline 			 value
+    keyword whole block 			 value
+    keyword whole list-item 			 value
+    keyword whole run-in 			 value
+    keyword whole compact 			 value
+    keyword whole marker 			 value
+    keyword whole table 			 value
+    keyword whole inline-table 			 value
+    keyword whole table-row-group 		 value
+    keyword whole table-header-group 		 value
+    keyword whole table-footer-group 		 value
+    keyword whole table-row 			 value
+    keyword whole table-column-group 		 value
+    keyword whole table-column 			 value
+    keyword whole table-cell 			 value
+    keyword whole table-caption 		 value
+
+    keyword whole small 			 value
+    keyword whole medium 			 value
+    keyword whole large 			 value
+
+### font-weight
+    keyword whole normal 			 value
+    keyword whole bold 				 value
+    keyword whole bolder 			 value
+    keyword whole lighter 			 value
+
+    keyword whole open-quote 			 value
+    keyword whole close-quote 			 value
+    keyword whole no-open-quote 		 value
+    keyword whole no-close-quote 		 value
+
+### vertical-align
+    keyword whole baseline 			 value
+    keyword whole sub 				 value
+    keyword whole super 			 value
+    keyword whole top 				 value
+    keyword whole text-top 			 value
+    keyword whole middle 			 value
+    keyword whole bottom 			 value
+    keyword whole text-bottom 			 value
+
+    keyword whole collapse 			 value
+    keyword whole separate 			 value
+
+    keyword whole capitalize 			 value
+    keyword whole uppercase 			 value
+    keyword whole lowercase 			 value
+
+
+    keyword whole pre 				 value
+    keyword whole nowrap 			 value
+
+
+### *-color
+    keyword whole aliceblue			 value
+    keyword whole antiquewhite			 value
+    keyword whole aqua				 value
+    keyword whole aquamarine			 value
+    keyword whole azure				 value
+    keyword whole beige				 value
+    keyword whole bisque			 value
+    keyword whole black				 value
+    keyword whole blanchedalmond		 value
+    keyword whole blue				 value
+    keyword whole blueviolet			 value
+    keyword whole brown				 value
+    keyword whole burlywood			 value
+    keyword whole cadetblue			 value
+    keyword whole chartreuse			 value
+    keyword whole chocolate			 value
+    keyword whole coral				 value
+    keyword whole cornflowerblue		 value
+    keyword whole cornsilk			 value
+    keyword whole crimson			 value
+    keyword whole cyan				 value
+    keyword whole darkblue			 value
+    keyword whole darkcyan			 value
+    keyword whole darkgoldenrod			 value
+    keyword whole darkgray			 value
+    keyword whole darkgreen			 value
+    keyword whole darkkhaki			 value
+    keyword whole darkmagenta			 value
+    keyword whole darkolivegreen		 value
+    keyword whole darkorange			 value
+    keyword whole darkorchid			 value
+    keyword whole darkred			 value
+    keyword whole darksalmon			 value
+    keyword whole darkseagreen			 value
+    keyword whole darkslateblue			 value
+    keyword whole darkslategray			 value
+    keyword whole darkturquoise			 value
+    keyword whole darkviolet			 value
+    keyword whole deeppink			 value
+    keyword whole deepskyblue			 value
+    keyword whole dimgray			 value
+    keyword whole dodgerblue			 value
+    keyword whole feldspar			 value
+    keyword whole firebrick			 value
+    keyword whole floralwhite			 value
+    keyword whole forestgreen			 value
+    keyword whole fuchsia			 value
+    keyword whole gainsboro			 value
+    keyword whole ghostwhite			 value
+    keyword whole gold				 value
+    keyword whole goldenrod			 value
+    keyword whole gray				 value
+    keyword whole green				 value
+    keyword whole greenyellow			 value
+    keyword whole honeydew			 value
+    keyword whole hotpink			 value
+    keyword whole indianred			 value
+    keyword whole indigo			 value
+    keyword whole ivory				 value
+    keyword whole khaki				 value
+    keyword whole lavender			 value
+    keyword whole lavenderblush			 value
+    keyword whole lawngreen			 value
+    keyword whole lemonchiffon			 value
+    keyword whole lightblue			 value
+    keyword whole lightcoral			 value
+    keyword whole lightcyan			 value
+    keyword whole lightgoldenrodyellow		 value
+    keyword whole lightgrey			 value
+    keyword whole lightgreen			 value
+    keyword whole lightpink			 value
+    keyword whole lightsalmon			 value
+    keyword whole lightseagreen			 value
+    keyword whole lightskyblue			 value
+    keyword whole lightslateblue		 value
+    keyword whole lightslategray		 value
+    keyword whole lightsteelblue		 value
+    keyword whole lightyellow			 value
+    keyword whole lime				 value
+    keyword whole limegreen			 value
+    keyword whole linen				 value
+    keyword whole magenta			 value
+    keyword whole maroon			 value
+    keyword whole mediumaquamarine		 value
+    keyword whole mediumblue			 value
+    keyword whole mediumorchid			 value
+    keyword whole mediumpurple			 value
+    keyword whole mediumseagreen		 value
+    keyword whole mediumslateblue		 value
+    keyword whole mediumspringgreen		 value
+    keyword whole mediumturquoise		 value
+    keyword whole mediumvioletred		 value
+    keyword whole midnightblue			 value
+    keyword whole mintcream			 value
+    keyword whole mistyrose			 value
+    keyword whole moccasin			 value
+    keyword whole navajowhite			 value
+    keyword whole navy				 value
+    keyword whole oldlace			 value
+    keyword whole olive				 value
+    keyword whole olivedrab			 value
+    keyword whole orange			 value
+    keyword whole orangered			 value
+    keyword whole orchid			 value
+    keyword whole palegoldenrod			 value
+    keyword whole palegreen			 value
+    keyword whole paleturquoise			 value
+    keyword whole palevioletred			 value
+    keyword whole papayawhip			 value
+    keyword whole peachpuff			 value
+    keyword whole peru				 value
+    keyword whole pink				 value
+    keyword whole plum				 value
+    keyword whole powderblue			 value
+    keyword whole purple			 value
+    keyword whole red				 value
+    keyword whole rosybrown			 value
+    keyword whole royalblue			 value
+    keyword whole saddlebrown			 value
+    keyword whole salmon			 value
+    keyword whole sandybrown			 value
+    keyword whole seagreen			 value
+    keyword whole seashell			 value
+    keyword whole sienna			 value
+    keyword whole silver			 value
+    keyword whole skyblue			 value
+    keyword whole slateblue			 value
+    keyword whole slategray			 value
+    keyword whole snow				 value
+    keyword whole springgreen			 value
+    keyword whole steelblue			 value
+    keyword whole tan				 value
+    keyword whole teal				 value
+    keyword whole thistle			 value
+    keyword whole tomato			 value
+    keyword whole turquoise			 value
+    keyword whole violet			 value
+    keyword whole violetred			 value
+    keyword whole wheat				 value
+    keyword whole white				 value
+    keyword whole whitesmoke			 value
+    keyword whole yellow			 value
+    keyword whole yellowgreen			 value
+
+    keyword counter(\{*\}*)		 magenta
+    keyword counters(\{*\}*)		 magenta
+    keyword url(\{*\}*)			 magenta
+    keyword rgb(\{*\}*)			 magenta
+
+# Default font families
+    keyword whole sans-serif value
+    keyword whole serif value
+	keyword whole monospace value
+
+# Colour codes
+    keyword #\{0123456789abcdefABCDEF\}\{0123456789abcdefABCDEF\}\{0123456789abcdefABCDEF\}\{0123456789abcdefABCDEF\}\{0123456789abcdefABCDEF\}\{0123456789abcdefABCDEF\} value
+    keyword #\{0123456789abcdefABCDEF\}\{0123456789abcdefABCDEF\}\{0123456789abcdefABCDEF\} value
+
+# Lengths
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]px length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]em length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]cm length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]mm length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]in length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]ex length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]pt length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]pc length
+    keyword \{0123456789\}\[0123456789\]\[.\{0123456789\}\]% length
+	keyword 0 length
+

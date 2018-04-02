@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp -a libcsv/csv.h "$UB_INSTALLDIR"/usr/include/
+cp -a libcsv/.libs/libcsv.a "$UB_INSTALLDIR"/usr/lib/
+#chmod +x libcsv/libcsv.la
+cp -a libcsv/libcsv.la "$UB_INSTALLDIR"/usr/lib/
+
+cd "$UB_INSTALLDIR"/usr/bin; mv recsel recutils-recsel
+cd "$UB_INSTALLDIR"/usr/share/man/man1; mv recsel.1 recutils-recsel.1

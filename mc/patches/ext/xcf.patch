@@ -1,0 +1,13 @@
+diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
+--- orig/misc/mc.ext.in	2011-07-26 14:55:53.000000000 +0200
++++ patched/misc/mc.ext.in	2011-07-29 17:42:38.000000000 +0200
+@@ -351,6 +351,9 @@
+ type/^GIF
+ 	Include=image
+ 
++type/^GIMP XCF
++	Include=image
++
+ type/^JPEG
+ 	View=%view{ascii} identify %f; test -x /usr/bin/exif && echo && exif %f 2>/dev/null
+ 	Include=image

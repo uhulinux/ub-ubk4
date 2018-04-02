@@ -1,0 +1,32 @@
+diff -Naurd a/src/cellwidget.c b/src/cellwidget.c
+--- a/src/cellwidget.c	2012-11-12 07:52:30.000000000 +0100
++++ b/src/cellwidget.c	2013-02-08 19:45:08.000000000 +0100
+@@ -1472,12 +1472,28 @@
+         }
+ #endif
+
++#if 0
++	/* This if statement is the reason it quits working when I
++	   accidently go outside the box while writing with the tablet
++	   stylus. It is very annoying to have it do that, because the
++	   only think I can do to get Cellwriter working again is to
++	   kill it and restart it. Disabling Xinput is not the right
++	   solution, so let's try something else. -- karlheg
++	 */
++
+         /* If we are getting invalid output from this device with XInput
+            enabled, ignore it */
+         if (x < 0 || x > drawing_area->allocation.width ||
+             y < 0 || y > drawing_area->allocation.width) {
+                 return TRUE;
+         }
++#endif
++
++	/* Constrain the stroke to be inside the box. */
++	if (x < 0) x = 0;
++	if (y < 0) y = 0;
++	if (x > drawing_area->allocation.width) x = drawing_area->allocation.width;
++	if (y > drawing_area->allocation.height) y = drawing_area->allocation.height;
+
+         /* Check where the pointer is */
+         check_cell(x, y, event->device);

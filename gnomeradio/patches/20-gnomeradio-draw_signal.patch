@@ -1,0 +1,39 @@
+## Description: Fixed problems with Gtk3 events and signals.
+## Origin: upstream, https://launchpadlibrarian.net/97002557/gnomeradio-draw_signal.patch
+## Bug-Ubuntu: http://launchpad.net/bugs/955462
+## Bug-Debian: 
+## Author: Pojar George
+## Forwarded: not-needed
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c	2013-07-05 06:20:20.068561000 +0000
++++ gnomeradio-1.8/src/gui.c	2013-07-05 06:27:37.645212997 +0000
+@@ -349,7 +349,7 @@
+ 	/* window = gdk_pixmap_new(real_window, win_width, win_height, -1); */
+ 
+ 	cr = gdk_cairo_create (real_window);
+-	cairo_set_source_rgb (cr, 1, 1, 1);
++	cairo_set_source_rgb (cr, 0, 0, 0);
+ 	cairo_paint (cr);
+ 	
+ 	win_width -= 5;
+@@ -401,9 +401,8 @@
+ 	
+ 	return TRUE;	
+ }
+-	
+ 
+-static gboolean expose_event_cb(GtkWidget *widget, GdkEventExpose *event, gpointer data)
++static gboolean draw_cb(GtkWidget *widget, cairo_t *cr, gpointer data)
+ {
+ 	redraw_status_window();
+ 	return TRUE;
+@@ -1042,7 +1041,7 @@
+ 	g_signal_connect(G_OBJECT(about_button), "clicked", G_CALLBACK(about_button_clicked_cb), NULL);
+ 	g_signal_connect(G_OBJECT(rec_button), "clicked", G_CALLBACK(rec_button_clicked_cb), (gpointer) app);
+ 	g_signal_connect(G_OBJECT(prefs_button), "clicked", G_CALLBACK(prefs_button_clicked_cb), (gpointer) app);
+-	g_signal_connect(G_OBJECT(drawing_area), "expose-event", G_CALLBACK(expose_event_cb), NULL);
++	g_signal_connect(G_OBJECT(drawing_area), "draw", G_CALLBACK(draw_cb), NULL);
+ 
+ 	gtk_widget_set_tooltip_text(scbw_button, _("Scan Backwards"));
+ 	gtk_widget_set_tooltip_text(scfw_button, _("Scan Forwards"));

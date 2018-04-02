@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+install -D -m 755 lsb_release "$UB_INSTALLDIR"/usr/bin/lsb_release
+install -D -m 644 lsb_release.1 "$UB_INSTALLDIR"/usr/share/man/man1/lsb_release.1
+
+. /etc/os-release
+
+install -dm755 "$UB_INSTALLDIR"/etc
+echo "LSB_VERSION=$UB_VERSION" >> "$UB_INSTALLDIR"/etc/lsb-release
+echo "DISTRIB_ID=$NAME" >> "$UB_INSTALLDIR/etc/lsb-release"
+echo "DISTRIB_RELEASE=$VERSION_ID" >> "$UB_INSTALLDIR/etc/lsb-release"
+echo "DISTRIB_CODENAME=`echo $VERSION | cut -d' ' -f2`" >> "$UB_INSTALLDIR/etc/lsb-release"
+echo "DISTRIB_DESCRIPTION=\"$PRETTY_NAME\"" >> "$UB_INSTALLDIR/etc/lsb-release"

@@ -1,0 +1,20 @@
+diff -urN XBlast-2.6-sound.orig/Legacy/main.c XBlast-2.6-sound/Legacy/main.c
+--- XBlast-2.6-sound.orig/Legacy/main.c	1999-08-07 22:01:58.000000000 +0200
++++ XBlast-2.6-sound/Legacy/main.c	2002-11-18 20:02:38.000000000 +0100
+@@ -46,6 +46,7 @@
+ #include <sys/time.h>
+ #include <time.h>
+ #include <unistd.h>
++#include <locale.h>
+ 
+ #define _MAIN_C
+ #include "include.h"
+@@ -696,6 +697,8 @@
+   struct timezone ft_tz;
+ #endif
+ 
++  setlocale(LC_ALL, "");
++
+   printf("%s\n",c_string);
+   printf("Report any bugs to: m.vogel@ndh.net\n");
+ 

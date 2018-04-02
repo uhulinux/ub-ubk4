@@ -1,0 +1,14 @@
+--- b/avahi-daemon/avahi-dbus.conf.in	2010-08-26 02:51:38.000000000 +0200
++++ a/avahi-daemon/avahi-dbus.conf.in	2011-01-23 18:03:09.000000000 +0100
+@@ -20,11 +20,6 @@
+           send_interface="org.freedesktop.Avahi.Server" send_member="SetHostName"/>
+   </policy>
+ 
+-  <!-- Allow everything, including access to SetHostName to users of the group "@AVAHI_PRIV_ACCESS_GROUP@" -->
+-  <policy group="@AVAHI_PRIV_ACCESS_GROUP@">
+-    <allow send_destination="org.freedesktop.Avahi"/>
+-    <allow receive_sender="org.freedesktop.Avahi"/>
+-  </policy>
+   <policy user="root">
+     <allow send_destination="org.freedesktop.Avahi"/>
+     <allow receive_sender="org.freedesktop.Avahi"/>

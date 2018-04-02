@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+make \
+	-C scite/gtk \
+	DESTDIR="$UB_INSTALLDIR" \
+	GTK2=1 \
+	install
+install -m 644 scite/doc/scite.1 "$UB_INSTALLDIR"/usr/share/man/man1/SciTE.1
+
+ln -s SciTE "$UB_INSTALLDIR"/usr/bin/scite
+ln -s SciTE.1 "$UB_INSTALLDIR"/usr/share/man/man1/scite.1

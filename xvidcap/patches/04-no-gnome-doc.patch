@@ -1,0 +1,23 @@
+diff -Naur orig/doc/Makefile.am patched/doc/Makefile.am
+--- orig/doc/Makefile.am	2006-09-27 22:47:23.000000000 +0200
++++ patched/doc/Makefile.am	2014-09-22 07:05:39.553113616 +0200
+@@ -1,5 +1,4 @@
+-SUBDIRS = xvidcap \
+-	man
++SUBDIRS = man
+ 
+ EXTRA_DIST = xmldocs.make \
+ 	omf.make
+diff -Naur orig/doc/Makefile.in patched/doc/Makefile.in
+--- orig/doc/Makefile.in	2008-07-12 17:09:21.000000000 +0200
++++ patched/doc/Makefile.in	2014-09-22 07:06:30.525366373 +0200
+@@ -211,8 +211,7 @@
+ target_alias = @target_alias@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = xvidcap \
+-	man
++SUBDIRS = man
+ 
+ EXTRA_DIST = xmldocs.make \
+ 	omf.make

@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+export LDLIBS+="-lncurses"
+ub_make READLINE=1
+cd primes
+ub_make
+cd ../lib
+ub_make
+cd ../examples
+gcc limits.c -o c-limits
+./compile.roots

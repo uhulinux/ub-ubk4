@@ -1,0 +1,203 @@
+diff -Naur btmgr-3.7-1.orig/installer/sbminst.c btmgr-3.7-1/installer/sbminst.c
+--- btmgr-3.7-1.orig/installer/sbminst.c	2001-02-09 18:10:32.000000000 +0100
++++ btmgr-3.7-1/installer/sbminst.c	2003-11-29 21:30:22.000000000 +0100
+@@ -87,6 +87,7 @@
+ byte dev_sectors, dev_heads;
+ #endif
+ 
++int KNL_LBA;
+ int knl_tsize;
+ FILE *bk_fp, *ui_fp;
+ byte buf_ldr[SECTOR_SIZE + 1], buf_knl[MAX_SBM_SIZE], buf_knl_ucl[MAX_SBM_SIZE];
+@@ -95,6 +96,8 @@
+ 
+ int always_yes;
+ int no_cdrom_booting;
++char *ldr_file;
++char *knl_file;
+ 
+ struct sbml_header *p_loader;
+ struct sbmk_header *p_knl;
+@@ -103,12 +106,15 @@
+ void
+ init_settings ()
+ {
++  KNL_LBA = 1;
+   knl_tsize = 0;		/* kernel part total size */
+   bk_fp = NULL;
+   ui_fp = NULL;
+   theme_code = theme_us_code;
+   always_yes = 0;
+   no_cdrom_booting = 0;
++  ldr_file = NULL;
++  knl_file = NULL;
+ 
+ #ifdef __linux__
+   strcpy(inst_dev, "/dev/fd0");
+@@ -252,6 +258,33 @@
+ 	case 'c':
+ 	  no_cdrom_booting = 1;
+ 	  break;
++	case 'l':
++	  if (!num)
++	    {
++	      printf ("\nincomplete option %s\n", (*index));
++	      usage (name);
++	    }
++	  num--, index++;
++	  ldr_file = *(index);
++	  break;
++	case 'k':
++	  if (!num)
++	    {
++	      printf ("\nincomplete option %s\n", (*index));
++	      usage (name);
++	    }
++	  num--, index++;
++	  knl_file = *(index);
++	  break;
++	case 's':
++	  if (!num)
++	    {
++	      printf ("\nincomplete option %s\n", (*index));
++	      usage (name);
++	    }
++	  num--, index++;
++	  KNL_LBA = atoi (*(index));
++	  break;
+ 
+ 	default:
+ 	  usage (name);
+@@ -364,7 +397,19 @@
+ #endif
+ 
+ #ifdef __linux__
++if (!ldr_file && !knl_file)
++{
+   devd = open_blk_dev (inst_dev);
++}
++else if (knl_file)
++{
++  if ((devd = open (knl_file, O_WRONLY|O_TRUNC|O_CREAT, 0666)) < 0)
++    die ("open %s: %s", knl_file, strerror (errno));
++}
++else
++{
++   devd = -1;
++}
+ #else
+   check_dev (inst_devid);
+ #endif
+@@ -376,9 +421,12 @@
+   memcpy (p_knl->sbml_codes, loader_code, SIZE_OF_MBR);
+ 
+ #ifdef __linux__
++if (!ldr_file && !knl_file)
++{
+   lseek( devd, 0, SEEK_SET );
+   if( read( devd, p_knl->previous_mbr, SECTOR_SIZE ) != SECTOR_SIZE )
+     die ("read %s: %s", inst_dev, strerror (errno));
++}
+ #else
+   disk_io(2, inst_devid, LDR_HEAD, LDR_CYL, LDR_SECT, buf_ldr, 1);
+   memcpy (p_knl->previous_mbr, buf_ldr, SECTOR_SIZE);
+@@ -420,11 +468,17 @@
+ 
+   /* always begin at safe place */
+ #ifdef __linux__
++if (!ldr_file && !knl_file)
++{
+   lseek (devd, SECTOR_SIZE * KNL_LBA, SEEK_SET);
++}
++if (devd >= 0)
++{
+   if (write (devd, buf_knl, knl_tsize) != knl_tsize)
+     die ("write %s: %s", inst_dev, strerror (errno));
+ 
+   close_blk_dev (devd, inst_dev);
++}
+ #else
+   disk_io (3, inst_devid, KNL_HEAD, KNL_CYL, KNL_SECT, buf_knl,
+            p_knl->kernel_sectors);
+@@ -442,10 +496,21 @@
+   int devd;
+ 
+ #ifdef __linux__
++if (!ldr_file && !knl_file) {
+   devd = open_blk_dev (inst_dev);
+   lseek (devd, 0, SEEK_SET);
+   if (read (devd, buf_ldr, SECTOR_SIZE) != SECTOR_SIZE )
+     die ("read %s: %s", inst_dev, strerror (errno));
++}
++else if (ldr_file)
++{
++  if ((devd = open (ldr_file, O_WRONLY|O_TRUNC|O_CREAT, 0666)) < 0)
++    die ("open %s: %s", ldr_file, strerror (errno));
++}
++else
++{
++   devd = -1;
++}
+ #else
+   check_dev (inst_devid);
+   disk_io(2, inst_devid, LDR_HEAD, LDR_CYL, LDR_SECT, buf_ldr, 1);
+@@ -459,11 +524,17 @@
+   p_loader->kernel_sects2 = 0;
+ 
+ #ifdef __linux__
++if (!ldr_file && !knl_file)
++{
+   lseek (devd, 0, SEEK_SET);
++}
++if (devd >= 0)
++{
+   if (write (devd, buf_ldr, SECTOR_SIZE) != SECTOR_SIZE)
+     die ("write %s: %s", inst_dev, strerror (errno));
+ 
+   close_blk_dev (devd,inst_dev);
++}
+ #else
+   disk_io (3, inst_devid, LDR_HEAD, LDR_CYL, LDR_SECT, buf_ldr, 1);
+ #endif
+@@ -672,7 +743,7 @@
+   if (bk_fp != NULL)
+     backup ();
+ 
+-  if (!always_yes)
++  if (!always_yes && !ldr_file && !knl_file)
+     {
+       check_lilo ();
+ 
+diff -Naur btmgr-3.7-1.orig/installer/sbminst.h btmgr-3.7-1/installer/sbminst.h
+--- btmgr-3.7-1.orig/installer/sbminst.h	2001-02-09 18:08:04.000000000 +0100
++++ btmgr-3.7-1/installer/sbminst.h	2003-11-29 21:29:08.000000000 +0100
+@@ -10,8 +10,6 @@
+ #define KNL_CYL   0
+ #define KNL_SECT  2
+ 
+-#define KNL_LBA   1
+-
+ #define MAJOR_FD        2	/* floppy major */
+ #define MAJOR_HD1       3	/* IDE HD major */
+ #define MAJOR_HD2       22      /* IDE HD major */
+@@ -59,7 +57,8 @@
+   "This program comes with ABSOLUTELY NO WARRANTY!\n\n";
+ 
+ char usage_msg[] =
+-  " [-t theme] [-d drv_name] [-b backup_file] [-u backup_file] \n\n"
++  " [-t theme] [-d drv_name] [-l ldr_file] [-k knl_file]\n"
++  " [-s sector] [-b backup_file] [-u backup_file] \n\n"
+   " -t theme     select the theme to be used, in which the theme could be: \n"
+   "                 us = English theme       de = German theme \n"
+   "                 hu = Hungarian theme     zh = Chinese theme \n"
+@@ -72,7 +71,10 @@
+   "              /dev/fd0 is the first floppy driver, \n"
+   "              /dev/hda is the first IDE harddisk driver.\n"
+   "              /dev/sda is the first SCSI harddisk driver.\n\n"
++  " -l ldr_file  file to put the loader into.\n"
++  " -k knl_file  file to put the kernel into.\n\n"
+ #else
++  " -s sector    start the kernel at this sector (default: 1).\n"
+   " -d drv_id    set the drive that you want to install Smart BootManager on.\n"
+   "              0   is the first floppy driver,\n"
+   "              128 is the first hard driver.\n\n"

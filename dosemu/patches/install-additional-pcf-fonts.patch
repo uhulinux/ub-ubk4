@@ -1,0 +1,21 @@
+diff -Naur ORIG/src/arch/linux/Makefile.main UHU/src/arch/linux/Makefile.main
+--- ORIG/src/arch/linux/Makefile.main	2007-05-04 16:18:48.000000000 +0200
++++ UHU/src/arch/linux/Makefile.main	2009-03-01 16:39:38.000000000 +0100
+@@ -72,6 +72,9 @@
+ 
+ ../etc/vga10x24.pcf.gz:
+ ifdef X_SUPPORT
++	@for i in $(REALTOPDIR)/usr/share/fonts/misc/*.pcf; do \
++	    cat      $$i | gzip -c -9 > ../etc/`basename $$i .pcf`.pcf.gz; \
++	done
+ 	@for i in $(REALTOPDIR)/etc/*.bdf; do \
+ 	    bdftopcf $$i | gzip -c -9 > ../etc/`basename $$i .bdf`.pcf.gz; \
+ 	done
+@@ -235,6 +238,7 @@
+ 		for i in ../etc/*.pcf.gz; do \
+ 		    install -m 0644 $$i $(DESTDIR)$(x11fontdir); \
+ 		done; \
++		install -m 0644 ../etc/10x20-CP852-0.pcf $(DESTDIR)$(x11fontdir); \
+ 		install -m 0644 ../etc/fonts.dir $(DESTDIR)$(x11fontdir); \
+ 		cd $(REALTOPDIR)/etc; \
+ 		if [ ! -f $(DESTDIR)$(x11fontdir)/fonts.alias ]; then \

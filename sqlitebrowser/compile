@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+export QTLIB=/usr/lib/qt5
+ub_compile \
+	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
+	-DENABLE_TESTING=OFF

@@ -1,0 +1,16 @@
+--- a/util/startfluxbox.in.orig	2008-01-03 12:01:31.000000000 +0100
++++ b/util/startfluxbox.in	2008-01-03 12:07:30.000000000 +0100
+@@ -24,6 +24,13 @@
+     shift
+ done
+ 
++# start pulseaudio
++if [ -f /etc/fluxbox-pulseaudio ]; then
++    if [ -x /usr/bin/pulseaudio ]; then
++      /usr/bin/pulseaudio -D
++    fi
++fi
++
+ if [ -x "$startup" ]; then
+     exec "$startup"
+ elif [ -r "$startup" ]; then

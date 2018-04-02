@@ -1,0 +1,82 @@
+#!/bin/sh -eux
+
+# deprecated in 5.5: Qt WebKit, Qt Declarative (Qt Quick 1), Qt Script
+
+# qtwebengine: külön csomag
+
+# deps: hunspell, libwebp
+
+if [ "$UB_ARCH" == "amd64" ];then
+platform="-platform linux-g++-64"
+else
+platform="-platform linux-g++-32"
+fi
+
+export LD_LIBRARY_PATH="$(pwd)"/lib
+
+./configure \
+	$platform \
+	-prefix /usr/lib/qt5 \
+	-sysconfdir /etc/xdg \
+	\
+	-release            \
+	-opensource         \
+	-confirm-license	\
+	-shared             \
+	-journald			\
+	-c++std c++1z       \
+	-verbose            \
+	-silent             \
+	-no-pch             \
+	-qml-debug			\
+	-no-use-gold-linker \
+	-reduce-relocations \
+	-no-rpath           \
+	\
+	-nomake examples    \
+	-nomake tests		\
+	-skip qtwebengine	\
+	\
+	-accessibility      \
+	\
+	-plugin-sql-mysql -I/usr/include/mysql \
+	-plugin-sql-psql -I/usr/include/postgresql -I/usr/include/postgresql/server \
+	-plugin-sql-odbc    \
+	-plugin-sql-sqlite  \
+	\
+	-gstreamer 1.0		\
+	\
+	-system-freetype	\
+	-system-harfbuzz	\
+	-system-libjpeg     \
+	-system-libpng      \
+	-system-pcre		\
+	-system-sqlite		\
+	-system-zlib        \
+	-system-xcb         \
+	-system-xkbcommon-x11 \
+	\
+	-dbus-linked        \
+	-openssl-linked     \
+	-ssl               \
+	\
+	-cups               \
+	-glib               \
+	-gtk				\
+	-opengl             \
+	-no-iconv           \
+	-no-linuxfb         \
+	-no-eglfs           \
+	-no-kms             \
+	-no-libproxy		\
+	\
+	-fontconfig         \
+	-xinput2            \
+	-evdev				\
+	-mtdev				\
+	-libinput			\
+	-tslib				\
+	-xkb                \
+	-xcb-xlib			\
+
+ub_make

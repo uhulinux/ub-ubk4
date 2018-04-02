@@ -1,0 +1,55 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2013-07-19 18:30:03.000000000 +0200
++++ patched/Makefile	2013-10-24 00:56:45.925523369 +0200
+@@ -72,7 +72,7 @@
+ 	mkdir -p $(STATEDIR)
+ 	mkdir -p $(SPOOLDIR)
+ 	mkdir -p $(CONFDIR)
+-	$(CHOWN) $(USER) $(LOGDIR) $(STATEDIR) $(SPOOLDIR)
++	$(CHOWN) $(USERID) $(LOGDIR) $(STATEDIR) $(SPOOLDIR)
+ 
+ install-master-prime: $(INFILES_MASTER) install-pre install-master
+ 	mkdir -p $(CONFDIR)/templates
+@@ -88,10 +88,10 @@
+ 	mkdir -p $(DBDIR)/cgi-tmp
+ 	mkdir -p $(CGIDIR)
+ 
+-	$(CHOWN) $(USER) $(HTMLDIR) $(DBDIR)
++	$(CHOWN) $(USERID) $(HTMLDIR) $(DBDIR)
+ 	$(CHMOD) 0755 $(DBDIR)
+ 
+-	$(CHOWN) $(CGIUSER) $(DBDIR)/cgi-tmp
++	$(CHOWN) $(CGIUSERID) $(DBDIR)/cgi-tmp
+ 	$(CHMOD) 0755 $(DBDIR)/cgi-tmp
+ 
+ 	for p in master/www/*.tmpl ;  do \
+diff -Naur orig/Makefile.config patched/Makefile.config
+--- orig/Makefile.config	2013-07-19 18:30:03.000000000 +0200
++++ patched/Makefile.config	2013-10-24 00:58:07.490276190 +0200
+@@ -118,20 +118,24 @@
+ 
+ # User to run munin as
+ USER       := munin
++USERID     := 223
+ GROUP      := munin
++GROUPID    := 223
+ 
+ # Default user to run the plugins as
+ PLUGINUSER := nobody
++PLUGINUSERID := 99
+ 
+ # Default user to run the cgi as
+ CGIUSER := nobody
++CGIUSERID := 99
+ 
+ # Which command to use to check if the USER and GROUP to run Munin as, exists.
+ # These will work on most modern OSes:
+ #
+ GETENT     := $(shell which getent || which true 2>/dev/null)
+-CHECKUSER  := $(shell $(GETENT) passwd $(USER) >/dev/null 2>/dev/null || (echo "echo User $(USER) nonexistent. Create the user and retry; exit 2"))
+-CHECKGROUP := $(shell $(GETENT) group $(GROUP) >/dev/null 2>/dev/null || (echo "echo Group $(GROUP) nonexistent. Create the group and retry; exit 2"))
++CHECKUSER  := $(true)
++CHECKGROUP := $(true)
+ 
+ # For OSX, comment out the previous two lines and comment in these
+ #

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+# freeimageplus
+ub_make clean
+ub_make -f Makefile.fip
+ub_install -f Makefile.fip

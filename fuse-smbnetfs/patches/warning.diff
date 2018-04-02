@@ -1,0 +1,16 @@
+Author: Varun Hiremath <vh63@cornell.edu>
+Date: Tue, 20 Oct 2009 02:32:48 -0400
+Description: smbnetfs.conf is present in /etc directory, fix warning message
+Index: smbnetfs-0.6.0/src/reconfigure.c
+===================================================================
+--- smbnetfs-0.6.0.orig/src/reconfigure.c	2009-10-20 02:28:24.000000000 -0400
++++ smbnetfs-0.6.0/src/reconfigure.c	2009-10-20 02:28:29.000000000 -0400
+@@ -88,7 +88,7 @@
+ 	"WARNING!!! Configuration directory %s is not found. Please create it.\n"
+ 	"This directory should contain at least two files: smb.conf and smbnetfs.conf.\n"
+ 	"You may copy smb.conf from the /etc/samba directory. You can find a sample of\n"
+-	"smbnetfs.conf in the doc directory of original SMBNetFS distribution.\n\n"
++	"smbnetfs.conf in the /etc directory.\n\n"
+ 	"Using default settings for now.\n", path);
+ }
+ 

@@ -1,0 +1,23 @@
+#!/bin/sh -eux
+
+rm -f aliens.tgz cyrus.gkrellm.tar.gz glass.gkrellm.tar.gz IReX.tar.gz
+rm -f Crux_chaos.tar.gz egan-gkrellm.tar.gz
+
+mkdir -p ${UB_INSTALLDIR}/usr/share/gkrellm2/themes
+
+for file in *gz ; do
+    tar zxC "${UB_INSTALLDIR}/usr/share/gkrellm2/themes" -f $file \
+    --exclude CVS \
+    --exclude "*~" \
+    --exclude "*.swp" \
+    --exclude .xvpics \
+    --no-same-owner \
+    --no-same-permissions
+done
+
+cd ${UB_INSTALLDIR}/usr/share/gkrellm2/themes
+find . -type d -print0 | xargs -0 chmod 0755
+find . -type f -print0 | xargs -0 chmod 0644
+
+cd twilite
+rm -f './.png' && ln -s 'green/frame_right.png' './.png'

@@ -1,0 +1,12 @@
+diff -Nur orig/make/include/main.defs mod/make/include/main.defs
+--- orig/make/include/main.defs	2017-10-27 11:09:46.000000000 +0200
++++ mod/make/include/main.defs	2017-10-27 11:16:30.391612678 +0200
+@@ -75,8 +75,6 @@
+ ifeq (1,$(FEATURE.x265))
+ endif
+ 
+-MODULES += contrib/libbluray
+-
+ ifneq (,$(filter $(BUILD.system),mingw))
+ ifneq ($(HAS.pthread),1)
+ ifneq ($(HAS.pthreadGC2),1)

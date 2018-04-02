@@ -1,0 +1,14 @@
+diff -Naur orig/src-qt5/OS-detect.pri patched/src-qt5/OS-detect.pri
+--- orig/src-qt5/OS-detect.pri	2017-11-25 04:08:44.780868603 +0100
++++ patched/src-qt5/OS-detect.pri	2017-11-25 13:35:26.493013620 +0100
+@@ -93,7 +93,9 @@
+   message( $$MSG )
+ 
+   # Setup the dirs needed to find/load libraries
+-  INCLUDEPATH +=$${PREFIX}/include 
++  !equals(PREFIX,"/usr"){
++    INCLUDEPATH +=$${PREFIX}/include 
++  }
+ 
+   # If the detailed install variables are not set - create them from the general vars
+   isEmpty(L_BINDIR){ L_BINDIR = $${PREFIX}/bin }

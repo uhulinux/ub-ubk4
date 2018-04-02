@@ -1,0 +1,7 @@
+#!/bin/bash -eux
+
+mkdir "$UB_INSTALLDIR"/usr/lib/mkinitrd
+cp init "$UB_INSTALLDIR"/usr/lib/mkinitrd/
+chmod 755 "$UB_INSTALLDIR"/usr/lib/mkinitrd/init
+cp  mkinitrd "$UB_INSTALLDIR"/usr/sbin/
+chmod 755 "$UB_INSTALLDIR"/usr/sbin/mkinitrd

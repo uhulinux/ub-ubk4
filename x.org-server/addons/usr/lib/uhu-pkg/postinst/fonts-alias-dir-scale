@@ -1,0 +1,52 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+setup_fonts_alias_dir_scale ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Generating fonts.alias, fonts.dir, fonts.scale files ..."
+	for i in /usr/share/fonts/*; do
+		if [ -d "$i" -a ! -L "$i" ]; then
+			touch -r "$i" "$i/.timestamp" # save timestamp
+			for type in dir scale alias; do
+				rm -f "$i/.fonts.$type.new"
+				for j in "$i/fonts.$type"?*; do
+					case "${j##*/}" in
+					  *~ | *.bak | *.orig | *.dpkg* | *.rpm*)
+						continue;;
+					  *)
+						cat "$j" >>"$i/.fonts.$type.new"
+					esac
+				done
+				if [ -f "$i/.fonts.$type.new" ]; then
+					rm -f "$i/fonts.$type"
+					if [ "$type" != "alias" ]; then
+						lines=$(wc -l <"$i/.fonts.$type.new")
+						echo $lines >"$i/fonts.$type"
+					fi
+					cat "$i/.fonts.$type.new" >>"$i/fonts.$type"
+					rm "$i/.fonts.$type.new"
+				fi
+			done
+			touch -r "$i/.timestamp" "$i" # restore timestamp so that
+			rm "$i/.timestamp"            # fontconfig's cache remains valid
+		fi
+	done
+	true > /var/lib/uhu-pkg/fonts-alias-dir-scale
+	while [ ! /var/lib/uhu-pkg/fonts-alias-dir-scale -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/fonts-alias-dir-scale -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/fonts-alias-dir-scale
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ -f /var/lib/uhu-pkg/fonts-alias-dir-scale -a /var/lib/uhu-pkg/fonts-alias-dir-scale -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "x.org-server" -o "$1" = "+" ]; then
+	setup_fonts_alias_dir_scale
+elif grep -q '^/usr/share/fonts/' /var/lib/dpkg/info/"$1".list; then
+	setup_fonts_alias_dir_scale
+fi

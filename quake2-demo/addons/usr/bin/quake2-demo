@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ ! -f ~/.quake2/baseq2/pak0.pak ]; then
+  mkdir -p ~/.quake2/baseq2
+  ln -s /usr/share/games/quake2/baseq2/pak0.pak ~/.quake2/baseq2/pak0.pak
+  if [ ! -f ~/.quake2/baseq2/config.cfg ];then
+    cp /usr/share/games/quake2/config.cfg ~/.quake2/baseq2/
+  fi
+fi
+
+sdlquake2 +set basedir /usr/share/games/quake2

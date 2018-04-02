@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+ub_compile \
+	--with-included-lzo \
+	--enable-release \
+	--disable-x11-textmode

@@ -1,0 +1,411 @@
+.\" This -*- nroff -*- file has been generated from
+.\" DocBook SGML with docbook-to-man on Debian GNU/Linux.
+...\"
+...\"	transcript compatibility for postscript use.
+...\"
+...\"	synopsis:  .P! <file.ps>
+...\"
+.de P!
+\\&.
+.fl			\" force out current output buffer
+\\!%PB
+\\!/showpage{}def
+...\" the following is from Ken Flowers -- it prevents dictionary overflows
+\\!/tempdict 200 dict def tempdict begin
+.fl			\" prolog
+.sy cat \\$1\" bring in postscript file
+...\" the following line matches the tempdict above
+\\!end % tempdict %
+\\!PE
+\\!.
+.sp \\$2u	\" move below the image
+..
+.de pF
+.ie     \\*(f1 .ds f1 \\n(.f
+.el .ie \\*(f2 .ds f2 \\n(.f
+.el .ie \\*(f3 .ds f3 \\n(.f
+.el .ie \\*(f4 .ds f4 \\n(.f
+.el .tm ? font overflow
+.ft \\$1
+..
+.de fP
+.ie     !\\*(f4 \{\
+.	ft \\*(f4
+.	ds f4\"
+'	br \}
+.el .ie !\\*(f3 \{\
+.	ft \\*(f3
+.	ds f3\"
+'	br \}
+.el .ie !\\*(f2 \{\
+.	ft \\*(f2
+.	ds f2\"
+'	br \}
+.el .ie !\\*(f1 \{\
+.	ft \\*(f1
+.	ds f1\"
+'	br \}
+.el .tm ? font underflow
+..
+.ds f1\"
+.ds f2\"
+.ds f3\"
+.ds f4\"
+'\" t 
+.ta 8n 16n 24n 32n 40n 48n 56n 64n 72n  
+.TH "irattach" "8" 
+.SH "NAME" 
+irattach \(em binds the Linux-IrDA stack to a IrDA port 
+ 
+.SH "SYNOPSIS" 
+.PP 
+\fBirattach\fP [<dev>]  [\fI-s\fP]  [\fI-d dongle\fP]  [\fI-v\fP]  [\fI-h\fP]  
+.SH "DESCRIPTION" 
+.PP 
+\fBirattach\fP binds the Linux-IrDA stack to an IrDA 
+port. It configures the low level of the Linux-IrDA stack in the 
+kernel. This step is usually necessary before you (or applications) 
+can use the higher layer of the IrDA stack. 
+.PP 
+The \fBirattach\fP command loads the necessary Linux-IrDA 
+driver, which configures the IrDA hardware, and configures the IrDA 
+stack to operate on the new IrDA port. Multiple IrDA ports can be 
+activated through multiple \fBirattach\fP commands. 
+.PP 
+\fBirattach\fP by default uses the 
+\fBirtty\fP driver which connects to the Linux TTY 
+subsystem and use the standard Linux serial driver. This works well 
+for most machines and configurations, but limits the baud rate to 
+115200bps (IrDA SIR mode). The mode of operation will work with most 
+FIR hardware (as found in laptops - they provide serial emulation) and 
+most serial dongles (provided the proper dongle type is specified), 
+making it a safe choice. However, USB dongles and a few FIR hardware 
+don't support serial emulation and can't be used with the 
+\fBirtty\fP driver. 
+.PP 
+\fBirattach\fP can also use one of the Linux FIR drivers 
+(including USB dongle drivers) instead of the \fBirtty\fP driver. Most FIR drivers require proper configuration of module 
+parameters (this is documented below). FIR drivers allow you to use 
+higher baud rates (generally up to 4Mbps). In general, Linux FIR 
+support is not as stable and mature, due to lack of time and 
+documentation. 
+.PP 
+\fBirattach\fP must be run as root or installed setuid 
+root, as it requires root privileges. If you have compiled the IrDA 
+stack as modules (recommended), then you will need to edit the 
+\fB/etc/modules.conf\fP file.  See the \fBInfrared-HOWTO\fP for 
+details. 
+.SH "OPTIONS" 
+.PP 
+\fB<dev>\fP : this is the name of a TTY, an IrDA 
+interface or IrDA driver. \fBirattach\fP decides to use 
+the \fBirtty\fP driver or one of the FIR drivers based on 
+this argument. 
+ 
+.IP "   \(bu" 6 
+\fBTTY name\fP : this is the serial port to be configured 
+using the \fBirtty\fP driver, such as 
+\fB/dev/ttyS0\fP. \fBirattach\fP will use the 
+\fBirtty\fP driver, so only SIR will be available. You need 
+to check your serial configuration or BIOS to know which serial port 
+is the IrDA port that need to be passed to \fBirattach\fP. 
+.IP "   \(bu" 6 
+\fBinterface name\fP : this is the device name of an IrDA 
+interface, such as \fBirda0\fP. \fBirattach\fP will use one of the FIR drivers (including USB dongle drivers). The 
+selected FIR driver must be loaded prior to the call to 
+\fBirattach\fP, or the proper alias for the device name 
+must be set in \fB/etc/modules.conf\fP. 
+.IP "   \(bu" 6 
+\fBmodule name\fP : this is the name of an FIR driver 
+module, such as \fBnsc-ircc\fP (see list below). All new 
+IrDA interfaces created after loading the module will be configured, 
+so this won't work if the module is already loaded. This feature is 
+still experimental. 
+.PP 
+\fB-s\fP : starts discovery of remote IrDA devices (note that 
+the form "-s 1" is no longer supported) 
+.PP 
+\fB-v\fP : shows version information (this happens, when no option  
+is given, too) 
+.PP 
+\fB-h\fP : shows help information. 
+.PP 
+\fB-d dongle\fP : attaches an additional dongle driver to the 
+IrDA port. 
+.PP 
+You need a dongle driver if you have an infrared device that connects 
+to your computer's serial port (normal 9-pin serial port 
+connector). These devices are called dongles, and can currently be 
+used by any SIR driver (IrTTY or irport).  This option is not 
+compatible with FIR drivers, and only works with the irtty and irport 
+drivers. 
+.PP 
+The currently known (serial) dongles are: 
+ 
+.IP "   \(bu" 6 
+\fBesi\fP        Extended Systems JetEye PC ESI-9680 
+.IP "   \(bu" 6 
+\fBtekram\fP     Tekram IrMate IR-210B dongle 
+.IP "   \(bu" 6 
+\fBactisys\fP    ACTiSYS IR-220L dongle 
+.IP "   \(bu" 6 
+\fBactisys+\fP   ACTiSYS IR-220L+ dongle 
+.IP "   \(bu" 6 
+\fBgirbil\fP     Greenwich GIrBIL dongle 
+.IP "   \(bu" 6 
+\fBlitelink \fP  Parallax LiteLink dongle & Extended 
+Systems JetEye PC ESI-9680B 
+.IP "   \(bu" 6 
+\fBairport\fP    N.N. 
+.IP "   \(bu" 6 
+\fBold_belkin\fP Belkin (old) SmartBeam dongle or any 
+dongle only capable of 9600 bauds 
+.IP "   \(bu" 6 
+\fBep7211\fP     IR port driver for the Cirrus Logic EP7211 
+processor (ARM based) 
+.IP "   \(bu" 6 
+\fBmcp2120\fP    Dongles based on the MCP2120 (Microchip) 
+.IP "   \(bu" 6 
+\fBact200l\fP    ACTiSYS Ir-200L dongles 
+.IP "   \(bu" 6 
+\fBma600\fP      Mobile Action ma600 dongles 
+.SH "FIR DRIVER MODULES" 
+.PP 
+If you are one of the lucky people which have a FIR chipset or USB 
+dongle that is supported by one of the Linux-IrDA drivers, you can use 
+\fBirattach\fP with the interface name of the IrDA port 
+to configure. You will need to configure 
+\fB/etc/conf.modules\fP appropriately, with at least an 
+alias of \fBirda0\fP to the driver name, or load the driver 
+manually beforehand. 
+.PP 
+You don't strictly need to use \fBirattach\fP with FIR 
+drivers, you can use \fBmodprobe\fP to load the driver, 
+\fBifconfig\fP to bring up the interface and set the 
+various sysctl by hand, but \fBirattach\fP offer a 
+convenient way to do it. 
+.PP 
+Of course, you need to know which FIR driver applies to your hardware. 
+You may use \fBfindchip\fP to get information about the 
+FIR chip. If this doesn't help, the \fBInfrared-HOWTO\fP shows other means to 
+retrieve these data. 
+.PP 
+Also, you often need to configure the \fBLinux-serial 
+driver\fP to ignore the IrDA port, otherwise both drivers will 
+conflict. This can usually be done with 
+\fBsetserial /dev/ttySx uart none\fP. 
+.PP 
+The currently known FIR drivers are: 
+ 
+.IP "   \(bu" 6 
+\fBali-ircc\fP ALi FIR Controller Driver for ALi M5123 
+(options: io, irq, dma). 
+This driver supports SIR, MIR and FIR (4Mbps) speeds. 
+This chipset is used by e.g.: 
+.IP "" 10 
+The ALi M5123 FIR Controller 
+is embedded in ALi M1543C, M1535, M1535D, M1535+, M1535D South Bridge. 
+.IP "   \(bu" 6 
+\fBirda-usb\fP IrDA-USB device driver, for USB 
+devices/dongles that comply with the official IrDA-USB class 
+specification. Note: USB 2.0 is not yet tested. 
+(options: qos_mtt_bits int, description "Minimum Turn Time"). 
+This is used, for e.g.: 
+.IP "" 10 
+ACTiSYS ACT-IR2000U 
+.IP "" 10 
+KC Technology KC-180 
+.IP "" 10 
+Extended Systems XTNDAccess ESI-9685 
+.IP "" 10 
+Note that there is another USB driver for those devices called 
+\fBir-usb\fP which is NOT compatible with the IrDA stack 
+and conflict with \fBirda-usb\fP. Because it 
+always loads first, you have to remove \fBir-usb\fP completely. 
+.IP "" 10 
+Devices based on the SigmaTel chip are not not compliant with the 
+IrDA-USB class specification and therfore not supported by this 
+driver. 
+.IP "   \(bu" 6 
+\fBnsc-ircc\fP NSC IrDA device driver  
+(options: io, irq, dma, dongle_id, qos_mtt_bits). 
+This chipset is used by e.g.: 
+.IP "" 10 
+IBM ThinkPad		dongle_id=0x09 
+.IP "" 10 
+HP OmniBook 6000	dongle_id=0x08 
+.IP "   \(bu" 6 
+\fBsa1100_ir\fP Infrared driver for devices based on the StrongARM SA1100 embedded 
+microprocessor  
+(options: power_level, tx_lpm).  
+This driver may support FIR on devices that can do it.  
+This chipset is used by e.g.: 
+.IP "" 10 
+Samsung YOPY, COMPAQ iPAQ, SHARP Zaurus SL5000/5500 
+.IP "   \(bu" 6 
+\fBsmc-ircc\fP SMC IrCC controller driver  
+(options: ircc_dma, ircc_irq). 
+This chipset is used by e.g.: 
+.IP "" 10 
+Fujitsu-Siemens Lifebook 635t 
+Sony PCG-505TX 
+.IP "   \(bu" 6 
+\fBw83977af_ir\fP Winbond W83977AF IrDA device driver 
+(options: io, irq, qos_mtt_bits). 
+This chipset is used by e.g.: 
+.IP "" 10 
+Corel NetWinder 
+.IP "   \(bu" 6 
+\fBtoshoboe\fP Toshiba OBOE IrDA device driver, supports Toshiba Type-O IR chipset. 
+(options: max_baud). 
+This chipset is used by e.g.: 
+.IP "" 10 
+Toshiba Libretto 100CT., and many more old Toshiba laptops. 
+.IP "   \(bu" 6 
+\fBdonauboe\fP is a new version of \fBtoshoboe\fP and has better FIR support 
+and compability with the Donauoboe chip http://libxg.free.fr/lib-irda.html 
+(options: ..). 
+This chipset is used by e.g.: 
+.IP "" 10 
+Toshiba Libretto 100CT., Tecra 8100, Portege 7020 and many more 
+Toshiba laptops. 
+.IP "   \(bu" 6 
+\fBvlsi_ir\fP VLSI 82C147 SIR/MIR/FIR device driver 
+This chipset is used by e.g.: 
+.IP "" 10 
+HP Omnibook 800 
+.IP "" 10 
+(options: ..). 
+ 
+ 
+.RS 
+.IP "   \(bu" 6 
+clksrc int, description "clock input source selection" 
+ 
+.IP "   \(bu" 6 
+ringsize int array (min = 1, max = 2), description "tx, rx ring 
+descriptor size" 
+ 
+.IP "   \(bu" 6 
+sirpulse int, description "sir pulse width tuning" 
+ 
+.IP "   \(bu" 6 
+mtt_bits int, description "IrLAP bitfield representing min-turn-time" 
+ 
+.RE 
+.SH "EXAMPLES" 
+.PP 
+Attach the IrDA stack to the second serial port (integrated IrDA port 
+using serial emulation) and start discovery: 
+.IP "   \(bu" 6 
+\fBirattach /dev/ttyS1 -s\fP 
+.PP 
+Attach the IrDA stack to the first serial port where you have an 
+external ACTiSYS serial dongle and start discovery: 
+.IP "   \(bu" 6 
+\fBirattach /dev/ttyS0 -d actisys+ -s\fP 
+.PP 
+Attach the IrDA stack to the first IrDA-USB dongle and start discovery: 
+.IP "   \(bu" 6 
+\fBmodprobe irda-usb ; irattach irda0 -s\fP 
+.PP 
+Attach the IrDA stack to the NSC FIR (4Mbps) device driver on a Thinkpad 
+laptop: 
+.IP "   \(bu" 6 
+\fBmodprobe nsc-ircc dongle_id=0x9 ; irattach irda0 -s\fP.  
+.PP 
+Attach the IrDA stack to the NSC FIR (4Mbps) device driver on a Thinkpad 
+laptop: 
+.IP "   \(bu" 6 
+\fBirattach irda0 -s\fP.  
+.IP "" 10 
+This assume that you have added the following entries to  
+\fB/etc/conf.modules\fP: 
+.IP "" 10 
+options nsc-ircc dongle_id=0x09 
+.IP "" 10 
+alias irda0 nsc-ircc 
+.SH "CAVEATS" 
+.PP 
+The following hints are a very short introduction into the 
+configuration of Linux/IrDA. If this doesn't help 
+read the \fBLinux/IrDA-Tutorial\fP and/or the \fBInfrared-HOWTO\fP . 
+Before configuring Linux/IrDA make sure whether you want to configure 
+SIR or FIR. It's recommended to try SIR first, unless your device is 
+not compatible with SIR (for example USB dongles). 
+.PP 
+To get the SIR "serial" device 
+have a look into the BIOS. Then run \fBdmesg | grep tty\fP to get a survey of tty devices supported by your machine. Now try to  
+choose the one, which is probably the IrDA device and use 
+\fBirattach /dev/ttySx -s\fP. 
+.PP 
+If you don't succeed with SIR (which seems a rare case) you may 
+try FIR. First look up the BIOS. Then run \fBfindchip\fP to get information about the IrDA controller chip. Use  
+\fBsetserial /dev/ttySx uart none \fP to avoid conflicts with the serial driver. 
+Note: don't use \fBsetserial\fP if you configure SIR. 
+Now you may use \fBirattach\fP. 
+.PP 
+Finally \fBirdadump\fP should show at least your computer 
+itself. If it doesn't start at the beginning. 
+.PP 
+This man page deal only with the low level of the IrDA stack (IrDA 
+ports and IrDA drivers). After this step is done, you usually need to 
+setup your favorite application to access the high level IrDA stack 
+(via IrCOMM, IrLPT, IrNET, IrLAN or IrSOCK), which is documented 
+elsewhere. 
+.PP 
+This man page doesn't document the usage of the irport driver. The 
+irport driver support the same hardware as the irtty driver, but is 
+configured like a FIR driver. 
+.SH "DIAGNOSTICS" 
+.PP 
+This section currently contains the raw error messages from source 
+code only. 
+.PP 
+"ioctl(TIOCGETD): %m" 
+.PP 
+"irattach: tty: set_disc(%d): %s" 
+.PP 
+"tcsetattr: %m" 
+.PP 
+"Failed to open %s: %m" 
+.PP 
+"Couldn't get device fd flags: %m" 
+.PP 
+"Couldn't set device to non-blocking mode: %m" 
+.SH "BUGS" 
+.PP 
+N.N. 
+.SH "SEE ALSO" 
+.PP 
+irattach(8), irdaping(8), irdadump(8), findchip(8),  
+irpsion5(8), modprobe(8) 
+ 
+.PP 
+\fBLinux/IrDA Project\fP http://irda.sourceforge.net -*- 
+\fBLinux/IrDA-Tutorial\fP http://www.hpl.hp.com/personal/Jean_Tourrilhes/IrDA/index.html -*- 
+\fBInfrared-HOWTO\fP http://tuxmobil.org/howtos.html -*- 
+\fBInfrared-Hardware-Survey\fP http://tuxmobil.org/ir_misc.html 
+ 
+.SH "AUTHOR" 
+.PP 
+This manual page is written by Werner Heuser 
+wehe@tuxmobil.org. It is based on the READMEs 
+from \fBirda-utils\fP by the \fBLinux/IrDA Project\fP and the \fBLinux/IrDA-Tutorial\fP. 
+It was subsequently updated and modified by Jean Tourrilhes 
+jt@hpl.hp.com. 
+ 
+.SH "COPYRIGHT" 
+.PP 
+Copyright (c) 2001 Werner Heuser 
+Copyright (c) 2002 Jean Tourrilhes 
+ 
+.PP 
+Permission is granted to copy, distribute  
+and/or modify this document under 
+the terms of the GNU Free Documentation 
+License (GFDL), Version 1.1 or any later version published by the  
+Free Software Foundation; with no Invariant Sections, no Front-Cover 
+Texts and no Back-Cover Texts. 
+ 
+...\" created by instant / docbook-to-man, Wed 30 Apr 2003, 13:58 

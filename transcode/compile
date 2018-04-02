@@ -1,0 +1,28 @@
+#!/bin/sh -eux
+
+autoreconf
+
+UB_UPDATELIBTOOL=yes ub_compile \
+	--enable-v4l \
+	--enable-oss \
+	--enable-libpostproc \
+	--enable-freetype2 \
+	--enable-ogg \
+	--enable-vorbis \
+	--enable-theora \
+	--enable-libdv \
+	--enable-libquicktime \
+	--enable-lzo \
+	--enable-a52 \
+	--enable-libxml2 \
+	--enable-mjpegtools \
+	--enable-sdl \
+	--enable-x264 \
+	--enable-xvid \
+	--enable-libmpeg2 \
+	--enable-libmpeg2convert \
+	--enable-libv4l2 \
+	--enable-libv4lconvert \
+	--enable-alsa \
+	--enable-faac \
+	--enable-imagemagick

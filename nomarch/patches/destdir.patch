@@ -1,0 +1,15 @@
+diff -urN nomarch-1.3.orig/Makefile nomarch-1.3/Makefile
+--- nomarch-1.3.orig/Makefile	2002-08-08 14:24:33.000000000 +0200
++++ nomarch-1.3/Makefile	2004-02-23 22:51:54.000000000 +0100
+@@ -7,9 +7,9 @@
+ # MANDIR to directory for man page.
+ # Usually it will be simpler to just set PREFIX.
+ #
+-PREFIX=/usr/local
++PREFIX=$(DESTDIR)/usr
+ BINDIR=$(PREFIX)/bin
+-MANDIR=$(PREFIX)/man/man1
++MANDIR=$(PREFIX)/share/man/man1
+ 
+ # You shouldn't need to edit below this line.
+ #--------------------------------------------------------

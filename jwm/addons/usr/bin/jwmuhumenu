@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ ! -f ~/.jwmrc ]; then
+cp /etc/system.jwmrc ~/.jwmrc
+fi
+mjwm --iconize=gnome --language hu -c /usr/share/mjwm/default.mjwm
+
+jwm -restart

@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+ln -s qe.1 "$UB_INSTALLDIR"/usr/share/man/man1/qemacs.1
+install -D -m644 config.eg "$UB_INSTALLDIR"/usr/share/qe/config.eg
+cp -a plugin-example tests "$UB_INSTALLDIR"/usr/share/qe/

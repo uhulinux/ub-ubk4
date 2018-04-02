@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_install
+
+cp README "$UB_INSTALLDIR"/usr/share/rexxwrapper/
+cp rexxwrap64.xpm "$UB_INSTALLDIR"/usr/share/rexxwrapper/
+chmod 644 "$UB_INSTALLDIR"/usr/share/rexxwrapper/*.*
+chmod 644 "$UB_INSTALLDIR"/usr/share/rexxwrapper/README
+chmod 644 "$UB_INSTALLDIR"/usr/share/rexxwrapper/common/*
+chmod 644 "$UB_INSTALLDIR"/usr/share/rexxwrapper/des/*
+chmod 644 "$UB_INSTALLDIR"/usr/share/rexxwrapper/zlib/*

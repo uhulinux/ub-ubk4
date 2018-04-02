@@ -1,0 +1,97 @@
+diff -Nurad ORBit2-2.14.19.orig//configure ORBit2-2.14.19//configure
+--- ORBit2-2.14.19.orig//configure	2010-09-28 11:39:37.000000000 +0200
++++ ORBit2-2.14.19//configure	2013-04-03 19:58:05.000000000 +0200
+@@ -12949,9 +12949,7 @@
+ 
+ 
+ if test "$enable_maintainer_mode" = "yes"; then
+-	DISABLE_DEPRECATED_CFLAGS=" \
+-		-DG_DISABLE_DEPRECATED -DG_DISABLE_SINGLE_INCLUDES"
+-
++	DISABLE_DEPRECATED_CFLAGS=""
+ fi
+ 
+ 
+@@ -13613,70 +13611,6 @@
+ 
+ fi
+ 
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking CFLAGS for gcc -Werror-implicit-function-declaration" >&5
+-$as_echo_n "checking CFLAGS for gcc -Werror-implicit-function-declaration... " >&6; }
+-if test "${ac_cv_cflags_gcc_option__Werror_implicit_function_declaration+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_cv_cflags_gcc_option__Werror_implicit_function_declaration="no, unknown"
+-
+- ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-
+- ac_save_CFLAGS="$CFLAGS"
+-for ac_arg in "-pedantic  % -Werror-implicit-function-declaration"     #
+-do CFLAGS="$ac_save_CFLAGS "`echo $ac_arg | sed -e 's,%%.*,,' -e 's,%,,'`
+-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-return 0;
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_cflags_gcc_option__Werror_implicit_function_declaration=`echo $ac_arg | sed -e 's,.*% *,,'` ; break
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-done
+- CFLAGS="$ac_save_CFLAGS"
+- ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_cflags_gcc_option__Werror_implicit_function_declaration" >&5
+-$as_echo "$ac_cv_cflags_gcc_option__Werror_implicit_function_declaration" >&6; }
+-case ".$ac_cv_cflags_gcc_option__Werror_implicit_function_declaration" in
+-     .ok|.ok,*)  ;;
+-   .|.no|.no,*)  ;;
+-   *)
+-   if echo " $CFLAGS " | grep " $ac_cv_cflags_gcc_option__Werror_implicit_function_declaration " 2>&1 >/dev/null
+-   then { { $as_echo "$as_me:${as_lineno-$LINENO}: : CFLAGS does contain \$ac_cv_cflags_gcc_option__Werror_implicit_function_declaration"; } >&5
+-  (: CFLAGS does contain $ac_cv_cflags_gcc_option__Werror_implicit_function_declaration) 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
+-   else { { $as_echo "$as_me:${as_lineno-$LINENO}: : CFLAGS=\"\$CFLAGS \$ac_cv_cflags_gcc_option__Werror_implicit_function_declaration\""; } >&5
+-  (: CFLAGS="$CFLAGS $ac_cv_cflags_gcc_option__Werror_implicit_function_declaration") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
+-                      CFLAGS="$CFLAGS $ac_cv_cflags_gcc_option__Werror_implicit_function_declaration"
+-   fi
+- ;;
+-esac
+-
+ CFLAGS="$CFLAGS $ORBIT_DEBUG_CFLAGS"
+ 
+ 
+diff -Nurad ORBit2-2.14.19.orig//linc2/src/Makefile.in ORBit2-2.14.19//linc2/src/Makefile.in
+--- ORBit2-2.14.19.orig//linc2/src/Makefile.in	2010-09-28 11:39:39.000000000 +0200
++++ ORBit2-2.14.19//linc2/src/Makefile.in	2013-04-03 20:05:11.000000000 +0200
+@@ -244,7 +244,7 @@
+ #	-I$(top_srcdir)/include    
+ INCLUDES = -I$(top_builddir)/linc2/include \
+ 	-I$(top_srcdir)/linc2/include $(LINC_CFLAGS) $(WARN_CFLAGS) \
+-	-DG_DISABLE_DEPRECATED $(am__append_1)
++	$(am__append_1)
+ liblinc_la_SOURCES = \
+ 	linc.c			\
+ 	linc-connection.c	\

@@ -1,0 +1,323 @@
+diff -Nur orig/luasocket52/gem/gem.c mod/luasocket52/gem/gem.c
+--- orig/luasocket52/gem/gem.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/gem/gem.c	2016-10-21 15:51:20.530242073 +0200
+@@ -1,5 +1,5 @@
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #define CR '\xD'
+ #define LF '\xA'
+diff -Nur orig/luasocket52/src/auxiliar.h mod/luasocket52/src/auxiliar.h
+--- orig/luasocket52/src/auxiliar.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/auxiliar.h	2016-10-21 15:51:20.454241096 +0200
+@@ -29,8 +29,8 @@
+ * reverse mapping are done using lauxlib. 
+ \*=========================================================================*/
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ int auxiliar_open(lua_State *L);
+ void auxiliar_newclass(lua_State *L, const char *classname, luaL_Reg *func);
+diff -Nur orig/luasocket52/src/buffer.c mod/luasocket52/src/buffer.c
+--- orig/luasocket52/src/buffer.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/buffer.c	2016-10-21 15:51:20.458241343 +0200
+@@ -2,8 +2,8 @@
+ * Input/Output interface for Lua programs
+ * LuaSocket toolkit
+ \*=========================================================================*/
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "buffer.h"
+ 
+diff -Nur orig/luasocket52/src/buffer.h mod/luasocket52/src/buffer.h
+--- orig/luasocket52/src/buffer.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/buffer.h	2016-10-21 15:51:20.458241343 +0200
+@@ -15,7 +15,7 @@
+ * The module is built on top of the I/O abstraction defined in io.h and the
+ * timeout management is done with the timeout.h interface.
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ #include "io.h"
+ #include "timeout.h"
+diff -Nur orig/luasocket52/src/except.c mod/luasocket52/src/except.c
+--- orig/luasocket52/src/except.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/except.c	2016-10-21 15:51:20.458241343 +0200
+@@ -4,8 +4,8 @@
+ \*=========================================================================*/
+ #include <stdio.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "except.h"
+ 
+diff -Nur orig/luasocket52/src/except.h mod/luasocket52/src/except.h
+--- orig/luasocket52/src/except.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/except.h	2016-10-21 15:51:20.462241583 +0200
+@@ -26,7 +26,7 @@
+ * exceptions on error, but that don't interrupt the user script. 
+ \*=========================================================================*/
+ 
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ int except_open(lua_State *L);
+ 
+diff -Nur orig/luasocket52/src/inet.c mod/luasocket52/src/inet.c
+--- orig/luasocket52/src/inet.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/inet.c	2016-10-21 15:51:20.466241751 +0200
+@@ -6,8 +6,8 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "inet.h"
+ 
+diff -Nur orig/luasocket52/src/inet.h mod/luasocket52/src/inet.h
+--- orig/luasocket52/src/inet.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/inet.h	2016-10-21 15:51:20.466241751 +0200
+@@ -14,7 +14,7 @@
+ *
+ * The Lua functions toip and tohostname are also implemented here.
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ #include "socket.h"
+ #include "timeout.h"
+ 
+diff -Nur orig/luasocket52/src/io.h mod/luasocket52/src/io.h
+--- orig/luasocket52/src/io.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/io.h	2016-10-21 15:51:20.470241943 +0200
+@@ -13,7 +13,7 @@
+ * is very simple.
+ \*=========================================================================*/
+ #include <stdio.h>
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ #include "timeout.h"
+ 
+diff -Nur orig/luasocket52/src/luasocket.c mod/luasocket52/src/luasocket.c
+--- orig/luasocket52/src/luasocket.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/luasocket.c	2016-10-21 15:51:20.474242245 +0200
+@@ -15,8 +15,8 @@
+ /*=========================================================================*\
+ * Standard include files
+ \*=========================================================================*/
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ 
+ /*=========================================================================*\
+diff -Nur orig/luasocket52/src/luasocket.h mod/luasocket52/src/luasocket.h
+--- orig/luasocket52/src/luasocket.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/luasocket.h	2016-10-21 15:51:20.474242245 +0200
+@@ -6,7 +6,7 @@
+ * Diego Nehab
+ * 9/11/1999
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ /*-------------------------------------------------------------------------*\
+ * Current socket library version
+diff -Nur orig/luasocket52/src/mime.c mod/luasocket52/src/mime.c
+--- orig/luasocket52/src/mime.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/mime.c	2016-10-21 15:51:20.478242353 +0200
+@@ -4,8 +4,8 @@
+ \*=========================================================================*/
+ #include <string.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #if !defined(LUA_VERSION_NUM) || (LUA_VERSION_NUM < 501)
+ #include "compat-5.1.h"
+diff -Nur orig/luasocket52/src/mime.h mod/luasocket52/src/mime.h
+--- orig/luasocket52/src/mime.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/mime.h	2016-10-21 15:51:20.482242387 +0200
+@@ -8,7 +8,7 @@
+ * and formatting conforming to RFC 2045. It is used by mime.lua, which
+ * provide a higher level interface to this functionality. 
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ /*-------------------------------------------------------------------------*\
+ * Current MIME library version
+diff -Nur orig/luasocket52/src/options.c mod/luasocket52/src/options.c
+--- orig/luasocket52/src/options.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/options.c	2016-10-21 15:51:20.486242299 +0200
+@@ -4,7 +4,7 @@
+ \*=========================================================================*/
+ #include <string.h> 
+ 
+-#include "lauxlib.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "auxiliar.h"
+ #include "options.h"
+diff -Nur orig/luasocket52/src/options.h mod/luasocket52/src/options.h
+--- orig/luasocket52/src/options.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/options.h	2016-10-21 15:51:20.486242299 +0200
+@@ -8,7 +8,7 @@
+ * modules UDP and TCP. 
+ \*=========================================================================*/
+ 
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ #include "socket.h"
+ 
+ /* option registry */
+diff -Nur orig/luasocket52/src/select.c mod/luasocket52/src/select.c
+--- orig/luasocket52/src/select.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/select.c	2016-10-21 15:51:20.490242213 +0200
+@@ -4,8 +4,8 @@
+ \*=========================================================================*/
+ #include <string.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "socket.h"
+ #include "timeout.h"
+diff -Nur orig/luasocket52/src/serial.c mod/luasocket52/src/serial.c
+--- orig/luasocket52/src/serial.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/serial.c	2016-10-21 15:51:20.490242213 +0200
+@@ -4,8 +4,8 @@
+ \*=========================================================================*/
+ #include <string.h> 
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "auxiliar.h"
+ #include "socket.h"
+diff -Nur orig/luasocket52/src/tcp.c mod/luasocket52/src/tcp.c
+--- orig/luasocket52/src/tcp.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/tcp.c	2016-10-21 15:51:20.498242052 +0200
+@@ -4,8 +4,8 @@
+ \*=========================================================================*/
+ #include <string.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "auxiliar.h"
+ #include "socket.h"
+diff -Nur orig/luasocket52/src/tcp.h mod/luasocket52/src/tcp.h
+--- orig/luasocket52/src/tcp.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/tcp.h	2016-10-21 15:51:20.498242052 +0200
+@@ -14,7 +14,7 @@
+ * tcp objects either connected to some address or returned by the accept
+ * method of a server object.
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ #include "buffer.h"
+ #include "timeout.h"
+diff -Nur orig/luasocket52/src/timeout.c mod/luasocket52/src/timeout.c
+--- orig/luasocket52/src/timeout.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/timeout.c	2016-10-21 15:51:20.502242074 +0200
+@@ -6,8 +6,8 @@
+ #include <limits.h>
+ #include <float.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "auxiliar.h"
+ #include "timeout.h"
+diff -Nur orig/luasocket52/src/timeout.h mod/luasocket52/src/timeout.h
+--- orig/luasocket52/src/timeout.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/timeout.h	2016-10-21 15:51:20.502242074 +0200
+@@ -4,7 +4,7 @@
+ * Timeout management functions
+ * LuaSocket toolkit
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ /* timeout control structure */
+ typedef struct t_timeout_ {
+diff -Nur orig/luasocket52/src/udp.c mod/luasocket52/src/udp.c
+--- orig/luasocket52/src/udp.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/udp.c	2016-10-21 15:51:20.506242135 +0200
+@@ -5,8 +5,8 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "auxiliar.h"
+ #include "socket.h"
+diff -Nur orig/luasocket52/src/udp.h mod/luasocket52/src/udp.h
+--- orig/luasocket52/src/udp.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/udp.h	2016-10-21 15:51:20.510242142 +0200
+@@ -12,7 +12,7 @@
+ * with a call to the setpeername function. The same function can be used to
+ * break the connection.
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ #include "timeout.h"
+ #include "socket.h"
+diff -Nur orig/luasocket52/src/unix.c mod/luasocket52/src/unix.c
+--- orig/luasocket52/src/unix.c	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/unix.c	2016-10-21 15:51:20.514242139 +0200
+@@ -4,8 +4,8 @@
+ \*=========================================================================*/
+ #include <string.h> 
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include "lua5.2/lua.h"
++#include "lua5.2/lauxlib.h"
+ 
+ #include "auxiliar.h"
+ #include "socket.h"
+diff -Nur orig/luasocket52/src/unix.h mod/luasocket52/src/unix.h
+--- orig/luasocket52/src/unix.h	2013-06-14 13:27:32.000000000 +0200
++++ mod/luasocket52/src/unix.h	2016-10-21 15:51:20.514242139 +0200
+@@ -7,7 +7,7 @@
+ * This module is just an example of how to extend LuaSocket with a new 
+ * domain.
+ \*=========================================================================*/
+-#include "lua.h"
++#include "lua5.2/lua.h"
+ 
+ #include "buffer.h"
+ #include "timeout.h"

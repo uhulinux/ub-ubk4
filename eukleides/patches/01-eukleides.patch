@@ -1,0 +1,34 @@
+diff -Naur orig/Config mod/Config
+--- orig/Config	2010-03-19 17:44:43.000000000 +0100
++++ mod/Config	2010-03-22 06:43:33.000000000 +0100
+@@ -2,7 +2,7 @@
+ # Copyright (c) Christian Obrecht 2004-2010
+ 
+ # Installation prefix
+-PREFIX=/usr/local
++PREFIX=/usr
+ 
+ BINARIES = eukleides euktopst
+ 
+@@ -24,8 +24,8 @@
+ 
+ # Check if the following fits your system.
+ 
+-BIN_DIR = $(PREFIX)/bin
+-SHARE_DIR = $(PREFIX)/share
++BIN_DIR = $(DESTDIR)$(PREFIX)/bin
++SHARE_DIR = $(DESTDIR)$(PREFIX)/share
+ MO_DIR = $(SHARE_DIR)/locale
+ DOC_DIR = $(SHARE_DIR)/doc/eukleides
+ EXM_DIR = $(DOC_DIR)/examples
+diff -Naur orig/doc/Makefile mod/doc/Makefile
+--- orig/doc/Makefile	2010-03-19 17:44:43.000000000 +0100
++++ mod/doc/Makefile	2010-03-04 18:05:15.000000000 +0100
+@@ -50,7 +50,6 @@
+ install_info: eukleides.info.gz
+ 	@echo "    Installing info pages"
+ 	@install -d $(INFO_DIR)
+-	@ginstall-info --quiet $< $(INFO_DIR)/dir
+ 	@install -m 0644 $< $(INFO_DIR)
+ 
+ install_pdf: pdf

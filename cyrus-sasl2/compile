@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+export UB_MAKE_PROCS=1
+export CPPFLAGS="-I/usr/include/postgresql"
+ub_compile \
+	--enable-srp \
+	--enable-srp-setpass \
+	--disable-krb4 \
+	--disable-java \
+	--with-dblib=berkeley \
+	--enable-sql \
+	--with-pgsql=/usr/include/postgresql \
+	--without-sqlite \
+	--with-ldap \
+	--enable-ldapdb \
+	--with-saslauthd=/var/run/saslauthd

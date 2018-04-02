@@ -1,0 +1,12 @@
+diff -Naur orig/gtkspell/gtkspell.c patched/gtkspell/gtkspell.c
+--- orig/gtkspell/gtkspell.c	2009-10-09 21:01:47.000000000 +0200
++++ patched/gtkspell/gtkspell.c	2018-02-14 11:49:45.350065935 +0100
+@@ -277,7 +277,7 @@
+ 	get_word_extents_from_mark(spell->buffer, &start, &end, spell->mark_click);
+ 	word = gtk_text_buffer_get_text(spell->buffer, &start, &end, FALSE);
+ 	
+-	enchant_dict_add_to_pwl( spell->speller, word, strlen(word));
++	enchant_dict_add( spell->speller, word, strlen(word));
+ 
+ 	gtkspell_recheck_all(spell);
+ 

@@ -1,0 +1,19 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2015-02-12 09:32:35.000000000 +0100
++++ mod/Makefile	2016-04-12 06:58:54.981224311 +0200
+@@ -30,14 +30,12 @@
+ 	cp multitail $(DESTDIR)$(PREFIX)/bin
+ 	mkdir -p $(DESTDIR)$(PREFIX)/share/man/man1
+ 	cp multitail.1 $(DESTDIR)$(PREFIX)/share/man/man1/multitail.1
+-	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/multitail-$(VERSION)
+-	cp *.txt INSTALL manual*.html $(DESTDIR)$(PREFIX)/share/doc/multitail-$(VERSION)
+ 	#
+ 	### COPIED multitail.conf.new, YOU NEED TO REPLACE THE multitail.conf
+ 	### YOURSELF WITH THE NEW FILE
+ 	#
+ 	mkdir -p $(DESTDIR)/etc/multitail/
+-	cp multitail.conf $(CONFIG_FILE).new
++	cp multitail.conf $(CONFIG_FILE)
+ 	cp conversion-scripts/* $(DESTDIR)/etc/multitail/
+ #rm -f $(DESTDIR)$(PREFIX)/share/man/man1/multitail.1.gz
+ #gzip -9 $(DESTDIR)$(PREFIX)/share/man/man1/multitail.1

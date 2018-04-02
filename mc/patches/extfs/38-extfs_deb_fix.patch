@@ -1,0 +1,12 @@
+diff -Naur orig/src/vfs/extfs/helpers/deb.in patched/src/vfs/extfs/helpers/deb.in
+--- orig/src/vfs/extfs/helpers/deb.in	2011-12-12 10:15:38.000000000 +0100
++++ patched/src/vfs/extfs/helpers/deb.in	2011-12-15 17:30:27.000000000 +0100
+@@ -72,7 +72,7 @@
+ 			$link=$_[$pathindex++];
+ 			$link2=$_[$pathindex++];
+ 
+-			$owgr=~s!/! !;
++			$owgr=~s!/! ! unless $owgr eq "/";
+ 			if($arrow eq 'link')
+ 			{
+ # report hard links as soft links

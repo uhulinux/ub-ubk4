@@ -1,0 +1,2 @@
+dir=$(sflist libmtp libmtp | splitver '^([0-9.]+)' | sort -V | tail -n 1)
+sflist libmtp libmtp/$dir | parsever | sort -V | tail -n 1

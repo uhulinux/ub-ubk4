@@ -1,0 +1,12 @@
+diff -Naur orig/configure.ac.footer patched/configure.ac.footer
+--- orig/configure.ac.footer	2012-10-26 23:21:38.134739579 +0200
++++ patched/configure.ac.footer	2017-09-15 23:18:51.177260060 +0200
+@@ -149,7 +149,7 @@
+ AC_SUBST(release)
+ AC_SUBST(release_date)
+ 
+-CPPFLAGS="$CPPFLAGS "'-I$(srcdir) $(DEFS) -include headers/config.h -Wall -DSYSCONFDIR="\"$(sysconfdir)\"" -DSBINDIR="\"$(sbindir)\"" -D_GNU_SOURCE'
++CPPFLAGS="$CPPFLAGS "'-I$(srcdir) -I$(srcdir)/headers $(DEFS) -include headers/config.h -Wall -DSYSCONFDIR="\"$(sysconfdir)\"" -DSBINDIR="\"$(sbindir)\"" -D_GNU_SOURCE'
+ LDFLAGS="$LDFLAGS "'-L$(srcdir)'
+ 
+ dnl AC_DEFINE_UNQUOTED(SYSCONFDIR,"$sysconfdir")

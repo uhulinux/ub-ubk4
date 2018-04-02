@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+# A Cmake itt sem tökéletes még
+rm -f CMakeLists.txt
+export UB_MAKE_PROCS=1
+export CFLAGS+="-Wno-error"
+ub_compile

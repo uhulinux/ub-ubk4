@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+cp -R gtk2 gtk3
+cd gtk2
+export CFLAGS+="-Wno-error"
+ub_compile \
+	--with-gtk=2 \
+	--disable-dumper
+
+	cd ../gtk3
+ub_compile \
+	--with-gtk=3 \
+	--disable-dumper

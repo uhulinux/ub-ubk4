@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+export AM_VER=`automake --version | head -n 1 | cut -d' ' -f4 | cut -d. -f-2`
+
+for i in COPYING INSTALL install-sh missing mkinstalldirs; do
+	ln -sf /usr/share/automake-"$AM_VER"/"$i"
+done
+
+autoreconf -vif
+ub_compile \
+	--with-docdir=/usr/share/doc/Packages

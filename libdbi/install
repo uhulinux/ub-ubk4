@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cd drivers
+ub_install
+
+rm -Rf ${UB_INSTALLDIR}/var/lib/libdbi/{firebird,sqlite}

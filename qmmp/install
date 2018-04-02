@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+# dev rész nem kell
+rm -f $UB_INSTALLDIR/usr/lib/libqmmp{,ui}.so
+rm -Rf $UB_INSTALLDIR/usr/lib/pkgconfig
+rm -Rf $UB_INSTALLDIR/usr/include

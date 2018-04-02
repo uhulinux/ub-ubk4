@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+# sed -i -e 's@modules/afmongodb/libmongo-client@@' -e 's@lib/jsonc@@' autogen.sh
+rm -f CMakeLists.txt
+
+./autogen.sh
+ub_compile \
+	--with-systemdsystemunitdir=/usr/lib/systemd/system \
+	--with-embedded-crypto \
+	--with-libmongo-client=no \
+	--with-jsonc=system \
+	--enable-env-wrapper \
+	--enable-spoof-source \
+	--sysconfdir=/etc/syslog-ng \
+	--localstatedir=/var/lib/syslog-ng \
+	--datadir=/usr/share/syslog-ng

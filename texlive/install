@@ -1,0 +1,26 @@
+#!/bin/sh -eux
+
+# install texmf
+#cp -a texmf "$UB_INSTALLDIR"/usr/share/
+cp -a texmf-dist "$UB_INSTALLDIR"/usr/share/
+
+rm -Rf "$UB_INSTALLDIR"/usr/share/texmf/doc
+rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/doc
+rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/source
+rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/fonts/source
+rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/scripts/context/stubs/source
+
+cd build
+ub_install
+
+sed -i 's/^TEXMFROOT = .*$/TEXMFROOT = $SELFAUTODIR\/share/' "$UB_INSTALLDIR"/usr/share/texmf-dist/web2c/texmf.cnf
+ln -s pdftex "$UB_INSTALLDIR"/usr/bin/latex
+ln -s pdftex "$UB_INSTALLDIR"/usr/bin/pdflatex
+
+# install perl module
+cd ..
+mkdir -p "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive
+install -m644 texk/tests/TeXLive/*.pm "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive/
+
+rm "$UB_INSTALLDIR"/usr/bin/latexmk
+rm "$UB_INSTALLDIR"/usr/bin/otfinfo

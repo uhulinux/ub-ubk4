@@ -1,0 +1,85 @@
+diff -Naur orig/codepage.inc patched/codepage.inc
+--- orig/codepage.inc	2014-06-25 01:39:41.000000000 +0200
++++ patched/codepage.inc	2015-10-02 13:08:19.266075870 +0200
+@@ -3903,11 +3903,11 @@
+ 	{ "ISO 8859-14 (Celtic)", aliases_8859_14, table_8859_14 },
+ 	{ "ISO 8859-15 (Western European)", aliases_8859_15, table_8859_15 },
+ 	{ "ISO 8859-16 (Romainian)", aliases_8859_16, table_8859_16 },
+-	{ "Window$ 1250 (Central European)", aliases_cp1250, table_cp1250 },
+-	{ "Window$ 1251 (Cyrillic)", aliases_cp1251, table_cp1251 },
+-	{ "Window$ 1252 (Western European)", aliases_cp1252, table_cp1252 },
+-	{ "Window$ 1256 (Arabic)", aliases_cp1256, table_cp1256 },
+-	{ "Window$ 1257 (Baltic)", aliases_cp1257, table_cp1257 },
++	{ "Windows 1250 (Central European)", aliases_cp1250, table_cp1250 },
++	{ "Windows 1251 (Cyrillic)", aliases_cp1251, table_cp1251 },
++	{ "Windows 1252 (Western European)", aliases_cp1252, table_cp1252 },
++	{ "Windows 1256 (Arabic)", aliases_cp1256, table_cp1256 },
++	{ "Windows 1257 (Baltic)", aliases_cp1257, table_cp1257 },
+ 	{ "CP 437 (US)", aliases_cp437, table_cp437 },
+ 	{ "CP 737 (Greek)", aliases_cp737, table_cp737 },
+ 	{ "CP 850 (Western European)", aliases_cp850, table_cp850 },
+diff -Naur orig/default.c patched/default.c
+--- orig/default.c	2015-09-13 19:11:40.000000000 +0200
++++ patched/default.c	2015-10-02 13:08:19.266075870 +0200
+@@ -2019,10 +2019,10 @@
+ int async_lookup = 1;
+ int download_utime = 0;
+ 
+-int max_format_cache_entries = 5;
+-int memory_cache_size = 4194304;
+-int image_cache_size = 1048576;
+-int font_cache_size = 2097152;
++int max_format_cache_entries = 0;
++int memory_cache_size = 0;
++int image_cache_size = 0;
++int font_cache_size = 0;
+ int aggressive_cache = 1;
+ 
+ struct ipv6_options ipv6_options = { ADDR_PREFERENCE_DEFAULT };
+diff -Naur orig/session.c patched/session.c
+--- orig/session.c	2015-07-27 23:58:10.000000000 +0200
++++ patched/session.c	2015-10-02 13:08:19.266075870 +0200
+@@ -2716,7 +2716,6 @@
+ 	add_to_list(sessions, ses);
+ 	if (first_use) {
+ 		first_use = 0;
+-		msg_box(term, NULL, TEXT_(T_WELCOME), AL_CENTER | AL_EXTD_TEXT, TEXT_(T_WELCOME_TO_LINKS), cast_uchar "\n\n", TEXT_(T_BASIC_HELP), NULL, NULL, 1, TEXT_(T_OK), NULL, B_ENTER | B_ESC);
+ 	}
+ 	return ses;
+ }
+diff -Naur orig/Unicode/cp1251.cp patched/Unicode/cp1251.cp
+--- orig/Unicode/cp1251.cp	2004-01-07 10:56:47.000000000 +0100
++++ patched/Unicode/cp1251.cp	2015-10-02 13:08:19.266075870 +0200
+@@ -1,4 +1,4 @@
+-Window$ 1251 (Cyrillic)
++Windows 1251 (Cyrillic)
+ "windows-1251", "1251", "cp1251"
+ 
+ 0x20	0x0020	# SPACE
+diff -Naur orig/Unicode/cp1252.cp patched/Unicode/cp1252.cp
+--- orig/Unicode/cp1252.cp	2004-01-07 10:56:47.000000000 +0100
++++ patched/Unicode/cp1252.cp	2015-10-02 13:08:19.270075890 +0200
+@@ -1,4 +1,4 @@
+-Window$ 1252 (Western European)
++Windows 1252 (Western European)
+ "windows-1252", "1252"
+ 
+ 0x00	0x0000	#NULL
+diff -Naur orig/Unicode/cp1256.cp patched/Unicode/cp1256.cp
+--- orig/Unicode/cp1256.cp	2004-01-07 10:56:47.000000000 +0100
++++ patched/Unicode/cp1256.cp	2015-10-02 13:08:19.270075890 +0200
+@@ -1,4 +1,4 @@
+-Window$ 1256 (Arabic)
++Window2 1256 (Arabic)
+ "windows-1256", "1256", "cp1256"
+ #
+ #    Name:     cp1256 to Unicode table
+diff -Naur orig/Unicode/cp1257.cp patched/Unicode/cp1257.cp
+--- orig/Unicode/cp1257.cp	2004-10-22 20:11:32.000000000 +0200
++++ patched/Unicode/cp1257.cp	2015-10-02 13:08:19.270075890 +0200
+@@ -1,4 +1,4 @@
+-Window$ 1257 (Baltic)
++Windows 1257 (Baltic)
+ "windows-1257", "1257", "cp1257"
+ #
+ #    Name:     cp1257 to Unicode table

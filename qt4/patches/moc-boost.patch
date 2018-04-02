@@ -1,0 +1,11 @@
+diff -Naur orig/src/tools/moc/main.cpp patched/src/tools/moc/main.cpp
+--- orig/src/tools/moc/main.cpp	2013-06-07 07:17:00.000000000 +0200
++++ patched/src/tools/moc/main.cpp	2013-08-23 12:18:20.939603089 +0200
+@@ -190,6 +190,7 @@
+ 
+     // Workaround a bug while parsing the boost/type_traits/has_operator.hpp header. See QTBUG-22829
+     pp.macros["BOOST_TT_HAS_OPERATOR_HPP_INCLUDED"];
++    pp.macros["BOOST_LEXICAL_CAST_INCLUDED"];
+ 
+     QByteArray filename;
+     QByteArray output;

@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/{lib,include,share/{doc/fmod3,fmod/media}}
+cp api/*.so "$UB_INSTALLDIR"/usr/lib/
+ln -s "$UB_INSTALLDIR"/usr/lib/libfmod*.so "$UB_INSTALLDIR"/usr/lib/libfmod.so
+cp api/inc/*.h "$UB_INSTALLDIR"/usr/include/
+cp media/* "$UB_INSTALLDIR"/usr/share/fmod/media/
+cp -r samples "$UB_INSTALLDIR"/usr/share/fmod/
+cp -r documentation/* "$UB_INSTALLDIR"/usr/share/doc/fmod3/

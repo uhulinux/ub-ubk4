@@ -1,0 +1,22 @@
+# Copyright (C) 2007  Miriam Ruiz <little_miry@yahoo.es>
+# Licensed under the GPL, see /usr/share/common-licenses/GPL
+
+Index: fenix-0.92a.dfsg1/fxc/src/main.c
+===================================================================
+--- fenix-0.92a.dfsg1.orig/fxc/src/main.c	2007-08-28 14:39:51.000000000 +0200
++++ fenix-0.92a.dfsg1/fxc/src/main.c	2007-08-28 14:46:05.000000000 +0200
+@@ -154,14 +154,6 @@
+ 
+ 	srand (time(NULL)) ;
+ 
+-	/* Init SDL */
+-
+-	if ( SDL_Init (SDL_INIT_VIDEO) < 0 )
+-	{
+-		fprintf (stderr, _("SDL Init Error: %s\n"), SDL_GetError()) ;
+-		exit(1) ;
+-	}
+-
+ 	/* Get command line parameters */
+ 
+ 	for (i = 1 ; i < argc ; i++)

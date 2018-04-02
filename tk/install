@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+cd unix
+make \
+	INSTALL_ROOT="$UB_INSTALLDIR" \
+	install \
+	install-private-headers
+
+for i in tkUnix*.h ../generic/tk*.h; do
+	sed -e 's,\.\./[^/]*/,,g' <"$i" >"$UB_INSTALLDIR/usr/include/${i##*/}"
+done
+ls -1 "$UB_INSTALLDIR"/usr/bin/wish*
+binver=$(echo "$UB_VERSION_HEAD2" | sed 's/[a-z].*//')
+ln -s wish"$binver" "$UB_INSTALLDIR"/usr/bin/wish
+chmod -x "$UB_INSTALLDIR"/usr/lib/*.a

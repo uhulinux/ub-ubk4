@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/frogatto
+mkdir -p "$UB_INSTALLDIR"/usr/share/fonts/truetype
+
+cp -a game server "$UB_INSTALLDIR"/usr/share/frogatto/
+
+#külön frogatto-data csomag tölti majd le
+#for i in data images modules music; do \
+#	cp -a $i "$UB_INSTALLDIR"/usr/share/frogatto/
+#done
+
+cp -a *.ttf "$UB_INSTALLDIR"/usr/share/frogatto/
+ln -s /usr/share/frogatto/UbuntuMono-R.ttf "$UB_INSTALLDIR"/usr/share/fonts/truetype/
+cp -a make-tileset.pl "$UB_INSTALLDIR"/usr/share/frogatto/
+# data csomag postinst szkriptbe a verzió
+sed "s/ubversion/$UB_VERSION/" -i $UB_SRCDIR/packages/frogatto-data/postinst

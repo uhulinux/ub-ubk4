@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+cd unix
+./prebuild.sh
+cd ..
+ub_compile \
+	COMPILED_BY='UBK <ubk@ubk.hu>' \
+	--enable-optimiz

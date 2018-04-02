@@ -1,0 +1,39 @@
+diff -Naur orig/lib/Locale/Po4a/Man.pm patched/lib/Locale/Po4a/Man.pm
+--- orig/lib/Locale/Po4a/Man.pm	2015-08-28 19:05:31.000000000 +0200
++++ patched/lib/Locale/Po4a/Man.pm	2015-12-12 02:59:53.551823041 +0100
+@@ -2230,7 +2230,7 @@
+             # Lines are continued on \ at the end of line
+             $buffer .= $line;
+         } else {
+-            if ($line =~ s/\s*T\{\s*$//) { # start of text block
++            if ($line =~ s/\s*T{\s*$//) { # start of text block
+               $in_textblock = 1;
+               $postline = $&; # save the `T{' to be outputed below
+             } elsif ($buffer eq "" && $line ne ""){ # single line data
+diff -Naur orig/lib/Locale/Po4a/Sgml.pm patched/lib/Locale/Po4a/Sgml.pm
+--- orig/lib/Locale/Po4a/Sgml.pm	2015-08-28 19:05:31.000000000 +0200
++++ patched/lib/Locale/Po4a/Sgml.pm	2015-12-12 03:02:00.904454549 +0100
+@@ -672,9 +672,9 @@
+             }
+         }
+     }
+-    $prolog =~ s/<!--\{PO4A-ent-beg-(.*?)\}(.*?)\{PO4A-ent-end\}-->/<!ENTITY % $1 SYSTEM "$2">/g;
++    $prolog =~ s/<!--{PO4A-ent-beg-(.*?)}(.*?){PO4A-ent-end}-->/<!ENTITY % $1 SYSTEM "$2">/g;
+     # Unprotect undefined inclusions, and die of them
+-    $prolog =~ s/\{PO4A-percent\}/%/sg;
++    $prolog =~ s/{PO4A-percent}/%/sg;
+     if ($prolog =~ /%([^;\s]*);/) {
+         die wrap_mod("po4a::sgml",
+                      dgettext("po4a",
+diff -Naur orig/lib/Locale/Po4a/TeX.pm patched/lib/Locale/Po4a/TeX.pm
+--- orig/lib/Locale/Po4a/TeX.pm	2015-08-28 19:05:31.000000000 +0200
++++ patched/lib/Locale/Po4a/TeX.pm	2015-12-12 03:03:12.812811123 +0100
+@@ -1168,7 +1168,7 @@
+ #       environment contains an un-closed bracket)
+         if (   ($closed and ($line =~ /^\s*$/ or
+                              $line =~ /^\s*$RE_VERBATIM\s*$/))
+-            or (in_verbatim(@env) and $line =~ /^\s*\Q$ESCAPE\Eend\{$env[-1]\}\s*$/)
++            or (in_verbatim(@env) and $line =~ /^\s*\Q$ESCAPE\Eend{$env[-1]}\s*$/)
+            ) {
+             # An empty line. This indicates the end of the current
+             # paragraph.

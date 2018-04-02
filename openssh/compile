@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+export UB_MAKE_PROCS=1
+# ub_compile \
+./configure \
+    --prefix=/usr \
+    --with-ldns \
+	--sysconfdir=/etc/ssh \
+	--datadir=/usr/share/openssh \
+	--with-kerberos5=/usr \
+	--with-xauth=/usr/bin/xauth \
+	--with-pam \
+	--with-md5-passwords \
+	--with-libedit
+ub_make

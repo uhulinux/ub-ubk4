@@ -1,0 +1,16 @@
+#/bin/sh
+
+version=ubversion
+
+echo downloading data...
+
+mkdir -p /usr/share/frogatto
+mkdir -p /tmp/install
+cd /tmp/install
+curl -o ${version}.tar.gz https://codeload.github.com/frogatto/frogatto/tar.gz/${version}
+echo extracting data...
+tar -xvf ${version}.tar.gz -C /usr/share/
+mv  /usr/share/frogatto-${version}/{data,images,modules,music} /usr/share/frogatto/
+rm -rf /usr/share/frogatto-$version
+cd -
+rm -rf /tmp/install

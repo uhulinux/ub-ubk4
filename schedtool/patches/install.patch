@@ -1,0 +1,33 @@
+diff -Naur schedtool-1.3.0-orig/Makefile schedtool-1.3.0/Makefile
+--- schedtool-1.3.0-orig/Makefile	2008-09-15 15:46:35.000000000 +0200
++++ schedtool-1.3.0/Makefile	2009-12-08 20:36:07.000000000 +0100
+@@ -4,7 +4,7 @@
+ CC=gcc
+ # likewise, if you want to change the destination prefix
+ DESTDIR=
+-DESTPREFIX=/usr/local
++DESTPREFIX=/usr
+ MANDIR=$(DESTPREFIX)/share/man/man8
+ GZIP=gzip -9
+ TARGET=schedtool
+@@ -20,14 +20,14 @@
+ 	rm -f *~ *.s
+ 
+ install: all install-doc zipman
+-	install -d $(DESTDIR)$(DESTPREFIX)/bin
+-	install -p -c $(TARGET) $(DESTDIR)$(DESTPREFIX)/bin
+-	install -d $(DESTDIR)$(MANDIR)
+-	install -p -c schedtool.8.gz $(DESTDIR)$(MANDIR)
++	install -d $(DESTDIR)/$(DESTPREFIX)/bin
++	install -c $(TARGET) $(DESTDIR)/$(DESTPREFIX)/bin
++	install -d $(DESTDIR)/$(DESTPREFIX)/share/man/man8
++	install -c schedtool.8.gz $(DESTDIR)/$(DESTPREFIX)/share/man/man8
+ 
+ install-doc:
+-	install -d $(DESTDIR)$(DESTPREFIX)/share/doc/$(RELEASE)
+-	install -p -c $(DOCS) $(DESTDIR)$(DESTPREFIX)/share/doc/$(RELEASE)
++	install -d $(DESTDIR)/$(DESTPREFIX)/share/doc/Packages/schedtool
++	install -c $(DOCS) $(DESTDIR)/$(DESTPREFIX)/share/doc/Packages/schedtool
+ 
+ zipman:
+ 	test -f schedtool.8 && $(GZIP) schedtool.8 || exit 0

@@ -1,0 +1,16 @@
+diff -Naur orig/desktop/gimp.desktop.in.in patched/desktop/gimp.desktop.in.in
+--- orig/desktop/gimp.desktop.in.in	2012-03-12 20:18:08.000000000 +0100
++++ patched/desktop/gimp.desktop.in.in	2015-03-07 23:02:00.177079990 +0100
+@@ -1,10 +1,10 @@
+ [Desktop Entry]
+ Version=1.0
+ Type=Application
+-_Name=GNU Image Manipulation Program
++Name=GIMP
+ _GenericName=Image Editor
+ _Comment=Create images and edit photographs
+-Exec=@GIMP_COMMAND@ %U
++Exec=gimp-@GIMP_APP_VERSION@ %U
+ TryExec=gimp-@GIMP_APP_VERSION@
+ Icon=gimp
+ Terminal=false

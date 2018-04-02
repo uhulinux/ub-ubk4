@@ -1,0 +1,12 @@
+# Description: Add a couple of missing header files, to eliminate compiler warnings.
+# Author: Kenneth J. Pronovici <pronovic@debian.org>
+--- sopwith-1.7.3.orig/src/vid_vga.c
++++ sopwith-1.7.3/src/vid_vga.c
+@@ -33,6 +33,8 @@
+ #include "swsymbol.h"
+ #include "swutil.h"
+ 
++#include <string.h>
++
+ // this should be in a header somewhere
+ #define SBAR_HGHT 19

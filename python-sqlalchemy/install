@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+
+python3 setup.py install --root="$UB_INSTALLDIR"
+
+mkdir -p "${UB_INSTALLDIR}"/usr/share/doc/sqlalchemy
+cp -r doc "${UB_INSTALLDIR}"/usr/share/doc/sqlalchemy/
+cp -r examples "${UB_INSTALLDIR}"/usr/share/doc/sqlalchemy/

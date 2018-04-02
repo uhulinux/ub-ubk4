@@ -1,0 +1,42 @@
+diff -Naurdp aamath.orig/expr.cc aamath/expr.cc
+--- aamath.orig/expr.cc	2005-03-08 03:00:02.000000000 +0100
++++ aamath/expr.cc	2009-11-30 17:38:06.000000000 +0100
+@@ -1192,7 +1192,7 @@ IntegralOnInterval::render_head() const
+ 
+ class SumSymbol : public OpSymbol {
+   public:
+-	void render(Canvas& c, int r, int c) const;
++	void render(Canvas& cv, int r, int c) const;
+ };
+ 
+ void
+@@ -1208,7 +1208,7 @@ SumSymbol::render(Canvas& canvas, int r,
+ 
+ class ProductSymbol : public OpSymbol {
+   public:
+-	void render(Canvas& c, int r, int c) const;
++	void render(Canvas& cv, int r, int c) const;
+ };
+ 
+ void
+diff -Naurdp aamath.orig/expr.h aamath/expr.h
+--- aamath.orig/expr.h	2005-03-08 02:56:12.000000000 +0100
++++ aamath/expr.h	2009-11-30 17:36:35.000000000 +0100
+@@ -451,7 +451,7 @@ class Integral : public OpOnFunction {
+ 
+ 	virtual CanvasPtr render_head() const;
+ 
+-	void render_symbol(Canvas& c, int r, int c, int h) const;
++	void render_symbol(Canvas& cv, int r, int c, int h) const;
+ 
+ 	virtual CanvasPtr render() const;
+ };
+@@ -467,7 +467,7 @@ class IntegralOnInterval : public Integr
+ 
+ class OpSymbol {
+   public:
+-	virtual void render(Canvas& c, int r, int c) const = 0;
++	virtual void render(Canvas& cv, int r, int c) const = 0;
+ };
+ 
+ class SumOrProduct : public OpOnFunction {

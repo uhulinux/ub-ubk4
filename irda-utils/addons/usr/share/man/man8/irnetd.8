@@ -1,0 +1,58 @@
+.\" Jean II - HPL - 03
+.\" irnetd.8
+.\"
+.TH IRNETD 4 "2 May 2003" "irda-utils" "Linux-IrDA man pages"
+.\"
+.\" NAME part
+.\"
+.SH NAME
+irnetd \- Handle automatically incoming IrNET connections
+.\"
+.\" SYNOPSIS part
+.\"
+.SH SYNOPSIS
+.BI "irnetd [" ppp-options ]
+.\"
+.\" DESCRIPTION part
+.\"
+.SH DESCRIPTION
+.B Irnetd
+is a very simple daemon automatically handling
+.IR "incoming IrNET connections" .
+Every time a peer attempt to connect to the local computer,
+.B irnetd
+generates the relevant
+.IR pppd (8)
+command to starts an IrNET server handling this peer.
+.\"
+.\" PARAMETER part
+.\"
+.SH PARAMETERS
+.TP
+.I ppp-options
+Override the default
+.IR pppd (8)
+options. These options will just be passed on the command line of
+.IR pppd (8).
+The default options are 
+.I """noauth nolock connect-delay 0 idle 10""
+which should fit most usages.
+.\"
+.\" AUTHOR part
+.\"
+.SH AUTHOR
+Jean Tourrilhes \- jt@hpl.hp.com
+.\"
+.\" FILES part
+.\"
+.SH FILES
+.I /dev/irnet
+.\"
+.\" SEE ALSO part
+.\"
+.SH SEE ALSO
+.BR irda (7),
+.BR irnet (4),
+.BR pppd (8),
+.BR irattach (8),
+.BR irdadump (8).

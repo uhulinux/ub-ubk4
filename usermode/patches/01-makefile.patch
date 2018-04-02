@@ -1,0 +1,16 @@
+diff -Naur usermode-1.111-orig/Makefile.in usermode-1.111/Makefile.in
+--- usermode-1.111-orig/Makefile.in	2012-09-22 17:38:45.000000000 +0200
++++ usermode-1.111/Makefile.in	2013-11-23 15:08:28.429602395 +0100
+@@ -1436,12 +1436,6 @@
+ 
+ 
+ install-data-local: userinfo.desktop usermount.desktop userpasswd.desktop
+-	mkdir -p $(DESTDIR)$(datadir)/applications
+-	for i in userinfo.desktop usermount.desktop userpasswd.desktop; do \
+-		desktop-file-install --vendor=$(VENDOR)			   \
+-			--dir=$(DESTDIR)$(datadir)/applications		   \
+-			$(top_builddir)/$$i;				   \
+-	done
+ 
+ uninstall-local:
+ 	-rm -f $(DESTDIR)$(datadir)/applications/$(VENDOR)-userinfo.desktop   \

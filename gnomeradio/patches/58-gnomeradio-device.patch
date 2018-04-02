@@ -1,0 +1,462 @@
+Description: Don't stop radio twice to avoid double free or corruption.
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1110660
+Author: POJAR GEORGE <geoubuntu@gmail.com>
+Index: gnomeradio-1.8/src/v4l2.c
+===================================================================
+--- gnomeradio-1.8.orig/src/v4l2.c
++++ gnomeradio-1.8/src/v4l2.c
+@@ -93,13 +93,35 @@ v4l2_radio_is_init(RadioDev *radio_dev)
+ 	return (dev->fd >= 0);
+ }
+ 
++static double
++v4l2_radio_get_freq(RadioDev *radio_dev)
++{
++	V4L2RadioDev *dev = (V4L2RadioDev*)radio_dev;
++	struct v4l2_frequency freq;
++
++	if (dev->fd < 0)
++		return -1;
++
++	memset(&freq, 0, sizeof(freq));
++	freq.tuner = 0;
++	freq.type = V4L2_TUNER_RADIO;
++
++	if (ioctl (dev->fd, VIDIOC_G_FREQUENCY, &freq) < 0) {
++		perror ("VIDIOC_G_FREQUENCY");
++		return -1;
++	}
++
++	double result = freq.frequency / (double) dev->freq_fact;
++	return round(result * 100) / 100;
++}
++
+ static void
+ v4l2_radio_set_freq(RadioDev *radio_dev, float frequency)
+ {
+ 	V4L2RadioDev *dev = (V4L2RadioDev*)radio_dev;
+ 	struct v4l2_frequency freq;
+ 
+-	if (dev->fd<0)
++	if (dev->fd < 0)
+ 		return;
+ 
+ 	memset(&freq, 0, sizeof(freq));
+@@ -120,7 +142,7 @@ v4l2_radio_mute(RadioDev *radio_dev, int
+ 	V4L2RadioDev *dev = (V4L2RadioDev*)radio_dev;
+ 	struct v4l2_control control;
+ 
+-	if (dev->fd<0)
++	if (dev->fd < 0)
+ 		return;
+ 
+ 	memset(&control, 0, sizeof(control));
+@@ -131,12 +153,32 @@ v4l2_radio_mute(RadioDev *radio_dev, int
+ }
+ 
+ static int
++v4l2_radio_is_muted(RadioDev *radio_dev)
++{
++	V4L2RadioDev *dev = (V4L2RadioDev*)radio_dev;
++	struct v4l2_control control;
++
++	if (dev->fd < 0)
++		return -1;
++
++	memset(&control, 0, sizeof(control));
++	control.id = V4L2_CID_AUDIO_MUTE;
++
++	if (ioctl (dev->fd, VIDIOC_G_CTRL, &control) < 0) {
++		perror ("VIDIOC_S_CTRL");
++		return -1;
++	}
++
++	return control.value;
++}
++
++static int
+ v4l2_radio_get_stereo(RadioDev *radio_dev)
+ {
+ 	V4L2RadioDev *dev = (V4L2RadioDev*)radio_dev;
+ 	struct v4l2_tuner tuner;
+ 
+-	if (dev->fd<0)
++	if (dev->fd < 0)
+ 		return -1;
+ 
+ 	memset(&tuner, 0, sizeof(tuner));
+@@ -155,7 +197,7 @@ v4l2_radio_get_signal(RadioDev *radio_de
+ 	V4L2RadioDev *dev = (V4L2RadioDev*)radio_dev;
+ 	struct v4l2_tuner tuner;
+ 
+-	if (dev->fd<0)
++	if (dev->fd < 0)
+ 		return -1;
+ 
+ 	memset(&tuner, 0, sizeof(tuner));
+@@ -181,7 +223,7 @@ v4l2_radio_finalize(RadioDev *radio_dev)
+ RadioDev*
+ v4l2_radio_dev_new (void)
+ {
+-    RadioDev *dev;
++	RadioDev *dev;
+ 	V4L2RadioDev *v4l2_dev;
+ 
+ 	v4l2_dev = malloc (sizeof (V4L2RadioDev));
+@@ -190,8 +232,10 @@ v4l2_radio_dev_new (void)
+ 	dev = (RadioDev*)v4l2_dev;
+ 	dev->init       = v4l2_radio_init;
+ 	dev->is_init    = v4l2_radio_is_init;
++	dev->get_freq   = v4l2_radio_get_freq;
+ 	dev->set_freq   = v4l2_radio_set_freq;
+ 	dev->mute       = v4l2_radio_mute;
++	dev->is_muted   = v4l2_radio_is_muted;
+ 	dev->get_stereo = v4l2_radio_get_stereo;
+ 	dev->get_signal = v4l2_radio_get_signal;
+ 	dev->finalize   = v4l2_radio_finalize;
+Index: gnomeradio-1.8/src/v4l1.c
+===================================================================
+--- gnomeradio-1.8.orig/src/v4l1.c
++++ gnomeradio-1.8/src/v4l1.c
+@@ -45,10 +45,9 @@ v4l1_radio_init(RadioDev *radio_dev, cha
+ 		return 0;
+ 	
+ 	tuner.tuner = 0;
+-	if (ioctl (dev->fd, VIDIOCGTUNER, &tuner) < 0)
++	if (ioctl (dev->fd, VIDIOCGTUNER, &tuner) < 0) {
+ 		dev->freq_fact = 16;
+-	else
+-	{
++	} else {
+ 		if ((tuner.flags & VIDEO_TUNER_LOW) == 0)
+ 			dev->freq_fact = 16;
+ 		else
+@@ -64,19 +63,33 @@ int v4l1_radio_is_init(RadioDev *radio_d
+ 	return (dev->fd >= 0);
+ }
+ 
++static double
++v4l1_radio_get_freq(RadioDev *radio_dev)
++{
++	V4L1RadioDev *dev = (V4L1RadioDev*)radio_dev;
++	long freq;
++
++	if (dev->fd < 0)
++		return -1;
++
++	if (ioctl (dev->fd, VIDIOCGFREQ, &freq)) {
++		perror ("VIDIOCGFREQ");
++		return -1;
++	}
++
++	return freq / (double) dev->freq_fact;
++}
++
+ static void
+ v4l1_radio_set_freq(RadioDev *radio_dev, float freq)
+ {
+ 	V4L1RadioDev *dev = (V4L1RadioDev*)radio_dev;
+-    int ifreq;
++	int ifreq;
+ 
+-    if (dev->fd<0)
+-    	return;
++	if (dev->fd < 0)
++		return;
+     
+ 	ifreq = (freq+1.0/32)*dev->freq_fact;
+-#if 0
+-	printf("Setting to %i (= %.2f)\n", ifreq, freq);
+-#endif
+ 
+ 	/* FIXME: Do we need really need these checks? */
+ 	if ((freq > 108) || (freq < 65))
+@@ -84,7 +97,7 @@ v4l1_radio_set_freq(RadioDev *radio_dev,
+ 
+ 	assert ((freq <= 108) && (freq > 65));
+ 
+-    if (ioctl(dev->fd, VIDIOCSFREQ, &ifreq) < 0)
++	if (ioctl(dev->fd, VIDIOCSFREQ, &ifreq) < 0)
+ 		perror ("VIDIOCSFREQ");
+ }
+ 
+@@ -92,37 +105,54 @@ static void
+ v4l1_radio_mute(RadioDev *radio_dev, int mute)
+ {
+ 	V4L1RadioDev *dev = (V4L1RadioDev*)radio_dev;
+-    struct video_audio vid_aud;
++	struct video_audio vid_aud;
+ 
+-    if (dev->fd<0)
+-    	return;
++	if (dev->fd < 0)
++		return;
+ 
+-    if (ioctl(dev->fd, VIDIOCGAUDIO, &vid_aud)) {
++	if (ioctl(dev->fd, VIDIOCGAUDIO, &vid_aud)) {
+ 		perror("VIDIOCGAUDIO");
+ 		memset (&vid_aud, 0, sizeof (struct video_audio));
+ 	}
+ 	if (mute) {
+-    	vid_aud.flags |= VIDEO_AUDIO_MUTE;
++		vid_aud.flags |= VIDEO_AUDIO_MUTE;
+ 	} else {
+ 		vid_aud.volume = 0xFFFF;
+ 		vid_aud.flags &= ~VIDEO_AUDIO_MUTE;
+ 		vid_aud.mode = VIDEO_SOUND_STEREO;
+ 	}
+-    if (ioctl(dev->fd, VIDIOCSAUDIO, &vid_aud))
++	if (ioctl(dev->fd, VIDIOCSAUDIO, &vid_aud))
+ 		perror("VIDIOCSAUDIO");
+ }
+ 
+ static int
++v4l1_radio_is_muted(RadioDev *radio_dev)
++{
++	V4L1RadioDev *dev = (V4L1RadioDev*)radio_dev;
++	struct video_audio vid_aud;
++
++	if (dev->fd < 0)
++		return -1;
++
++	if (ioctl (dev->fd, VIDIOCGAUDIO, &vid_aud)) {
++		perror ("VIDIOCGAUDIO");
++		return -1;
++	}
++
++	return (vid_aud.flags & VIDEO_AUDIO_MUTE);
++}
++
++static int
+ v4l1_radio_get_stereo(RadioDev *radio_dev)
+ {
+ 	V4L1RadioDev *dev = (V4L1RadioDev*)radio_dev;
+-    struct video_audio va;
+-    va.mode=-1;
++	struct video_audio va;
++	va.mode=-1;
+ 
+-    if (dev->fd<0)
+-    	return -1;
++	if (dev->fd < 0)
++		return -1;
+     
+-    if (ioctl (dev->fd, VIDIOCGAUDIO, &va) < 0)
++	if (ioctl (dev->fd, VIDIOCGAUDIO, &va) < 0)
+ 		return -1;
+ 	if (va.mode == VIDEO_SOUND_STEREO)
+ 		return 1;
+@@ -134,17 +164,17 @@ static int
+ v4l1_radio_get_signal(RadioDev *radio_dev)
+ {
+ 	V4L1RadioDev *dev = (V4L1RadioDev*)radio_dev;
+-    struct video_tuner vt;
+-    int signal;
++	struct video_tuner vt;
++	int signal;
+ 
+-    if (dev->fd<0)
+-    	return -1;
++	if (dev->fd < 0)
++		return -1;
+ 
+-    memset(&vt,0,sizeof(vt));
+-    ioctl (dev->fd, VIDIOCGTUNER, &vt);
+-    signal=vt.signal>>13;
++	memset(&vt,0,sizeof(vt));
++	ioctl (dev->fd, VIDIOCGTUNER, &vt);
++	signal=vt.signal>>13;
+ 
+-    return signal;
++	return signal;
+ }
+ 
+ static void
+@@ -160,7 +190,7 @@ v4l1_radio_finalize(RadioDev *radio_dev)
+ RadioDev*
+ v4l1_radio_dev_new (void)
+ {
+-    RadioDev *dev;
++	RadioDev *dev;
+ 	V4L1RadioDev *v4l1_dev;
+ 
+ 	v4l1_dev = malloc(sizeof(V4L1RadioDev));
+@@ -169,8 +199,10 @@ v4l1_radio_dev_new (void)
+ 
+ 	dev->init       = v4l1_radio_init;
+ 	dev->is_init    = v4l1_radio_is_init;
++	dev->get_freq   = v4l1_radio_get_freq;
+ 	dev->set_freq   = v4l1_radio_set_freq;
+ 	dev->mute       = v4l1_radio_mute;
++	dev->is_muted   = v4l1_radio_is_muted;
+ 	dev->get_stereo = v4l1_radio_get_stereo;
+ 	dev->get_signal = v4l1_radio_get_signal;
+ 	dev->finalize   = v4l1_radio_finalize;
+Index: gnomeradio-1.8/src/radio.c
+===================================================================
+--- gnomeradio-1.8.orig/src/radio.c
++++ gnomeradio-1.8/src/radio.c
+@@ -35,10 +35,7 @@ static RadioDev *dev;
+  
+ int radio_init(char *device, DriverType driver)
+ {
+-    int rv = -1;
+-	if (dev) {
+-		radio_stop();
+-	}
++	int rv = -1;
+ 
+ 	switch (driver) {
+ 		case DRIVER_ANY:
+@@ -84,42 +81,68 @@ failure:
+ 
+ int radio_is_init(void)
+ {
+-	if (dev) return dev->is_init (dev);
+-	else return 0;
++	if (dev)
++		return dev->is_init (dev);
++	else
++		return 0;
+ }
+ 
+ void radio_stop(void)
+ {
+ 	radio_mute();
+ 	
+-	if (dev) dev->finalize (dev);
++	if (dev)
++		dev->finalize (dev);
++}
++
++double radio_get_freq(void)
++{
++	if (dev)
++		return dev->get_freq (dev);
++	else
++		return -1;
+ }
+ 
+ void radio_set_freq(float frequency)
+ {
+-	if (dev) dev->set_freq (dev, frequency);
++	if (dev)
++		dev->set_freq (dev, frequency);
+ }
+ 
+ void radio_unmute(void)
+ {
+-	if (dev) dev->mute (dev, 0);
++	if (dev)
++		dev->mute (dev, 0);
+ }
+ 
+ void radio_mute(void)
+ {
+-	if (dev) dev->mute (dev, 1);
++	if (dev)
++		dev->mute (dev, 1);
++}
++
++int radio_is_muted(void)
++{
++	if (dev)
++		return dev->is_muted (dev);
++	else
++		return -1;
+ }
+ 
+ int radio_get_stereo(void)
+ {
+-	if (dev) return dev->get_stereo (dev);
+-	else return -1;
++	if (dev)
++		return dev->get_stereo (dev);
++	else
++		return -1;
+ }
+ 
+ int radio_get_signal(void)
+ {
+-	if (dev) return dev->get_signal (dev);
+-	else return -1;
++	if (dev)
++		return dev->get_signal (dev);
++	else
++		return -1;
+ }
+ 
+ int radio_check_station(float freq)
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -448,10 +448,8 @@ static gboolean draw_cb(GtkWidget *widge
+ void exit_gnome_radio(void)
+ {
+ 	if (settings.mute_on_exit)
+-	{
+-		radio_mute();
+ 		radio_stop();
+-	}
++
+ 	mixer_close();
+ 	save_settings();
+ 	gtk_main_quit();
+@@ -1153,10 +1151,8 @@ static void
+ session_die_cb(void)
+ {
+ 	if (settings.mute_on_exit)
+-	{
+-		radio_mute();
+ 		radio_stop();
+-	}
++
+ 	mixer_close();
+ 	gtk_main_quit();
+ 	exit (0);
+Index: gnomeradio-1.8/src/radio.h
+===================================================================
+--- gnomeradio-1.8.orig/src/radio.h
++++ gnomeradio-1.8/src/radio.h
+@@ -20,13 +20,15 @@
+ typedef struct _RadioDev RadioDev;
+ struct _RadioDev
+ {
+-	int  (*init)       (RadioDev *dev, char *device);
+-	int  (*is_init)    (RadioDev *dev);
+-	void (*set_freq)   (RadioDev *dev, float freq);
+-	void (*mute)       (RadioDev *dev, int   mute);
+-	int  (*get_stereo) (RadioDev *dev);
+-	int  (*get_signal) (RadioDev *dev);
+-	void (*finalize)   (RadioDev *dev);
++	int    (*init)       (RadioDev *dev, char *device);
++	int    (*is_init)    (RadioDev *dev);
++	double (*get_freq)   (RadioDev *dev);
++	void   (*set_freq)   (RadioDev *dev, float freq);
++	void   (*mute)       (RadioDev *dev, int   mute);
++	int    (*is_muted)   (RadioDev *dev);
++	int    (*get_stereo) (RadioDev *dev);
++	int    (*get_signal) (RadioDev *dev);
++	void   (*finalize)   (RadioDev *dev);
+ };
+ 
+ typedef enum _DriverType DriverType;
+@@ -43,6 +45,8 @@ int radio_is_init(void);
+ 
+ void radio_stop(void);
+ 
++double radio_get_freq(void);
++
+ void radio_set_freq(float freq);
+ 
+ int radio_check_station(float freq);
+@@ -51,6 +55,8 @@ void radio_unmute(void);
+ 
+ void radio_mute(void);
+ 
++int radio_is_muted(void);
++
+ int radio_get_stereo(void);
+ 
+ int radio_get_signal(void);

@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_install
+
+for i in "$UB_INSTALLDIR"/usr/lib/*dbus-1*.so.*; do
+	mv -f "$i" "$UB_INSTALLDIR"/lib/
+	ln -s ../../lib/"${i##*/}" "$i"
+done
+for i in "$UB_INSTALLDIR"/usr/bin/dbus-{daemon,send,cleanup-sockets}; do
+	mv -f "$i" "$UB_INSTALLDIR"/bin/
+	ln -s ../../bin/"${i##*/}" "$i"
+done

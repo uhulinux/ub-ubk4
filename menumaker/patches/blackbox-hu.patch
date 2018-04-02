@@ -1,0 +1,41 @@
+diff -Nur orig/MenuMaker/BlackBox.py mod/MenuMaker/BlackBox.py
+--- orig/MenuMaker/BlackBox.py	2017-01-09 12:25:03.000000000 +0100
++++ mod/MenuMaker/BlackBox.py	2017-10-07 19:44:15.016715347 +0200
+@@ -1,3 +1,4 @@
++# -*- coding: utf-8 -*-
+ import os.path
+ import MenuMaker
+ import Prophet
+@@ -23,7 +24,7 @@
+ 
+ 
+ class StylesMenu(MenuMaker.Menu):
+-    name = "Styles"
++    name = "Stílusok"
+ 
+     def __init__(self, dirs):
+         super(StylesMenu, self).__init__(
+@@ -35,7 +36,7 @@
+     name = "BlackBox"
+ 
+     def __init__(self):
+-        subs = [X("Workspaces", "workspaces")]
++        subs = [X("Munkaasztalok", "workspaces")]
+         try:
+             subs += [StylesMenu([os.path.join(blackbox().prefix,
+                                               "share/blackbox/styles"),
+@@ -43,10 +44,10 @@
+         except Prophet.NotSet:
+             pass
+         subs += [
+-            X("Configure", "config"),
+-            X("Reconfig", "reconfig"),
+-            X("Restart", "restart"),
+-            X("Exit", "exit")
++            X("Beállítások", "config"),
++            X("Újrabeállítás", "reconfig"),
++            X("Újraindítás", "restart"),
++            X("Kilépés", "exit")
+         ]
+         super(SysMenu, self).__init__(subs)
+         self.align = MenuMaker.Entry.StickBottom

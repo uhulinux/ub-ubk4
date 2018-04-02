@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+
+grep -q hpaio /etc/sane.d/dll.conf && sed -i '/^hpaio/d' /etc/sane.d/dll.conf || true

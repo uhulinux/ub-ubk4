@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+export INSTROOT="$UB_INSTALLDIR"
+
+CFLAGS="-D_GNU_SOURCE" \
+./configure --prefix=/usr
+make
+
+# pppgetpass
+cd contrib/pppgetpass
+make -f Makefile.linux

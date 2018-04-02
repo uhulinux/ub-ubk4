@@ -1,0 +1,25 @@
+diff -Naur orig/src/ffDiaporama/ffDiaporama.pro patched/src/ffDiaporama/ffDiaporama.pro
+--- orig/src/ffDiaporama/ffDiaporama.pro	2014-05-04 10:33:56.000000000 +0200
++++ patched/src/ffDiaporama/ffDiaporama.pro	2016-11-20 00:53:14.988409585 +0100
+@@ -101,21 +101,18 @@
+             LIBS    += -lswresample                                             #------ conditionnaly include libswresample
+         } else:exists(/usr/include/libswresample/swresample.h) {                #------ Specific for openSUSE
+             message("Use ffmpeg in /usr/include")
+-            INCLUDEPATH += /usr/include/
+             DEFINES += USELIBSWRESAMPLE
+             LIBS    += -lswresample                                             #------ conditionnaly include libswresample
+         } else:exists(/usr/include/libavresample/avresample.h) {
+             message("Use libav 9 in /usr/include")
+             DEFINES += USELIBAVRESAMPLE
+             LIBS    += -lavresample                                             #------ conditionnaly include libavresample
+-            INCLUDEPATH += /usr/include/
+         } else {
+             message("Use libav 0.8+taglib in /usr/include")
+             LIBS        += -ltag                                                #------ TAGlib is used only with LIBAV 8
+             DEFINES     += USETAGLIB
+             DEFINES     += HAVE_CONFIG_H                                        #------ specific for TAGLib
+             DEFINES     += TAGLIB_STATIC                                        #------ specific for TAGLib
+-            INCLUDEPATH += /usr/include/
+         }
+ 
+     }

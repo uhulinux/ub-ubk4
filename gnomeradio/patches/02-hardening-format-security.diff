@@ -1,0 +1,34 @@
+Index: b/src/gui.c
+===================================================================
+--- a/src/gui.c	2012-12-03 10:14:50.390899942 +0000
++++ b/src/gui.c	2012-12-03 10:14:52.710899873 +0000
+@@ -171,7 +171,7 @@
+ 					g_list_length(data.stations));
+ 			
+ 			dialog = gtk_message_dialog_new(GTK_WINDOW(app), DIALOG_FLAGS, GTK_MESSAGE_QUESTION,
+-					GTK_BUTTONS_YES_NO, text);
++					GTK_BUTTONS_YES_NO, "%s", text);
+ 			g_free(text);
+ 			
+ 			int response = gtk_dialog_run(GTK_DIALOG(dialog));
+@@ -784,7 +784,7 @@
+ 	{
+ 		GtkWidget *dialog;
+ 		dialog = gtk_message_dialog_new(NULL, DIALOG_FLAGS, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+-				error->message);
++				"%s", error->message);
+ 		gtk_dialog_run (GTK_DIALOG (dialog));
+ 		gtk_widget_destroy (dialog);
+ 		g_error_free (error);
+@@ -1209,9 +1209,9 @@
+ 	g_assert(text);
+ 	
+ 	dialog = gtk_message_dialog_new(NULL, DIALOG_FLAGS, type, GTK_BUTTONS_CLOSE,
+-			text);
++			"%s", text);
+ 	if (details) {
+-		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), details);
++		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", details);
+ 	}
+ 	gtk_dialog_run(GTK_DIALOG (dialog));
+ 	gtk_widget_destroy(dialog);

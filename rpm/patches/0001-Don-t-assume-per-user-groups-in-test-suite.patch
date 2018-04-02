@@ -1,0 +1,70 @@
+From 92b718bb0e98ecaea6d4229eab9ef3bc0220d9c2 Mon Sep 17 00:00:00 2001
+Message-Id: <92b718bb0e98ecaea6d4229eab9ef3bc0220d9c2.1507815046.git.pmatilai@redhat.com>
+From: Panu Matilainen <pmatilai@redhat.com>
+Date: Thu, 12 Oct 2017 15:51:26 +0300
+Subject: [PATCH] Don't assume per-user groups in test-suite
+
+The tests from commits f2d3be2a8741234faaa96f5fd05fdfdc75779a79 and
+c815822c8bdb138066ff58c624ae83e3a12ebfa9 assume per-user groups,
+but this is not a generally valid assumption and causes unnecessary
+bogus failures in the test-suite in some setups (eg mock)
+---
+ tests/data/SPECS/replacetest.spec | 3 ++-
+ tests/rpmreplace.at               | 2 ++
+ tests/rpmverify.at                | 1 +
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tests/data/SPECS/replacetest.spec b/tests/data/SPECS/replacetest.spec
+index c764adc27..54974567b 100644
+--- a/tests/data/SPECS/replacetest.spec
++++ b/tests/data/SPECS/replacetest.spec
+@@ -1,6 +1,7 @@
+ %{!?filetype: %global filetype file}
+ %{?fixit: %global havepretrans 1}
+ %{!?user: %global user root}
++%{!?grp: %global grp root}
+ 
+ Name:		replacetest%{?sub:-%{sub}}
+ Version:	%{ver}
+@@ -44,5 +45,5 @@ rm -rf $RPM_BUILD_ROOT
+ %endif
+ 
+ %files
+-%defattr(-,%{user},%{user},-)
++%defattr(-,%{user},%{grp},-)
+ /opt/*
+diff --git a/tests/rpmreplace.at b/tests/rpmreplace.at
+index 11e6221d7..6f0444bb7 100644
+--- a/tests/rpmreplace.at
++++ b/tests/rpmreplace.at
+@@ -403,6 +403,7 @@ runroot rpmbuild --quiet -bb \
+ 	--define "filetype datadir" \
+ 	--define "filedata README1" \
+ 	--define "user $(id -u -n)" \
++	--define "grp $(id -g -n)" \
+           /data/SPECS/replacetest.spec
+ 
+ runroot rpmbuild --quiet -bb \
+@@ -410,6 +411,7 @@ runroot rpmbuild --quiet -bb \
+ 	--define "filetype datadir" \
+ 	--define "filedata README2" \
+ 	--define "user $(id -u -n)" \
++	--define "grp $(id -g -n)" \
+           /data/SPECS/replacetest.spec
+ 
+ mkdir "${RPMTEST}"/opt/f00f
+diff --git a/tests/rpmverify.at b/tests/rpmverify.at
+index c5530de69..78f50fd33 100644
+--- a/tests/rpmverify.at
++++ b/tests/rpmverify.at
+@@ -78,6 +78,7 @@ runroot rpmbuild --quiet -bb \
+         --define "filetype datadir" \
+         --define "filedata README1" \
+         --define "user $(id -u -n)" \
++        --define "grp $(id -g -n)" \
+           /data/SPECS/replacetest.spec
+ 
+ runroot rpm -U /build/RPMS/noarch/replacetest-1.0-1.noarch.rpm
+-- 
+2.13.6
+

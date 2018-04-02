@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+chmod 644 *
+mkdir -p ${UB_INSTALLDIR}/usr/share/dict
+cp -a extra.words linux.words words ${UB_INSTALLDIR}/usr/share/dict/

@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+ub_install
+
+#create nspr.pc
+NSPR_LIBS=`./config/nspr-config --libs`
+NSPR_CFLAGS=`./config/nspr-config --cflags`
+NSPR_VERSION=`./config/nspr-config --version`
+mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
+cat nspr.pc.in | sed -e "s,%libdir%,/usr/lib,g" \
+                     -e "s,%prefix%,/usr,g" \
+					 -e "s,%exec_prefix%,/usr,g" \
+					 -e "s,%includedir%,/usr/include/nspr4,g" \
+					 -e "s,%NSPR_VERSION%,$NSPR_VERSION,g" \
+					 -e "s,%FULL_NSPR_LIBS%,$NSPR_LIBS,g" \
+					 -e "s,%FULL_NSPR_CFLAGS%,$NSPR_CFLAGS,g" > \
+					 "$UB_INSTALLDIR"/usr/lib/pkgconfig/nspr.pc

@@ -1,0 +1,22 @@
+diff -Naurd a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2013-05-01 15:34:11.000000000 +0200
++++ b/Makefile.in	2013-06-16 11:30:39.000000000 +0200
+@@ -105,15 +105,15 @@
+ AfterStep.desktop.final:
+ 	@$(CP) AfterStep.desktop AfterStep.desktop.final; \
+ 		echo "NoDisplay=true" >> AfterStep.desktop.final ; \
+-		echo "Exec=$(AFTER_BIN_DIR)/afterstep" >> AfterStep.desktop.final ; \
+-		echo "TryExec=$(AFTER_BIN_DIR)/afterstep" >> AfterStep.desktop.final ; \
++		echo "Exec=afterstep" >> AfterStep.desktop.final ; \
++		echo "TryExec=afterstep" >> AfterStep.desktop.final ; \
+ 		echo "Icon=$(AFTER_SHAREDIR)/desktop/icons/large/AfterStep3" >> AfterStep.desktop.final
+ 
+ AfterStep.desktop.session:
+ 	@if test "x$(AFTER_EXEC_COMMAND)" != "x"; then \
+ 			$(CP) AfterStep.desktop AfterStep.desktop.session; \
+ 			echo "Exec=$(AFTER_EXEC_COMMAND)" >> AfterStep.desktop.session ; \
+-			echo "TryExec=$(AFTER_BIN_DIR)/afterstep" >> AfterStep.desktop.session ; \
++			echo "TryExec=afterstep" >> AfterStep.desktop.session ; \
+ 		fi;
+ 
+ 

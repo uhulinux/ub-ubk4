@@ -1,0 +1,12 @@
+diff -Naur plus4emu-1.2.10.1-orig/SConstruct plus4emu-1.2.10.1/SConstruct
+--- plus4emu-1.2.10.1-orig/SConstruct	2017-02-22 12:47:43.000000000 +0100
++++ plus4emu-1.2.10.1/SConstruct	2017-06-03 06:37:41.257744059 +0200
+@@ -28,7 +28,7 @@
+     compilerFlags = ' -Wno-long-long -Wshadow -g -O0 ' + compilerFlags
+     compilerFlags = ' -Wall -W -ansi -pedantic ' + compilerFlags
+ else:
+-    compilerFlags = ' -Wall -O3 ' + compilerFlags + ' -mtune=generic '
++    compilerFlags = ' -Wall -O2 ' + compilerFlags + ' -mtune=generic '
+     compilerFlags = compilerFlags + ' -fno-inline-functions '
+     compilerFlags = compilerFlags + ' -fomit-frame-pointer -ffast-math '
+ 

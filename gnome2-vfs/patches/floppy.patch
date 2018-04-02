@@ -1,0 +1,12 @@
+diff -Naur gnome-vfs-2.12.0.orig/libgnomevfs/gnome-vfs-hal-mounts.c gnome-vfs-2.12.0/libgnomevfs/gnome-vfs-hal-mounts.c
+--- gnome-vfs-2.12.0.orig/libgnomevfs/gnome-vfs-hal-mounts.c	2005-09-05 10:19:11.000000000 +0200
++++ gnome-vfs-2.12.0/libgnomevfs/gnome-vfs-hal-mounts.c	2005-09-28 18:41:43.000000000 +0200
+@@ -409,7 +409,7 @@
+ 			
+ 		may_prepend_external = TRUE;		
+ 	} else if (drive_type == LIBHAL_DRIVE_TYPE_FLOPPY) {
+-		name = g_strdup (_("Floppy Drive"));
++		name = g_strdup (_("Floppy"));
+ 		may_prepend_external = TRUE;
+ 	} else if (drive_type == LIBHAL_DRIVE_TYPE_COMPACT_FLASH) {
+ 		name = g_strdup (_("Compact Flash Drive"));

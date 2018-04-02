@@ -1,0 +1,97 @@
+diff -Naur fbgetty-0.1.698.orig/Makefile.in fbgetty-0.1.698/Makefile.in
+--- fbgetty-0.1.698.orig/Makefile.in	2001-12-29 22:14:42.000000000 +0100
++++ fbgetty-0.1.698/Makefile.in	2006-04-28 14:59:39.000000000 +0200
+@@ -85,7 +85,7 @@
+ EXTRA_DIST = BUGS configure.default
+ 
+ # The fbgetty package is not flat
+-SUBDIRS = config examples contrib packages docs include src
++SUBDIRS = config examples contrib packages docs include src po
+ subdir = .
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+diff -Naur fbgetty-0.1.698.orig/po/hu.po fbgetty-0.1.698/po/hu.po
+--- fbgetty-0.1.698.orig/po/hu.po	1970-01-01 01:00:00.000000000 +0100
++++ fbgetty-0.1.698/po/hu.po	2006-04-28 15:04:25.000000000 +0200
+@@ -0,0 +1,14 @@
++msgid ""
++msgstr ""
++"Project-Id-Version: hu\n"
++"Report-Msgid-Bugs-To: \n"
++"POT-Creation-Date: 2006-04-28 15:00+0200\n"
++"PO-Revision-Date: 2006-04-28 15:00+0200\n"
++"Last-Translator: Koblinger Egmont <egmont@uhulinux.hu>\n"
++"Language-Team: Hungarian <hu@li.org>\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++msgid "%a %b %d %Y %H:%M:%S"
++msgstr "%Y. %b. %-d. %H.%M.%S"
+diff -Naur fbgetty-0.1.698.orig/po/Makefile fbgetty-0.1.698/po/Makefile
+--- fbgetty-0.1.698.orig/po/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ fbgetty-0.1.698/po/Makefile	2006-04-28 15:07:26.000000000 +0200
+@@ -0,0 +1,11 @@
++all: hu.mo
++
++hu.mo: hu.po
++	msgfmt -c -v -o hu.mo hu.po
++
++install: all
++	mkdir -p $(DESTDIR)/usr/share/locale/hu/LC_TIME
++	cp hu.mo $(DESTDIR)/usr/share/locale/hu/LC_TIME/fbgetty.mo
++
++clean:
++	rm -f hu.mo
+diff -Naur fbgetty-0.1.698.orig/README fbgetty-0.1.698/README
+--- fbgetty-0.1.698.orig/README	2001-12-28 21:33:44.000000000 +0100
++++ fbgetty-0.1.698/README	2006-04-28 14:59:03.000000000 +0200
+@@ -119,6 +119,7 @@
+ 
+ @ftime		-	format date/time like 'date' does (see date(1) manpage or date --help)
+ 			example: @ftime="%X" will print time like @time
++			@ftime="_" is a special case, it uses a built-in locale-specific format string
+ 
+ @uptime		-	display uptime *
+ 
+diff -Naur fbgetty-0.1.698.orig/src/init.c fbgetty-0.1.698/src/init.c
+--- fbgetty-0.1.698.orig/src/init.c	2001-12-29 21:26:22.000000000 +0100
++++ fbgetty-0.1.698/src/init.c	2006-04-28 14:56:47.000000000 +0200
+@@ -33,6 +33,7 @@
+ #include <stdarg.h>
+ 
+ #include <locale.h>
++#include <libintl.h>
+ #include <string.h> 
+ 
+ #include <fcntl.h>
+@@ -366,6 +367,8 @@
+   error("new locale: %s", setlocale(LC_ALL,NULL));
+ #endif
+ 
++  bindtextdomain("fbgetty", "/usr/share/locale");
++
+   /* install the default signal handlers */
+   install_signal();
+ 
+diff -Naur fbgetty-0.1.698.orig/src/issue.c fbgetty-0.1.698/src/issue.c
+--- fbgetty-0.1.698.orig/src/issue.c	2001-12-29 21:16:05.000000000 +0100
++++ fbgetty-0.1.698/src/issue.c	2006-04-28 14:57:01.000000000 +0200
+@@ -26,6 +26,8 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ 
++#include <locale.h>
++#include <libintl.h>
+ #include <string.h>
+ 
+ #include <ctype.h>
+@@ -282,6 +284,8 @@
+ 
+   for(i = 0; i < argc && argv[i] != NULL; i ++)
+     {
++      if (!strcmp(argv[i], "_")) printf_time(stdout, dcgettext("fbgetty", "%a %b %d %Y %H:%M:%S", LC_TIME), &sysinfos);
++      else
+       printf_time(stdout, argv[i], &sysinfos);
+     }
+ 

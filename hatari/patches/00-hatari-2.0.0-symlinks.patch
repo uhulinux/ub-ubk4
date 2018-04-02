@@ -1,0 +1,36 @@
+
+# HG changeset patch
+# User Thomas Huth
+# Date 1480244545 -3600
+# Node ID 35281f58daabab1976b52ea7939b546a2d84f10c
+# Parent  dca750f303bbc736da517a4714f9d6f3b84c6a55
+Take DESTDIR into consideration when installing symlinks
+
+diff -r dca750f303bb -r 35281f58daab share/CMakeLists.txt
+--- a/share/CMakeLists.txt	Sun Nov 27 09:03:46 2016 +0100
++++ b/share/CMakeLists.txt	Sun Nov 27 12:02:25 2016 +0100
+@@ -5,8 +5,9 @@
+ 	install(FILES icons/hicolor/${size}/mimetypes/application-x-st-disk-image.png
+ 		DESTINATION ${ICONDIR}/${size}/mimetypes)
+ 	foreach(type vnd.msa vnd.fastcopy x-stx)
+-		install(CODE "execute_process(COMMAND ln -sf application-x-st-disk-image.png
+-				${CMAKE_INSTALL_PREFIX}/${ICONDIR}/${size}/mimetypes/application-${type}-disk-image.png)
++		install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E create_symlink
++				application-x-st-disk-image.png
++				\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${ICONDIR}/${size}/mimetypes/application-${type}-disk-image.png)
+ 				")
+ 	endforeach()
+ endforeach()
+@@ -16,8 +17,9 @@
+ install(FILES icons/hicolor/scalable/mimetypes/application-x-st-disk-image.svg
+ 	DESTINATION ${ICONDIR}/scalable/mimetypes)
+ foreach(type vnd.msa vnd.fastcopy x-stx)
+-	install(CODE "execute_process(COMMAND ln -sf application-x-st-disk-image.svg
+-			${CMAKE_INSTALL_PREFIX}/${ICONDIR}/scalable/mimetypes/application-${type}-disk-image.svg)
++	install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E create_symlink
++			application-x-st-disk-image.svg
++			\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${ICONDIR}/scalable/mimetypes/application-${type}-disk-image.svg)
+ 			")
+ endforeach()
+ install(FILES mime/packages/hatari.xml DESTINATION share/mime/packages)
+

@@ -1,0 +1,42 @@
+#!/bin/sh -eux
+
+make \
+	BUILDROOT="$UB_INSTALLDIR" \
+	install
+
+rm -rf "$UB_INSTALLDIR"/usr/share/man/cat*
+rm -rf "$UB_INSTALLDIR"/usr/share/man/*/cat*
+rm -rf "$UB_INSTALLDIR"/etc/rc0.d
+rm -rf "$UB_INSTALLDIR"/etc/rc2.d
+rm -rf "$UB_INSTALLDIR"/etc/rc3.d
+rm -rf "$UB_INSTALLDIR"/etc/rc5.d
+rm -rf "$UB_INSTALLDIR"/etc/init.d/cups
+
+# Nem kell a spanyol, orosz, japán doksi
+rm -rf "$UB_INSTALLDIR"/usr/share/doc/cups/{es,ja,ru}
+
+# LSB 3.2 printer driver directory
+mkdir -p ${UB_INSTALLDIR}/usr/share/ppd
+mkdir -p "$UB_INSTALLDIR"/etc/cups
+mkdir -p "$UB_INSTALLDIR"/etc/xinetd.d
+mkdir -p  ${UB_INSTALLDIR}/etc/X11/sysconfig ${UB_INSTALLDIR}/etc/X11/applnk/System
+# create empty config files
+touch ${UB_INSTALLDIR}/etc/cups/printers.conf
+touch ${UB_INSTALLDIR}/etc/cups/classes.conf
+touch ${UB_INSTALLDIR}/etc/cups/client.conf
+touch ${UB_INSTALLDIR}/etc/cups/subscriptions.conf
+touch ${UB_INSTALLDIR}/etc/cups/lpoptions
+cp -a conf/mime.convs "$UB_INSTALLDIR"/etc/cups/
+cp -a conf/mime.types "$UB_INSTALLDIR"/etc/cups/
+cp -a "$UB_INSTALLDIR"/usr/lib/cups/daemon/cups-lpd "$UB_INSTALLDIR"/etc/xinetd.d/
+
+# comment out all conversion rules which use any of the removed filters
+perl -p -i -e 's:^(.*\s+bannertops\s*)$:#\1:' "$UB_INSTALLDIR"/usr/share/cups/mime/mime.convs
+
+# Remove unshipped files.
+rm -rf ${UB_INSTALLDIR}/usr/share/man/cat? ${UB_INSTALLDIR}/usr/share/man/*/cat?
+#rm -f ${UB_INSTALLDIR}/usr/share/applications/cups.desktop
+rm -rf ${UB_INSTALLDIR}/usr/share/icons
+# there are pdf-banners shipped with cups-filters (#919489)
+rm -rf ${UB_INSTALLDIR}/usr/share/cups/banners
+rm -f ${UB_INSTALLDIR}/usr/share/cups/data/testprint

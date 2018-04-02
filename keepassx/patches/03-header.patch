@@ -1,0 +1,22 @@
+diff -Naur keepassx-0.4.3-orig/share/mimelnk/application/x-keepass.desktop keepassx-0.4.3/share/mimelnk/application/x-keepass.desktop
+--- keepassx-0.4.3-orig/share/mimelnk/application/x-keepass.desktop	2014-08-18 20:36:03.885581906 +0200
++++ keepassx-0.4.3/share/mimelnk/application/x-keepass.desktop	2008-10-02 16:11:35.000000000 +0200
+@@ -1,7 +1,6 @@
+ [Desktop Entry]
+ Comment=KeePass database
+ Comment[de]=KeePass Datenbank
+-Comment[hu]=KeePass adatbázis
+ Hidden=false
+ Icon=keepassx
+ MimeType=application/x-keepass;
+diff -Naur keepassx-0.4.3-orig/src/lib/random.cpp keepassx-0.4.3/src/lib/random.cpp
+--- keepassx-0.4.3-orig/src/lib/random.cpp	2009-06-28 16:22:31.000000000 +0200
++++ keepassx-0.4.3/src/lib/random.cpp	2014-08-18 20:33:24.421933138 +0200
+@@ -19,6 +19,7 @@
+  ***************************************************************************/
+ 
+ #include "random.h"
++#include <unistd.h>
+ 
+ 
+ #if defined(Q_WS_X11) || defined(Q_WS_MAC)

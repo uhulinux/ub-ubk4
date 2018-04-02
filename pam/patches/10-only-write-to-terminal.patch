@@ -1,0 +1,18 @@
+diff -urN Linux-PAM-0.77.orig/libpam_misc/misc_conv.c Linux-PAM-0.77/libpam_misc/misc_conv.c
+--- Linux-PAM-0.77.orig/libpam_misc/misc_conv.c	2001-10-11 06:14:30.000000000 +0200
++++ Linux-PAM-0.77/libpam_misc/misc_conv.c	2002-12-28 17:31:18.000000000 +0100
+@@ -291,12 +291,12 @@
+ 	    }
+ 	    break;
+ 	case PAM_ERROR_MSG:
+-	    if (fprintf(stderr,"%s\n",msgm[count]->msg) < 0) {
++	    if (isatty(STDERR_FILENO) && fprintf(stderr,"%s\n",msgm[count]->msg) < 0) {
+ 		goto failed_conversation;
+ 	    }
+ 	    break;
+ 	case PAM_TEXT_INFO:
+-	    if (fprintf(stdout,"%s\n",msgm[count]->msg) < 0) {
++	    if (isatty(STDOUT_FILENO) && fprintf(stdout,"%s\n",msgm[count]->msg) < 0) {
+ 		goto failed_conversation;
+ 	    }
+ 	    break;

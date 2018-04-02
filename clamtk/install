@@ -1,0 +1,29 @@
+#!/bin/sh -eux
+
+export PERLVERSION=`perl -V:version | cut -d"'" -f2`
+
+#install libs
+mkdir -p "$UB_INSTALLDIR"/usr/lib/perl5/vendor_perl/"$PERLVERSION"/ClamTk
+install -m 644 lib/*.pm "$UB_INSTALLDIR"/usr/lib/perl5/vendor_perl/"$PERLVERSION"/ClamTk/
+
+# install bin
+install -m 755 clamtk "$UB_INSTALLDIR"/usr/bin/
+
+# install other datas
+install -m 644 clamtk.1.gz "$UB_INSTALLDIR"/usr/share/man/man1/
+install -m 644 images/clamtk.png images/clamtk.xpm "$UB_INSTALLDIR"/usr/share/pixmaps/
+install -m 644 clamtk.desktop "$UB_INSTALLDIR"/usr/share/applications/
+
+# help
+#install -dm755 "$UB_INSTALLDIR"/usr/share/help/
+#cp -dr --no-preserve=ownership help/* "$UB_INSTALLDIR"/usr/share/help/
+
+#po
+cd po
+
+for i in *.mo; do
+	mkdir -p "$UB_INSTALLDIR"/usr/share/locale/`basename $i .mo`/LC_MESSAGES
+	install -m 644 "$i" "$UB_INSTALLDIR"/usr/share/locale/`basename $i .mo`/LC_MESSAGES/clamtk.mo
+done
+
+cd ..

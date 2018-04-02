@@ -1,0 +1,56 @@
+Index: zhu3d-4.2.4/src/paths.h
+===================================================================
+--- zhu3d-4.2.4.orig/src/paths.h
++++ zhu3d-4.2.4/src/paths.h
+@@ -26,45 +26,24 @@ extern QString appPath;
+ 
+ 
+ /** Location of html-helpfiles */
+-#ifndef DOCDIR
+-	#define MYDOCDIR (appPath+"/doc/")
+-#else
+-	#define MYDOCDIR (QString(DOCDIR)+"/")
+-#endif
++#define MYDOCDIR (QString("/usr/share/doc/zhu3d/"))
+ 
+ 
+ /** Location of system-files like startup/languages/icons ... */
+-#ifndef SYSDIR
+-	#define MYSYSDIR (appPath+"/system/")
+-	#define MYLANDIR (appPath+"/system/languages/")
+-#else
+-	#define MYSYSDIR (QString(SYSDIR)+"/")
+-	#define MYLANDIR (QString(SYSDIR)+"/languages/")
+-#endif
++#define MYSYSDIR (QString("/usr/share/zhu3d/system/"))                                                                                     
++#define MYLANDIR (QString("/usr/share/zhu3d/languages/"))
+ 
+ 
+ /** Location of work directory with the zhu-files */
+-#ifndef WORKDIR
+-	#define MYWORKDIR (appPath+"/work/")
+-#else
+-	#define MYWORKDIR (QString(WORKDIR)+"/")
+-#endif
++#define MYWORKDIR (QString("/usr/share/zhu3d/work/"))
+ 
+ 
+ /** Location of texture directory */
+-#ifndef TEXDIR
+-	#define MYTEXDIR (appPath+"/work/textures/")
+-#else
+-	#define MYTEXDIR (QString(TEXDIR)+"/")
+-#endif
++#define MYTEXDIR (QString("/usr/share/zhu3d/work/textures/"))
+ 
+ 
+ /** Set default gui */
+-#ifndef DEFGUI
+-	#define MYDEFGUI (QString("Plastique"))
+-#else
+-	#define MYDEFGUI (QString(DEFGUI))
+-#endif
++#define MYDEFGUI (QString("IaOraQt"))
+ 
+ 
+ /** _PATHS_H_ */

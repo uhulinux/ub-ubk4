@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+mkdir -p "${UB_INSTALLDIR}/usr/share/games/dark-oberon"
+cp -r dat maps races schemes "${UB_INSTALLDIR}/usr/share/games/dark-oberon"
+install -Dm755 dark-oberon "${UB_INSTALLDIR}/usr/bin/dark-oberon"

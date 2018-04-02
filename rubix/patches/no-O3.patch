@@ -1,0 +1,12 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2008-11-19 22:18:15.000000000 +0100
++++ mod/Makefile	2017-06-06 09:42:56.188883505 +0200
+@@ -19,7 +19,7 @@
+ #EXTRALIBS=-lsocket
+ 
+ CC=gcc
+-CFLAGS=-Wall -O3 -fomit-frame-pointer -ffast-math \
++CFLAGS=-Wall -O2 -fomit-frame-pointer -ffast-math \
+    -DGAMESDIR="\"$(GAMESDIR)\"" \
+    -D$(LANGUAGE) $(architecture)
+ 

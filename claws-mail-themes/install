@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/usr/share/claws-mail/themes/
+cd ${UB_COMPILEDIR}/
+rm -f autogen.sh claws-mail-themes configure.ac
+find -type f -iname 'Makefile.am' -exec rm -f {} \;
+find -type f -iname 'INSTALL' -exec rm -f {} \;
+mv * ${UB_INSTALLDIR}/usr/share/claws-mail/themes/

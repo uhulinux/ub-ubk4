@@ -1,0 +1,13 @@
+Ez a csomag felelős az összes többi UHU csomag telepítése avagy eltávolítása
+után elvégzendő teendőkért. Minden UHU csomag egy, ebben a csomagban
+található szkriptet hív meg &"postinst", &"prerm" illetve &"postrm"
+szkriptként, amely egységesen végzi el az alábbi teendőket:
+
+- könyvtárak tulajdonosának, csoportjának és hozzáférési módjának beállítása,
+- felhasználó illetve csoport létrehozása vagy törlése,
+- a csomag saját egyéni &{postinst,prerm,postrm}-custom szkriptjének futtatása,
+- az egyéb csomagok által kívánt lépések (például &ldconfig, &install-info).
+
+A csomag tartalmazza továbbá az &uhu-stat programot is, amely az UHU által
+használt szintaxisban adja vissza vagy állítja be a megadott fájlok
+metaadatait.

@@ -1,0 +1,1 @@
+urllist http://ftp.debian.org/debian/pool/main/o/open-iscsi/ | splitver '^open-iscsi_([0-9.-]+).orig.tar.gz$' | sort -V | tail -n 1 | sed s/0\./0~/

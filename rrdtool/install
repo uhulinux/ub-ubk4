@@ -1,0 +1,19 @@
+#!/bin/sh -eux
+
+ub_install site-perl-install
+
+cd bindings/perl-piped
+ub_install
+
+cd ../perl-shared
+ub_install
+
+# ugly hack to install ruby binding
+arch="i686"
+if [ "$UB_ARCH" == "amd64" ];then
+arch="x86_64"
+fi
+mkdir -p "$UB_INSTALLDIR"/usr/lib/ruby/site_ruby/2.5.0/$arch-linux
+
+cd ../ruby
+ub_install

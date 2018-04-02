@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+./configure \
+	--prefix=/usr
+sed -e 's/^CFLAGS=\(.*\)$$/CFLAGS= -g -D_GNU_SOURCE \1/' MCONFIG > MCONFIG.new
+mv MCONFIG.new MCONFIG
+make

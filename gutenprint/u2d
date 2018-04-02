@@ -1,0 +1,7 @@
+function alja () {
+minor=$(urllist http://sourceforge.net/projects/gimp-print/files/ | splitver '^gutenprint-([0-9.]+)' | sort -V )
+for i in $minor; do
+sflist gimp-print gutenprint-"$i" | splitver '^([0-9.]+)$' | sort -V | tail -n 1
+done
+}
+alja  | sort -V | tail -n 1

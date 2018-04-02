@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--enable-sdl-dlopen \
+	--disable-arts --disable-esd --disable-nas \
+	--enable-alsa --enable-pulseaudio-shared \
+	--enable-video-wayland \
+	--disable-rpath

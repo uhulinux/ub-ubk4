@@ -1,0 +1,24 @@
+diff -Naur orig/composer/app/profile/all.js mod/composer/app/profile/all.js
+--- orig/composer/app/profile/all.js	2013-08-21 15:47:02.000000000 +0200
++++ mod/composer/app/profile/all.js	2013-08-21 15:47:54.000000000 +0200
+@@ -762,7 +762,7 @@
+ pref("intl.charset.detector",               "chrome://navigator/locale/navigator.properties");
+ pref("intl.charset.default",                "chrome://navigator-platform/locale/navigator.properties");
+ pref("intl.content.langcode",               "chrome://communicator-region/locale/region.properties");
+-pref("intl.locale.matchOS",                 false);
++pref("intl.locale.matchOS",                 true);
+ // fallback charset list for Unicode conversion (converting from Unicode)
+ // currently used for mail send only to handle symbol characters (e.g Euro, trademark, smartquotes)
+ // for ISO-8859-1
+diff -Naur orig/modules/libpref/src/init/all.js mod/modules/libpref/src/init/all.js
+--- orig/modules/libpref/src/init/all.js	2013-08-21 15:46:31.000000000 +0200
++++ mod/modules/libpref/src/init/all.js	2013-08-21 15:47:54.000000000 +0200
+@@ -793,7 +793,7 @@
+ pref("intl.charset.detector",               "chrome://navigator/locale/navigator.properties");
+ pref("intl.charset.default",                "chrome://navigator-platform/locale/navigator.properties");
+ pref("intl.content.langcode",               "chrome://communicator-region/locale/region.properties");
+-pref("intl.locale.matchOS",                 false);
++pref("intl.locale.matchOS",                 true);
+ // fallback charset list for Unicode conversion (converting from Unicode)
+ // currently used for mail send only to handle symbol characters (e.g Euro, trademark, smartquotes)
+ // for ISO-8859-1

@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+mv "$UB_INSTALLDIR"/usr/bin/fuser   "$UB_INSTALLDIR"/bin/
+ln -s ../../bin/fuser "$UB_INSTALLDIR"/usr/bin/
+mv "$UB_INSTALLDIR"/usr/bin/killall "$UB_INSTALLDIR"/bin/
+ln -s ../../bin/killall "$UB_INSTALLDIR"/usr/bin/

@@ -1,0 +1,13 @@
+diff -Naur orig/src-qt5/OS-detect.pri patched/src-qt5/OS-detect.pri
+--- orig/src-qt5/OS-detect.pri	2017-11-25 04:08:44.780868603 +0100
++++ patched/src-qt5/OS-detect.pri	2017-11-25 04:22:00.342247709 +0100
+@@ -84,6 +84,9 @@
+     equals(LINUX_DISTRO,"Ubuntu"){
+       INCLUDEPATH *= /usr/include/poppler/qt5
+     }
++    equals(LINUX_DISTRO,"UHU-Linux"){
++      INCLUDEPATH *= /usr/include/poppler/qt5
++    }
+   }else{
+     OS="Unknown";
+   }

@@ -1,0 +1,70 @@
+diff -Naur orig/src/master/master.c patched/src/master/master.c
+--- orig/src/master/master.c	2012-03-09 15:57:39.000000000 +0100
++++ patched/src/master/master.c	2013-03-18 13:38:49.289188819 +0100
+@@ -177,6 +177,8 @@
+ 
+ #include <sys_defs.h>
+ #include <sys/stat.h>
++#include <sys/types.h>
++#include <sys/wait.h>
+ #include <syslog.h>
+ #include <signal.h>
+ #include <stdlib.h>
+@@ -255,7 +257,34 @@
+     ARGV   *import_env;
+     int     wait_flag = 0;
+     int     monitor_fd = -1;
+-
++    pid_t pid;
++    int pipefd[2];
++    char buf[1];
++    int status;
++    int do_fork = getenv("_POSTFIX_FORK");
++
++    if (do_fork) {
++      if (pipe(pipefd) < 0)
++        exit(1);
++      pid = fork();
++      if (pid > 0) {
++        close(pipefd[1]);
++        if (read(pipefd[0], &buf, 1) != 1) {
++          waitpid(pid, &status, 0);
++          if (WIFEXITED(status))
++            exit(WEXITSTATUS(status));
++          else if (WIFSIGNALED(status))
++            exit(128 + WTERMSIG(status));
++          else
++            exit(1);
++        }
++        exit(0);
++      } else if (pid == 0) {
++        close(pipefd[0]);
++      } else if (pid < 0) {
++        exit(1);
++      }
++    }
+     /*
+      * Fingerprint executables and core dumps.
+      */
+@@ -298,7 +327,8 @@
+      * of this we have to close descriptors > 2, and pray that doing so does
+      * not break things.
+      */
+-    closefrom(3);
++    dup2(pipefd[1], 3);
++    closefrom(4);
+ 
+     /*
+      * Initialize logging and exit handler.
+@@ -461,6 +491,11 @@
+ 	msg_fatal("cannot update lock file %s: %m", vstring_str(lock_path));
+     close_on_exec(vstream_fileno(lock_fp), CLOSE_ON_EXEC);
+ 
++    if (do_fork) {
++      write(3, "p", 1); /* pipefd[1] */
++      close(3); /* pipefd[1] */
++    }
++
+     /*
+      * Lock down the Postfix-writable data directory.
+      */

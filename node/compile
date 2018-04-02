@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+rm -rf tools/scons
+mkdir tools/scons
+ln -s /usr/bin/scons tools/scons/scons.py
+
+./configure \
+	--prefix=/usr \
+	--shared-zlib \
+	--shared-openssl \
+	--shared-cares
+ub_make

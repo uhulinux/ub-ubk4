@@ -1,0 +1,186 @@
+diff -urN xzoom-0.3.orig/xzoom.c xzoom-0.3/xzoom.c
+--- xzoom-0.3.orig/xzoom.c	Mon Dec  3 20:47:49 2001
++++ xzoom-0.3/xzoom.c	Mon Dec  3 20:48:15 2001
+@@ -26,6 +26,8 @@
+                           optimized scaling routines
+                           use memcpy() instead of memmove() ;-)
+                           some other minor changes/fixes
++Egmont Koblinger          Added XSHM auto detection,
++                          -shm, -noshm and -autoshm option
+ */
+ 
+ #include <stdio.h>
+@@ -82,6 +84,9 @@
+ #define MAGX	MAG				/* horizontal magnification */
+ #define MAGY	MAG				/* vertical magnification */
+ 
++int use_xshm = 1;
++int force_xshm = 0;
++
+ int xgrab, ygrab;				/* where do we take the picture from */
+ 
+ int magx = MAGX;
+@@ -131,7 +136,7 @@
+ 
+ 	for(i = 0; i < 2; i++) {
+ 
+-#ifdef XSHM
++if (use_xshm) { /*#ifdef XSHM*/
+ 		ximage[i] = XShmCreateImage(dpy,
+ 			DefaultVisualOfScreen(scr),
+ 			DefaultDepthOfScreen(scr),
+@@ -167,11 +172,15 @@
+ 		ximage[i]->data = shminfo[i].shmaddr;
+ 		shminfo[i].readOnly = False;
+ 
+-		XShmAttach(dpy, &shminfo[i]);
+-		XSync(dpy, False);
++		if (XShmAttach(dpy, &shminfo[i]) || force_xshm) {
++			XSync(dpy, False);
+ 
+-		shmctl(shminfo[i].shmid, IPC_RMID, 0);
+-#else
++			shmctl(shminfo[i].shmid, IPC_RMID, 0);
++		} else {
++			use_xshm = 0;
++		}
++}
++if (!use_xshm) { /*#else*/
+ 		char *data;
+ 		data = malloc(BitmapUnit(dpy) / 8 * width[i] * height[i]);
+ 
+@@ -186,7 +195,7 @@
+ 			exit(-1);
+ 		}
+ 
+-#endif /* XSHM */
++} /*#endif*/ /* XSHM */
+ 	}
+ 	created_images = True;
+ }
+@@ -199,12 +208,12 @@
+ 		return;
+ 
+ 	for(i = 0; i < 2; i++) {
+-#ifdef XSHM
++if (use_xshm) { /*#ifdef XSHM*/
+ 		XShmDetach(dpy, &shminfo[i]);	/* ask X11 to detach shared segment */
+ 		shmdt(shminfo[i].shmaddr);		/* detach it ourselves */
+-#else
++} else { /*#else*/
+ 		free(ximage[i]->data);
+-#endif
++} /*#endif*/
+ 		ximage[i]->data = NULL;			/* remove refrence to that address */
+ 		XDestroyImage(ximage[i]);		/* and destroy image */
+ 	}
+@@ -217,6 +226,9 @@
+ 	fprintf(stderr, "Usage: %s [ args ]\n"
+ 		"Command line args:\n"
+ 		"-display displayname\n"
++		"-shm\n"
++		"-noshm\n"
++		"-autoshm\n"
+ 		"-mag magnification [ magnification ]\n"
+ 		"-geometry geometry\n"
+ 		"-source geometry\n"
+@@ -346,6 +358,22 @@
+ 			continue;
+ 		}
+ 
++		if(!strcmp(argv[0], "-shm")) {
++			force_xshm = 1;
++			use_xshm = 1;
++			continue;
++		}
++		if(!strcmp(argv[0], "-noshm")) {
++			force_xshm = 0;
++			use_xshm = 0;
++			continue;
++		}
++		if(!strcmp(argv[0], "-autoshm")) {
++			force_xshm = 0;
++			use_xshm = 1;
++			continue;
++		}
++
+ 		if(!strcmp(argv[0], "-mag")) {
+ 			++argv; --argc;
+ 
+@@ -793,14 +821,14 @@
+ 
+ 		}
+ 
+-#ifdef XSHM
++if (use_xshm) { /*#ifdef XSHM*/
+ 		XShmGetImage(dpy, RootWindowOfScreen(scr), ximage[SRC],
+ 			xgrab, ygrab, AllPlanes);
+-#else
++} else { /*#else*/
+ 		XGetSubImage(dpy, RootWindowOfScreen(scr),
+ 			xgrab, ygrab, width[SRC], height[SRC], AllPlanes,
+ 			ZPixmap, ximage[SRC], 0, 0);
+-#endif
++} /*#endif*/
+ #ifdef FRAME
+ 		if(buttonpressed) {	/* show the frame */
+ 			DRAW_FRAME();
+@@ -815,11 +843,11 @@
+ 		else if (depth <= 8*sizeof(int))
+ 			scale32();
+ 
+-#ifdef XSHM
++if (use_xshm) { /*#ifdef XSHM*/
+ 		XShmPutImage(dpy, win, gc, ximage[DST], 0, 0, 0, 0, width[DST], height[DST], False);
+-#else
++} else { /*#else*/
+ 		XPutImage(dpy, win, gc, ximage[DST], 0, 0, 0, 0, width[DST], height[DST]);
+-#endif
++} /*#endif*/
+ 		if(set_title) {
+ 			if(magx == magy && !flipx && !flipy && !flipxy)
+ 				sprintf(title, "%s x%d", progname, magx);
+diff -urN xzoom-0.3.orig/xzoom.man xzoom-0.3/xzoom.man
+--- xzoom-0.3.orig/xzoom.man	Mon Dec  3 20:47:49 2001
++++ xzoom-0.3/xzoom.man	Mon Dec  3 20:48:15 2001
+@@ -9,6 +9,7 @@
+ [ \-display \fIdisplayname\fP ] [ \-mag \fImag\fP [ \fImag\fP ] ]
+ [ \-x ] [ \-y ] [ \-xy ]
+ [ \-geometry \fIgeometry\fP ] [ \-source \fIgeometry\fP ]
++[ \-shm ] [ \-noshm ] [ \-autoshm ]
+ .SH OPTIONS
+ .LP
+ .TP 5
+@@ -38,6 +39,16 @@
+ The dimensions of this area are multiplied by the magnification to
+ get the size of \fBxzoom\fR's window. If these dimensions are given
+ separately (by use of \-geometry ) then an error is reported.
++.TP 5
++.B \-shm
++Force XSHM extension.
++.TP 5
++.B \-noshm
++Disable XSHM extension.
++.TP 5
++.B \-autoshm
++Try to autodetect if XSHM is available. This is the default. Unfortunately
++this is not perfect, sometimes you need to manually give \-noshm.
+ .br
+ .SH DESCRIPTION
+ .IR Xzoom
+@@ -145,14 +156,7 @@
+ delays would feel like poor response to user commands.
+ .LP 5
+ \(dg
+-For best performance the shared memory extension for X11 is
+-used. Xzoom will fail if it is compiled to use XSHM and its
+-display is not on the local host.
+-.LP 5
+-\(dg
+-The Ximage data is accessed directly, in a way which may
+-not be portable. Xzoom will not run with display depth other
+-than 8 bits per pixel.
++Auto detection of XSHM is far from perfect.
+ .LP 5
+ \(dg
+ Xzoom is given with no warranty. It was tested only under

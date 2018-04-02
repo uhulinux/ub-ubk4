@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+install Install/aumix "$UB_INSTALLDIR"/usr/bin/gaumix
+
+# Az xaumix elég felejthető, mi több, nem működik.
+rm "$UB_INSTALLDIR"/usr/bin/xaumix

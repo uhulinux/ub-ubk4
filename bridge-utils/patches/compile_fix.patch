@@ -1,0 +1,11 @@
+diff -urN bridge-utils-1.5.orig/libbridge/libbridge.h bridge-utils-1.5/libbridge/libbridge.h
+--- bridge-utils-1.5.orig/libbridge/libbridge.h	2011-03-29 02:52:54.000000000 +0200
++++ bridge-utils-1.5/libbridge/libbridge.h	2014-04-24 08:01:11.539023113 +0200
+@@ -21,6 +21,7 @@
+ 
+ #include <sys/socket.h>
+ #include <linux/if.h>
++#include <netinet/ip6.h>
+ #include <linux/if_bridge.h>
+ 
+ /* defined in net/if.h but that conflicts with linux/if.h... */

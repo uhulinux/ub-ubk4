@@ -1,0 +1,17 @@
+## Description: Set the pulse media role.
+## Origin: upstream, no
+## Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gnomeradio/+bug/1079573
+## Author: Pojar George <geoubuntu@gmail.com> 
+## Forwarded: no
+Index: gnomeradio-1.8/src/gui.c
+===================================================================
+--- gnomeradio-1.8.orig/src/gui.c
++++ gnomeradio-1.8/src/gui.c
+@@ -1248,6 +1248,7 @@ int main(int argc, char* argv[])
+ 
+ 	gtk_init(&argc, &argv);
+ 	gtk_window_set_default_icon_name("gnomeradio");
++	g_setenv("PULSE_PROP_media.role", "production", TRUE);
+ 	/* Main app */
+ 	main_visible = FALSE;
+ 	app = gnome_radio_gui();

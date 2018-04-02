@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+ub_install
+cp $UB_INSTALLDIR/usr/share/calamares/settings.conf $UB_INSTALLDIR/usr/share/calamares/settings.conf.net
+cp $UB_INSTALLDIR/usr/share/calamares/modules/welcome.conf $UB_INSTALLDIR/usr/share/calamares/modules/welcome.conf.net
+cp $UB_INSTALLDIR/usr/share/calamares/modules/packages.conf $UB_INSTALLDIR/usr/share/calamares/modules/packages.conf.net
+
+rm -Rf $UB_INSTALLDIR/usr/include
+rm -Rf $UB_INSTALLDIR/usr/lib/cmake

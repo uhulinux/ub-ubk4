@@ -1,0 +1,12 @@
+diff -Naur lde.orig/src/swiped/cnews/getdate.y lde/src/swiped/cnews/getdate.y
+--- lde.orig/src/swiped/cnews/getdate.y	2003-12-07 02:35:53.000000000 +0100
++++ lde/src/swiped/cnews/getdate.y	2005-12-13 19:37:35.000000000 +0100
+@@ -20,6 +20,8 @@
+ static time_t timezone = 0;
+ #endif
+ 
++#define daylight lde_daylight
++
+ #define daysec (24L*60L*60L)
+ 
+ 	static int timeflag, dateflag, dayflag, relflag;

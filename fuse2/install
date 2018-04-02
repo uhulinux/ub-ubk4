@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+export DESTDIR=${UB_INSTALLDIR}
+ub_install
+# Remove init script in wrong path
+# Don't add our own for now, as fusectl fs oopses on 2.6.18
+rm -r ${UB_INSTALLDIR}/etc/init.d
+
+# remove udev rules (is in the udev package}
+rm -rf ${UB_INSTALLDIR}/etc/udev
+
+# static device nodes are handled by udev
+rm -r ${UB_INSTALLDIR}/dev
+
+# part of fuse-common package
+rm ${UB_INSTALLDIR}/usr/share/man/man8/mount.fuse.8 ${UB_INSTALLDIR}/usr/bin/mount.fuse

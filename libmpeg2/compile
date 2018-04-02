@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+# A -O3 veszélyes
+ub_replace -O3 -O2 configure
+ub_replace -O3 -O2 vc++/Makefile.in
+
+ub_compile

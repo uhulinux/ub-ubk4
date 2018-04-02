@@ -1,0 +1,25 @@
+diff -Naur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2013-08-13 20:41:54.000000000 +0200
++++ mod/Makefile.am	2013-08-22 21:09:56.000000000 +0200
+@@ -4,7 +4,6 @@
+ 
+ 
+ bin_PROGRAMS = xye
+-xye_LDFLAGS = 
+ 
+ 
+ docedir = $(datadir)/@PACKAGE@
+diff -Naur orig/src/editorsave.cpp mod/src/editorsave.cpp
+--- orig/src/editorsave.cpp	2012-09-15 22:21:06.000000000 +0200
++++ mod/src/editorsave.cpp	2013-08-22 21:12:05.000000000 +0200
+@@ -616,7 +616,9 @@
+     file << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+     file << "<pack>\n<name>"<< StripXML(editorboard::filetitle) <<"</name><author>"<< StripXML(editorboard::author) <<"</author>\n<description>"<< StripXML(editorboard::description) <<"</description>\n";
+     
+-    for (int i=first; i<editorboard::CountLevels(); i++) {
++    int i;
++    for (i=first; i<editorboard::CountLevels(); i++) {
++
+         editorboard::LoadLevelNumber(board, i);
+         file << "\n<level>\n";
+         file << "<title>"<< StripXML(board->title) <<"</title>\n";

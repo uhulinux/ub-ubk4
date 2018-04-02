@@ -1,0 +1,188 @@
+
+gtkdialog [--help | -h ] [--version | -v ] [--program | -p <variable> ] 
+          [--file | -f [filename] ]
+
+
+Célja: A gtkdialog célja, hogy egyszerû és hatékony programozási eszközt
+       biztosítson. Bármely posix héjprogram és az Xwindow felület között.  
+
+
+
+
+Parancssori paraméterek:
+
+  --help    | -h	     Rövid leírás a programról.
+  --program | -p <variable>  A lefuttatandó programot a "variable" nevü
+			     környezeti változóban keresi.
+  --file    | -f [filename]  A lefuttatandó programot a "filename" nevü 
+			     állományból tölti be. Amennyiben az állománynevet			     
+			     elhagyjuk alkalmazható futtatható file készítésre:
+			     #!/usrb/bin/gtkdialog -f
+			     sorral kezdve az állományt.
+  --stdin   | -s	     A végrehajtandó utasításlistát a szabványos 
+			     bemenetrõl olvassa.
+
+
+Kimeneti értékek:
+
+    A gtkdialog befelyezõdésekor a szabványos kimenetre írja a programozó által 
+  definiált belsõ változónév és érték párokat a következõ formátumban:
+  
+  Változónév1="érték1"\n
+  Változónév2="érték2"\n
+	.
+	.
+	.           
+  EXIT="gombérték"
+  
+    A kimeneti állapot 0 ha a program sikeresen lefutott; 1 ha hiba lépett fel
+  ilyenkor a változóértékek nem kerülnek kiírásra, a hibaüzenet szövege pedig 
+  a szabványos kimenetre kerül.
+    Ha a felhasználó az ablakkezelõ eszközeivel bezárja a gtkdialog 
+  képernyõablakát, a gtkdialog futása megszakad, a változó értékek kiíratása
+  az EXIT="user-break" sorral zárul. 
+    
+
+Az alkalmazott parancsnyelv rövid leírása
+
+    A gtkdialog program egy belsõ nyelven definiált képernyõtervet jelenít meg.
+  A kérenyõ felépítésekor a következõkben ismertetett elemeket alkalmazhatjuk.  
+  A rendelkezésre álló elemek és a futási környezet között interakciót az 
+  elemekhez rendelt jellemzõk segítségével szabályozhatjuk. A nyelv lehetõséget 
+  biztosít az elemek egymásba ágyazására. nyelv szerkezete megengedi a jobb 
+  érthetõség érdekében aképelemek sorokra tördelését, és a szóközzel, 
+  tabulátorral való pozicionálást is. 
+			     
+
+Keret típusok: 
+
+   Az alább felsorolt kerettípusok mindegyikének legalább egy másik keretet, 
+ vagy egy (vagy több) képelemet tartalmaznia kell. A kereten belül az elemek
+ sorrendje definiálja a megjelenítéskori fentrõl-le illetve balról-jobbra 
+ elrendezést.  
+
+  <vbox> .. Képelem(ek) | Keret .. </vbox>  
+    "Függõleges Doboz" a keret elemeit függõlegesen egymás alatt helyezi el.
+    
+  <hbox> .. Képelemek | Keret .. </hbox>
+    "Vízszintes doboz" a keret elemeit vízszintesen egymás mellet helyezi el
+
+  <frame> | <frame text> .. Képelemek | Keret .. </frame>
+    "Képkeret" Egy speciális "Függõleges Doboz"-t valósít meg: 
+        - bekertetezi a doboz területét
+	- amennyiben a "frame" szót egyébb karakterek követik a ">" jelig,
+	 akkor ezek a keret címeként a felsõ határoló vonalon jelennek meg 
+
+
+Képelemek listája:
+
+   Minden képelem legalább egy attributumot tartalmazzon! Az attributumok 
+ nélküli képelemek is megjelennek a képernyõn, de visszatérési értéket nem 
+ szolgáltatnak, mivel a "Változónév" attributum azonosítja a shell számára
+ az adott képelemet.
+     
+
+  <title> .. Attributum(ok) .. </title>
+    "Cím" a gtk programablak címét állítja be. (pillanatnyilag még nem üzemel!)
+
+  <text> .. Attributum(ok) ..  </text> 
+    "Szöveg" Egy konstans szöveget jelenít meg, a "cimke <label>" attributum
+      tartalma alapján.
+    
+  <entry> .. Attributum(ok) .. </entry>
+    "Bevitelimezõ" egysoros adatbeviteli mezõ. A "változónév <variable>" 
+      attributum által meghatározott környezetiváltozó tartalmát lehet 
+      módosítani. A kiindulási érték az "alapértelmezett <default>" 
+      attributmból. Ha ez nem létezik akkor az adott környezeti változó 
+      eredeti értéke kerül megjelenítésre. A megjelenítés módját (pl.:
+      normál, csillagokkal rejtett... ) a "Megjelenítés (visible)"
+      attributum befolyásolja. (alapértelmezett a normál megjelenítés 
+      választható a <visible>Password</visible>)
+      
+  <button> .. Attributum(ok) .. </button>	
+    "Nyomógomb" A "Cimke <label>" attributum szövegével megjelenít egy 
+      nyomógombot. A gomb lenyomásakor az "EXIT" kimeneti váltózó értékét
+      az "Alapértelmezett <default>" attributum értékére állítja be, majd
+      megszakítja a program futását és minden környezeti változóját declare
+      formátumban felsorolja a szabvány kimeneten. 
+
+  <checkbox> .. Attributum(ok) ..	</checkbox>
+    "Jelölõnégyzet" A "Cimke <label>" attributum szövege elõtt megjelenít egy
+      kiválasztási lehetõséget, amennyiben ezt beikszeljük a "változónév 
+      <variable>" attributum által meghatározott változó visszatérésiértékét
+      "true"-re állítja különben az érték "false".  Az "alapértelmezett <default>"
+      attributum "true" illetve "false", vagy a környezeti változó alapértéke a
+      kezdeti megjelenítés alapja.
+  
+  <radiobutton> | <radio> .. Attributum(ok) .. </radiobutton> | </radio>
+    "Választógomb" Mûködése és paraméterei azonosak a "Jelölõnégyzet 
+      <checkbox>" képelem adataival. A fõ különbség az, hogy az azonos 
+      keretben lévõ választógombokból mindig csak az utolsónak kiválasztott
+      változó lessz "true" az összes többi "false" értéket kap.
+
+  <list> .. Attributum(ok) .. </list>
+    "Lista" Egy oszlopos listát jelenít meg. A lista elemeit a "Bemenet <input>"
+      attributum család valamely tagja szolgáltatja. A kiválasztott tétel a 
+      "Változónév <variable>" attributum által definiált változóba kerül.
+
+  <table> .. Attributum(ok) .. </table>
+    "Táblázat" Többoszlopos, fejléccel ellátott listát jelenít meg. A fejléc 
+      elemeit a "Cimke <label>" attributum adja, az oszlop határokat a 
+      "mezõhatároló <ifs>" attributum definiálja A lista elemeit a "Bemenet 
+      <input>" attributum család valamely tagja szolgáltatja. A kiválasztott 
+      tétel a "Változónév <variable>" attributum által definiált változóba 
+      kerül.
+
+Lehetséges jellemzõk (attributumok) listája:
+
+    Az attributumok jelentése általában képelemenként változik, de logikailag
+  minden képelemnél hasonló funkciót töltenek be. A fentieknek megfelelõen 
+  nyelvtanuk, érték készletük is eltér. Minden képelem leírásánál jelölöm a 
+  megvalósított attributumokat. Amennyiben lehetséges ismertetem az egyes 
+  jellemzõk általános célját, paramétereit.
+
+
+[1]  
+  <label>	 szöveg	</label>
+    "Cimke"  A képelemhez tartozó megjelenítendõ szövegek.
+[2]
+  <default>érték</default>
+    "Alapértelmezett" A képelem alapértelmezett iniciáló értéke. (általában a
+      képelemheztartozó változó kezdeti értékét állítja be.
+
+[3]
+  <visible>érték</visible>
+    "Megjelenítés" Jelentése képelemenként eltérõ  
+
+[4]  
+  <variable> Vname </variable>
+    "Változónév" Mindenesetben a megadott "Vname" lessz a kimeneti változó neve.
+      A legtöbb esetben a képelemeknél a "Változonév" elhagyása azt eredményezi,
+      hogy a képelem megjelenik ugyan, de annak tartalma elérhetetlen / hatástalan
+      marad.
+
+[5]
+  <height>szám</height>
+    "Magasság" Adott képernyõelem abszolult magassága képpontokban mérve.
+
+[6]
+  <width>szám</width>
+    "Szélesség" Adott képernyõelem abszolult szélessége képpontokban mérve.
+
+[7]
+  <input>command: Statement </input>
+  <input>file: Fname </input>
+  <input>stdin: </input>
+  <input> Statement </input>
+    "Bemenet" Táblázatok és listák adatforrásának meghatározására szolgáló 
+      jellemzõcsalád. Alapértelmezetten - paraméter nélkül -  küsõ programként
+      próbálja alkalmazni a rendszer.
+
+[8]     
+  <ifs>szöveg</ifs>
+    "Mezõhatároló" A szöveg minden egyes karakter mezõhatároló karakterként
+     kerül értelmezésre ahol ennek jelentõsége van.
+     
+[9]
+  <action>Statement</action>
+    "Esemény"

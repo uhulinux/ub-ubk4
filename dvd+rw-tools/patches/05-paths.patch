@@ -1,0 +1,14 @@
+diff -Naur dvd+rw-tools-5.21.4.10.8.orig/Makefile.m4 dvd+rw-tools-5.21.4.10.8/Makefile.m4
+--- dvd+rw-tools-5.21.4.10.8.orig/Makefile.m4	2004-07-23 12:04:39.000000000 +0200
++++ dvd+rw-tools-5.21.4.10.8/Makefile.m4	2006-02-09 17:50:20.000000000 +0100
+@@ -150,8 +150,8 @@
+ 
+ LINK.o=$(LINK.cc)
+ 
+-prefix?=/usr/local
+-manprefix?=$(shell case $(prefix) in (*/usr/?*) echo $(prefix)/man ;; (*) echo $(prefix)/share/man ;; esac)
++prefix?=/usr
++manprefix?=$(prefix)/share/man
+ 
+ bin_mode?=0755	# yes, default is *no* set-uid
+ minus_o:=$(shell [[ `id -u` == 0 ]] && echo "-o root")

@@ -1,0 +1,47 @@
+# Copyright (C) 2008,  Darren Salt <linux@youmustbejoking.demon.co.uk>
+# See: #485061
+
+diff -ur fenix-0.92a.dfsg1.orig/fxi/src/strings.c fenix-0.92a.dfsg1/fxi/src/strings.c
+--- fenix-0.92a.dfsg1.orig/fxi/src/strings.c	2008-06-07 21:34:32.000000000 +0100
++++ fenix-0.92a.dfsg1/fxi/src/strings.c	2008-06-07 21:39:15.000000000 +0100
+@@ -108,9 +108,9 @@
+     string_used = 0 ;
+ 
+     string_ptr_allocated = 1024 ;
+-    string_ptr = (char **) malloc (1024 * sizeof(char *)) ;
+-    string_uct = (int *) malloc (1024 * sizeof(int)) ;
+-    string_dontfree = (char *) malloc (1024 * sizeof(char)) ;
++    string_ptr = (char **) calloc (1024, sizeof(char *)) ;
++    string_uct = (int *) calloc (1024, sizeof(int)) ;
++    string_dontfree = (char *) calloc (1024, sizeof(char)) ;
+ 
+     /* Create an empty string with ID 0 */
+     string_mem[0] = 0 ;
+@@ -131,14 +131,23 @@
+ 
+ static void string_alloc (int count)
+ {
+-    string_ptr_allocated += count ;
++    int new_allocated = string_ptr_allocated + count ;
+ 
+-    string_ptr = (char **) realloc (string_ptr, string_ptr_allocated * sizeof(char *)) ;
+-    string_uct = (int *) realloc (string_uct, string_ptr_allocated * sizeof(int)) ;
+-    string_dontfree = (char *) realloc (string_dontfree, string_ptr_allocated * sizeof(char)) ;
++    string_ptr = (char **) realloc (string_ptr, new_allocated * sizeof(char *)) ;
++    string_uct = (int *) realloc (string_uct, new_allocated * sizeof(int)) ;
++    string_dontfree = (char *) realloc (string_dontfree, new_allocated * sizeof(char)) ;
+ 
+     if (!string_ptr || !string_uct || !string_dontfree)
+         gr_error (_("string_alloc: out of memory\n")) ;
++
++    if (count > 0)
++    {
++        memset (string_ptr + string_ptr_allocated, 0, count * sizeof (char *));
++        memset (string_uct + string_ptr_allocated, 0, count * sizeof (int));
++        memset (string_dontfree + string_ptr_allocated, 0, count * sizeof (char));
++    }
++
++    string_ptr_allocated = new_allocated;
+ }
+ 
+ /****************************************************************************/

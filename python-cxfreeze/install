@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+python3 setup.py install --root="$UB_INSTALLDIR"
+mv "${UB_INSTALLDIR}"/usr/bin/cxfreeze "${UB_INSTALLDIR}"/usr/bin/cxfreeze3
+mv "${UB_INSTALLDIR}"/usr/bin/cxfreeze-quickstart "${UB_INSTALLDIR}"/usr/bin/cxfreeze3-quickstart
+
+python setup.py install --root="$UB_INSTALLDIR"

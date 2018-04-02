@@ -1,0 +1,1 @@
+urllist ftp://ftp.fu-berlin.de/pc/msdos/games/idgames/idstuff/doom/ | splitver '^doom([0-9]+)s.zip$'| sed -r ':L;s=\b([0-9]+)([0-9]{1})\b=\1\.\2=g;t L' | sort -V | tail -n 1

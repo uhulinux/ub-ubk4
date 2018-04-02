@@ -1,0 +1,26 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+update_mime_database ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Generating shared MIME database ..."
+	update-mime-database /usr/share/mime >/dev/null
+	true > /var/lib/uhu-pkg/shared-mime-info
+	while [ ! /var/lib/uhu-pkg/shared-mime-info -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/shared-mime-info -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/shared-mime-info
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ -f /var/lib/uhu-pkg/shared-mime-info -a /var/lib/uhu-pkg/shared-mime-info -nt /var/lib/dpkg/info ]; then
+	exit 0
+fi
+
+if [ "$1" = "shared-mime-info" -o "$1" = "+" ]; then
+	update_mime_database
+elif grep -q '^/usr/share/mime/' /var/lib/dpkg/info/"$1".list; then
+	update_mime_database
+fi

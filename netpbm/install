@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+make package pkgdir="$UB_COMPILEDIR"/Package
+
+# az installnetpbm.pl nem UHU-kompatíbilis, manuálisan telepítünk
+
+cp -a -r "$UB_COMPILEDIR"/Package/bin "$UB_INSTALLDIR"/usr/
+cp -a -r "$UB_COMPILEDIR"/Package/include "$UB_INSTALLDIR"/usr/
+cp -a -r "$UB_COMPILEDIR"/Package/lib "$UB_INSTALLDIR"/usr/
+cp -a -r "$UB_COMPILEDIR"/Package/link/* "$UB_INSTALLDIR"/usr/lib/
+# cp -a -r "$UB_COMPILEDIR"/Package/man "$UB_INSTALLDIR"/usr/share/
+
+rm -rf "$UB_INSTALLDIR"/usr/bin/doc.url
+rm -rf "$UB_INSTALLDIR"/usr/share/man/web

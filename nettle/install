@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+
+#theese libraries need execution bit
+chmod +rwx "$UB_INSTALLDIR"/usr/lib/lib{hogweed,nettle}.so.*
+# ln -sf libhogweed.so.4 ${UB_INSTALLDIR}/usr/lib/libhogwed.so.2
+# ln -sf libnettle.so.6 ${UB_INSTALLDIR}/usr/lib/libnettle.so.4

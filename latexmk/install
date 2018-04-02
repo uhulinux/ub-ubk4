@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+# We would like to invoke perl binary directly so change it:
+ub_replace "#\!/usr/bin/env perl" "#\!/usr/bin/perl -w" latexmk.pl
+
+# create necessary directory
+mkdir -p "$UB_INSTALLDIR"/usr/share/doc/latexmk
+
+# install the files
+install -m 0755 -p latexmk.pl "$UB_INSTALLDIR"/usr/bin/latexmk
+install -m 0644 -p latexmk.1 "$UB_INSTALLDIR"/usr/share/man/man1
+install -m 0644 -p latexmk.pdf "$UB_INSTALLDIR"/usr/share/doc/latexmk
+cp -a extra-scripts "$UB_INSTALLDIR"/usr/share/doc/latexmk/
+cp -a example_rcfiles "$UB_INSTALLDIR"/usr/share/doc/latexmk/

@@ -1,0 +1,19 @@
+diff -Naurdp a/e2fsck/unix.c b/e2fsck/unix.c
+--- a/e2fsck/unix.c	2012-05-12 00:36:09.000000000 +0200
++++ b/e2fsck/unix.c	2012-05-15 20:50:54.936116729 +0200
+@@ -396,6 +396,7 @@ static void check_if_skip(e2fsck_t ctx)
+ 	}
+ 
+ 	/* Print the summary message when we're skipping a full check */
++	if (getenv("FSCK_QUIET_IF_CLEAN") == NULL)
+ 	log_out(ctx, _("%s: clean, %u/%u files, %llu/%llu blocks"),
+ 		ctx->device_name,
+ 		fs->super->s_inodes_count - fs->super->s_free_inodes_count,
+@@ -1184,6 +1185,7 @@ int main (int argc, char *argv[])
+ 
+ 	init_resource_track(&ctx->global_rtrack, NULL);
+ 	if (!(ctx->options & E2F_OPT_PREEN) || show_version_only)
++		if (getenv("FSCK_QUIET_IF_CLEAN") == NULL)
+ 		log_err(ctx, "e2fsck %s (%s)\n", my_ver_string,
+ 			 my_ver_date);
+ 

@@ -1,0 +1,39 @@
+Index: b/src/prefs.c
+===================================================================
+--- a/src/prefs.c	2012-12-03 10:14:53.066899862 +0000
++++ b/src/prefs.c	2012-12-03 10:14:53.262899857 +0000
+@@ -15,7 +15,7 @@
+  */
+ 
+ #include <gconf/gconf-client.h>
+-#include <profiles/audio-profile-choose.h>
++#include <libgnome-media-profiles/audio-profile-choose.h>
+ #include <string.h>
+ #include "config.h"
+ #include "prefs.h"
+Index: b/src/rec_tech.c
+===================================================================
+--- a/src/rec_tech.c	2012-12-03 10:14:50.118899950 +0000
++++ b/src/rec_tech.c	2012-12-03 10:14:53.266899856 +0000
+@@ -17,7 +17,7 @@
+ 
+ #include "rec_tech.h"
+ #include <gnome.h>
+-#include <profiles/audio-profile.h>
++#include <libgnome-media-profiles/audio-profile.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+Index: b/configure.in
+===================================================================
+--- a/configure.in	2012-12-03 10:14:50.118899950 +0000
++++ b/configure.in	2012-12-03 10:14:53.266899856 +0000
+@@ -23,7 +23,7 @@
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", GETTEXT_PACKAGE)
+ 
+ 
+-PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.12 gconf-2.0 >= 2.12 gnome-vfs-2.0 >= 2.12 gnome-media-profiles >= 2.12)
++PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.12 gconf-2.0 >= 2.12 gnome-vfs-2.0 >= 2.12 libgnome-media-profiles-3.0 >= 3.0)
+ PKG_CHECK_MODULES(GNOME14, libgnomeui-2.0 >= 2.14, GNOME_14="1";echo "yes", GNOME_14="0";echo "no")
+ AC_SUBST(GNOME_CFLAGS)
+ AC_SUBST(GNOME_LIBS)

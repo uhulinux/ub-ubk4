@@ -1,0 +1,15 @@
+diff -Nur orig/internet.c mod/internet.c
+--- orig/internet.c	2008-03-23 14:47:52.000000000 +0100
++++ mod/internet.c	2016-08-03 13:22:51.573290717 +0200
+@@ -3,9 +3,9 @@
+ #include "stdio.h"
+ 
+ // USE HERE THE PROPER DEFINITION FOR THE OS YOU ARE COMPILING DEFLEKTOR ON 
+-#define INTT_WIN // Windows
++//#define INTT_WIN // Windows
+ //#define INTT_MAC // Macintosh
+-//#define INTT_LNX // Linux
++#define INTT_LNX // Linux
+ //#define INTT_OTR // Other
+ 
+ #ifdef INTT_WIN

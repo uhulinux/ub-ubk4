@@ -1,0 +1,21 @@
+#!/bin/sh -eux
+
+ub_compile \
+	--libdir=/lib \
+	--with-shared \
+	--disable-termcap \
+	--with-fallbacks="vt100,ansi,linux,xterm,screen"
+
+mkdir Install
+UB_MAKEINSTALL_PREFIX="$UB_COMPILEDIR"/Install ub_install
+
+# build widec
+ub_compile \
+	--libdir=/lib \
+	--with-shared \
+	--disable-termcap \
+	--enable-widec \
+	--enable-pc-files \
+	--with-pkg-config-libdir=/usr/lib/pkgconfig \
+	--includedir=/usr/include/ncursesw \
+	--with-fallbacks="vt100,ansi,linux,xterm,screen"

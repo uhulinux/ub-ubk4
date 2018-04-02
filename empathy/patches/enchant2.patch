@@ -1,0 +1,12 @@
+diff -Naur orig/libempathy-gtk/empathy-spell.c patched/libempathy-gtk/empathy-spell.c
+--- orig/libempathy-gtk/empathy-spell.c	2017-01-26 03:18:50.000000000 +0100
++++ patched/libempathy-gtk/empathy-spell.c	2018-02-14 23:54:02.435513698 +0100
+@@ -424,7 +424,7 @@
+ 	if (lang == NULL)
+ 		return;
+ 
+-	enchant_dict_add_to_pwl (lang->speller, word, strlen (word));
++	enchant_dict_add (lang->speller, word, strlen (word));
+ }
+ 
+ #else /* not HAVE_ENCHANT */

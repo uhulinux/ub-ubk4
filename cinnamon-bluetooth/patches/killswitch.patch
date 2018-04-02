@@ -1,0 +1,537 @@
+diff -Naur orig/files/usr/share/cinnamon/applets/bluetooth@cinnamon.org/applet.js mod/files/usr/share/cinnamon/applets/bluetooth@cinnamon.org/applet.js
+--- orig/files/usr/share/cinnamon/applets/bluetooth@cinnamon.org/applet.js	2015-10-19 10:37:47.000000000 +0200
++++ mod/files/usr/share/cinnamon/applets/bluetooth@cinnamon.org/applet.js	2015-10-21 22:58:44.000000000 +0200
+@@ -17,17 +17,8 @@
+     CONNECTING: 3
+ }
+ 
+-if (!GnomeBluetooth.hasOwnProperty('KillswitchState')){
+-    ABI=4;
+-}
+-
+-
+-// Override Gettext localization
+-const Gettext = imports.gettext;
+-Gettext.bindtextdomain('cinnamon-bluetooth', '/usr/share/locale');
+-
+-function gettextBT(string) {
+-    return Gettext.dgettext("cinnamon-bluetooth", string);
++ if (!GnomeBluetooth.hasOwnProperty('KillswitchState')){
++     ABI=4;
+ }
+ 
+ function Source() {
+@@ -38,7 +29,7 @@
+     __proto__: MessageTray.Source.prototype,
+ 
+     _init: function() {
+-        MessageTray.Source.prototype._init.call(this, gettextBT("Bluetooth"));
++        MessageTray.Source.prototype._init.call(this, _("Bluetooth"));
+ 
+         this._setSummaryIcon(this.createNotificationIcon());
+     },
+@@ -72,18 +63,18 @@
+     _init: function(source, applet, device_path, name, long_name, uuid) {
+         MessageTray.Notification.prototype._init.call(this,
+                                                       source,
+-                                                      gettextBT("Bluetooth"),
+-                                                      gettextBT("Authorization request from %s").format(name),
++                                                      _("Bluetooth"),
++                                                      _("Authorization request from %s").format(name),
+                                                       { customContent: true });
+         this.setResident(true);
+ 
+         this._applet = applet;
+         this._devicePath = device_path;
+-        this.addBody(gettextBT("Device %s wants access to the service '%s'").format(long_name, uuid));
++        this.addBody(_("Device %s wants access to the service '%s'").format(long_name, uuid));
+ 
+-        this.addButton('always-grant', gettextBT("Always grant access"));
+-        this.addButton('grant', gettextBT("Grant this time only"));
+-        this.addButton('reject', gettextBT("Reject"));
++        this.addButton('always-grant', _("Always grant access"));
++        this.addButton('grant', _("Grant this time only"));
++        this.addButton('reject', _("Reject"));
+ 
+         this.connect('action-invoked', Lang.bind(this, function(self, action) {
+             switch (action) {
+@@ -112,18 +103,18 @@
+     _init: function(source, applet, device_path, name, long_name, pin) {
+         MessageTray.Notification.prototype._init.call(this,
+                                                       source,
+-                                                      gettextBT("Bluetooth"),
+-                                                      gettextBT("Pairing confirmation for %s").format(name),
++                                                      _("Bluetooth"),
++                                                      _("Pairing confirmation for %s").format(name),
+                                                       { customContent: true });
+         this.setResident(true);
+ 
+         this._applet = applet;
+         this._devicePath = device_path;
+-        this.addBody(gettextBT("Device %s wants to pair with this computer").format(long_name));
+-        this.addBody(gettextBT("Please confirm whether the PIN '%s' matches the one on the device.").format(pin));
++        this.addBody(_("Device %s wants to pair with this computer").format(long_name));
++        this.addBody(_("Please confirm whether the PIN '%s' matches the one on the device.").format(pin));
+ 
+-        this.addButton('matches', gettextBT("Matches"));
+-        this.addButton('does-not-match', gettextBT("Does not match"));
++        this.addButton('matches', _("Matches"));
++        this.addButton('does-not-match', _("Does not match"));
+ 
+         this.connect('action-invoked', Lang.bind(this, function(self, action) {
+             if (action == 'matches')
+@@ -145,16 +136,16 @@
+     _init: function(source, applet, device_path, name, long_name, numeric) {
+         MessageTray.Notification.prototype._init.call(this,
+                                                       source,
+-                                                      gettextBT("Bluetooth"),
+-                                                      gettextBT("Pairing request for %s").format(name),
++                                                      _("Bluetooth"),
++                                                      _("Pairing request for %s").format(name),
+                                                       { customContent: true });
+         this.setResident(true);
+ 
+         this._applet = applet;
+         this._devicePath = device_path;
+         this._numeric = numeric;
+-        this.addBody(gettextBT("Device %s wants to pair with this computer").format(long_name));
+-        this.addBody(gettextBT("Please enter the PIN mentioned on the device."));
++        this.addBody(_("Device %s wants to pair with this computer").format(long_name));
++        this.addBody(_("Please enter the PIN mentioned on the device."));
+ 
+         this._entry = new St.Entry();
+         this._entry.connect('key-release-event', Lang.bind(this, function(entry, event) {
+@@ -170,8 +161,8 @@
+         }));
+         this.addActor(this._entry);
+ 
+-        this.addButton('ok', gettextBT("OK"));
+-        this.addButton('cancel', gettextBT("Cancel"));
++        this.addButton('ok', _("OK"));
++        this.addButton('cancel', _("Cancel"));
+ 
+         this.connect('action-invoked', Lang.bind(this, function(self, action) {
+             if (action == 'ok') {
+@@ -201,54 +192,32 @@
+     }
+ }
+ 
+-function MyApplet(metadata, orientation, panel_height, instance_id) {
+-    this._init(metadata, orientation, panel_height, instance_id);
++function MyApplet(metadata, orientation, panel_height) {
++    this._init(metadata, orientation, panel_height);
+ }
+ 
+ MyApplet.prototype = {
+     __proto__: Applet.TextIconApplet.prototype,
+ 
+-    _init: function(metadata, orientation, panel_height, instance_id) {
+-        Applet.TextIconApplet.prototype._init.call(this, orientation, panel_height, instance_id);
++    _init: function(metadata, orientation, panel_height) {        
++        Applet.TextIconApplet.prototype._init.call(this, orientation, panel_height);
+         
+-        try {                                
++        try {
+             this.metadata = metadata;
+             Main.systrayManager.registerRole("bluetooth", metadata.uuid);
+             Main.systrayManager.registerRole("bluetooth-manager", metadata.uuid);
++            
+             this.menuManager = new PopupMenu.PopupMenuManager(this);
+             this.menu = new Applet.AppletPopupMenu(this, orientation);
+             this.menuManager.addMenu(this.menu);            
+             
+             this.set_applet_icon_symbolic_name('bluetooth-disabled');
+-            this.set_applet_tooltip(gettextBT("Bluetooth"));
++            this.set_applet_tooltip(_("Bluetooth"));
+                         
+             GLib.spawn_command_line_sync ('pkill -f "^bluetooth-applet$"');
+             this._applet = new GnomeBluetoothApplet.Applet();
+-            this._killswitch = new PopupMenu.PopupSwitchMenuItem(gettextBT("Bluetooth"), false);
+-            this._applet.connect('notify::killswitch-state', Lang.bind(this, this._updateKillswitch));
+-            this._killswitch.connect('toggled', Lang.bind(this, function() {
+-                let current_state = this._applet.killswitch_state;
+-		if (ABI==6){
+-			if (current_state != GnomeBluetooth.KillswitchState.HARD_BLOCKED &&
+-			    current_state != GnomeBluetooth.KillswitchState.NO_ADAPTER) {
+-			    this._applet.killswitch_state = this._killswitch.state ?
+-				GnomeBluetooth.KillswitchState.UNBLOCKED:
+-			        GnomeBluetooth.KillswitchState.SOFT_BLOCKED;
+-			} else
+-				this._killswitch.setToggleState(false);
+-		} else {
+-			if (current_state != GnomeBluetoothApplet.KillswitchState.HARD_BLOCKED &&
+-			    current_state != GnomeBluetoothApplet.KillswitchState.NO_ADAPTER) {
+-			    this._applet.killswitch_state = this._killswitch.state ?
+-				GnomeBluetoothApplet.KillswitchState.UNBLOCKED:
+-			        GnomeBluetoothApplet.KillswitchState.SOFT_BLOCKED;
+-			} else
+-				this._killswitch.setToggleState(false);
+-		}
+-		global.logError(this._killswitch.state)
+-            }));
+ 
+-            this._discoverable = new PopupMenu.PopupSwitchMenuItem(gettextBT("Visibility"), this._applet.discoverable);
++            this._discoverable = new PopupMenu.PopupSwitchMenuItem(_("Visibility"), this._applet.discoverable);
+             this._applet.connect('notify::discoverable', Lang.bind(this, function() {
+                 this._discoverable.setToggleState(this._applet.discoverable);
+             }));
+@@ -256,14 +225,12 @@
+                 this._applet.discoverable = this._discoverable.state;
+             }));
+ 
+-            this._updateKillswitch();
+-            this.menu.addMenuItem(this._killswitch);
+             this.menu.addMenuItem(this._discoverable);
+             this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+ 
+             this._fullMenuItems = [new PopupMenu.PopupSeparatorMenuItem(),
+-                                   new PopupMenu.PopupMenuItem(gettextBT("Send Files to Device...")),
+-                                   new PopupMenu.PopupMenuItem(gettextBT("Set up a New Device...")),
++                                   new PopupMenu.PopupMenuItem(_("Send Files to Device...")),
++                                   new PopupMenu.PopupMenuItem(_("Set up a New Device...")),
+                                    new PopupMenu.PopupSeparatorMenuItem()];
+             this._hasDevices = false;
+ 
+@@ -287,7 +254,7 @@
+             this._applet.connect('notify::show-full-menu', Lang.bind(this, this._updateFullMenu));
+             this._updateFullMenu();
+ 
+-            this.menu.addSettingsAction(gettextBT("Bluetooth Settings"), 'bluetooth'); 
++            this.menu.addSettingsAction(_("Bluetooth Settings"), 'bluetooth'); 
+ 
+             this._applet.connect('pincode-request', Lang.bind(this, this._pinRequest));
+             this._applet.connect('confirm-request', Lang.bind(this, this._confirmRequest));
+@@ -303,44 +270,7 @@
+     on_applet_clicked: function(event) {
+         this.menu.toggle();        
+     },
+-    
+-   
+-    _updateKillswitch: function() {
+-        let current_state = this._applet.killswitch_state;
+-	let on;
+-	let has_adapter;
+-	let can_toggle;
+-	if (ABI==6){
+-		on = current_state == GnomeBluetooth.KillswitchState.UNBLOCKED;
+-		has_adapter = current_state != GnomeBluetooth.KillswitchState.NO_ADAPTER;
+-		can_toggle = current_state != GnomeBluetooth.KillswitchState.NO_ADAPTER &&
+-			         current_state != GnomeBluetooth.KillswitchState.HARD_BLOCKED;
+-	} else {
+-		on = current_state == GnomeBluetoothApplet.KillswitchState.UNBLOCKED;
+-		has_adapter = current_state != GnomeBluetoothApplet.KillswitchState.NO_ADAPTER;
+-		can_toggle = current_state != GnomeBluetoothApplet.KillswitchState.NO_ADAPTER &&
+-			         current_state != GnomeBluetoothApplet.KillswitchState.HARD_BLOCKED;
+-	}
+-        this._killswitch.setToggleState(on);
+-        if (can_toggle)
+-            this._killswitch.setStatus(null);
+-        else
+-            /* TRANSLATORS: this means that bluetooth was disabled by hardware rfkill */
+-            this._killswitch.setStatus(gettextBT("hardware disabled"));
+-
+-        if (has_adapter)
+-            this.actor.show();
+-        else
+-            this.actor.hide();
+-
+-        if (on) {
+-            this._discoverable.actor.show();
+-            this.set_applet_icon_symbolic_name('bluetooth-active');
+-        } else {
+-            this._discoverable.actor.hide();
+-            this.set_applet_icon_symbolic_name('bluetooth-disabled');
+-        }
+-    },
++
+ 
+     _updateDevices: function() {
+         let devices = this._applet.get_devices();
+@@ -389,7 +319,6 @@
+ 
+         // adopt the new device object
+         item._device = device;
+-        item._connected = device.connected
+         device._item = item;
+ 
+         // update properties
+@@ -424,17 +353,16 @@
+     _buildDeviceSubMenu: function(item, device) {
+         if (device.can_connect) {
+             item._connected = device.connected;
+-            item._connectedMenuitem = new PopupMenu.PopupSwitchMenuItem(gettextBT("Connection"), device.connected);
++            item._connectedMenuitem = new PopupMenu.PopupSwitchMenuItem(_("Connection"), device.connected);
+             item._connectedMenuitem.connect('toggled', Lang.bind(this, function() {
+-                let menuitem = item._connectedMenuitem;
+                 if (item._connected > ConnectionState.CONNECTED) {
+                     // operation already in progress, revert
+                     // (should not happen anyway)
+                     menuitem.setToggleState(menuitem.state);
+-                } else
+-                if (item._connected == ConnectionState.CONNECTED) {
++                }
++                if (item._connected) {
+                     item._connected = ConnectionState.DISCONNECTING;
+-                    menuitem.setStatus(gettextBT("disconnecting..."));
++                    menuitem.setStatus(_("disconnecting..."));
+                     this._applet.disconnect_device(item._device.device_path, function(applet, success) {
+                         if (success) { // apply
+                             item._connected = ConnectionState.DISCONNECTED;
+@@ -445,12 +373,12 @@
+                         }
+                         menuitem.setStatus(null);
+                     });
+-                } else if (item._connected == ConnectionState.DISCONNECTED) {
++                } else {
+                     item._connected = ConnectionState.CONNECTING;
+-                    menuitem.setStatus(gettextBT("connecting..."));
+-                   this._applet.connect_device(item._device.device_path, function(applet, success) {
++                    menuitem.setStatus(_("connecting..."));
++                    this._applet.connect_device(item._device.device_path, function(applet, success) {
+                         if (success) { // apply
+-                           item._connected = ConnectionState.CONNECTED;
++                            item._connected = ConnectionState.CONNECTED;
+                             menuitem.setToggleState(true);
+                         } else { // revert
+                             item._connected = ConnectionState.DISCONNECTED;
+@@ -465,12 +393,12 @@
+         }
+ 
+         if (device.capabilities & GnomeBluetoothApplet.Capabilities.OBEX_PUSH) {
+-            item.menu.addAction(gettextBT("Send Files..."), Lang.bind(this, function() {
++            item.menu.addAction(_("Send Files..."), Lang.bind(this, function() {
+                 this._applet.send_to_address(device.bdaddr, device.alias);
+             }));
+         }
+         if (device.capabilities & GnomeBluetoothApplet.Capabilities.OBEX_FILE_TRANSFER) {
+-            item.menu.addAction(gettextBT("Browse Files..."), Lang.bind(this, function(event) {
++            item.menu.addAction(_("Browse Files..."), Lang.bind(this, function(event) {
+                 this._applet.browse_address(device.bdaddr, event.get_time(),
+                     Lang.bind(this, function(applet, result) {
+                         try {
+@@ -478,9 +406,9 @@
+                         } catch (e) {
+                             this._ensureSource();
+                             this._source.notify(new MessageTray.Notification(this._source,
+-                                 gettextBT("Bluetooth"),
+-                                 gettextBT("Error browsing device"),
+-                                 { body: gettextBT("The requested device cannot be browsed, error is '%s'").format(e) }));
++                                 _("Bluetooth"),
++                                 _("Error browsing device"),
++                                 { body: _("The requested device cannot be browsed, error is '%s'").format(e) }));
+                         }
+                     }));
+             }));
+@@ -488,15 +416,15 @@
+ 
+         switch (device.type) {
+         case GnomeBluetoothApplet.Type.KEYBOARD:
+-            item.menu.addSettingsAction(gettextBT("Keyboard Settings"), 'keyboard');
++            item.menu.addSettingsAction(_("Keyboard Settings"), 'keyboard');
+             break;
+         case GnomeBluetoothApplet.Type.MOUSE:
+-            item.menu.addSettingsAction(gettextBT("Mouse Settings"), 'mouse');
++            item.menu.addSettingsAction(_("Mouse Settings"), 'mouse');
+             break;
+         case GnomeBluetoothApplet.Type.HEADSET:
+         case GnomeBluetoothApplet.Type.HEADPHONES:
+         case GnomeBluetoothApplet.Type.OTHER_AUDIO:
+-            item.menu.addSettingsAction(gettextBT("Sound Settings"), 'sound');
++            item.menu.addSettingsAction(_("Sound Settings"), 'sound');
+             break;
+         default:
+             break;
+@@ -560,7 +488,7 @@
+     }
+ };
+ 
+-function main(metadata, orientation, panel_height, instance_id) {
+-    let myApplet = new MyApplet(metadata, orientation, panel_height, instance_id);
++function main(metadata, orientation, panel_height) {  
++    let myApplet = new MyApplet(metadata, orientation, panel_height);
+     return myApplet;      
+ }
+diff -Naur orig/panels/bluetooth/cc-bluetooth-panel.c mod/panels/bluetooth/cc-bluetooth-panel.c
+--- orig/panels/bluetooth/cc-bluetooth-panel.c	2015-10-19 10:37:47.000000000 +0200
++++ mod/panels/bluetooth/cc-bluetooth-panel.c	2015-10-21 22:57:58.000000000 +0200
+@@ -32,9 +32,7 @@
+ 
+ #include <bluetooth-client.h>
+ #include <bluetooth-utils.h>
+-#include <bluetooth-killswitch.h>
+ #include <bluetooth-chooser.h>
+-#include <bluetooth-plugin-manager.h>
+ 
+ CC_PANEL_REGISTER (CcBluetoothPanel, cc_bluetooth_panel)
+ 
+@@ -52,7 +50,6 @@
+ 	GtkWidget           *chooser;
+ 	char                *selected_bdaddr;
+ 	BluetoothClient     *client;
+-	BluetoothKillswitch *killswitch;
+ 	gboolean             debug;
+ 	GHashTable          *connecting_devices;
+ };
+@@ -106,11 +103,8 @@
+ {
+ 	CcBluetoothPanel *self;
+ 
+-	bluetooth_plugin_manager_cleanup ();
+-
+ 	self = CC_BLUETOOTH_PANEL (object);
+ 	g_clear_object (&self->priv->builder);
+-	g_clear_object (&self->priv->killswitch);
+ 	g_clear_object (&self->priv->client);
+ 
+     if (self->priv->connecting_devices != NULL) {
+@@ -221,16 +215,13 @@
+ 	if (bluetooth_chooser_get_selected_device_info (BLUETOOTH_CHOOSER (self->priv->chooser),
+ 							"proxy", &value) == FALSE) {
+ 		g_warning ("Could not get D-Bus proxy for selected device");
+-		g_free (bdaddr);
+ 		return;
+ 	}
+ 	proxy = g_strdup (g_dbus_proxy_get_object_path (g_value_get_object (&value)));
+ 	g_value_unset (&value);
+ 
+-	if (proxy == NULL) {
+-		g_free (bdaddr);
++	if (proxy == NULL)
+ 		return;
+-	}
+ 
+ 	data = g_new0 (ConnectData, 1);
+ 	data->bdaddr = bdaddr;
+@@ -273,22 +264,7 @@
+ 							"uuids", &value) == FALSE)
+ 		return;
+ 
+-	uuids = (char **) g_value_get_boxed (&value);
+-	list = bluetooth_plugin_manager_get_widgets (bdaddr, (const char **) uuids);
+-	if (list == NULL) {
+-		g_value_unset (&value);
+-		return;
+-	}
+-
+-	container = WID ("additional_setup_box");
+-	for (l = list; l != NULL; l = l->next) {
+-		GtkWidget *widget = l->data;
+-		gtk_box_pack_start (GTK_BOX (container), widget,
+-				    FALSE, FALSE, 0);
+-		gtk_widget_show_all (widget);
+-	}
+-	gtk_widget_show (container);
+-	g_value_unset (&value);
++	return;
+ }
+ 
+ static void
+@@ -423,8 +399,6 @@
+ 
+ 	state = gtk_switch_get_active (GTK_SWITCH (WID ("switch_bluetooth")));
+ 	g_debug ("Power switched to %s", state ? "off" : "on");
+-	bluetooth_killswitch_set_state (self->priv->killswitch,
+-					state ? 1 : 0);
+ }
+ 
+ static void
+@@ -454,20 +428,12 @@
+ 		      "default-adapter", &path,
+ 		      "default-adapter-powered", &powered,
+ 		      NULL);
+-	state = bluetooth_killswitch_get_state (self->priv->killswitch);
+ 
+-	g_debug ("Updating power, default adapter: %s (powered: %s), killswitch: %s",
++	g_debug ("Updating power, default adapter: %s (powered: %s)",
+ 		 path ? path : "(none)",
+-		 powered ? "on" : "off",
+-		 bluetooth_killswitch_state_to_string (state));
++		 powered ? "on" : "off");
+ 
+ 	if (path == NULL &&
+-	    bluetooth_killswitch_has_killswitches (self->priv->killswitch) &&
+-	    state != 2) {
+-		g_debug ("Default adapter is unpowered, but should be available");
+-		sensitive = TRUE;
+-		cc_bluetooth_panel_update_treeview_message (self, _("Bluetooth is disabled"));
+-	} else if (path == NULL &&
+ 		   state == 2) {
+ 		g_debug ("Bluetooth is Hard blocked");
+ 		sensitive = FALSE;
+@@ -490,10 +456,16 @@
+ static void
+ switch_panel (CcBluetoothPanel *self,
+ 	      const char       *panel)
+-{  
+-  gchar * command = g_strdup_printf("cinnamon-settings %s &", panel);
+-  system(command);
+-  g_free(command);
++{
++  CcShell *shell;
++  GError *error = NULL;
++
++  shell = cc_panel_get_shell (CC_PANEL (self));
++  if (cc_shell_set_active_panel_from_id (shell, panel, NULL, &error) == FALSE)
++    {
++      g_warning ("Failed to activate '%s' panel: %s", panel, error->message);
++      g_error_free (error);
++    }
+ }
+ 
+ static gboolean
+@@ -727,11 +699,6 @@
+ 
+ 	name = bluetooth_chooser_get_selected_device_name (BLUETOOTH_CHOOSER (self->priv->chooser));
+ 
+-	if (show_confirm_dialog (self, name) != FALSE) {
+-		if (remove_selected_device (self))
+-			bluetooth_plugin_manager_device_deleted (address);
+-	}
+-
+ 	g_free (address);
+ 	g_free (name);
+ }
+@@ -788,16 +755,6 @@
+ }
+ 
+ static void
+-killswitch_changed (BluetoothKillswitch      *killswitch,
+-		                            int       state,
+-		    CcBluetoothPanel         *self)
+-{
+-	g_debug ("Killswitch changed to state '%s' (%d)", bluetooth_killswitch_state_to_string (state) , state);
+-	cc_bluetooth_panel_update_state (self);
+-	cc_bluetooth_panel_update_power (self);
+-}
+-
+-static void
+ cc_bluetooth_panel_init (CcBluetoothPanel *self)
+ {
+ 	GtkWidget *widget;
+@@ -806,8 +763,6 @@
+ 
+ 	self->priv = BLUETOOTH_PANEL_PRIVATE (self);
+ 
+-	bluetooth_plugin_manager_init ();
+-	self->priv->killswitch = bluetooth_killswitch_new ();
+ 	self->priv->client = bluetooth_client_new ();
+ 	self->priv->connecting_devices = g_hash_table_new_full (g_str_hash,
+ 								g_str_equal,
+@@ -901,8 +856,6 @@
+ 	/* Set the initial state of power */
+ 	g_signal_connect (G_OBJECT (WID ("switch_bluetooth")), "notify::active",
+ 			  G_CALLBACK (power_callback), self);
+-	g_signal_connect (G_OBJECT (self->priv->killswitch), "state-changed",
+-			  G_CALLBACK (killswitch_changed), self);
+ 	cc_bluetooth_panel_update_power (self);
+ 
+ 	gtk_widget_show_all (GTK_WIDGET (self));
+@@ -921,7 +874,7 @@
+ void
+ g_io_module_load (GIOModule *module)
+ {
+-	bindtextdomain (GETTEXT_PACKAGE, "/usr/share/locale");
++	bindtextdomain (GETTEXT_PACKAGE, "/usr/share/cinnamon/locale");
+ 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+ 
+ 	/* register the panel */

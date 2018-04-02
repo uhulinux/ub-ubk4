@@ -1,0 +1,31 @@
+diff -Naurd orig/Makefile.in mod/Makefile.in
+--- orig/Makefile.in	2004-03-22 23:38:02.000000000 +0100
++++ mod/Makefile.in	2009-08-18 20:31:25.000000000 +0200
+@@ -26,19 +26,19 @@
+ 		$(CC) -o $@ $(LDFLAGS) deroff.o misc.o getopt.o getopt1.o $(LIBS)
+ 
+ install:	all install-po-@USE_NLS@
+-		[ -d $(BINDIR) ] || $(INSTALL) -m 755 -d $(BINDIR)
+-		$(INSTALL_PROGRAM) -s deroff $(BINDIR)/deroff
+-		[ -d $(MANDIR)/man1 ] || $(INSTALL) -m 755 -d $(MANDIR)/man1
+-		[ -d $(MANDIR)/de/man1 ] || $(INSTALL) -m 755 -d $(MANDIR)/de/man1
+-		$(INSTALL_DATA) deroff.1.en $(MANDIR)/man1/deroff.1
+-		$(INSTALL_DATA) deroff.1.de $(MANDIR)/de/man1/deroff.1
++		[ -d $(DESTDIR)$(BINDIR) ] || $(INSTALL) -m 755 -d $(DESTDIR)$(BINDIR)
++		$(INSTALL_PROGRAM) -s deroff $(DESTDIR)$(BINDIR)/deroff
++		[ -d $(DESTDIR)$(MANDIR)/man1 ] || $(INSTALL) -m 755 -d $(DESTDIR)$(MANDIR)/man1
++		[ -d $(DESTDIR)$(MANDIR)/de/man1 ] || $(INSTALL) -m 755 -d $(DESTDIR)$(MANDIR)/de/man1
++		$(INSTALL_DATA) deroff.1.en $(DESTDIR)$(MANDIR)/man1/deroff.1
++		$(INSTALL_DATA) deroff.1.de $(DESTDIR)$(MANDIR)/de/man1/deroff.1
+ 
+ install-po-no:
+ install-po-yes:	$(CATALOGS)
+ 		for cat in $(CATALOGS); do \
+ 		  dir=$(localedir)/`basename $$cat .mo`/LC_MESSAGES; \
+-		  [ -d $$dir ] || @INSTALL@ -m 755 -d $$dir; \
+-		  @INSTALL@ -m 644 $$cat $$dir/deroff.mo; \
++		  [ -d $(DESTDIR)$$dir ] || @INSTALL@ -m 755 -d $(DESTDIR)$$dir; \
++		  @INSTALL@ -m 644 $$cat $(DESTDIR)$$dir/deroff.mo; \
+ 		done
+ 
+ check:

@@ -1,0 +1,13 @@
+--- zoo-2.10.orig/machine.c
++++ zoo-2.10/machine.c
+@@ -48,6 +48,10 @@
+ /* PART 2.  FOR EACH SPECIFIC SYSTEM, INCLUDE A C FILE HERE.           */
+ /***********************************************************************/
+ 
++#ifdef LINUX
++#include "linux.c"
++#endif
++
+ #ifdef SYS_V
+ #include "sysv.c"
+ #endif

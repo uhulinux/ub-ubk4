@@ -1,0 +1,116 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2016-08-21 07:21:59.134741323 +0200
++++ patched/configure	2017-04-30 01:09:07.416434071 +0200
+@@ -5641,7 +5641,7 @@
+ 
+ 
+ 
+-HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
++HELP2MAN="true"}
+ 
+ if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
+diff -Naur orig/doc/diffutils.info patched/doc/diffutils.info
+--- orig/doc/diffutils.info	2016-08-21 07:22:04.134741323 +0200
++++ patched/doc/diffutils.info	2017-04-30 01:14:20.476419130 +0200
+@@ -1865,6 +1865,15 @@
+ or 'cp -sR').  Before editing a file in the copy for the first time, you
+ should break the link and replace it with a regular copy.
+ 
++   In UHU-Linux, `diff' was modified to assume that two files are the
++same too if their size, modification timestamp, hard link count,
++permissions, owner and group are equal. This causes significant speedup
++on large trees that are a copy of each other (e.g. created by `cp -a'),
++but there is a chance that `diff' will miss different files if their
++timestamps were intentionally tampered with. The original behavior is
++reverted by setting the `DIFF_DONT_CHEAT' environment variable to any
++value.
++
+    You can also affect the performance of GNU 'diff' by giving it
+ options that change the way it compares files.  Performance has more
+ than one dimension.  These options improve one aspect of performance at
+diff -Naur orig/man/diff.1 patched/man/diff.1
+--- orig/man/diff.1	2016-08-21 07:22:04.134741323 +0200
++++ patched/man/diff.1	2017-04-30 01:09:07.440434367 +0200
+@@ -235,6 +235,24 @@
+ If \fB\-\-from\-file\fR or \fB\-\-to\-file\fR is given, there are no restrictions on FILE(s).
+ If a FILE is '\-', read standard input.
+ Exit status is 0 if inputs are the same, 1 if different, 2 if trouble.
++.SH NOTE
++Important note to the users of UHU-Linux:
++.PP
++The original
++.B diff
++utility assumes that two regular files are identical if their device and
++inode numbers are the same, i.e. they are hard links to each other. In
++UHU-Linux,
++.B diff
++assumes that two files are the same too if their size, modification
++timestamp, hard link count, permissions, owner and group are equal. This
++causes significant speedup on large trees that are a copy of each other
++(e.g. created by `cp -a'), but there is a chance that
++.B diff
++will miss different files if their timestamps were intentionally tampered
++with. The original behavior is reverted by setting the
++.B DIFF_DONT_CHEAT
++environment variable to any value.
+ .SH AUTHOR
+ Written by Paul Eggert, Mike Haertel, David Hayes,
+ Richard Stallman, and Len Tower.
+diff -Naur orig/src/diff.c patched/src/diff.c
+--- orig/src/diff.c	2016-08-09 03:50:37.134741323 +0200
++++ patched/src/diff.c	2017-04-30 01:09:07.440434367 +0200
+@@ -103,7 +103,11 @@
+ /* Report files compared that are the same (-s).
+    Normally nothing is output when that happens.  */
+ static bool report_identical_files;
+-
++
++/* Cheat: assume that files with same size and timestamp and other stuff
++   are identical.  */
++static bool cheat;
++
+ static char const shortopts[] =
+ "0123456789abBcC:dD:eEfF:hHiI:lL:nNpPqrsS:tTuU:vwW:x:X:yZ";
+ 
+@@ -655,6 +659,7 @@
+ 	}
+       prev = c;
+     }
++  cheat = (getenv("DIFF_DONT_CHEAT") == NULL);
+ 
+   if (colors_style == AUTO)
+     {
+@@ -1268,9 +1273,11 @@
+   else if ((same_files
+ 	    = (cmp.file[0].desc != NONEXISTENT
+ 	       && cmp.file[1].desc != NONEXISTENT
+-	       && 0 < same_file (&cmp.file[0].stat, &cmp.file[1].stat)
++	       && (( 0 < same_file (&cmp.file[0].stat, &cmp.file[1].stat)
+ 	       && same_file_attributes (&cmp.file[0].stat,
+-					&cmp.file[1].stat)))
++					&cmp.file[1].stat))
++	       || (cheat && most_likely_same_content (&cmp.file[0].stat,
++						      &cmp.file[1].stat)))))
+ 	   && no_diff_means_no_output)
+     {
+       /* The two named files are actually the same physical file.
+diff -Naur orig/src/system.h patched/src/system.h
+--- orig/src/system.h	2016-08-05 01:37:45.134741323 +0200
++++ patched/src/system.h	2017-04-30 01:09:07.444434416 +0200
+@@ -211,4 +211,15 @@
+     && (s)->st_ctime == (t)->st_ctime)
+ #endif
+ 
++#ifndef most_likely_same_content
++# define most_likely_same_content(s, t) \
++   ((s)->st_mode == (t)->st_mode \
++    && S_ISREG ((s)->st_mode) \
++    && (s)->st_nlink == (t)->st_nlink \
++    && (s)->st_uid == (t)->st_uid \
++    && (s)->st_gid == (t)->st_gid \
++    && (s)->st_size == (t)->st_size \
++    && (s)->st_mtime == (t)->st_mtime)
++#endif
++
+ #define STREQ(a, b) (strcmp (a, b) == 0)

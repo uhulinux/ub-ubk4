@@ -1,0 +1,36 @@
+diff -Naur orig/gvfs/Makefile mod/gvfs/Makefile
+--- orig/gvfs/Makefile	2009-11-15 17:00:40.000000000 +0100
++++ mod/gvfs/Makefile	2013-08-15 22:56:54.000000000 +0200
+@@ -34,7 +34,7 @@
+ treepath_vfs.o: treepath_vfs.c treepath_vfs.h
+ 
+ install::
+-	$(INSTALL) ./libgvfs_plugin.so $(DESTDIR)/lib$(LIB_SUFFIX)/tuxcmd/
++	$(INSTALL) -D ./libgvfs_plugin.so $(DESTDIR)/lib/tuxcmd/./libgvfs_plugin.so
+ 
+ clean: 
+ 	rm -f *.o *.d *.gch libgvfs_plugin.so
+diff -Naur orig/libarchive/Makefile mod/libarchive/Makefile
+--- orig/libarchive/Makefile	2009-11-15 17:00:40.000000000 +0100
++++ mod/libarchive/Makefile	2013-08-15 22:56:54.000000000 +0200
+@@ -52,7 +52,7 @@
+ treepath_vfs.o: treepath_vfs.c treepath_vfs.h
+ 
+ install::
+-	$(INSTALL) ./libarchive_plugin.so $(DESTDIR)/lib$(LIB_SUFFIX)/tuxcmd/
++	$(INSTALL) -D ./libarchive_plugin.so $(DESTDIR)/lib/tuxcmd/./libarchive_plugin.so
+ 
+ clean: 
+ 	rm -f *.o *.d *.gch libarchive_plugin.so
+diff -Naur orig/zip/Makefile mod/zip/Makefile
+--- orig/zip/Makefile	2009-11-15 17:00:40.000000000 +0100
++++ mod/zip/Makefile	2013-08-15 22:56:54.000000000 +0200
+@@ -43,7 +43,7 @@
+ 
+ 
+ install::
+-	$(INSTALL) ./libzip_plugin.so $(DESTDIR)/lib$(LIB_SUFFIX)/tuxcmd/
++	$(INSTALL) -D ./libzip_plugin.so $(DESTDIR)/lib/tuxcmd/./libzip_plugin.so
+ 
+ clean: 
+ 	( cd $(DIR_ZIPARCHIVE) && make -f ../Makefile.ziparch clean ) || exit 1

@@ -1,0 +1,11 @@
+[Unit]
+Description=DHCP Server
+After=network.target
+
+[Service]
+PIDFile=/var/run/dhcpd.pid
+ExecStart=/usr/sbin/dhcpd -cf /etc/dhcpd.conf
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

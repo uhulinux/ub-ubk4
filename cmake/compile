@@ -1,0 +1,22 @@
+#!/bin/sh -eux
+
+# A -O3 veszélyes
+
+ub_replace -O3 -O2 Modules/Compiler/GNU.cmake
+ub_replace -O3 -O2 Modules/Compiler/GNU-Fortran.cmake
+ub_replace -O3 -O2 Modules/Compiler/Intel.cmake
+ub_replace -O3 -O2 Modules/Compiler/PathScale.cmake
+
+mkdir build
+cd build
+../bootstrap \
+	--system-libs \
+	--no-system-jsoncpp \
+	--no-system-libuv \
+	--no-system-librhash \
+	--prefix=/usr \
+	--datadir=/share/cmake \
+	--mandir=/share/man \
+	--docdir=/share/doc/Packages/cmake
+
+ub_make

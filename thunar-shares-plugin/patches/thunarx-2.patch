@@ -1,0 +1,371 @@
+diff -Naur orig/configure.in patched/configure.in
+--- orig/configure.in	2009-02-15 21:00:53.000000000 +0100
++++ patched/configure.in	2012-06-14 17:25:16.999843898 +0200
+@@ -9,19 +9,19 @@
+ m4_define([tsp_version_major], [0])
+ m4_define([tsp_version_minor], [2])
+ m4_define([tsp_version_micro], [0])
+-m4_define([tsp_version_build], [r06693])
+-m4_define([tsp_version_tag], [])
+-m4_define([tsp_version], [tsp_version_major().tsp_version_minor().tsp_version_micro()ifelse(tsp_version_tag(),[],[], [-ifelse(tsp_version_tag(), [svn], [tsp_version_tag()-tsp_version_build()], [tsp_version_tag()])])])
++m4_define([tsp_version_build], [@REVISION@])
++m4_define([tsp_version_tag], [git])
++m4_define([tsp_version], [tsp_version_major().tsp_version_minor().tsp_version_micro()ifelse(tsp_version_tag(),[],[], [-ifelse(tsp_version_tag(), [git], [tsp_version_tag()-tsp_version_build()], [tsp_version_tag()])])])
+ 
+ dnl -------------------------------------------------------
+-dnl Debugging support for SVN
++dnl Debugging support for GIT
+ dnl -------------------------------------------------------
+-m4_define([tsp_debug_default], [ifelse(tsp_version_tag(), [svn], [full], [minimum])])
++m4_define([tsp_debug_default], [ifelse(tsp_version_tag(), [git], [minimum], [minimum])])
+ 
+ dnl -------------------------------------------------------
+ dnl Init autoconf
+ dnl -------------------------------------------------------
+-AC_COPYRIGHT([Copyright (c) 2008 Daniel Morales <daniel@daniel.com.uy>.])
++AC_COPYRIGHT([Copyright (c) 2009-2010 Daniel Morales <daniel@daniel.com.uy>.])
+ AC_INIT([thunar-shares-plugin], [tsp_version], [thunar-dev@xfce.org])
+ AC_CONFIG_SRCDIR([thunar-plugin/thunar-shares-plugin.c])
+ AC_PREREQ(2.59)
+@@ -49,15 +49,14 @@
+ dnl -------------------------------------------------------
+ dnl Check headers
+ dnl -------------------------------------------------------
+-AC_CHECK_HEADERS([string.h sys/types.h sys/wait.h time.h]) 
++AC_CHECK_HEADERS([string.h sys/types.h sys/wait.h time.h sys/stat.h unistd.h]) 
+ 
+ dnl -------------------------------------------------------
+ dnl Packages checks
+ dnl -------------------------------------------------------
+ XDT_CHECK_PACKAGE([GTK], [gtk+-2.0], [2.12.0])
+-XDT_CHECK_PACKAGE([GLIB], [glib-2.0], [2.10.0])
+-XDT_CHECK_PACKAGE([THUNARX], [thunarx-1], [0.8.0])
+-XDT_CHECK_PACKAGE([THUNARVFS], [thunar-vfs-1], [0.8.0])
++XDT_CHECK_PACKAGE([GLIB], [glib-2.0], [2.18.0])
++XDT_CHECK_PACKAGE([THUNARX], [thunarx-2], [1.0.1])
+ 
+ dnl -------------------------------------------------------
+ dnl Languages
+diff -Naur orig/libshares/libshares-util.c patched/libshares/libshares-util.c
+--- orig/libshares/libshares-util.c	2009-02-15 20:54:41.000000000 +0100
++++ patched/libshares/libshares-util.c	2012-06-14 17:56:33.374644150 +0200
+@@ -22,21 +22,30 @@
+ #include <config.h>
+ #endif
+ 
++#ifdef HAVE_SYS_STAT_H
++#include <sys/stat.h>
++#endif
++
++#ifdef HAVE_UNISTD_H
++#include <unistd.h>
++#endif
++
++#include <gio/gio.h>
++
+ #include <glib/gstdio.h>
+ #include <gtk/gtk.h>
++#include <glib/gi18n-lib.h>
+ 
+-#include <thunar-vfs/thunar-vfs.h>
+ #include <thunarx/thunarx.h>
+ 
+ #include "libshares-util.h"
+ #include "shares.h"
+ 
+-static gboolean tsp_ask_perms   (gboolean     need_r,
+-                                 gboolean     need_w,
+-                                 gboolean     need_x);
++static gboolean tsp_ask_perms (void);
+ 
+ static gboolean tsp_check_perms (const gchar *path,
+-                                 gboolean     is_writable);
++								 gboolean is_writable,
++								 gboolean guests_ok);
+ 
+ /**
+  * libshares_get_local_file:
+@@ -190,7 +199,7 @@
+     }
+   }
+ 
+-  if (tsp_check_perms (file_local, is_writable))
++  if (tsp_check_perms (file_local, is_writable, guests_ok))
+   {
+     share_info = g_new0 (ShareInfo, 1);
+ 
+@@ -289,17 +298,17 @@
+ libshares_is_shareable (ThunarxFileInfo *info)
+ {
+   gboolean retval;
+-  gchar   *scheme;
++  GFile *file;
+ 
+   if (!thunarx_file_info_is_directory (info)){
+     return FALSE;
+   }
+ 
+-  scheme = thunarx_file_info_get_uri_scheme (info);
++  file = thunarx_file_info_get_location (info);
+ 
+-  retval = g_str_equal ("file", scheme);
++  retval = g_file_is_native (file);
+ 
+-  g_free (scheme);
++  g_object_unref (file);
+ 
+   return retval;
+ }
+@@ -315,19 +324,22 @@
+ gboolean
+ libshares_check_owner (ThunarxFileInfo *info)
+ {
+-  ThunarVfsInfo *vfsinfo;
++  GFileInfo *fileinfo;
+   gboolean retval = TRUE;
+   gboolean owner_only;
++  guint32 uid;
+ 
+   if (shares_has_owner_only (&owner_only, NULL))
+   {
+     if (owner_only)
+     {
+-      vfsinfo = thunarx_file_info_get_vfs_info (info);
++	  fileinfo = thunarx_file_info_get_file_info (info);
++
++	  uid = g_file_info_get_attribute_uint32 (fileinfo, G_FILE_ATTRIBUTE_UNIX_UID);
+ 
+-      retval = (geteuid () == vfsinfo->uid);
++      retval = (geteuid () == uid);
+ 
+-      thunar_vfs_info_unref (vfsinfo);
++      g_object_unref (fileinfo);
+     }
+   }
+ 
+@@ -336,9 +348,7 @@
+ 
+ /* Asks to the user if we can change the permissions of the folder */
+ static gboolean
+-tsp_ask_perms (gboolean  need_r,
+-               gboolean  need_w,
+-               gboolean  need_x)
++tsp_ask_perms (void)
+ {
+   return libshares_ask_user (_("Thunar needs to add some permissions to your folder in order to share it. Do you agree?"));
+ }
+@@ -346,35 +356,33 @@
+ /* Checks if the current file has the necesary permissions */
+ static gboolean
+ tsp_check_perms (const gchar *path,
+-                 gboolean     is_writable)
++				 gboolean is_writable,
++				 gboolean guests_ok)
+ {
+   struct stat st;
+-  gboolean    need_r;
+-  gboolean    need_w;
+-  gboolean    need_x;
+   mode_t      new_mode;
+   mode_t      mode;
++  mode_t	  need_mask;
+ 
+-  if (stat (path, &st) != 0)
++  if (g_stat (path, &st) != 0)
+     return FALSE;
+ 
+-  mode = st.st_mode;
+-
+-  new_mode = mode;
++  new_mode = mode = st.st_mode;
+ 
+-  need_r = (mode & THUNAR_VFS_FILE_MODE_OTH_READ) == 0;
+-  new_mode |= THUNAR_VFS_FILE_MODE_OTH_READ;
++  /* go+rx is necesary to guest enabled shares */
++  if (guests_ok)
++  new_mode |= (S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+ 
+-  need_w = is_writable && (mode & THUNAR_VFS_FILE_MODE_OTH_WRITE) == 0;
+-  if (need_w)
+-    new_mode |= THUNAR_VFS_FILE_MODE_OTH_WRITE;
++  /* go+w is necesary to writable shares */
++  if (is_writable)
++  new_mode |= (S_IWGRP | S_IWOTH);
+ 
+-  need_x = (mode & THUNAR_VFS_FILE_MODE_OTH_EXEC) == 0;
+-  new_mode |= THUNAR_VFS_FILE_MODE_OTH_EXEC;
++  /* Compare both modes */
++  need_mask = new_mode & ~mode;
+ 
+-  if (need_r || need_w || need_x)
++  if (need_mask != 0)
+   {
+-    if (!tsp_ask_perms (need_r, need_w, need_x))
++    if (!tsp_ask_perms ())
+       return FALSE;
+ #ifdef G_ENABLE_DEBUG
+     g_message ("Changing permissions of '%s'", path);
+diff -Naur orig/libshares/Makefile.am patched/libshares/Makefile.am
+--- orig/libshares/Makefile.am	2009-02-15 20:54:41.000000000 +0100
++++ patched/libshares/Makefile.am	2012-06-14 17:14:07.165444619 +0200
+@@ -17,14 +17,12 @@
+ 	$(PLATFORM_CFLAGS)				\
+ 	$(GTK_CFLAGS)					\
+ 	$(GLIB_CFLAGS)					\
+-	$(THUNARX_CFLAGS)				\
+-	$(THUNARVFS_CFLAGS)
++	$(THUNARX_CFLAGS)
+ 
+ libshares_la_LDFLAGS =					\
+ 	$(GTK_LIBS)					\
+ 	$(GLIB_LIBS)					\
+ 	$(THUNARX_LIBS)					\
+-	$(THUNARVFS_LIBS)				\
+ 	$(PLATFORM_LDFLAGS)
+ 
+ # vi:set ts=8 sw=8 noet ai nocindent syntax=automake:
+diff -Naur orig/libshares/shares.c patched/libshares/shares.c
+--- orig/libshares/shares.c	2009-02-15 20:54:41.000000000 +0100
++++ patched/libshares/shares.c	2012-06-14 17:46:51.513189623 +0200
+@@ -398,9 +398,9 @@
+ 
+ 	acl = get_string_from_key_file (key_file, group, KEY_ACL);
+ 	if (acl) {
+-		if (strncmp (acl, "Everyone:R", 10) == 0)
++		if (strstr (acl, "Everyone:R") == 0)
+ 			is_writable = FALSE;
+-		else if (strncmp (acl, "Everyone:F", 10) == 0)
++		else if (strstr (acl, "Everyone:F") == 0)
+ 			is_writable = TRUE;
+ 		else {
+ #ifdef G_ENABLE_DEBUG
+@@ -690,6 +690,8 @@
+ 	GError *real_error;
+ 	gboolean supports_success;
+ 	gboolean supports_guest_ok;
++	gboolean net_success;
++
+ #ifdef G_ENABLE_DEBUG
+ 	g_message ("add_share() start");
+ #endif
+@@ -713,7 +715,11 @@
+ 	argv[2] = info->share_name;
+ 	argv[3] = info->path;
+ 	argv[4] = info->comment;
+-	argv[5] = info->is_writable ? "Everyone:F" : "Everyone:R";
++	if (info->is_writable){
++	argv[5] = "Everyone:F";
++	} else {
++	argv[5] = g_strdup_printf ("Everyone:R,%s:F", g_get_user_name ());
++	}
+ 
+ 	if (supports_guest_ok) {
+ 		argv[6] = info->guest_ok ? "guest_ok=y" : "guest_ok=n";
+@@ -722,7 +728,12 @@
+ 		argc = 6;
+ 
+ 	real_error = NULL;
+-	if (!net_usershare_run (argc, argv, &key_file, &real_error)) {
++	net_success = net_usershare_run (argc, argv, &key_file, &real_error);
++
++	if (!info->is_writable) g_free (argv[5]);
++
++	if (!net_success)
++	{
+ #ifdef G_ENABLE_DEBUG
+ 		g_message ("Called \"net usershare add\" but it failed: %s", real_error->message);
+ #endif
+diff -Naur orig/thunar-plugin/Makefile.am patched/thunar-plugin/Makefile.am
+--- orig/thunar-plugin/Makefile.am	2009-02-15 20:54:41.000000000 +0100
++++ patched/thunar-plugin/Makefile.am	2012-06-14 17:13:16.335755405 +0200
+@@ -7,7 +7,7 @@
+ 	-DDATADIR=\"$(datadir)\"				\
+ 	$(PLATFORM_CPPFLAGS)
+ 
+-extensionsdir = $(libdir)/thunarx-1
++extensionsdir = $(libdir)/thunarx-2
+ extensions_LTLIBRARIES = thunar-shares-plugin.la
+ 
+ thunar_shares_plugin_la_SOURCES =				\
+@@ -19,8 +19,7 @@
+ 	$(PLATFORM_CFLAGS)					\
+ 	$(GTK_CFLAGS)						\
+ 	$(GLIB_CFLAGS)						\
+-	$(THUNARX_CFLAGS)					\
+-	$(THUNARVFS_CFLAGS)
++	$(THUNARX_CFLAGS)
+ 
+ thunar_shares_plugin_la_LDFLAGS =				\
+ 	-avoid-version						\
+@@ -29,7 +28,6 @@
+ 	$(GTK_LIBS)						\
+ 	$(GLIB_LIBS)						\
+ 	$(THUNARX_LIBS)						\
+-	$(THUNARVFS_LIBS)					\
+ 	$(PLATFORM_LDFLAGS)
+ 
+ thunar_shares_plugin_la_LIBADD=					\
+diff -Naur orig/thunar-plugin/thunar-shares-plugin.c patched/thunar-plugin/thunar-shares-plugin.c
+--- orig/thunar-plugin/thunar-shares-plugin.c	2009-02-15 20:54:41.000000000 +0100
++++ patched/thunar-plugin/thunar-shares-plugin.c	2012-06-14 17:37:36.429777117 +0200
+@@ -22,7 +22,7 @@
+ #include <config.h>
+ #endif
+ 
+-#include <glib/gi18n.h>
++#include <glib/gi18n-lib.h>
+ #include <libshares/shares.h>
+ 
+ #include "tsp-provider.h"
+diff -Naur orig/thunar-plugin/tsp-page.c patched/thunar-plugin/tsp-page.c
+--- orig/thunar-plugin/tsp-page.c	2009-02-15 20:54:41.000000000 +0100
++++ patched/thunar-plugin/tsp-page.c	2012-06-14 17:50:32.265048337 +0200
+@@ -22,7 +22,7 @@
+ #include <config.h>
+ #endif
+ 
+-#include <glib/gi18n.h>
++#include <glib/gi18n-lib.h>
+ #include <gtk/gtk.h>
+ 
+ #include <libshares/shares.h>
+@@ -99,6 +99,7 @@
+   gboolean            can_guests;
+   gchar              *share_name;
+   gchar              *share_comment;
++  gboolean			  supports_guest;
+ };
+ 
+ /* implements the tsp_page_get_type() and tsp_page_register_type() functions */
+@@ -132,7 +133,6 @@
+   GtkWidget *vbox1;
+   GtkWidget *hbox1;
+   GtkWidget *widget;
+-  gboolean   guest_ok = FALSE;
+ 
+   /* Main container */
+   vbox1 = gtk_vbox_new (FALSE, 0);
+@@ -222,9 +222,10 @@
+   gtk_widget_show_all (vbox1);
+ 
+   /* Check if guest access is supported */
+-  shares_supports_guest_ok (&guest_ok, NULL);
+-  if (!guest_ok){
+-    gtk_widget_hide (page->cb_share_guest);
++  shares_supports_guest_ok (&page->supports_guest, NULL);
++ 
++  if (!page->supports_guest){
++  gtk_widget_set_sensitive(page->cb_share_guest, FALSE);
+   }
+ }
+ 
+@@ -549,7 +550,9 @@
+   gtk_widget_set_sensitive (GTK_WIDGET (tsp_page->label_name), sens);
+   gtk_widget_set_sensitive (GTK_WIDGET (tsp_page->label_comments), sens);
+   gtk_widget_set_sensitive (GTK_WIDGET (tsp_page->label_comments), sens);
++  if (tsp_page->supports_guest){
+   gtk_widget_set_sensitive (GTK_WIDGET (tsp_page->cb_share_guest), sens);
++  }
+ }
+ 
+ /* Checks if the settings of the current file has been changed */

@@ -1,0 +1,11 @@
+diff -Naur mcrypt-2.6.8-orig/src/crypt mcrypt-2.6.8/src/crypt
+--- mcrypt-2.6.8-orig/src/crypt	2003-09-08 19:25:47.000000000 +0200
++++ mcrypt-2.6.8/src/crypt	2009-11-28 19:46:38.000000000 +0100
+@@ -17,6 +17,6 @@
+ then
+  mcrypt -a enigma -o scrypt -m stream --bare --force
+ else
+- mcrypt -a enigma -o scrypt -m stream --bare --key $1 --force
++ mcrypt -a enigma -o scrypt -m stream --bare --key "$1" --force
+ fi
+ 

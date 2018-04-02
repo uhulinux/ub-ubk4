@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+: > /etc/lsb-release
+
+. /etc/os-release
+
+cat > /etc/lsb-release <<- _EOF_
+	LSB_VERSION=1.4
+	DISTRIB_ID=$NAME
+	DISTRIB_RELEASE=$VERSION_ID
+	DISTRIB_CODENAME=`echo $VERSION | cut -d' ' -f2`
+	DISTRIB_DESCRIPTION="$PRETTY_NAME"
+	_EOF_

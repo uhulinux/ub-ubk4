@@ -1,0 +1,728 @@
+diff -Naur XBlast-2.6-sound.orig/Legacy/defaults.h XBlast-2.6-sound/Legacy/defaults.h
+--- XBlast-2.6-sound.orig/Legacy/defaults.h	2006-04-10 17:41:31.000000000 +0200
++++ XBlast-2.6-sound/Legacy/defaults.h	2006-04-10 17:42:11.000000000 +0200
+@@ -81,7 +81,6 @@
+   { D_NumberOfVictories,     "5" },
+   { D_FrameRate,             "20" },
+   { D_Random,                "off" },
+-  { D_AllowColorMode,        "true" },
+   { D_BellSound,             "true" },
+   { D_RecordDemo,            "false" },
+   { D_PrintStat,             "false" },
+@@ -153,8 +152,6 @@
+  * fallbacks for display setup 
+  */
+ static BMEntry disp_default_setting[] = {
+-  /* color mode */
+-  { D_ColorMode,        "true" },
+   /* color calibration */
+   { D_BaseRed,          "4096" },
+   { D_BaseGreen,        "4096" },
+@@ -237,8 +234,6 @@
+   { "+rp",      W_RandomPlayerPosition, XrmoptionNoArg,     (caddr_t) "off"},  
+   { "-rl",      W_RandomLevelOrder,     XrmoptionNoArg,     (caddr_t) "on"},
+   { "+rl",      W_RandomLevelOrder,     XrmoptionNoArg,     (caddr_t) "off"},
+-  { "-bw",      W_AllowColorMode,       XrmoptionNoArg,     (caddr_t) "false"},
+-  { "+bw",      W_AllowColorMode,       XrmoptionNoArg,     (caddr_t) "true"},
+   { "-q",       W_BellSound,            XrmoptionNoArg,     (caddr_t) "false"},
+   { "+q",       W_BellSound,            XrmoptionNoArg,     (caddr_t) "true"},
+   { "-R",       W_RecordDemo,           XrmoptionNoArg,     (caddr_t) "true"},
+diff -Naur XBlast-2.6-sound.orig/Legacy/graphics.c XBlast-2.6-sound/Legacy/graphics.c
+--- XBlast-2.6-sound.orig/Legacy/graphics.c	2006-04-10 17:41:31.000000000 +0200
++++ XBlast-2.6-sound/Legacy/graphics.c	2006-04-10 17:52:04.000000000 +0200
+@@ -111,7 +111,6 @@
+ /*
+  * global variables
+  */
+-ColorMode colorMode;
+ Display *dpy = NULL;
+ 
+ /*
+@@ -2089,60 +2088,11 @@
+     break;
+   }
+ #endif
+-  /* get color mode from visual */
+-  colorMode = COL_MONO;
+-#ifndef MONO_XBLAST
+-  if (visual_class >= TrueColor) {
+-      colorMode = COL_HICOLOR;
+-  }
+-  if (colorMode > GfxSetup.max_color_mode) {
+-    colorMode = GfxSetup.max_color_mode;
+-  }
+-#endif
+-
+-#ifdef DEBUG
+-  switch (colorMode) {
+-  case COL_MONO:
+-    fprintf(stderr,"Color mode is monchrome\n");
+-    break;
+-  case COL_COLOR:
+-    fprintf(stderr,"Color mode is normal color\n");
+-    break;
+-  case COL_HICOLOR:
+-    fprintf(stderr,"Color mode is hicolor\n");
+-    break;
+-  }
+-#endif
+ 
+   /* init window, either override or normal */
+     init_window_normal(win_title, icon_title);
+ #ifndef MONO_XBLAST
+   /* init graphics either color or black an white */
+-  switch (colorMode) {
+-    /* monchrome display */
+-  case COL_MONO:
+-  case COL_COLOR:
+-#endif
+-    init_pixmap_bw();
+-    init_fonts_bw();
+-    init_score_tiles_bw();
+-#ifdef DEBUG
+-    t0 = time(NULL);
+-#endif
+-    if (config->record_mode == RM_PLAYBACK) {
+-      init_sprites_bw (MAX_PLAYER);
+-    } else if (config->team_mode == TM_Double) {
+-      init_sprites_bw (config->num_player / 2);
+-    } else {
+-      init_sprites_bw (config->num_player);
+-    }
+-#ifdef DEBUG
+-    fprintf(stderr, "Time to load sprites: %ld s.\n",time(NULL)-t0);
+-#endif
+-#ifndef MONO_XBLAST
+-    break;
+-    /* support for (rendered) hi color graphics */
+-  case COL_HICOLOR:
+     init_color(visual_class);
+     init_pixmap_color();
+     init_fonts_color();
+@@ -2160,8 +2110,6 @@
+ #ifdef DEBUG
+     fprintf(stderr, "Time to load sprites: %ld s.\n",time(NULL)-t0);
+ #endif
+-    break;
+-  }
+ #endif
+ }
+ 
+@@ -2536,19 +2484,7 @@
+   BMBlockTile *tile;
+ #endif
+ {
+-#ifndef MONO_XBLAST
+-  switch(colorMode) {
+-  case COL_MONO:
+-  case COL_COLOR:
+-#endif
+-    init_block_bw(in_pix, tile);
+-#ifndef MONO_XBLAST
+-    break;
+-  case COL_HICOLOR:
+     init_block_color(in_pix, tile);
+-    break;
+-  }
+-#endif
+ }
+ 
+ #ifndef MONO_XBLAST
+@@ -2646,19 +2582,7 @@
+ init_explosion_blocks ()
+ #endif
+ {
+-#ifndef MONO_XBLAST
+-  switch (colorMode) {
+-  case COL_MONO:
+-#endif
+-    init_explosion_blocks_bw();
+-#ifndef MONO_XBLAST
+-    break;
+-  case COL_COLOR:
+-  case COL_HICOLOR:
+     init_explosion_blocks_color();
+-    break;
+-  }
+-#endif
+ }
+ 
+ /* public function : free_block */
+@@ -2676,24 +2600,6 @@
+ 
+   /* free pixmap */
+   XFreePixmap(dpy, pix_block[in_pix]);
+-  /* free read only colors cells */
+-#ifndef MONO_XBLAST
+-  if (colorMode == COL_COLOR) {
+-    num=0;
+-    if (col_triple[in_pix].fg != black_pixel) {
+-      pix_val[num++] = (unsigned long) col_triple[in_pix].fg;
+-    }
+-    if (col_triple[in_pix].bg != white_pixel) {
+-      pix_val[num++] = (unsigned long) col_triple[in_pix].bg;
+-    }
+-    if (col_triple[in_pix].add != white_pixel) {
+-      pix_val[num++] = (unsigned long) col_triple[in_pix].add;
+-    }
+-    if (num >0) {
+-      XFreeColors(dpy, cmap, pix_val, num, 0);
+-    }
+-  }
+-#endif
+ }
+ 
+ /* public function : free_explosion_blocks */
+@@ -2906,8 +2812,6 @@
+      int x, y, block;
+ #endif
+ {
+-#ifndef MONO_XBLAST
+-  if (colorMode) {
+     XSetTSOrigin(dpy, gc_sprite_bits, x*BLOCK_WIDTH, 
+ 		 y*BLOCK_HEIGHT);
+     XSetClipOrigin(dpy, gc_sprite_bits, x*BLOCK_WIDTH, 
+@@ -2917,23 +2821,6 @@
+     XFillRectangle(dpy, pix, gc_sprite_bits,
+ 		   BLOCK_WIDTH*x, BLOCK_HEIGHT*y,
+ 		   BLOCK_WIDTH, BLOCK_HEIGHT);
+-  } else {
+-#endif
+-    XSetTSOrigin(dpy, gc_sprite_mask, x*BLOCK_WIDTH, 
+-		 y*BLOCK_HEIGHT);
+-    XSetStipple(dpy, gc_sprite_mask, pix_expl_mask[block]);
+-    XFillRectangle(dpy, pix, gc_sprite_mask,
+-		   BLOCK_WIDTH*x, BLOCK_HEIGHT*y,
+-		   BLOCK_WIDTH, BLOCK_HEIGHT);
+-    XSetTSOrigin(dpy, gc_sprite_bits, x*BLOCK_WIDTH, 
+-		 y*BLOCK_HEIGHT);
+-    XSetStipple(dpy, gc_sprite_bits, pix_expl_bits[block]);
+-    XFillRectangle(dpy, pix, gc_sprite_bits,
+-		   BLOCK_WIDTH*x, BLOCK_HEIGHT*y,
+-		   BLOCK_WIDTH, BLOCK_HEIGHT);
+-#ifndef MONO_XBLAST
+-  }
+-#endif
+ }
+ 
+ 
+@@ -3278,7 +3165,7 @@
+ 
+ #ifndef MONO_XBLAST
+   /* draw sprite as clipped tile when in color mode */
+-  if ( !(spl->mode & SPM_MASKED) && colorMode ) {
++  if ( !(spl->mode & SPM_MASKED) ) {
+     /* set drawing offset */
+     XSetClipOrigin(dpy, gc_sprite_bits, spl->x, spl->y);
+     XSetTSOrigin(dpy, gc_sprite_bits, spl->x, spl->y);
+@@ -3296,14 +3183,6 @@
+ #ifndef MONO_XBLAST
+   }
+ #endif
+-  /* draw sprite as stipple when in monochrome mode */
+-  if (!colorMode && !(spl->mode & SPM_MASKED) ) {
+-    /* set drawing offset */
+-    XSetTSOrigin(dpy, gc_sprite_bits, spl->x, spl->y);
+-    XSetStipple(dpy, gc_sprite_bits, pix_bomb_bits[spl->bomb][spl->anime] );
+-    XFillRectangle(dpy, pix, gc_sprite_bits,
+-		   (int)spl->x, (int)spl->y, BLOCK_WIDTH, BLOCK_HEIGHT);
+-  }
+ }
+ 
+ 
+@@ -3330,7 +3209,7 @@
+   
+ #ifndef MONO_XBLAST
+   /* draw sprite as clipped tile when in color mode */
+-  if ( !(spl->mode & SPM_MASKED) && colorMode ) {
++  if ( !(spl->mode & SPM_MASKED) ) {
+     /* set drawing offset */
+     XSetClipOrigin(dpy, gc_sprite_bits, x, y);
+     XSetTSOrigin(dpy, gc_sprite_bits, x, y);
+@@ -3351,15 +3230,6 @@
+ #ifndef MONO_XBLAST
+   }
+ #endif
+-  /* draw sprite as stipple when in monochrome mode */
+-  if (!colorMode && !(spl->mode & SPM_MASKED) ) {
+-    /* set drawing offset */
+-    XSetTSOrigin(dpy, gc_sprite_bits, x, y);
+-    XSetStipple(dpy, gc_sprite_bits, 
+-		sprite_data[spl->player][spl->anime].bits);
+-    XFillRectangle(dpy, pix, gc_sprite_bits,
+-		   x, y, width, height );
+-  }
+ }
+ 
+ /* public function draw_time_led */
+@@ -3519,7 +3389,7 @@
+ 	XDrawLine(dpy, pix, gc_bg, rect->x, rect->y + y, 
+ 		  rect->x + rect->w -1, rect->y + y);
+       } 
+-      xgcv.line_width = colorMode ? 3 : 2;
++      xgcv.line_width = 3;
+       XChangeGC(dpy, gc_bg, GCLineWidth , &xgcv);
+     }
+     XDrawRectangle(dpy, pix, gc_fg, rect->x, rect->y, 
+diff -Naur XBlast-2.6-sound.orig/Legacy/mytypes.h XBlast-2.6-sound/Legacy/mytypes.h
+--- XBlast-2.6-sound.orig/Legacy/mytypes.h	1999-07-28 21:28:02.000000000 +0200
++++ XBlast-2.6-sound/Legacy/mytypes.h	2006-04-10 17:54:29.000000000 +0200
+@@ -233,7 +233,6 @@
+   int random_spos;
+   int sound_flag;
+   int frame_time;
+-  int color_mode;
+   int print_stat;
+   char *use_level;
+ } XBSettings;
+@@ -241,10 +240,8 @@
+ /*
+  * graphics setup
+  */
+-typedef enum {COL_MONO, COL_COLOR, COL_HICOLOR } ColorMode;
+ typedef struct {
+   int rbase, gbase, bbase;
+-  ColorMode max_color_mode;
+ } XBGraphicsSetup;
+ 
+ /*
+diff -Naur XBlast-2.6-sound.orig/Legacy/resource.h XBlast-2.6-sound/Legacy/resource.h
+--- XBlast-2.6-sound.orig/Legacy/resource.h	2006-04-10 17:41:31.000000000 +0200
++++ XBlast-2.6-sound/Legacy/resource.h	2006-04-10 17:52:39.000000000 +0200
+@@ -149,11 +149,6 @@
+ #define N_RandomPlayerPosition  "xblast.randomPlayerPosition"
+ #define W_RandomLevelOrder      ".randomLevelOrder"
+ #define N_RandomLevelOrder      "xblast.randomLevelOrder"
+-/* toggle color support */
+-#define W_AllowColorMode  ".allowColorMode"
+-#define D_AllowColorMode  "XBlast.allowColorMode"
+-#define N_AllowColorMode  "xblast.allowColorMode"
+-#define C_AllowColorMode  "XBlast.AllowColorMode"
+ /* color calibration */
+ #define W_BaseRed   ".baseRed"
+ #define D_BaseRed   "XBlast.baseRed"
+@@ -240,10 +235,6 @@
+ /*
+  * display resources
+  */
+-/* color mode */
+-#define N_ColorMode "xblast.colorMode"
+-#define D_ColorMode "XBlast.colorMode"
+-#define C_ColorMode "XBlast.ColorMode"
+ /* fonts */
+ #define N_LargeFont  "xblast.largeFont"
+ #define D_LargeFont  "XBlast.largeFont"
+diff -Naur XBlast-2.6-sound.orig/Legacy/setup.c XBlast-2.6-sound/Legacy/setup.c
+--- XBlast-2.6-sound.orig/Legacy/setup.c	2006-04-10 17:41:31.000000000 +0200
++++ XBlast-2.6-sound/Legacy/setup.c	2006-04-10 17:47:38.000000000 +0200
+@@ -908,8 +908,6 @@
+     fprintf(fp, str_format, N_BellSound, setup->sound_flag ? "True" : "False" );
+ #endif
+     fprintf(fp, int_format, N_FrameRate, (int)(1000000/setup->frame_time));
+-    fprintf(fp, str_format, N_AllowColorMode, 
+-	    setup->color_mode ? "True" : "False" );
+     
+ #ifdef XBLAST_SOUND
+     /* sound server setup */
+@@ -1097,9 +1095,6 @@
+     }
+   }
+ 
+-#ifndef MONO_XBLAST
+-  query_bool_for_database (&inter_DB, N_AllowColorMode, "Allow color mode");
+-#endif
+   query_int_for_database (&inter_DB, N_FrameRate, "Frames per second", 2, 100, 
+ 			  db_get_int(default_DB, 2, 100, N_FrameRate, 
+ 				     C_FrameRate) );
+@@ -1147,7 +1142,6 @@
+     string_to_children ( db_get_string (default_DB, get_level_res_name(level), C_UseLevel ) );
+   }
+ 
+-  string_to_children ( db_get_string (default_DB, N_AllowColorMode, C_AllowColorMode) );
+   string_to_children ( db_get_string (default_DB, N_BellSound , C_BellSound) );
+ }
+ 
+@@ -1194,8 +1188,6 @@
+   }
+ 
+   string_from_parent(buf);
+-  XrmPutStringResource(&inter_DB, N_AllowColorMode, buf);
+-  string_from_parent(buf);
+   XrmPutStringResource(&inter_DB, N_BellSound, buf);
+   string_to_children ( db_get_string (default_DB, N_BellSound , C_BellSound) );
+ 
+@@ -1774,9 +1766,6 @@
+   setup->random_spos = db_get_bool(default_DB, N_RandomPlayerPosition,
+ 				   C_Random);
+   setup->print_stat = db_get_bool(default_DB, N_PrintStat, C_PrintStat);
+-
+-  setup->color_mode = db_get_bool(default_DB, N_AllowColorMode, 
+-				  C_AllowColorMode);
+   /* use level setzen */
+   for (i=0; i<levelMax; i++) {
+     setup->use_level[i] = db_get_bool(default_DB, get_level_res_name(i), 
+@@ -1943,22 +1932,6 @@
+   XBGraphicsSetup *gfx_setup;
+ #endif
+ {
+-  /* color mode */
+-  if ( db_get_bool(default_DB, N_AllowColorMode, C_AllowColorMode)
+-       && db_get_bool(disp_DB, N_ColorMode, C_ColorMode) ) {
+-#if 0
+-    if (db_get_bool(default_DB, N_AllowHiColorMode, C_AllowHiColorMode)) {
+-      gfx_setup->max_color_mode = COL_HICOLOR;
+-    } else {
+-      gfx_setup->max_color_mode = COL_COLOR;
+-    }
+-#else
+-    gfx_setup->max_color_mode = COL_HICOLOR;
+-#endif
+-  } else {
+-    gfx_setup->max_color_mode = COL_MONO;
+-  }
+-
+   /* color calibration */
+   gfx_setup->rbase = db_get_int(disp_DB, 0,65535, N_BaseRed,  C_BaseColor);
+   gfx_setup->gbase = db_get_int(disp_DB, 0,65535, N_BaseGreen,C_BaseColor);
+diff -Naur XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.tcl XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.tcl
+--- XBlast-2.6-sound.orig/Legacy/tkXBlast/tkXBlast.tcl	2006-04-10 17:41:31.000000000 +0200
++++ XBlast-2.6-sound/Legacy/tkXBlast/tkXBlast.tcl	2006-04-10 18:04:59.000000000 +0200
+@@ -128,8 +128,6 @@
+ #
+ proc initWish {} {
+     #
+-    global colorMode
+-    #
+     global frameColor
+     global frameColorLight
+     global textColorLight
+@@ -137,24 +135,8 @@
+     #
+     global argv
+     #
+-    # try to detect color mode
+-    #
+-    if {[lindex $argv 0]!="-mono"} {
+-	case [winfo screenvisual .] {
+-	    {grayscale staticgray} {
+-		set colorMode 0
+-	    } 
+-	    default {
+-		set colorMode 1
+-	    }
+-	}
+-    } else {
+-	set colorMode 0
+-    }
+-    #
+     # set palette
+     #
+-    if {$colorMode} {
+ 	set frameColor(.launch)         rgb:ff/7f/7f
+ 	set frameColor(.levels)         rgb:ff/ff/7f
+ 	set frameColor(.statistics)     rgb:7f/ff/7f
+@@ -171,16 +153,6 @@
+ 	#
+ 	set textColorLight Black
+ 	set textColor Black
+-    } else {
+-	foreach i {.launch .levels .statistics .playerColor .playerResource \
+-		.xblastColor} {
+-	    set frameColor($i) Black
+-	    set frameColorLight($i) White
+-	}
+-	set textColorLight Black
+-	set textColor White
+-	#tk_setPalette White
+-    }
+     #
+     # set default player colors
+     #
+@@ -188,7 +160,6 @@
+     global playerColors1
+     global playerColors2
+     #
+-    if {$colorMode} {
+ 	for {set i 0} {$i < 6} {incr i} {
+ 	    set var1 [lindex $playerColorItemList $i]Color1
+ 	    set var2 [lindex $playerColorItemList $i]Color2
+@@ -197,12 +168,6 @@
+ 	    set $var1 [lindex $playerColors1 $i]
+ 	    set $var2 [lindex $playerColors2 $i]
+ 	}
+-    } else {
+-	foreach i $playerColorItemList {
+-	    set ${i}Color1 White
+-	    set ${i}Color2 White
+-	}
+-    }
+     
+ }
+ 
+@@ -312,7 +277,6 @@
+ 
+ proc createButtonRow {W} {
+     global fontMedium
+-    global colorMode
+     global frameColor
+     global textColor 
+     global frameColorLight
+@@ -340,7 +304,6 @@
+ 	    -background $frameColor(.statistics) \
+ 	    -activebackground $frameColorLight(.statistics)\
+ 	    -activeforeground $textColorLight
+-    if {$colorMode} {
+ 	button $W.playerColor -text "  Player Colors  " \
+ 		-font $fontMedium \
+ 		-command "showFrame .playerColor" \
+@@ -348,7 +311,6 @@
+ 		-background $frameColor(.playerColor)\
+ 		-activebackground $frameColorLight(.playerColor)\
+ 		-activeforeground $textColorLight
+-    }
+     button $W.playerResource -text "  Player Resources  " \
+ 	    -font $fontMedium \
+ 	    -command "showFrame .playerResource"\
+@@ -356,7 +318,6 @@
+ 	    -background $frameColor(.playerResource)\
+ 	    -activebackground $frameColorLight(.playerResource)\
+ 	    -activeforeground $textColorLight
+-#    if {$colorMode} {
+ #	button $W.xblastColor -text "  XBlast Colors  " \
+ #		-font $fontMedium \
+ #		-command "showFrame .xblastColor" \
+@@ -364,7 +325,6 @@
+ #		-background $frameColor(.xblastColor)\
+ #		-activebackground $frameColorLight(.xblastColor)\
+ #		-activeforeground $textColorLight
+-#    }
+ 
+     foreach w [winfo children $W] {
+ 	pack $w -side left -fill y -expand yes -padx 8 -pady 4
+@@ -1026,8 +986,6 @@
+     global fontMedium
+     global fontSmall
+     #
+-    global colorMode
+-    #
+     frame $W -relief raised -borderwidth 2
+     makeTitle $W.title .statistics "Select $mode"
+     #
+@@ -1040,9 +998,7 @@
+ 	    -width 12
+     listbox $W.list.box \
+ 	    -yscrollcommand "$W.list.scroll set"
+-    if {$colorMode} {
+ 	$W.list.box config -background Gray95
+-    }
+     if {$mode=="Level"} {
+ 	$W.list.box config -font $fontSmall 
+ 	$W.list.box config -height 24 -width 34 -selectmode single 
+@@ -1061,8 +1017,6 @@
+     global fontTypewriter
+     global fontMedium
+     #
+-    global colorMode
+-    #
+     frame $W -relief raised -borderwidth 2
+     makeTitle $W.title .statistics "Statistics Output" 
+     #
+@@ -1078,9 +1032,7 @@
+ 	    -height 24 \
+ 	    -font $fontTypewriter \
+ 	    -yscrollcommand "$W.text.scroll set" 
+-    if {$colorMode} {
+ 	$W.text.box config -background Gray95
+-    }
+     pack $W.text.box -side left -fill both -expand yes
+     pack $W.text.scroll -side left -fill y
+     #
+@@ -1170,7 +1122,6 @@
+     global numVictories
+     global randomPlayer
+     global randomLevel
+-    global blackWhite
+     global soundOption
+     global forkMode
+     global gameStat
+@@ -1203,7 +1154,7 @@
+ 	}
+     }
+     set optionString "$teamMode -L $numLives -v $numVictories $randomPlayer\
+-	    $randomLevel $blackWhite -f $frameRate $soundOption \
++	    $randomLevel -f $frameRate $soundOption \
+ 	    $forkMode $recordMode $gameStat" 
+     wm withdraw .
+     #    catch "exec $xblastCommand $playerString $optionString" output
+@@ -1270,7 +1221,6 @@
+     global numVictories
+     global randomPlayer
+     global randomLevel
+-    global blackWhite
+     global soundOption
+     global forkMode
+     global gameStat
+@@ -1310,11 +1260,6 @@
+     } else {
+ 	puts $fp "xblast.randomLevelOrder: False"
+     }
+-    if {$blackWhite=="-bw"} {
+-	puts $fp "xblast.allowColorMode: False"
+-    } else {
+-	puts $fp "xblast.allowColorMode: True"
+-    }
+     global hasDspSound
+     if {$hasDspSound} {
+ 	if {$soundOption == "-stereo"} {
+@@ -1367,7 +1312,6 @@
+     global numVictories
+     global randomPlayer
+     global randomLevel
+-    global blackWhite
+     global soundOption
+     global forkMode
+     global gameStat
+@@ -1489,14 +1433,6 @@
+ 		    set randomLevel "+rl"
+ 		}
+ 	    }
+-	    {xblast.allowColorMode} {
+-		# black and white mode
+-		if {$value} {
+-		    set blackWhite "+bw"
+-		} else {
+-		    set blackWhite "-bw"
+-		}
+-	    }
+ 	    {xblast.bellSound} {
+ 		# toggle bell sound
+ 		global hasDspSound
+@@ -1578,8 +1514,6 @@
+ #
+ proc createPlayerWidget {W player} {
+     #
+-    global colorMode
+-    #
+     global bitmapPath
+     global fontLarge 
+     global fontMedium 
+@@ -1839,26 +1773,6 @@
+ 	    -side left -fill y -expand yes -pady 2 
+ 
+     #
+-    # force block and white box
+-    #
+-    global blackWhite
+-    label $W.o.l.blackWhite -text "Allow color mode" -font $fontMedium
+-    frame $W.o.r.blackWhite -relief sunken
+-    radiobutton $W.o.r.blackWhite.b1 \
+-	    -variable blackWhite \
+-	    -text "yes " \
+-	    -value "+bw" \
+-	    -font $fontMedium
+-    radiobutton $W.o.r.blackWhite.b0 \
+-	    -variable blackWhite \
+-	    -text "no " \
+-	    -value "-bw" \
+-	    -font $fontMedium
+-    pack $W.o.r.blackWhite.b1 $W.o.r.blackWhite.b0 \
+-	    -side left -fill y -expand yes -pady 2 
+-    
+-
+-    #
+     # frameRate box
+     #
+     global frameRate
+@@ -2309,19 +2223,11 @@
+ 
+ proc createBigImage {W id} {
+     global bitmapPath
+-    global colorMode
+     #
+     # check if color or bw mode
+     #
+     frame $W -background White \
+ 	    -relief sunken -borderwidth 2 
+-    if {! $colorMode} {
+-	label $W.c \
+-		-background white \
+-		-foreground black \
+-		-bitmap @${bitmapPath}/big_${id}.xbm
+-
+-    } else {
+ 	#
+ 	# create images needed
+ 	#
+@@ -2394,7 +2300,6 @@
+ 	$W.c create image 4 0 -anchor nw -image playerHandsfeet${id}
+ 	$W.c create image 4 0 -anchor nw -image playerArmslegs${id}
+ 	$W.c create image 4 0 -anchor nw -image playerBackpack${id}
+-    }
+     pack $W.c -side left -expand yes -fill none
+ }
+ 
+@@ -3356,9 +3261,6 @@
+ global randomLevel
+ set randomLevel "+rl"
+ #
+-global blackWhite
+-set blackWhite "+bw"
+-#
+ global soundOption
+ if {$hasDspSound} {
+     set soundOption "-stereo"
+diff -Naur XBlast-2.6-sound.orig/Legacy/XBlast.ad XBlast-2.6-sound/Legacy/XBlast.ad
+--- XBlast-2.6-sound.orig/Legacy/XBlast.ad	2006-04-10 17:41:31.000000000 +0200
++++ XBlast-2.6-sound/Legacy/XBlast.ad	2006-04-10 17:53:27.000000000 +0200
+@@ -28,12 +28,10 @@
+ 
+ # global setup (valid for all displays)
+ XBlast.frameRate:      20
+-XBlast.allowColorMode: true
+ XBlast.bellSound:      true
+ XBlast.fork:           true
+ 
+ # local setup (can be changed by local xresources)
+-XBlast.colorMode: true
+ # color calibration (for Hicolor mode)
+ XBlast.BaseColor: 4096
+ 
+diff -Naur XBlast-2.6-sound.orig/Legacy/xblast.man XBlast-2.6-sound/Legacy/xblast.man
+--- XBlast-2.6-sound.orig/Legacy/xblast.man	2006-04-10 17:41:31.000000000 +0200
++++ XBlast-2.6-sound/Legacy/xblast.man	2006-04-10 18:03:33.000000000 +0200
+@@ -113,13 +113,6 @@
+ .B -?, -h
+ This option causes \fIXBlast\fP to print a usage message.
+ .TP
+-.B -bw
+-The option forces black and white mode for all displays.
+-.TP
+-.B +bw
+-The option indicates to allow the color mode for all displays, 
+-which support it.
+-.TP
+ .B -D
+ This option indicates to load default settings from the file ".xblast" 
+ in your home directory. This save file will be used by
+@@ -645,10 +638,6 @@
+ override resources from sources mentioned before.
+ The following game resources are available:
+ .TP
+-.B allowColorMode (\fPclass\fB AllowColorMode)
+-Specifies whether the color mode is allowed for any display, which supports it.
+-The default is "true"
+-.TP
+ .B bellSound (\fPclass\fB BellSound)
+ Specifies if the bell is used for explosions and game restart after pause.
+ The default is "true"
+@@ -713,10 +702,6 @@
+ .PP
+ Furthermore the following general resources can be set:
+ .TP
+-.B colorMode (\fRclass\fP ColorMode)
+-Specifies if color mode should be used. This resource
+-is used only for color displays. The default is "true".
+-.TP
+ .B largeFont (\fRclass\fP Font)
+ Specifies the font to be used for large sized text.
+ The default is "-*-helvetica-bold-r-*-*-24-*-*-*-*-*-iso8859-*"

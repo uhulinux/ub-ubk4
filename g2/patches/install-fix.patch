@@ -1,0 +1,22 @@
+diff -Naurd g2-0.49a.orig/Makefile.in g2-0.49a/Makefile.in
+--- g2-0.49a.orig/Makefile.in	2002-02-13 23:56:30.000000000 +0100
++++ g2-0.49a/Makefile.in	2003-11-17 23:26:16.000000000 +0100
+@@ -89,12 +89,13 @@
+ libg2.@LD_SHARED_EXT@: $(OBJ)
+ 	@LD_SHARED@ @LD_SHARED_FLAGS@ -o $@ $(OBJ) @LD_SHARED_OPT@
+ 
+-install: libg2.a
+-	test -d $(LIBDIR) || mkdir -p $(LIBDIR)
+-	test -d $(INCDIR) || mkdir -p $(INCDIR)
+-	$(INSTALL_DATA) libg2.a $(LIBDIR)
++install: libg2.a libg2.@LD_SHARED_EXT@
++	test -d $(DESTDIR)$(LIBDIR) || mkdir -p $(DESTDIR)$(LIBDIR)
++	test -d $(DESTDIR)$(INCDIR) || mkdir -p $(DESTDIR)$(INCDIR)
++	$(INSTALL_DATA) libg2.a $(DESTDIR)$(LIBDIR)
++	$(INSTALL_DATA) libg2.@LD_SHARED_EXT@ $(DESTDIR)$(LIBDIR)
+ 	for IFILE in $(INS); do \
+-		$(INSTALL_DATA) $$IFILE  $(INCDIR); \
++		$(INSTALL_DATA) $$IFILE  $(DESTDIR)$(INCDIR); \
+ 	done
+ 
+ clean:

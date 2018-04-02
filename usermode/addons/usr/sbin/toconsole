@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [ ! "$1" ]; then
+	echo "Használat: toconsole [/usr]/sbin/programnév [fallback]"
+	exit -1;
+fi
+
+case "$1" in
+    /sbin/*|/usr/sbin/*)
+	LINK="${1/sbin/bin}"
+	;;
+    *)
+	echo "/sbin vagy /usr/sbin alatti programokat lehet beállítani."
+	exit 1
+	;;
+esac
+
+PROG="${1/*\//}"
+ln -s /usr/bin/consolehelper "$LINK"
+ln -s /etc/pam.d/consolehelper "/etc/pam.d/$PROG"
+
+FILE="/etc/security/console.apps/$PROG"
+mkdir -p /etc/security/console.apps
+
+echo USER=root    >  $FILE
+echo PROGRAM=$1   >> $FILE
+echo SESSION=true >> $FILE
+if [ "$2" ] ; then
+    echo FALLBACK=true >> $FILE
+else
+    echo FALLBACK=false >>$FILE
+fi

@@ -1,0 +1,14 @@
+diff -Nur orig/meson.build mod/meson.build
+--- orig/meson.build	2017-11-20 16:14:46.000000000 +0100
++++ mod/meson.build	2018-01-13 14:11:58.739960186 +0100
+@@ -113,10 +113,6 @@
+ subdir('examples')
+ subdir('testsuite')
+ 
+-if not meson.is_cross_build() and host_os != 'windows'
+-  subdir('doc')
+-endif
+-
+ pc_conf.set('prefix', get_option('prefix'))
+ pc_conf.set('exec_prefix', get_option('prefix'))
+ pc_conf.set('libdir', join_paths(get_option('prefix'), get_option('libdir')))

@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_install
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/cmake/modules
+cp CMake/FLTK* "$UB_INSTALLDIR"/usr/share/cmake/modules/
+mkdir -p "$UB_INSTALLDIR"/usr/share/doc/fltk/
+cd documentation
+ub_install
+ub_install install-linux
+cd ../test
+ub_install install-linux

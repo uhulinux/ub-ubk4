@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd /sys/bus/pci/devices || exit 1
+
+shopt -s nullglob
+for i in *; do
+	if [ -f "$i/class" -a "$(<$i/class)" == "0x060000" ]; then
+		if [ -e "$i/driver" ]; then
+			echo -n "$i" >"$i"/driver/unbind
+		fi
+	fi
+done

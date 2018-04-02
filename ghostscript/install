@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install soinstall
+
+cp "$UB_COMPILEDIR"/base/gserrors.h "$UB_INSTALLDIR"/usr/include/ghostscript/
+
+cd ijs
+ub_install

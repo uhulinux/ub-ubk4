@@ -1,0 +1,51 @@
+#!/bin/sh -eux
+
+if [ "$UB_ARCH" != "amd64" ];then
+    sed s%version_test_gt_cmp=gt%version_test_gt_cmp=lt% -i grub/util/grub-mkconfig_lib.in
+    cd grub
+    ./autogen.sh
+    ub_compile \
+        --with-grubdir=grub \
+        --enable-efiemu \
+        --disable-werror
+else
+    cp -r grub grub-bios
+    cp -r grub grub-efi
+    opts=" --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --mandir=/usr/share/man \
+    --infodir=/usr/share/info \
+    --with-grubdir=grub \
+	--disable-werror \
+	--disable-silent-rules \
+	--build=x86_64-gnu-linux \
+	--host=x86_64-gnu-linux \
+    "
+
+    cd grub-bios
+    ./autogen.sh
+    ./configure $opts \
+    --enable-efiemu \
+    --target="i386" \
+    --with-platform="pc"
+    make -j2
+
+    cd ../grub-efi
+    ./autogen.sh
+    ./configure $opts \
+	--disable-efiemu \
+	--target=x86_64 \
+	--with-platform="efi"
+    make -j2
+
+    cd ../grub
+    ./autogen.sh
+    ./configure $opts \
+	--enable-grub-emu-usb=no \
+	--enable-grub-emu-sdl=no \
+	--disable-grub-emu-pci \
+	--target=x86_64 \
+	--with-platform="emu"
+    make -j2
+fi

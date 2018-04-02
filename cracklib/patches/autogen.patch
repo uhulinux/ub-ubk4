@@ -1,0 +1,19 @@
+diff -Naur orig/src/configure.ac patched/src/configure.ac
+--- orig/src/configure.ac	2015-08-18 20:48:15.000000000 +0200
++++ patched/src/configure.ac	2016-07-15 11:10:10.452731199 +0200
+@@ -99,5 +99,5 @@
+ 
+ AC_OUTPUT(util/Makefile lib/Makefile doc/Makefile python/Makefile Makefile \
+ 		python/setup.py \
+-		po/Makefile.in m4/Makefile dicts/Makefile cracklib.spec)
++		po/Makefile.in dicts/Makefile cracklib.spec)
+ 
+diff -Naur orig/src/Makefile.am patched/src/Makefile.am
+--- orig/src/Makefile.am	2015-08-18 20:48:15.000000000 +0200
++++ patched/src/Makefile.am	2016-07-15 11:12:15.666456238 +0200
+@@ -1,4 +1,4 @@
+-SUBDIRS = m4 lib util po doc python dicts
++SUBDIRS = lib util po doc python dicts
+ 
+ EXTRA_DIST = \
+ 		cracklib.spec.in \

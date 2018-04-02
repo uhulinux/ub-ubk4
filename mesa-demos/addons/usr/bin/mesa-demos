@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd /usr/share/mesa-demos/objviewer
+for i in `ls -1 *.obj`;do
+echo objview $i
+read -n 1 -s
+./objview $i
+done
+cd /usr/share/mesa-demos/demos
+for i in `ls -1 ` ;do
+if [ ! "$i" == "gltestperf" ];then
+echo $i
+read -n 1 -s
+./$i
+fi
+done
+cd -

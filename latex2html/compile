@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+#Még a L2hos.pm sincs az PERL útvonalon?
+export PERL5LIB+="$UB_COMPILEDIR"
+
+# XXX FIXME ARRGHH: miért is kell neki a latex2html útvonalkomponens,
+# ha a default értékben a ./configure fájlban az nincs ott???
+ub_configure \
+	--shlibdir=/usr/share/latex2html
+ub_make

@@ -1,0 +1,21 @@
+diff -Naur orig/src/vfs/extfs/helpers/uesp patched/src/vfs/extfs/helpers/uesp
+--- orig/src/vfs/extfs/helpers/uesp	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/vfs/extfs/helpers/uesp	2011-12-15 17:40:47.000000000 +0100
+@@ -0,0 +1,17 @@
++#! /bin/sh
++#
++# EXTfs script for Midnight Commander 4.x.x
++# read details in README.MC
++#
++# Written by A'rpi/ESP-team  1999
++#
++
++case "$1" in
++  list)
++    unesp vm $2;
++    exit 0;;
++  copyout)
++    unesp eym $2 $4 /$3 >2 /dev/null
++    exit 0;;
++esac
++exit 1

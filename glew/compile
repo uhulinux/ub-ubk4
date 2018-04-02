@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+find -type f | while read i; do
+	if [ `file -b --mime-type "$i" | sed 's,/.*,,'` = 'text' ]; then
+		sed -i 's,\r,,' "$i"
+	fi
+done
+
+sed -i 's|lib64|lib|' config/Makefile.linux
+
+ub_compile

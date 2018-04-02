@@ -1,0 +1,33 @@
+#!/bin/sh -eux
+
+make \
+	MANDIR="$UB_INSTALLDIR"/usr/share/man \
+	install
+
+# attr
+for i in fgetxattr flistxattr fremovexattr fsetxattr getxattr \
+  lgetxattr listxattr llistxattr lremovexattr lsetxattr \
+  removexattr setxattr; do
+	rm "$UB_INSTALLDIR"/usr/share/man/man2/$i.2
+done
+rm "$UB_INSTALLDIR"/usr/share/man/man5/attr.5
+
+# libcap
+for i in capget capset; do
+	rm "$UB_INSTALLDIR"/usr/share/man/man2/$i.2
+done
+
+# shadow
+rm "$UB_INSTALLDIR"/usr/share/man/man5/passwd.5
+
+# x.org
+mv "$UB_INSTALLDIR"/usr/share/man/man4/{mouse,mouse_serial}.4
+
+# lirc szállít újabbat
+rm "$UB_INSTALLDIR"/usr/share/man/man4/lirc.4
+
+rm "$UB_INSTALLDIR"/usr/share/man/man5/tzfile.5
+rm "$UB_INSTALLDIR"/usr/share/man/man8/{tzselect,zdump,zic}.8
+
+# keyutils
+rm "$UB_INSTALLDIR"/usr/share/man/man7/{keyrings,persistent-keyring,process-keyring,session-keyring,thread-keyring,user-keyring,user-session-keyring}.7

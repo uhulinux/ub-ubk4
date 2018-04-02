@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+UB_MAKE_PROCS=1 \
+SENDMAIL=/usr/sbin/sendmail \
+ub_compile \
+	--with-jobdir=/var/spool/atjobs \
+	--with-atspool=/var/spool/atspool

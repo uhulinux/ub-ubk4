@@ -1,0 +1,18 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+if [ "$1" = "texinfo" -o "$1" = "+" ]; then
+	rm -f /usr/share/info/dir
+	for info in /usr/share/info/*.info; do
+		if grep -qx START-INFO-DIR-ENTRY "$info"; then
+			install-info "$info" /usr/share/info/dir
+		fi
+	done
+else
+	for info in $(grep '^/usr/share/info/.*\.info$' /var/lib/dpkg/info/"$1".list); do
+		if grep -qx START-INFO-DIR-ENTRY "$info"; then
+			install-info "$info" /usr/share/info/dir
+		fi
+	done
+fi

@@ -1,0 +1,12 @@
+diff -urN openslp-1.2.1.orig/Makefile.in openslp-1.2.1/Makefile.in
+--- openslp-1.2.1.orig/Makefile.in	2005-03-02 19:00:22.000000000 +0100
++++ openslp-1.2.1/Makefile.in	2008-09-15 16:16:33.000000000 +0200
+@@ -185,7 +185,7 @@
+ target_alias = @target_alias@
+ SUBDIRS = common libslpattr slpd libslp slptool test
+ EXTRA_DIST = win32 doc etc README.W32 FAQ
+-DOC_DIR = $(prefix)/doc/openslp-$(VERSION)
++DOC_DIR = $(prefix)/share/doc/openslp-$(VERSION)
+ all: config.h
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+ 

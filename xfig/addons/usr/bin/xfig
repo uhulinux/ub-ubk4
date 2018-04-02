@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for i in LANG ${!LC_*}; do
+	if [ "${!i}" != "${!i%.UTF-8}" ]; then
+		export "$i"="${!i%.UTF-8}"
+	fi
+done
+
+exec xfig.bin "$@"

@@ -1,0 +1,40 @@
+#!/bin/sh -eux
+
+# „generált” ikonok, azaz szimlinkek a Makefile.am-ből
+
+for size in 16 24; do \
+   (cd gtk/stock-icons/$size \
+   && rm -f go-previous-rtl.png \
+   && ln -s go-next-ltr.png go-previous-rtl.png \
+   && rm -f go-next-rtl.png \
+   && ln -s go-previous-ltr.png go-next-rtl.png \
+   && rm -f go-first-rtl.png \
+   && ln -s go-last-ltr.png go-first-rtl.png \
+   && rm -f go-last-rtl.png \
+   && ln -s go-first-ltr.png go-last-rtl.png \
+   && rm -f media-seek-forward-rtl.png \
+   && ln -s media-seek-backward-ltr.png media-seek-forward-rtl.png \
+   && rm -f media-skip-forward-rtl.png \
+   && ln -s media-skip-backward-ltr.png media-skip-forward-rtl.png \
+   && rm -f media-skip-backward-rtl.png \
+   && ln -s media-skip-forward-ltr.png media-skip-backward-rtl.png \
+   && rm -f media-seek-backward-rtl.png \
+   && ln -s media-seek-forward-ltr.png media-seek-backward-rtl.png \
+   && rm -f document-save.png \
+   && ln -s media-floppy.png document-save.png \
+   && rm -f folder-remote.png \
+   && ln -s folder.png folder-remote.png \
+   && rm -f user-home.png \
+   && ln -s folder.png user-home.png \
+   && rm -f user-desktop.png \
+   && ln -s folder.png user-desktop.png \
+) done
+
+# ezek az ikonok valamiért csak 20-as méretben vannak, viszont 16-os és 24-es (is) kell belőlük
+
+for size in 16 24; do
+	for icon in gtk-apply.png gtk-cancel.png gtk-no.png gtk-ok.png gtk-yes.png window-close.png; do
+		cp gtk/stock-icons/20/$icon gtk/stock-icons/$size/$icon
+		convert gtk/stock-icons/$size/$icon -resize "$size"x"$size" gtk/stock-icons/$size/$icon
+	done
+done

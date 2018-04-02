@@ -1,0 +1,11 @@
+diff -Nur orig/avahi-daemon/avahi-daemon.service.in mod/avahi-daemon/avahi-daemon.service.in
+--- orig/avahi-daemon/avahi-daemon.service.in	2011-09-01 02:13:12.000000000 +0200
++++ mod/avahi-daemon/avahi-daemon.service.in	2017-02-10 18:03:16.513239359 +0100
+@@ -25,6 +25,7 @@
+ ExecStart=@sbindir@/avahi-daemon -s
+ ExecReload=@sbindir@/avahi-daemon -r
+ NotifyAccess=main
++PIDFile=/var/run/avahi-daemon/pid
+ 
+ [Install]
+ WantedBy=multi-user.target

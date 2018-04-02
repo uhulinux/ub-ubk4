@@ -1,0 +1,22 @@
+#!/bin/sh -eux
+
+make \
+	prefix="$UB_INSTALLDIR"/usr \
+	mandir="$UB_INSTALLDIR"/usr/share/man \
+	infodir="$UB_INSTALLDIR"/usr/share/info \
+	tooldir="$UB_INSTALLDIR"/usr \
+	install
+make \
+	prefix="$UB_INSTALLDIR"/usr \
+	mandir="$UB_INSTALLDIR"/usr/share/man \
+	infodir="$UB_INSTALLDIR"/usr/share/info \
+	tooldir="$UB_INSTALLDIR"/usr \
+	install-info
+
+cp -f include/plugin-api.h "$UB_INSTALLDIR"/usr/include/
+
+## create a "host" named link like in gcc
+ln -sf ar "$UB_INSTALLDIR"/usr/bin/i586-gnu-linux-ar
+ln -sf as "$UB_INSTALLDIR"/usr/bin/i586-gnu-linux-as
+ln -sf ar "$UB_INSTALLDIR"/usr/bin/i686-gnu-linux-ar
+ln -sf as "$UB_INSTALLDIR"/usr/bin/i686-gnu-linux-as

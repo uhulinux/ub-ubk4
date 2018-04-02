@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+make \
+	prefix=/usr \
+	DESTDIR=${UB_INSTALLDIR} \
+	install
+rm -rf ${UB_INSTALLDIR}/usr/share/doc
