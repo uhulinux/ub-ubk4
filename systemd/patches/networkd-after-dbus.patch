@@ -1,7 +1,7 @@
-diff -Nur orig/units/systemd-networkd.service.m4.in mod/units/systemd-networkd.service.m4.in
---- orig/units/systemd-networkd.service.m4.in	2017-07-12 16:01:10.000000000 +0200
-+++ mod/units/systemd-networkd.service.m4.in	2018-01-21 16:20:11.006171078 +0100
-@@ -11,7 +11,7 @@
+diff -Naur orig/units/systemd-networkd.service.in patched/units/systemd-networkd.service.in
+--- orig/units/systemd-networkd.service.in	2018-01-28 16:58:17.000000000 +0100
++++ patched/units/systemd-networkd.service.in	2018-02-04 12:47:27.904142171 +0100
+@@ -13,7 +13,7 @@
  ConditionCapability=CAP_NET_ADMIN
  DefaultDependencies=no
  # systemd-udevd.service can be dropped once tuntap is moved to netlink

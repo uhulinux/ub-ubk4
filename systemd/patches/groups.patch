@@ -1,7 +1,7 @@
 diff -Naur orig/sysusers.d/basic.conf.in patched/sysusers.d/basic.conf.in
---- orig/sysusers.d/basic.conf.in	2017-07-12 16:01:10.000000000 +0200
-+++ patched/sysusers.d/basic.conf.in	2018-01-19 22:51:27.808591377 +0100
-@@ -18,19 +18,11 @@
+--- orig/sysusers.d/basic.conf.in	2018-01-28 16:58:17.000000000 +0100
++++ patched/sysusers.d/basic.conf.in	2018-02-04 12:36:29.165583754 +0100
+@@ -18,20 +18,11 @@
  g wheel   -     -            -
  
  # Access to certain kernel and userspace facilities
@@ -15,15 +15,16 @@ diff -Naur orig/sysusers.d/basic.conf.in patched/sysusers.d/basic.conf.in
 -g dialout -     -            -
 -g disk    -     -            -
 -g input   -     -            -
- g lp      -     -            -
 -g kvm     -     -            -
+ g lp      -     -            -
+-g render  -     -            -
 -g tape    -     -            -
  g video   -     -            -
  
  # Default group for normal users
 diff -Naur orig/tmpfiles.d/systemd.conf.m4 patched/tmpfiles.d/systemd.conf.m4
---- orig/tmpfiles.d/systemd.conf.m4	2017-07-12 16:01:10.000000000 +0200
-+++ patched/tmpfiles.d/systemd.conf.m4	2018-01-19 22:53:06.905495587 +0100
+--- orig/tmpfiles.d/systemd.conf.m4	2018-01-28 16:58:17.000000000 +0100
++++ patched/tmpfiles.d/systemd.conf.m4	2018-02-04 12:33:46.164032827 +0100
 @@ -8,7 +8,7 @@
  # See tmpfiles.d(5) for details
  
@@ -34,17 +35,17 @@ diff -Naur orig/tmpfiles.d/systemd.conf.m4 patched/tmpfiles.d/systemd.conf.m4
  d /run/systemd/ask-password 0755 root root -
  d /run/systemd/seats 0755 root root -
 diff -Naur orig/tmpfiles.d/var.conf.m4 patched/tmpfiles.d/var.conf.m4
---- orig/tmpfiles.d/var.conf.m4	2017-07-12 16:01:10.000000000 +0200
-+++ patched/tmpfiles.d/var.conf.m4	2018-01-19 22:53:44.693838460 +0100
+--- orig/tmpfiles.d/var.conf.m4	2018-01-28 16:58:17.000000000 +0100
++++ patched/tmpfiles.d/var.conf.m4	2018-02-04 12:38:12.238582244 +0100
 @@ -13,9 +13,9 @@
  
  d /var/log 0755 - - -
- m4_ifdef(`HAVE_UTMP',
+ m4_ifdef(`ENABLE_UTMP',
 -f /var/log/wtmp 0664 root utmp -
--f /var/log/btmp 0600 root utmp -
+-f /var/log/btmp 0660 root utmp -
 -f /var/log/lastlog 0664 root utmp -
 +f /var/log/wtmp 0664 root root -
-+f /var/log/btmp 0600 root root -
++f /var/log/btmp 0660 root root -
 +f /var/log/lastlog 0664 root root -
  )m4_dnl
  
