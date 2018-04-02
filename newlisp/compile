@@ -1,9 +1,4 @@
 #!/bin/sh -eux
 
-if [ "$UB_ARCH" == "amd64" ];then
 ub_make \
     -f makefile_linuxLP64
-else
-ub_make \
-    -f makefile_linux_utf8
-fi

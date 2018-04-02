@@ -1,39 +1,14 @@
 #!/bin/sh -eux
 
-if [ "$UB_ARCH" == "amd64" ];then
+cd rust-std-x86_64-unknown-linux-gnu
+cp -r lib ${UB_INSTALLDIR}/usr
 
-	tar -xzvf rust-${UB_VERSION}-x86_64-unknown-linux-gnu.tar.gz
-	cd rust-${UB_VERSION}-x86_64-unknown-linux-gnu
+cd ../rustc
+cp -r bin ${UB_INSTALLDIR}/usr
+cp -r lib ${UB_INSTALLDIR}/usr
+cp -r share ${UB_INSTALLDIR}/usr
 
-	cd rust-std-x86_64-unknown-linux-gnu
-	cp -r lib ${UB_INSTALLDIR}/usr
-
-	cd ../rustc
-	cp -r bin ${UB_INSTALLDIR}/usr
-	cp -r lib ${UB_INSTALLDIR}/usr
-	cp -r share ${UB_INSTALLDIR}/usr
-
-	cd ../cargo
-	cp -r bin ${UB_INSTALLDIR}/usr
-	cp -r share/doc ${UB_INSTALLDIR}/usr/share
-	cp -r share/man ${UB_INSTALLDIR}/usr/share
-
-else
-
-	tar -xzvf rust-${UB_VERSION}-i686-unknown-linux-gnu.tar.gz
-	cd rust-${UB_VERSION}-i686-unknown-linux-gnu
-
-	cd rust-std-i686-unknown-linux-gnu
-	cp -r lib ${UB_INSTALLDIR}/usr
-
-	cd ../rustc
-	cp -r bin ${UB_INSTALLDIR}/usr
-	cp -r lib ${UB_INSTALLDIR}/usr
-	cp -r share ${UB_INSTALLDIR}/usr
-
-	cd ../cargo
-	cp -r bin ${UB_INSTALLDIR}/usr
-	cp -r share/doc ${UB_INSTALLDIR}/usr/share
-	cp -r share/man ${UB_INSTALLDIR}/usr/share
-
-fi
+cd ../cargo
+cp -r bin ${UB_INSTALLDIR}/usr
+cp -r share/doc ${UB_INSTALLDIR}/usr/share
+cp -r share/man ${UB_INSTALLDIR}/usr/share

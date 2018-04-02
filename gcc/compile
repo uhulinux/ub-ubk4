@@ -10,19 +10,11 @@ XCFLAGS="$OPT_FLAGS" \
 TCFLAGS="$OPT_FLAGS" \
 GCJFLAGS="$OPT_FLAGS" \
 
-if [ "$UB_ARCH" == "amd64" ]; then
-	hostflags=(
-	--build=x86_64-gnu-linux
-	--host=x86_64-gnu-linux
-	--target=x86_64-gnu-linux
-	)
-else
-	hostflags=(
-	--build=i686-gnu-linux
-	--host=i686-gnu-linux
-	--target=i686-gnu-linux
-	)
-fi
+hostflags=(
+--build=x86_64-gnu-linux
+--host=x86_64-gnu-linux
+--target=x86_64-gnu-linux
+)
 
 SED=sed \
 

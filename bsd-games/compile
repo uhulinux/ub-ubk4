@@ -1,11 +1,4 @@
 #!/bin/sh -eux
 
-if [ "$UB_ARCH" == "amd64" ];then
-cd adventure
-patch -i $UB_SRCDIR/patches/adventure-64bit.patch.skip
-cd ../dm
-patch -i $UB_SRCDIR/patches/dm-64bit.patch.skip
-cd ..
-fi
 mv monop/monop{,oly}.6.in
 echo "$UB_INSTALLDIR" | ub_compile

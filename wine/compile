@@ -1,6 +1,5 @@
 #!/bin/sh -eux
 
-if [ "$UB_ARCH" == "amd64" ];then
 ub_compile \
     --libdir=/usr/lib \
     --enable-win64 \
@@ -14,16 +13,4 @@ ub_compile \
 	--without-sane \
 	--without-netapi \
 	--with-dbus
-else
-ub_compile \
- 	--without-hal \
-	--without-openal \
-	--without-opencl \
-	--without-oss \
-	--without-capi \
-	--without-tiff \
-	--without-mpg123 \
-	--without-sane \
-	--without-netapi \
-	--with-dbus
-fi
+

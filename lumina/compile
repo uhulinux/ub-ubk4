@@ -3,10 +3,6 @@
 cp src-qt5/core/libLumina/LuminaOS-Debian.cpp src-qt5/core/libLumina/LuminaOS-UHU-Linux.cpp
 sed -i "s,Debian GNU/Linux,UHU-Linux," src-qt5/core/libLumina/LuminaOS-UHU-Linux.cpp
 
-if [ $UB_ARCH == "i386" ]; then
-qmake -set QMAKE_XSPEC linux-g++-32
-fi
-
 # QMAKE_CFLAGS_ISYSTEM=
 
 qmake \

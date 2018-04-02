@@ -1,16 +1,9 @@
 #!/bin/sh -eux
 
 mkdir -p "$UB_INSTALLDIR"/usr/share/pixmaps
-if [ "$UB_ARCH" == i386 ];then
-arch=86
-else
-arch=64
-fi
-tar x -f SweetHome3D-${UB_VERSION}-linux-x${arch}.tgz
-rm SweetHome3D-${UB_VERSION}-linux*
-cd SweetHome3D-${UB_VERSION}
+
 cp -a . -- "$UB_INSTALLDIR"/usr/share/SweetHome3D/
-ln -s ../share/SweetHome3D/jre8/lib/$UB_ARCH/jli/libjli.so \
+ln -s ../share/SweetHome3D/jre8/lib/amd64/jli/libjli.so \
 "$UB_INSTALLDIR"/usr/lib/libjli.so
 cp SweetHome3DIcon.png "$UB_INSTALLDIR"/usr/share/pixmaps/
 cp COPYING.TXT LICENSE.TXT ../

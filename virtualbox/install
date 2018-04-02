@@ -3,23 +3,13 @@
 source ./env.sh
 
 # we install the kernel module
-if [ $UB_ARCH = "amd64" ]; then
-	cd ./out/linux.amd64/release/bin/src
-	make \
-		DESTDIR="$UB_INSTALLDIR" \
-		INSTALL_MOD_PATH="$UB_INSTALLDIR" \
-		KERN_DIR="/usr/src/`readlink /usr/src/linux`" \
-		MODULE_DIR="${UB_INSTALLDIR}`ls -1d /lib/modules/*.x86_64`/kernel/drivers/misc/" \
-		install
-else
-	cd ./out/linux.x86/release/bin/src
-	make \
-		DESTDIR="$UB_INSTALLDIR" \
-		INSTALL_MOD_PATH="$UB_INSTALLDIR" \
-		KERN_DIR="/usr/src/`readlink /usr/src/linux`" \
-		MODULE_DIR="${UB_INSTALLDIR}`ls -1d /lib/modules/*.i386`/kernel/drivers/misc/" \
-		install
-fi
+cd ./out/linux.amd64/release/bin/src
+make \
+	DESTDIR="$UB_INSTALLDIR" \
+	INSTALL_MOD_PATH="$UB_INSTALLDIR" \
+	KERN_DIR="/usr/src/`readlink /usr/src/linux`" \
+	MODULE_DIR="${UB_INSTALLDIR}`ls -1d /lib/modules/*.x86_64`/kernel/drivers/misc/" \
+	install
 
 # install the other files
 cd ..

@@ -2,9 +2,6 @@
 
 sed -i "/ADDITIONAL_OBJCFLAGS/s/=/= -fobjc-exceptions/" GNUmakefile
 
-if [ "$UB_ARCH" == "amd64" ]; then
-	export UB_TARGET="x86_64-unknown-linux"
-else
-	export UB_TARGET="i686-gnu-linux"
-fi
+export UB_TARGET="x86_64-unknown-linux"
+
 CC=gcc make GNUSTEP_MAKEFILES="/usr/share/GNUstep/Makefiles" -f Makefile release-deployment

@@ -5,10 +5,6 @@ host=$(uname -m)
 cross=1
 if [ "$host" == "x86_64" ] && [ "$UB_ARCH" == "amd64" ];then
     cross=0
-else
-    if [ "$host" == "i686" ] && [ "$UB_ARCH" == "i386" ];then
-        cross=0
-    fi
 fi
 
 ub_compile \

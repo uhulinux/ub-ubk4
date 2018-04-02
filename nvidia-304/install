@@ -1,12 +1,8 @@
 #!/bin/bash -eux
+
 #kernel verzió
-if [ "$UB_ARCH" == "amd64" ];then
 KVER="$(ls -1 /lib/modules | grep x86_64)"
 forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
-else
-KVER="$(ls -1 /lib/modules | grep i386)"
-forras="NVIDIA-Linux-x86-${UB_VERSION}"
-fi
 #célkönyvtárak
 #libek
 cellibdir="$UB_INSTALLDIR"/usr/lib

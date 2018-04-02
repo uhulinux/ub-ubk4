@@ -1,8 +1,4 @@
 #!/bin/sh -eux
 
-if [ $UB_ARCH == "i386" ]; then
-qmake -set QMAKE_XSPEC linux-g++-32
-fi
-
 qmake
 ub_compile

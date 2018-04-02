@@ -1,7 +1,3 @@
 #!/bin/sh -eux
 
-arch=""
-if [ "$UB_ARCH" == "amd64" ];then
-arch="_64"
-fi
-cp -a bin.linuxx86${arch}/bjam "$UB_INSTALLDIR"/usr/bin/bjam
+cp -a bin.linuxx86_64/bjam "$UB_INSTALLDIR"/usr/bin/bjam

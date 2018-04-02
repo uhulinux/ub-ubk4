@@ -1,10 +1,5 @@
 #!/bin/sh -eux
 
-opts=""
-if [ "$UB_ARCH" == "amd64" ];then
-opts="--enable-64bit"
-fi
-
 ub_compile \
 	--includedir=/usr/include/nspr4 \
-	$opts
+	--enable-64bit

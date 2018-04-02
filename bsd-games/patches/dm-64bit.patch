@@ -1,0 +1,12 @@
+--- bsd-games/dm/utmpentry.c
++++ bsd-games/dm/utmpentry.c
+@@ -291,7 +291,8 @@
+ 	e->line[sizeof(e->line) - 1] = '\0';
+ 	(void)strncpy(e->host, up->ut_host, sizeof(up->ut_host));
+ 	e->name[sizeof(e->host) - 1] = '\0';
+-	e->tv = up->ut_tv;
++	e->tv.tv_sec = up->ut_tv.tv_sec;
++	e->tv.tv_usec = up->ut_tv.tv_usec;
+ 	adjust_size(e);
+ }
+ #endif

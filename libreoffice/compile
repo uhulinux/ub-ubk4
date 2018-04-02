@@ -14,21 +14,6 @@ ccache --max-size=12G
 # fi
 # mv *.{gz,zip,bz2,xz} src/
 
-# hostflags 32 és 64 bithez
-if [ "$UB_ARCH" == "amd64" ]; then
-	hostflags=(
-	--build=x86_64-linux
-	--host=x86_64-linux
-	--target=x86_64-linux
-	)
-else
-	hostflags=(
-	--build=i686-linux
-	--host=i686-linux
-	--target=i686-linux
-	)
-fi
-
 export QT5DIR=/usr/lib/qt5
 
 # ha van a distro-configs alatt megfelelő tartalmú .conf fájl, ekkor az
@@ -40,7 +25,9 @@ export QT5DIR=/usr/lib/qt5
 
 # opciók a distro-configs/LibreOfficeUHU.conf-ból
 ./autogen.sh \
-	${hostflags[@]} \
+	--build=x86_64-linux \
+	--host=x86_64-linux \
+	--target=x86_64-linux \
 	--with-distro=LibreOfficeUHU
 
 # az unitcheck és a slowcheck nem kell

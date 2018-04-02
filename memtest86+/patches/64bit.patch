@@ -1,0 +1,12 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2013-08-10 04:01:58.000000000 +0200
++++ mod/Makefile	2017-10-18 12:21:25.303274905 +0200
+@@ -35,7 +35,7 @@
+ 	objcopy -O binary $< memtest_shared.bin
+ 
+ memtest: memtest_shared.bin memtest.lds
+-	$(LD) -s -T memtest.lds -b binary memtest_shared.bin -o $@
++	$(LD) -s -T memtest.lds -z max-page-size=0x1000 -b binary memtest_shared.bin -o $@
+ 
+ head.s: head.S config.h defs.h test.h
+ 	$(CC) -E -traditional $< -o $@

@@ -1,12 +1,6 @@
 #!/bin/sh -eux
 
-if [ ${UB_ARCH} == "amd64" ];then
-arch="x64"
-else
-arch="i586"
-fi
-
-tar xf jdk-${UB_VERSION/.0./u}-linux-$arch.tar.gz
+tar xf jdk-${UB_VERSION/.0./u}-linux-x64.tar.gz
 
 cd jdk1.${UB_VERSION/.0./.0_}/jre/lib/desktop/applications
 

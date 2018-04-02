@@ -1,8 +1,0 @@
-#!/bin/sh -eux
-
-if [ "$UB_ARCH" == "amd64" ];then
-sed 's/int readlink/ssize_t readlink/' -i libutf8filename.c
-gcc -m64 -fPIC -shared -ldl -o libutf8filename.so libutf8filename.c
-else
-ub_compile
-fi

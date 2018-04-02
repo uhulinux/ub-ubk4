@@ -2,21 +2,19 @@
 
 cd grub
 cp AUTHORS COPYING NEWS README THANKS TODO ../
-if [ "$UB_ARCH" != "amd64" ];then
-    ub_install
-else
-    make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.module
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.image
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/{kernel.exec,gdb_grub,gmodule.pl}
-    cd ../grub-efi
-    make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.module
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.image
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/{kernel.exec,gdb_grub,gmodule.pl}
-    cd ../grub-bios
-    make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/*.module
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/*.image
-    rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/{kernel.exec,gdb_grub,gmodule.pl}
-fi
+
+make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.module
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.image
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/{kernel.exec,gdb_grub,gmodule.pl}
+cd ../grub-efi
+make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.module
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.image
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/{kernel.exec,gdb_grub,gmodule.pl}
+cd ../grub-bios
+make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/*.module
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/*.image
+rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/{kernel.exec,gdb_grub,gmodule.pl}
+

@@ -2,11 +2,7 @@
 
 # radio, radio-capture: libv4l
 
-opts=""
-if [ "$UB_ARCH" == "i386" ];then
-opts="-march=i686"
-fi
-CFLAGS="-O2 $opts -mtune=generic -fomit-frame-pointer -I/usr/include/directfb" \
+CFLAGS="-O2 -mtune=generic -fomit-frame-pointer -I/usr/include/directfb" \
 ./configure \
 	--prefix=/usr \
 	--datadir=/usr/share/mplayer \

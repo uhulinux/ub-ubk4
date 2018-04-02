@@ -2,13 +2,6 @@
 
 export UB_MAKE_PROCS=2
 export CFLAGS+="-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fPIC"
-if [ "$UB_ARCH" == "amd64" ];then
-tokudb="-DWITH_TOKUDB=ON"
-mroonga="-DWITH_MROONGA=ON"
-else
-tokudb="-DWITHOUT_TOKUDB=ON"
-mroonga="-DWITHOUT_MROONGA=ON"
-fi
 
 ub_compile \
 	-DMYSQL_MAINTAINER_MODE=OFF \
@@ -26,5 +19,5 @@ ub_compile \
 	-DWITH_ZLIB=system \
 	-DWITH_SSL=system \
 	-DWITH_PCRE=system \
-	$tokudb \
-	$mroonga
+	-DWITH_TOKUDB=ON \
+	-DWITH_MROONGA=ON

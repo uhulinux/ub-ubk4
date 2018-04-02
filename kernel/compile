@@ -21,13 +21,8 @@ NUMCPUS="$(grep ^processor /proc/cpuinfo|wc -l)"
 
 rm -f localversion*
 
-if [ "$UB_ARCH" == "amd64" ];then
-archok="x86_64"
-else
-archok="x86_64 i386"
-fi
+ARCH="x86_64"
 
-for ARCH in $archok; do
 VERSION="${VERSION_BASE}.$ARCH"
 ub_replace "^EXTRAVERSION =[\t ]*\(\.\([0-9]\+\)\)*.*" "EXTRAVERSION = \1-${VERSION#*-}" Makefile
 
@@ -115,16 +110,12 @@ ln -sf ../../../usr/src/linux-$VERSION $UB_OBJECTDIR/lib/modules/$VERSION/source
 rm -rf $UB_OBJECTDIR/usr/src/linux-$VERSION/Documentation
 find "$UB_OBJECTDIR/usr/src/linux-$VERSION/" -name "*.o" -print0 | xargs -r0 rm -v
 find "$UB_OBJECTDIR/usr/src/linux-$VERSION/" -name "*.cmd" -print0 | xargs -r0 rm -v
-# find "$UB_OBJECTDIR/usr/include/" -name ..install.cmd -print0 | xargs -r0 rm -v
-# find "$UB_OBJECTDIR/usr/include/" -name .install -print0 | xargs -r0 rm -v
 
 # remove mISDN headers
 rm -f "$UB_OBJECTDIR"/usr/src/linux/include/linux/mISDN*
 
 # System.map
 cp -a System.map "$UB_OBJECTDIR/lib/modules/$VERSION/"
-
-done
 
 # bzImage symlink
 # ln -s "$bzimage.i386" "$UB_OBJECTDIR/boot/$bzimage"

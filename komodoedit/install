@@ -1,14 +1,5 @@
 #!/bin/sh -eux
 
-if [ ${UB_ARCH} == "amd64" ];then
-arch="x86_64"
-else
-arch="x86"
-fi
-
-tar xf Komodo-Edit-${UB_VERSION_HEAD3}-${UB_VERSION_TAIL1}-linux-$arch.tar.gz
-
-cd Komodo-Edit-${UB_VERSION_HEAD3}-${UB_VERSION_TAIL1}-linux-$arch
 sed s%/usr/local/bin/python%/usr/bin/python%g -i INSTALLDIR/lib/mozilla/python/komodo/Crypto/Util/RFC1751.py
 sed s%/usr/local/bin/python%/usr/bin/python%g -i INSTALLDIR/lib/mozilla/python/komodo/pathtools/patterns.py
 sed s%/usr/local/bin/python%/usr/bin/python%g -i INSTALLDIR/lib/python/lib/python2.7/cgi.py

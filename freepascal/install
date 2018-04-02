@@ -1,14 +1,5 @@
 #!/bin/sh -eux
 
-if [ "$UB_ARCH" == "amd64" ];then
-noarch=i386
-arch=x64
-else
-noarch=x86_64
-arch=386
-fi
-rm -f binary.${noarch}-linux.tar
-
 PREFIX="$UB_INSTALLDIR/usr" ./install.sh
 
 # fix configfiles
@@ -20,8 +11,8 @@ ub_replace "$UB_INSTALLDIR" "" "$UB_INSTALLDIR/etc/fppkg/default"
 echo -e "#ifdef cpux86_64\n# for x86_64 use -fPIC by default\n-Cg\n#endif" >> "$UB_INSTALLDIR/etc/fpc.cfg"
 
 # fix symlink
-rm "$UB_INSTALLDIR/usr/bin/ppc${arch}"
-ln -s "../lib/fpc/$UB_VERSION/ppc${arch}" "$UB_INSTALLDIR/usr/bin/ppc${arch}"
+rm "$UB_INSTALLDIR/usr/bin/ppcx64"
+ln -s "../lib/fpc/$UB_VERSION/ppcx64" "$UB_INSTALLDIR/usr/bin/ppcx64"
 
 # /usr/man -> /usr/share/man
 rm -rf "$UB_INSTALLDIR"/usr/share/man

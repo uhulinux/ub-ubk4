@@ -1,10 +1,7 @@
 #!/bin/sh -eux
 
 echo "STDLIBS += -ldl -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss -ltiff -ljpeg ;" >> Jamtop
-if [ "$UB_ARCH" = "amd64" ]; then
-	export CFLAGS="-DUNIX -D_THREAD_SAFE -m64"
-else
-	export CFLAGS="-DUNIX -D_THREAD_SAFE -m32"
-fi
+export CFLAGS="-DUNIX -D_THREAD_SAFE -m64"
+
 sed -e 's:CCFLAGS:CFLAGS:g' -i Jambase
 jam -dx -fJambase -j2

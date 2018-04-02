@@ -2,8 +2,6 @@
 
 # A -O3 veszélyes
 ub_replace -O3 -O2 Makefile
+ub_replace -march=i686 -march=x86-64 Makefile
 
-if [ "$UB_ARCH" == "amd64" ];then
-    ub_replace -march=i686 -march=x86-64 Makefile
-fi
 ub_compile

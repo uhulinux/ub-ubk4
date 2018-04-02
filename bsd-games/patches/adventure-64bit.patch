@@ -1,0 +1,13 @@
+--- bsd-games/adventure/crc.c
++++ bsd-games/adventure/crc.c
+@@ -134,7 +134,8 @@
+ 				if (step >= sizeof(crctab) / sizeof(crctab[0]))
+ 					step = 0;
+ 			}
+-			crcval = (crcval << 8) ^ crctab[i];
++			/* Mask to 32 bits. */
++			crcval = ((crcval << 8) ^ crctab[i]) & 0xffffffff;
+ 		}
+-	return crcval & 0xffffffff;	/* Mask to 32 bits. */
++	return crcval;
+ }

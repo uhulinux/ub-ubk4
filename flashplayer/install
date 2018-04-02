@@ -1,12 +1,5 @@
 #!/bin/sh -eux
 
-if [ "$UB_ARCH" = "amd64" ]; then
-	tar -xzvf flash_player_ppapi_linux.x86_64.tar.gz
-else
-	tar -xzvf flash_player_ppapi_linux.i386.tar.gz
-fi
-rm -f flash_player_ppapi_linux*.tar.gz
-
 libdir="$UB_INSTALLDIR/usr/lib"
 sofile=libpepflashplayer.so
 

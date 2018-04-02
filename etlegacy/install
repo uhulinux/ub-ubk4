@@ -24,16 +24,9 @@ mv $UB_INSTALLDIR/usr/lib/etlegacy/etmain/*.cfg $UB_INSTALLDIR/etc/xdg/etlagacy/
 ln -s /etc/xdg/etlegacy/etmain/{etl_server,legacy,{campaign,lms,mapvote,objective}cycle}.cfg \
     $UB_INSTALLDIR/usr/lib/etlegacy/etmain/
 
-# melyik etlegacy architektúra ?
-if [ "$UB_ARCH" == "amd64" ];then
-tarfile="87"
-else
-tarfile="85"
-fi
-
 # kibontás
-tar -x -f $tarfile
-rm -f $tarfile
+tar -x -f 87
+rm -f 87
 
 # etlegacy fájlok eljhelyezése
 cd etlegacy*

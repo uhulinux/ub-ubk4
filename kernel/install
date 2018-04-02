@@ -21,33 +21,6 @@ export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C LANG=C date)"
 
 # mkinitrd
 
-if [ "$UB_ARCH" != "amd64" ];then
-
-cat >"$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel <<END
-#!/bin/sh
-
-mkinitrd $VERSION.i386
-mkinitrd $VERSION.x86_64
-
-rm -f /boot/initrd.i386.gz
-ln -s initrd-$VERSION.i386.gz /boot/initrd.i386.gz
-
-rm -f /boot/initrd.x86_64.gz
-ln -s initrd-$VERSION.x86_64.gz /boot/initrd.x86_64.gz
-
-rm -f /boot/initrd.gz
-ln -s initrd.i386.gz /boot/initrd.gz
-
-# update grub config
-if [ -f /boot/grub/grub.cfg ]; then
-	mv /boot/grub/grub.cfg /boot/grub/grub.cfg.`date '+%F'`
-fi
-exec grub-mkconfig -o /boot/grub/grub.cfg
-
-END
-
-else
-
 cat >"$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel <<END
 #!/bin/sh
 
@@ -66,8 +39,6 @@ fi
 exec grub-mkconfig -o /boot/grub/grub.cfg
 
 END
-
-fi
 
 chmod 755 "$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel
 

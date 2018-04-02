@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
-dpkg-deb -x ghetto-skype_${UB_VERSION}_${UB_ARCH}.deb .
-rm -f ghetto-skype_${UB_VERSION}_*.deb
+dpkg-deb -x ghetto-skype_${UB_VERSION}_amd64.deb .
+rm -f ghetto-skype_${UB_VERSION}_amd64.deb
 
 cp -r "$UB_COMPILEDIR"/usr "$UB_INSTALLDIR"/
 cp -r "$UB_COMPILEDIR"/opt/* "$UB_INSTALLDIR"/usr/lib/ghetto-skype
