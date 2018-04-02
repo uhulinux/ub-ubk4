@@ -1,7 +1,5 @@
 #!/bin/sh -eux
 
-export SHELL=/bin/bash
-
 cd "$UB_OBJECTDIR"
 
 ub_install
@@ -11,7 +9,6 @@ cp "$UB_COMPILEDIR"/other-licenses/branding/thunderbird/mailicon48.png "$UB_INST
 rm -f "$UB_INSTALLDIR"/usr/lib/thunderbird/thunderbird
 rm -f "$UB_INSTALLDIR"/usr/bin/thunderbird
 ln -s /usr/lib/thunderbird/thunderbird "$UB_INSTALLDIR"/usr/bin/thunderbird
-ln -s thunderbird "$UB_INSTALLDIR"/usr/lib/thunderbird-"$UB_VERSION"
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions/langpack-hu@thunderbird.mozilla.org
 cp -aR "$UB_COMPILEDIR"/langpack-hu/. "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions/langpack-hu@thunderbird.mozilla.org/
