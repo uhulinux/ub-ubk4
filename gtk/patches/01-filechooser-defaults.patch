@@ -1,0 +1,21 @@
+diff -Naur orig/gtk/org.gtk.Settings.FileChooser.gschema.xml patched/gtk/org.gtk.Settings.FileChooser.gschema.xml
+--- orig/gtk/org.gtk.Settings.FileChooser.gschema.xml	2016-10-22 06:17:51.000000000 +0200
++++ patched/gtk/org.gtk.Settings.FileChooser.gschema.xml	2018-04-04 10:29:52.142650419 +0200
+@@ -69,7 +69,7 @@
+       </description>
+     </key>
+     <key type="b" name="sort-directories-first">
+-      <default>false</default>
++      <default>true</default>
+       <summary>Show folders first</summary>
+       <description>
+         If set to true, then folders are shown before files in the list.
+@@ -119,7 +119,7 @@
+       </description>
+     </key>
+     <key name='startup-mode' enum='org.gtk.Settings.FileChooser.StartupMode'>
+-      <default>'recent'</default>
++      <default>'cwd'</default>
+       <summary>Startup mode</summary>
+       <description>
+ 	Either "recent" or "cwd"; controls whether the file chooser
