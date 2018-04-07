@@ -17,7 +17,8 @@ UB_CONFIGURE_DIR="$UB_COMPILEDIR" ub_configure \
 	--enable-bind-now \
 	--disable-profile \
 	--enable-lock-elision \
-	libc_cv_slibdir=/lib
+	libc_cv_slibdir=/lib \
+	libc_cv_rtlddir=/lib
 
 # glibc doesn't like -Os!
 # build failures with -O1 maybe gcc bug:
