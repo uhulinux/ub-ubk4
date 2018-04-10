@@ -4,6 +4,9 @@ make DESTDIR=${UB_INSTALLDIR} install
 
 # libglvnd ütközés
 rm -f "$UB_INSTALLDIR"/usr/lib/libGLESv*
+# wayland 1.15 ütközés
+rm -f "$UB_INSTALLDIR"/usr/lib/libwayland-egl.so*
+rm -f "$UB_INSTALLDIR"/usr/lib/pkgconfig/wayland-*.pc
 # indirect rendering
 ln -s /usr/lib/libGLX_mesa.so.0 ${UB_INSTALLDIR}/usr/lib/libGLX_indirect.so.0
 

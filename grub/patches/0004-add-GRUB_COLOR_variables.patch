@@ -2,7 +2,7 @@ diff --git a/grub/util/grub-mkconfig.in b/grub/util/grub-mkconfig.in
 index 3390ba9..c416489 100644
 --- a/grub/util/grub-mkconfig.in
 +++ b/grub/util/grub-mkconfig.in
-@@ -218,6 +218,8 @@ export GRUB_DEFAULT \
+@@ -222,6 +222,8 @@ export GRUB_DEFAULT \
    GRUB_THEME \
    GRUB_GFXPAYLOAD_LINUX \
    GRUB_DISABLE_OS_PROBER \
@@ -16,9 +16,9 @@ index d2e7252..8259f45 100644
 --- a/grub/util/grub.d/00_header.in
 +++ b/grub/util/grub.d/00_header.in
 @@ -125,6 +125,14 @@ cat <<EOF
- 
+
  EOF
- 
+
 +if [ x$GRUB_COLOR_NORMAL != x ] && [ x$GRUB_COLOR_HIGHLIGHT != x ] ; then
 +    cat << EOF
 +set menu_color_normal=$GRUB_COLOR_NORMAL

@@ -1,18 +1,6 @@
-From 98eaef69af1350e459bf9c175476d3b772968874 Mon Sep 17 00:00:00 2001
-From: Akira TAGOH <akira@tagoh.org>
-Date: Thu, 15 Mar 2018 12:17:52 +0900
-Subject: [PATCH] Leave the locale setting to applications
-
-https://bugs.freedesktop.org/show_bug.cgi?id=105492
----
- fc-conflist/fc-conflist.c |  2 ++
- src/fccfg.c               | 22 ++--------------------
- 2 files changed, 4 insertions(+), 20 deletions(-)
-
-diff --git a/fc-conflist/fc-conflist.c b/fc-conflist/fc-conflist.c
-index d02273b..5c40a0f 100644
---- a/fc-conflist/fc-conflist.c
-+++ b/fc-conflist/fc-conflist.c
+diff -Naur orig/fc-conflist/fc-conflist.c patched/fc-conflist/fc-conflist.c
+--- orig/fc-conflist/fc-conflist.c	2017-11-20 13:02:20.000000000 +0100
++++ patched/fc-conflist/fc-conflist.c	2018-04-08 00:13:57.209607327 +0200
 @@ -38,6 +38,7 @@
  #include <unistd.h>
  #include <stdlib.h>
@@ -21,7 +9,7 @@ index d02273b..5c40a0f 100644
  
  #ifdef ENABLE_NLS
  #include <libintl.h>
-@@ -102,6 +103,7 @@ main (int argc, char **argv)
+@@ -102,6 +103,7 @@
  #if HAVE_GETOPT_LONG || HAVE_GETOPT
      int		c;
  
@@ -29,10 +17,9 @@ index d02273b..5c40a0f 100644
  #if HAVE_GETOPT_LONG
      while ((c = getopt_long (argc, argv, "Vh", longopts, NULL)) != -1)
  #else
-diff --git a/src/fccfg.c b/src/fccfg.c
-index e311f17..e35c451 100644
---- a/src/fccfg.c
-+++ b/src/fccfg.c
+diff -Naur orig/src/fccfg.c patched/src/fccfg.c
+--- orig/src/fccfg.c	2018-02-04 12:01:46.000000000 +0100
++++ patched/src/fccfg.c	2018-04-08 00:15:57.526746207 +0200
 @@ -26,7 +26,6 @@
  
  #include "fcint.h"
@@ -41,7 +28,7 @@ index e311f17..e35c451 100644
  #include <sys/types.h>
  
  #if defined (_WIN32) && !defined (R_OK)
-@@ -39,24 +38,7 @@ static FcConfig *
+@@ -39,19 +38,7 @@
  FcConfigEnsure (void)
  {
      FcConfig	*config;
@@ -51,23 +38,18 @@ index e311f17..e35c451 100644
 -    is_locale_initialized = (intptr_t) fc_atomic_ptr_get (&static_is_locale_initialized);
 -    if (!is_locale_initialized)
 -    {
--	char *loc;
--
 -	is_locale_initialized = FcTrue;
 -	if (!fc_atomic_ptr_cmpexch (&static_is_locale_initialized, NULL,
 -				    (void *)(intptr_t) is_locale_initialized))
 -	    goto retry_locale;
--
--	loc = setlocale (LC_ALL, NULL);
--	if (!loc || strcmp (loc, "C") == 0)
--	    setlocale (LC_ALL, "");
+-	setlocale (LC_ALL, "");
 -    }
 -retry_config:
 +retry:
      config = fc_atomic_ptr_get (&_fcConfig);
      if (!config)
      {
-@@ -64,7 +46,7 @@ FcConfigEnsure (void)
+@@ -59,7 +46,7 @@
  
  	if (!fc_atomic_ptr_cmpexch (&_fcConfig, NULL, config)) {
  	    FcConfigDestroy (config);
