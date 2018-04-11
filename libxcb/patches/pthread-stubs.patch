@@ -1,0 +1,24 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2018-03-05 10:21:26.000000000 +0100
++++ patched/configure	2018-04-10 16:51:51.852858760 +0200
+@@ -19645,7 +19645,7 @@
+ $as_echo "yes" >&6; }
+ 
+ fi
+-NEEDED="pthread-stubs xau >= 0.99.2"
++NEEDED="xau >= 0.99.2"
+ 
+ pkg_failed=no
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for NEEDED" >&5
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2018-03-05 10:21:04.000000000 +0100
++++ patched/configure.ac	2018-04-10 16:52:07.481040941 +0200
+@@ -51,7 +51,7 @@
+ 
+ # Checks for pkg-config packages
+ PKG_CHECK_MODULES(XCBPROTO, xcb-proto >= 1.13)
+-NEEDED="pthread-stubs xau >= 0.99.2"
++NEEDED="xau >= 0.99.2"
+ PKG_CHECK_MODULES(NEEDED, $NEEDED)
+ 
+ have_xdmcp="no"

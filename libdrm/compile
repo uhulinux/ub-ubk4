@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
-autoreconf -fi
+# autoreconf -fi
+# ub_compile \
+#	--enable-udev
+
 ub_compile \
-	--enable-udev
+	-Dudev=true
