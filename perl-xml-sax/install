@@ -1,10 +1,6 @@
 #!/bin/sh -eux
 
+localperllib="$UB_INSTALLDIR/usr/lib/perl5/site_perl/`perl -e 'print $^V' | tr -d 'v'`"
+export PERL5LIB=$localperllib
+
 ub_install
-
-mkdir -p "$UB_INSTALLDIR/usr/lib/perl5/site_perl/`perl -e 'print $^V' | tr -d 'v'`/XML/SAX/"
-
-cat <<EOF > "$UB_INSTALLDIR/usr/lib/perl5/site_perl/`perl -e 'print $^V' | tr -d 'v'`/XML/SAX/ParserDetails.ini"
-[XML::LibXML::SAX]
-http://xml.org/sax/features/namespaces = 1
-EOF

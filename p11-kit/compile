@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
-./autogen.sh
+NOCONFIGURE=1 ./autogen.sh
+
 ub_configure \
 	--with-module-path=/usr/lib/pkcs11 \
 	--with-trust-paths=/etc/ssl/certs/ca-certificates.crt:/usr/share/ca-certificates
