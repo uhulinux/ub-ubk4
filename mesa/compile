@@ -1,35 +1,26 @@
 #!/bin/sh -eux
 
-# meson: nincs istall target
-rm -f meson.build
-autoreconf -fi
-
 ub_compile \
-	--enable-texture-float \
-	--enable-gles1 \
-	--enable-gles2 \
-	--enable-xa \
-	--enable-xvmc \
-	--enable-vdpau \
-	--enable-gbm \
-	--enable-glx-tls \
-	--enable-dri \
-	--enable-glx \
-	--enable-gallium-llvm \
-	--enable-egl \
-	--with-platforms=x11,drm,wayland \
-	--enable-libglvnd \
-	--enable-llvm \
-	--enable-llvm-shared-libs \
-	--enable-shared-glapi \
-	--with-gallium-drivers=r300,r600,radeonsi,nouveau,svga,swrast,virgl,swr \
-	--with-dri-drivers=i915,i965,r200,radeon,nouveau,swrast \
-	--with-vulkan-drivers=intel,radeon \
-	--enable-libunwind \
-	--enable-lmsensors \
-	--enable-gallium-osmesa \
-	--enable-gallium-extra-hud \
-	--enable-omx-bellagio \
-	--enable-nine \
-	--enable-opencl \
-	--enable-opencl-icd
+    -Dplatforms=x11,drm,wayland \
+    -Ddri-drivers=i915,i965,r200,radeon,nouveau \
+    -Dgallium-drivers=r300,r600,radeonsi,nouveau,svga,swrast,virgl,swr \
+    -Dgallium-extra-hud=true \
+    -Dgallium-vdpau=true \
+    -Dgallium-xvmc=true \
+    -Dgallium-omx=true \
+    -Dgallium-xa=true \
+    -Dgallium-nine=true \
+    -Dgallium-opencl=icd \
+    -Dvulkan-drivers=intel,radeon \
+    -Dshared-glapi=true \
+	-Dgles1=true \
+	-Dgles2=true \
+	-Dgbm=true \
+	-Dglx=dri \
+	-Degl=true \
+	-Dglvnd=true \
+	-Dllvm=true \
+	-Dlibunwind=true \
+	-Dlmsensors=true \
+	-Dtexture-float=true \
+	-Dosmesa=gallium

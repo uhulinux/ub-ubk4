@@ -16,7 +16,6 @@ rm -f "$UB_INSTALLDIR"/usr/bin/ldb*
 
 # systemd
 cd packaging/systemd
-cp -a {samba,nmb,smb,winbind}.service "$UB_INSTALLDIR"/usr/lib/systemd/system
 mkdir "$UB_INSTALLDIR"/usr/lib/tmpfiles.d
 cp -a samba.conf.tmp "$UB_INSTALLDIR"/usr/lib/tmpfiles.d/samba.conf
 cp -a samba.sysconfig "$UB_INSTALLDIR"/etc/sysconfig/samba

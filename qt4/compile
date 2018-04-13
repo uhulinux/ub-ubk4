@@ -10,10 +10,9 @@ ub_replace -O3 -O2 src/3rdparty/webkit/Source/JavaScriptCore/JavaScriptCore.pro
 ub_replace -O3 -O2 src/3rdparty/zlib/treebuild.xml
 
 export LD_LIBRARY_PATH="$(pwd)"/lib
-export CXXFLAGS+="-std=gnu++98"
+export CXXFLAGS="-std=gnu++98"
 
 ./configure \
-	-platform linux-g++-64 \
 	-prefix /usr/lib/qt4 \
 	-sysconfdir /etc/xdg \
 	\

@@ -1,6 +1,5 @@
 #!/bin/sh -eux
 
-export UB_MAKE_PROCS=1
-autoreconf -vif
 ub_compile \
-    --enable-tools
+    -Dtools=true \
+    -Dvalgrind=false

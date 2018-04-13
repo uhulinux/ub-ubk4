@@ -1,9 +1,10 @@
 #!/bin/sh -eux
 
-make DESTDIR=${UB_INSTALLDIR} install
+ub_install
 
 # libglvnd ütközés
 rm -f "$UB_INSTALLDIR"/usr/lib/libGLESv*
+# rm -f "$UB_INSTALLDIR"/usr/lib/pkgconfig/gles*.pc
 # wayland 1.15 ütközés
 rm -f "$UB_INSTALLDIR"/usr/lib/libwayland-egl.so*
 rm -f "$UB_INSTALLDIR"/usr/lib/pkgconfig/wayland-*.pc

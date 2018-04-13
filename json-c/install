@@ -1,3 +1,6 @@
 #!/bin/sh -eux
 
 ub_install
+
+# főverzió változásnál szimlinkelünk a régi verzióval
+ln -sf libjson-c.so.4 "$UB_INSTALLDIR"/usr/lib/libjson-c.so.3
