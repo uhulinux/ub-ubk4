@@ -1,6 +1,6 @@
 diff -Naur orig/ssh_config patched/ssh_config
---- orig/ssh_config	2015-08-11 10:57:29.000000000 +0200
-+++ patched/ssh_config	2015-08-13 20:45:33.969633025 +0200
+--- orig/ssh_config	2018-04-02 07:38:28.000000000 +0200
++++ patched/ssh_config	2018-04-14 15:49:02.702739626 +0200
 @@ -19,7 +19,8 @@
  
  # Host *
@@ -8,22 +8,22 @@ diff -Naur orig/ssh_config patched/ssh_config
 -#   ForwardX11 no
 +    ForwardX11 yes
 +    ForwardX11Trusted yes
- #   RhostsRSAAuthentication no
- #   RSAAuthentication yes
  #   PasswordAuthentication yes
-@@ -30,7 +31,7 @@
+ #   HostbasedAuthentication no
+ #   GSSAPIAuthentication no
+@@ -28,7 +29,7 @@
  #   CheckHostIP yes
  #   AddressFamily any
  #   ConnectTimeout 0
 -#   StrictHostKeyChecking ask
 +    StrictHostKeyChecking no
- #   IdentityFile ~/.ssh/identity
  #   IdentityFile ~/.ssh/id_rsa
  #   IdentityFile ~/.ssh/id_dsa
+ #   IdentityFile ~/.ssh/id_ecdsa
 diff -Naur orig/sshd_config patched/sshd_config
---- orig/sshd_config	2015-08-11 10:57:29.000000000 +0200
-+++ patched/sshd_config	2015-08-13 20:47:57.250343516 +0200
-@@ -82,7 +82,7 @@
+--- orig/sshd_config	2018-04-02 07:38:28.000000000 +0200
++++ patched/sshd_config	2018-04-14 15:51:01.120141722 +0200
+@@ -67,7 +67,7 @@
  #KerberosGetAFSToken no
  
  # GSSAPI options
@@ -32,7 +32,7 @@ diff -Naur orig/sshd_config patched/sshd_config
  #GSSAPICleanupCredentials yes
  
  # Set this to 'yes' to enable PAM authentication, account processing,
-@@ -94,16 +94,16 @@
+@@ -79,16 +79,16 @@
  # If you just want the PAM account and session checks to run without
  # PAM authentication, then enable this but set PasswordAuthentication
  # and ChallengeResponseAuthentication to 'no'.

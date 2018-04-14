@@ -1,0 +1,21 @@
+diff -Naur orig/gdk/gdkglshapes.c patched/gdk/gdkglshapes.c
+--- orig/gdk/gdkglshapes.c	2004-02-20 10:38:12.000000000 +0100
++++ patched/gdk/gdkglshapes.c	2018-04-14 14:53:28.419914388 +0200
+@@ -544,7 +544,7 @@
+   {-Z, -X, 0}
+ };
+ 
+-static int index[20][3] =
++static int glindex[20][3] =
+ {
+   {0, 4, 1},
+   {0, 9, 4},
+@@ -574,7 +574,7 @@
+   int i;
+ 
+   for (i = 19; i >= 0; i--) {
+-    drawtriangle(i, idata, index, shadeType);
++    drawtriangle(i, idata, glindex, shadeType);
+   }
+ }
+ 
