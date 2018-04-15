@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+make \
+    COPTS="-DHAVE_DNSSEC -DHAVE_DBUS -DHAVE_LIBIDN2 -DHAVE_CONNTRACK" \
+    PREFIX=/usr \
+    BINDIR=/usr/bin \
+    DESTDIR="$UB_INSTALLDIR" \
+    install install-i18n
+
+install -Dm644 "dbus/dnsmasq.conf" "$UB_INSTALLDIR"/usr/share/dbus-1/system.d/dnsmasq.conf
+install -Dm644 "dnsmasq.conf.example" "$UB_INSTALLDIR"/etc/dnsmasq.conf
+install -Dm644 "contrib/systemd/dnsmasq.service" "$UB_INSTALLDIR"/usr/lib/systemd/system/dnsmasq.service
+
+# DNSSEC setup
+sed -i 's,%%PREFIX%%,/usr,' "$UB_INSTALLDIR"/etc/dnsmasq.conf
+install -Dm644 "trust-anchors.conf" "$UB_INSTALLDIR"/usr/share/dnsmasq/trust-anchors.conf

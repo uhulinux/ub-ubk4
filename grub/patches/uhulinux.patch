@@ -1,6 +1,6 @@
-diff -Naur orig/grub/util/grub.d/10_linux.in patched/grub/util/grub.d/10_linux.in
---- orig/grub/util/grub.d/10_linux.in	2016-08-20 14:46:06.000000000 +0200
-+++ patched/grub/util/grub.d/10_linux.in	2016-08-21 17:27:46.064594315 +0200
+diff -Nur orig/grub/util/grub.d/10_linux.in mod/grub/util/grub.d/10_linux.in
+--- orig/grub/util/grub.d/10_linux.in	2017-04-24 11:15:50.000000000 +0200
++++ mod/grub/util/grub.d/10_linux.in	2018-04-13 13:19:09.759496162 +0200
 @@ -31,7 +31,7 @@
  if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
    OS=GNU/Linux
@@ -24,6 +24,15 @@ diff -Naur orig/grub/util/grub.d/10_linux.in patched/grub/util/grub.d/10_linux.i
        esac
        if [ x"$title" = x"$GRUB_ACTUAL_DEFAULT" ] || [ x"Previous Linux versions>$title" = x"$GRUB_ACTUAL_DEFAULT" ]; then
  	  replacement_title="$(echo "Advanced options for ${OS}" | sed 's,>,>>,g')>$(echo "$title" | sed 's,>,>>,g')"
+@@ -131,7 +133,7 @@
+   message="$(gettext_printf "Loading Linux %s ..." ${version})"
+   sed "s/^/$submenu_indentation/" << EOF
+ 	echo	'$(echo "$message" | grub_quote)'
+-	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} ro ${args}
++	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} rw ${args}
+ EOF
+   if test -n "${initrd}" ; then
+     # TRANSLATORS: ramdisk isn't identifier. Should be translated.
 @@ -150,12 +152,12 @@
  case "x$machine" in
      xi?86 | xx86_64)

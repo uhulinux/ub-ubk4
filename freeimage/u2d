@@ -1,1 +1,1 @@
-curl -s -k https://raw.githubusercontent.com/danoli3/FreeImage/master/Whatsnew.txt | grep th, | sed 's/.* //g' | sort -V | tail -n 1
+urllist https://sourceforge.net/projects/freeimage/files/Source%20Distribution/ | grep -E '^([0-9.]+)$' | sort -V | tail -n 1
