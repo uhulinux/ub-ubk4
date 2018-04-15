@@ -6,7 +6,8 @@ rm -rf apr-util
 rm -rf neon
 
 ub_compile \
-	--with-apache-libexecdir=/usr/lib/apache
+	--with-apache-libexecdir=/usr/lib/apache \
+	--with-utf8proc=internal
 
 ub_make swig-pl
 ub_make swig-py
