@@ -107,6 +107,15 @@ ln -sf ../../../usr/src/linux-$VERSION $UB_OBJECTDIR/lib/modules/$VERSION/build
 rm $UB_OBJECTDIR/lib/modules/$VERSION/source
 ln -sf ../../../usr/src/linux-$VERSION $UB_OBJECTDIR/lib/modules/$VERSION/source
 
+# add objtool for external module building and enabled VALIDATION_STACK option
+cp $UB_COMPILEDIR/tools/objtool/objtool $UB_OBJECTDIR/usr/src/linux-$VERSION/tools/objtool/
+
+# remove unneeded architectures
+for _archs in $UB_OBJECTDIR/usr/src/linux-$VERSION/arch/*/; do
+    [[ ${_archs} == */x86/ ]] && continue
+    rm -r "${_archs}"
+done
+
 rm -rf $UB_OBJECTDIR/usr/src/linux-$VERSION/Documentation
 find "$UB_OBJECTDIR/usr/src/linux-$VERSION/" -name "*.o" -print0 | xargs -r0 rm -v
 find "$UB_OBJECTDIR/usr/src/linux-$VERSION/" -name "*.cmd" -print0 | xargs -r0 rm -v
@@ -118,8 +127,8 @@ rm -f "$UB_OBJECTDIR"/usr/src/linux/include/linux/mISDN*
 cp -a System.map "$UB_OBJECTDIR/lib/modules/$VERSION/"
 
 # bzImage symlink
-# ln -s "$bzimage.i386" "$UB_OBJECTDIR/boot/$bzimage"
+ln -s "$bzimage.$ARCH" "$UB_OBJECTDIR/boot/$bzimage"
 
 # cpupower
-# cd tools/power/cpupower
-# ub_make VERSION=${UB_VERSION}
+cd tools/power/cpupower
+ub_make VERSION=${UB_VERSION}
