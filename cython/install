@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-python setup.py install --root="$UB_INSTALLDIR"
+python2 setup.py install --root="$UB_INSTALLDIR"
 
 for f in cygdb cython cythonize; do
     mv "$UB_INSTALLDIR"/usr/bin/$f "$UB_INSTALLDIR"/usr/bin/${f}2
