@@ -2,11 +2,22 @@
 
 export QTDIR=/usr/lib/qt4
 
-python3 configure.py --confirm-license --verbose -q $QTDIR/bin/qmake -p ${UB_INSTALLDIR}/$QTDIR/plugins
+python3 configure.py \
+    --confirm-license \
+    --verbose \
+    -q $QTDIR/bin/qmake \
+    -p ${UB_INSTALLDIR}/$QTDIR/plugins \
+    --no-sip-files
 ub_make
 ub_install
 mv ${UB_INSTALLDIR}/usr/bin/pyuic4 ${UB_INSTALLDIR}/usr/bin/pyuic4-python3
 
-python2 configure.py --confirm-license --verbose -q $QTDIR/bin/qmake -s /usr/include/dbus-1.0 -p ${UB_INSTALLDIR}/$QTDIR/plugins
+python2 configure.py \
+    --confirm-license \
+    --verbose \
+    -q $QTDIR/bin/qmake \
+    -s /usr/include/dbus-1.0 \
+    -p ${UB_INSTALLDIR}/$QTDIR/plugins \
+    --no-sip-files
 make clean
 ub_make
