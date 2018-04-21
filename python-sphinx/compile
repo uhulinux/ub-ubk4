@@ -4,6 +4,6 @@ cp -a sphinx sphinx3
 find sphinx -type f -name '*.py' -exec \
     sed -ri 's,(sphinx-(:?build|apidoc|autogen|quickstart)),\12,' {} \;
 cd sphinx
-python setup.py build
+python2 setup.py build
 cd ../sphinx3
 python3 setup.py build
