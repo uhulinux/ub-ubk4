@@ -24,7 +24,7 @@ mkdir -p "$UB_INSTALLDIR"/usr/lib/tmpfiles.d/
 install -m 644 "$UB_COMPILEDIR"/nscd/nscd.tmpfiles "$UB_INSTALLDIR"/usr/lib/tmpfiles.d/nscd.conf
 install -m 644 "$UB_COMPILEDIR"/nscd/nscd.service "$UB_INSTALLDIR"/usr/lib/systemd/system
 
-mkdir -p "$UB_INSTALLDIR"/lib64
-cd "$UB_INSTALLDIR"/lib64
-ln -s ../lib/ld-linux-x86-64.so.2 ld-linux-x86-64.so.2
-ln -s ../lib/ld-linux-x86-64.so.2 ld-lsb-x86-64.so.3
+# mkdir -p "$UB_INSTALLDIR"/lib64
+# cd "$UB_INSTALLDIR"/lib64
+# ln -s ../lib/ld-linux-x86-64.so.2 ld-linux-x86-64.so.2
+# ln -s ../lib/ld-linux-x86-64.so.2 ld-lsb-x86-64.so.3
