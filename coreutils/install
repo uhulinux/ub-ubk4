@@ -2,16 +2,7 @@
 
 ub_install
 
-for cmd in [ basename cat chgrp chmod chown cp cut date dd df dir dircolors \
-  du echo env false install link ln ls mkdir mkfifo mknod mv nice pwd rm rmdir \
-  shred sleep sort stat stty sync test touch true uname unlink vdir; do
-	mv "$UB_INSTALLDIR"/usr/bin/$cmd "$UB_INSTALLDIR"/bin/
-done
-for cmd in [ cut dir dircolors du env install mkfifo nice shred sort stat test vdir; do
-	ln -s ../../bin/"$cmd" "$UB_INSTALLDIR"/usr/bin/"$cmd"
-done
-
-mv "$UB_INSTALLDIR"/usr/bin/chroot "$UB_INSTALLDIR"/sbin/
+mv "$UB_INSTALLDIR"/usr/bin/chroot "$UB_INSTALLDIR"/usr/sbin/
 mv "$UB_INSTALLDIR"/usr/share/man/man1/chroot.1 "$UB_INSTALLDIR"/usr/share/man/man8/chroot.8
 
 # usleep symlink
