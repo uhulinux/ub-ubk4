@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+python2 configure.py
+ub_make
+ub_install
+
+python3 configure.py
+make clean
+ub_make
+ub_install
+
+mv doc/html ${UB_INSTALLDIR}/usr/share/doc/sip

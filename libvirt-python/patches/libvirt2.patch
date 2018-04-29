@@ -1,0 +1,22 @@
+diff --git a/libvirt-override.c b/libvirt-override.c
+index 580c259..a7077f2 100644
+--- a/libvirt-override.c
++++ b/libvirt-override.c
+@@ -7738,7 +7738,7 @@ libvirt_virDomainMigrateGetMaxDowntime(PyObject *self ATTRIBUTE_UNUSED,
+ }
+ #endif /* LIBVIR_CHECK_VERSION(3, 7, 0) */
+
+-#if LIBVIR_CHECK_VERSION(1, 1, 0)
++#if LIBVIR_CHECK_VERSION(2, 0, 0)
+ static virPyTypedParamsHint virPyDomainMigrate3Params[] = {
+     { VIR_MIGRATE_PARAM_URI, VIR_TYPED_PARAM_STRING },
+     { VIR_MIGRATE_PARAM_DEST_NAME, VIR_TYPED_PARAM_STRING },
+@@ -9845,7 +9845,7 @@ static PyMethodDef libvirtMethods[] = {
+     {(char *) "virDomainMigrateGetMaxDowntime", libvirt_virDomainMigrateGetMaxDowntime, METH_VARARGS, NULL},
+ #endif /* LIBVIR_CHECK_VERSION(3, 7, 0) */
+     {(char *) "virDomainMigrateGetMaxSpeed", libvirt_virDomainMigrateGetMaxSpeed, METH_VARARGS, NULL},
+-#if LIBVIR_CHECK_VERSION(1, 1, 0)
++#if LIBVIR_CHECK_VERSION(2, 0, 0)
+     {(char *) "virDomainMigrate3", libvirt_virDomainMigrate3, METH_VARARGS, NULL},
+     {(char *) "virDomainMigrateToURI3", libvirt_virDomainMigrateToURI3, METH_VARARGS, NULL},
+ #endif /* LIBVIR_CHECK_VERSION(1, 1, 0) */

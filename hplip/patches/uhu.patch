@@ -1,29 +1,38 @@
 diff -Naur orig/base/password.py patched/base/password.py
---- orig/base/password.py	2017-11-23 13:10:20.000000000 +0100
-+++ patched/base/password.py	2018-03-19 03:58:04.881091369 +0100
+--- orig/base/password.py	2018-03-06 10:55:55.000000000 +0100
++++ patched/base/password.py	2018-04-20 08:41:26.933235867 +0200
 @@ -55,6 +55,7 @@
-              'gos':'sudo',
-              'boss':'su',
-              'lfs':'su',
-+             'uhu-linux':'su',
-              }
- 
+               'gos': 'sudo',
+               'boss': 'su',
+               'lfs': 'su',
++              'uhu-linux':'su',
+               'manjarolinux': 'sudo',
+               }
  
 diff -Naur orig/installer/distros.dat patched/installer/distros.dat
---- orig/installer/distros.dat	2017-11-23 13:10:13.000000000 +0100
-+++ patched/installer/distros.dat	2018-03-19 04:04:27.464643414 +0100
+--- orig/installer/distros.dat	2018-03-06 10:56:02.000000000 +0100
++++ patched/installer/distros.dat	2018-04-20 08:43:19.708388858 +0200
 @@ -92,7 +92,7 @@
  # ****************************************
  
  [distros]
--distros=unknown,mepis,debian,suse,mandriva,fedora,redhat,rhel,slackware,gentoo,redflag,ubuntu,xandros,freebsd,linspire,ark,pclinuxos,centos,igos,linuxmint,linpus,gos,boss,lfs
-+distros=unknown,mepis,debian,suse,mandriva,fedora,redhat,rhel,slackware,gentoo,redflag,ubuntu,xandros,freebsd,linspire,ark,pclinuxos,centos,igos,linuxmint,linpus,gos,boss,lfs,uhu-linux
+-distros=unknown,mepis,debian,suse,mandriva,fedora,redhat,rhel,slackware,gentoo,redflag,ubuntu,xandros,freebsd,linspire,ark,pclinuxos,centos,igos,linuxmint,linpus,gos,boss,lfs,manjarolinux
++distros=unknown,mepis,debian,suse,mandriva,fedora,redhat,rhel,slackware,gentoo,redflag,ubuntu,xandros,freebsd,linspire,ark,pclinuxos,centos,igos,linuxmint,linpus,gos,boss,lfs,uhu-linux,manjarolinux
  
  # ****************************************
  
-@@ -10117,3 +10117,157 @@
- [lfs:6:epm]
- packages=epm
+@@ -7035,7 +7035,7 @@
+ usb_supported=1
+ packaged_version=0.9.1
+ release_date=2004-9-16
+-notes=Before proceeding, please add the "contrib", "main", and "updates" installation sources to your URPMI configuration./n Open your browser and go to http://easyurpmi.zarb.org/ and follow the instructions provided and then proceed with the HPLIP install. Also be sure to disable the cdrom1-12 media sources. 
++notes=Before proceeding, please add the "contrib", "main", and "updates" installation sources to your URPMI configuration./n Open your browser and go to http://easyurpmi.zarb.org/ and follow the instructions provided and then proceed with the HPLIP install. Also be sure to disable the cdrom1-12 media sources.
+ ppd_install=ppd
+ udev_mode_fix=1
+ ppd_dir=/usr/share/cups/model/HP
+@@ -10618,3 +10618,157 @@
+ packages=automake
+ 
  
 +
 +# ****************************************

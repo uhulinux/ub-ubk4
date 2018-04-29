@@ -1,0 +1,132 @@
+diff -Naur orig/poppler.c patched/poppler.c
+--- orig/poppler.c	2013-11-07 11:58:15.000000000 +0100
++++ patched/poppler.c	2018-04-15 23:18:11.803475906 +0200
+@@ -4501,7 +4501,6 @@
+   pyg_enum_add(module, "FormTextType", strip_prefix, POPPLER_TYPE_FORM_TEXT_TYPE);
+   pyg_enum_add(module, "FormChoiceType", strip_prefix, POPPLER_TYPE_FORM_CHOICE_TYPE);
+   pyg_enum_add(module, "Error", strip_prefix, POPPLER_TYPE_ERROR);
+-  pyg_enum_add(module, "Orientation", strip_prefix, POPPLER_TYPE_ORIENTATION);
+   pyg_enum_add(module, "PageTransitionType", strip_prefix, POPPLER_TYPE_PAGE_TRANSITION_TYPE);
+   pyg_enum_add(module, "PageTransitionAlignment", strip_prefix, POPPLER_TYPE_PAGE_TRANSITION_ALIGNMENT);
+   pyg_enum_add(module, "PageTransitionDirection", strip_prefix, POPPLER_TYPE_PAGE_TRANSITION_DIRECTION);
+diff -Naur orig/poppler.defs patched/poppler.defs
+--- orig/poppler.defs	2013-11-07 11:57:04.000000000 +0100
++++ patched/poppler.defs	2018-04-15 23:17:49.919239841 +0200
+@@ -570,18 +570,6 @@
+   )
+ )
+ 
+-(define-enum Orientation
+-  (in-module "Poppler")
+-  (c-name "PopplerOrientation")
+-  (gtype-id "POPPLER_TYPE_ORIENTATION")
+-  (values
+-    '("portrait" "POPPLER_ORIENTATION_PORTRAIT")
+-    '("landscape" "POPPLER_ORIENTATION_LANDSCAPE")
+-    '("upsidedown" "POPPLER_ORIENTATION_UPSIDEDOWN")
+-    '("seascape" "POPPLER_ORIENTATION_SEASCAPE")
+-  )
+-)
+-
+ (define-enum PageTransitionType
+   (in-module "Poppler")
+   (c-name "PopplerPageTransitionType")
+@@ -1580,6 +1568,7 @@
+   (of-object "PopplerFormField")
+   (c-name "poppler_form_field_choice_set_text")
+   (return-type "none")
++  (unblock-threads #t)
+   (parameters
+     '("const-gchar*" "text")
+   )
+@@ -1710,6 +1699,7 @@
+   (of-object "PopplerPage")
+   (c-name "poppler_page_get_size")
+   (return-type "none")
++  (unblock-threads #t)
+   (parameters
+     '("double*" "width")
+     '("double*" "height")
+@@ -1722,6 +1712,12 @@
+   (return-type "int")
+ )
+ 
++(define-method get_label
++  (of-object "PopplerPage")
++  (c-name "poppler_page_get_label")
++  (return-type "gchar*")
++)
++
+ (define-method get_duration
+   (of-object "PopplerPage")
+   (c-name "poppler_page_get_duration")
+@@ -1773,9 +1769,15 @@
+   (of-object "PopplerPage")
+   (c-name "poppler_page_get_selected_text")
+   (return-type "char*")
++)
++
++(define-method get_selected_text
++  (of-object "PopplerPage")
++  (c-name "poppler_page_get_selected_text")
++  (return-type "char*")
+   (parameters
+     '("PopplerSelectionStyle" "style")
+-    '("PopplerRectangle*" "rect")
++    '("PopplerRectangle*" "selection")
+   )
+ )
+ 
+@@ -1793,6 +1795,7 @@
+ (define-function poppler_page_selection_region_free
+   (c-name "poppler_page_selection_region_free")
+   (return-type "none")
++  (unblock-threads #t)
+   (parameters
+     '("GList*" "region")
+   )
+@@ -1807,6 +1810,7 @@
+ (define-function poppler_page_free_link_mapping
+   (c-name "poppler_page_free_link_mapping")
+   (return-type "none")
++  (unblock-threads #t)
+   (parameters
+     '("GList*" "list")
+   )
+@@ -1863,15 +1867,36 @@
+   )
+ )
+ 
++(define-function poppler_page_add_annot
++  (of-object "PopplerPage")
++  (c-name "poppler_page_add_annot")
++  (return-type "none")
++  (parameters
++    '("PopplerAnnot*" "annot")
++    '("GList*" "list")
++  )
++)
++
+ (define-method get_crop_box
+   (of-object "PopplerPage")
+   (c-name "poppler_page_get_crop_box")
+   (return-type "none")
++  (unblock-threads #t)
+   (parameters
+     '("PopplerRectangle*" "rect")
+   )
+ )
+ 
++(define-method get_text_layout
++  (of-object "PopplerPage")
++  (c-name "poppler_page_get_text_layout")
++  (return-type "gboolean")
++  (parameters
++    '("PopplerRectangle**" "rectangles")
++    '("guint*" "n_rectangles")
++  )
++)
++
+ (define-function poppler_rectangle_get_type
+   (c-name "poppler_rectangle_get_type")
+   (return-type "GType")

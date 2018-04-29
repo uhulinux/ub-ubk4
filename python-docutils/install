@@ -3,7 +3,7 @@
 cp docutils/{BUGS.txt,COPYING.txt,FAQ.txt,HISTORY.txt,README.txt,RELEASE-NOTES.txt,THANKS.txt} ./
 cp -a docutils docutils3
 cd docutils
-python setup.py install --root="$UB_INSTALLDIR"
+python2 setup.py install --root="$UB_INSTALLDIR"
 for _f in "$UB_INSTALLDIR"/usr/bin/*.py; do
       mv -v "$_f" "${_f%.py}2.py"
 done

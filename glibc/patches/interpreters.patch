@@ -1,0 +1,11 @@
+diff -Naur orig/sysdeps/unix/sysv/linux/x86_64/ldconfig.h patched/sysdeps/unix/sysv/linux/x86_64/ldconfig.h
+--- orig/sysdeps/unix/sysv/linux/x86_64/ldconfig.h	2017-08-02 14:57:16.000000000 +0200
++++ patched/sysdeps/unix/sysv/linux/x86_64/ldconfig.h	2018-04-25 06:20:14.401603813 +0200
+@@ -19,6 +19,7 @@
+ 
+ #define SYSDEP_KNOWN_INTERPRETER_NAMES \
+   { "/lib/ld-linux.so.2", FLAG_ELF_LIBC6 }, \
++  { "/lib/ld-linux-x86-64.so.2", FLAG_ELF_LIBC6 }, \
+   { "/libx32/ld-linux-x32.so.2", FLAG_ELF_LIBC6 }, \
+   { "/lib64/ld-linux-x86-64.so.2", FLAG_ELF_LIBC6 },
+ #define SYSDEP_KNOWN_LIBRARY_NAMES \

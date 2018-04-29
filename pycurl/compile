@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-cp -a pycurl pycurl3
-cd pycurl
-ub_compile
-python setup.py  build --with-ssl
-cd ../pycurl3
-ub_compile
-python3 setup.py  build --with-ssl

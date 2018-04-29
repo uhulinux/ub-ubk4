@@ -1,0 +1,122 @@
+From ddf7c50332f0b09f4eec86043df4bc38b08dd02f Mon Sep 17 00:00:00 2001
+From: Till Kamppeter <till.kamppeter@gmail.com>
+Date: Tue, 9 Aug 2016 18:11:27 +0200
+Subject: Make CUPS reading all option settings in PostScript print
+
+ jobs and add the option settings to the filter command line before
+ starting the filter chain. This fixes the problem that in the PDF
+ printing workflow (where incoming PostScript gets converted to PDF by
+ pstopdf) option settings embedded in the incoming PostScript code do
+ not get obeyed. Especially the options of jobs from Windows clients get
+ ignored.
+Origin: vendor
+Bug: https://www.cups.org/str.php?L4344
+Last-Update: 2015-02-10
+
+Patch-Name: read-embedded-options-from-incoming-postscript-and-add-to-ipp-attrs.patch
+---
+ scheduler/ipp.c | 84 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+
+diff --git a/scheduler/ipp.c b/scheduler/ipp.c
+index ad8f1f0bf..b82b61acf 100644
+--- a/scheduler/ipp.c
++++ b/scheduler/ipp.c
+@@ -8700,6 +8700,11 @@ read_job_ticket(cupsd_client_t *con)	/* I - Client connection */
+   ipp_attribute_t	*attr,		/* Current attribute */
+ 			*attr2,		/* Job attribute */
+ 			*prev2;		/* Previous job attribute */
++  int                   foundfirstpage; /* Did we find the first page already
++					   in the PostScript input? */
++  int                   num_copies;     /* Number of copies according to
++					   PostScript command in input file */
++  char                  *s, *t, buffer[10];
+ 
+ 
+  /*
+@@ -8760,6 +8765,85 @@ read_job_ticket(cupsd_client_t *con)	/* I - Client connection */
+     num_options = cupsParseOptions(line + 15, num_options, &options);
+   }
+ 
++ /*
++  * Read option settings embedded in the file...
++  */
++
++  foundfirstpage = 0;
++
++  while (cupsFileGets(fp, line, sizeof(line)))
++  {
++   /*
++    * Stop at the second page, we read also the settings of the first PageSetup
++    * to work around a bug in OpenOffice.org. This app puts options intended
++    * for the whole document into the page setup of the first page
++    */
++
++    if (!strncmp(line, "%%Page:", 7))
++    {
++      if (foundfirstpage == 1)
++	break;
++      foundfirstpage = 1;
++    }
++
++   /*
++    * Add the embedded option settings to the option array...
++    */
++
++    s = NULL;
++    if (!strncmp(line, "%%BeginFeature:", 15))
++      s = line + 15;
++    else if (!strncmp(line, "%%IncludeFeature:", 17))
++      s = line + 17;
++    else if (!strncmp(line, "%%BeginNonPPDFeature:", 21))
++      s = line + 21;
++
++    if (s && (t = strstr(s, "NumCopies")) != NULL)
++    {
++      t += 9;
++      while ((*t == ' ') || (*t == '\t')) t++;
++      if (sscanf(t, "%9d", &num_copies) == 1)
++      {
++	sprintf(buffer, "%d", num_copies);
++	num_options = cupsAddOption("copies", buffer, num_options, &options);
++      }      
++    } 
++    else if (s)
++    {
++      while ((*s == ' ') || (*s == '\t')) s++;
++      if (*s == '*') s++;
++      t = s;
++      while (*t && (*t != ' ') && (*t != '\t')) t++;
++      if ((*t == ' ') || (*t == '\t')) *t = '=';
++      num_options = cupsParseOptions(s, num_options, &options);
++    }
++
++   /*
++    * Read out "/#copies XXX def" and "/NumCopies XXX def" expressions from
++    * PostScript input. Some apps insert these expressions to set the
++    * number of copies.
++    */
++
++    s = NULL;
++    if ((s = strstr(line, "/#copies")) != NULL)
++      s += 8;
++    else if ((s = strstr(line, "/NumCopies")) != NULL)
++      s += 10;
++    if (s)
++    {
++      while ((*s == ' ') || (*s == '\t')) s++;
++      if (sscanf(s, "%9d %as ", &num_copies, &t) == 2)
++      {
++	if (!strncmp(t, "def", 3))
++	{
++	  sprintf(buffer, "%d", num_copies);
++	  num_options = cupsAddOption("copies", buffer, num_options, &options);
++	}
++	free(t);
++      }
++    }
++  }
++
+  /*
+   * Done with the file; see if we have any options...
+   */

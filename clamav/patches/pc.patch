@@ -1,0 +1,10 @@
+diff -Naur orig/libclamav/libmspack-0.5alpha/libclammspack.pc.in patched/libclamav/libmspack-0.5alpha/libclammspack.pc.in
+--- orig/libclamav/libmspack-0.5alpha/libclammspack.pc.in	2018-04-04 02:13:58.000000000 +0200
++++ patched/libclamav/libmspack-0.5alpha/libclammspack.pc.in	2018-04-19 17:57:15.434283345 +0200
+@@ -6,5 +6,5 @@
+ Name: @PACKAGE@
+ Description: Compressors and decompressors for Microsoft formats
+ Version: @VERSION@
+-Libs: -L${libdir} -lmspack
++Libs: -L${libdir} -lclammspack
+ Cflags: -I${includedir}
