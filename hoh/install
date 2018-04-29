@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
-ub_install
-mkdir -p $UB_INSTALLDIR/usr/share/pixmaps
+make \
+	DESTDIR=/var/uhubuild/work/install \
+	install
+mkdir -p $UB_INSTALLDIR/usr/share/{applications,pixmaps}
 cp extras/icons/headoverheels48.png $UB_INSTALLDIR/usr/share/pixmaps/headoverheels.png
+cp extras/headoverheels.desktop $UB_INSTALLDIR/usr/share/applications/
