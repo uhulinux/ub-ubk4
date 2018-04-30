@@ -25,8 +25,4 @@ install -m 644 "$UB_COMPILEDIR"/nscd/nscd.tmpfiles "$UB_INSTALLDIR"/usr/lib/tmpf
 install -m 644 "$UB_COMPILEDIR"/nscd/nscd.service "$UB_INSTALLDIR"/usr/lib/systemd/system
 
 # compat symlinks
-# ln -s ld-linux.so.2 "$UB_INSTALLDIR"/lib/ld-linux-x86-64.so.2
-mkdir -p "$UB_INSTALLDIR"/lib64
-cd "$UB_INSTALLDIR"/lib64
-ln -s ../lib/ld-linux-x86-64.so.2 ld-linux-x86-64.so.2
-# ln -s ../lib/ld-linux-x86-64.so.2 ld-lsb-x86-64.so.3
+ln -sT lib "$UB_INSTALLDIR"/lib64

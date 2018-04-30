@@ -115,6 +115,10 @@ for _archs in $UB_OBJECTDIR/usr/src/linux-$VERSION/arch/*/; do
     [[ ${_archs} == */x86/ ]] && continue
     rm -r "${_archs}"
 done
+for _archs in $UB_OBJECTDIR/usr/src/linux-$VERSION/scripts/dtc/include-prefixes/*/; do
+    [[ ${_archs} == */x86/ ]] && continue
+    rm -r "${_archs}"
+done
 
 rm -rf $UB_OBJECTDIR/usr/src/linux-$VERSION/Documentation
 find "$UB_OBJECTDIR/usr/src/linux-$VERSION/" -name "*.o" -print0 | xargs -r0 rm -v

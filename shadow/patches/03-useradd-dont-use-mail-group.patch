@@ -1,7 +1,7 @@
 diff -Naur orig/src/useradd.c patched/src/useradd.c
---- orig/src/useradd.c	2017-06-26 16:36:35.597776660 +0200
-+++ patched/src/useradd.c	2017-06-26 17:08:53.585792310 +0200
-@@ -1999,7 +1999,6 @@
+--- orig/src/useradd.c	2018-04-29 20:18:09.356906011 +0200
++++ patched/src/useradd.c	2018-04-29 20:22:10.239944799 +0200
+@@ -2074,7 +2074,6 @@
  		const char *spool;
  		char *file;
  		int fd;
@@ -9,11 +9,11 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  		gid_t gid;
  		mode_t mode;
  
-@@ -2015,16 +2014,8 @@
+@@ -2093,16 +2092,8 @@
  			return;
  		}
  
--		gr = getgrnam ("mail"); /* local, no need for xgetgrnam */
+-		gr = prefix_getgrnam ("mail"); /* local, no need for xgetgrnam */
 -		if (NULL == gr) {
 -			fputs (_("Group 'mail' not found. Creating the user mailbox file with 0600 mode.\n"),
 -			       stderr);

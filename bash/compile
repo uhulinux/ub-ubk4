@@ -1,7 +1,13 @@
 #!/bin/sh -eux
 
+_bashconfig=(-DDEFAULT_PATH_VALUE=\'\"/usr/local/sbin:/usr/local/bin:/usr/bin\"\'
+             -DSTANDARD_UTILS_PATH=\'\"/usr/bin\"\'
+             -DSYS_BASHRC=\'\"/etc/bashrc\"\'
+             -DSYS_BASH_LOGOUT=\'\"/etc/bash_logout\"\'
+             -DNON_INTERACTIVE_LOGIN_SHELLS)
+export CFLAGS=" ${_bashconfig[@]}"
+
 ub_compile \
-	--bindir=/bin \
 	--with-curses \
 	--with-installed-readline
 

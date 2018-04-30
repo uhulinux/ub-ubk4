@@ -2,8 +2,12 @@
 
 ub_install
 
+for i in "$UB_INSTALLDIR"/usr/bin/*; do
+	ln -s /usr/bin/"${i##*/}" "$UB_INSTALLDIR"/bin/"${i##*/}"
+done
+
 mv "$UB_INSTALLDIR"/usr/bin/chroot "$UB_INSTALLDIR"/usr/sbin/
 mv "$UB_INSTALLDIR"/usr/share/man/man1/chroot.1 "$UB_INSTALLDIR"/usr/share/man/man8/chroot.8
 
 # usleep symlink
-ln -s sleep "$UB_INSTALLDIR"/bin/usleep
+ln -s sleep "$UB_INSTALLDIR"/usr/bin/usleep

@@ -1,0 +1,19 @@
+diff -Naur orig/ld/emulparams/elf_x86_64.sh patched/ld/emulparams/elf_x86_64.sh
+--- orig/ld/emulparams/elf_x86_64.sh	2018-01-13 14:31:16.000000000 +0100
++++ patched/ld/emulparams/elf_x86_64.sh	2018-04-26 03:30:21.040799523 +0200
+@@ -40,7 +40,7 @@
+   x86_64*-linux*|i[3-7]86-*-linux-*)
+     case "$EMULATION_NAME" in
+       *64*)
+-	LIBPATH_SUFFIX=64
++	LIBPATH_SUFFIX=
+ 	PARSE_AND_LIST_OPTIONS_BNDPLT='
+   fprintf (file, _("\
+   -z bndplt                   Always generate BND prefix in PLT entries\n"));
+@@ -59,3 +59,6 @@
+     ELF_INTERPRETER_NAME=\"/lib/amd64/ld.so.1\"
+   ;;
+ esac
++
++LIBPATH_SUFFIX=
++ELF_INTERPRETER_NAME=\"/lib/ld-linux-x86-64.so.2\"
