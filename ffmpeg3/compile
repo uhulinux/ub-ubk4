@@ -1,12 +1,12 @@
 #!/bin/sh -eux
 
 # --enable-frei0r kell?
-# --disable-openssl: GnuTLS and OpenSSL must not be enabled at the same time.
-# a gnutls kevésbé problémás (API változások probléma)
 
 ./configure \
 	--prefix=/usr \
 	--mandir=/usr/share/man \
+	--disable-programs \
+	--disable-doc \
 	--disable-debug \
 	--disable-static \
 	--enable-shared \
@@ -51,17 +51,12 @@
 	--enable-nonfree \
 	--enable-openal \
 	--enable-opengl \
+	--enable-openssl \
 	--enable-pic \
 	--enable-pthreads \
 	--enable-postproc \
 	--enable-swresample \
 	--enable-swscale \
 	--enable-version3 \
-	--disable-openssl \
 	--disable-libopencv
 ub_make
-
-extratools="aviocat graph2dot ismindex pktdumper qt-faststart trasher cws2fws"
-for i in $extratools; do
-	make "tools/$i"
-done
