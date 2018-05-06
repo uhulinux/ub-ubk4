@@ -2,9 +2,8 @@
 
 ub_install
 
-ln -s /usr/bin/bash "$UB_INSTALLDIR"/usr/bin/sh
-ln -s /usr/bin/bash "$UB_INSTALLDIR"/bin/bash
-ln -s /usr/bin/bash "$UB_INSTALLDIR"/bin/sh
+ln -s bash "$UB_INSTALLDIR"/bin/sh
+ln -s ../../bin/bash "$UB_INSTALLDIR"/usr/bin/sh
 ln -s bash.1 "$UB_INSTALLDIR"/usr/share/man/man1/sh.1
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/bash
