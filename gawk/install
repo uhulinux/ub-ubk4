@@ -5,3 +5,10 @@ ub_install
 rm "$UB_INSTALLDIR"/usr/bin/gawk-"$UB_VERSION"
 
 ln -s gawk.1 "$UB_INSTALLDIR"/usr/share/man/man1/awk.1
+
+mv "$UB_INSTALLDIR"/{usr/,}/bin/awk
+mv "$UB_INSTALLDIR"/{usr/,}/bin/gawk
+ln -s ../../bin/awk "$UB_INSTALLDIR"/usr/bin/
+ln -s ../../bin/gawk "$UB_INSTALLDIR"/usr/bin/
+ln -s ../../bin/gawk "$UB_INSTALLDIR"/usr/bin/pgawk
+ln -s ../../bin/gawk "$UB_INSTALLDIR"/usr/bin/dgawk
