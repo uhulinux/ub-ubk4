@@ -6,6 +6,9 @@ cd "$UB_OBJECTDIR"
 UB_CONFIGURE_DIR="$UB_COMPILEDIR" \
 LIBS="-lpthread" \
 ub_configure \
+	--bindir=/bin \
+	--libdir=/lib \
+	--sbindir=/sbin \
 	--enable-elf-shlibs \
 	--disable-libblkid \
 	--disable-uuidd \
