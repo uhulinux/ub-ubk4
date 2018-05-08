@@ -1,0 +1,25 @@
+diff -Naur orig/texk/dvisvgm/dvisvgm-src/src/Makefile.am patched/texk/dvisvgm/dvisvgm-src/src/Makefile.am
+--- orig/texk/dvisvgm/dvisvgm-src/src/Makefile.am	2018-01-17 23:50:15.000000000 +0100
++++ patched/texk/dvisvgm/dvisvgm-src/src/Makefile.am	2018-05-08 03:46:18.062420286 +0200
+@@ -28,7 +28,8 @@
+ 	$(FREETYPE2_LIBS) \
+ 	$(FONTFORGE_LIBS) \
+ 	$(ZLIB_LIBS) \
+-	$(LIBGS_LIBS)
++	$(LIBGS_LIBS) \
++	-ldl
+ 
+ dvisvgm_DEPENDENCIES = $(noinst_LIBRARIES)
+ dvisvgm_DEPENDENCIES += $(KPATHSEA_DEPEND) $(ZLIB_DEPEND) $(FREETYPE2_DEPEND)
+diff -Naur orig/texk/dvisvgm/dvisvgm-src/src/Makefile.in patched/texk/dvisvgm/dvisvgm-src/src/Makefile.in
+--- orig/texk/dvisvgm/dvisvgm-src/src/Makefile.in	2018-01-17 23:50:15.000000000 +0100
++++ patched/texk/dvisvgm/dvisvgm-src/src/Makefile.in	2018-05-08 03:46:54.490827810 +0200
+@@ -482,7 +482,7 @@
+ dvisvgm_LDADD = $(noinst_LIBRARIES) ../libs/clipper/libclipper.a \
+ 	../libs/xxHash/libxxhash.a $(am__append_1) $(KPATHSEA_LIBS) \
+ 	$(POTRACE_LIBS) $(FREETYPE2_LIBS) $(FONTFORGE_LIBS) \
+-	$(ZLIB_LIBS) $(LIBGS_LIBS)
++	$(ZLIB_LIBS) $(LIBGS_LIBS) -ldl
+ dvisvgm_DEPENDENCIES = $(noinst_LIBRARIES) $(KPATHSEA_DEPEND) \
+ 	$(ZLIB_DEPEND) $(FREETYPE2_DEPEND)
+ libdvisvgm_a_SOURCES = AGLTable.hpp BasicDVIReader.cpp \

@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
+mv -v texk/web2c/pdftexdir/pdftoepdf{-newpoppler,}.cc
+mv -v texk/web2c/pdftexdir/pdftosrc{-newpoppler,}.cc
+
 mkdir build
 cd build
 UB_CONFIGURE_DIR=../ ub_configure \

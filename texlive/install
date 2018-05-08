@@ -1,26 +1,24 @@
 #!/bin/sh -eux
 
 # install texmf
-#cp -a texmf "$UB_INSTALLDIR"/usr/share/
+rm -Rf texmf-dist/doc
+rm -Rf texmf-dist/source
+rm -Rf texmf-dist/fonts/source
+rm -Rf texmf-dist/scripts/context/stubs/{mswin,source,win64}
 cp -a texmf-dist "$UB_INSTALLDIR"/usr/share/
-
-rm -Rf "$UB_INSTALLDIR"/usr/share/texmf/doc
-rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/doc
-rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/source
-rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/fonts/source
-rm -Rf "$UB_INSTALLDIR"/usr/share/texmf-dist/scripts/context/stubs/source
 
 cd build
 ub_install
 
-sed -i 's/^TEXMFROOT = .*$/TEXMFROOT = $SELFAUTODIR\/share/' "$UB_INSTALLDIR"/usr/share/texmf-dist/web2c/texmf.cnf
-ln -s pdftex "$UB_INSTALLDIR"/usr/bin/latex
-ln -s pdftex "$UB_INSTALLDIR"/usr/bin/pdflatex
+# a kpsewhere nélkül rakat hibás szimlink lesz,
+# de a kpsewhere csak akkor működik, ha megvan neki a libkpathsea
+make DESTDIR="$UB_INSTALLDIR" LD_LIBRARY_PATH="$UB_INSTALLDIR/usr/lib" texlinks
 
 # install perl module
 cd ..
 mkdir -p "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive
 install -m644 texk/tests/TeXLive/*.pm "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive/
+# install -m644 tlpkg/TeXLive/*.pm "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive/
 
 rm "$UB_INSTALLDIR"/usr/bin/latexmk
 rm "$UB_INSTALLDIR"/usr/bin/otfinfo
