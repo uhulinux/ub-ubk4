@@ -3,6 +3,5 @@
 ub_install
 
 for cmd in depmod insmod modinfo modprobe rmmod lsmod; do
-	ln -s /usr/bin/kmod "${UB_INSTALLDIR}/usr/sbin/${cmd}"
-	ln -s /usr/bin/kmod "${UB_INSTALLDIR}/usr/sbin/${cmd}"
+	ln -s ../bin/kmod "${UB_INSTALLDIR}/usr/sbin/${cmd}"
 done

@@ -1,0 +1,1235 @@
+diff -Naur orig/base.mk patched/base.mk
+--- orig/base.mk	2018-05-10 02:45:22.568788344 +0200
++++ patched/base.mk	2018-05-10 02:46:02.937430428 +0200
+@@ -427,9 +427,7 @@
+ ##############################################################################
+ 
+ ifndef ISWMAKE
+-include $(MAKE_DIR)baseace.mk
+ include $(MAKE_DIR)baseuace.mk
+ else
+-!include $(MAKE_DIR)baseace.mk
+ !include $(MAKE_DIR)baseuace.mk
+ endif
+diff -Naur orig/makefile patched/makefile
+--- orig/makefile	2018-05-10 02:45:23.008795343 +0200
++++ patched/makefile	2018-05-10 02:47:33.294867609 +0200
+@@ -14,17 +14,16 @@
+ SRCSsl          = $(BASIC_DIR)source
+ SRCS            = $(SRCSsl)/
+ 
++ifdef SYSINC
+ INCLSYSDIR 	= //usr/include/sys
+ INCLDIR 	= //usr/include
+-
+-DEFINES		= -D__LINUX__ -D__unix__ -D__GCC__ -D__HAS_IO_H__
+-
+-ifdef DEBUG
+-LSWITCHES	=
++INCLS		= -I$(INCLDIR) -idirafter $(INCLSYSDIR)
+ else
+-LSWITCHES	= -Wl,-s
++INCLS		=
+ endif
+ 
++DEFINES		= -D__LINUX__ -D__unix__ -D__GCC__ -U__HAS_IO_H__
++
+ ##############################################################################
+ all: unace
+ 
+@@ -47,7 +46,7 @@
+   $(APPS_UNACEEXE_CFILES)
+ 
+ unace: $(UNACEEXELIN_CFILES)
+-	gcc $(LSWITCHES) -Wl,-lncurses -static -I$(INCLDIR) -I$(INCLSYSDIR) -I$(SRCSsl) $(DEFINES) $(UNACEEXELIN_CFILES) -ggdb -o$(EXECS_DIR)unace
++	gcc $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(INCLS) -I$(SRCSsl) $(DEFINES) $(UNACEEXELIN_CFILES) -o$(EXECS_DIR)unace
+ ifndef DEBUG
+ 	tar cfvz linunace25.tgz unace file_id.diz licence
+ 	#sh linpack.sh
+diff -Naur orig/source/apps/exe/acefuncs/acefuncs.c patched/source/apps/exe/acefuncs/acefuncs.c
+--- orig/source/apps/exe/acefuncs/acefuncs.c	2018-05-10 02:45:22.940794261 +0200
++++ patched/source/apps/exe/acefuncs/acefuncs.c	2018-05-10 02:46:07.569504103 +0200
+@@ -27,14 +27,16 @@
+ 
+ void    APPS_EXE_ACEFUNCS_List(BOOL Verbose)
+ {
+-CHAR      ShortStr[80],
++CHAR      ShortStr[BASE_LFN_MAXLEN],
+           SizeStr1[80],
+           SizeStr2[80],
+           OutputStr[160];
+ PCHAR     OutputFileName;
+ INT       I;
+-tBASE_DOSFUNCS_FileTime
+-          FileTime;
++union {
++tBASE_DOSFUNCS_FileTime Fields;
++ULONG                   Raw;
++} FileTime;
+ 
+   BASE_FILELIST_Init();
+   BASE_FILELIST_VolumeCreate();
+@@ -79,7 +81,7 @@
+ 
+         APPS_EXE_CONVERT_MakeStrShorter(ShortStr, OutputFileName, 35);
+ 
+-        *(PULONG) &FileTime = BASE_ARCBLK.Header.File.FTIME;
++        FileTime.Raw = BASE_ARCBLK.Header.File.FTIME;
+ 
+         BASE_STATE.SummaryUnComprBytes += BASE_ARCBLK.Header.File.SIZE;
+         BASE_STATE.SummaryComprBytes   += BASE_ARCBLK.Header.File.PSIZE;
+@@ -87,8 +89,9 @@
+ 
+         sprintf(
+           OutputStr, "%2d.%2d.%2d_%2d:%2d %c%c%s %s %4d%% %c%s",
+-          FileTime.Day, FileTime.Month, (80 + FileTime.Year) % 100,
+-          FileTime.Hour, FileTime.Minute,
++          FileTime.Fields.Day, FileTime.Fields.Month,
++          (80 + FileTime.Fields.Year) % 100,
++          FileTime.Fields.Hour, FileTime.Fields.Minute,
+           BASE_ARCBLK.Header.File.HEAD_FLAGS & BASE_ACESTRUC_FLAG_SPLITBEFORE ?
+             '\x11' : ' ',
+           BASE_ARCBLK.Header.File.HEAD_FLAGS & BASE_ACESTRUC_FLAG_SPLITAFTER  ?
+diff -Naur orig/source/apps/exe/convert/convert.c patched/source/apps/exe/convert/convert.c
+--- orig/source/apps/exe/convert/convert.c	2018-05-10 02:45:22.948794389 +0200
++++ patched/source/apps/exe/convert/convert.c	2018-05-10 02:46:07.557503913 +0200
+@@ -31,7 +31,7 @@
+   ByteSize = (ByteSize / 1000000) * 100000000 + (ByteSize / 1000) * 10000
+              + ByteSize % 1000;
+ 
+-  sprintf(Str, "%lld ", ByteSize);
++  sprintf(Str, "%llu ", (unsigned long long)ByteSize);
+ 
+   StrLen      = strlen(Str) - 1;
+   Str[StrLen] = UNITCHARS[UnitCharNumber];
+@@ -109,7 +109,7 @@
+   {
+     UnitCharNumber = 0;
+ 
+-    while (Size > 999999999 || UnitCharNumber && Size > 99999999)
++    while (Size > 999999999 || (UnitCharNumber && Size > 99999999))
+     {
+       Size >>= 10;
+       UnitCharNumber++;
+@@ -117,12 +117,12 @@
+ 
+     if (UnitCharNumber)
+     {
+-      sprintf(SizeStr, "%8lld ", Size);
++      sprintf(SizeStr, "%8llu ", (unsigned long long)Size);
+       SizeStr[strlen(SizeStr) - 1] = UNITCHARS[UnitCharNumber];
+     }
+     else
+     {
+-      sprintf(SizeStr, "%9lld", Size);
++      sprintf(SizeStr, "%9llu", (unsigned long long)Size);
+     }
+   }
+ 
+diff -Naur orig/source/apps/exe/input/input.c patched/source/apps/exe/input/input.c
+--- orig/source/apps/exe/input/input.c	2018-05-10 02:45:22.964794643 +0200
++++ patched/source/apps/exe/input/input.c	2018-05-10 02:46:07.545503722 +0200
+@@ -169,6 +169,7 @@
+           TempStr[200];
+ INT       TimeCount;
+ UINT      ButtonNumber;
++PCHAR     ButtonPtr;
+ PCHAR     Output;
+ 
+   APPS_EXE_CONVERT_MakeStrShorter(ShortStr1, Description1, 79);
+@@ -207,11 +208,11 @@
+       APPS_EXE_INPUT.LastKey = APPS_EXE_MESSAGES.YANC[3];
+     }
+   }
+-  while (!(ButtonNumber =
+-             (LONG) strchr(APPS_EXE_MESSAGES.YANC, APPS_EXE_INPUT.LastKey))
++  while (!(ButtonPtr =
++             strchr(APPS_EXE_MESSAGES.YANC, APPS_EXE_INPUT.LastKey))
+          && !BASE_ERROR_EXTERN_HandleCancel(0));
+ 
+-  ButtonNumber -= (LONG) APPS_EXE_MESSAGES.YANC;
++  ButtonNumber = ButtonPtr - APPS_EXE_MESSAGES.YANC;
+ 
+   if (!BASE_ERROR.ErrorCode)
+   {
+diff -Naur orig/source/apps/exe/messages/messages.c patched/source/apps/exe/messages/messages.c
+--- orig/source/apps/exe/messages/messages.c	2018-05-10 02:45:22.984794961 +0200
++++ patched/source/apps/exe/messages/messages.c	2018-05-10 02:46:07.553503849 +0200
+@@ -107,7 +107,7 @@
+     
+   APPS_EXE_MESSAGES_Skip(Start - 22);
+ 
+-  BASE_MEMORY_FreeCheck((PVOID *) &APPS_EXE_MESSAGES.MessagesBuf);
++  BASE_MEMORY_FreeCheck(APPS_EXE_MESSAGES.MessagesBuf);
+ 
+   if (!(APPS_EXE_MESSAGES.MessagesBuf =
+         (PCHAR) BASE_MEMORY_GetMem(*Size + 1)))
+@@ -192,7 +192,7 @@
+ {
+ PCHAR     AndPos;
+ 
+-  if (AndPos = strchr(Str, '&'))
++  if ((AndPos = strchr(Str, '&')))
+   {
+     strcpy(AndPos, AndPos + 1);
+ 
+diff -Naur orig/source/apps/exe/output/output.c patched/source/apps/exe/output/output.c
+--- orig/source/apps/exe/output/output.c	2018-05-10 02:45:22.972794770 +0200
++++ patched/source/apps/exe/output/output.c	2018-05-10 02:46:07.573504167 +0200
+@@ -125,7 +125,7 @@
+     memset(&DeleteStr[74], ' ', 74);
+     DeleteStr[222] = 0;
+ 
+-    printf(DeleteStr);
++    printf("%s", DeleteStr);
+ #ifndef __sun__
+     fflush(stdout);
+ #endif
+diff -Naur orig/source/apps/unace/exe/commline/commline.c patched/source/apps/unace/exe/commline/commline.c
+--- orig/source/apps/unace/exe/commline/commline.c	2018-05-10 02:45:22.880793307 +0200
++++ patched/source/apps/unace/exe/commline/commline.c	2018-05-10 02:46:07.577504231 +0200
+@@ -42,15 +42,17 @@
+ 
+ void    APPS_UNACE_EXE_COMMLINE_Init(void)
+ {
++  INT SearchExcludeListMax;
++  
+   APPS_EXE_COMMLINE.TimeOutLimit = 600;
+ 
+   BASE_FILELIST.SearchExcludeListEnd =
+     BASE_FILELIST.SearchExcludeList  =
+-        (PCHAR) BASE_MEMORY_GetMemBase2((PINT)
+-                                        &BASE_FILELIST.SearchExcludeListMax,
++        (PCHAR) BASE_MEMORY_GetMemBase2(&SearchExcludeListMax,
+                                         1);
+ 
+-  BASE_FILELIST.SearchExcludeListMax += (INT) BASE_FILELIST.SearchExcludeList;
++  BASE_FILELIST.SearchExcludeListMax = SearchExcludeListMax + 
++                                       BASE_FILELIST.SearchExcludeList;
+ 
+   APPS_EXE_OUTPUT.DoUseStdOutput = 1;
+ 
+@@ -265,12 +267,12 @@
+ 
+ void    APPS_UNACE_EXE_COMMLINE_GetFileListInit(void)
+ {
++  INT SearchListMax;
+   BASE_FILELIST.SearchListEnd =
+     BASE_FILELIST.SearchList  =
+-       (PCHAR) BASE_MEMORY_GetMemBase2((PINT)
+-                                       &BASE_FILELIST.SearchListMax, 1);
++       (PCHAR) BASE_MEMORY_GetMemBase2(&SearchListMax,1);
+ 
+-  BASE_FILELIST.SearchListMax += (INT) BASE_FILELIST.SearchListEnd;
++  BASE_FILELIST.SearchListMax = SearchListMax + BASE_FILELIST.SearchListEnd;
+ }
+ 
+ /*-----------------APPS_UNACE_EXE_COMMLINE_GetFileListDone---------------*/
+@@ -393,7 +395,7 @@
+ 
+ void    APPS_UNACE_EXE_COMMLINE_ToggleSwitch(PCHAR SwitchChar, PINT Variable)
+ {
+-  if (!(*SwitchChar) || *SwitchChar == '+' && *(SwitchChar + 1) == 0)
++  if (!(*SwitchChar) || (*SwitchChar == '+' && *(SwitchChar + 1) == 0))
+   {
+     *Variable = 1;
+   }
+@@ -472,8 +474,10 @@
+ 
+           case APPS_UNACE_EXE_COMMLINE_SWITCH_P:
+           {
+-            strcpy(BASE_OPTIONS.ExtractOptions.CryptionData.Password,
+-                   Switch + 1);
++            const size_t size = sizeof(BASE_OPTIONS.ExtractOptions.CryptionData.Password) - 1;
++            strncpy(BASE_OPTIONS.ExtractOptions.CryptionData.Password,
++                    Switch + 1, size);
++            BASE_OPTIONS.ExtractOptions.CryptionData.Password[size] = 0;
+ 
+             BASE_CRYPT.DoUseCurrentPassword = 1;
+ 
+@@ -537,8 +541,10 @@
+   {
+     if (APPS_EXE_COMMLINE.ArgumentCount < APPS_EXE_COMMLINE.ArgumentsNumber)
+     {
+-      strcpy(APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName,
+-             APPS_EXE_COMMLINE.Arguments[APPS_EXE_COMMLINE.ArgumentCount++]);
++      const size_t size = sizeof(APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName) - 1;
++      strncpy(APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName,
++              APPS_EXE_COMMLINE.Arguments[APPS_EXE_COMMLINE.ArgumentCount++], size);
++      APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName[size] = 0;
+ 
+       BASE_PATHFUNC_ToSystemPathSeparator(APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName);
+ 
+@@ -549,10 +555,12 @@
+       if (strrchr(APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName, BASE_PATHFUNC_SEPARATOR)
+             > PointPos
+           || !PointPos
+-          || !BASE_CONVERT_StrICmp(PointPos, ".")
+-            && !BASE_CONVERT_StrICmp(PointPos, ".ace")
+-            && !BASE_CONVERT_StrICmp(PointPos, ".exe"))
++          || (!BASE_CONVERT_StrICmp(PointPos, ".")
++              && !BASE_CONVERT_StrICmp(PointPos, ".ace")
++              && !BASE_CONVERT_StrICmp(PointPos, ".exe")))
+       {
++        if (size - strlen(APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName) >=
++            strlen(BASE_ACESTRUC_EXTENSION))
+         strcat(APPS_UNACE_EXE_COMMLINE.WildcardedArchiveName,
+                BASE_ACESTRUC_EXTENSION);
+       }
+diff -Naur orig/source/base/all/all.h patched/source/base/all/all.h
+--- orig/source/base/all/all.h	2018-05-10 02:45:22.604788917 +0200
++++ patched/source/base/all/all.h	2018-05-10 02:46:07.573504167 +0200
+@@ -61,7 +61,8 @@
+ #define put_unaligned(ptr, val) ((void)( *(ptr) = (val) ))
+ #endif /* __EMULATE_UNALIGNED__ */
+ 
+-#ifdef __BIG_ENDIAN__
++#include <endian.h>
++#if __BYTE_ORDER == __BIG_ENDIAN
+ #define ADJUST_ENDIANNESS16(Ptr) {\
+   USHORT x = get_unaligned((USHORT*) (Ptr));\
+   put_unaligned((USHORT*) (Ptr), x >> 8 | x << 8);\
+@@ -78,10 +79,12 @@
+   x2 = x2 >> 16 | x2 << 16;\
+   put_unaligned(((ULONG*) (Ptr)), (x2&0xff00ff00) >> 8 | (x2&0x00ff00ff) << 8);\
+ }
+-#else
++#elif __BYTE_ORDER == __LITTLE_ENDIAN
+ #define ADJUST_ENDIANNESS16(Ptr) 
+ #define ADJUST_ENDIANNESS32(Ptr) 
+ #define ADJUST_ENDIANNESS64(Ptr) 
++#else
++#error Please define system endianness
+ #endif
+ 
+ #endif
+diff -Naur orig/source/base/all/arcblk/arcblk.c patched/source/base/all/arcblk/arcblk.c
+--- orig/source/base/all/arcblk/arcblk.c	2018-05-10 02:45:22.628789299 +0200
++++ patched/source/base/all/arcblk/arcblk.c	2018-05-10 02:46:07.557503913 +0200
+@@ -117,7 +117,7 @@
+   if ((Header->File.HEAD_FLAGS & BASE_ACESTRUC_FLAG_SECURITY)
+       && (*Size = BASE_ARCBLK_FileHeaderSecuritySize(Header)))
+   {
+-    if (*Security = BASE_MEMORY_GetMem(*Size))
++    if ((*Security = BASE_MEMORY_GetMem(*Size)))
+     {
+       memcpy(*Security, BASE_ARCBLK_FileHeaderSecurity(Header), *Size);
+     }
+@@ -218,8 +218,8 @@
+           memmove(&BASE_ARCBLK.Header.File.FTIME,
+                   &BASE_ARCBLK.Header.File32.FTIME,
+                   sizeof(BASE_ARCBLK.Header)
+-                  - ((ULONG)&BASE_ARCBLK.Header.File.FTIME
+-                     - (ULONG)&BASE_ARCBLK.Header));
++                  - ((PCHAR)&BASE_ARCBLK.Header.File.FTIME
++                     - (PCHAR)&BASE_ARCBLK.Header));
+ 
+           BASE_ARCBLK.Header.File.PSIZE = PSIZE;
+           BASE_ARCBLK.Header.File.SIZE = SIZE;
+@@ -239,8 +239,8 @@
+           memmove(&BASE_ARCBLK.Header.Recovery.CLUSTER,
+                   &BASE_ARCBLK.Header.Recovery32.CLUSTER,
+                   sizeof(BASE_ARCBLK.Header)
+-                  - ((ULONG)&BASE_ARCBLK.Header.Recovery.CLUSTER
+-                     - (ULONG)&BASE_ARCBLK.Header));
++                  - ((PCHAR)&BASE_ARCBLK.Header.Recovery.CLUSTER
++                     - (PCHAR)&BASE_ARCBLK.Header));
+ 
+           BASE_ARCBLK.Header.Recovery.REC_BLK_SIZE = REC_BLK_SIZE;
+           BASE_ARCBLK.Header.Recovery.REL_STRT = REL_STRT;
+@@ -259,8 +259,8 @@
+               memmove(&BASE_ARCBLK.Header.Basic.other,
+                 &BASE_ARCBLK.Header.Basic32.other,
+                 sizeof(BASE_ARCBLK.Header)
+-                  - ((ULONG)&BASE_ARCBLK.Header.Basic.other
+-                  - (ULONG)&BASE_ARCBLK.Header));
++                  - ((PCHAR)&BASE_ARCBLK.Header.Basic.other
++                  - (PCHAR)&BASE_ARCBLK.Header));
+ 
+             BASE_ARCBLK.Header.Basic.ADDSIZE = ADDSIZE; 
+ 
+@@ -282,12 +282,8 @@
+ #if defined(__MACOSX__)
+     BASE_ARCBLK.Header.File.FNAME_SIZE = BASE_UNINORM_CP850ToUTF8NFD(
+       BASE_ARCBLK.Header.File.FNAME, BASE_ARCBLK.Header.File.FNAME_SIZE);
+-#elif defined(__LINUX__)
+-    /* may not work for every linux user */
+-    BASE_ARCBLK.Header.File.FNAME_SIZE = BASE_UNINORM_CP850ToANSI(
+-      BASE_ARCBLK.Header.File.FNAME, BASE_ARCBLK.Header.File.FNAME_SIZE);
+ #elif defined(__unix__)
+-    /* for every other unix assume UTF-8 NFC normalization */
++    /* for unix, assume UTF-8 NFC normalization */
+     BASE_ARCBLK.Header.File.FNAME_SIZE = BASE_UNINORM_CP850ToUTF8NFC(
+       BASE_ARCBLK.Header.File.FNAME, BASE_ARCBLK.Header.File.FNAME_SIZE);
+ #endif
+diff -Naur orig/source/base/all/archives/ace/ace.c patched/source/base/all/archives/ace/ace.c
+--- orig/source/base/all/archives/ace/ace.c	2018-05-10 02:45:22.828792480 +0200
++++ patched/source/base/all/archives/ace/ace.c	2018-05-10 02:46:07.565504040 +0200
+@@ -35,12 +35,12 @@
+     if (!memcmp(&BASE_ARCHIVES_TEST.TestBuffer[I], BASE_ACESTRUC_ACESIGN,
+                 BASE_ACESTRUC_ACESIGNLEN)
+         && (FilePos = BASE_DIRDATA_Dir1.ArchiveBegin + I
+-                      - ((INT) BASE_ARCBLK.Header.Main.ACESIGN
+-                      - (INT) &BASE_ARCBLK.Header))
++                      - ((PCHAR) BASE_ARCBLK.Header.Main.ACESIGN
++                       - (PCHAR) &BASE_ARCBLK.Header))
+             >= 0)
+     {
+-      Flags = ((INT) BASE_ARCBLK.Header.Main.ACESIGN - (INT) &BASE_ARCBLK.Header);
+-      Flags = ((INT) &BASE_ARCBLK.Header.Main.ACESIGN - (INT) &BASE_ARCBLK.Header);
++      Flags = ((PCHAR) BASE_ARCBLK.Header.Main.ACESIGN - (PCHAR) &BASE_ARCBLK.Header);
++      Flags = ((PCHAR) &BASE_ARCBLK.Header.Main.ACESIGN - (PCHAR) &BASE_ARCBLK.Header);
+ 
+       BASE_DOSFUNCS_LSeek(BASE_ARCHIVES_TEST.ArchiveHandle, FilePos, SEEK_SET);
+       read(BASE_ARCHIVES_TEST.ArchiveHandle, (PCHAR) &BASE_ARCBLK.Header, 4);
+@@ -183,13 +183,13 @@
+         break;
+       }
+ 
+-      BASE_ARCHIVES_READ.FileData[BASE_ARCHIVES_READ.FileNumber].Size       =
++      BASE_ARCHIVES_READ.FileData[BASE_ARCHIVES_READ.FileNumber].Size        =
+         BASE_ARCBLK.Header.File.SIZE;
+ 
+-      BASE_ARCHIVES_READ.FileData[BASE_ARCHIVES_READ.FileNumber].PackedSize =
++      BASE_ARCHIVES_READ.FileData[BASE_ARCHIVES_READ.FileNumber].PackedSize  =
+         BASE_ARCBLK.Header.File.PSIZE;
+ 
+-      BASE_ARCHIVES_READ.FileData[BASE_ARCHIVES_READ.FileNumber].Time       =
++      BASE_ARCHIVES_READ.FileData[BASE_ARCHIVES_READ.FileNumber].Time.Fields =
+         BASE_DOSFUNCS_CalcFileTime(BASE_ARCBLK.Header.File.FTIME);
+ 
+       Attributes |=
+diff -Naur orig/source/base/all/archives/read/read.c patched/source/base/all/archives/read/read.c
+--- orig/source/base/all/archives/read/read.c	2018-05-10 02:45:22.820792353 +0200
++++ patched/source/base/all/archives/read/read.c	2018-05-10 02:46:07.553503849 +0200
+@@ -22,8 +22,8 @@
+ 
+ void    BASE_ARCHIVES_READ_FreeArchiveList(void)
+ {
+-  BASE_MEMORY_FreeCheck((PVOID *) &BASE_ARCHIVES_READ.FileData);
+-  BASE_MEMORY_FreeCheck((PVOID *) &BASE_ARCHIVES_READ.FileNames);
++  BASE_MEMORY_FreeCheck(BASE_ARCHIVES_READ.FileData);
++  BASE_MEMORY_FreeCheck(BASE_ARCHIVES_READ.FileNames);
+ }
+ 
+ /*-----------------BASE_ARCHIVES_READ_GetArchiveList---------------------*/
+diff -Naur orig/source/base/all/archives/test/test.c patched/source/base/all/archives/test/test.c
+--- orig/source/base/all/archives/test/test.c	2018-05-10 02:45:22.832792544 +0200
++++ patched/source/base/all/archives/test/test.c	2018-05-10 02:46:07.541503658 +0200
+@@ -59,7 +59,7 @@
+                   (PVOID)&BASE_ARCHIVES_TEST.TestBuffer[TestPos],
+                   512 + 32 -TestPos);
+                         	
+-      if (!Read && !TestPos || errno)
++      if ((!Read && !TestPos) || errno)
+       {
+         break;
+       }
+diff -Naur orig/source/base/all/bufread/bufread.c patched/source/base/all/bufread/bufread.c
+--- orig/source/base/all/bufread/bufread.c	2018-05-10 02:45:22.800792035 +0200
++++ patched/source/base/all/bufread/bufread.c	2018-05-10 02:46:07.553503849 +0200
+@@ -3,6 +3,10 @@
+ 
+ #ifdef __HAS_IO_H__
+ 	#include <io.h>
++#else
++#ifdef __unix__
++	#include <unistd.h>
++#endif
+ #endif
+ 
+ #include <string.h>
+@@ -130,7 +134,7 @@
+ {
+   close(BASE_BUFREAD.Handle);
+   BASE_BUFREAD.Handle = -1;
+-  BASE_MEMORY_FreeCheck((PVOID *) &BASE_BUFREAD.Buf);
++  BASE_MEMORY_FreeCheck(BASE_BUFREAD.Buf);
+ }
+ 
+ /*-----------------BASE_BUFREAD_Tell-------------------------------------*/
+diff -Naur orig/source/base/all/comments/comments.c patched/source/base/all/comments/comments.c
+--- orig/source/base/all/comments/comments.c	2018-05-10 02:45:22.628789299 +0200
++++ patched/source/base/all/comments/comments.c	2018-05-10 02:46:07.545503722 +0200
+@@ -47,7 +47,11 @@
+     CommentSize = sizeof(BASE_COMMENTS.Comment) - 1;
+   }
+ 
+-  memcpy(BASE_COMMENTS.Comment, CommentPos, CommentSize);
++  if(CommentSize > 0)
++  {
++    memcpy(BASE_COMMENTS.Comment, CommentPos, CommentSize);
++  }
++  
+   BASE_COMMENTS.CompressedSize = CommentSize;
+   BASE_DCPR_COMMENTS_GetComment();
+ 
+diff -Naur orig/source/base/all/dcpr/comments/comments.c patched/source/base/all/dcpr/comments/comments.c
+--- orig/source/base/all/dcpr/comments/comments.c	2018-05-10 02:45:22.760791398 +0200
++++ patched/source/base/all/dcpr/comments/comments.c	2018-05-10 02:46:07.561503976 +0200
+@@ -45,7 +45,7 @@
+ {
+   if (BASE_DCPR.DoFreeReadBuf)
+   {
+-    BASE_MEMORY_FreeCheck((PVOID *) &BASE_DCPR.ReadBuf);
++    BASE_MEMORY_FreeCheck(BASE_DCPR.ReadBuf);
+   }
+ }
+ 
+@@ -62,6 +62,8 @@
+ 
+   if (BASE_COMMENTS.CompressedSize)
+   {
++    MatchPos = 0;
++  
+     CommentPos = 0;
+     memset(&Hash, 0, sizeof(Hash));
+     BASE_DCPR_COMMENTS_Init();
+diff -Naur orig/source/base/all/dcpr/dcpr.c patched/source/base/all/dcpr/dcpr.c
+--- orig/source/base/all/dcpr/dcpr.c	2018-05-10 02:45:22.768791526 +0200
++++ patched/source/base/all/dcpr/dcpr.c	2018-05-10 02:46:07.553503849 +0200
+@@ -125,8 +125,8 @@
+     RestLen           -= R;
+   }
+   while ((R || BASE_DCPR.NextType != BASE_DCPR.Type
+-           || (BASE_DCPR.NextType == BASE_ACESTRUC_BLOCKEDTYPE_LZ77_DELTA)
+-               && BASE_DCPR_LZ77.NextDeltaLen)
++           || ((BASE_DCPR.NextType == BASE_ACESTRUC_BLOCKEDTYPE_LZ77_DELTA)
++                && BASE_DCPR_LZ77.NextDeltaLen))
+          && (RestLen > BASE_CPRDCPR_LZ77_MAXLEN));
+ 
+   return Len - RestLen;
+@@ -301,8 +301,8 @@
+ {
+   if (BASE_DCPR.IsInitialized)
+   {
+-    BASE_MEMORY_FreeCheck((PVOID *) &BASE_DCPR.ReadBuf);
+-    BASE_MEMORY_FreeCheck((PVOID *) &BASE_DCPR_LZ77.Dictionary);
++    BASE_MEMORY_FreeCheck(BASE_DCPR.ReadBuf);
++    BASE_MEMORY_FreeCheck(BASE_DCPR_LZ77.Dictionary);
+     BASE_DCPR.IsInitialized = 0;
+     BASE_MEMORY_Optimize();
+   }
+diff -Naur orig/source/base/all/dcpr/pic/pic.c patched/source/base/all/dcpr/pic/pic.c
+--- orig/source/base/all/dcpr/pic/pic.c	2018-05-10 02:45:22.752791271 +0200
++++ patched/source/base/all/dcpr/pic/pic.c	2018-05-10 02:46:07.553503849 +0200
+@@ -137,7 +137,7 @@
+     BASE_DCPR_PIC.Data[0] -= BASE_DCPR_PIC.Planes;
+     BASE_DCPR_PIC.Data[1] -= BASE_DCPR_PIC.Planes;
+ 
+-    BASE_MEMORY_FreeCheck((PVOID *) &BASE_DCPR_PIC.Data[0]);
+-    BASE_MEMORY_FreeCheck((PVOID *) &BASE_DCPR_PIC.Data[1]);
++    BASE_MEMORY_FreeCheck(BASE_DCPR_PIC.Data[0]);
++    BASE_MEMORY_FreeCheck(BASE_DCPR_PIC.Data[1]);
+   }
+ }
+diff -Naur orig/source/base/all/declare.h patched/source/base/all/declare.h
+--- orig/source/base/all/declare.h	2018-05-10 02:45:22.616789108 +0200
++++ patched/source/base/all/declare.h	2018-05-10 02:46:07.541503658 +0200
+@@ -7,76 +7,47 @@
+ #ifndef _DECLARE_H_INCLUDED
+ #define _DECLARE_H_INCLUDED
+ 
+-#if !defined(__OS2__) && !defined(_WINDOWS_)
+-  typedef int             BOOL;
++#include <stdint.h>
+ 
+-  typedef char               CHAR;
+-  typedef unsigned char      UCHAR;
+-  typedef UCHAR             *PUCHAR;
+-  typedef char              *PSZ;
++typedef int             BOOL;
++typedef BOOL           *PBOOL;
+ 
+-  typedef short              SHORT;
+-  typedef unsigned short     USHORT;
+-  typedef USHORT            *PUSHORT;
+-
+-  typedef long               LONG;
+-  typedef unsigned long      ULONG;
+-
+-  typedef ULONG             *PULONG;
+-
+-  typedef int                INT;
+-  typedef unsigned int       UINT;
+-  typedef unsigned int      *PUINT;
+-
+-  typedef CHAR              *LPSTR;
+-#endif
+-
+-#if __WATCOMC__==1060
+-  typedef long               __int64[2];
+-  typedef __int64            LONGLONG;
+-  typedef LONGLONG          *PLONGLONG;
+-  typedef __int64            ULONGLONG;
+-  typedef ULONGLONG          DWORDLONG;
+-#else
+-  #if !defined(_WINDOWS_)
+-    #if !defined(__WATCOMC__) && !defined(__int64)
+-      #define __int64  long long
+-    #endif
+-
+-    typedef __int64            LONGLONG;
+-    typedef LONGLONG          *PLONGLONG;
+-    typedef unsigned __int64   ULONGLONG;
+-    typedef ULONGLONG          DWORDLONG;
+-  #endif
+-#endif
+-
+-
+-#if !defined(_WINDOWS_)
+-  typedef BOOL           *PBOOL;
+-  typedef INT            *PINT;
+-#endif
+-
+-#if !defined(__wtypes_h__)
+-  typedef void           *PVOID;
+-  typedef CHAR           *PCHAR;
+-  typedef SHORT          *PSHORT;
+-  typedef LONG           *PLONG;
+-  typedef ULONGLONG      *PULONGLONG;
+-#endif
+-
+-#if defined(_GNU_H_WINDOWS32_BASE)
+-  typedef LONGLONG  	  ULONGLONG;
+-  typedef ULONGLONG      *PULONGLONG;
+-#endif
+-
+-typedef signed char     SCHAR;
++typedef char               CHAR;
++typedef CHAR              *PCHAR;
++typedef unsigned char      UCHAR;
++typedef UCHAR             *PUCHAR;
++typedef signed char        SCHAR;
++typedef CHAR              *PSZ;
++typedef CHAR              *LPSTR;
++
++typedef int                INT;
++typedef INT               *PINT;
++typedef unsigned int       UINT;
++typedef unsigned int      *PUINT;
++
++typedef int16_t            SHORT;
++typedef SHORT             *PSHORT;
++typedef uint16_t           USHORT;
++typedef USHORT            *PUSHORT;
++
++typedef int32_t            LONG;
++typedef LONG              *PLONG;
++typedef uint32_t           ULONG;
++typedef ULONG             *PULONG;
++
++typedef int64_t            LONGLONG;
++typedef LONGLONG          *PLONGLONG;
++typedef uint64_t           ULONGLONG;
++typedef ULONGLONG         *PULONGLONG;
++
++typedef void              *PVOID;
++
++/* Dear ACE team, please clean your code to remove the following types */
++typedef LONGLONG           __int64;
++typedef ULONGLONG          DWORDLONG;
+ 
+ #ifndef NULL
+- #if defined(__SMALL__) || defined(__MEDIUM__) || defined(__386__) || defined(__AXP__) || defined(__PPC__)
+-  #define NULL   0
+- #else
+-  #define NULL   0L
+- #endif
++#include <stdlib.h>
+ #endif
+ 
+ 
+diff -Naur orig/source/base/all/dosfuncs/lin.c patched/source/base/all/dosfuncs/lin.c
+--- orig/source/base/all/dosfuncs/lin.c	2018-05-10 02:45:22.704790508 +0200
++++ patched/source/base/all/dosfuncs/lin.c	2018-05-10 02:46:07.545503722 +0200
+@@ -46,7 +46,7 @@
+     {
+       BASE_PATHFUNC_CompletePath(DirToOpen);
+ 
+-      if (ChPtr = strrchr(DirToOpen, BASE_PATHFUNC_SEPARATOR))
++      if ((ChPtr = strrchr(DirToOpen, BASE_PATHFUNC_SEPARATOR)))
+       {
+         strcpy(SearchMask, ChPtr + 1);
+     
+diff -Naur orig/source/base/all/extract/extract.c patched/source/base/all/extract/extract.c
+--- orig/source/base/all/extract/extract.c	2018-05-10 02:45:22.592788726 +0200
++++ patched/source/base/all/extract/extract.c	2018-05-10 02:46:07.553503849 +0200
+@@ -134,7 +134,7 @@
+       Decompressed = BASE_DCPR_Block(&Buf[BufPos], BufSize
+                                      + BASE_CPRDCPR_LZ77_MAXLEN - BufPos);
+ 
+-      if (!Decompressed && !BufPos || BASE_ERROR_EXTERN_HandleCancel(1))
++      if ((!Decompressed && !BufPos) || BASE_ERROR_EXTERN_HandleCancel(1))
+       {
+         break;
+       }
+@@ -232,10 +232,10 @@
+   {
+     BASE_LFN_SetFileAttributes(BASE_STATE.DestinationFileName, Attr);
+     BASE_DOSFUNCS_SetFileSecurity(BASE_STATE.DestinationFileName, NTFSSecurity);
+-    BASE_MEMORY_FreeCheck((PVOID)&NTFSSecurity);
++    BASE_MEMORY_FreeCheck(NTFSSecurity);
+   }
+ 
+-  BASE_MEMORY_FreeCheck((PVOID *) &Buf);
++  BASE_MEMORY_FreeCheck(Buf);
+ 
+   return;
+ 
+@@ -265,8 +265,8 @@
+ 
+   while (!BASE_ERROR_EXTERN_HandleCancel(1)
+          && (BASE_EXTRACT.DoExtractAllVolumes
+-             || BASE_ARCBLK.Options.IsVolume
+-                && BASE_EXTRACT.DoProcessAllVolumes
++             || (BASE_ARCBLK.Options.IsVolume
++                 && BASE_EXTRACT.DoProcessAllVolumes)
+              || FilesNumber)
+          && BASE_ARCBLK_LoadBlock())
+   {
+@@ -348,8 +348,8 @@
+ 
+   if (BASE_VOLUME_FirstVolumeToProcess(ArchiveName))
+   {
+-    if (!DoWriteData && BASE_ARCBLK.Options.IsSolid
+-        || !BASE_FILELIST.Number)
++    if ((!DoWriteData && BASE_ARCBLK.Options.IsSolid)
++         || !BASE_FILELIST.Number)
+     {
+       BASE_EXTRACT.DoExtractAllVolumes = 1;
+       BASE_FILELIST.SizeOfFiles = BASE_DIRDATA_Dir1.UnPackedSize;
+diff -Naur orig/source/base/all/filelist/filelist.c patched/source/base/all/filelist/filelist.c
+--- orig/source/base/all/filelist/filelist.c	2018-05-10 02:45:22.816792289 +0200
++++ patched/source/base/all/filelist/filelist.c	2018-05-10 02:46:07.565504040 +0200
+@@ -242,7 +242,7 @@
+     {
+       BASE_FILELIST.ListFileData[BASE_FILELIST.Number].Size = FileSize;
+ 
+-      BASE_FILELIST.ListFileData[BASE_FILELIST.Number].Time = 
++      BASE_FILELIST.ListFileData[BASE_FILELIST.Number].Time.Fields = 
+         BASE_DOSFUNCS_CalcFileTime(FileTime);
+ 
+       if ((BASE_FILELIST.ListFileData[BASE_FILELIST.Number].Attr = Attr)
+@@ -290,7 +290,7 @@
+   if (!(BASE_FILELIST.ListFileData =
+          (pBASE_FILELIST_FileData) BASE_MEMORY_GetMemBase2(&BufSize, 1)))
+   {
+-    BASE_MEMORY_FreeCheck((PVOID *) &BASE_FILELIST.List);
++    BASE_MEMORY_FreeCheck(BASE_FILELIST.List);
+ 
+     return;
+   }
+@@ -303,8 +303,8 @@
+ 
+ void    BASE_FILELIST_Done(void)
+ {
+-  BASE_MEMORY_FreeCheck((PVOID *) &BASE_FILELIST.List);
+-  BASE_MEMORY_FreeCheck((PVOID *) &BASE_FILELIST.ListFileData);
++  BASE_MEMORY_FreeCheck(BASE_FILELIST.List);
++  BASE_MEMORY_FreeCheck(BASE_FILELIST.ListFileData);
+   BASE_MEMORY_Optimize();
+ }
+ 
+@@ -314,6 +314,7 @@
+                              BOOL DoOutputNoFilesError)
+ {
+ PVOID     SavedScreenPtr;
++ULONG     PosIndex, LastIndex;
+ 
+   BASE_MSGOUT_EXTERN_ListCreateBegin(&SavedScreenPtr);
+ 
+@@ -344,14 +345,14 @@
+                                 BASE_FILELIST.Number
+                                   * sizeof(tBASE_FILELIST_FileData));
+ 
+-  BASE_FILELIST.Pos  -= (ULONG) BASE_FILELIST.List;
+-  BASE_FILELIST.Last -= (ULONG) BASE_FILELIST.List;
+-
++  PosIndex  = BASE_FILELIST.Pos  - BASE_FILELIST.List;
++  LastIndex = BASE_FILELIST.Last - BASE_FILELIST.List;
++  
+   BASE_FILELIST.List  = (PCHAR) BASE_MEMORY_ReAlloc(BASE_FILELIST.List,
+-                                      (ULONG) BASE_FILELIST.Last);
++                                                    LastIndex);
+ 
+-  BASE_FILELIST.Pos  += (ULONG) BASE_FILELIST.List;
+-  BASE_FILELIST.Last += (ULONG) BASE_FILELIST.List;
++  BASE_FILELIST.Pos   = BASE_FILELIST.List + PosIndex;
++  BASE_FILELIST.Last  = BASE_FILELIST.List + LastIndex;
+ 
+   BASE_MEMORY_Optimize();
+ 
+@@ -396,7 +397,7 @@
+     if (BASE_PATHFUNC_WildCardCheck(ListPosition, PureFileName + AddDirLen))
+     {
+       BASE_FILELIST_AddFile(FileName, FileData.Size,
+-                       *(PULONG) &FileData.Time, FileData.Attr);
++                       FileData.Time.Raw, FileData.Attr);
+ 
+       return;
+     }
+diff -Naur orig/source/base/all/filelist/filelist.h patched/source/base/all/filelist/filelist.h
+--- orig/source/base/all/filelist/filelist.h	2018-05-10 02:45:22.820792353 +0200
++++ patched/source/base/all/filelist/filelist.h	2018-05-10 02:46:07.565504040 +0200
+@@ -31,8 +31,11 @@
+ 
+ typedef struct
+ {
+-  tBASE_DOSFUNCS_FileTime
+-          Time;
++  union {
++    tBASE_DOSFUNCS_FileTime
++          Fields;
++    ULONG Raw;
++  } Time;
+   ULONGLONG
+           Size,
+           PackedSize;
+diff -Naur orig/source/base/all/funcs/funcs.c patched/source/base/all/funcs/funcs.c
+--- orig/source/base/all/funcs/funcs.c	2018-05-10 02:45:22.640789490 +0200
++++ patched/source/base/all/funcs/funcs.c	2018-05-10 02:46:07.545503722 +0200
+@@ -24,10 +24,11 @@
+   BASE_FILELIST.DoAddFileCheckIfValidFile =
+     !BASE_DIRDATA_IsInArchive1 && BASE_DIRDATA_IsInArchive2;
+ 
+-  if (BASE_EXTRACT.DoExtractAllVolumes
+-      && BASE_FILELIST_Create(1, 5, 1)
+-        || !BASE_EXTRACT.DoExtractAllVolumes
+-        && BASE_FILELIST_Create(1, Mode, 1))
++  if ((BASE_EXTRACT.DoExtractAllVolumes
++       && BASE_FILELIST_Create(1, 5, 1))
++        ||
++      (!BASE_EXTRACT.DoExtractAllVolumes
++       && BASE_FILELIST_Create(1, Mode, 1)))
+   {
+     BASE_FUNCS_EXTERN_DoCopy(Mode);
+ 
+@@ -45,7 +46,7 @@
+ 
+ INT     BASE_FUNCS_DeleteRealFile(PCHAR FileName, BOOL IsOverwriteDelete)
+ {
+-BOOL      Err;
++BOOL      Err = 0;
+ INT       Input;
+ UINT      Attr;
+ 
+@@ -76,11 +77,12 @@
+           {
+             BASE_ERROR.ErrorCode = BASE_ERROR_USER;
+           }
+-        }
+-
+-        if (Input && !BASE_FUNCS.DoDeleteAll)
+-        {
+-          return 1;
++          
++          if (Input > 1)
++          {
++            return 1;
++          }
++            
+         }
+ 
+         BASE_LFN_SetFileAttributes(FileName, BASE_DOSFUNCS_NORMAL);
+@@ -162,7 +164,7 @@
+ INT     BASE_FUNCS_CreateDestinationFile(INT Attr)
+ {
+ INT       Handle,
+-          Input,
++          Input = 0,
+           Len;
+ 
+   sprintf(BASE_STATE.DestinationFileName, "%s%s",
+@@ -224,7 +226,7 @@
+       }
+ 
+       BASE_FUNCS.DidNotCopyAll |=
+-        (Input = (Input && !BASE_FUNCS.DoOverwriteAll
++        (Input = ((Input && !BASE_FUNCS.DoOverwriteAll)
+                   || BASE_FUNCS_DeleteRealFile(BASE_STATE.DestinationFileName, 1)));
+ 
+       if (Input)
+diff -Naur orig/source/base/all/lfn/lfn.c patched/source/base/all/lfn/lfn.c
+--- orig/source/base/all/lfn/lfn.c	2018-05-10 02:45:22.708790571 +0200
++++ patched/source/base/all/lfn/lfn.c	2018-05-10 02:46:07.577504231 +0200
+@@ -30,8 +30,6 @@
+ PCHAR   BASE_LFN_GetCurrentDir(PCHAR Directory, size_t Size)
+ {
+   Directory = (PCHAR) getcwd(Directory, Size);
+-  
+-  strcpy(Directory, BASE_LFN_LongName(Directory));
+ 
+   return Directory;
+ }
+diff -Naur orig/source/base/all/lfn/lfn.h patched/source/base/all/lfn/lfn.h
+--- orig/source/base/all/lfn/lfn.h	2018-05-10 02:45:22.716790698 +0200
++++ patched/source/base/all/lfn/lfn.h	2018-05-10 02:46:07.537503595 +0200
+@@ -6,6 +6,10 @@
+ 
+ #ifdef __HAS_IO_H__
+ 	#include <io.h>
++#else
++#ifdef __unix__
++	#include <unistd.h>
++#endif
+ #endif
+ 
+ #ifdef INCL_BASE_LFN_EXCLUSIVE
+diff -Naur orig/source/base/all/lfn/lin.c patched/source/base/all/lfn/lin.c
+--- orig/source/base/all/lfn/lin.c	2018-05-10 02:45:22.716790698 +0200
++++ patched/source/base/all/lfn/lin.c	2018-05-10 02:46:07.553503849 +0200
+@@ -50,7 +50,7 @@
+   {
+     SepStr = getenv("PATH");
+ 
+-    if (Env = (PCHAR) BASE_MEMORY_GetMem(strlen(SepStr) + 1))
++    if ((Env = (PCHAR) BASE_MEMORY_GetMem(strlen(SepStr) + 1)))
+     {
+       strcpy(Env, SepStr);
+       SepStr = Env;
+@@ -67,7 +67,7 @@
+         }
+       }
+ 
+-      BASE_MEMORY_FreeCheck((PVOID*)&Env);
++      BASE_MEMORY_FreeCheck(Env);
+     }
+   }
+ 
+diff -Naur orig/source/base/all/lfn/nont.c patched/source/base/all/lfn/nont.c
+--- orig/source/base/all/lfn/nont.c	2018-05-10 02:45:22.712790635 +0200
++++ patched/source/base/all/lfn/nont.c	2018-05-10 02:46:07.549503785 +0200
+@@ -52,7 +52,7 @@
+ 
+     do
+     {
+-      if (NextSlashPos = (PCHAR) strchr(NamePos, BASE_PATHFUNC_SEPARATOR))
++      if ((NextSlashPos = (PCHAR) strchr(NamePos, BASE_PATHFUNC_SEPARATOR)))
+       {
+         NameLen = NextSlashPos - NamePos;
+       }
+@@ -131,7 +131,7 @@
+     CharPos1 = &Name[strlen(Name)];
+   }
+ 
+-  Len = (UINT) CharPos1 - (UINT) Name;
++  Len = (PCHAR) CharPos1 - (PCHAR) Name;
+ 
+   for (I = 0; I < Len; I++)
+   {
+diff -Naur orig/source/base/all/memory/lin.c patched/source/base/all/memory/lin.c
+--- orig/source/base/all/memory/lin.c	2018-05-10 02:45:22.788791844 +0200
++++ patched/source/base/all/memory/lin.c	2018-05-10 02:46:07.585504358 +0200
+@@ -22,6 +22,7 @@
+ 
+   Buf = NULL;
+ 
++#if 0
+   while (Size < BASE_MEMORY_EXTERN_MaxMemoryRequirement()
+          && (NewBuf = (char*) realloc(Buf, Size + STEP)))
+   {
+@@ -48,6 +49,8 @@
+ 
+   free(Buf);
+   BASE_MEMORY.MaxAllocate  = Size;
++#endif
++  BASE_MEMORY.MaxAllocate  = BASE_MEMORY_EXTERN_MaxMemoryRequirement();
+ 
+   BASE_MEMORY_InitAlloc();
+ }
+diff -Naur orig/source/base/all/memory/memory.c patched/source/base/all/memory/memory.c
+--- orig/source/base/all/memory/memory.c	2018-05-10 02:45:22.780791716 +0200
++++ patched/source/base/all/memory/memory.c	2018-05-10 02:46:07.553503849 +0200
+@@ -150,13 +150,12 @@
+ 
+ /*-----------------BASE_MEMORY_FreeCheck---------------------------------*/
+ 
+-void    BASE_MEMORY_FreeCheck(PVOID *Pointer)
++void    BASE_MEMORY_FreeCheck_(PVOID Pointer)
+ {
+-  if (*Pointer)
++  if (Pointer)
+   {
+-    BASE_MEMORY.MaxAllocate += BASE_MEMORY_Size(*Pointer);
+-    free((PVOID) (((PULONG) *Pointer) - 1));
+-    *Pointer = NULL;
++    BASE_MEMORY.MaxAllocate += BASE_MEMORY_Size(Pointer);
++    free((PVOID) (((PULONG) Pointer) - 1));
+   }
+ }
+ 
+@@ -183,7 +182,7 @@
+   }
+ 
+   memcpy(NewPointer, OldPointer, OldSize);
+-  BASE_MEMORY_FreeCheck(&OldPointer);
++  BASE_MEMORY_FreeCheck(OldPointer);
+ 
+   if (BASE_MEMORY_MemMax() < MemMaxSize)
+   {
+@@ -193,7 +192,7 @@
+     }
+ 
+     memcpy(OldPointer, NewPointer, OldSize);
+-    BASE_MEMORY_FreeCheck(&NewPointer);
++    BASE_MEMORY_FreeCheck(NewPointer);
+ 
+     return OldPointer;
+   }
+@@ -238,8 +237,8 @@
+ 
+   BASE_MEMORY_EXTERN_OptimizeOtherMemory();
+ 
+-  I             = (INT) BASE_FILELIST.Last - (INT) BASE_FILELIST.List;
+-  J             = (INT) BASE_FILELIST.Pos  - (INT) BASE_FILELIST.List;
++  I             = BASE_FILELIST.Last - BASE_FILELIST.List;
++  J             = BASE_FILELIST.Pos  - BASE_FILELIST.List;
+   BASE_FILELIST.List = (PCHAR)BASE_MEMORY_ReAllocSameSize(BASE_FILELIST.List);
+   BASE_FILELIST.Last = BASE_FILELIST.List + I;
+   BASE_FILELIST.Pos  = BASE_FILELIST.List + J;
+diff -Naur orig/source/base/all/memory/memory.h patched/source/base/all/memory/memory.h
+--- orig/source/base/all/memory/memory.h	2018-05-10 02:45:22.784791780 +0200
++++ patched/source/base/all/memory/memory.h	2018-05-10 02:46:07.553503849 +0200
+@@ -32,7 +32,8 @@
+ PVOID   BASE_MEMORY_GetMemBase2PlusMax(PINT Size, INT Base, INT Maximum,
+                                        INT Plus);
+ 
+-void    BASE_MEMORY_FreeCheck(PVOID *Pointer);
++void    BASE_MEMORY_FreeCheck_(PVOID Pointer);
++#define BASE_MEMORY_FreeCheck(ptr) do { BASE_MEMORY_FreeCheck_(ptr); ptr=0; } while(0)
+ PVOID   BASE_MEMORY_ReAlloc(PVOID OldPointer, INT NewSize);
+ PVOID   BASE_MEMORY_ReAllocSameSize(PVOID OldPointer);
+ void    BASE_MEMORY_InitAlloc(void);
+diff -Naur orig/source/base/all/memory/nodos32.c patched/source/base/all/memory/nodos32.c
+--- orig/source/base/all/memory/nodos32.c	2018-05-10 02:45:22.784791780 +0200
++++ patched/source/base/all/memory/nodos32.c	2018-05-10 02:46:07.545503722 +0200
+@@ -14,7 +14,7 @@
+ 
+   OldSize = BASE_MEMORY_Size(OldPointer);
+ 
+-  if (NewPointer = realloc((PVOID) ((PULONG) OldPointer - 1), NewSize + 4))
++  if ((NewPointer = realloc((PVOID) ((PULONG) OldPointer - 1), NewSize + 4)))
+   {
+     BASE_MEMORY.MaxAllocate += OldSize - NewSize;
+     *(PULONG) NewPointer = NewSize;
+diff -Naur orig/source/base/all/pathfunc/pathfunc.c patched/source/base/all/pathfunc/pathfunc.c
+--- orig/source/base/all/pathfunc/pathfunc.c	2018-05-10 02:45:22.600788853 +0200
++++ patched/source/base/all/pathfunc/pathfunc.c	2018-05-10 02:46:07.549503785 +0200
+@@ -140,7 +140,7 @@
+         DoRepeat = 0;
+         strcpy(CompareStr1, SlashPos);
+ 
+-        if (NextSlashPos = strchr(SlashPos + 1, BASE_PATHFUNC_SEPARATOR))
++        if ((NextSlashPos = strchr(SlashPos + 1, BASE_PATHFUNC_SEPARATOR)))
+         {
+           CompareStr1[NextSlashPos - SlashPos] = 0;
+         }
+@@ -195,18 +195,18 @@
+ 
+   if (WildcardPos < PointPos && WildcardPos)
+   {
+-    SourceIndex = (LONG) WildcardPos - (LONG) SourceStr;
++    SourceIndex = WildcardPos - SourceStr;
+   }
+   else
+   {
+     if (PointPos)
+     {
+-      SourceIndex = (LONG) PointPos - (LONG) SourceStr;
++      SourceIndex = PointPos - SourceStr;
+     }
+     else
+     {
+       SourceIndex = WildcardPos ?
+-                      (LONG) WildcardPos - (LONG) SourceStr :
++                      WildcardPos - SourceStr :
+                       strlen(SourceStr);
+     }
+   }
+@@ -227,7 +227,7 @@
+ 
+   if (PointPos)
+   {
+-    SourceIndex = (INT) PointPos - (INT) SourceStr + 1;
++    SourceIndex = PointPos - SourceStr + 1;
+     CharsToCopy = 0;
+ 
+     while (SourceStr[SourceIndex] && SourceStr[SourceIndex] != '*')
+@@ -276,7 +276,7 @@
+         return 0;
+       }
+ 
+-      Result = (UINT) SlashPos - (UINT) Path + 1;
++      Result = SlashPos - Path + 1;
+     }
+     else
+     {
+@@ -323,7 +323,7 @@
+   }
+ 
+   *SlashPos = 0;
+-  SlashPos  = SlashPos - (UINT) Dir + (UINT) FileName;
++  SlashPos  = SlashPos - Dir + FileName;
+ 
+   if (*SlashPos == BASE_PATHFUNC_SEPARATOR)
+   {
+@@ -345,11 +345,12 @@
+         || !strchr(Path, ':'))
+       && Path[0] != '/')
+ */
+-  if (Path[0] == '\\' && Path[1] != '\\'
+-       || Path[0] != BASE_PATHFUNC_SEPARATOR 
++  if ((Path[0] == '\\' && Path[1] != '\\')
++       || (Path[0] != BASE_PATHFUNC_SEPARATOR 
+ #ifndef __unix__
+        && !strchr(Path, ':')
+ #endif
++          )
+        )
+   {
+     getcwd(CurrentDir, sizeof(CurrentDir));
+@@ -390,7 +391,7 @@
+ {
+ PCHAR     Ptr;
+ 
+-  if (Ptr = strrchr(Path, ':'))
++  if ((Ptr = strrchr(Path, ':')))
+   {
+     return *(Ptr + 1) != '\\';
+   }
+diff -Naur orig/source/base/all/state/state.h patched/source/base/all/state/state.h
+--- orig/source/base/all/state/state.h	2018-05-10 02:45:22.796791971 +0200
++++ patched/source/base/all/state/state.h	2018-05-10 02:46:07.545503722 +0200
+@@ -54,6 +54,7 @@
+ void    BASE_STATE_OutputCRCOk(BOOL CRCIsOk);
+ 
+ void    BASE_STATE_EXTERN_IsCRCOk(PBOOL IsCRCOk, BOOL IsEncrypted);
++void    BASE_STATE_EXTERN_IsCRCOkSet(PBOOL IsCRCOk, BOOL IsEncrypted);
+ void    BASE_STATE_EXTERN_OutputProgressData(PCHAR Buf, INT Bytes);
+ 
+ void    BASE_STATE_EXTERN_OutputProcess(PCHAR OperationStr, PCHAR FileName,
+diff -Naur orig/source/base/all/uninorm/unincore.c patched/source/base/all/uninorm/unincore.c
+--- orig/source/base/all/uninorm/unincore.c	2018-05-10 02:45:22.680790126 +0200
++++ patched/source/base/all/uninorm/unincore.c	2018-05-10 02:46:07.581504294 +0200
+@@ -17,6 +17,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include "base/all/includes.h" /* BASE_LFN_MAXLEN */
+ #include "unidata.h"
+ 
+ /* Hangul constants */
+@@ -33,7 +34,7 @@
+ 
+ /* convenience null */
+ #define null 0
+-#define MAX_FILENAME_SIZE 2048
++#define MAX_FILENAME_SIZE BASE_LFN_MAXLEN
+ 
+ 
+ /**
+@@ -367,7 +368,7 @@
+     uint temp[MAX_FILENAME_SIZE];
+     temp[0] = null;
+ 
+-    for (i = 0; i < length; ++i)
++    for (i = 0; i < length && pos < MAX_FILENAME_SIZE; ++i)
+     {
+         decompose_recursive(temp, str[i]);
+         len = istrlen(temp);
+@@ -458,7 +459,7 @@
+     int i, j = 0;
+     int len = istrlen(str);
+ 
+-    for (i = 0; i < len; ++i)
++    for (i = 0; i < len && j < MAX_FILENAME_SIZE; ++i)
+     {
+         uint c = str[i];
+ 
+diff -Naur orig/source/base/all/uninorm/unincore.h patched/source/base/all/uninorm/unincore.h
+--- orig/source/base/all/uninorm/unincore.h	2018-05-10 02:45:22.684790189 +0200
++++ patched/source/base/all/uninorm/unincore.h	2018-05-10 02:46:07.561503976 +0200
+@@ -3,28 +3,30 @@
+  *
+  */
+ 
++typedef unsigned int uint;
++
+ /* integer string functions                             */
+-int    istrlen                  (int  * str             );
+-int    istrcmp                  (int  * s1,  int  * s2  );
++uint   istrlen                  (uint * str             );
++uint   istrcmp                  (uint * s1,  uint * s2  );
+ 
+ /* unicode data accessors                               */
+-int    is_excluded              (int    c               );
+-int    get_combining_class      (int    c               );
+-int    get_recombined_codepoint (int    c1,  int    c2  );
+-int  * get_decomposition        (int  * buf, int    c   );
++uint   is_excluded              (uint   c               );
++uint   get_combining_class      (uint   c               );
++int    get_recombined_codepoint (uint   c1,  uint   c2  );
++uint * get_decomposition        (uint * buf, uint   c   );
+ 
+ /* utf en/decoding functions                            */
+ void encode_utf8(char *buf, unsigned *str);
+ void decode_utf8(unsigned *buf, char *str);
+ 
+ /* (de)composition functions                            */
+-void decompose_recursive      (int  * buf, int    c   );
+-void canonical_order          (int  * str             );
+-void canonical_composition    (int  * str             );
+-void canonical_decomposition  (int  * buf, int  * str );
++void decompose_recursive      (uint * buf, uint   c   );
++void canonical_order          (uint * str             );
++void canonical_composition    (uint * str             );
++void canonical_decomposition  (uint * buf, uint * str );
+ 
+ /* normalization functions                              */
+-void normalize_nfd            (int  * buf, int  * str );
+-void normalize_nfc            (int  * buf, int  * str );
++void normalize_nfd            (uint * buf, uint * str );
++void normalize_nfc            (uint * buf, uint * str );
+ void normalize_nfd_utf8       (char * buf, char * str );
+ void normalize_nfc_utf8       (char * buf, char * str );
+diff -Naur orig/source/base/all/uninorm/uninorm.c patched/source/base/all/uninorm/uninorm.c
+--- orig/source/base/all/uninorm/uninorm.c	2018-05-10 02:45:22.680790126 +0200
++++ patched/source/base/all/uninorm/uninorm.c	2018-05-10 02:46:07.581504294 +0200
+@@ -36,6 +36,9 @@
+    UINT Unicode[BASE_LFN_MAXLEN+1], Normalized[BASE_LFN_MAXLEN+1], *destptr = Unicode;
+    UCHAR *srcptr = cp850String, *resultstr = cp850String;
+ 
++   if ((UINT) len >= BASE_LFN_MAXLEN)
++     len = BASE_LFN_MAXLEN - 1;
++
+    srcptr[len] = 0;
+    /* First, convert that DOS CP850 encoded String to Unicode */
+    while (*srcptr)
+@@ -48,6 +51,7 @@
+    /* Then normalize and return UTF-8 encoded in place of the input string */
+    normalize_nfc(Normalized, Unicode);
+    encode_utf8(resultstr, Normalized);
++   resultstr[len] = 0;
+ 
+    
+    return strlen(resultstr);
+@@ -101,4 +105,4 @@
+   }
+ }
+ 
+-*/
+\ Nincs új sor a fájl végén
++*/
+diff -Naur orig/unace.mk patched/unace.mk
+--- orig/unace.mk	2018-05-10 02:45:22.560788217 +0200
++++ patched/unace.mk	2018-05-10 02:46:02.937430428 +0200
+@@ -27,8 +27,6 @@
+ 
+ ifndef ISWMAKE
+ include $(MAKE_DIR)unaceexe.mk
+-include $(MAKE_DIR)unacedll.mk
+ else
+ !include $(MAKE_DIR)unaceexe.mk
+-!include $(MAKE_DIR)unacedll.mk
+ endif

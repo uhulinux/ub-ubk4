@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
+find . -type f -exec dos2unix {} \;
+patch -p1 -i "$UB_SRCDIR"/patches/buildfixes.patch.skip
 ub_compile
