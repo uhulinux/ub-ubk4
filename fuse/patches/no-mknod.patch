@@ -1,12 +1,15 @@
-diff -Nur orig/util/install_helper.sh mod/util/install_helper.sh
---- orig/util/install_helper.sh	2017-09-12 15:50:16.000000000 +0200
-+++ mod/util/install_helper.sh	2017-09-14 09:01:01.380577066 +0200
-@@ -16,7 +16,7 @@
+diff -Naur orig/util/install_helper.sh patched/util/install_helper.sh
+--- orig/util/install_helper.sh	2018-03-31 14:08:08.000000000 +0200
++++ patched/util/install_helper.sh	2018-05-11 03:35:33.409648661 +0200
+@@ -14,11 +14,6 @@
+ chown root:root "${prefix}/${bindir}/fusermount3"
+ chmod u+s "${prefix}/${bindir}/fusermount3"
  
- if test ! -e "${DESTDIR}/dev/fuse"; then
-     mkdir -p "${DESTDIR}/dev"
+-if test ! -e "${DESTDIR}/dev/fuse"; then
+-    mkdir -p "${DESTDIR}/dev"
 -    mknod "${DESTDIR}/dev/fuse" -m 0666 c 10 229
-+#    mknod "${DESTDIR}/dev/fuse" -m 0666 c 10 229
- fi
- 
+-fi
+-
  install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
+         "${DESTDIR}/${udevrulesdir}/99-fuse3.rules"
+ 
