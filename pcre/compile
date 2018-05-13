@@ -1,14 +1,11 @@
 #!/bin/sh -eux
 
+rm CMakeLists.txt
 sed -i -e "s:-lpcre ::" libpcrecpp.pc.in
-
 ub_compile \
-    -DBUILD_SHARED_LIBS=ON \
-    -DBUILD_STATIC_LIBS=OFF \
-    -DPCRE_BUILD_PCRE8=ON \
-    -DPCRE_BUILD_PCRE16=ON \
-    -DPCRE_BUILD_PCRE32=ON \
-    -DPCRE_SUPPORT_UTF=ON \
-    -DPCRE_SUPPORT_UNICODE_PROPERTIES=ON \
-    -DPCRE_SUPPORT_JIT=ON \
-    -DPCRE_BUILD_TESTS=OFF
+	--enable-pcre32 \
+	--enable-pcre16 \
+	--enable-utf8 \
+	--enable-pcre8 \
+	--enable-unicode-properties \
+	--enable-jit
