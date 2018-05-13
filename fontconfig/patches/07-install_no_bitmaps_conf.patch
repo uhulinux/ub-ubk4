@@ -1,7 +1,18 @@
-diff -Nur orig/conf.d/Makefile.am mod/conf.d/Makefile.am
---- orig/conf.d/Makefile.am	2018-01-25 15:22:09.000000000 +0100
-+++ mod/conf.d/Makefile.am	2018-01-25 16:00:08.346321321 +0100
+diff -Naur orig/conf.d/Makefile.am mod/conf.d/Makefile.am
+--- orig/conf.d/Makefile.am	2017-10-12 11:03:39.000000000 +0200
++++ mod/conf.d/Makefile.am	2018-05-13 02:43:37.648546147 +0200
 @@ -41,6 +41,7 @@
+ 	65-fonts-persian.conf \
+ 	65-nonlatin.conf \
+ 	69-unifont.conf \
++	70-no-bitmaps.conf \
+ 	80-delicious.conf \
+ 	90-synthetic.conf
+ 
+diff -Naur orig/conf.d/Makefile.in mod/conf.d/Makefile.in
+--- orig/conf.d/Makefile.in	2018-03-06 04:31:57.000000000 +0100
++++ mod/conf.d/Makefile.in	2018-05-13 02:46:16.938676404 +0200
+@@ -383,6 +383,7 @@
  	65-fonts-persian.conf \
  	65-nonlatin.conf \
  	69-unifont.conf \
