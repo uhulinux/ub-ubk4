@@ -1,0 +1,23 @@
+From 3cef86f8c290b1bad3ac78a65fc8407dfbae163a Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Mon, 14 May 2018 23:21:41 +0200
+Subject: =?UTF-8?q?ub=5Fconfigure:=20autogen.sh=20kezel=C3=A9s=20jav=C3=AD?=
+ =?UTF-8?q?t=C3=A1sa?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/src/helpers/ub_compile b/src/helpers/ub_compile
+index 8dcd528..909b7f3 100755
+--- a/src/helpers/ub_compile
++++ b/src/helpers/ub_compile
+@@ -38,7 +38,7 @@ if [ -f "configure" -a ! -f CMakeLists.txt -a ! -f meson.build ]; then
+ 	ub_configure "$@"
+ else
+ 	if [ -f "autogen.sh" -a ! -f CMakeLists.txt -a ! -f meson.build ]; then
+-		UB_CONFIGURE_SCRIPT="./autogen.sh" ub_configure "$@"
++		NOCONFIGURE=1 ./autogen.sh && ub_configure "$@"
+ 	fi
+ 	if [ ! -f "configure" -a ! -f "autogen.sh" -a ! -f CMakeLists.txt -a ! -f meson.build ]; then
+ 		autoreconf -vif && ub_configure "$@"

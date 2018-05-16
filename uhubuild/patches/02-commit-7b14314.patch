@@ -1,0 +1,27 @@
+From 7b14314194b0b08a7da5b203432c12b2529950eb Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Mon, 14 May 2018 04:11:15 +0200
+Subject: ub_compile: ne fusson le a configure, ha van CMakeLists.txt is
+
+
+diff --git a/src/helpers/ub_compile b/src/helpers/ub_compile
+index f5f6aa5..8dcd528 100755
+--- a/src/helpers/ub_compile
++++ b/src/helpers/ub_compile
+@@ -34,13 +34,13 @@ if [ -f CMakeLists.txt ]; then
+ 		..
+ fi
+ 
+-if [ -f "configure" -a ! -f meson.build ]; then
++if [ -f "configure" -a ! -f CMakeLists.txt -a ! -f meson.build ]; then
+ 	ub_configure "$@"
+ else
+-	if [ -f "autogen.sh" -a ! -f meson.build ]; then
++	if [ -f "autogen.sh" -a ! -f CMakeLists.txt -a ! -f meson.build ]; then
+ 		UB_CONFIGURE_SCRIPT="./autogen.sh" ub_configure "$@"
+ 	fi
+-	if [ ! -f "configure" -a ! -f "autogen.sh" -a ! -f meson.build ]; then
++	if [ ! -f "configure" -a ! -f "autogen.sh" -a ! -f CMakeLists.txt -a ! -f meson.build ]; then
+ 		autoreconf -vif && ub_configure "$@"
+ 	fi
+ fi
