@@ -1,0 +1,23 @@
+#!/bin/sh -eux
+
+if [ ${UB_ARCH} == "amd64" ];then
+arch="amd64"
+
+tar -xzf master-pdf-editor-${UB_VERSION}_qt5.${UB_ARCH}.tar.gz
+cd master-pdf-editor-4
+patch -i "$UB_SRCDIR"/patches/desktop.patch.skip
+mkdir -p ${UB_INSTALLDIR}/usr/lib/master-pdf-editor-4
+mv masterpdfeditor4.desktop ${UB_INSTALLDIR}/usr/share/applications/
+cp -r * ${UB_INSTALLDIR}/usr/lib/master-pdf-editor-4/
+
+else
+arch="i386"
+
+tar -xzf master-pdf-editor-${UB_VERSION}_${UB_ARCH}.tar.gz
+cd master-pdf-editor-4
+patch -i "$UB_SRCDIR"/patches/desktop.patch.skip
+mkdir -p ${UB_INSTALLDIR}/usr/lib/master-pdf-editor-4
+mv masterpdfeditor4.desktop ${UB_INSTALLDIR}/usr/share/applications/
+cp -r * ${UB_INSTALLDIR}/usr/lib/master-pdf-editor-4/
+
+fi
