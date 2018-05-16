@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+PREFIX=/usr ub_install
+
+mkdir -p "$UB_INSTALLDIR/etc/vdr/plugins/skindesigner/"
+ln -s /usr/share/vdr/plugins/skindesigner/dtd "$UB_INSTALLDIR/etc/vdr/plugins/skindesigner/dtd"
+
+cd "$UB_INSTALLDIR/usr/lib/vdr/skindesigner/scripts"
+mv temperatures.default temperatures
+mv vdrstats.default vdrstats
+chmod +x vdrstats
+rm README temperatures.*
+ln -s libskindesignerapi.so.0.1.2 $UB_INSTALLDIR/usr/lib/libskindesignerapi.so.0

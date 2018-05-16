@@ -1,0 +1,17 @@
+diff -Nur orig/DisplayChannel.c mod/DisplayChannel.c
+--- orig/DisplayChannel.c	2016-03-31 18:21:44.000000000 +0200
++++ mod/DisplayChannel.c	2018-05-03 09:12:59.682467932 +0200
+@@ -77,6 +77,13 @@
+ #include "symbols/1080/CarHD.xpm"
+ #include "symbols/1080/Csignal.xpm"
+ 
++#ifndef min
++#define min(a,b) ((a) <= (b) ? (a) : (b))
++#endif
++#ifndef max
++#define max(a,b) ((a) >= (b) ? (a) : (b))
++#endif
++
+ cBitmap cSkinElchiDisplayChannel::bmAVps(vps_xpm);
+ cBitmap cSkinElchiDisplayChannel::bmATeletext(teletext_xpm);
+ cBitmap cSkinElchiDisplayChannel::bmARadio(radio_xpm);

@@ -1,1 +1,3 @@
-u2d http://projects.vdr-developer.org/projects/plg-skinenigmang/files/
+curl -s -k https://projects.vdr-developer.org/projects/plg-skinenigmang/repository/revisions/master/raw/HISTORY | \
+    grep Version | sed 's/.*Version //g' | sort -V | tail -n 1
+

@@ -1,1 +1,3 @@
-urllist http://ppa.launchpad.net/yavdr/stable-vdr/ubuntu/pool/main/v/vdr-plugin-xine/ | splitver '^vdr-plugin-xine_([0-9.].+).orig.tar.gz$' | sort -V | tail -n 1
+#urllist http://ppa.launchpad.net/yavdr/stable-vdr/ubuntu/pool/main/v/vdr-plugin-xine/ | splitver '^vdr-plugin-xine_([0-9.].#+).orig.tar.gz$' | sort -V | tail -n 1
+curl -s -k https://raw.githubusercontent.com/vdr-projects/vdr-plugin-xine/master/xine.c | grep *VERSION | sed 's/.*= \"//g' | \
+    sed s/\".*//g

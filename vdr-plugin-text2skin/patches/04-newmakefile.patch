@@ -1,6 +1,6 @@
 diff -Nur orig/Makefile mod/Makefile
---- orig/Makefile	2011-05-28 12:33:12.000000000 +0200
-+++ mod/Makefile	2016-10-19 13:55:17.783610041 +0200
+--- orig/Makefile	2018-05-01 19:11:04.000000000 +0200
++++ mod/Makefile	2018-05-01 20:22:28.518520385 +0200
 @@ -7,7 +7,7 @@
  # TBD: is this still true?
  
@@ -10,7 +10,7 @@ diff -Nur orig/Makefile mod/Makefile
  
  
  # DO NOT EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU'RE DOING
-@@ -17,44 +17,39 @@
+@@ -17,44 +17,38 @@
  # The official name of this plugin.
  # This name will be used in the '-P...' option of VDR to load the plugin.
  # By default the main source file also carries this name.
@@ -27,7 +27,7 @@ diff -Nur orig/Makefile mod/Makefile
 -### The C++ compiler and options:
 -
 -CXX      ?= g++
--CXXFLAGS ?= -fPIC -Wall -Woverloaded-virtual
+-CXXFLAGS ?= -fPIC -Wall -Werror=overloaded-virtual
 -
  ### The directory environment:
  
@@ -50,12 +50,12 @@ diff -Nur orig/Makefile mod/Makefile
 +export CXXFLAGS = $(call PKGCFG,cxxflags)
  
 --include $(VDRDIR)/Make.config
-+### The version number of VDR's plugin API:
- 
+-
 -### The version number of VDR's plugin API (taken from VDR's "config.h"):
 -
 -APIVERSION = $(shell sed -ne '/define APIVERSION/s/^.*"\(.*\)".*$$/\1/p' \
 -                         $(VDRDIR)/config.h)
++### The version number of VDR's plugin API:
 +APIVERSION = $(call PKGCFG,apiversion)
  
  ### The name of the distribution archive:
@@ -70,12 +70,19 @@ diff -Nur orig/Makefile mod/Makefile
  ### The object files (add further files here):
  
  OBJS = $(PLUGIN).o loader.o display.o render.o common.o bitmap.o \
-@@ -95,13 +90,13 @@
+@@ -85,19 +79,19 @@
+ 	CXXFLAGS += -g -fno-inline
+ 	DEFINES += -DDEBUG
+ else
+-	CXXFLAGS += -O3
++	CXXFLAGS += -O2
+ ifdef BENCH
+ 	DEFINES += -DBENCH
  endif
  endif
  
 -INCLUDES += -I$(VDRDIR)/include -I.
-+INCLUDES +=
++INCLUDES += -I.
  
 -DEFINES += -D_GNU_SOURCE -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
 +DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
@@ -87,7 +94,7 @@ diff -Nur orig/Makefile mod/Makefile
  
  ### Implicit rules:
  
-@@ -120,15 +115,14 @@
+@@ -117,17 +111,16 @@
  ### Internationalization (I18N):
  
  PODIR     = po
@@ -96,26 +103,28 @@ diff -Nur orig/Makefile mod/Makefile
  I18Npot   = $(PODIR)/$(PLUGIN).pot
  
  $(I18Npot): $(wildcard *.c)
--	xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --package-name=vdr-$(PLUGIN) --package-version=$(VERSION) --msgid-bugs-address=http://projects.vdr-developer.org/projects/show/plg-text2skin -o $@ $^
-+	xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --package-name=vdr-$(PLUGIN) --package-version=$(VERSION) --msgid-bugs-address='<see README>' -o $@ `ls $^`
+ 	@echo GT $@
+-	$(Q)xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --package-name=vdr-$(PLUGIN) --package-version=$(VERSION) --msgid-bugs-address=http://projects.vdr-developer.org/projects/show/plg-text2skin -o $@ $^
++	$(Q)xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --package-name=vdr-$(PLUGIN) --package-version=$(VERSION) --msgid-bugs-address='<see README>' -o $@ `ls $^`
  
  %.po: $(I18Npot)
--	msgmerge -U --no-wrap --no-location --backup=none -q $@ $<
-+	msgmerge -U --no-wrap --no-location --backup=none -q -N $@ $<
+ 	@echo PO $@
+-	$(Q)msgmerge -U --no-wrap --no-location --backup=none -q $@ $<
++	$(Q)msgmerge -U --no-wrap --no-location --backup=none -q -N $@ $<
  	@touch $@
  
  $(LOCALEDIR)/%/LC_MESSAGES/vdr-$(PLUGIN).mo: $(PODIR)/%.po
-@@ -140,12 +134,13 @@
+@@ -140,12 +133,15 @@
  
  ### Targets:
  
 -libvdr-$(PLUGIN).so: $(OBJS)
 +$(SOFILE): $(OBJS)
- 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(LIBS) -o $@
--	@cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)
--ifndef DEBUG
--	$(STRIP) $(LIBDIR)/$@.$(APIVERSION)
--endif
+ 	@echo LD $@
+ 	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(LIBS) -o $@
+ 	@echo IN $@ $(LIBDIR)/$@.$(APIVERSION)
+-	$(Q)cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)
+-	$(Q)$(STRIP) $(LIBDIR)/$@.$(APIVERSION)
 +
 +install-lib: $(SOFILE)
 +	install -D $^ $(LIBDIR)/$^.$(APIVERSION)
@@ -124,10 +133,3 @@ diff -Nur orig/Makefile mod/Makefile
  
  dist: $(addprefix $(PODIR)/,$(I18Npo)) clean
  	@-rm -rf $(TMPDIR)/$(ARCHIVE)
-@@ -157,4 +152,5 @@
- 	@echo Distribution package created as $(PACKAGE).tgz
- 
- clean:
--	@-rm -f $(OBJS) $(DEPFILE) *.so $(I18Npot) *.tgz core* *~
-+	@-rm -f $(PODIR)/*.mo $(PODIR)/*.pot
-+	@-rm -f $(OBJS) $(DEPFILE) *.so *.tgz core* *~

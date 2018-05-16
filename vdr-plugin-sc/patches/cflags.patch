@@ -1,0 +1,12 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2018-05-06 16:02:38.000000000 +0200
++++ mod/Makefile	2018-05-06 16:26:57.473365595 +0200
+@@ -41,7 +41,7 @@
+ ### The compiler options:
+ 
+ export CFLAGS   = $(call PKGCFG,cflags)
+-export CXXFLAGS = $(call PKGCFG,cxxflags)
++export CXXFLAGS = '-std=c++98' $(call PKGCFG,cxxflags)
+ export SCAPIVERS
+ export APIVERSION
+ 

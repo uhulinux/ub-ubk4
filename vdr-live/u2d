@@ -1,1 +1,1 @@
-u2d http://live.vdr-developer.org/downloads/
+urllist https://github.com/vdr-projects/vdr-plugin-live/releases/ | grep release_ | sed s/-/\./g | splitver '^release_([0-9.]+).tar.gz$' | sort -V | tail -n 1

@@ -1,5 +1,13 @@
 #!/bin/sh -eux
 
+sed -i DisplayChannel.c \
+	-e "s:/hqlogos::" \
+	-e "s:/logos::"
+
+# wrong sed in vdr-plugin-2.eclass?
+sed -e "s:INCLUDES += -I\$(VDRINCDIR):INCLUDES += -I\$(VDRINCDIR)/include:" \
+	-i Makefile
+sed -e "s:auto_ptr:unique_ptr:" -i services/epgsearch_services.h
 make	CONFDIR=/etc/vdr/ \
 	VIDEODIR=/var/vdr/video \
 	HAVE_IMAGEMAGICK=0

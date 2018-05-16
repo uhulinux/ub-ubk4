@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_install
+#pc fix
+sed 's/-L -l:/-L\/usr\/lib -l/' -i ${UB_INSTALLDIR}/usr/lib/pkgconfig/kodiplatform.pc

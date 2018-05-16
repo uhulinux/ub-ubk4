@@ -1,0 +1,49 @@
+Index: b/channelgroups.h
+===================================================================
+--- a/channelgroups.h
++++ b/channelgroups.h
+@@ -16,6 +16,19 @@
+     int channelStop;
+     string name;
+ public:
++    cChannelGroup(const cChannelGroup &ChannelGroup)
++	{
++    	*this = ChannelGroup;
++	};
++    cChannelGroup& operator= (const cChannelGroup &ChannelGroup)
++    {
++    	this->id = ChannelGroup.id;
++    	this->channelStart = ChannelGroup.channelStart;
++    	this->channelStop = ChannelGroup.channelStop;
++    	this->name = ChannelGroup.name;
++
++    	return *this;
++    };
+     cChannelGroup(string name, int id);
+     virtual ~cChannelGroup(void);
+     int GetId(void) { return id; };
+Index: b/switchtimer.h
+===================================================================
+--- a/switchtimer.h
++++ b/switchtimer.h
+@@ -11,6 +11,20 @@
+     tChannelID channelID;
+     int switchMinsBefore;
+     int announceOnly;
++    cSwitchTimer(const cSwitchTimer &SwitchTimer)
++	{
++    	*this = SwitchTimer;
++	};
++    cSwitchTimer& operator= (const cSwitchTimer &SwitchTimer)
++    {
++    	this->eventID = SwitchTimer.eventID;
++    	this->startTime = SwitchTimer.startTime;
++    	this->channelID = SwitchTimer.channelID;
++    	this->switchMinsBefore = SwitchTimer.switchMinsBefore;
++    	this->announceOnly = SwitchTimer.announceOnly;
++
++    	return *this;
++    };
+     cSwitchTimer(void);
+     cSwitchTimer(const cEvent* Event);
+     bool Parse(const char *s);

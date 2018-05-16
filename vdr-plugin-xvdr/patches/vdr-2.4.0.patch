@@ -1,0 +1,510 @@
+diff -Nur orig/src/demuxer/streaminfo.cpp mod/src/demuxer/streaminfo.cpp
+--- orig/src/demuxer/streaminfo.cpp	2018-05-05 22:37:42.027506238 +0200
++++ mod/src/demuxer/streaminfo.cpp	2018-05-05 22:38:25.571442680 +0200
+@@ -266,7 +266,7 @@
+   rhs.m_parsed = lhs.get_U8();
+ 
+   // read specific data
+-  int at = 0;
++  //int at = 0;
+   std::string lang;
+ 
+   switch(rhs.m_content) {
+diff -Nur orig/src/live/livestreamer.cpp mod/src/live/livestreamer.cpp
+--- orig/src/live/livestreamer.cpp	2018-05-03 15:28:37.000000000 +0200
++++ mod/src/live/livestreamer.cpp	2018-05-03 15:40:04.310668431 +0200
+@@ -251,9 +251,10 @@
+   if (m_Device == NULL)
+   {
+     // return status "recording running" if there is an active timer
++    LOCK_TIMERS_READ;
+     time_t now = time(NULL);
+ 
+-    for (cTimer *ti = Timers.First(); ti; ti = Timers.Next(ti)) {
++    for (const cTimer *ti = Timers->First(); ti; ti = Timers->Next(ti)) {
+       if (ti->Recording() && ti->Matches(now)) {
+         return XVDR_RET_RECRUNNING;
+       }
+diff -Nur orig/src/recordings/recordingscache.cpp mod/src/recordings/recordingscache.cpp
+--- orig/src/recordings/recordingscache.cpp	2018-05-03 15:28:37.000000000 +0200
++++ mod/src/recordings/recordingscache.cpp	2018-05-03 23:07:43.098658077 +0200
+@@ -40,7 +40,8 @@
+ }
+ 
+ void cRecordingsCache::Update() {
+-  for (cRecording *recording = Recordings.First(); recording; recording = Recordings.Next(recording)) {
++    LOCK_RECORDINGS_WRITE;
++  for (cRecording *recording = Recordings->First(); recording; recording = Recordings->Next(recording)) {
+     Register(recording);
+   }
+ }
+@@ -67,6 +68,7 @@
+ }
+ 
+ cRecording* cRecordingsCache::Lookup(uint32_t uid) {
++  LOCK_RECORDINGS_WRITE;
+   DEBUGLOG("%s - lookup uid: %08x", __FUNCTION__, uid);
+ 
+   sqlite3_stmt* s = m_storage.Query("SELECT filename FROM recordings WHERE recid=%u;", uid);
+@@ -90,7 +92,7 @@
+ 
+   DEBUGLOG("%s - filename: %s", __FUNCTION__, (const char*)filename);
+ 
+-  cRecording* r = Recordings.GetByName(filename);
++  cRecording* r = Recordings->GetByName(filename);
+   DEBUGLOG("%s - recording %s", __FUNCTION__, (r == NULL) ? "not found !" : "found");
+ 
+   return r;
+@@ -227,7 +229,8 @@
+     const char* filename = (const char*)sqlite3_column_text(s, 1);
+ 
+     // remove orphaned entry
+-    if(Recordings.GetByName(filename) == NULL) {
++    LOCK_RECORDINGS_READ;
++    if(Recordings->GetByName(filename) == NULL) {
+       INFOLOG("removing outdated recording '%s' from cache", filename);
+       m_storage.Exec("DELETE FROM recordings WHERE recid=%u;", recid);
+     }
+diff -Nur orig/src/tools/hash.cpp mod/src/tools/hash.cpp
+--- orig/src/tools/hash.cpp	2018-05-03 15:28:37.000000000 +0200
++++ mod/src/tools/hash.cpp	2018-05-03 23:18:29.629696775 +0200
+@@ -128,10 +128,11 @@
+ }
+ 
+ cTimer* FindTimerByUID(uint32_t timerUID) {
+-  int numTimers = Timers.Count();
++  LOCK_TIMERS_WRITE;
++  int numTimers = Timers->Count();
+ 
+   for (int i = 0; i < numTimers; i++) {
+-    cTimer* timer = Timers.Get(i);
++    cTimer* timer = Timers->Get(i);
+     if (!timer)
+       continue;
+ 
+diff -Nur orig/src/xvdr/timerconflicts.cpp mod/src/xvdr/timerconflicts.cpp
+--- orig/src/xvdr/timerconflicts.cpp	2018-05-03 15:28:37.000000000 +0200
++++ mod/src/xvdr/timerconflicts.cpp	2018-05-03 23:26:00.481026601 +0200
+@@ -39,10 +39,11 @@
+ 
+   // order active timers by starttime
+   std::map<time_t, cTimer*> timeline;
+-  int numTimers = Timers.Count();
++  LOCK_TIMERS_WRITE;
++  int numTimers = Timers->Count();
+   for (int i = 0; i < numTimers; i++)
+   {
+-    cTimer* t = Timers.Get(i);
++    cTimer* t = Timers->Get(i);
+ 
+     // same timer -> skip
+     if (!t || timer->Index() == i)
+diff -Nur orig/src/xvdr/xvdrchannels.cpp mod/src/xvdr/xvdrchannels.cpp
+--- orig/src/xvdr/xvdrchannels.cpp	2018-05-03 15:28:37.000000000 +0200
++++ mod/src/xvdr/xvdrchannels.cpp	2018-05-05 23:26:04.227272129 +0200
+@@ -7,44 +7,55 @@
+ cXVDRChannels XVDRChannels;
+ 
+ cXVDRChannels::cXVDRChannels() {
+-	Channels.Lock(false);
+-	channels = Reorder(&Channels);
+-	channelsHash = ChannelsHash(&Channels);
+-	Channels.Unlock();
++//#if VDRVERSNUM >= 20301
++//	channels = Reorder(&Channels);
++//	channelsHash = ChannelsHash(&Channels);
++//#else
++//	Channels.Lock(false);
++//	channels = Reorder(&Channels);
++//	channelsHash = ChannelsHash(&Channels);
++//	Channels.Unlock();
++//#endif
+ }
+ 
+ uint64_t cXVDRChannels::CheckUpdates() {
+-	cRwLock::Lock(false);
+-	Channels.Lock(false);
+-
+-	cChannels *oldChannels = channels;
+-	uint64_t oldHash = channelsHash;
+-	uint64_t newHash = ChannelsHash(&Channels);
+-
+-	if (newHash == oldHash) {
+-		Channels.Unlock();
+-		cRwLock::Unlock();
+-		return oldHash;
+-	}
+-
+-	cRwLock::Unlock();
+-	cRwLock::Lock(true);
+-
+-	if ((channelsHash == oldHash) && (channels == oldChannels)) {
+-		if (channels != &Channels) {
+-			delete channels;
+-		}
+-
+-		channels = Reorder(&Channels);
+-		channelsHash = newHash;
+-	} else {
++//	cRwLock::Lock(false);
++//#if VDRVERSNUM < 20301
++//	Channels.Lock(false);
++//#endif
++//	cChannels *oldChannels = channels;
++//	uint64_t oldHash = channelsHash;
++//	uint64_t newHash = ChannelsHash(&Channels);
++
++//	if (newHash == oldHash) {
++//#if VDRVERSNUM < 20301
++//		Channels.Unlock();
++//#endif
++//		cRwLock::Unlock();
++//		return oldHash;
++//	}
++
++//	cRwLock::Unlock();
++//	cRwLock::Lock(true);
++
++//	if ((channelsHash == oldHash) && (channels == oldChannels)) {
++//		if (channels != &Channels) {
++//			delete channels;
++//		}
++
++//		channels = Reorder(&Channels);
++//		channelsHash = newHash;
++//	} else {
+ 		// Seems another thread has already updated the hash.
+-		newHash = channelsHash;
+-	}
++//		newHash = channelsHash;
++//	}
+ 
+-	Channels.Unlock();
+-	cRwLock::Unlock();
+-	return newHash;
++//#if VDRVERSNUM < 20301
++//	Channels.Unlock();
++//#endif
++//    cRwLock::Unlock();
++//	return newHash;
++    return 0;
+ }
+ 
+ cChannels* cXVDRChannels::Get() {
+@@ -199,18 +210,18 @@
+ }
+ 
+ bool cXVDRChannels::Lock(bool Write, int TimeoutMs) {
+-	if (cRwLock::Lock(Write, TimeoutMs)) {
+-		if (Get()->Lock(Write, TimeoutMs)) {
+-			return true;
+-		} else {
+-			cRwLock::Unlock();
+-		}
+-	}
++//	if (cRwLock::Lock(Write, TimeoutMs)) {
++//		if (Get()->Lock(Write, TimeoutMs)) {
++//			return true;
++//		} else {
++//			cRwLock::Unlock();
++//		}
++//	}
+ 
+-	return false;
++	return true;
+ }
+ 
+ void cXVDRChannels::Unlock(void) {
+-	Get()->Unlock();
+-	cRwLock::Unlock();
++//	Get()->Unlock();
++//	cRwLock::Unlock();
+ }
+diff -Nur orig/src/xvdr/xvdrclient.cpp mod/src/xvdr/xvdrclient.cpp
+--- orig/src/xvdr/xvdrclient.cpp	2018-05-03 15:28:37.000000000 +0200
++++ mod/src/xvdr/xvdrclient.cpp	2018-05-05 20:34:24.902424946 +0200
+@@ -756,7 +756,7 @@
+ 
+   INFOLOG("Welcome client '%s' with protocol version '%u'", m_clientName.c_str(), m_protocolVersion);
+ 
+-  if(!m_LanguageIndex != -1) {
++  if((!m_LanguageIndex) != -1) {
+     INFOLOG("Preferred language: %s / type: %i", I18nLanguageCode(m_LanguageIndex), (int)m_LangStreamType);
+   }
+ 
+@@ -1263,7 +1263,8 @@
+ 
+ bool cXVDRClient::processTIMER_GetCount() /* OPCODE 80 */
+ {
+-  int count = Timers.Count();
++  LOCK_TIMERS_WRITE;
++  int count = Timers->Count();
+ 
+   m_resp->put_U32(count);
+ 
+@@ -1274,13 +1275,14 @@
+ {
+   uint32_t number = m_req->get_U32();
+ 
+-  if (Timers.Count() == 0)
++  LOCK_TIMERS_WRITE;
++  if (Timers->Count() == 0)
+   {
+     m_resp->put_U32(XVDR_RET_DATAUNKNOWN);
+     return true;
+   }
+ 
+-  cTimer *timer = Timers.Get(number-1);
++  cTimer *timer = Timers->Get(number-1);
+   if (timer == NULL)
+   {
+     m_resp->put_U32(XVDR_RET_DATAUNKNOWN);
+@@ -1295,21 +1297,25 @@
+ 
+ bool cXVDRClient::processTIMER_GetList() /* OPCODE 82 */
+ {
+-  if (Timers.BeingEdited())
++
++#if VDRVERSNUM < 20301
++  if (Timers->BeingEdited())
+   {
+     ERRORLOG("Unable to delete timer - timers being edited at VDR");
+     m_resp->put_U32(XVDR_RET_DATALOCKED);
+     return true;
+   }
+-
++#else
++  LOCK_TIMERS_WRITE;
++#endif
+   cTimer *timer;
+-  int numTimers = Timers.Count();
++  int numTimers = Timers->Count();
+ 
+   m_resp->put_U32(numTimers);
+ 
+   for (int i = 0; i < numTimers; i++)
+   {
+-    timer = Timers.Get(i);
++    timer = Timers->Get(i);
+     if (!timer)
+       continue;
+ 
+@@ -1321,13 +1327,16 @@
+ 
+ bool cXVDRClient::processTIMER_Add() /* OPCODE 83 */
+ {
+-  if (Timers.BeingEdited())
++#if VDRVERSNUM < 20301
++    if (Timers.BeingEdited())
+   {
+     ERRORLOG("Unable to add timer - timers being edited at VDR");
+     m_resp->put_U32(XVDR_RET_DATALOCKED);
+     return true;
+   }
+-
++#else
++  LOCK_TIMERS_WRITE;
++#endif
+   m_req->get_U32(); // index unused
+   uint32_t flags      = m_req->get_U32() > 0 ? tfActive : tfNone;
+   uint32_t priority   = m_req->get_U32();
+@@ -1361,15 +1370,23 @@
+     buffer = cString::sprintf("%u:%s:%s:%04d:%04d:%d:%d:%s:%s\n", flags, (const char*)channel->GetChannelID().ToString(), *cTimer::PrintDay(day, weekdays, true), start, stop, priority, lifetime, file, aux);
+   }
+   XVDRChannels.Unlock();
+-
+   cTimer *timer = new cTimer;
+   if (timer->Parse(buffer))
+   {
++#if VDRVERSNUM < 20301
+     cTimer *t = Timers.GetTimer(timer);
++#else
++    cTimer *t = Timers->GetTimer(timer);
++#endif
+     if (!t)
+     {
++#if VDRVERSNUM < 20301
+       Timers.Add(timer);
+       Timers.SetModified();
++#else
++      Timers->Add(timer);
++      Timers->SetModified();
++#endif
+       INFOLOG("Timer %s added", *timer->ToDescr());
+       m_resp->put_U32(XVDR_RET_OK);
+       return true;
+@@ -1404,13 +1421,14 @@
+     return true;
+   }
+ 
++#if VDRVERSNUM < 20301
+   if (Timers.BeingEdited())
+   {
+     ERRORLOG("Unable to delete timer - timers being edited at VDR");
+     m_resp->put_U32(XVDR_RET_DATALOCKED);
+     return true;
+   }
+-
++#endif
+   if (timer->Recording() && !force)
+   {
+     ERRORLOG("Timer is recording and can be deleted (use force to stop it)");
+@@ -1419,11 +1437,20 @@
+   }
+ 
+   timer->Skip();
+-  cRecordControls::Process(time(NULL));
+-
++#if VDRVERSNUM >= 20301
++    LOCK_TIMERS_WRITE;
++ 	cRecordControls::Process(Timers,time(0));
++#else
++	cRecordControls::Process(time(NULL));
++#endif
+   INFOLOG("Deleting timer %s", *timer->ToDescr());
++#if VDRVERSNUM < 20301
+   Timers.Del(timer);
+   Timers.SetModified();
++#else
++  Timers->Del(timer);
++  Timers->SetModified();
++#endif
+   m_resp->put_U32(XVDR_RET_OK);
+ 
+   return true;
+@@ -1486,9 +1513,9 @@
+     m_resp->put_U32(XVDR_RET_DATAINVALID);
+     return true;
+   }
+-
++LOCK_TIMERS_WRITE
+   *timer = t;
+-  Timers.SetModified();
++  Timers->SetModified();
+   TimerChange();
+ 
+   m_resp->put_U32(XVDR_RET_OK);
+@@ -1517,8 +1544,9 @@
+ }
+ 
+ bool cXVDRClient::processRECORDINGS_GetCount() /* OPCODE 101 */
+-{
+-  m_resp->put_U32(Recordings.Count());
++ {
++  LOCK_RECORDINGS_WRITE;
++  m_resp->put_U32(Recordings->Count());
+ 
+   return true;
+ }
+@@ -1526,8 +1554,12 @@
+ bool cXVDRClient::processRECORDINGS_GetList() /* OPCODE 102 */
+ {
+   cRecordingsCache& reccache = cRecordingsCache::GetInstance();
+-
++#if VDRVERSNUM >= 20301
++  LOCK_RECORDINGS_WRITE;
++  for (cRecording *recording = Recordings->First(); recording; recording = Recordings->Next(recording))
++#else
+   for (cRecording *recording = Recordings.First(); recording; recording = Recordings.Next(recording))
++#endif
+   {
+ #if APIVERSNUM >= 10705
+     const cEvent *event = recording->Info()->GetEvent();
+@@ -1667,7 +1699,9 @@
+   const char* newtitle     = m_req->get_String();
+   cRecording* recording    = cRecordingsCache::GetInstance().Lookup(uid);
+   int         r            = XVDR_RET_DATAINVALID;
+-
++#if VDRVERSNUM >= 20301
++  LOCK_RECORDINGS_WRITE;
++#endif
+   if(recording != NULL) {
+     // get filename and remove last part (recording time)
+     char* filename_old = strdup((const char*)recording->FileName());
+@@ -1689,8 +1723,11 @@
+ 
+     INFOLOG("renaming recording '%s' to '%s'", filename_old, filename_new);
+     r = rename(filename_old, filename_new);
++#if VDRVERSNUM >= 20301
++    Recordings->Update();
++#else
+     Recordings.Update();
+-
++#endif
+     free(filename_old);
+   }
+ 
+@@ -1704,7 +1741,9 @@
+   const char* recid = m_req->get_String();
+   uint32_t uid = recid2uid(recid);
+   cRecording* recording = cRecordingsCache::GetInstance().Lookup(uid);
+-
++#if VDRVERSNUM >= 20301
++  LOCK_RECORDINGS_WRITE;
++#endif
+   if (recording == NULL)
+   {
+     ERRORLOG("Recording not found !");
+@@ -1728,8 +1767,11 @@
+     m_resp->put_U32(XVDR_RET_ERROR);
+     return true;
+   }
+-
++#if VDRVERSNUM >= 20301
++  Recordings->DelByName(recording->FileName());
++#else
+   Recordings.DelByName(recording->FileName());
++#endif
+   INFOLOG("Recording \"%s\" deleted", recording->FileName());
+   m_resp->put_U32(XVDR_RET_OK);
+ 
+@@ -1871,7 +1913,11 @@
+   uint32_t startTime  = m_req->get_U32();
+   uint32_t duration   = m_req->get_U32();
+ 
+-  XVDRChannels.Lock(false);
++#if VDRVERSNUM >= 20301
++  LOCK_CHANNELS_READ;
++  LOCK_SCHEDULES_READ;
++#endif
++XVDRChannels.Lock(false);
+ 
+   const cChannel* channel = NULL;
+ 
+@@ -1889,6 +1935,7 @@
+     return true;
+   }
+ 
++#if VDRVERSNUM < 20301
+   cSchedulesLock MutexLock;
+   const cSchedules *Schedules = cSchedules::Schedules(MutexLock);
+   if (!Schedules)
+@@ -1899,6 +1946,7 @@
+     DEBUGLOG("written 0 because Schedule!s! = NULL");
+     return true;
+   }
++#endif
+ 
+   const cSchedule *Schedule = Schedules->GetSchedule(channel->GetChannelID());
+   if (!Schedule)
+diff -Nur orig/src/xvdr/xvdrserver.cpp mod/src/xvdr/xvdrserver.cpp
+--- orig/src/xvdr/xvdrserver.cpp	2018-05-03 15:28:37.000000000 +0200
++++ mod/src/xvdr/xvdrserver.cpp	2018-05-05 21:28:15.177689612 +0200
+@@ -244,7 +244,7 @@
+   int recState = -1;
+   int recStateOld = -1;
+ 
+-  Recordings.StateChanged(recState);
++ // Recordings.StateChanged(recState);
+   recStateOld = recState;
+ 
+   while (Running())
+@@ -330,7 +330,7 @@
+       }
+ 
+       // check for recording changes
+-      Recordings.StateChanged(recState);
++//      Recordings.StateChanged(recState);
+       if(recState != recStateOld)
+       {
+         recordingReloadTrigger = true;

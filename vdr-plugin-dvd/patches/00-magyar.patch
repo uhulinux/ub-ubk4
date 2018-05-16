@@ -1,0 +1,622 @@
+diff -Naur orig/i18n.c mod/i18n.c
+--- orig/i18n.c	2008-12-23 18:26:32.000000000 +0100
++++ mod/i18n.c	2010-06-06 15:18:38.000000000 +0200
+@@ -50,23 +50,23 @@
+     {"sl", "Slovenski"},
+     {"it", "Italiano"},
+     {"nl", "Nederlands"},
+-    {"pt", "PortuguÍs"},
+-    {"fr", "FranÁais"},
++    {"pt", "Portugu√™s"},
++    {"fr", "Fran√ßais"},
+     {"no", "Norsk"},
+     {"fi", "suomi"},
+     {"pl", "Polski"},
+-    {"es", "EspaÒol"},
+-    {"el", "≈ÎÎÁÌÈÍ‹"},
++    {"es", "Espa√±ol"},
++    {"el", "√Ö√´√´√ß√≠√©√™√ú"},
+     {"se", "Svenska"},
+     {"ro", "Romaneste"},
+     {"hu", "Magyar"},
+-    {"ca", "Catal‡"},
+-    {"ru", "¿„··⁄ÿŸ"},
++    {"ca", "Catal√†"},
++    {"ru", "√Ä√£√°√°√ö√ò√ô"},
+     {"hr", "Hrvatski"},
+     {"et", "Eesti"},
+     {"da", "Dansk"},
+     {"cs", "Czech"},
+-    {"tr", "T¸rkÁe"}
++    {"tr", "T√ºrk√ße"}
+ };
+ 
+ #if VDRVERSNUM < 10507
+@@ -77,206 +77,206 @@
+         "DVD",                                              // Slovenski
+         "DVD",                                              // Italiano
+         "DVD",                                              // Nederlands
+-        "DVD",                                              // PortuguÍs
+-        "DVD",                                              // FranÁais
++        "DVD",                                              // Portugu√™s
++        "DVD",                                              // Fran√ßais
+         "DVD",                                              // Norsk
+         "DVD",                                              // suomi
+         "DVD",                                              // Polski
+-        "DVD",                                              // EspaÒol
+-        "DVD",                                              // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "DVD",                                              // Espa√±ol
++        "DVD",                                              // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "DVD",                                              // Svenska
+         "DVD",                                              // Romaneste
+         "DVD",                                              // Magyar
+-        "DVD",                                              // Catal‡
+-        "ø‡ﬁÿ”‡Î“–‚’€Ï DVD",                                // ¿„··⁄ÿŸ (Russian)
++        "DVD",                                              // Catal√†
++        "¬ø√†√û√ò√ì√†√´√í√ê√¢√ï√õ√¨ DVD",                                // √Ä√£√°√°√ö√ò√ô (Russian)
+         "DVD",                                              // Hrvatski (Croatian)
+         "DVD",                                              // Eesti
+         "DVD",                                              // Dansk
+         "DVD",                                              // Czech
+ #if VDRVERSNUM >= 10502
+-        "DVD",                                              // T¸rkÁe
++        "DVD",                                              // T√ºrk√ße
+ #endif
+     },
+     {
+     "Plugin.DVD$turn VDR into an (almost) full featured DVD player",    // English
+-        "verwandelt VDR in einen (fast) vollst‰ndigen DVD Spieler",     // Deutsch
++        "verwandelt VDR in einen (fast) vollst√§ndigen DVD Spieler",     // Deutsch
+         "spremeni VDR v (skoraj) popolen DVD predvajalnik",             // Slovenski
+         "",                                                             // Italiano
+         "Verander VDR in een (bijna) complete DVD-speler",              // Nederlands
+-        "",                                                             // PortuguÍs
+-        "",                                                             // FranÁais
++        "",                                                             // Portugu√™s
++        "",                                                             // Fran√ßais
+         "",                                                             // Norsk
+         "DVD-soitin",                                                   // suomi
+         "Zmienia VDR w odtwarzacz DVD",                                 // Polski
+-        "Convierte VDR en un reproductor DVD (casi) completo",          // EspaÒol
+-        "Metatropi tou VDR se ena (sxedon) olokliromeno DVD",           // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Convierte VDR en un reproductor DVD (casi) completo",          // Espa√±ol
++        "Metatropi tou VDR se ena (sxedon) olokliromeno DVD",           // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                             // Svenska
+         "",                                                             // Romaneste
+-        "",                                                             // Magyar
+-        "",                                                             // Catal‡
+-        "ø‡ﬁÿ”‡Î“–‚’€Ï DVD",                                            // ¿„··⁄ÿŸ (Russian)
++        "A VDR-t (szinte) teljes√©rt√©k≈± DVD lej√°tsz√≥v√° teszi",                                                             // Magyar
++        "",                                                             // Catal√†
++        "¬ø√†√û√ò√ì√†√´√í√ê√¢√ï√õ√¨ DVD",                                            // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                             // Hrvatski (Croatian)
+-        "DVD-m‰ngija",                                                  // Eesti
+-        "forvandler VDR til en (nÊsten) normal DVD afspiller",          // Dansk
+-        "P¯emÏnÌ VDR v plnohodnotn˝ DVD p¯ehr·vaË",                     // Czech
++        "DVD-m√§ngija",                                                  // Eesti
++        "forvandler VDR til en (n√¶sten) normal DVD afspiller",          // Dansk
++        "P√∏em√¨n√≠ VDR v plnohodnotn√Ω DVD p√∏ehr√°va√®",                     // Czech
+ #if VDRVERSNUM >= 10502
+-        "VDR'i (nerdeyse) tam DVD oynat˝c˝s˝na Áevirir"                 // T¸rkÁe
++        "VDR'i (nerdeyse) tam DVD oynat√Ωc√Ωs√Ωna √ßevirir"                 // T√ºrk√ße
+ #endif
+     },
+     {
+     "Setup.DVD$Preferred menu language",                    // English
+-        "Bevorzugte Spache f¸r Men¸s",                      // Deutsch
++        "Bevorzugte Spache f√ºr Men√ºs",                      // Deutsch
+         "Prednostni jezik za menije",                       // Slovenski
+         "menu - linguaggio preferito",                      // Italiano
+         "Taalkeuze voor menu",                              // Nederlands
+-        "",                                                 // PortuguÍs
+-        "Langage prÈfÈrÈ pour les menus",                   // FranÁais
++        "",                                                 // Portugu√™s
++        "Langage pr√©f√©r√© pour les menus",                   // Fran√ßais
+         "",                                                 // Norsk
+         "Haluttu valikkokieli",                             // suomi
+-        "Preferowany jÍzyk menu",                           // Polski
+-        "Idioma preferido para los men˙s",                  // EspaÒol
+-        "Protinomeni glossa gia menou",                     // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Preferowany j√™zyk menu",                           // Polski
++        "Idioma preferido para los men√∫s",                  // Espa√±ol
++        "Protinomeni glossa gia menou",                     // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "ø‡’‘ﬂﬁÁÿ‚–’‹ÎŸ Ô◊Î⁄ ‹’›Ó",                         // ¿„··⁄ÿŸ (Russian)
++        "a men√ºk els≈ëdleges nyelve",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬ø√†√ï√î√ü√û√ß√ò√¢√ê√ï√ú√´√ô √Ø√ó√´√ö √ú√ï√ù√Æ",                         // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+-        "Eelistatud men¸¸keel",                             // Eesti
++        "Eelistatud men√º√ºkeel",                             // Eesti
+         "Foretrukket sprog for menuer",                     // Dansk
+-        "Preferovan˝ jazyk menu",                           // Czech
++        "Preferovan√Ω jazyk menu",                           // Czech
+ #if VDRVERSNUM >= 10502
+-        "Men¸lerin dil tercihi"                             // T¸rkÁe
++        "Men√ºlerin dil tercihi"                             // T√ºrk√ße
+ #endif
+     },
+     {
+     "Setup.DVD$Preferred audio language",                   // English
+-        "Bevorzugte Sprache f¸r Dialog",                    // Deutsch
++        "Bevorzugte Sprache f√ºr Dialog",                    // Deutsch
+         "Prednostni jezik za zvok",                         // Slovenski
+         "audio - linguaggio preferito",                     // Italiano
+         "Taalkeuze voor geluid",                            // Nederlands
+-        "",                                                 // PortuguÍs
+-        "Langage prÈfÈrÈ pour le son",                      // FranÁais
++        "",                                                 // Portugu√™s
++        "Langage pr√©f√©r√© pour le son",                      // Fran√ßais
+         "",                                                 // Norsk
+-        "Haluttu ‰‰niraita",                                // suomi
+-        "Preferowany jÍzyk dºwiÍku",                        // Polski
+-        "Idioma preferido para el sonido",                  // EspaÒol
+-        "Protinomeni glossa gia ton dialogo",               // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Haluttu √§√§niraita",                                // suomi
++        "Preferowany j√™zyk d¬ºwi√™ku",                        // Polski
++        "Idioma preferido para el sonido",                  // Espa√±ol
++        "Protinomeni glossa gia ton dialogo",               // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "ø‡’‘ﬂﬁÁÿ‚–’‹ÎŸ Ô◊Î⁄ –„‘ÿﬁ",                        // ¿„··⁄ÿŸ (Russian)
++        "a hang els≈ëdleges nyelve",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬ø√†√ï√î√ü√û√ß√ò√¢√ê√ï√ú√´√ô √Ø√ó√´√ö √ê√£√î√ò√û",                        // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+         "Eelistatud audiokeel",                             // Eesti
+         "Foretrukket sprog for lyd",                        // Dansk
+-        "Preferovan˝ jazyk zvuku",                          // Czech
++        "Preferovan√Ω jazyk zvuku",                          // Czech
+ #if VDRVERSNUM >= 10502
+-        "Diyaloglar˝n dil tercihi"                          // T¸rkÁe
++        "Diyaloglar√Ωn dil tercihi"                          // T√ºrk√ße
+ #endif
+     },
+     {
+     "Setup.DVD$Preferred subtitle language",                // English
+-        "Bevorzugte Spache f¸r Untertitel",                 // Deutsch
++        "Bevorzugte Spache f√ºr Untertitel",                 // Deutsch
+         "Prednostni jezik za podnapise",                    // Slovenski
+         "sottotitoli - linguaggio preferito",               // Italiano
+         "Taalkeuze voor ondertitels",                       // Nederlands
+-        "",                                                 // PortuguÍs
+-        "Langage prÈfÈrÈ pour les sous-titres",             // FranÁais
++        "",                                                 // Portugu√™s
++        "Langage pr√©f√©r√© pour les sous-titres",             // Fran√ßais
+         "",                                                 // Norsk
+         "Haluttu tekstityskieli",                           // suomi
+-        "Preferowany jÍzyk napisÛw",                        // Polski
+-        "Idioma preferido para los subtÌtulos",             // EspaÒol
+-        "Protinomeni glossa ipotitlon",                     // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Preferowany j√™zyk napis√≥w",                        // Polski
++        "Idioma preferido para los subt√≠tulos",             // Espa√±ol
++        "Protinomeni glossa ipotitlon",                     // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "ø‡’‘ﬂﬁÁÿ‚–’‹ÎŸ Ô◊Î⁄ ·„—‚ÿ‚‡ﬁ“",                    // ¿„··⁄ÿŸ (Russian)
++        "feliratok els≈ëdleges nyelve",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬ø√†√ï√î√ü√û√ß√ò√¢√ê√ï√ú√´√ô √Ø√ó√´√ö √°√£√ë√¢√ò√¢√†√û√í",                    // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+         "Eelistatud subtiitritekeel",                       // Eesti
+         "Foretrukket sprog for undertekster",               // Dansk
+-        "Preferovan˝ jazyk titulk˘",                        // Czech
++        "Preferovan√Ω jazyk titulk√π",                        // Czech
+ #if VDRVERSNUM >= 10502
+-        "Altyaz˝lar˝n dil tercihi"                          // T¸rkÁe
++        "Altyaz√Ωlar√Ωn dil tercihi"                          // T√ºrk√ße
+ #endif
+     },
+     {
+     "Setup.DVD$Player region code",                         // English
+-        "Regionalkode f¸r DVD Spieler",                     // Deutsch
++        "Regionalkode f√ºr DVD Spieler",                     // Deutsch
+         "Regionalna koda za predvajalnik",                  // Slovenski
+         "region code del DVD player",                       // Italiano
+         "Regiocode van Speler",                             // Nederlands
+-        "",                                                 // PortuguÍs
+-        "Code rÈgion du lecteur",                           // FranÁais
++        "",                                                 // Portugu√™s
++        "Code r√©gion du lecteur",                           // Fran√ßais
+         "",                                                 // Norsk
+         "Soittimen aluekoodi",                              // suomi
+         "Kod regionu odtwarzacza",                          // Polski
+-        "CÛdigo de zona del lector",                        // EspaÒol
+-        "Kodikos Zonis DVD",                                // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "C√≥digo de zona del lector",                        // Espa√±ol
++        "Kodikos Zonis DVD",                                // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "∫ﬁ‘ ◊ﬁ›Î",                                         // ¿„··⁄ÿŸ (Russian)
++        "DVD lej√°tsz√≥ r√©gi√≥ k√≥dja",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬∫√û√î √ó√û√ù√´",                                         // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+-        "M‰ngija regioonikood",                             // Eesti
++        "M√§ngija regioonikood",                             // Eesti
+         "Afspillerens regions kode",                        // Dansk
+-        "Region·lnÌ kÛd p¯ehr·vaËe",                        // Czech
++        "Region√°ln√≠ k√≥d p√∏ehr√°va√®e",                        // Czech
+ #if VDRVERSNUM >= 10502
+-        "DVD oynat˝c˝n˝n bˆlge kodu"                        // T¸rkÁe
++        "DVD oynat√Ωc√Ωn√Ωn b√∂lge kodu"                        // T√ºrk√ße
+ #endif
+     },
+     {
+     "Setup.DVD$Display subtitles",                          // English
+         "Untertitel anzeigen",                              // Deutsch
+-        "Prikaæi podnapise",                                // Slovenski
++        "Prika¬æi podnapise",                                // Slovenski
+         "Visualizza sottotitoli",                           // Italiano
+         "Toon ondertitels",                                 // Nederlands
+-        "",                                                 // PortuguÍs
+-        "Affiche les sous-titres",                          // FranÁais
++        "",                                                 // Portugu√™s
++        "Affiche les sous-titres",                          // Fran√ßais
+         "",                                                 // Norsk
+-        "N‰yt‰ tekstitys",                                  // suomi
+-        "Wy∂wietlaj napisy",                                // Polski
+-        "Mostrar subtÌtulos",                               // EspaÒol
+-        "Endiksi ipotitlon",                                // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "N√§yt√§ tekstitys",                                  // suomi
++        "Wy¬∂wietlaj napisy",                                // Polski
++        "Mostrar subt√≠tulos",                               // Espa√±ol
++        "Endiksi ipotitlon",                                // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "øﬁ⁄–◊Î“–‚Ï ·„—‚ÿ‚‡Î",                              // ¿„··⁄ÿŸ (Russian)
++        "feliratok mutat√°sa",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬ø√û√ö√ê√ó√´√í√ê√¢√¨ √°√£√ë√¢√ò√¢√†√´",                              // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+         "Subtiitrite kuvamine",                             // Eesti
+         "Vis undertekster",                                 // Dansk
+         "Zobrazovat titulky",                               // Czech
+ #if VDRVERSNUM >= 10502
+-        "Altyaz˝lar˝ gˆster"                                // T¸rkÁe
++        "Altyaz√Ωlar√Ω g√∂ster"                                // T√ºrk√ße
+ #endif
+     },
+     {
+     "Setup.DVD$Hide Mainmenu Entry",
+-        "Hauptmen¸eintrag verstecken",                      // Deutsch
++        "Hauptmen√ºeintrag verstecken",                      // Deutsch
+         "Skrij galvni meni",                                // Slovenski
+-        "Nascondi voce men˘",                               // Italiano
++        "Nascondi voce men√π",                               // Italiano
+         "Verberg vermelding in het hoofdmenu",              // Nederlands
+-        "",                                                 // PortuguÍs
+-        "",                                                 // FranÁais
++        "",                                                 // Portugu√™s
++        "",                                                 // Fran√ßais
+         "",                                                 // Norsk
+-        "Piilota valinta p‰‰valikosta",                     // suomi
+-        "Ukryj pozycjÍ w g≥Ûwnym menu",                     // Polski
+-        "Ocultar entrada en el men˙ principal",             // EspaÒol
+-        "Apokripsi sto vasiko menou",                       // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Piilota valinta p√§√§valikosta",                     // suomi
++        "Ukryj pozycj√™ w g¬≥√≥wnym menu",                     // Polski
++        "Ocultar entrada en el men√∫ principal",             // Espa√±ol
++        "Apokripsi sto vasiko menou",                       // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "¡⁄‡Î‚Ï ⁄ﬁ‹–›‘„ “ ”€–“›ﬁ‹ ‹’›Ó",                    // ¿„··⁄ÿŸ (Russian)
++        "f≈ëmen√º bel√©p√©s elrejt√©se",                                                 // Magyar
++        "",                                                 // Catal√†
++        "√Å√ö√†√´√¢√¨ √ö√û√ú√ê√ù√î√£ √í √ì√õ√ê√í√ù√û√ú √ú√ï√ù√Æ",                    // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+-        "Peita peamen¸¸ valikust",                          // Eesti
++        "Peita peamen√º√º valikust",                          // Eesti
+         "Skjul DVD i hovedmenuen",                          // Dansk
+-        "Skr˝t poloæku v hlavnÌm menu",                     // Czech
++        "Skr√Ωt polo¬æku v hlavn√≠m menu",                     // Czech
+ #if VDRVERSNUM >= 10502
+-        "Ana men¸de sakla"                                  // T¸rkÁe
++        "Ana men√ºde sakla"                                  // T√ºrk√ße
+ #endif
+     },
+     {
+@@ -285,76 +285,76 @@
+         "Beri vnaprej",                                       // Slovenski
+         "ReadAHead",                                        // Italiano
+         "Vooruit lezen",                                    // Nederlands
+-        "ReadAHead",                                        // PortuguÍs
+-        "ReadAHead",                                        // FranÁais
++        "ReadAHead",                                        // Portugu√™s
++        "ReadAHead",                                        // Fran√ßais
+         "ReadAHead",                                        // Norsk
+         "ReadAHead-toiminto",                               // suomi
+         "ReadAHead",                                        // Polski
+-        "Lectura anticipada",                               // EspaÒol
+-        "ReadAHead",                                        // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Lectura anticipada",                               // Espa√±ol
++        "ReadAHead",                                        // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "ReadAHead",                                        // Svenska
+         "ReadAHead",                                        // Romaneste
+-        "ReadAHead",                                        // Magyar
+-        "ReadAHead",                                        // Catal‡
+-        "√ﬂ‡’÷‘–ÓÈ’’ Á‚’›ÿ’",                               // ¿„··⁄ÿŸ (Russian)
++        "AHead olvas√°s",                                        // Magyar
++        "ReadAHead",                                        // Catal√†
++        "√É√ü√†√ï√ñ√î√ê√Æ√©√ï√ï √ß√¢√ï√ù√ò√ï",                               // √Ä√£√°√°√ö√ò√ô (Russian)
+         "ReadAHead",                                        // Hrvatski (Croatian)
+         "ReadAHead",                                        // Eesti
+-        "LÊs forud",                                        // Dansk
+-        "Dop¯ednÈ ËtenÌ",                                   // Czech
++        "L√¶s forud",                                        // Dansk
++        "Dop√∏edn√© √®ten√≠",                                   // Czech
+ #if VDRVERSNUM >= 10502
+-        "›leri oku"                                         // T¸rkÁe
++        "√ùleri oku"                                         // T√ºrk√ße
+ #endif
+     },
+     {
+     "Setup.DVD$Gain (analog)",
+-        "Verst‰rkung (analog)",                             // Deutsch
+-        "OjaËanje (analogno)",                              // Slovenski
++        "Verst√§rkung (analog)",                             // Deutsch
++        "Oja√®anje (analogno)",                              // Slovenski
+         "Gain (analog)",                                    // Italiano
+         "Versterking (analoog)",                            // Nederlands
+-        "Gain (analog)",                                    // PortuguÍs
+-        "Gain (analog)",                                    // FranÁais
++        "Gain (analog)",                                    // Portugu√™s
++        "Gain (analog)",                                    // Fran√ßais
+         "Gain (analog)",                                    // Norsk
+-        "ƒ‰nen vahvistus (analoginen)",                     // suomi
++        "√Ñ√§nen vahvistus (analoginen)",                     // suomi
+         "Zysk (analogowo)",                                 // Polski
+-        "Ganancia (analÛgico)",                             // EspaÒol
+-        "Gain (analogika)",                                 // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Ganancia (anal√≥gico)",                             // Espa√±ol
++        "Gain (analogika)",                                 // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "Gain (analog)",                                    // Svenska
+         "Gain (analog)",                                    // Romaneste
+-        "Gain (analog)",                                    // Magyar
+-        "Gain (analog)",                                    // Catal‡
+-        "√·ÿ€’›ÿ’ (–›–€ﬁ”.)",                               // ¿„··⁄ÿŸ (Russian)
++        "er≈ës√≠t√©s (analog)",                                    // Magyar
++        "Gain (analog)",                                    // Catal√†
++        "√É√°√ò√õ√ï√ù√ò√ï (√ê√ù√ê√õ√û√ì.)",                               // √Ä√£√°√°√ö√ò√ô (Russian)
+         "Gain (analog)",                                    // Hrvatski (Croatian)
+-        "Helivıimendamine (analoog)",                       // Eesti
+-        "ForstÊrkning (analog)",                            // Dansk
+-        "ZesÌlenÌ (analog)",                                // Czech
++        "Heliv√µimendamine (analoog)",                       // Eesti
++        "Forst√¶rkning (analog)",                            // Dansk
++        "Zes√≠len√≠ (analog)",                                // Czech
+ #if VDRVERSNUM >= 10502
+-        "Kuvvetlendirmek (analog)"                          // T¸rkÁe
++        "Kuvvetlendirmek (analog)"                          // T√ºrk√ße
+ #endif
+     },
+     {
+     "Error.DVD$Error opening DVD!",                         // English
+-        "Fehler beim ˆffnen der DVD!",                      // Deutsch
++        "Fehler beim √∂ffnen der DVD!",                      // Deutsch
+         "Napaka pri odpiranju DVD-ja!",                     // Slovenski
+         "",                                                 // Italiano
+         "Fout bij het openen van de DVD!",                  // Nederlands
+-        "",                                                 // PortuguÍs
+-        "",                                                 // FranÁais
++        "",                                                 // Portugu√™s
++        "",                                                 // Fran√ßais
+         "",                                                 // Norsk
+-        "DVD:n avaaminen ep‰onnistui!",                     // suomi
+-        "B≥±d otwierania DVD!",                             // Polski
+-        "°Error abriendo el DVD!",                          // EspaÒol
+-        "Lathos sto anigma tou DVD",                        // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "DVD:n avaaminen ep√§onnistui!",                     // suomi
++        "B¬≥¬±d otwierania DVD!",                             // Polski
++        "¬°Error abriendo el DVD!",                          // Espa√±ol
++        "Lathos sto anigma tou DVD",                        // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "æËÿ—⁄– ﬁ‚⁄‡Î‚ÿÔ DVD!",                             // ¿„··⁄ÿŸ (Russian)
++        "DVD megnyit√°si hiba!",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬æ√®√ò√ë√ö√ê √û√¢√ö√†√´√¢√ò√Ø DVD!",                             // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+-        "DVD avamine ebaınnestus!",                         // Eesti
+-        "Fejl ved Âbning af DVD!",                          // Dansk
+-        "Chyba p¯i otevÌr·nÌ DVD!",                         // Czech
++        "DVD avamine eba√µnnestus!",                         // Eesti
++        "Fejl ved √•bning af DVD!",                          // Dansk
++        "Chyba p√∏i otev√≠r√°n√≠ DVD!",                         // Czech
+ #if VDRVERSNUM >= 10502
+-        "DVD aÁ˝l˝˛ hatas˝!"                                // T¸rkÁe
++        "DVD a√ß√Ωl√Ω√æ hatas√Ω!"                                // T√ºrk√ße
+ #endif
+     },
+     {
+@@ -363,76 +363,76 @@
+         "Napaka pri branju podatkov iz DVD-ja!",            // Slovenski
+         "",                                                 // Italiano
+         "Error bij het verkrijgen van data van de DVD!",    // Nederlands
+-        "",                                                 // PortuguÍs
+-        "",                                                 // FranÁais
++        "",                                                 // Portugu√™s
++        "",                                                 // Fran√ßais
+         "",                                                 // Norsk
+-        "DVD:n lukeminen ep‰onnistui",                      // suomi
+-        "B≥±d pobierania danych z DVD!",                    // Polski
+-        "°Error obteniendo datos del DVD!",                 // EspaÒol
+-        "Lathos sto diavasma tou DVD",                      // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "DVD:n lukeminen ep√§onnistui",                      // suomi
++        "B¬≥¬±d pobierania danych z DVD!",                    // Polski
++        "¬°Error obteniendo datos del DVD!",                 // Espa√±ol
++        "Lathos sto diavasma tou DVD",                      // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "æËÿ—⁄– Á‚’›ÿÔ DVD!",                               // ¿„··⁄ÿŸ (Russian)
++        "DVD olvas√°si hiba!",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬æ√®√ò√ë√ö√ê √ß√¢√ï√ù√ò√Ø DVD!",                               // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+-        "Lugemine DVD-lt ebaınnestus!",                     // Eesti
++        "Lugemine DVD-lt eba√µnnestus!",                     // Eesti
+         "Fejl ved hentning af data fra DVD!",               // Dansk
+-        "Chyba p¯i naËÌt·nÌ dat z DVD!",                    // Czech
++        "Chyba p√∏i na√®√≠t√°n√≠ dat z DVD!",                    // Czech
+ #if VDRVERSNUM >= 10502
+-        "DVD okuma hatas˝!"                                 // T¸rkÁe
++        "DVD okuma hatas√Ω!"                                 // T√ºrk√ße
+ #endif
+     },
+     {
+     "Error.DVD$Current subtitle stream not seen!",          // English
+-        "Der ausgew‰hlte Untertitel ist nicht vorhanden!",  // Deutsch
++        "Der ausgew√§hlte Untertitel ist nicht vorhanden!",  // Deutsch
+         "Izbrani podnapisi niso prisotni!",                 // Slovenski
+         "",                                                 // Italiano
+         "De gekozen ondertiteling is niet beschikbaar!",    // Nederlands
+-        "",                                                 // PortuguÍs
+-        "",                                                 // FranÁais
++        "",                                                 // Portugu√™s
++        "",                                                 // Fran√ßais
+         "",                                                 // Norsk
+         "Tekstitysraitaa ei havaita!",                      // suomi
+-        "Wybrane napisy nie istniej±!",                     // Polski
+-        "°SubtÌtulos actuales no encontrados!",             // EspaÒol
+-        "O epilegmenos ipotitlos den iparxi",               // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "Wybrane napisy nie istniej¬±!",                     // Polski
++        "¬°Subt√≠tulos actuales no encontrados!",             // Espa√±ol
++        "O epilegmenos ipotitlos den iparxi",               // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "Ω’‘ﬁ·‚„ﬂ’› “ÿ‘’ﬁﬂﬁ‚ﬁ⁄ ‚’⁄„È’”ﬁ ‡–◊‘’€–!",          // ¿„··⁄ÿŸ (Russian)
++        "A v√°lasztott felirat nincs!",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬Ω√ï√î√û√°√¢√£√ü√ï√ù √í√ò√î√ï√û√ü√û√¢√û√ö √¢√ï√ö√£√©√ï√ì√û √†√ê√ó√î√ï√õ√ê!",          // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+         "Subtiitriterada pole avastatud!",                  // Eesti
+         "Valgte undertekst findes ikke!",                   // Dansk
+-        "VybranÈ titulky nejsou k dispozici!",              // Czech
++        "Vybran√© titulky nejsou k dispozici!",              // Czech
+ #if VDRVERSNUM >= 10502
+-        "SeÁilen altyaz˝ bulunamad˝!"                       // T¸rkÁe
++        "Se√ßilen altyaz√Ω bulunamad√Ω!"                       // T√ºrk√ße
+ #endif
+     },
+     {
+     "Error.DVD$Current audio track not seen!",              // English
+-        "Die ausgew‰hlte Audiospur ist nicht vorhanden!",   // Deutsch
+-        "Izbrani zvoËni zapis ni prisoten!",                // Slovenski
++        "Die ausgew√§hlte Audiospur ist nicht vorhanden!",   // Deutsch
++        "Izbrani zvo√®ni zapis ni prisoten!",                // Slovenski
+         "",                                                 // Italiano
+         "Het gekozen audiospoort is niet beschikbaar",      // Nederlands
+-        "",                                                 // PortuguÍs
+-        "",                                                 // FranÁais
++        "",                                                 // Portugu√™s
++        "",                                                 // Fran√ßais
+         "",                                                 // Norsk
+-        "ƒ‰niraitaa ei havaita!",                           // suomi
+-        "Wybrana ∂cieøka dºwiÍkowa nie istnieje!",          // Polski
+-        "°Pista de audio actual no encontrada!",            // EspaÒol
+-        "I Epilegmeni desmi ixou den mpori na wrethi",      // ≈ÎÎÁÌÈÍ‹ (Greek)
++        "√Ñ√§niraitaa ei havaita!",                           // suomi
++        "Wybrana ¬∂cie¬øka d¬ºwi√™kowa nie istnieje!",          // Polski
++        "¬°Pista de audio actual no encontrada!",            // Espa√±ol
++        "I Epilegmeni desmi ixou den mpori na wrethi",      // √Ö√´√´√ß√≠√©√™√ú (Greek)
+         "",                                                 // Svenska
+         "",                                                 // Romaneste
+-        "",                                                 // Magyar
+-        "",                                                 // Catal‡
+-        "Ω’‘ﬁ·‚„ﬂ’› ‚’⁄„ÈÿŸ –„‘ÿﬁﬂﬁ‚ﬁ⁄!",                   // ¿„··⁄ÿŸ (Russian)
++        "A v√°lasztott hangs√°v nincs! ",                                                 // Magyar
++        "",                                                 // Catal√†
++        "¬Ω√ï√î√û√°√¢√£√ü√ï√ù √¢√ï√ö√£√©√ò√ô √ê√£√î√ò√û√ü√û√¢√û√ö!",                   // √Ä√£√°√°√ö√ò√ô (Russian)
+         "",                                                 // Hrvatski (Croatian)
+         "Audiorada pole avastatud!",                        // Eesti
+         "Valgte lyd-spor findes ikke!",                     // Dansk
+-        "Vybran· zvukov· stopa nenÌ k dispozici!",          // Czech
++        "Vybran√° zvukov√° stopa nen√≠ k dispozici!",          // Czech
+ #if VDRVERSNUM >= 10502
+-        "SeÁilen audio ses bulunamad˝!"                     // T¸rkÁe
++        "Se√ßilen audio ses bulunamad√Ω!"                     // T√ºrk√ße
+ #endif
+     },
+     { NULL }
+diff -Naur orig/po/hu_HU.po mod/po/hu_HU.po
+--- orig/po/hu_HU.po	1970-01-01 01:00:00.000000000 +0100
++++ mod/po/hu_HU.po	2010-06-06 15:38:06.000000000 +0200
+@@ -0,0 +1,59 @@
++# translation of hu_HU.po to hungarian
++# VDR plugin language source file.
++# Copyright (C) 2007
++# This file is distributed under the same license as the dvd-plugin package.
++#
++# Marco Schluessler <marco@lordzodiac.de>, 2007.
++# Kiss Attila <attus@enterpriseforever.com>, 2010.
++msgid ""
++msgstr ""
++"Project-Id-Version: hu_HU\n"
++"Report-Msgid-Bugs-To: <marco@lordzodiac.de>\n"
++"POT-Creation-Date: 2008-12-23 17:27+0100\n"
++"PO-Revision-Date: 2010-06-06 15:36+0200\n"
++"Last-Translator: Kiss Attila <attus@enterpriseforever.com>\n"
++"Language-Team: hungarian <hu@li.org>\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++"X-Generator: KBabel 1.11.4\n"
++
++msgid "Error.DVD$Current subp stream not seen!"
++msgstr "A v√°lasztani k√≠v√°nt felirat nincs!"
++
++msgid "Plugin.DVD$turn VDR into an (almost) full featured DVD player"
++msgstr "A VDR-t DVD lej√°tsz√≥v√° teszi"
++
++msgid "Plugin.DVD$DVD"
++msgstr "DVD"
++
++msgid "Error.DVD$Error opening DVD!"
++msgstr "A DVD megnyit√°sa sikertelen!"
++
++msgid "Error.DVD$Error fetching data from DVD!"
++msgstr "A DVD olvs√°sa nem siker√ºlt!"
++
++msgid "Setup.DVD$Preferred menu language"
++msgstr "men√ºk f≈ë nyelve"
++
++msgid "Setup.DVD$Preferred audio language"
++msgstr "hang f≈ë nyelve"
++
++msgid "Setup.DVD$Preferred subtitle language"
++msgstr "felirat f≈ë nyelve"
++
++msgid "Setup.DVD$Player region code"
++msgstr "DVD r√©gi√≥ k√≥dja"
++
++msgid "Setup.DVD$Display subtitles"
++msgstr "felirat l√°tszik"
++
++msgid "Setup.DVD$Hide Mainmenu Entry"
++msgstr "men√ºbel√©p√©s elrejt√©se"
++
++msgid "Setup.DVD$ReadAHead"
++msgstr "ReadAHead"
++
++msgid "Setup.DVD$Gain (analog)"
++msgstr "anal√≥g er≈ës√≠t√©s"
++

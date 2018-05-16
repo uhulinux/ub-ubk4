@@ -1,0 +1,12 @@
+diff -Naur orig/player-dvd.c mod/player-dvd.c
+--- orig/player-dvd.c	2009-01-18 14:58:42.000000000 +0100
++++ mod/player-dvd.c	2015-02-15 18:27:07.000000000 +0100
+@@ -375,7 +375,7 @@
+ 	        if (playMode == pmSlow)
+                 sp=2;
+         }
+-        DeviceTrickSpeed(sp);
++        DeviceTrickSpeed(sp,true);
+ 
+     } else if ( nts>0 && nts-NORMAL_SPEED <= MAX_MAX_SPEEDS ) {
+         fastWindFactor  = 1;
