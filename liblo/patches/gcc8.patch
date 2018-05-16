@@ -1,0 +1,12 @@
+diff -Naur orig/src/server.c patched/src/server.c
+--- orig/src/server.c	2017-05-23 16:03:02.000000000 +0200
++++ patched/src/server.c	2018-05-16 02:21:08.487740421 +0200
+@@ -321,7 +321,7 @@
+         gethostname(hostname, sizeof(hostname));
+         he = gethostbyname(hostname);
+         if (he) {
+-            strncpy(hostname, he->h_name, sizeof(hostname));
++            strncpy(hostname, he->h_name, sizeof(hostname) -1);
+         }
+     }
+ 

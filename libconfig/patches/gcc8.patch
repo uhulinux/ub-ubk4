@@ -1,0 +1,33 @@
+From 62acbe7c9dd85c9ee0976bb006718a8e7df11cf7 Mon Sep 17 00:00:00 2001
+From: Patrick Boettcher <patrick.boettcher@posteo.de>
+Date: Wed, 14 Feb 2018 17:30:08 +0100
+Subject: [PATCH] cmake: do not set _STDLIB_H-define (fixes #100)
+
+Setting this define makes that
+
+    #include <stdlib.h>
+
+does nothing (because of the include-guard). But this file
+is needed for free() and realloc() and others.
+---
+ lib/CMakeLists.txt | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 0503df8..de35ce0 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -41,14 +41,12 @@ set_target_properties(libconfig++
+ target_compile_definitions(libconfig
+     PRIVATE
+         _CRT_SECURE_NO_DEPRECATE
+-        _STDLIB_H
+         YY_NO_UNISTD_H
+         YY_USE_CONST )
+ 
+ target_compile_definitions(libconfig++ 
+     PRIVATE
+         _CRT_SECURE_NO_DEPRECATE
+-        _STDLIB_H
+         YY_NO_UNISTD_H
+         YY_USE_CONST )
