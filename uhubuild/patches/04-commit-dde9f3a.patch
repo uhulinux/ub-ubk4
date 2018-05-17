@@ -1,0 +1,21 @@
+From dde9f3adccb1ded6857b25dc647d623e90dd58c3 Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Thu, 17 May 2018 04:28:11 +0200
+Subject: ub_compile: autoreconf csak ha van configure.{ac,in}
+
+
+diff --git a/src/helpers/ub_compile b/src/helpers/ub_compile
+index 909b7f3..f95b65a 100755
+--- a/src/helpers/ub_compile
++++ b/src/helpers/ub_compile
+@@ -41,7 +41,9 @@ else
+ 		NOCONFIGURE=1 ./autogen.sh && ub_configure "$@"
+ 	fi
+ 	if [ ! -f "configure" -a ! -f "autogen.sh" -a ! -f CMakeLists.txt -a ! -f meson.build ]; then
+-		autoreconf -vif && ub_configure "$@"
++	    if [ -f configure.ac -o -f configure.in ]; then
++		    autoreconf -vif && ub_configure "$@"
++		fi
+ 	fi
+ fi
+ 
