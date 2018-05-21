@@ -1,19 +1,22 @@
-diff -Naur orig/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py patched/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py
---- orig/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py	2017-08-09 12:47:15.134739579 +0200
-+++ patched/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py	2017-10-08 04:57:18.004794685 +0200
-@@ -80,11 +80,11 @@
-     [_("Languages"),                     "mintlocale",                   "cs-language",        "prefs",          _("language, install, foreign")],
-     [_("Input Method"),                  "mintlocale im",                "cs-input-method",    "prefs",          _("language, install, foreign, input, method, chinese, korean, japanese, typing")],
-     [_("Login Window"),                  "gksu /usr/sbin/mdmsetup",      "cs-login",           "admin",          _("login, mdm, gdm, manager, user, password, startup, switch")],
--    [_("Login Window"),                  "lightdm-settings",             "cs-login",           "admin",          _("login, lightdm, mdm, gdm, manager, user, password, startup, switch")],
--    [_("Driver Manager"),                "mintdrivers",                  "cs-drivers",         "admin",          _("video, driver, wifi, card, hardware, proprietary, nvidia, radeon, nouveau, fglrx")],
--    [_("Software Sources"),              "mintsources",                  "cs-sources",         "admin",          _("ppa, repository, package, source, download")],
-+    [_("Login Window"),                  "sddm-config-editor",           "cs-login",           "admin",          _("login, sddm, gdm, manager, user, password, startup, switch")],
-+    [_("Nvidia Settings"),               "nvidia-settings",              "cs-drivers",         "admin",          _("video, driver, proprietary, nvidia, settings")],
-+    [_("Software Sources"),              "synaptic",                     "synaptic",           "admin",          _("ppa, repository, package, source, download")],
-     [_("Users and Groups"),              "cinnamon-settings-users",      "cs-user-accounts",   "admin",          _("user, users, account, accounts, group, groups, password")],
--    [_("Bluetooth"),                     "blueberry",                    "cs-bluetooth",       "hardware",       _("bluetooth, dongle, transfer, mobile")],
-+    [_("Bluetooth"),                     "blueman-manager",              "cs-bluetooth",       "hardware",       _("bluetooth, dongle, transfer, mobile")],
-     [_("Manage Services and Units"),     "systemd-manager-pkexec",       "cs-sources",         "admin",          _("systemd, units, services, systemctl, init")]
+diff -Nur orig/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py mod/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py
+--- orig/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py	2018-05-06 17:13:24.000000000 +0200
++++ mod/files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py	2018-05-19 12:26:09.761395449 +0200
+@@ -81,15 +81,13 @@
+     [_("Languages"),                     "mintlocale",                          "cs-language",        "prefs",          _("language, install, foreign")],
+     [_("Input Method"),                  "mintlocale im",                       "cs-input-method",    "prefs",          _("language, install, foreign, input, method, chinese, korean, japanese, typing")],
+     [_("Login Window"),                  "gksu /usr/sbin/mdmsetup",             "cs-login",           "admin",          _("login, mdm, gdm, manager, user, password, startup, switch")],
+-    [_("Login Window"),                  "lightdm-settings",                    "cs-login",           "admin",          _("login, lightdm, mdm, gdm, manager, user, password, startup, switch")],
+-    [_("Login Window"),                  "lightdm-gtk-greeter-settings-pkexec", "cs-login",           "admin",          _("login, lightdm, manager, settings, editor")],
+-    [_("Driver Manager"),                "mintdrivers",                         "cs-drivers",         "admin",          _("video, driver, wifi, card, hardware, proprietary, nvidia, radeon, nouveau, fglrx")],
++    [_("Login Window"),                  "sddm-config-editor",                  "cs-login",           "admin",          _("login, sddm, gdm, manager, user, password, startup, switch")],
+     [_("Nvidia Settings"),               "nvidia-settings",                     "cs-drivers",         "admin",          _("video, driver, proprietary, nvidia, settings")],
+-    [_("Software Sources"),              "mintsources",                         "cs-sources",         "admin",          _("ppa, repository, package, source, download")],
++    [_("Software Sources"),              "synaptic",                            "synaptic",           "admin",          _("ppa, repository, package, source, download")],
+     [_("Package Management"),            "dnfdragora",                          "cs-sources",         "admin",          _("update, install, repository, package, source, download")],
+     [_("Package Management"),            "yumex-dnf",                           "cs-sources",         "admin",          _("update, install, repository, package, source, download")],
+     [_("Users and Groups"),              "cinnamon-settings-users",             "cs-user-accounts",   "admin",          _("user, users, account, accounts, group, groups, password")],
+-    [_("Bluetooth"),                     "blueberry",                           "cs-bluetooth",       "hardware",       _("bluetooth, dongle, transfer, mobile")],
++    [_("Bluetooth"),                     "blueman-manager",                     "cs-bluetooth",       "hardware",       _("bluetooth, dongle, transfer, mobile")],
+     [_("Manage Services and Units"),     "systemd-manager-pkexec",              "cs-sources",         "admin",          _("systemd, units, services, systemctl, init")]
  ]
  
