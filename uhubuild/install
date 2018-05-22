@@ -58,7 +58,7 @@ for dist in UBK1 UBK2; do
 		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
 		cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
 		uhu-scanpkgs
-		echo "Label: UHU Linux" > Release
+		echo "Label: UHU-Linux" > Release
 		echo "Origin: UHU Linux Baráti Kör" >> Release
 		echo "Version: $dist" >> Release
 	done # arch
@@ -85,7 +85,7 @@ for dist in UBK3; do
 		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
 		cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
 		uhu-scanpkgs
-		echo "Label: UHU Linux" > Release
+		echo "Label: UHU-Linux" > Release
 		echo "Origin: UHU Linux Baráti Kör" >> Release
 		echo "Version: $dist" >> Release
 	done # arch
@@ -101,5 +101,7 @@ ln -s "$UB_INSTALLDIR"/usr/bin/build \
 	"$UB_INSTALLDIR"/usr/bin/build-ubk1
 ln -s "$UB_INSTALLDIR"/usr/bin/build \
 	"$UB_INSTALLDIR"/usr/bin/build-ubk2
+ln -s "$UB_INSTALLDIR"/usr/bin/build \
+	"$UB_INSTALLDIR"/usr/bin/build-ubk3
 # mkdir -p "$UB_INSTALLDIR"/usr/share/doc/Packages
 # cp "$UB_SRCDIR"/changelog "$UB_INSTALLDIR"/usr/share/doc/Packages
