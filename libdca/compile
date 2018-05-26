@@ -1,8 +1,5 @@
 #!/bin/sh -eux
 
-# A -O3 veszélyes
-ub_replace -O3 -O2 configure
-ub_replace -O3 -O2 configure.ac
-
+autoreconf -vif
 ub_compile \
 	--enable-fixed

@@ -1,6 +1,12 @@
 #!/bin/sh -eux
 
-rm -rf libusb
+git clone https://github.com/DIGImend/usbhid-dump.git
+
+cd usbhid-dump
+./bootstrap
+cd ..
+
+autoreconf -vif
 ub_compile \
 	--disable-zlib \
 	--enable-usbmodules
