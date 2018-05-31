@@ -1,6 +1,6 @@
 diff -Naur orig/base/password.py patched/base/password.py
---- orig/base/password.py	2018-03-06 10:55:55.000000000 +0100
-+++ patched/base/password.py	2018-04-20 08:41:26.933235867 +0200
+--- orig/base/password.py	2018-05-24 06:34:29.000000000 +0200
++++ patched/base/password.py	2018-05-26 03:17:05.399039529 +0200
 @@ -55,6 +55,7 @@
                'gos': 'sudo',
                'boss': 'su',
@@ -10,8 +10,8 @@ diff -Naur orig/base/password.py patched/base/password.py
                }
  
 diff -Naur orig/installer/distros.dat patched/installer/distros.dat
---- orig/installer/distros.dat	2018-03-06 10:56:02.000000000 +0100
-+++ patched/installer/distros.dat	2018-04-20 08:43:19.708388858 +0200
+--- orig/installer/distros.dat	2018-05-24 06:34:43.000000000 +0200
++++ patched/installer/distros.dat	2018-05-26 03:32:22.095200386 +0200
 @@ -92,7 +92,7 @@
  # ****************************************
  
@@ -21,16 +21,7 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
  
  # ****************************************
  
-@@ -7035,7 +7035,7 @@
- usb_supported=1
- packaged_version=0.9.1
- release_date=2004-9-16
--notes=Before proceeding, please add the "contrib", "main", and "updates" installation sources to your URPMI configuration./n Open your browser and go to http://easyurpmi.zarb.org/ and follow the instructions provided and then proceed with the HPLIP install. Also be sure to disable the cdrom1-12 media sources. 
-+notes=Before proceeding, please add the "contrib", "main", and "updates" installation sources to your URPMI configuration./n Open your browser and go to http://easyurpmi.zarb.org/ and follow the instructions provided and then proceed with the HPLIP install. Also be sure to disable the cdrom1-12 media sources.
- ppd_install=ppd
- udev_mode_fix=1
- ppd_dir=/usr/share/cups/model/HP
-@@ -10618,3 +10618,157 @@
+@@ -10651,3 +10651,280 @@
  packages=automake
  
  
@@ -38,7 +29,7 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
 +# ****************************************
 +[uhu-linux]
 +index=60
-+versions=UBK1,UBK2
++versions=UBK1,UBK2,UBK3
 +display_name=UHU-Linux
 +alt_names=
 +display=1
@@ -188,3 +179,126 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
 +release_date=
 +same_as_version=UBK1
 +
++# ****************************************
++
++[uhu-linux:UBK3]
++code_name=RIA
++supported=1
++scan_supported=1
++fax_supported=1
++pcard_supported=1
++network_supported=1
++parallel_supported=1
++usb_supported=1
++packaged_version=
++release_date=
++notes=
++ppd_install=drv
++udev_mode_fix=1
++ppd_dir=/usr/share/ppd/HP
++fix_ppd_symlink=0
++drv_dir=/usr/share/cups/drv/hp
++ui_toolkit=qt4
++native_cups=1
++policykit=1
++
++
++[uhu-linux:UBK3:cups]
++packages=cups
++
++[uhu-linux:UBK3:cups-devel]
++packages=cups-dev
++
++[uhu-linux:UBK3:gcc]
++packages=gcc
++
++[uhu-linux:UBK3:gs]
++packages=ghostscript
++
++[uhu-linux:UBK3:libcrypto]
++packages=openssl-dev
++
++[uhu-linux:UBK3:libjpeg]
++packages=libjpeg-turbo-dev
++
++[uhu-linux:UBK3:libnetsnmp-devel]
++packages=libnetsnmp-dev
++
++[uhu-linux:UBK3:libpthread]
++packages=glibc
++
++[uhu-linux:UBK3:libtool]
++packages=libtool
++
++[uhu-linux:UBK3:libusb]
++packages=libusb-dev
++
++[uhu-linux:UBK3:make]
++packages=make
++
++[uhu-linux:UBK3:pil]
++packages=python2-pillow
++
++[uhu-linux:UBK3:ppdev]
++packages=
++commands=su -c "modprobe ppdev",su -c cp -f /etc/modules /etc/modules.hplip,echo ppdev | su -c tee -a /etc/modules
++
++[uhu-linux:UBK3:python-devel]
++packages=python2-dev
++
++[uhu-linux:UBK3:pyqt]
++packages=
++
++[uhu-linux:UBK3:pyqt4]
++packages=python2-pyqt4
++
++[uhu-linux:UBK3:pyqt4-dbus]
++packages=python2-pyqt4
++
++[uhu-linux:UBK3:python23]
++packages=python2
++
++[uhu-linux:UBK3:python2x]
++packages=python2
++
++[uhu-linux:UBK3:reportlab]
++packages=python2-reportlab
++
++[uhu-linux:UBK3:sane]
++packages=sane
++
++[uhu-linux:UBK3:sane-devel]
++packages=sane-dev
++
++[uhu-linux:UBK3:scanimage]
++packages=sane-backends
++
++[uhu-linux:UBK3:xsane]
++packages=xsane
++
++[uhu-linux:UBK3:cups-ddk]
++packages=
++
++[uhu-linux:UBK3:python-dbus]
++packages=dbus-python2,python2-pygobject
++
++[uhu-linux:UBK3:dbus]
++packages=dbus-dev
++
++[uhu-linux:UBK3:python-ctypes]
++packages=
++
++[uhu-linux:UBK3:cups-image]
++packages=cups,cups-dev
++
++[uhu-linux:UBK3:policykit]
++packages=policykit,policykit-gnome
++
++[uhu-linux:UBK3:python-notify]
++packages=python2-notify
++
++[uhu-linux:UBK3:network]
++packages=wget
++
++[uhu-linux:UBK3:avahi-utils]
++packages=avahi
