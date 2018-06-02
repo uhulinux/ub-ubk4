@@ -1,0 +1,13 @@
+diff --git a/src/3rdparty/chromium/media/base/decoder_buffer.h b/src/3rdparty/chromium/media/base/decoder_buffer.h
+index 0341e5784f..60ffba708b 100644
+--- a/src/3rdparty/chromium/media/base/decoder_buffer.h
++++ b/src/3rdparty/chromium/media/base/decoder_buffer.h
+@@ -37,7 +37,7 @@ class MEDIA_EXPORT DecoderBuffer
+     : public base::RefCountedThreadSafe<DecoderBuffer> {
+  public:
+   enum {
+-    kPaddingSize = 32,
++    kPaddingSize = 64,
+ #if defined(ARCH_CPU_ARM_FAMILY)
+     kAlignmentSize = 16
+ #else
