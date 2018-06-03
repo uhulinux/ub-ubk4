@@ -1,6 +1,5 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--disable-gconf \
-	--enable-systemd \
-	--disable-docbook-docs
+	-Dsystemd=true \
+	-Ddocbook=false

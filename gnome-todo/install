@@ -2,5 +2,6 @@
 
 ub_install
 
-# nem kell pc fájl
-rm -rf ${UB_INSTALLDIR}/usr/lib/pkgconfig
+cp build/src/libgtd.so.0.0.0 $UB_INSTALLDIR/usr/lib/
+ln -sf libgtd.so.0.0.0  $UB_INSTALLDIR/usr/lib/libgtd.so.0
+ln -sf libgtd.so.0.0.0  $UB_INSTALLDIR/usr/lib/libgtd.so
