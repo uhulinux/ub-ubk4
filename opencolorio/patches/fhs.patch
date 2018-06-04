@@ -1,0 +1,18 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2018-01-05 02:38:27.000000000 +0100
++++ patched/CMakeLists.txt	2018-06-04 01:55:48.594972052 +0200
+@@ -596,7 +596,7 @@
+         set(OCIO_STATIC_COMPILE_DEFINITIONS )
+     endif()
+ endif()
+-install(EXPORT OpenColorIO DESTINATION cmake)
++install(EXPORT OpenColorIO DESTINATION lib/cmake)
+ file(WRITE "${CMAKE_BINARY_DIR}/OpenColorIOConfig.cmake"
+     "
+     get_filename_component(OpenColorIO_DIR \"\${CMAKE_CURRENT_LIST_FILE}\" PATH)
+@@ -646,4 +646,4 @@
+     message(STATUS OPENCOLORIO_FOUND=\${OPENCOLORIO_FOUND})
+     "
+ )
+-install(FILES "${CMAKE_BINARY_DIR}/OpenColorIOConfig.cmake" DESTINATION .)
++install(FILES "${CMAKE_BINARY_DIR}/OpenColorIOConfig.cmake" DESTINATION lib/cmake)
