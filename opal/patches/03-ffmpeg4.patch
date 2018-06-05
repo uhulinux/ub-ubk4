@@ -1,0 +1,176 @@
+diff -Naur orig/plugins/video/H.263-1998/h263-1998.cxx patched/plugins/video/H.263-1998/h263-1998.cxx
+--- orig/plugins/video/H.263-1998/h263-1998.cxx	2018-06-05 00:55:13.770127371 +0200
++++ patched/plugins/video/H.263-1998/h263-1998.cxx	2018-06-05 00:56:31.151172557 +0200
+@@ -234,7 +234,7 @@
+ 
+   m_context->opaque = this;
+ 
+-  m_context->flags = CODEC_FLAG_TRUNCATED  // Possible missing packets
++  m_context->flags = AV_CODEC_FLAG_TRUNCATED  // Possible missing packets
+                    ;
+ 
+   m_context->pix_fmt = AV_PIX_FMT_YUV420P;
+@@ -343,9 +343,9 @@
+     // Level 3+
+     // works with eyeBeam
+     if (atoi(value) == 1)
+-      m_context->flags |= CODEC_FLAG_AC_PRED; 
++      m_context->flags |= AV_CODEC_FLAG_AC_PRED; 
+     else
+-      m_context->flags &= ~CODEC_FLAG_AC_PRED; 
++      m_context->flags &= ~AV_CODEC_FLAG_AC_PRED; 
+     return;
+   }
+ 
+@@ -353,9 +353,9 @@
+     // Annex J: Deblocking Filter
+     // works with eyeBeam
+     if (atoi(value) == 1)
+-      m_context->flags |= CODEC_FLAG_LOOP_FILTER; 
++      m_context->flags |= AV_CODEC_FLAG_LOOP_FILTER; 
+     else
+-      m_context->flags &= ~CODEC_FLAG_LOOP_FILTER; 
++      m_context->flags &= ~AV_CODEC_FLAG_LOOP_FILTER; 
+     return;
+   }
+ 
+@@ -419,8 +419,8 @@
+   m_context->qcompress = 0.5;               // qscale factor between easy & hard scenes (0.0-1.0)
+ 
+   // Lagrange multipliers - this is how the context defaults do it:
+-  m_context->lmin = m_context->qmin * FF_QP2LAMBDA;
+-  m_context->lmax = m_context->qmax * FF_QP2LAMBDA; 
++  av_opt_set_int(m_context, "lmin", m_context->qmin * FF_QP2LAMBDA, 0);
++  av_opt_set_int(m_context, "lmax", m_context->qmax * FF_QP2LAMBDA, 0);
+ 
+   // YUV420P input
+   m_inputFrame->linesize[0] = m_context->width;
+@@ -595,7 +595,7 @@
+   m_context->opaque = this; // used to separate out packets from different encode threads
+ 
+   av_opt_set_int(m_context->priv_data, "umv", 0, 0);
+-  m_context->flags &= ~CODEC_FLAG_4MV;
++  m_context->flags &= ~AV_CODEC_FLAG_4MV;
+ #if LIBAVCODEC_RTP_MODE
+   m_context->flags &= ~CODEC_FLAG_H263P_AIC;
+ #endif
+diff -Naur orig/plugins/video/H.263-1998/rfc2429.cxx patched/plugins/video/H.263-1998/rfc2429.cxx
+--- orig/plugins/video/H.263-1998/rfc2429.cxx	2013-02-20 03:18:03.000000000 +0100
++++ patched/plugins/video/H.263-1998/rfc2429.cxx	2018-06-05 00:56:31.151172557 +0200
+@@ -286,7 +286,7 @@
+ 
+ unsigned char * RFC2429Frame::GetBuffer()
+ {
+-  memset (m_encodedFrame.ptr + m_encodedFrame.pos,0 , FF_INPUT_BUFFER_PADDING_SIZE);
++  memset (m_encodedFrame.ptr + m_encodedFrame.pos,0 , AV_INPUT_BUFFER_PADDING_SIZE);
+   return (m_encodedFrame.ptr);
+ }
+ 
+@@ -340,10 +340,10 @@
+ 
+   unsigned remBytes = packet.GetPayloadSize() - headerPLEN - (headerV ? 3 : 2);
+ 
+-  if ((m_encodedFrame.pos + (headerP ? 2 : 0) + remBytes) > (m_maxFrameSize - FF_INPUT_BUFFER_PADDING_SIZE)) {
++  if ((m_encodedFrame.pos + (headerP ? 2 : 0) + remBytes) > (m_maxFrameSize - AV_INPUT_BUFFER_PADDING_SIZE)) {
+     PTRACE(2, "H.263-RFC2429", "Trying to add " << remBytes 
+          << " bytes to frame at position " << m_encodedFrame.pos + (headerP ? 2 : 0) 
+-         << " bytes while maximum frame size is  " << m_maxFrameSize << "-" << FF_INPUT_BUFFER_PADDING_SIZE << " bytes");
++         << " bytes while maximum frame size is  " << m_maxFrameSize << "-" << AV_INPUT_BUFFER_PADDING_SIZE << " bytes");
+     return false;
+   }
+ 
+diff -Naur orig/plugins/video/H.264/h264-x264.cxx patched/plugins/video/H.264/h264-x264.cxx
+--- orig/plugins/video/H.264/h264-x264.cxx	2018-06-05 00:55:13.770127371 +0200
++++ patched/plugins/video/H.264/h264-x264.cxx	2018-06-05 00:56:31.151172557 +0200
+@@ -1076,9 +1076,9 @@
+       m_context->workaround_bugs = FF_BUG_AUTODETECT;
+       m_context->idct_algo = FF_IDCT_H264;
+       m_context->error_concealment = FF_EC_GUESS_MVS | FF_EC_DEBLOCK;
+-      m_context->flags2 = CODEC_FLAG2_DROP_FRAME_TIMECODE |
++      m_context->flags2 = AV_CODEC_FLAG2_DROP_FRAME_TIMECODE |
+                           CODEC_FLAG2_SKIP_RD |
+-                          CODEC_FLAG2_CHUNKS;
++                          AV_CODEC_FLAG2_CHUNKS;
+ 
+       if ((m_picture = FFMPEGLibraryInstance.AvcodecAllocFrame()) == NULL)
+         return false;
+diff -Naur orig/plugins/video/MPEG4-ffmpeg/mpeg4.cxx patched/plugins/video/MPEG4-ffmpeg/mpeg4.cxx
+--- orig/plugins/video/MPEG4-ffmpeg/mpeg4.cxx	2018-06-05 00:55:13.770127371 +0200
++++ patched/plugins/video/MPEG4-ffmpeg/mpeg4.cxx	2018-06-05 00:56:31.151172557 +0200
+@@ -548,19 +548,19 @@
+     // Reduce the difference in quantization between frames.
+     m_avcontext->qblur = 0.3f;
+     // default is tex^qComp; 1 is constant bitrate
+-    m_avcontext->rc_eq = (char*) "1";
+-    //avcontext->rc_eq = "tex^qComp";
++    av_opt_set(m_avcontext, "rc_eq", (char*) "1", 0);
++    //av_opt_set(m_avcontext, "rc_eq", "tex^qComp", 0);
+     // These ones technically could be dynamic, I think
+     m_avcontext->rc_min_rate = 0;
+     // This is set to 0 in ffmpeg.c, the command-line utility.
+-    m_avcontext->rc_initial_cplx = 0.0f;
++    av_opt_set_double(m_avcontext, "rc_initial_cplx", 0.0f, 0);
+ 
+     // And this is set to 1.
+     // It seems to affect how aggressively the library will raise and lower
+     // quantization to keep bandwidth constant. Except it's in reference to
+     // the "vbv buffer", not bits per second, so nobody really knows how
+     // it works.
+-    m_avcontext->rc_buffer_aggressivity = 1.0f;
++    av_opt_set_double(m_avcontext, "rc_buffer_aggressivity", 1.0f, 0);
+ 
+     // Ratecontrol buffer size, in bits. Usually 0.5-1 second worth.
+     // 224 kbyte is what VLC uses, and it seems to fix the quantization pulse (at Level 5)
+@@ -594,11 +594,11 @@
+     m_avcontext->flags |= CODEC_FLAG_4MV;    // 4 motion vectors
+ #else
+     m_avcontext->max_b_frames=0; /*don't use b frames*/
+-    m_avcontext->flags|=CODEC_FLAG_AC_PRED;
++    m_avcontext->flags|=AV_CODEC_FLAG_AC_PRED;
+     av_opt_set_int(m_avcontext->priv_data, "umv", 1, 0);
+     /*c->flags|=CODEC_FLAG_QPEL;*/ /*don't enable this one: this forces profile_level to advanced simple profile */
+-    m_avcontext->flags|=CODEC_FLAG_4MV;
+-    m_avcontext->flags|=CODEC_FLAG_LOOP_FILTER;
++    m_avcontext->flags|=AV_CODEC_FLAG_4MV;
++    m_avcontext->flags|=AV_CODEC_FLAG_LOOP_FILTER;
+     av_opt_set_int(m_avcontext->priv_data, "structured_slices", 1, 0);
+ #endif
+     m_avcontext->opaque = this;              // for use in RTP callback
+@@ -636,8 +636,8 @@
+     m_avcontext->qmax = std::min( m_avcontext->qmax, 31);
+ 
+     // Lagrange multipliers - this is how the context defaults do it:
+-    m_avcontext->lmin = m_avcontext->qmin * FF_QP2LAMBDA;
+-    m_avcontext->lmax = m_avcontext->qmax * FF_QP2LAMBDA;
++    av_opt_set_int(m_avcontext, "lmin", m_avcontext->qmin * FF_QP2LAMBDA, 0);
++    av_opt_set_int(m_avcontext, "lmax", m_avcontext->qmax * FF_QP2LAMBDA, 0);
+ 
+     // If framesize has changed or is not yet initialized, fix it up
+     if((unsigned)m_avcontext->width != m_frameWidth || (unsigned)m_avcontext->height != m_frameHeight) {
+@@ -665,7 +665,7 @@
+     {
+         delete[] m_rawFrameBuffer;
+     }
+-    m_rawFrameBuffer = new BYTE[m_rawFrameLen + FF_INPUT_BUFFER_PADDING_SIZE];
++    m_rawFrameBuffer = new BYTE[m_rawFrameLen + AV_INPUT_BUFFER_PADDING_SIZE];
+ 
+     if (m_encFrameBuffer)
+     {
+@@ -675,7 +675,7 @@
+     m_encFrameBuffer = new BYTE[m_encFrameLen];
+ 
+     // Clear the back padding
+-    memset(m_rawFrameBuffer + m_rawFrameLen, 0, FF_INPUT_BUFFER_PADDING_SIZE);
++    memset(m_rawFrameBuffer + m_rawFrameLen, 0, AV_INPUT_BUFFER_PADDING_SIZE);
+     const unsigned fsz = m_frameWidth * m_frameHeight;
+     m_avpicture->data[0] = m_rawFrameBuffer;              // luminance
+     m_avpicture->data[1] = m_rawFrameBuffer + fsz;        // first chroma channel
+@@ -1326,7 +1326,7 @@
+ //
+ 
+ void MPEG4DecoderContext::SetStaticDecodingParams() {
+-    m_avcontext->flags |= CODEC_FLAG_4MV; 
++    m_avcontext->flags |= AV_CODEC_FLAG_4MV; 
+     av_opt_set_int(m_avcontext->priv_data, "data_partitionin", 1, 0);
+     m_avcontext->workaround_bugs = 0; // no workaround for buggy implementations
+ }
