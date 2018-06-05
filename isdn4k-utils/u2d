@@ -1,1 +1,2 @@
-geturl http://misdn.eu/?p=repositories/isdn4k-utils.git #| grep v | sed s/.*v//g | splitver '^([0-9]\.[0-9]+)$' | sort -V | tail -n 1
+urllist http://archive.fedoraproject.org/pub/archive/fedora/linux/releases/26/Everything/source/tree/Packages/i/ \
+    | grep ^isdn4k-utils- | sed s/.*utils-//g | sed s/-.*//g
