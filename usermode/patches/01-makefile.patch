@@ -1,8 +1,8 @@
-diff -Naur usermode-1.111-orig/Makefile.in usermode-1.111/Makefile.in
---- usermode-1.111-orig/Makefile.in	2012-09-22 17:38:45.000000000 +0200
-+++ usermode-1.111/Makefile.in	2013-11-23 15:08:28.429602395 +0100
-@@ -1436,12 +1436,6 @@
- 
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2018-02-22 16:58:15.000000000 +0100
++++ mod/Makefile.am	2018-06-05 12:50:52.570846916 +0200
+@@ -35,12 +35,6 @@
+ noinst_LIBRARIES = liblib.a
  
  install-data-local: userinfo.desktop usermount.desktop userpasswd.desktop
 -	mkdir -p $(DESTDIR)$(datadir)/applications
