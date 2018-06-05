@@ -1,6 +1,3 @@
 #!/bin/sh -eux
 
-# avoid conflicting types
-sed -i -e "s/G_MODULE_EXPORT//g" src/gnome-chess.{c,vala}
-
 ub_compile
