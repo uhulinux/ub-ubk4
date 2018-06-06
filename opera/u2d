@@ -1,1 +1,7 @@
-urllist http://get.geo.opera.com/ftp/pub/opera/desktop/ | grep -E '^([0-9.]+)$' | sort -V | tail -n 1
+for i in `urllist http://get.geo.opera.com/ftp/pub/opera/desktop/ | grep -E '^([0-9.]+)$' | sort -Vr`;do
+if [ "$(urllist http://get.geo.opera.com/ftp/pub/opera/desktop/$i/ | grep linux)" ];then
+echo $i
+exit 0
+fi
+done
+

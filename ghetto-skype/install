@@ -3,14 +3,13 @@
 dpkg-deb -x ghetto-skype_${UB_VERSION}_amd64.deb .
 rm -f ghetto-skype_${UB_VERSION}_amd64.deb
 
+cd usr/share/applications
+patch -i $UB_SRCDIR/patches/desktop.patch.skip
+cd -
+
 cp -r "$UB_COMPILEDIR"/usr "$UB_INSTALLDIR"/
 cp -r "$UB_COMPILEDIR"/opt/* "$UB_INSTALLDIR"/usr/lib/ghetto-skype
 
 rm -Rf "$UB_INSTALLDIR"/usr/share/lintian
 
 ln -s /usr/lib/ghetto-skype/ghetto-skype "$UB_INSTALLDIR"/usr/bin/ghetto-skype
-
-# Exec javítás
-sed -i -e "s/^Exec=.*/Exec=ghetto-skype/" "$UB_INSTALLDIR"/usr/share/applications/"Ghetto Skype.desktop"
-# Categories javítás
-sed -i -e "s/^Categories=.*/Categories=Network;Chat;VideoConference;/" "$UB_INSTALLDIR"/usr/share/applications/"Ghetto Skype.desktop"
