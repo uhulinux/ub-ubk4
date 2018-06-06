@@ -1,0 +1,12 @@
+diff -Naur orig/libDeployPkg/linuxDeploymentUtilities.c patched/libDeployPkg/linuxDeploymentUtilities.c
+--- orig/libDeployPkg/linuxDeploymentUtilities.c	2018-03-30 20:44:35.000000000 +0200
++++ patched/libDeployPkg/linuxDeploymentUtilities.c	2018-06-07 01:35:23.925265466 +0200
+@@ -124,7 +124,7 @@
+    }
+    while ((dir = readdir(tempDir)) != NULL) {
+       if (!regexec(&scriptRegex, dir->d_name, 0, NULL, 0)) {
+-         scriptSize = strlen(dir->d_name);
++         scriptSize = sizeof(dir->d_name);
+          *scriptName = malloc(sizeof(char) * scriptSize + 1);
+          if (*scriptName == NULL) {
+             sLog(log_warning, "Could not allocate memory for scriptName: %s",

@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
-# ./autogen.sh
 ub_compile \
-	--enable-openssl \
-	--enable-textfe \
-	--enable-python=python3
+	-Dwith-ssl=true \
+	-Dwith-gtk=true \
+	-Dwith-text=true
