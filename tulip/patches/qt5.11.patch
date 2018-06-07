@@ -1,0 +1,45 @@
+diff -Naur orig/library/tulip-gui/src/CoordEditor.cpp patched/library/tulip-gui/src/CoordEditor.cpp
+--- orig/library/tulip-gui/src/CoordEditor.cpp	2017-11-08 23:54:34.000000000 +0100
++++ patched/library/tulip-gui/src/CoordEditor.cpp	2018-06-07 21:53:12.891930089 +0200
+@@ -23,6 +23,8 @@
+ 
+ #include <cfloat>
+ 
++#include <QDoubleValidator>
++
+ using namespace tlp;
+ 
+ CoordEditor::CoordEditor(QWidget *parent, bool editSize) :
+diff -Naur orig/library/tulip-gui/src/CSVImportWizard.cpp patched/library/tulip-gui/src/CSVImportWizard.cpp
+--- orig/library/tulip-gui/src/CSVImportWizard.cpp	2017-11-08 23:54:34.000000000 +0100
++++ patched/library/tulip-gui/src/CSVImportWizard.cpp	2018-06-07 21:08:00.876733561 +0200
+@@ -20,6 +20,7 @@
+ 
+ #include <QVBoxLayout>
+ #include <QLabel>
++#include <QHeaderView>
+ 
+ #include <tulip/CSVGraphImport.h>
+ #include <tulip/CSVParserConfigurationWidget.h>
+diff -Naur orig/plugins/view/SOMView/SOMPropertiesWidget.cpp patched/plugins/view/SOMView/SOMPropertiesWidget.cpp
+--- orig/plugins/view/SOMView/SOMPropertiesWidget.cpp	2017-11-08 23:54:34.000000000 +0100
++++ patched/plugins/view/SOMView/SOMPropertiesWidget.cpp	2018-06-07 22:59:04.388575537 +0200
+@@ -27,6 +27,7 @@
+ #include <QDoubleValidator>
+ #include <QRadioButton>
+ #include <QPushButton>
++#include <QButtonGroup>
+ 
+ #include <tulip/GraphPropertiesSelectionWidget.h>
+ #include <tulip/ColorScalesManager.h>
+diff -Naur orig/software/tulip/src/TulipWelcomePage.cpp patched/software/tulip/src/TulipWelcomePage.cpp
+--- orig/software/tulip/src/TulipWelcomePage.cpp	2017-11-08 23:54:35.000000000 +0100
++++ patched/software/tulip/src/TulipWelcomePage.cpp	2018-06-07 23:10:47.781131112 +0200
+@@ -27,6 +27,7 @@
+ #include <QNetworkRequest>
+ #include <QNetworkReply>
+ #include <QXmlStreamReader>
++#include <QStyle>
+ 
+ #include <tulip/TulipSettings.h>
+ #include <tulip/PluginManager.h>

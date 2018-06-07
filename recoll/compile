@@ -1,8 +1,6 @@
 #!/bin/sh -eux
 
-for file in $(ls -1 filters); do
-  sed -i 's/\r//g' filters/"$file"
-done
+sed -i 's/\r//g' filters/rcluncomp.py
 
 export QTDIR="/usr/lib/qt5"
 
