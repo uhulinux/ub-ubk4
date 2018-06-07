@@ -1,6 +1,6 @@
 diff -Naur orig/docs/Makefile.am patched/docs/Makefile.am
---- orig/docs/Makefile.am	2014-09-21 02:53:39.000000000 +0200
-+++ patched/docs/Makefile.am	2014-09-21 03:01:10.351215941 +0200
+--- orig/docs/Makefile.am	2017-12-14 13:34:57.000000000 +0100
++++ patched/docs/Makefile.am	2018-06-07 14:01:13.667789103 +0200
 @@ -4,10 +4,8 @@
  man_MANS = 					\
  	xfburn.1
@@ -12,3 +12,17 @@ diff -Naur orig/docs/Makefile.am patched/docs/Makefile.am
  
  EXTRA_DIST =					\
  	$(man_MANS)				\
+diff -Naur orig/docs/Makefile.in patched/docs/Makefile.in
+--- orig/docs/Makefile.in	2017-12-14 14:02:43.000000000 +0100
++++ patched/docs/Makefile.in	2018-06-07 14:02:02.652392275 +0200
+@@ -599,8 +599,8 @@
+ .PRECIOUS: Makefile
+ 
+ 
+-@MAINTAINER_MODE_TRUE@%.1: %.xml
+-@MAINTAINER_MODE_TRUE@	xsltproc http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
++%.1: %.xml
++	xsltproc http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+ 
+ # vi:set ts=8 sw=8 noet ai nocindent softtabstop=0 list listchars=tab\:>- syntax=automake:
+ 
