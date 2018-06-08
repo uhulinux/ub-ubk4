@@ -1,0 +1,47 @@
+diff -Nur orig/src/ffDiaporama/engine/cBaseMediaFile.cpp mod/src/ffDiaporama/engine/cBaseMediaFile.cpp
+--- orig/src/ffDiaporama/engine/cBaseMediaFile.cpp	2018-06-08 13:48:48.000000000 +0200
++++ mod/src/ffDiaporama/engine/cBaseMediaFile.cpp	2018-06-08 14:04:44.408030031 +0200
+@@ -2941,8 +2941,8 @@
+                  LibavVideoFile->streams[VideoStreamNumber]->codec->sample_aspect_ratio.num,LibavVideoFile->streams[VideoStreamNumber]->codec->sample_aspect_ratio.den
+         );
+ 
+-        AVFilter *srcFilter=avfilter_get_by_name("buffer");
+-        AVFilter *outFilter=avfilter_get_by_name("buffersink");
++        const AVFilter *srcFilter=avfilter_get_by_name("buffer");
++        const AVFilter *outFilter=avfilter_get_by_name("buffersink");
+ 
+         if ((result=avfilter_graph_create_filter(&VideoFilterIn,srcFilter,"in",args,NULL,VideoFilterGraph))<0) {
+             ToLog(LOGMSG_CRITICAL,QString("Error in cVideoFile::VideoFilter_Open : avfilter_graph_create_filter: src"));
+diff -Nur orig/src/ffDiaporama/engine/cDeviceModelDef.h mod/src/ffDiaporama/engine/cDeviceModelDef.h
+--- orig/src/ffDiaporama/engine/cDeviceModelDef.h	2018-06-08 13:43:09.000000000 +0200
++++ mod/src/ffDiaporama/engine/cDeviceModelDef.h	2018-06-08 13:47:12.000000000 +0200
+@@ -60,7 +60,6 @@
+ #include <libavformat/avio.h>
+ 
+ #include "libavfilter/avfilter.h"
+-#include "libavfilter/avfiltergraph.h"
+ 
+ #if (LIBAVUTIL_VERSION_MICRO<100)&&(LIBAVCODEC_VERSION_MICRO<100)&&(LIBAVFORMAT_VERSION_MICRO<100)&&(LIBAVDEVICE_VERSION_MICRO<100)&&(LIBAVFILTER_VERSION_MICRO<100)&&(LIBSWSCALE_VERSION_MICRO<100)
+     #define LIBAV
+diff -Nur orig/src/ffDiaporama/engine/_EncodeVideo.cpp mod/src/ffDiaporama/engine/_EncodeVideo.cpp
+--- orig/src/ffDiaporama/engine/_EncodeVideo.cpp	2018-06-08 14:06:03.000000000 +0200
++++ mod/src/ffDiaporama/engine/_EncodeVideo.cpp	2018-06-08 15:11:10.241429629 +0200
+@@ -387,7 +387,7 @@
+             ||(!strcmp(Container->oformat->name,"mpegts"))
+             ||(!strcmp(Container->oformat->name,"3gp"))
+         )
+-        (*Stream)->codec->flags|=CODEC_FLAG_GLOBAL_HEADER;
++        (*Stream)->codec->flags|=AV_CODEC_FLAG_GLOBAL_HEADER;
+ 
+     int ThreadC =((getCpuCount()/*-1*/)>1)?(getCpuCount()-1):1;
+     if (ThreadC>0) (*Stream)->codec->thread_count=ThreadC;
+@@ -456,9 +456,7 @@
+         VideoStream->codec->qmax    =ImageHeight<=576?63:51;                av_dict_set(&opts,"qmax",QString("%1").arg(VideoStream->codec->qmax).toUtf8(),0);
+         VideoStream->codec->qmin    =ImageHeight<=576?1:11;                 av_dict_set(&opts,"qmin",QString("%1").arg(VideoStream->codec->qmin).toUtf8(),0);
+         VideoStream->codec->mb_lmin =VideoStream->codec->qmin*FF_QP2LAMBDA;
+-        VideoStream->codec->lmin    =VideoStream->codec->qmin*FF_QP2LAMBDA;
+         VideoStream->codec->mb_lmax =VideoStream->codec->qmax*FF_QP2LAMBDA;
+-        VideoStream->codec->lmax    =VideoStream->codec->qmax*FF_QP2LAMBDA;
+ 
+         if (ImageHeight<=720) av_dict_set(&opts,"profile","0",0); else av_dict_set(&opts,"profile","1",0);
+         if (ImageHeight>576)  av_dict_set(&opts,"slices","4",0);
