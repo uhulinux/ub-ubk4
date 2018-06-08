@@ -1,7 +1,7 @@
-diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
---- orig/misc/mc.ext.in	2016-03-12 16:45:47.000000000 +0100
-+++ patched/misc/mc.ext.in	2016-03-28 12:51:51.716281400 +0200
-@@ -118,45 +118,45 @@
+diff -Naur mc-4.8.21-orig/misc/mc.ext.in mc-4.8.21/misc/mc.ext.in
+--- mc-4.8.21-orig/misc/mc.ext.in	2018-05-27 21:56:21.000000000 +0200
++++ mc-4.8.21/misc/mc.ext.in	2018-06-08 10:34:36.929149886 +0200
+@@ -118,35 +118,35 @@
  ### Archives ###
  
  # .tgz, .tpz, .tar.gz, .tar.z, .tar.Z, .ipk, .gem
@@ -44,6 +44,9 @@ diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
  	Open=%cd %p/utar://
  	View=%view{ascii} @EXTHELPERSDIR@/archive.sh view tar.xz
  
+@@ -156,12 +156,12 @@
+ 	View=%view{ascii} @EXTHELPERSDIR@/archive.sh view tar.zst
+ 
  # .tar.F - used in QNX
 -shell/.tar.F
 +shell/i/.tar.F
@@ -56,7 +59,7 @@ diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
  	Open=%cd %p/utar://
  	View=%view{ascii} @EXTHELPERSDIR@/archive.sh view tar.qpr
  
-@@ -196,23 +196,23 @@
+@@ -201,19 +201,19 @@
  	View=%view{ascii} @EXTHELPERSDIR@/archive.sh view alz
  
  # cpio
@@ -79,6 +82,10 @@ diff -Naur orig/misc/mc.ext.in patched/misc/mc.ext.in
 +shell/i/.cpio.xz
  	Open=%cd %p/ucpio://
  	View=%view{ascii} @EXTHELPERSDIR@/archive.sh view cpio.xz
+ 
+@@ -221,7 +221,7 @@
+ 	Open=%cd %p/ucpio://
+ 	View=%view{ascii} @EXTHELPERSDIR@/archive.sh view cpio.zst
  
 -shell/.cpio.gz
 +shell/i/.cpio.gz

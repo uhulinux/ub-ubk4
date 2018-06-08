@@ -1,6 +1,6 @@
-diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
---- orig/src/filemanager/boxes.c	2017-11-18 18:45:59.134739579 +0100
-+++ patched/src/filemanager/boxes.c	2017-12-27 17:53:27.775211429 +0100
+diff -Naur mc-4.8.21-orig/src/filemanager/boxes.c mc-4.8.21/src/filemanager/boxes.c
+--- mc-4.8.21-orig/src/filemanager/boxes.c	2018-05-27 21:56:21.000000000 +0200
++++ mc-4.8.21/src/filemanager/boxes.c	2018-06-08 09:53:10.772194051 +0200
 @@ -104,9 +104,11 @@
  static unsigned long panel_list_formats_id, panel_user_format_id, panel_brief_cols_id;
  static unsigned long mini_user_status_id, mini_user_format_id;
@@ -45,9 +45,9 @@ diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
  
  /* --------------------------------------------------------------------------------------------- */
  /** Show tree in a box, not on a panel */
-diff -Naur orig/src/filemanager/boxes.h patched/src/filemanager/boxes.h
---- orig/src/filemanager/boxes.h	2017-03-04 18:51:38.134739579 +0100
-+++ patched/src/filemanager/boxes.h	2017-12-27 17:53:27.775211429 +0100
+diff -Naur mc-4.8.21-orig/src/filemanager/boxes.h mc-4.8.21/src/filemanager/boxes.h
+--- mc-4.8.21-orig/src/filemanager/boxes.h	2017-03-04 18:51:38.000000000 +0100
++++ mc-4.8.21/src/filemanager/boxes.h	2018-06-08 09:54:38.322012503 +0200
 @@ -25,7 +25,9 @@
                         int *brief_cols);
  const panel_field_t *sort_box (dir_sort_options_t * op, const panel_field_t * sort_field);
@@ -58,10 +58,10 @@ diff -Naur orig/src/filemanager/boxes.h patched/src/filemanager/boxes.h
  void configure_vfs (void);
  void jobs_cmd (void);
  char *cd_dialog (void);
-diff -Naur orig/src/filemanager/midnight.c patched/src/filemanager/midnight.c
---- orig/src/filemanager/midnight.c	2017-05-02 21:00:18.134739579 +0200
-+++ patched/src/filemanager/midnight.c	2017-12-27 17:53:27.775211429 +0100
-@@ -1179,9 +1179,11 @@
+diff -Naur mc-4.8.21-orig/src/filemanager/midnight.c mc-4.8.21/src/filemanager/midnight.c
+--- mc-4.8.21-orig/src/filemanager/midnight.c	2018-05-27 21:56:21.000000000 +0200
++++ mc-4.8.21/src/filemanager/midnight.c	2018-06-08 09:56:39.388527260 +0200
+@@ -1173,9 +1173,11 @@
          diff_view_cmd ();
          break;
  #endif
@@ -73,13 +73,13 @@ diff -Naur orig/src/filemanager/midnight.c patched/src/filemanager/midnight.c
      case CK_Edit:
          edit_cmd ();
          break;
-diff -Naur orig/src/setup.c patched/src/setup.c
---- orig/src/setup.c	2017-05-02 21:00:18.134739579 +0200
-+++ patched/src/setup.c	2017-12-27 17:53:27.775211429 +0100
-@@ -293,11 +293,13 @@
-     { "confirm_directory_hotlist_delete", &confirm_directory_hotlist_delete },
+diff -Naur mc-4.8.21-orig/src/setup.c mc-4.8.21/src/setup.c
+--- mc-4.8.21-orig/src/setup.c	2018-05-27 21:56:21.000000000 +0200
++++ mc-4.8.21/src/setup.c	2018-06-08 09:58:47.799336727 +0200
+@@ -296,11 +296,13 @@
      { "confirm_view_dir", &confirm_view_dir },
      { "safe_delete", &safe_delete },
+     { "safe_overwrite", &safe_overwrite },
 +#if 0
  #ifndef HAVE_CHARSET
      { "eight_bit_clean", &mc_global.eight_bit_clean },
