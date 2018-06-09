@@ -1,12 +1,12 @@
-diff -Nur orig/src/makefile mod/src/makefile
---- orig/src/makefile	2018-02-11 06:29:59.000000000 +0100
-+++ mod/src/makefile	2018-02-15 10:44:43.984915631 +0100
-@@ -88,18 +88,18 @@
- 	#binary
+diff -Naur orig/src/makefile patched/src/makefile
+--- orig/src/makefile	2018-03-18 04:59:17.000000000 +0100
++++ patched/src/makefile	2018-06-09 06:43:36.137601289 +0200
+@@ -93,18 +93,18 @@
  	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
- 	install -m 0755 gtk3-version-polo "$(DESTDIR)$(bindir)"
+ 	install -m 0755 ${app_name}-gtk3-helper "$(DESTDIR)$(bindir)"
+ 	install -m 0755 ${app_name}-disk "$(DESTDIR)$(bindir)"
 -	install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
-+	#install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
++	# install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
  
  	#shared files
  	cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/${app_name}" ./share/${app_name}/*
@@ -23,12 +23,12 @@ diff -Nur orig/src/makefile mod/src/makefile
  
  	# appdata
  	install -m 0755 ../debian/${app_name}-gtk.appdata.xml "$(DESTDIR)$(sharedir)/appdata"
-@@ -115,7 +115,7 @@
- 	#binary
+@@ -121,7 +121,7 @@
  	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk"
- 	rm -f "$(DESTDIR)$(bindir)/gtk3-version-polo"
+ 	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk3-helper"
+ 	rm -f "$(DESTDIR)$(bindir)/${app_name}-disk"
 -	rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
-+	#rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
++	# rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
  
  	#shared files
  	rm -rf "$(DESTDIR)$(sharedir)/${app_name}"

@@ -1,0 +1,12 @@
+diff -Naur orig/src/Gtk/TermBox.vala patched/src/Gtk/TermBox.vala
+--- orig/src/Gtk/TermBox.vala	2018-03-18 04:59:17.000000000 +0100
++++ patched/src/Gtk/TermBox.vala	2018-06-09 06:50:54.138870517 +0200
+@@ -249,7 +249,7 @@
+ 			cmd = "%s\n".printf(cmd);
+ 		}
+ 		
+-		term.feed_child(cmd, -1);
++		term.feed_child(cmd.to_utf8());
+ 	}
+ 
+ 	public void refresh(){
