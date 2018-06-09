@@ -1,10 +1,10 @@
 diff -Naur orig/chrome/browser/ui/startup/startup_browser_creator_impl.cc patched/chrome/browser/ui/startup/startup_browser_creator_impl.cc
---- orig/chrome/browser/ui/startup/startup_browser_creator_impl.cc	2018-03-07 00:04:20.000000000 +0100
-+++ patched/chrome/browser/ui/startup/startup_browser_creator_impl.cc	2018-03-07 23:49:14.729609546 +0100
-@@ -797,8 +797,6 @@
-     chrome::ShowBadFlagsPrompt(browser);
-     InfoBarService* infobar_service = InfoBarService::FromWebContents(
-         browser->tab_strip_model()->GetActiveWebContents());
+--- orig/chrome/browser/ui/startup/startup_browser_creator_impl.cc	2018-06-06 21:13:38.000000000 +0200
++++ patched/chrome/browser/ui/startup/startup_browser_creator_impl.cc	2018-06-07 23:52:45.891816340 +0200
+@@ -900,8 +900,6 @@
+     chrome::ShowBadFlagsPrompt(web_contents);
+     InfoBarService* infobar_service =
+         InfoBarService::FromWebContents(web_contents);
 -    if (!google_apis::HasKeysConfigured())
 -      GoogleApiKeysInfoBarDelegate::Create(infobar_service);
      if (ObsoleteSystem::IsObsoleteNowOrSoon()) {

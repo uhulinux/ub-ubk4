@@ -1,9 +1,7 @@
-description: disable third-party cookies by default
-author: Chad Miller <chad.miller@canonical.com>
-
---- a/components/content_settings/core/browser/cookie_settings.cc
-+++ b/components/content_settings/core/browser/cookie_settings.cc
-@@ -88,7 +88,7 @@ void CookieSettings::GetCookieSettings(
+diff -Naur orig/components/content_settings/core/browser/cookie_settings.cc patched/components/content_settings/core/browser/cookie_settings.cc
+--- orig/components/content_settings/core/browser/cookie_settings.cc	2018-06-06 21:13:43.000000000 +0200
++++ patched/components/content_settings/core/browser/cookie_settings.cc	2018-06-07 23:56:25.494490994 +0200
+@@ -111,7 +111,7 @@
  void CookieSettings::RegisterProfilePrefs(
      user_prefs::PrefRegistrySyncable* registry) {
    registry->RegisterBooleanPref(
