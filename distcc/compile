@@ -1,8 +1,9 @@
 #!/bin/sh -eux
 
 ./autogen.sh
- ub_compile \
+ ub_configure \
 	--with-gtk \
 	--sysconfdir=/etc \
 	--mandir=/usr/share/man \
 	--enable-rfc2553
+make  WERROR_CFLAGS=
