@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
-rm -f meson.build
+export PKG_CONFIG_PATH=/usr/lib/ffmpeg3/pkgconfig
+
 ub_compile
