@@ -4,7 +4,7 @@ diff -Nur orig/configure.inc mod/configure.inc
 @@ -1420,7 +1420,7 @@
  
      AC_SUB 'INSTALL' "$PROG_INSTALL"
-     AC_SUB 'INSTALL_PROGRAM' "$PROG_INSTALL -s -m 755"
+     AC_SUB 'INSTALL_PROGRAM' "$PROG_INSTALL $_strip -m 755"
 -    AC_SUB 'INSTALL_DATA' "$PROG_INSTALL -m 444"
 +    AC_SUB 'INSTALL_DATA' "$PROG_INSTALL -m 644"
  
