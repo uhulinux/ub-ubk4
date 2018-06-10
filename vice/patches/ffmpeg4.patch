@@ -1,0 +1,39 @@
+diff -Nur orig/src/gfxoutputdrv/ffmpegdrv.c mod/src/gfxoutputdrv/ffmpegdrv.c
+--- orig/src/gfxoutputdrv/ffmpegdrv.c	2017-09-16 19:58:07.000000000 +0200
++++ mod/src/gfxoutputdrv/ffmpegdrv.c	2018-06-10 17:44:38.000170835 +0200
+@@ -360,7 +360,7 @@
+     }
+ 
+     audio_is_open = 1;
+-    if (c->codec->capabilities & CODEC_CAP_VARIABLE_FRAME_SIZE) {
++    if (c->codec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE) {
+         audio_inbuf_samples = 10000;
+     } else {
+         audio_inbuf_samples = c->frame_size;
+@@ -454,7 +454,7 @@
+ 
+     /* Some formats want stream headers to be separate. */
+     if (ffmpegdrv_oc->oformat->flags & AVFMT_GLOBALHEADER)
+-        c->flags |= CODEC_FLAG_GLOBAL_HEADER;
++        c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+ 
+     /* create resampler context */
+ #ifndef HAVE_FFMPEG_AVRESAMPLE
+@@ -787,7 +787,7 @@
+ 
+     /* Some formats want stream headers to be separate. */
+     if (ffmpegdrv_oc->oformat->flags & AVFMT_GLOBALHEADER) {
+-        c->flags |= CODEC_FLAG_GLOBAL_HEADER;
++        c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+     }
+ 
+     if (audio_init_done) {
+@@ -967,7 +967,7 @@
+ 
+     video_st.frame->pts = video_st.next_pts++;
+ 
+-    if (ffmpegdrv_oc->oformat->flags & AVFMT_RAWPICTURE) {
++    if (ffmpegdrv_oc->oformat->flags) {
+         AVPacket pkt;
+         VICE_P_AV_INIT_PACKET(&pkt);
+         pkt.flags |= AV_PKT_FLAG_KEY;
