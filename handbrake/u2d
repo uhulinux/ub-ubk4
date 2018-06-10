@@ -1,2 +1,1 @@
-u2d https://handbrake.fr/downloads.php
-
+urllist https://handbrake.fr/downloads.php/ | sed s/.*file=HandBrake-//g | splitver '^([0-9.]+)-source.tar.bz2$'
