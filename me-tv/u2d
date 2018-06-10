@@ -1,1 +1,1 @@
-curl -s -k https://raw.githubusercontent.com/Me-TV/Me-TV/master/CMakeLists.txt | grep -o 'VERSION_BASE [0-9.]*' | sed 's/VERSION_BASE //' | sort -V | tail -n 1
+curl -s -k https://raw.githubusercontent.com/Me-TV/Me-TV/master/Cargo.toml | grep ^version | sed 's/.* \"'//g | sed 's/\".*'//g | sort -V | tail -n 1
