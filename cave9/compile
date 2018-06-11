@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
+export CFLAGS='-Wno-error=cpp -Wno-error=int-in-bool-context -Wno-format-truncation'
+export LDFLAGS=''
 ub_compile
