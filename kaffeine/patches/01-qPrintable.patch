@@ -1,0 +1,41 @@
+From a9f09d4d84509259b92153f39e99e036bfcbcb61 Mon Sep 17 00:00:00 2001
+From: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Date: Wed, 16 May 2018 14:11:26 -0300
+Subject: [PATCH] only use qPrintable() for debug messages
+
+There are two places qhere qPrintable() is not used for print
+messages. Replace them by explicit conversion from QString
+to char *.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ src/backend-vlc/vlcmediawidget.cpp | 2 +-
+ src/dvb/dvbconfigdialog.cpp        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/backend-vlc/vlcmediawidget.cpp b/src/backend-vlc/vlcmediawidget.cpp
+index 2421dd6..9be6263 100644
+--- a/src/backend-vlc/vlcmediawidget.cpp
++++ b/src/backend-vlc/vlcmediawidget.cpp
+@@ -427,7 +427,7 @@ void VlcMediaWidget::setExternalSubtitle(const QUrl &url)
+ 		qCWarning(logMediaWidget, "Cannot set subtitle file %s", qPrintable(fname));
+ #else
+ 	if (libvlc_video_set_subtitle_file(vlcMediaPlayer,
+-					   qPrintable(fname)) == 0)
++					   fname.toLocal8Bit().constData()) == 0)
+ 		qCWarning(logMediaWidget, "Cannot set subtitle file %s", qPrintable(fname));
+ #endif
+ }
+diff --git a/src/dvb/dvbconfigdialog.cpp b/src/dvb/dvbconfigdialog.cpp
+index fc44459..a639635 100644
+--- a/src/dvb/dvbconfigdialog.cpp
++++ b/src/dvb/dvbconfigdialog.cpp
+@@ -1539,7 +1539,7 @@ void DvbSLnbConfigObject::configure()
+ 
+ 	for (i = 0; i < size; i++) {
+ 		struct lnbSat lnb = device->getLnbSatModels().at(i);
+-		QRadioButton *radioButton = new QRadioButton(i18nd("libdvbv5", qPrintable(lnb.name)), mainWidget);
++		QRadioButton *radioButton = new QRadioButton(i18nd("libdvbv5", lnb.name.toLocal8Bit().constData()), mainWidget);
+ 		mainLayout->addWidget(radioButton);
+ 		lnbSelectionGroup->addButton(radioButton, i + 1);
+ 		gridLayout->addWidget(radioButton, i % ((size + 1) / 2), i / ((size + 1) / 2));

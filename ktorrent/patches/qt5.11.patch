@@ -1,0 +1,44 @@
+diff -Naur orig/ktorrent/dialogs/fileselectdlg.cpp patched/ktorrent/dialogs/fileselectdlg.cpp
+--- orig/ktorrent/dialogs/fileselectdlg.cpp	2017-08-31 13:21:19.000000000 +0200
++++ patched/ktorrent/dialogs/fileselectdlg.cpp	2018-06-11 15:31:30.882213555 +0200
+@@ -23,6 +23,7 @@
+ #include <QMenu>
+ #include <QPushButton>
+ #include <QTextCodec>
++#include <QButtonGroup>
+ 
+ #include <KIO/Global>
+ #include <KLocalizedString>
+diff -Naur orig/ktorrent/dialogs/torrentcreatordlg.h patched/ktorrent/dialogs/torrentcreatordlg.h
+--- orig/ktorrent/dialogs/torrentcreatordlg.h	2017-08-31 13:21:19.000000000 +0200
++++ patched/ktorrent/dialogs/torrentcreatordlg.h	2018-06-11 15:33:16.199718835 +0200
+@@ -23,6 +23,7 @@
+ #define KT_TORRENTCREATORDLG_HH
+ 
+ #include <QDialog>
++#include <QTimer>
+ #include "ui_torrentcreatordlg.h"
+ #include <torrent/torrentcreator.h>
+ 
+diff -Naur orig/ktorrent/groups/groupview.cpp patched/ktorrent/groups/groupview.cpp
+--- orig/ktorrent/groups/groupview.cpp	2017-08-31 13:21:19.000000000 +0200
++++ patched/ktorrent/groups/groupview.cpp	2018-06-11 15:31:30.882213555 +0200
+@@ -26,6 +26,7 @@
+ #include <QInputDialog>
+ #include <QMenu>
+ #include <QTreeWidgetItemIterator>
++#include <QHeaderView>
+ 
+ #include <KActionCollection>
+ #include <KConfigGroup>
+diff -Naur orig/plugins/search/searchprefpage.cpp patched/plugins/search/searchprefpage.cpp
+--- orig/plugins/search/searchprefpage.cpp	2017-08-31 13:21:19.000000000 +0200
++++ patched/plugins/search/searchprefpage.cpp	2018-06-11 15:31:30.882213555 +0200
+@@ -30,6 +30,7 @@
+ #include <QRadioButton>
+ #include <QToolTip>
+ #include <QUrl>
++#include <QButtonGroup>
+ 
+ #include <KIconLoader>
+ #include <KLocalizedString>
