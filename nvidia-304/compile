@@ -12,6 +12,7 @@ rm *.run
 cd $forras
 patch -i "$UB_SRCDIR"/patches/menu.patch.skip
 cd kernel
+patch -i "$UB_SRCDIR"/patches/4.14_kernel.patch.skip
 patch -i "$UB_SRCDIR"/patches/disable-mtrr.patch.skip
 #patch -i "$UB_SRCDIR"/patches/drm-driver-legacy.patch.skip
 #patch -i "$UB_SRCDIR"/patches/linux-4.6.patch.skip

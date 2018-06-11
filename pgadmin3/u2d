@@ -1,1 +1,1 @@
-urllist https://www.postgresql.org/ftp/pgadmin/pgadmin3/ | sed -e' s/-/~/g' | tr -d 'v' | grep -E '^([0-9.]+)$' | sort -V | tail -n 1
+urllist https://www.postgresql.org/ftp/pgadmin/pgadmin3/ | grep -E '^v([0-9.]+)' | sort -V | tail -n 1 | sed s/v//
