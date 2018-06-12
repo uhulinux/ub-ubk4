@@ -5,10 +5,13 @@ export CHOST="x86_64-gnu-linux"
 export CBUILD="x86_64-gnu-linux"
 
 cd build/workspaces
+export CXXFLAGS+=' -DU_USING_ICU_NAMESPACE=1'
+export SDL2_CONFIG="pkg-config sdl2"
 ./update-workspaces.sh \
 	--bindir=/usr/bin \
     --libdir=/usr/lib/0ad \
-    --datadir=/usr/share/0ad/data
+    --datadir=/usr/share/0ad/data \
+    --without-pch \
 
 cd gcc
 ub_make
