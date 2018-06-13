@@ -1,10 +1,18 @@
 #!/bin/bash -eux
 
-KVER="$(ls -1 /lib/modules | grep x86_64)"
+if [ "$UB_ARCH" == "amd64" ];then
+	KVER="$(ls -1 /lib/modules | grep x86_64)"
+else
+	KVER="$(ls -1 /lib/modules | grep i386)"
+fi
 
 #célkönyvtárak
 cellibdir="$UB_INSTALLDIR"/usr/lib
-moduldir="$cellibdir"/modules/"$KVER"/kernel/drivers
+
+moduldir="$UB_INSTALLDIR"/lib/modules/"$KVER"/kernel/drivers
+
+#moduldir="$cellibdir"/modules/"$KVER"/kernel/drivers
+
 xmoduldir="$cellibdir"/xorg/modules
 sharedir="$UB_INSTALLDIR"/usr/share
 desktopdir="$sharedir"/applications
@@ -14,6 +22,7 @@ pixmapdir="$sharedir"/pixmaps/
 egldir="$sharedir"/egl/egl_external_platform.d
 vulcandir="$sharedir"/vulcan/icd.d
 xconfdir="$sharedir"/X11/x.org.conf.d
+glvnddir="$sharedir"/glvnd/egl_vendor.d
 
 #könyvtárgyártás
 mkdir -p "$cellibdir"/nvidia \
@@ -25,7 +34,8 @@ mkdir -p "$cellibdir"/nvidia \
 	"$pixmapdir" \
 	"$egldir" \
 	"$vulcandir" \
-	"$xconfdir"
+	"$xconfdir" \
+	"$glvnddir"
 
 #kernelmodulok
 cp kernel/*.ko "$moduldir"/
@@ -53,6 +63,9 @@ mv	*.1 "$mandir"/
 # vendor
 mv	nvidia.icd "$vendordir"/
 
+# glvnd
+mv 10_nvidia.json "$glvnddir"/
+
 # biztonságba helyezés a régi módon
 mv	libglx.so."$UB_VERSION" "$cellibdir"/nvidia/
 
@@ -78,8 +91,14 @@ mv nvidia-persistenced-init/systemd/nvidia-persistenced.service.template \
 
 # minden áthelyezése a libekbe
 mv *.so.* "$cellibdir"/
-# remove conflicting mesa lib
-rm -f "$cellibdir"/libGLESv2.so.2
+
+# remove conflicting libglvnd libs      # package vs libglvnd
+rm -f "$cellibdir"/libGLESv2.so.2       # file vs link
+rm -f "$cellibdir"/libGL.so.1.0.0       # file vs file
+rm -f "$cellibdir"/libGLX.so.0          # file vs link
+rm -f "$cellibdir"/libGLdispatch.so.0   # file vs link
+rm -f "$cellibdir"/libOpenGL.so.0       # file vs link
+
 #linkgyártások
 cd "$cellibdir"
 
