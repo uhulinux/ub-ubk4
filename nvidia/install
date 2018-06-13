@@ -1,18 +1,10 @@
 #!/bin/bash -eux
 
-if [ "$UB_ARCH" == "amd64" ];then
-	KVER="$(ls -1 /lib/modules | grep x86_64)"
-else
-	KVER="$(ls -1 /lib/modules | grep i386)"
-fi
+KVER="$(ls -1 /lib/modules | grep x86_64)"
 
 #célkönyvtárak
 cellibdir="$UB_INSTALLDIR"/usr/lib
-
 moduldir="$UB_INSTALLDIR"/lib/modules/"$KVER"/kernel/drivers
-
-#moduldir="$cellibdir"/modules/"$KVER"/kernel/drivers
-
 xmoduldir="$cellibdir"/xorg/modules
 sharedir="$UB_INSTALLDIR"/usr/share
 desktopdir="$sharedir"/applications
