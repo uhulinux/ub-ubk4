@@ -1,0 +1,41 @@
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2018-01-27 14:16:58.000000000 +0100
++++ patched/configure.ac	2018-06-12 09:50:03.404203281 +0200
+@@ -94,23 +94,7 @@
+ AC_FUNC_MMAP
+ 
+ dnl external stuff
+-AC_CHECK_LIB(Qt5Core, main,
+-  [HAVE_QT5="yes"],
+-  [AC_MSG_ERROR([Qt5Core library not found])])
+-
+-AC_CHECK_LIB(Qt5Gui, main,
+-  [HAVE_QT5="yes"],
+-  [AC_MSG_ERROR([Qt5Gui library not found])])
+-
+-AC_CHECK_LIB(Qt5Xml, main,
+-  [HAVE_QT5="yes"],
+-  [AC_MSG_ERROR([Qt5Xml library not found])])
+-
+-AC_CHECK_LIB(Qt5Widgets, main,
+-  [HAVE_QT5="yes"],
+-  [AC_MSG_ERROR([Qt5Widgets library not found])])
+-
+-if test "x$HAVE_QT5" = "xyes"; then
++# if test "x$HAVE_QT5" = "xyes"; then
+    QT_CXXFLAGS=`$PKG_CONFIG --cflags Qt5Core Qt5Gui Qt5Xml Qt5Widgets`
+ 
+       #error "You must build your code with position independent code if Qt was built with -reduce-relocations. " \
+@@ -124,9 +108,9 @@
+    QT_LIBS=`$PKG_CONFIG --libs Qt5Core Qt5Gui Qt5Xml Qt5Widgets`
+    CPPFLAGS="$CPPFLAGS $QT_CXXFLAGS"
+    LIBS="$LIBS $QT_LIBS"
+-else
+-   AC_MSG_ERROR([cannot find Qt5 library >= 5.3])
+-fi
++# else
++#   AC_MSG_ERROR([cannot find Qt5 library >= 5.3])
++# fi
+ 
+ AC_DEFINE(__STDC_LIMIT_MACROS, 1, [Required for C++])
+ AC_DEFINE(__STDC_CONSTANT_MACROS, 1, [Required for C++])
