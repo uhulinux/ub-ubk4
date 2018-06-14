@@ -15,5 +15,7 @@ kmk all
 
 cd ./out/linux.amd64/release/bin/src
 
+# The variable KERN_DIR must be a kernel build folder and
+# end with /build without a trailing slash, or KERN_VER must be set.
 ub_make \
-	KERN_DIR="/usr/src/`readlink /usr/src/linux`"
+	KERN_DIR="$(echo /lib/modules/*.x86_64/build)"

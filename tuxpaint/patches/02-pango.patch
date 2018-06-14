@@ -1,0 +1,18 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2014-08-19 09:28:33.000000000 +0200
++++ patched/Makefile	2018-06-14 02:31:58.008444136 +0200
+@@ -92,10 +92,13 @@
+ FRIBIDI_LIB:=$(shell $(PKG_CONFIG) --libs fribidi)
+ FRIBIDI_CFLAGS:=$(shell $(PKG_CONFIG) --cflags fribidi)
+ 
++PANGO_LIB:=$(shell $(PKG_CONFIG) --libs pangoft2)
++PANGO_CFLAGS:=$(shell $(PKG_CONFIG) --cflags pangoft2)
++
+ windows_ARCH_LINKS:=-lintl $(PNG) -lzdll -lwinspool -lshlwapi $(FRIBIDI_LIB) -liconv
+ osx_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB)
+ beos_ARCH_LINKS:=-lintl $(PNG) -lz -lbe -lnetwork -liconv $(FRIBIDI_LIB) $(PAPER_LIB) $(STDC_LIB)
+-linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB)
++linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB) $(PANGO_LIB)
+ ARCH_LINKS:=$($(OS)_ARCH_LINKS)
+ 
+ windows_ARCH_HEADERS:=src/win32_print.h
