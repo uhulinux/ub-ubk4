@@ -1,10 +1,10 @@
 diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
---- orig/src/branding/default/show.qml	2017-11-14 16:18:58.000000000 +0100
-+++ mod/src/branding/default/show.qml	2017-11-19 14:27:03.000000000 +0100
-@@ -24,8 +24,8 @@
-     id: presentation
+--- orig/src/branding/default/show.qml	2018-05-17 17:13:54.000000000 +0200
++++ mod/src/branding/default/show.qml	2018-06-12 12:41:42.406652251 +0200
+@@ -25,8 +25,8 @@
  
      Timer {
+         id: advanceTimer
 -        interval: 5000
 -        running: false
 +        interval: 20000
@@ -12,7 +12,7 @@ diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
          repeat: true
          onTriggered: presentation.goToNextSlide()
      }
-@@ -34,7 +34,7 @@
+@@ -35,7 +35,7 @@
  
          Image {
              id: background
@@ -21,7 +21,7 @@ diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
              width: 200; height: 200
              fillMode: Image.PreserveAspectFit
              anchors.centerIn: parent
-@@ -42,22 +42,20 @@
+@@ -43,11 +43,9 @@
          Text {
              anchors.horizontalCenter: background.horizontalCenter
              anchors.top: background.bottom
@@ -34,10 +34,9 @@ diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
 +                  "kevés, de lelkes ember munkájának gyümölcse.<br/>"+
 +                  "A telepítés ideje alatt kis diavetítés látható."
              wrapMode: Text.WordWrap
--            width: root.width
-+            width: 600
+             width: presentation.width
              horizontalAlignment: Text.Center
-         }
+@@ -55,11 +53,11 @@
      }
  
      Slide {
@@ -49,4 +48,5 @@ diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
 -        centeredText: "This is a third Slide element."
 +        centeredText: "de mára már teljesen független tőle."
      }
- }
+ 
+     Component.onCompleted: advanceTimer.running = true

@@ -1,28 +1,26 @@
 diff -Nur orig/settings.conf mod/settings.conf
---- orig/settings.conf	2017-11-14 16:18:58.000000000 +0100
-+++ mod/settings.conf	2017-11-22 09:52:44.000000000 +0100
-@@ -66,6 +66,7 @@
-   - keyboard
+--- orig/settings.conf	2018-05-17 17:13:54.000000000 +0200
++++ mod/settings.conf	2018-06-12 13:33:47.702505428 +0200
+@@ -78,6 +78,7 @@
    - partition
    - users
+ #  - tracking
 +  - netinstall
    - summary
  - exec:
  #  - dummycpp
-@@ -74,26 +75,31 @@
+@@ -86,26 +87,22 @@
  #  - dummypythonqt
    - partition
    - mount
 -  - unpackfs
 +  - chrootcfg
 +  - networkcfg
-+#  - unpackfs
 +  - packages
    - machineid
    - fstab
    - locale
 -  - keyboard
-+#  - keyboard
    - localecfg
  #  - luksbootkeyfile
  #  - luksopenswaphookcfg
@@ -30,27 +28,20 @@ diff -Nur orig/settings.conf mod/settings.conf
  #  - plymouthcfg
 -  - initcpiocfg
 -  - initcpio
-+#  - initcpiocfg
-+#  - initcpio
    - users
-+#  - removeuser
    - displaymanager
 -  - networkcfg
-+#  - networkcfg
    - hwclock
 -  - services
-+#  - services
  #  - dracut
 -  - initramfs
 -#  - grubcfg
-+# A ramdiszket a kernel már megcsinálta netinstall esetén
-+#  - initramfs
 +  - grubcfg
    - bootloader
    - umount
  - show:
-@@ -127,3 +133,7 @@
- # Default is false.
+@@ -146,3 +143,7 @@
+ #
  # YAML: boolean.
  dont-chroot: false
 +

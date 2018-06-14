@@ -1,6 +1,6 @@
 diff -Nur orig/src/modules/packages/packages.conf mod/src/modules/packages/packages.conf
---- orig/src/modules/packages/packages.conf	2017-11-14 16:18:58.000000000 +0100
-+++ mod/src/modules/packages/packages.conf	2017-11-30 20:03:20.696271283 +0100
+--- orig/src/modules/packages/packages.conf	2018-05-17 17:13:54.000000000 +0200
++++ mod/src/modules/packages/packages.conf	2018-06-12 13:14:30.272149269 +0200
 @@ -12,7 +12,7 @@
  #  - entropy     - Sabayon package manager
  #  - dummy       - Dummy manager, only logs
@@ -8,15 +8,16 @@ diff -Nur orig/src/modules/packages/packages.conf mod/src/modules/packages/packa
 -backend: dummy
 +backend: apt
  
- # If set to true, a package-manager specific update procedure
- # is run first (only if there is internet) to update the list
-@@ -111,12 +111,3 @@
+ # Often package installation needs an internet connection.
+ # Since you may allow system installation without a connection
+@@ -129,13 +129,3 @@
  # "binutils", and then a second time for "wget". When installing large numbers
  # of packages, this can lead to a considerable time savings.
  #
 -operations:
 -  - install:
 -    - vi
+-    - vi-${LOCALE}
 -    - wget
 -    - binutils
 -  - remove:

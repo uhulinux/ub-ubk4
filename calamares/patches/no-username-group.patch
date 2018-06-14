@@ -1,15 +1,15 @@
 diff -Nur orig/src/modules/users/CreateUserJob.cpp mod/src/modules/users/CreateUserJob.cpp
---- orig/src/modules/users/CreateUserJob.cpp	2017-11-14 16:18:58.000000000 +0100
-+++ mod/src/modules/users/CreateUserJob.cpp	2017-11-24 22:41:28.815166105 +0100
-@@ -151,7 +151,6 @@
+--- orig/src/modules/users/CreateUserJob.cpp	2018-05-17 17:13:54.000000000 +0200
++++ mod/src/modules/users/CreateUserJob.cpp	2018-06-12 13:09:47.372550813 +0200
+@@ -149,7 +149,6 @@
+     int ec = CalamaresUtils::System::instance()->
+              targetEnvCall( { "useradd",
                                "-m",
-                               "-s",
-                               "/bin/bash",
 -                              "-U",
                                "-c",
                                m_fullName,
                                m_userName } );
-@@ -177,7 +176,7 @@
+@@ -175,7 +174,7 @@
                        targetEnvCall( { "chown",
                                         "-R",
                                         QString( "%1:%2" ).arg( m_userName )

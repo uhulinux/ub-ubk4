@@ -1,29 +1,17 @@
-diff -Nur orig/TODO mod/TODO
---- orig/TODO	1970-01-01 01:00:00.000000000 +0100
-+++ mod/TODO	2017-11-18 08:54:09.000000000 +0100
-@@ -0,0 +1,25 @@
+diff -Nur orig/uhu-todo.patch mod/uhu-todo.patch
+--- orig/uhu-todo.patch	1970-01-01 01:00:00.000000000 +0100
++++ mod/uhu-todo.patch	2018-06-12 13:39:51.553988200 +0200
+@@ -0,0 +1,13 @@
++--------
 +UHU-UBK
 +--------
-+A hálózati és hálózat nélküli telepítési mód választható legyen.
-+- netinstall esetén kell a netinstall modul,
-+- offline módhoz nem kell a netistall modul, viszont kellenek a
-+  telepítendő csomagok az iso-ba. Kivéve, ha a telepítést úgy oldjuk
-+  meg, ahogy az uhu-installer: sima másolás a live rendszerről,
-+  a /dev/mapper kivételével.
 +  
-+NETINSTALL
 +- A hálózati settings.conf aktualizálása, ha választható a mód.
 +- A chrootcfg szkript csiszolása, felesleges részek kidobálása.
 +- Ha a chroot felépítése meghiúsul, a céleszköz leválasztása után az okot jelezni és rendben kilépni. 
 +- A packages.yaml csomagcsoportjainak részletes átnézése, ésszerű csoportosítások, újabbak felvétele, feleslegesek kidobálása.
 +- A packages.yaml subgroups funkciót működőképessé tenni, nem működik egyelőre a leírás szerint próbálgatva.
 +- Elérni, hogy a hiddden és eleve kijelölt alapcsomagokat telepítse előbb és ne a látható kijelölteket.
-+- Valamiképp jelezni kellene a csomagtelepítések előrehaladását a kijelző felületen. (Túl soká tart, és enélkül idegbeteg lesz a júzer.)
-+
-+OFFLINE
-+- Az offline settings.conf.live aktualizálása, ha választható a mód.
-+- A /dev/mapper törlése a telepítményről
-+KÖZÖS
 +- A diavetítés funkciót életre kelteni normális képekkel, feliratokkal.
 +- A fstab -ba csak a céltelepítményen lévő swap partíció veendő fel, eddig mindegyiket felveszi, ami a telepítéskor elérhető.
 +
