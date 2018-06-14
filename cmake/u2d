@@ -1,5 +1,7 @@
-for i in $(urllist http://www.cmake.org/files/ | grep -E '^v([0-9.]+)');do
-listatag=$(urllist http://www.cmake.org/files/$i/ | splitver '^cmake-([0-9.]+).tar.(gz|bz2|xz)$' | sort -V | tail -n 1)
-lista=$(echo -e "$lista\n$listatag")
+for minor in `urllist http://www.cmake.org/files/ | splitver '^v([0-9.]+)' | sort -Vr`;do
+verzio=$(u2d http://www.cmake.org/files/v$minor/)
+if [ "$verzio" ];then
+echo $verzio
+break
+fi
 done
-echo "$lista" | sort -V | tail -n 1

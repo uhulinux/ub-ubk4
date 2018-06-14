@@ -1,2 +1,1 @@
-alap=$(sflist podofo podofo | grep -E '^([0-9.]+)$' | sort -V | tail -n 1)
-sflist podofo podofo/"$alap" | parsever | sort -V | tail -n 1
+geturl http://podofo.sourceforge.net/download.html | grep podofo- | grep tar | sed s/.*podofo-//g | sed s/\.tar.*//g | sort -V | tail -n 1
