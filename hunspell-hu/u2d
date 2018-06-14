@@ -1,1 +1,7 @@
-u2dsubdir http://download.documentfoundation.org/libreoffice/src/
+for minor in `urllist http://download.documentfoundation.org/libreoffice/src/ | splitver '^([0-9.]+)$' | sort -Vr`;do
+verzio=$(u2d http://download.documentfoundation.org/libreoffice/src/"$minor"/)
+if [ "$verzio" ];then
+echo $verzio
+break
+fi
+done
