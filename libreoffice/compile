@@ -16,6 +16,8 @@ ccache --max-size=12G
 
 export QT5DIR=/usr/lib/qt5
 
+#export CFLAGS=-I/usr/include/harfbuzz
+
 # ha van a distro-configs alatt megfelelő tartalmú .conf fájl, ekkor az
 # ./autogen.sh --with-distro=<conffile> is használható
 # a LibreOfficeUHU.conf fájlhoz
@@ -25,10 +27,62 @@ export QT5DIR=/usr/lib/qt5
 
 # opciók a distro-configs/LibreOfficeUHU.conf-ból
 ./autogen.sh \
-	--build=x86_64-linux \
-	--host=x86_64-linux \
-	--target=x86_64-linux \
-	--with-distro=LibreOfficeUHU
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --mandir=/usr/share/man \
+    --infodir=/usr/share/info \
+    --with-lang="en-GB hu" \
+    --with-vendor=ubk.hu \
+    --with-help \
+    --with-fonts \
+    --with-external-tar=src \
+    --with-system-libs \
+    --with-system-headers \
+    --with-myspell-dicts \
+    --with-external-dict-dir=/usr/share/hunspell \
+    --without-java \
+    --without-system-jars \
+    --without-system-bluez \
+    --without-system-libabw \
+    --without-system-libcdr \
+    --without-system-libcmis \
+    --without-system-libebook \
+    --without-system-libepubgen \
+    --without-system-libexttextcat \
+    --without-system-libfreehand \
+    --without-system-libmspub \
+    --without-system-libmwaw \
+    --without-system-libnumbertext \
+    --without-system-libpagemaker \
+    --without-system-libqxp \
+    --without-system-libstaroffice \
+    --without-system-libzmf \
+    --without-system-lpsolve \
+    --without-system-mysql-cppconn \
+    --without-system-mythes \
+    --without-system-orcus \
+    --without-system-xmlsec \
+    --disable-coinmp \
+    --disable-dbgutil \
+    --disable-debug \
+    --disable-gstreamer-0-10 \
+    --disable-odk \
+    --disable-firebird-sdbc \
+    --disable-pdfimport \
+    --enable-avahi \
+    --enable-fetch-external \
+    --enable-gstreamer-1-0 \
+    --enable-postgresql-sdbc \
+    --enable-python \
+    --enable-ext-mariadb-connector \
+    --enable-ext-nlpsolver \
+    --enable-gio \
+    --enable-gtk3 \
+    --enable-gtk3-kde5 \
+    --enable-kde5 \
+    --enable-qt5 \
+    --enable-release-build
 
 # az unitcheck és a slowcheck nem kell
 make build-nocheck

@@ -1,0 +1,12 @@
+diff -Naur orig/vcl/unx/kde5/main.cxx patched/vcl/unx/kde5/main.cxx
+--- orig/vcl/unx/kde5/main.cxx	2018-05-24 19:00:05.000000000 +0200
++++ patched/vcl/unx/kde5/main.cxx	2018-06-14 23:23:33.419962266 +0200
+@@ -72,7 +72,7 @@
+         }
+ #endif
+ 
+-        KDE5SalInstance* pInstance = new KDE5SalInstance( new SvpSalYieldMutex() );
++        KDE5SalInstance* pInstance = new KDE5SalInstance( new SalYieldMutex() );
+         SAL_INFO( "vcl.kde5", "created KDE5SalInstance " << &pInstance );
+ 
+         // initialize SalData
