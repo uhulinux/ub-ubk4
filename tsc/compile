@@ -2,6 +2,12 @@
 
 git submodule update --init --recursive
 
+# mruby hack: mintha ez lenne az utolsó fordítható...
+cd mruby/mruby
+git checkout 277391e
+cd -
+
 cd tsc
 ub_compile \
-	-DENABLE_MRUBY=ON
+	-DENABLE_MRUBY=ON \
+	-DUSE_LIBXMLPP3=ON

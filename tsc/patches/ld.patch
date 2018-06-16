@@ -1,0 +1,13 @@
+diff -Naur orig/tsc/CMakeLists.txt patched/tsc/CMakeLists.txt
+--- orig/tsc/CMakeLists.txt	2018-06-15 03:23:12.000000000 +0200
++++ patched/tsc/CMakeLists.txt	2018-06-16 05:21:36.967683990 +0200
+@@ -224,7 +224,8 @@
+   ${PNG_LIBRARY}
+   ${PNG_LIBRARIES} # compatibility
+   ${MRuby_LIBRARIES}
+-  ${Tinyclipboard_LIBRARIES})
++  ${Tinyclipboard_LIBRARIES}
++  pthread) # boost-tread dependency
+ 
+ if (WIN32)
+   target_link_libraries(tsc
