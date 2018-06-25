@@ -94,6 +94,12 @@ rm -f "$cellibdir"/libOpenGL.so.0       # file vs link
 #linkgyártások
 cd "$cellibdir"
 
-ln -s libwfb.so xorg/modules/libnvidia-wfb.so."$UB_VERSION"
-ln -s libnvidia-ml.so."$UB_VERSION" libnvidia-ml.so.1
-ln -s libnvcuvid.so."$UB_VERSION" libnvcuvid.so.1
+ln -s libwfb.so xorg/modules/libnvidia-wfb.so.${UB_VERSION}
+ln -s libvdpau_nvidia.so.${UB_VERSION} libvdpau_nvidia.so.1
+ln -s libvdpau_nvidia.so.1 libvdpau_nvidia.so
+for i in `ls -1 libnv*`;do
+lib=$(echo $i | sed s/\.${UB_VERSION}//g)
+solink=$(echo $lib | sed s/so\..*/so/)
+ln -s $i $lib.1
+ln -s $lib.1 $solink
+done
