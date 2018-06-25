@@ -2,9 +2,6 @@
 
 ub_install
 
-mv "$UB_INSTALLDIR"/bin/{groups,login} "$UB_INSTALLDIR"/usr/bin/
-mv "$UB_INSTALLDIR"/sbin/nologin "$UB_INSTALLDIR"/usr/sbin/
-
 ln -sf system-auth "$UB_INSTALLDIR"/etc/pam.d/chfn
 ln -sf system-auth "$UB_INSTALLDIR"/etc/pam.d/chsh
 ln -sf system-auth "$UB_INSTALLDIR"/etc/pam.d/login
