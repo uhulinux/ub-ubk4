@@ -3,16 +3,6 @@
 ub_install
 
 ln -s bash "$UB_INSTALLDIR"/bin/sh
+ln -s ../../bin/bash "$UB_INSTALLDIR"/usr/bin/bash
 ln -s ../../bin/bash "$UB_INSTALLDIR"/usr/bin/sh
 ln -s bash.1 "$UB_INSTALLDIR"/usr/share/man/man1/sh.1
-
-mkdir -p "$UB_INSTALLDIR"/usr/lib/bash
-for i in examples/loadables/[a-z]*; do
-	if [ -f "$i" ]; then
-		case "$i" in
-		  *.*)	;;
-		  *)	install -m 755 "$i" "$UB_INSTALLDIR"/usr/lib/bash/
-			;;
-		esac
-	fi
-done

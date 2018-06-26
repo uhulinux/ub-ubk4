@@ -1,10 +1,9 @@
 #!/bin/sh -eux
 
 # users:
-# coredump: systemd-coredump
 # microhttpd: systemd-jornal-{gateway,remote}
 # libcurl: systemd-jornal-upload
-# --with-default-dnssec=no: a dnssec experimental
+# -Ddefault-dnssec=no: a dnssec experimental
 
 mv {usb,pci}.ids ma-{large,medium,small}.txt hwdb/
 
@@ -16,7 +15,7 @@ ub_compile \
 	-Dsplit-usr=false \
 	-Dlibcurl=false \
 	-Dmicrohttpd=false \
-	-Dcoredump=false \
+	-Dcoredump=true \
 	-Dwheel-group=false \
 	-Dusers-gid=999 \
 	-Dsystem-uid-max=999 \

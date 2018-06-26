@@ -3,6 +3,7 @@
 ub_compile \
 	--bindir=/bin \
 	--with-curses \
-	--with-installed-readline
+	--with-installed-readline \
+	--without-bash-malloc
 
-ub_make -C examples/loadables supported others
+ub_make
