@@ -1,27 +1,30 @@
 #!/bin/sh -eux
 
+# https://bugs.freedesktop.org/show_bug.cgi?id=106410
+rm -f meson.build
+
 ub_compile \
-    -Dplatforms=x11,drm,wayland \
-    -Ddri-drivers=i915,i965,r200,radeon,nouveau \
-    -Dgallium-drivers=r300,r600,radeonsi,nouveau,svga,swrast,virgl,swr \
-    -Dgallium-extra-hud=true \
-    -Dgallium-vdpau=true \
-    -Dgallium-xvmc=true \
-    -Dgallium-omx=auto \
-    -Dgallium-xa=true \
-    -Dgallium-nine=true \
-    -Dgallium-opencl=icd \
-    -Dgallium-va=true \
-    -Dvulkan-drivers=intel,radeon \
-    -Dshared-glapi=true \
-	-Dgles1=true \
-	-Dgles2=true \
-	-Dgbm=true \
-	-Dglx=dri \
-	-Degl=true \
-	-Dglvnd=true \
-	-Dllvm=true \
-	-Dlibunwind=true \
-	-Dlmsensors=true \
-	-Dtexture-float=true \
-	-Dosmesa=gallium
+    --with-platforms=x11,drm,wayland \
+    --with-dri-drivers=i915,i965,r200,radeon,nouveau \
+    --with-gallium-drivers=r300,r600,radeonsi,nouveau,svga,swrast,virgl,swr \
+    --enable-gallium-extra-hud \
+    --enable-vdpau \
+    --enable-xvmc \
+    --enable-omx-bellagio \
+    --enable-xa \
+    --enable-nine \
+    --enable-opencl-icd \
+    --enable-va \
+    --with-vulkan-drivers=intel,radeon \
+    --enable-shared-glapi \
+	--enable-gles1 \
+	--enable-gles2 \
+	--enable-gbm \
+	--enable-glx=dri \
+	--enable-egl \
+	--enable-libglvnd \
+	--enable-llvm \
+	--enable-libunwind \
+	--enable-lmsensors \
+	--enable-texture-float \
+	--enable-gallium-osmesa
