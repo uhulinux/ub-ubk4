@@ -1,30 +1,21 @@
 #!/bin/sh -eux
 
-# https://bugs.freedesktop.org/show_bug.cgi?id=106410
-rm -f meson.build
-
 ub_compile \
-    --with-platforms=x11,drm,wayland \
-    --with-dri-drivers=i915,i965,r200,radeon,nouveau \
-    --with-gallium-drivers=r300,r600,radeonsi,nouveau,svga,swrast,virgl,swr \
-    --enable-gallium-extra-hud \
-    --enable-vdpau \
-    --enable-xvmc \
-    --enable-omx-bellagio \
-    --enable-xa \
-    --enable-nine \
-    --enable-opencl-icd \
-    --enable-va \
-    --with-vulkan-drivers=intel,radeon \
-    --enable-shared-glapi \
-	--enable-gles1 \
-	--enable-gles2 \
-	--enable-gbm \
-	--enable-glx=dri \
-	--enable-egl \
-	--enable-libglvnd \
-	--enable-llvm \
-	--enable-libunwind \
-	--enable-lmsensors \
-	--enable-texture-float \
-	--enable-gallium-osmesa
+    -Dplatforms=x11,drm,wayland,surfaceless \
+    -Dswr-arches=avx,avx2 \
+    -Dri3=true \
+    -Dgallium-extra-hud=true \
+    -Dgallium-nine=true \
+    -Dgallium-opencl=icd \
+    -Dgallium-va=true \
+    -Dgallium-vdpau=true \
+    -Dgallium-xa=true \
+    -Dgallium-xvmc=true \
+	-Dgbm=true \
+	-Dglvnd=true \
+	-Dglx=dri \
+	-Dlibunwind=true \
+	-Dllvm=true \
+	-Dlmsensors=true \
+	-Dtexture-float=true \
+	-Dtools=all
