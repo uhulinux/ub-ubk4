@@ -1,8 +1,11 @@
 #!/bin/sh -eux
 
 ub_install
+
 for res in 16 32 48 128; do
 mkdir -p "${UB_INSTALLDIR}/usr/share/icons/hicolor/${res}x${res}/apps"
 cp share/icons/${res}x${res}/vlc.png \
 	"${UB_INSTALLDIR}/usr/share/icons/hicolor/${res}x${res}/apps/"
 done
+
+rm -Rf ${UB_INSTALLDIR}/usr/share/{kde4,macosx}
