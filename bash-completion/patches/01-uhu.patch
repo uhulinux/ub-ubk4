@@ -1,12 +1,12 @@
-diff -urN bash-completion-2.1.orig/completions/dpkg bash-completion-2.1/completions/dpkg
---- bash-completion-2.1.orig/completions/dpkg	2013-04-05 12:55:51.000000000 +0200
-+++ bash-completion-2.1/completions/dpkg	2014-03-21 11:28:07.916204689 +0100
-@@ -55,7 +55,7 @@
-         -c|-i|-A|-I|-f|-e|-x|-X|-W|--install|--unpack|--record-avail| \
+diff -Naur orig/completions/dpkg patched/completions/dpkg
+--- orig/completions/dpkg	2018-03-17 09:32:34.000000000 +0100
++++ patched/completions/dpkg	2018-07-03 03:01:25.412234089 +0200
+@@ -53,7 +53,7 @@
+         -c|-i|-A|-I|-f|-e|-x|-W|--install|--unpack|--record-avail| \
          --contents|--info|--fsys-tarfile|--field|--control|--extract| \
-         --show)
--            _filedir '?(u)deb'
-+            _filedir '?(u)deb|uhu'
-             return 0
+         --vextract)
+-            _filedir '?(u|d)deb'
++            _filedir '?(u|d)deb|uhu'
+             return
              ;;
          -b|--build)

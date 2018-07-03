@@ -3,10 +3,6 @@
 ub_install
 
 # remove conflicting files
-rm "$UB_INSTALLDIR"/usr/share/bash-completion/completions/{cal,dmesg,eject,hexdump,hwclock,ionice,look,mount,nmcli,renice,rfkill,rtcwake,su,umount}
+rm "$UB_INSTALLDIR"/usr/share/bash-completion/completions/{mount,umount}
 
 exit
-cp -a bash_completion "$UB_INSTALLDIR"/etc/
-
-mkdir "$UB_INSTALLDIR"/etc/bash_completion.d
-cp -a contrib/. "$UB_INSTALLDIR"/etc/bash_completion.d/
