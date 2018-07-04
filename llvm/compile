@@ -8,11 +8,9 @@ ffi_cflags=$(pkg-config --cflags-only-I libffi)
 ffi_ldflags=$(pkg-config --libs-only-L libffi)
 
 ub_compile \
-	-DCMAKE_BUILD_TYPE=Release \
 	-DBUILD_SHARED_LIBS=ON \
 	-DFFI_INCLUDE_DIR="${ffi_cflags#-I}" \
 	-DFFI_LIBRARY_DIR="${ffi_ldflags#-L}" \
-	-DLLDB_DISABLE_PYTHON=ON \
 	-DLLVM_BINUTILS_INCDIR=/usr/include \
 	-DLLVM_BUILD_DOCS=ON \
 	-DLLVM_BUILD_LLVM_DYLIB=OFF \
@@ -25,5 +23,6 @@ ub_compile \
 	-DLLVM_ENABLE_SPHINX=ON \
 	-DLLVM_INCLUDE_TESTS=OFF \
 	-DLLVM_LINK_LLVM_DYLIB=OFF \
+	-DLLVM_TOOL_LIBCXX_BUILD=ON \
 	-DSPHINX_WARNINGS_AS_ERRORS=OFF \
 	-DWITH_POLLY=OFF
