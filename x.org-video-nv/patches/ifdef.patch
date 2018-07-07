@@ -1,0 +1,337 @@
+diff -Naur orig/src/g80_driver.c patched/src/g80_driver.c
+--- orig/src/g80_driver.c	2013-02-07 08:56:01.000000000 +0100
++++ patched/src/g80_driver.c	2018-07-07 23:45:59.156485978 +0200
+@@ -151,7 +151,7 @@
+ {
+     G80Ptr pNv;
+     EntityInfoPtr pEnt;
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     struct pci_device *pPci;
+     int err;
+     void *p;
+@@ -184,14 +184,14 @@
+     pEnt = xf86GetEntityInfo(pScrn->entityList[0]);
+     if(pEnt->location.type != BUS_PCI) goto fail;
+     pPci = xf86GetPciInfoForEntity(pEnt->index);
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     /* Need this to unmap */
+     pNv->pPci = pPci;
+ #endif
+     primary = xf86IsPrimaryPci(pPci);
+ 
+     /* The ROM size sometimes isn't read correctly, so fix it up here. */
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     if(pPci->rom_size == 0)
+         /* The BIOS is 64k */
+         pPci->rom_size = 64 * 1024;
+@@ -304,7 +304,7 @@
+     pScrn->memPhysBase = MEMBASE(pPci, 1);
+     pScrn->fbOffset = 0;
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     err = pci_device_map_range(pPci, pPci->regions[0].base_addr, G80_REG_SIZE,
+                                PCI_DEV_MAP_FLAG_WRITABLE, &p);
+     if(err) {
+@@ -336,7 +336,7 @@
+ 
+     /* Determine the size of BAR1 */
+     /* Some configs have BAR1 < total RAM < 256 MB */
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     BAR1sizeKB = pPci->regions[1].size / 1024;
+ #else
+     BAR1sizeKB = 1UL << (pPci->size[1] - 10);
+@@ -366,7 +366,7 @@
+     xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "  Mapped memory: %.1f MB\n",
+                pScrn->videoRam / 1024.0);
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     err = pci_device_map_range(pPci, pPci->regions[1].base_addr,
+                                pScrn->videoRam * 1024,
+                                PCI_DEV_MAP_FLAG_WRITABLE |
+@@ -521,7 +521,7 @@
+ 
+     if(xf86ServerIsExiting()) {
+         if(pNv->int10) xf86FreeInt10(pNv->int10);
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+         pci_device_unmap_range(pNv->pPci, pNv->mem, pNv->videoRam * 1024);
+         pci_device_unmap_range(pNv->pPci, (void*)pNv->reg, G80_REG_SIZE);
+ #else
+diff -Naur orig/src/g80_type.h patched/src/g80_type.h
+--- orig/src/g80_type.h	2013-02-07 08:56:01.000000000 +0100
++++ patched/src/g80_type.h	2018-07-07 23:45:59.156485978 +0200
+@@ -41,7 +41,7 @@
+ } AccelMethod;
+ 
+ typedef struct G80Rec {
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     struct pci_device  *pPci;
+ #endif
+     volatile CARD32 *   reg;
+diff -Naur orig/src/nv_const.h patched/src/nv_const.h
+--- orig/src/nv_const.h	2010-03-07 20:35:21.000000000 +0100
++++ patched/src/nv_const.h	2018-07-07 23:45:59.156485978 +0200
+@@ -6,7 +6,7 @@
+ #define NV_DRIVER_NAME "nv"
+ 
+ /* libpciaccess gratuitous API changes */
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+  #define MEMBASE(p,n)     (p)->regions[n].base_addr
+  #define VENDOR_ID(p)     (p)->vendor_id
+  #define DEVICE_ID(p)     (p)->device_id
+diff -Naur orig/src/nv_dac.c patched/src/nv_dac.c
+--- orig/src/nv_dac.c	2013-02-07 08:56:01.000000000 +0100
++++ patched/src/nv_dac.c	2018-07-07 23:45:59.156485978 +0200
+@@ -42,7 +42,7 @@
+           we can do is experiment and apply hacks. */
+ 
+        if(((pNv->Chipset & 0xffff) == 0x0328) && (state->bpp == 32)) {
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+           if (((pNv->PciInfo->subvendor_id & 0xffff) == 0x1179) &&
+               ((pNv->PciInfo->subdevice_id & 0xffff) == 0x0020))
+ #else
+diff -Naur orig/src/nv_driver.c patched/src/nv_driver.c
+--- orig/src/nv_driver.c	2017-01-17 23:41:33.000000000 +0100
++++ patched/src/nv_driver.c	2018-07-07 23:45:59.160486018 +0200
+@@ -43,7 +43,7 @@
+ /* Mandatory functions */
+ static const OptionInfoRec * NVAvailableOptions(int chipid, int busid);
+ static void    NVIdentify(int flags);
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+ static Bool    NVPciProbe(DriverPtr, int entity, struct pci_device*, intptr_t data);
+ #else
+ static Bool    NVProbe(DriverPtr drv, int flags);
+@@ -76,7 +76,7 @@
+ static Bool	NVModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode);
+ static Bool	NVSetModeVBE(ScrnInfoPtr pScrn, DisplayModePtr pMode);
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+ /* For now, just match any NVIDIA display device and sort through them in the
+  * probe routine */
+ 
+@@ -109,7 +109,7 @@
+         NV_VERSION,
+ 	NV_DRIVER_NAME,
+         NVIdentify,
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+         NULL,
+ #else
+         NVProbe,
+@@ -118,7 +118,7 @@
+         NULL,
+         0,
+         NULL,
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+         NVPciIdMatchList,
+         NVPciProbe,
+ #endif
+@@ -712,7 +712,7 @@
+     if (!setupDone) {
+         setupDone = TRUE;
+         xf86AddDriver(&NV, module,
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+             HaveDriverFuncs
+ #else
+             0
+@@ -766,7 +766,7 @@
+     pScrn->driverName       = NV_DRIVER_NAME;
+     pScrn->name             = NV_NAME;
+ 
+-#if !XSERVER_LIBPCIACCESS
++#ifndef XSERVER_LIBPCIACCESS
+     pScrn->Probe            = NVProbe;
+ #endif
+     pScrn->PreInit          = NVPreInit;
+@@ -785,14 +785,14 @@
+ 
+ 
+ static CARD32 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+ NVGetPCIXpressChip (struct pci_device *dev)
+ #else
+ NVGetPCIXpressChip (pciVideoPtr pVideo)
+ #endif
+ {
+     volatile CARD32 *regs;
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     uint32_t pciid, pcicmd;
+     void *tmp;
+ 
+@@ -902,7 +902,7 @@
+ }
+ 
+ /* Mandatory */
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+ static Bool
+ NVPciProbe(DriverPtr drv, int entity, struct pci_device *dev, intptr_t data)
+ {
+@@ -1390,7 +1390,7 @@
+  
+     /* Find the PCI info for this screen */
+     pNv->PciInfo = xf86GetPciInfoForEntity(pNv->pEnt->index);
+-#if !XSERVER_LIBPCIACCESS
++#ifndef XSERVER_LIBPCIACCESS
+     pNv->PciTag = pciTag(pNv->PciInfo->bus, pNv->PciInfo->device,
+ 			  pNv->PciInfo->func);
+ #endif
+@@ -2097,7 +2097,7 @@
+ {
+     NVPtr pNv = NVPTR(pScrn);
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     void *tmp;
+ 
+     pci_device_map_range(pNv->PciInfo, pNv->FbAddress, pNv->FbMapSize,
+@@ -2144,7 +2144,7 @@
+     
+     pNv = NVPTR(pScrn);
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     pci_device_unmap_range(pNv->PciInfo, pNv->FbBase, pNv->FbMapSize);
+ #else
+     xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pNv->FbBase, pNv->FbMapSize);
+diff -Naur orig/src/nv_hw.c patched/src/nv_hw.c
+--- orig/src/nv_hw.c	2013-02-07 08:56:01.000000000 +0100
++++ patched/src/nv_hw.c	2018-07-07 23:45:59.160486018 +0200
+@@ -653,7 +653,7 @@
+     *lwm = graphics_lwm >> 3;
+ }
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+ static inline uint32_t
+ pciaccessReadLong(struct pci_device *const dev, pciaddr_t offset) {
+     uint32_t tmp;
+@@ -670,7 +670,7 @@
+     NVPtr        pNv
+ )
+ {
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     struct pci_device *const dev1 = pci_device_find_by_slot(0, 0, 0, 1);
+     struct pci_device *const dev2 = pci_device_find_by_slot(0, 0, 0, 2);
+     struct pci_device *const dev3 = pci_device_find_by_slot(0, 0, 0, 3);
+diff -Naur orig/src/nv_setup.c patched/src/nv_setup.c
+--- orig/src/nv_setup.c	2017-01-17 23:41:33.000000000 +0100
++++ patched/src/nv_setup.c	2018-07-07 23:45:59.160486018 +0200
+@@ -287,7 +287,7 @@
+     }
+ #endif
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     {
+     /* [AGP]: I don't know if this is correct */
+     struct pci_device *dev = pci_device_find_by_slot(0, 0, 0, 1);
+@@ -346,7 +346,7 @@
+     int FlatPanel = -1;   /* really means the CRTC is slaved */
+     Bool Television = FALSE;
+     void *tmp;
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     int err;
+ #endif
+ 
+@@ -378,7 +378,7 @@
+     pVga->MMIOBase   = (CARD8 *)pNv;
+     pVga->MMIOOffset = 0;
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     err = pci_device_map_range(pNv->PciInfo, pNv->IOAddress, 0x01000000,
+ 			       PCI_DEV_MAP_FLAG_WRITABLE, &tmp);
+     if (err != 0) {
+diff -Naur orig/src/nv_type.h patched/src/nv_type.h
+--- orig/src/nv_type.h	2017-01-17 23:41:33.000000000 +0100
++++ patched/src/nv_type.h	2018-07-07 23:45:59.160486018 +0200
+@@ -78,7 +78,7 @@
+     CARD32              Architecture;
+     CARD32              CursorStart;
+     EntityInfoPtr       pEnt;
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     struct pci_device  *PciInfo;
+ #else
+     pciVideoPtr         PciInfo;
+diff -Naur orig/src/riva_driver.c patched/src/riva_driver.c
+--- orig/src/riva_driver.c	2013-02-07 08:56:01.000000000 +0100
++++ patched/src/riva_driver.c	2018-07-07 23:54:28.605788051 +0200
+@@ -385,7 +385,7 @@
+  
+     /* Find the PCI info for this screen */
+     pRiva->PciInfo = xf86GetPciInfoForEntity(pRiva->pEnt->index);
+-#if !XSERVER_LIBPCIACCESS
++#ifndef XSERVER_LIBPCIACCESS
+     pRiva->PciTag = pciTag(pRiva->PciInfo->bus, pRiva->PciInfo->device,
+ 			  pRiva->PciInfo->func);
+ #endif
+@@ -825,7 +825,7 @@
+     /*
+      * Map IO registers to virtual address space
+      */ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     void *tmp;
+ 
+     pci_device_map_range(pRiva->PciInfo, pRiva->IOAddress, 0x1000000,
+@@ -890,7 +890,7 @@
+     /*
+      * Unmap IO registers to virtual address space
+      */ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     pci_device_unmap_range(pRiva->PciInfo, pRiva->IOBase, 0x1000000);
+     pci_device_unmap_range(pRiva->PciInfo, pRiva->FbBase, pRiva->FbMapSize);
+ #else
+@@ -1210,7 +1210,7 @@
+                case 16:	refreshArea = RivaRefreshArea16;	break;
+                case 32:	refreshArea = RivaRefreshArea32;	break;
+ 	   }
+-           xf86DisableRandR();
++           // xf86DisableRandR();
+            xf86DrvMsg(pScrn->scrnIndex, X_INFO,
+                       "Driver rotation enabled, RandR disabled\n");
+ 	}
+diff -Naur orig/src/riva_setup.c patched/src/riva_setup.c
+--- orig/src/riva_setup.c	2013-02-07 08:56:01.000000000 +0100
++++ patched/src/riva_setup.c	2018-07-07 23:45:59.160486018 +0200
+@@ -233,7 +233,7 @@
+     pRiva->riva.EnableIRQ = 0;
+     pRiva->riva.IO      = VGA_IOBASE_COLOR;
+ 
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+ #define MAP(ptr, offset, size) { \
+     void *tmp; \
+     pci_device_map_range(pRiva->PciInfo, (offset), (size), \
+diff -Naur orig/src/riva_type.h patched/src/riva_type.h
+--- orig/src/riva_type.h	2013-02-07 08:56:01.000000000 +0100
++++ patched/src/riva_type.h	2018-07-07 23:45:59.160486018 +0200
+@@ -53,7 +53,7 @@
+     RIVA_HW_STATE       SavedReg;
+     RIVA_HW_STATE       ModeReg;
+     EntityInfoPtr       pEnt;
+-#if XSERVER_LIBPCIACCESS
++#ifdef XSERVER_LIBPCIACCESS
+     struct pci_device  *PciInfo;
+ #else
+     pciVideoPtr         PciInfo;
