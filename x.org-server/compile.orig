@@ -1,0 +1,46 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+
+ub_compile \
+	--enable-config-udev \
+	--enable-composite \
+	--enable-xres \
+	--enable-record \
+	--enable-xv \
+	--enable-glamor \
+	--enable-xvmc \
+	--enable-dga \
+	--enable-screensaver \
+	--enable-xdmcp \
+	--enable-xdm-auth-1 \
+	--enable-glx \
+	--enable-dri \
+	--enable-xinerama \
+	--enable-xf86vidmode \
+	--enable-xace \
+	--enable-xcsecurity \
+	--enable-xf86bigfont \
+	--enable-dpms \
+	--enable-dbe \
+	--enable-xfree86-utils \
+	--enable-xorg \
+	--enable-xwayland \
+	--enable-dmx \
+	--enable-xvfb \
+	--enable-xnest \
+	--enable-kdrive \
+	--enable-xfake \
+	--enable-xephyr \
+	--enable-secure-rpc \
+	--disable-strict-compilation \
+	--disable-tslib \
+	--disable-xwin \
+	--disable-install-setuid \
+	--disable-config-hal \
+	--with-sha1=libcrypto \
+	--with-default-font-path="/usr/share/fonts/misc,/usr/share/fonts/75dpi,/usr/share/fonts/100dpi,/usr/share/fonts/truetype,/usr/share/fonts/Type1,/usr/share/fonts/ghostscript,/usr/share/fonts/unifont,/usr/share/fonts/freefont" \
+	--with-xkb-output="/var/lib/xkb" \
+	--with-builder-addr="ubk@ubk.hu" \
+	--with-os-name="UHU-Linux" \
+	--with-os-vendor="UHU Baráti kör"

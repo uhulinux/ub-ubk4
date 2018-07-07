@@ -4,7 +4,7 @@ mv AAAREADME README
 
 make tidy
 make makefiles \
-	CCARGS="-DNO_EAI -DUSE_CYRUS_SASL -DUSE_SASL_AUTH -DHAS_PCRE -DHAS_LDAP -DHAS_MYSQL -DHAS_PGSQL -DUSE_TLS -DMAX_DYNAMIC_MAPS -I/usr/include/mysql -I/usr/include/sasl -I/usr/include/openssl -I/usr/include/postgresql" \
+	CCARGS="-DNO_EAI -DUSE_CYRUS_SASL -DUSE_SASL_AUTH -DHAS_PCRE -DHAS_LDAP -DHAS_MYSQL -DHAS_PGSQL -DUSE_TLS -DMAX_DYNAMIC_MAPS -I/usr/include/mysql -I/usr/include/sasl -I/usr/include/openssl -I/usr/include/postgresql -I/usr/include/mariadb" \
 	OPT="-O2" \
 	AUXLIBS="-lgdbm -lldap -llber -lsasl2 -lmysqlclient -lz -lm -lssl -lcrypto -lpcre -lpq"
 make

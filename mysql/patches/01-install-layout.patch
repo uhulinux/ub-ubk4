@@ -1,17 +1,9 @@
-diff -Nur orig/cmake/install_layout.cmake mod/cmake/install_layout.cmake
---- orig/cmake/install_layout.cmake	2018-01-03 14:48:27.000000000 +0100
-+++ mod/cmake/install_layout.cmake	2018-01-05 09:39:12.008888625 +0100
-@@ -171,6 +171,7 @@
- SET(INSTALL_BINDIR_DEB                  "bin")
- SET(INSTALL_SBINDIR_DEB                 "sbin")
- SET(INSTALL_SCRIPTDIR_DEB               "bin")
-+SET(INSTALL_SYSCONFDIR_DEB              "/etc")
- SET(INSTALL_SYSCONF2DIR_DEB             "/etc/mysql/conf.d")
+diff -Naur orig/cmake/install_layout.cmake patched/cmake/install_layout.cmake
+--- orig/cmake/install_layout.cmake	2018-07-02 09:34:08.000000000 +0200
++++ patched/cmake/install_layout.cmake	2018-07-06 23:51:39.554887771 +0200
+@@ -179,21 +179,21 @@
  #
- SET(INSTALL_LIBDIR_DEB                  "lib")
-@@ -178,21 +179,21 @@
- #
- SET(INSTALL_INCLUDEDIR_DEB              "include/mysql")
+ SET(INSTALL_INCLUDEDIR_DEB              "include/mariadb")
  #
 -SET(INSTALL_DOCDIR_DEB                  "share/doc")
 -SET(INSTALL_DOCREADMEDIR_DEB            "share/doc")
@@ -36,9 +28,9 @@ diff -Nur orig/cmake/install_layout.cmake mod/cmake/install_layout.cmake
  SET(INSTALL_SYSTEMD_SYSUSERSDIR_DEB     "/usr/lib/sysusers.d")
  SET(INSTALL_SYSTEMD_TMPFILESDIR_DEB     "/usr/lib/tmpfiles.d")
  
-diff -Nur orig/support-files/rpm/my.cnf mod/support-files/rpm/my.cnf
---- orig/support-files/rpm/my.cnf	2018-01-03 14:48:32.000000000 +0100
-+++ mod/support-files/rpm/my.cnf	2018-01-05 09:33:09.341582540 +0100
+diff -Naur orig/support-files/rpm/my.cnf patched/support-files/rpm/my.cnf
+--- orig/support-files/rpm/my.cnf	2018-07-02 09:34:14.000000000 +0200
++++ patched/support-files/rpm/my.cnf	2018-07-06 23:53:25.812328946 +0200
 @@ -7,5 +7,5 @@
  #
  # include all files from the config directory
