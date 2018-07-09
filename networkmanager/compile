@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+rm -f meson.build
+
 ub_compile \
 	--with-udev-dir=/usr/lib/udev/ \
 	--with-pppd-plugin-dir=/usr/lib/pppd/2.4.7 \
@@ -8,4 +10,5 @@ ub_compile \
 	--enable-modify-system \
 	--enable-concheck \
 	--with-session-tracking=systemd \
-	--with-suspend-resume=systemd
+	--with-suspend-resume=systemd \
+	--with-libnm-glib
