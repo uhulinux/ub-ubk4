@@ -1,0 +1,28 @@
+While we correctly disable all public API bindings that rely on
+virNWFilterBindingPtr, the generator is still creating a helper function
+that needs it - libvirt_virNWFilterBinding_pointer. Making this helper
+conditional is a little hairy, so just provide a trivial typedef to keep
+it happy.
+
+Signed-off-by: Daniel P. Berrangé <berrange redhat com>
+---
+ typewrappers.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/typewrappers.h b/typewrappers.h
+index 1570c6a..4423774 100644
+--- a/typewrappers.h
++++ b/typewrappers.h
+@@ -27,6 +27,10 @@
+ typedef ssize_t Py_ssize_t;
+ #endif
+ 
++#if !LIBVIR_CHECK_VERSION(4, 5, 0)
++typedef struct _virNWFilterBinding *virNWFilterBindingPtr;
++#endif
++
+ #define PyvirConnect_Get(v) (((v) == Py_None) ? NULL : \
+         (((PyvirConnect_Object *)(v))->obj))
+ 
+-- 
+2.17.1
