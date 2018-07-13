@@ -3,12 +3,14 @@
 CC="ccache gcc -march=k8 -m64"
 CXX="ccache g++ -march=k8 -m64"
 
+# a bindgen fordításához az llvm c++ fejléceit használjuk,
+# azokat legalább megtalálja a clang...
+export BINDGEN_CFLAGS+="-I/usr/include/c++/v1"
 export LDFLAGS="-Wl,-rpath,/usr/lib/firefox/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
 
 # új opciók:
 # --disable-clang-plugin
-# --disable-stylo : 32 biten alapból tiltva a rust bindgen miatt,
-#					de 64 biten külön tiltani kell
+
 : > .mozconfig
 cat > .mozconfig << _EOF_
 mk_add_options MOZ_OBJDIR=$UB_OBJECTDIR
@@ -36,7 +38,6 @@ ac_add_options --enable-startup-notification
 ac_add_options --enable-default-toolkit=cairo-gtk3
 ac_add_options --enable-bundled-fonts
 ac_add_options --disable-clang-plugin
-ac_add_options --disable-stylo
 ac_add_options --disable-debug
 ac_add_options --disable-gconf
 ac_add_options --disable-necko-wifi
