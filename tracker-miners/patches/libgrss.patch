@@ -1,0 +1,12 @@
+diff -Naur orig/meson.build patched/meson.build
+--- orig/meson.build	2018-06-25 11:44:33.000000000 +0200
++++ patched/meson.build	2018-07-13 23:09:56.408784673 +0200
+@@ -80,7 +80,7 @@
+ have_tracker_writeback = get_option('writeback')
+ 
+ if have_tracker_miner_rss
+-  libgrss = dependency('libgrss', version: '> 0.7', required: false)
++  libgrss = dependency('libgrss', version: '>= 0.7.0', required: false)
+   if not libgrss.found()
+     error('libgrss is required for the RSS feed miner. You can disable ' +
+           'this miner by passing -Dminer_rss=false if needed.')
