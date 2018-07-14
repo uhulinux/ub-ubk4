@@ -2,14 +2,18 @@
 
 export QTDIR=/usr/lib/qt5
 
+# Remove check for sip from py2, it doesn't work since sip doesn't install __init__.py
+sed -e 's|from PyQt5 import sip|pass|g' -i configure.py
+
 python2 configure.py --confirm-license \
-	-w \
-	-q $QTDIR/bin/qmake \
-	-b /usr/bin \
-	-d /usr/lib/python2.7/site-packages \
-	-v /usr/share/sip/PyQt5-python2 \
+	--verbose \
+	--qmake $QTDIR/bin/qmake \
+	--bindir /usr/bin \
+	--destdir /usr/lib/python2.7/site-packages \
+	--sipdir /usr/share/sip/PyQt5-python2 \
 	--designer-plugindir /usr/lib/qt5/plugins/designer \
-	--qml-plugindir /usr/lib/qt5/plugins/PyQt5
+	--qml-plugindir /usr/lib/qt5/plugins/PyQt5 \
+	--no-dist-info
 
 ub_make
 
@@ -23,12 +27,13 @@ mv "$UB_INSTALLDIR"/usr/bin/{,python2-}pyrcc5
 rm -Rf "$UB_INSTALLDIR"/usr/lib/qt5
 
 python3 configure.py --confirm-license \
-	-w \
-	-q $QTDIR/bin/qmake \
-	-b /usr/bin \
-	-d /usr/lib/python3.7/site-packages \
-	-v /usr/share/sip/PyQt5-python3 \
+	--verbose \
+	--qmake $QTDIR/bin/qmake \
+	--bindir /usr/bin \
+	--destdir /usr/lib/python3.7/site-packages \
+	--sipdir /usr/share/sip/PyQt5-python3 \
 	--designer-plugindir /usr/lib/qt5/plugins/designer \
-	--qml-plugindir /usr/lib/qt5/plugins/PyQt5
+	--qml-plugindir /usr/lib/qt5/plugins/PyQt5 \
+	--no-dist-info
 
 ub_make
