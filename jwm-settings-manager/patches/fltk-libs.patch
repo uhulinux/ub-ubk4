@@ -1,21 +1,21 @@
 diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
---- orig/CMakeLists.txt	2016-12-13 16:29:57.134741323 +0100
-+++ patched/CMakeLists.txt	2017-05-06 00:23:03.334207275 +0200
-@@ -47,7 +47,7 @@
- set(DEBDEPS "\${source:Version}) , \${shlibs:Depends}, ${MISCDEPS}")
- set(ARGdebug "--debug")
- # Packages we need
--FIND_PACKAGE(FLTK REQUIRED NO_MODULE)
-+# FIND_PACKAGE(FLTK REQUIRED NO_MODULE)
+--- orig/CMakeLists.txt	2017-12-30 20:39:00.000000000 +0100
++++ patched/CMakeLists.txt	2018-07-14 23:39:02.214998587 +0200
+@@ -59,8 +59,6 @@
+ 	## Because Launchpad's build system is really weird!
+     MESSAGE("Using Debian based release")
+ 	FIND_PACKAGE(FLTK REQUIRED NO_MODULE)
+-else()
+-	 FIND_PACKAGE(FLTK REQUIRED)
+ endif()
  FIND_PACKAGE(X11 REQUIRED)
- IF(NOT EXISTS ${FLTK_FLUID_EXECUTABLE})
-     # Try to detect full path anyway
-@@ -142,7 +142,7 @@
+ 
+@@ -165,7 +163,7 @@
  add_executable(fltk-mouse fltk/jwm-mouse.cxx)
  add_executable(desktop-file-editor fltk/desktop-file-editor.cxx)
  ## Linker settings
--set(ALL_LIBS JSM fltk_SHARED fltk_images_SHARED ${X11_LIBRARIES} ${X11_X11_LIB} ${X11_Xpm_LIB})
-+set(ALL_LIBS JSM fltk fltk_images ${X11_LIBRARIES} ${X11_X11_LIB} ${X11_Xpm_LIB})
- TARGET_LINK_LIBRARIES(jwm-settings-manager ${ALL_LIBS})
- TARGET_LINK_LIBRARIES(fltk-mouse ${ALL_LIBS})
- TARGET_LINK_LIBRARIES(desktop-file-editor ${ALL_LIBS})
+-set(ALL_LIBS JSM ${X11_LIBRARIES} ${X11_X11_LIB} ${X11_Xpm_LIB} ${FLTK_LIBRARIES})
++set(ALL_LIBS JSM ${X11_LIBRARIES} ${X11_X11_LIB} ${X11_Xpm_LIB} fltk fltk_images)
+ ## Because Launchpad's build system is really weird!
+ if(result)
+ 	set(ALL_LIBS ${ALL_LIBS} fltk_SHARED fltk_images_SHARED)
