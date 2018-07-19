@@ -1,6 +1,6 @@
 diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2018-03-15 23:12:05.000000000 +0100
-+++ patched/browser/app/profile/firefox.js	2018-03-20 01:32:33.461502169 +0100
+--- orig/browser/app/profile/firefox.js	2018-07-04 12:21:10.000000000 +0200
++++ patched/browser/app/profile/firefox.js	2018-07-19 17:08:42.918850775 +0200
 @@ -21,6 +21,13 @@
  #endif
  #endif
@@ -15,7 +15,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.chromeURL","chrome://browser/content/");
  pref("browser.hiddenWindowChromeURL", "chrome://browser/content/hiddenWindow.xul");
  
-@@ -62,7 +69,8 @@
+@@ -57,7 +64,8 @@
  
  // Disable add-ons that are not installed by the user in all scopes by default.
  // See the SCOPE constants in AddonManager.jsm for values to use here.
@@ -25,7 +25,18 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -155,7 +163,7 @@
+@@ -84,8 +92,8 @@
+ pref("extensions.legacy.exceptions", "testpilot@cliqz.com,@testpilot-containers,jid1-NeEaf3sAHdKHPA@jetpack,@activity-streams,pulse@mozilla.com,@testpilot-addon,@min-vid,tabcentertest1@mozilla.com,snoozetabs@mozilla.com,speaktome@mozilla.com,hoverpad@mozilla.com");
+ 
+ // Require signed add-ons by default
+-pref("extensions.langpacks.signatures.required", true);
+-pref("xpinstall.signatures.required", true);
++pref("extensions.langpacks.signatures.required", false);
++pref("xpinstall.signatures.required", false);
+ pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
+ 
+ // Dictionary download preference
+@@ -151,7 +159,7 @@
  // If set to true, the Update Service will automatically download updates when
  // app updates are enabled per the app.update.enabled preference and if the user
  // can apply updates.
@@ -34,7 +45,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // If set to true, the Update Service will present no UI for any event.
  pref("app.update.silent", false);
-@@ -294,7 +302,7 @@
+@@ -290,7 +298,7 @@
  #endif
  
  // Control autoFill behavior
@@ -43,7 +54,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.urlbar.autoFill.typed", true);
  pref("browser.urlbar.speculativeConnect.enabled", true);
  
-@@ -336,7 +344,7 @@
+@@ -332,7 +340,7 @@
  pref("browser.urlbar.suggest.history.onlyTyped",    false);
  
  pref("browser.urlbar.formatting.enabled", true);
@@ -52,7 +63,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  pref("browser.urlbar.oneOffSearches", true);
  
-@@ -751,11 +759,7 @@
+@@ -756,11 +764,7 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
