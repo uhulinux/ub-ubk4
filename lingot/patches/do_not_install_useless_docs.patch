@@ -1,13 +1,17 @@
---- a/Makefile.in.orig	2012-09-05 21:05:36.000000000 +0200
-+++ a/Makefile.in	2012-09-05 21:06:39.000000000 +0200
-@@ -399,26 +399,6 @@
- 	test -n "$$files" || exit 0; \
- 	echo " ( cd '$(DESTDIR)$(gnomemenudir)' && rm -f" $$files ")"; \
- 	cd "$(DESTDIR)$(gnomemenudir)" && rm -f $$files
+diff -Naur lingot-1.0.1-orig/Makefile.in lingot-1.0.1/Makefile.in
+--- lingot-1.0.1-orig/Makefile.in	2018-07-07 12:37:01.000000000 +0200
++++ lingot-1.0.1/Makefile.in	2018-07-19 17:31:09.494783852 +0200
+@@ -599,27 +599,6 @@
+ 	@list='$(gnomemenu_DATA)'; test -n "$(gnomemenudir)" || list=; \
+ 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+ 	dir='$(DESTDIR)$(gnomemenudir)'; $(am__uninstall_files_from_dir)
 -install-lingotdocDATA: $(lingotdoc_DATA)
 -	@$(NORMAL_INSTALL)
--	test -z "$(lingotdocdir)" || $(MKDIR_P) "$(DESTDIR)$(lingotdocdir)"
 -	@list='$(lingotdoc_DATA)'; test -n "$(lingotdocdir)" || list=; \
+-	if test -n "$$list"; then \
+-	  echo " $(MKDIR_P) '$(DESTDIR)$(lingotdocdir)'"; \
+-	  $(MKDIR_P) "$(DESTDIR)$(lingotdocdir)" || exit 1; \
+-	fi; \
 -	for p in $$list; do \
 -	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 -	  echo "$$d$$p"; \
@@ -21,9 +25,7 @@
 -	@$(NORMAL_UNINSTALL)
 -	@list='$(lingotdoc_DATA)'; test -n "$(lingotdocdir)" || list=; \
 -	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
--	test -n "$$files" || exit 0; \
--	echo " ( cd '$(DESTDIR)$(lingotdocdir)' && rm -f" $$files ")"; \
--	cd "$(DESTDIR)$(lingotdocdir)" && rm -f $$files
+-	dir='$(DESTDIR)$(lingotdocdir)'; $(am__uninstall_files_from_dir)
  
  # This directory's subdirectories are mostly independent; you can cd
- # into them and run `make' without going through this Makefile.
+ # into them and run 'make' without going through this Makefile.
