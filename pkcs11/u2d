@@ -1,1 +1,1 @@
-urllist http://sec.sipsik.net/truecrypt/ftp.rsasecurity.com/pub/pkcs/pkcs-11/ | grep v | sed s/v// | sed s/-/\./
+urllist ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-11/ | grep -E '^v[0-9]-' | sed s/v// | sed s/-/\./ | sort -V | tail -n 1
