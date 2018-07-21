@@ -1,12 +1,12 @@
-diff -Nur orig/src/modules/netinstall/netinstall.conf mod/src/modules/netinstall/netinstall.conf
---- orig/src/modules/netinstall/netinstall.conf	2017-11-14 16:18:58.000000000 +0100
-+++ mod/src/modules/netinstall/netinstall.conf	2017-11-23 08:24:39.000000000 +0100
-@@ -1,7 +1,7 @@
- ---
- # This is the URL that is retrieved to get the netinstall groups-and-packages
- # data (which should be in the format described in netinstall.yaml).
--groupsUrl: http://chakraos.org/netinstall.php
-+groupsUrl: file:/usr/share/calamares/netinstall.yaml
+diff -Nur calamares-3.2.1/src/modules/netinstall/netinstall.conf calamares-3.2.1.patched/src/modules/netinstall/netinstall.conf
+--- calamares-3.2.1/src/modules/netinstall/netinstall.conf	2018-06-25 16:04:26.000000000 +0200
++++ calamares-3.2.1.patched/src/modules/netinstall/netinstall.conf	2018-07-21 17:26:00.028099112 +0200
+@@ -4,7 +4,7 @@
+ #   groupsUrl: http://example.org/netinstall.php
+ # or it can be a locally installed file:
+ #   groupsUrl: file:///usr/share/calamares/netinstall.yaml
+-# groupsUrl: file:///usr/share/calamares/netinstall.yaml
++groupsUrl: file:///usr/share/calamares/netinstall.yaml
  
  # If the installation can proceed without netinstall (e.g. the Live CD
  # can create a working installed system, but netinstall is preferred

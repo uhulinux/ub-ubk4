@@ -1,20 +1,21 @@
-diff -Nur orig/src/modules/users/CreateUserJob.cpp mod/src/modules/users/CreateUserJob.cpp
---- orig/src/modules/users/CreateUserJob.cpp	2018-05-17 17:13:54.000000000 +0200
-+++ mod/src/modules/users/CreateUserJob.cpp	2018-06-12 13:09:47.372550813 +0200
-@@ -149,7 +149,6 @@
-     int ec = CalamaresUtils::System::instance()->
-              targetEnvCall( { "useradd",
-                               "-m",
--                              "-U",
-                               "-c",
-                               m_fullName,
-                               m_userName } );
-@@ -175,7 +174,7 @@
-                       targetEnvCall( { "chown",
-                                        "-R",
-                                        QString( "%1:%2" ).arg( m_userName )
--                                                         .arg( m_userName ),
-+                                                         .arg( "users" ),
-                                        QString( "/home/%1" ).arg( m_userName ) } );
-     if ( ec )
-         return Calamares::JobResult::error( tr( "Cannot set home directory ownership for user %1." )
+diff -Nur calamares-3.2.1/src/modules/users/CreateUserJob.cpp calamares-3.2.1.patched/src/modules/users/CreateUserJob.cpp
+--- calamares-3.2.1/src/modules/users/CreateUserJob.cpp	2018-06-25 16:04:26.000000000 +0200
++++ calamares-3.2.1.patched/src/modules/users/CreateUserJob.cpp	2018-07-21 17:35:53.915208636 +0200
+@@ -147,7 +147,7 @@
+         }
+     }
+ 
+-    QStringList useradd{ "useradd", "-m", "-U" };
++    QStringList useradd{ "useradd", "-m" };
+     QString shell = gs->value( "userShell" ).toString();
+     if ( !shell.isEmpty() )
+         useradd << "-s" << shell;
+@@ -169,7 +169,7 @@
+         return pres.explainProcess( "usermod", 10 );
+     }
+ 
+-    QString userGroup = QString( "%1:%2" ).arg( m_userName ).arg( m_userName );
++    QString userGroup = QString( "%1:%2" ).arg( m_userName ).arg( "users" );
+     QString homeDir = QString( "/home/%1" ).arg( m_userName );
+     pres = CalamaresUtils::System::instance()->targetEnvCommand(
+         { "chown", "-R", userGroup, homeDir } );
