@@ -1,12 +1,12 @@
-diff -Naur orig/simmain.cc patched/simmain.cc
---- orig/simmain.cc	2016-01-09 22:36:24.000000000 +0100
-+++ patched/simmain.cc	2016-07-23 00:29:05.226784641 +0200
-@@ -486,8 +486,7 @@
- 		strcat( env_t::program_dir, path_sep );
+diff -Nur simutrans-src-120-3/simmain.cc simutrans-src-120-3.patched/simmain.cc
+--- simutrans-src-120-3/simmain.cc	2018-06-15 15:36:17.000000000 +0200
++++ simutrans-src-120-3.patched/simmain.cc	2018-07-08 08:01:44.901756810 +0200
+@@ -476,8 +476,7 @@
+ 		strcat( env_t::program_dir, PATH_SEPARATOR );
  	}
  	else {
 -		strcpy( env_t::program_dir, argv[0] );
--		*(strrchr( env_t::program_dir, path_sep[0] )+1) = 0;
+-		*(strrchr( env_t::program_dir, PATH_SEPARATOR[0] )+1) = 0;
 +		strcpy( env_t::program_dir, "/usr/share/games/simutrans/" );
  
  #ifdef __APPLE__

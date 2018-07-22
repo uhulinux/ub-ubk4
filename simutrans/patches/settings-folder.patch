@@ -1,7 +1,7 @@
-diff -Naur orig/simsys.cc patched/simsys.cc
---- orig/simsys.cc	2015-11-29 19:41:00.000000000 +0100
-+++ patched/simsys.cc	2016-07-23 00:31:29.985170136 +0200
-@@ -168,7 +168,7 @@
+diff -Nur simutrans-src-120-3/simsys.cc simutrans-src-120-3.patched/simsys.cc
+--- simutrans-src-120-3/simsys.cc	2018-05-19 14:34:54.000000000 +0200
++++ simutrans-src-120-3.patched/simsys.cc	2018-07-08 08:16:35.292497562 +0200
+@@ -357,7 +357,7 @@
  	find_directory(B_USER_DIRECTORY, &userDir);
  	sprintf(buffer, "%s/simutrans", userDir.Path());
  #else
@@ -9,4 +9,4 @@ diff -Naur orig/simsys.cc patched/simsys.cc
 +	sprintf(buffer, "%s/.simutrans", getenv("HOME"));
  #endif
  
- 	dr_mkdir(buffer);
+ 	// create directory and subdirectories
