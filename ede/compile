@@ -1,6 +1,0 @@
-#!/bin/sh -eux
-
-./autogen.sh
-./configure --prefix=/usr --sysconfdir=/etc
-sed -i '15i unset XDG_{DATA,CONFIG,CACHE,MENUS}_{HOME,DIRS,PREFIX}' data/startede
-jam -sBUILD_ICON_THEMES=1
