@@ -1,0 +1,68 @@
+From 3e3399bd99744d6e7d37fb01203f4407d583426e Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 17:50:02 +0200
+Subject: JWMS icon on tray
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 71f3500..41b55db 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -94,13 +94,17 @@ set(REGULAR_MENUS_LIST "${MENUS_LIST_NEW}")
+ set (ROOT_MENU "root:${JWM_ROOT_NUM}")
+ ## Mouse MENU
+ set(MOUSE_MENU "<RootMenu height=\"0\" onroot=\"3\">
+-		<Program icon=\"folder-home\" label=\"Home\">xdg-open ~/</Program>
+-		<Program icon=\"${JSM}\" label=\"Settings\">${JSM}</Program>
+-		<Program icon=\"add\" label=\"Add new items to Desktop\">desktop-file-editor</Program>
+-		<Program icon=\"preferences-desktop-wallpaper\" label=\"Change Desktop Background\">${JSM} --desktop</Program>
+-		<Dynamic label=\"Apps\" icon=\"torios-logo\" border=\"false\">exec:jwm-menu||jwm-menu-bash</Dynamic>
++		<Restart icon=\"view-refresh\" label=\"JWM újraindítása\" />
++		<Program icon=\"jwm-settings-manager\" label=\"JWM beállítások\">jwm-settings-manager</Program>
++		<Program icon=\"jsm-desktop\" label=\"Háttér beállítás\">jwm-settings-manager --desktop</Program>
++		<Program icon=\"jsm-fonts\" label=\"Betűválasztás\">jwm-settings-manager --font</Program>
++		<Program icon=\"jsm-windows\" label=\"Ablak beállítások\">jwm-settings-manager --window</Program>
++		<Program icon=\"jsm-panel\" label=\"Panel szerkesztés\">jwm-settings-manager --panel</Program>
++		<Program icon=\"list-add\" label=\"Új elem\">jwm-settings-manager --shortcuts</Program>
++		<Program icon=\"jsm-panel\" label=\"Menüszerkesztés\">jwm-settings-manager --menu</Program>
++		<Program icon=\"jsm-theme\" label=\"Témák\">jwm-settings-manager --themes</Program>
++		<Kill icon=\"process-stop\" label=\"Ablak kilövés\" />
+ 	</RootMenu>")
+-
+ ## window corners override in individual files
+ set(CORNER "4")
+ set(W_HEIGHT "20")
+@@ -111,9 +115,15 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+             <Button mask=\"1\">${JWM_ROOT}</Button>
+             <Button mask=\"23\">${EDIT_MENU_ROOT}</Button>
+         </TrayButton>
++		<Spacer width=\"2\" />
++        <TrayButton popup=\"JWM beállítások\" icon=\"jwm-settings-manager\" border=\"false\">
++            <Button mask=\"1\">root:3</Button>
++        </TrayButton>
++		<Spacer width=\"2\" />
+         <TrayButton popup=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">
+             <Button mask=\"1\">${PLACES_ROOT}</Button>
+         </TrayButton>
++		<Spacer width=\"2\" />
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+         <Dock/>
+@@ -145,7 +155,7 @@ set (GNOME_SYS_ICON "applications-system")
+ set (SHOW_DESK_ICON "preferences-system-hotcorners.png")
+ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+-	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
++        <TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+         <TrayButton popup=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Spacer/>
+         <Dock/>
+@@ -159,7 +169,7 @@ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width
+     </Tray>")
+ set (OLD_GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+-	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
++        <TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+         <TrayButton popup=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Spacer/>
+         <Dock/>

@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<JWM>
+	<RootMenu onroot="1">
+		<Include>exec: xdgmenumaker -n -i -f jwm</Include>
+	</RootMenu>
+	<RootMenu onroot="3">
+		<Program icon="process-stop" label="Kikapcsolás">systemctl poweroff</Program>
+		<Program icon="view-refresh" label="Újraindítás">systemctl reboot</Program>
+		<Exit icon="application-exit" label="Kilépés" confirm="true" />
+	</RootMenu>
+	<RootMenu onroot="p">
+		<Restart icon="view-refresh" label="JWM újraindítása" />
+		<Program icon="jwm-settings-manager" label="JWM beállítások">jwm-settings-manager</Program>
+		<Program icon="jsm-desktop" label="Háttér beállítás">
+        jwm-settings-manager --desktop</Program>
+		<Program icon="jsm-fonts" label="Betűválasztás">jwm-settings-manager --font</Program>
+		<Program icon="jsm-windows" label="Ablak beállítások">jwm-settings-manager --window</Program>
+		<Program icon="jsm-panel" label="Panel szerkesztés">jwm-settings-manager --panel</Program>
+		<Program icon="list-add" label="Új elem">jwm-settings-manager --shortcuts</Program>
+		<Program icon="jsm-panel" label="Menüszerkesztés">jwm-settings-manager --menu</Program>
+		<Program icon="jsm-theme" label="Témák">jwm-settings-manager --themes</Program>
+		<Kill icon="process-stop" label="Ablak kilövés" />
+	</RootMenu>
+	<Group>
+		<Option>tiled</Option>
+		<Option>aerosnap</Option>
+	</Group>
+	<Group>
+		<Class>Pidgin</Class>
+		<Option>sticky</Option>
+	</Group>
+	<Group>
+		<Name>xterm</Name>
+		<Option>vmax</Option>
+	</Group>
+	<Group>
+		<Name>xclock</Name>
+		<Option>drag</Option>
+		<Option>notitle</Option>
+	</Group>
+	<Tray x="0" y="0" autohide="off" height="32">
+		<TrayButton icon="uhu-32x32.png" popup="Programok">root:1</TrayButton>
+		<Spacer width="2" />
+		<TrayButton icon="user-desktop" popup="Asztalkép">showdesktop</TrayButton>
+		<Spacer width="2" />
+		<TrayButton icon="jwm-settings-manager" popup="JWM beállítások">root:p</TrayButton>
+		<Spacer width="2" />
+		<Pager labeled="true" />
+		<TaskList maxwidth="256" />
+		<Dock />
+		<Clock format="%H:%M">
+			<Button mask="3">exec:xclock</Button>
+		</Clock>
+		<TrayButton icon="application-exit" popup="Kilépés">root:3</TrayButton>
+	</Tray>
+	<WindowStyle>
+		<Font>Sans-9:bold</Font>
+		<Width>4</Width>
+		<Height>21</Height>
+		<Corner>3</Corner>
+		<Foreground>#FFFFFF</Foreground>
+		<Background>#555555</Background>
+		<Outline>#000000</Outline>
+		<Opacity>0.5</Opacity>
+		<Active>
+			<Foreground>#FFFFFF</Foreground>
+			<Background>#0077CC</Background>
+			<Outline>#000000</Outline>
+			<Opacity>1.0</Opacity>
+		</Active>
+	</WindowStyle>
+	<TrayStyle group="true" list="all">
+		<Font>Sans-10:</Font>
+		<Background>#666666</Background>
+		<Foreground>#FFFFFF</Foreground>
+		<Outline>#000000</Outline>
+		<Opacity>0.75</Opacity>
+	</TrayStyle>
+	<TaskListStyle>
+		<Font>Sans-10:</Font>
+		<Active>
+			<Foreground>#FFFFFF</Foreground>
+			<Background>#888888</Background>
+		</Active>
+		<Foreground>#FFFFFF</Foreground>
+		<Background>#777777</Background>
+	</TaskListStyle>
+	<PagerStyle>
+		<Outline>#000000</Outline>
+		<Foreground>#555555</Foreground>
+		<Background>#666666</Background>
+		<Text>#FFFFFF</Text>
+		<Active>
+			<Foreground>#0077CC</Foreground>
+			<Background>#004488</Background>
+		</Active>
+	</PagerStyle>
+	<MenuStyle>
+		<Font>sans-12:</Font>
+		<Foreground>#FFFFFF</Foreground>
+		<Background>#333333</Background>
+		<Outline>#000000</Outline>
+		<Active>
+			<Foreground>#FFFFFF</Foreground>
+			<Background>#0077CC</Background>
+		</Active>
+		<Opacity>0.85</Opacity>
+	</MenuStyle>
+	<PopupStyle>
+		<Font>Sans-12:</Font>
+		<Foreground>#000000</Foreground>
+		<Background>#999999</Background>
+	</PopupStyle>
+	<IconPath>/usr/share/jwm</IconPath>
+	<IconPath>/usr/share/pixmaps</IconPath>
+	<IconPath>/usr/share/icons/hicolor/48x48/apps</IconPath>
+	<IconPath>/usr/share/icons/hicolor/scaleable/apps</IconPath>
+	<IconPath>/usr/share/icons/hicolor/24x24/stock/data</IconPath>
+	<Desktops>
+		<Background type="gradient">#088088:#033033</Background>
+	</Desktops>
+	<DoubleClickSpeed>400</DoubleClickSpeed>
+	<DoubleClickDelta>2</DoubleClickDelta>
+	<FocusModel>sloppy</FocusModel>
+	<SnapMode distance="10">border</SnapMode>
+	<MoveMode>opaque</MoveMode>
+	<ResizeMode>opaque</ResizeMode>
+	<Key key="Up">up</Key>
+	<Key key="Down">down</Key>
+	<Key key="Right">right</Key>
+	<Key key="Left">left</Key>
+	<Key key="h">left</Key>
+	<Key key="j">down</Key>
+	<Key key="k">up</Key>
+	<Key key="l">right</Key>
+	<Key key="Return">select</Key>
+	<Key key="Escape">escape</Key>
+	<Key mask="A" key="Tab">nextstacked</Key>
+	<Key mask="A" key="F4">close</Key>
+	<Key mask="A" key="#">desktop#</Key>
+	<Key mask="A" key="F1">root:1</Key>
+	<Key mask="A" key="F2">window</Key>
+	<Key mask="A" key="F10">maximize</Key>
+	<Key mask="A" key="Right">rdesktop</Key>
+	<Key mask="A" key="Left">ldesktop</Key>
+	<Key mask="A" key="Up">udesktop</Key>
+	<Key mask="A" key="Down">ddesktop</Key>
+	<StartupCommand>nm-applet</StartupCommand>
+	<StartupCommand>/usr/libexec/lxpolkit</StartupCommand>
+	<StartupCommand>retrovol -hide</StartupCommand>
+	<StartupCommand>synclient MaxTapTime=0</StartupCommand>
+</JWM>

@@ -1,0 +1,28 @@
+From ec4e42b4a2ee6297a1fe65a163cb13d0ac604377 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 22:31:21 +0200
+Subject: =?UTF-8?q?menu-list=20jav=C3=ADtgat=C3=A1s?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 3758c09..443a2d1 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -101,12 +101,13 @@ set(PLACES_ICON "folder")
+ set(PLACES_MENU "    <RootMenu onroot=\"${PLACES_NUM}\">
+         <Include>${PLACES_INCLUDE}</Include>
+     </RootMenu>")
+-set(REGULAR_MENUS_LIST "    <Include>${APPMENU_FILE}</Include>
++set(REGULAR_MENUS_LIST "${    <Include>${APPMENU_FILE}</Include>
+ <!--Places Menu-->
+     <Include>${PLACES_MENU_FILE}</Include>
+ ${traybuttons}")
+ set(MENUS_LIST_NEW "${JWM_ROOT_MENU}
+ ${PLACES_MENU}")
++set(REGULAR_MENUS_LIST "${MENUS_LIST_NEW}")
+ set (ROOT_MENU "root:${JWM_ROOT_NUM}")
+ ## Mouse MENU
+ set(MOUSE_MENU "<RootMenu height=\"0\" onroot=\"3\">

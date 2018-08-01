@@ -1,0 +1,52 @@
+From 35bcb3b9ca6261273bfc01fc492d86be2364020e Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 21:28:29 +0200
+Subject: =?UTF-8?q?UHU=20log=C3=B3,=20torios-installer=20->=20synaptic?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index c546d71..060e023 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -26,7 +26,7 @@ set (STARTUP "<StartupCommand>nm-applet</StartupCommand>
+ 	<StartupCommand>synclient MaxTapTime=0</StartupCommand>")
+ 
+ ## Desktop Background
+-set(BG "/usr/share/backgrounds/default.jpg")
++set(BG "/usr/share/backgrounds/UHU/uhu_linux_ubk.jpg")
+ 
+ ################### MENUS ###############################
+ 
+@@ -70,25 +70,18 @@ set(LOGOUT_ICON "application-exit")
+ set(RESTART_ICON "view-refresh")
+ 
+ set(SHUTERDOWN "<Separator/>
+-	<Restart label=\"Reload Desktop\" icon=\"${RESTART_ICON}\"/>
++	<Restart label=\"JWM újraindítás\" icon=\"${RESTART_ICON}\"/>
+ 	<Program icon=\"${SHUTDOWN_ICON}\" label=\"Kikapcsolás\">${SHUTDOWN_PROGRAM}</Program>")
+ 
+ ## MAIN MENU
+-set(SEARCH_PROG "zlocate")
+-set(TRAYbuttonForTray "        <TrayButton popup=\"Software Installer\" icon=\"software-center\" border=\"false\">
+-          <Button mask=\"1\">exec:torios-installer --search</Button>
++set(TRAYbuttonForTray "<TrayButton popup=\"Szoftver telepítő\" icon=\"synaptic\" border=\"false\">
++          <Button mask=\"1\">exec:synaptic</Button>
+           <Button mask=\"23\">root:j</Button>
+-        </TrayButton>
+-        <TrayButton popup=\"Run\" icon=\"system-run\" border=\"false\">
+-          <Button mask=\"123\">exec:zrun</Button>
+-        </TrayButton>
+-        <TrayButton popup=\"Locate\" icon=\"system-search\" border=\"false\">
+-          <Button mask=\"123\">exec:${SEARCH_PROG}</Button>
+         </TrayButton>")
+ set(JWM_ROOT_NUM "2")
+ set(JWM_ROOT "root:${JWM_ROOT_NUM}")
+ 
+-set(MENU_ICON "/usr/share/pixmaps/distributor-logo.png")
++set(MENU_ICON "uhu-32x32.png")
+ #MAIN MENU GENERATOR
+ 
+ set(JWM_ROOT_MENU "<RootMenu onroot=\"${JWM_ROOT_NUM}\">

@@ -1,0 +1,45 @@
+diff -Nur jwm-2.3.7/contrib/Makefile jwm-2.3.7.patched/contrib/Makefile
+--- jwm-2.3.7/contrib/Makefile	2017-07-22 02:02:42.000000000 +0200
++++ jwm-2.3.7.patched/contrib/Makefile	2018-07-15 16:58:09.000000000 +0200
+@@ -1,4 +1,4 @@
+-ICONDIR = $(DESTDIR)/usr/local/share/jwm
++ICONDIR = $(DESTDIR)/usr/share/jwm
+ 
+ ICONS = jwm.xbm jwm-gray.svg jwm-blue.svg jwm-orange.svg
+ 
+diff -Nur jwm-2.3.7/po/Makefile jwm-2.3.7.patched/po/Makefile
+--- jwm-2.3.7/po/Makefile	2017-07-22 02:02:42.000000000 +0200
++++ jwm-2.3.7.patched/po/Makefile	2018-07-15 17:04:22.000000000 +0200
+@@ -22,11 +22,11 @@
+ top_srcdir = ..
+ 
+ 
+-prefix = /usr/local
+-exec_prefix = /usr/local
++prefix = /usr
++exec_prefix = /usr
+ datarootdir = ${prefix}/share
+ datadir = ${datarootdir}
+-localedir = /usr/local/share/locale
++localedir = /usr/share/locale
+ gettextsrcdir = $(datadir)/gettext/po
+ 
+ INSTALL = /usr/bin/install -c
+diff -Nur jwm-2.3.7/po/Makefile.in jwm-2.3.7.patched/po/Makefile.in
+--- jwm-2.3.7/po/Makefile.in	2017-07-22 02:02:42.000000000 +0200
++++ jwm-2.3.7.patched/po/Makefile.in	2018-07-15 17:03:34.000000000 +0200
+@@ -22,11 +22,11 @@
+ top_srcdir = ..
+ 
+ 
+-prefix = /usr/local
+-exec_prefix = /usr/local
++prefix = /usr
++exec_prefix = /usr
+ datarootdir = ${prefix}/share
+ datadir = ${datarootdir}
+-localedir = /usr/local/share/locale
++localedir = /usr/share/locale
+ gettextsrcdir = $(datadir)/gettext/po
+ 
+ INSTALL = /usr/bin/install -c

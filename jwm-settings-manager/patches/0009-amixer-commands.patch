@@ -1,0 +1,26 @@
+From 3140d42905cf1b181db657a858c231027d416215 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 18:46:26 +0200
+Subject: =?UTF-8?q?amixer=20parancs=20is=20m=C3=A1s=20UHU=20-n=C3=A1l?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index a16c1de..fed9ca4 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -11,9 +11,9 @@ set (SCREEN_SHOT "exec:screenie")
+ set (RUN_DIALOG "exec:zrun")
+ set (CALC_PROG "exec:xcalc")
+ set (TERM_PROG "exec:xterm")
+-set (VOL_UP "exec:amixer-up")
+-set (VOL_DOWN "exec:amixer-down")
+-set (VOL_MUTE "exec:amixer-toggle")
++set (VOL_UP "exec:amixer Master 5%+")
++set (VOL_DOWN "exec:amixer Master 5%-")
++set (VOL_MUTE "exec:amixer  Master toggle")
+ set (LOGOUT_PROGRAM "torios-exit")
+ set (TZ_PROG "xterm -e 'sudo dpkg-reconfigure tzdata'")
+ set (CAL_PROG "torios-calendar")

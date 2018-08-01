@@ -1,0 +1,40 @@
+From 19aeae6899990a375167208d005509ad49a5c1dc Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 07:32:01 +0200
+Subject: =?UTF-8?q?synaptic=20nem=20kell=20a=20t=C3=A1lc=C3=A1ra?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 15ab9cd..5b3cb41 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -74,10 +74,6 @@ set(SHUTERDOWN "<Separator/>
+ 	<Program icon=\"${SHUTDOWN_ICON}\" label=\"${SHUTDOWN_NAME}\">${SHUTDOWN_PROGRAM}</Program>
+ 	<Exit icon=\"${LOGOUT_ICON}\" label=\"Kilépés\" confirm=\"true\" />")
+ ## MAIN MENU
+-set(TRAYbuttonForTray "<TrayButton popup=\"Szoftver telepítő\" icon=\"synaptic\" border=\"false\">
+-          <Button mask=\"1\">exec:synaptic</Button>
+-          <Button mask=\"23\">root:j</Button>
+-        </TrayButton>")
+ set(JWM_ROOT_NUM "2")
+ set(JWM_ROOT "root:${JWM_ROOT_NUM}")
+ 
+@@ -135,7 +131,6 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+         <Dock/>
+-${TRAYbuttonForTray}
+         <Swallow name=\"xload\" width=\"64\">xload -nolabel -bg DimGrey -fg Grey -hl DarkGrey</Swallow>
+         ${CLOCK_TAG}
+         <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+@@ -147,7 +142,6 @@ set (OLD_DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" w
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+         <Dock/>
+-${TRAYbuttonForTray}
+         <Swallow name=\"xload\" width=\"64\">xload -nolabel -bg DimGrey -fg Grey -hl DarkGrey</Swallow>
+         ${OLD_CLOCK_TAG}
+         <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>

@@ -1,0 +1,45 @@
+From 4f9ada32f4cf85bbc874eafb4500a91bf2335c22 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 21:13:11 +0200
+Subject: torios-calendar sincs
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 2642e64..c546d71 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -11,7 +11,6 @@ set (TERM_PROG "exec:xterm")
+ set (VOL_UP "exec:amixer Master 5%+")
+ set (VOL_DOWN "exec:amixer Master 5%-")
+ set (VOL_MUTE "exec:amixer Master toggle")
+-set (CAL_PROG "torios-calendar")
+ set (RESTART_PROGRAM "systemctl reboot")
+ 
+ ## menu programs
+@@ -45,15 +44,8 @@ set(BG "/usr/share/backgrounds/default.jpg")
+ ## CLOCK
+ set(CLOCK_FORMAT "%a, %e %b %l:%M %p")
+ set(CLOCK "root:c")
+-set(OLD_CLOCK "${CAL_PROG}")
+-set(OLD_CLOCK_TAG "<Clock format=\"${CLOCK_FORMAT}\">${OLD_CLOCK}</Clock>")
++set(OLD_CLOCK_TAG "<Clock format=\"${CLOCK_FORMAT}\"></Clock>")
+ set(CLOCK_TAG "<Clock format=\"${CLOCK_FORMAT}\">${CLOCK}</Clock>")
+-set(CLOCK_MENU "<!-- Clock Menu-->
+-    <RootMenu height=\"0\" onroot=\"c\">
+-        <Program icon=\"time\" label=\"Clock Settings\">${JSM} --clock-settings</Program>
+-         <Separator/>
+-        <Program icon=\"calendar\" label=\"Calendar\">${OLD_CLOCK}</Program>
+-    </RootMenu>")
+ 
+ ## Panel Edit
+ set(EDIT_PANEL_ROOT "root:p")
+@@ -225,8 +217,7 @@ ${JWM_ROOT_MENU}
+         <Program icon=\"folder-home\" label=\"Home\">xdg-open ~/</Program>
+         <Program icon=\"jwm-settings-manager\" label=\"Settings\">jwm-settings-manager</Program>
+         <Program icon=\"preferences-desktop-wallpaper\" label=\"Change Desktop Background\">jwm-settings-manager --desktop</Program>
+-    </RootMenu>
+-    ${CLOCK_MENU}")
++    </RootMenu>")
+ 
+ set(FONT "Sans:10")
+ ## see http://en.wikipedia.org/wiki/Table_of_keyboard_shortcuts

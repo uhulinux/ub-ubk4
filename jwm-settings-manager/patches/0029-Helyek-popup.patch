@@ -1,0 +1,46 @@
+From 485dfb44b98fb5ccd4f9d04b4ab9fb99efd2e878 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 13:17:11 +0200
+Subject: Helyek -> popup
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index dfd730a..71f3500 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -111,7 +111,7 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+             <Button mask=\"1\">${JWM_ROOT}</Button>
+             <Button mask=\"23\">${EDIT_MENU_ROOT}</Button>
+         </TrayButton>
+-        <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">
++        <TrayButton popup=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">
+             <Button mask=\"1\">${PLACES_ROOT}</Button>
+         </TrayButton>
+         <Pager labeled=\"true\"/>
+@@ -124,7 +124,7 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+ ### OLD STYLE 2.2.2 configs
+ set (OLD_DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+-        <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
++        <TrayButton popup=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+         <Dock/>
+@@ -146,7 +146,7 @@ set (SHOW_DESK_ICON "preferences-system-hotcorners.png")
+ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+ 	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+-        <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
++        <TrayButton popup=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Spacer/>
+         <Dock/>
+          ${CLOCK_TAG}
+@@ -160,7 +160,7 @@ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width
+ set (OLD_GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+ 	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+-        <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
++        <TrayButton popup=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Spacer/>
+         <Dock/>
+          ${OLD_CLOCK_TAG}

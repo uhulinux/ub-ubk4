@@ -1,0 +1,19 @@
+From 145c435e722388f8b533e6f79a87c05c513c0b14 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 21:40:42 +0200
+Subject: JWM_MENU= xdgmenumaker
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 060e023..ac6b5c7 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -17,7 +17,7 @@ set (RESTART_PROGRAM "systemctl reboot")
+ set(PLACES_MENU_FILE "$HOME/.config/placesmenu")
+ set(PLACES_INCLUDE "exec:/usr/bin/jwm-places")
+ set(APPMENU_FILE "$HOME/.cache/jwm-menu.cache")
+-set(JWM_MENU "exec:/usr/bin/jwm-menu")
++set(JWM_MENU "exec:xdgmenumaker -n -i -f jwm")
+ 
+ ##Startup commands
+ set (STARTUP "<StartupCommand>nm-applet</StartupCommand>

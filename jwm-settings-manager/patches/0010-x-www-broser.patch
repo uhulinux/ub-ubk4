@@ -1,0 +1,105 @@
+From 361aaa4cbb9212969fd6dd18cf91b575d73fa0f1 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 19:05:58 +0200
+Subject: UHU: nincs x-www-browser szkript
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index fed9ca4..650c9f7 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -3,9 +3,6 @@
+ 
+ ## DEFAULT PROGRAMS
+ set(JSM "jwm-settings-manager")
+-set (MENU_WEB_PROG "x-www-browser")
+-set (WEB_PROG "exec:${MENU_WEB_PROG}")
+-set (STARTPAGE_ICON "browser")
+ set (SYS_MONITOR "exec:xterm htop")
+ set (SCREEN_SHOT "exec:screenie")
+ set (RUN_DIALOG "exec:zrun")
+@@ -13,7 +10,7 @@ set (CALC_PROG "exec:xcalc")
+ set (TERM_PROG "exec:xterm")
+ set (VOL_UP "exec:amixer Master 5%+")
+ set (VOL_DOWN "exec:amixer Master 5%-")
+-set (VOL_MUTE "exec:amixer  Master toggle")
++set (VOL_MUTE "exec:amixer Master toggle")
+ set (LOGOUT_PROGRAM "torios-exit")
+ set (TZ_PROG "xterm -e 'sudo dpkg-reconfigure tzdata'")
+ set (CAL_PROG "torios-calendar")
+@@ -25,17 +22,6 @@ set(PLACES_INCLUDE "exec:/usr/bin/jwm-places")
+ set(APPMENU_FILE "$HOME/.cache/jwm-menu.cache")
+ set(JWM_MENU "exec:/usr/bin/jwm-menu")
+ 
+-## help programs
+-set(ABOUT_PROG "torios-about || ${MENU_WEB_PROG} http://torios.top")
+-set (MANUAL "${MENU_WEB_PROG} /usr/share/doc/torios/html/index.html")
+-set (STARTPAGE "${WEB_PROG} /usr/share/doc/torios/startpage.html")
+-
+-# Web pages
+-set(FACEB "https://www.facebook.com/ToriOS.Official")
+-set(GPLUS "https://plus.google.com/113578220061772446187/posts")
+-set(TWITTER "https://twitter.com/ToriOS_Official")
+-set(LP "https://launchpad.net/~torios")
+-
+ ##Startup commands
+ set (STARTUP "<StartupCommand>nm-applet</StartupCommand>
+ 	<StartupCommand>/usr/libexec/lxpolkit</StartupCommand>
+@@ -118,14 +104,6 @@ set(MENU_ICON "/usr/share/pixmaps/distributor-logo.png")
+ 
+ set(JWM_ROOT_MENU "<RootMenu onroot=\"${JWM_ROOT_NUM}\">
+         <Include>${JWM_MENU}</Include>
+-        <Menu label=\"About ToriOS\" icon=\"help-about\" height=\"0\">
+-           <Program label=\"Help\" icon=\"help\">${MANUAL}</Program>
+-           <Program label=\"Launchpad\" icon=\"launchpad\">${MENU_WEB_PROG} ${LP}</Program>
+-           <Program label=\"G+\" icon=\"googleplus\">${MENU_WEB_PROG} ${GPLUS}</Program>
+-           <Program label=\"Facebook\" icon=\"facebook\">${MENU_WEB_PROG} ${FACEB}</Program>
+-           <Program label=\"Twitter\" icon=\"twitter\">${MENU_WEB_PROG} ${TWITTER}</Program>
+-           <Program label=\"About Us\" icon=\"${MENU_ICON}\">${ABOUT_PROG}</Program>
+-        </Menu>
+         ${SHUTERDOWN}
+     </RootMenu>")
+ set(TORI_ROOT "${JWM_ROOT}")
+@@ -171,10 +149,6 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+             <Button mask=\"1\">${PLACES_ROOT}</Button>
+             <Button mask=\"23\">${EDIT_MENU_ROOT}</Button>
+         </TrayButton>
+-        <TrayButton icon=\"${STARTPAGE_ICON}\" border=\"false\">
+-            <Button mask=\"1\">${STARTPAGE}</Button>
+-            <Button mask=\"23\">${EDIT_PANEL_ROOT}</Button>
+-        </TrayButton>
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+         <Dock/>
+@@ -186,7 +160,6 @@ ${TRAYbuttonForTray}
+ set (OLD_DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <TrayButton label=\"${MENU_NAME}\" icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
+         <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+-        <TrayButton icon=\"${STARTPAGE_ICON}\" border=\"false\">${STARTPAGE}</TrayButton>
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+         <Dock/>
+@@ -210,7 +183,6 @@ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width
+         <TrayButton label=\"${MENU_NAME}\" icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
+ 	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+         <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+-        <TrayButton icon=\"${STARTPAGE_ICON}\" border=\"false\">${STARTPAGE}</TrayButton>
+         <Spacer/>
+         <Dock/>
+          ${CLOCK_TAG}
+@@ -225,7 +197,6 @@ set (OLD_GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" w
+         <TrayButton label=\"${MENU_NAME}\" icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
+ 	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+         <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+-        <TrayButton icon=\"${STARTPAGE_ICON}\" border=\"false\">${STARTPAGE}</TrayButton>
+         <Spacer/>
+         <Dock/>
+          ${OLD_CLOCK_TAG}
+@@ -279,7 +250,6 @@ set(KEYSHORTCUTS "<Key key=\"Up\">up</Key>
+     <Key key=\"XF86AudioMute\">${VOL_MUTE}</Key>
+     <Key key=\"XF86AudioRaiseVolume\">${VOL_UP}</Key>
+     <Key key=\"XF86AudioLowerVolume\">${VOL_DOWN}</Key>
+-    <Key key=\"XF86WWW\">${WEB_PROG}</Key>
+     <Key key=\"XF86Calculator\">${CALC_PROG}</Key>
+     <Key key=\"Print\">${SCREEN_SHOT}</Key>
+     <Key mask=\"CA\" key=\"p\">${SCREEN_SHOT}</Key>

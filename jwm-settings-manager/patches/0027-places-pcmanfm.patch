@@ -1,0 +1,61 @@
+From 41abf53441da9b36c7224dcca18d87fa1fbb031a Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 12:46:27 +0200
+Subject: places ->pcmanfm
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index ec729e0..dfd730a 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -14,8 +14,7 @@ set (VOL_MUTE "exec:amixer Master toggle")
+ set (RESTART_PROGRAM "systemctl reboot")
+ 
+ ## menu programs
+-set(PLACES_MENU_FILE "$HOME/.config/placesmenu")
+-set(PLACES_INCLUDE "exec:/usr/bin/jwm-places")
++set(PLACES_ROOT "exec:pcmanfm")
+ set(APPMENU_FILE "exec:xdgmenumaker -n -i -f jwm")
+ set(JWM_MENU "exec:xdgmenumaker -n -i -f jwm")
+ 
+@@ -88,21 +87,9 @@ set(TORI_ROOT "${JWM_ROOT}")
+ 
+ 
+ 
+-## PLACES MENU
+-set(PLACES_NUM "7")
+-set(PLACES_ROOT "root:${PLACES_NUM}")
+-set(PLACES_NAME "Places")
+-
++set(PLACES_NAME "Helyek")
+ set(PLACES_ICON "folder")
+-set(PLACES_MENU "    <RootMenu onroot=\"${PLACES_NUM}\">
+-        <Include>${PLACES_INCLUDE}</Include>
+-    </RootMenu>")
+-set(REGULAR_MENUS_LIST "    <Include>${APPMENU_FILE}</Include>
+-<!--Places Menu-->
+-    <Include>${PLACES_MENU_FILE}</Include>
+-${traybuttons}")
+-set(MENUS_LIST_NEW "${JWM_ROOT_MENU}
+-${PLACES_MENU}")
++set(MENUS_LIST_NEW "${JWM_ROOT_MENU}")
+ set(REGULAR_MENUS_LIST "${MENUS_LIST_NEW}")
+ set (ROOT_MENU "root:${JWM_ROOT_NUM}")
+ ## Mouse MENU
+@@ -126,7 +113,6 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+         </TrayButton>
+         <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">
+             <Button mask=\"1\">${PLACES_ROOT}</Button>
+-            <Button mask=\"23\">${EDIT_MENU_ROOT}</Button>
+         </TrayButton>
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+@@ -199,8 +185,6 @@ ${JWM_ROOT_MENU}
+         <Program icon=\"${RESTART_ICON}\" label=\"Újraindítás\">${RESTART_PROGRAM}</Program>
+         <Restart label=\"JWM újraindítás\" icon=\"${RESTART_ICON}\"/>
+     </RootMenu>
+-        <!--Places Menu-->
+-    <Include>$HOME/.config/placesmenu</Include>
+     <!-- Mouse Menu-->
+     <RootMenu height=\"16\" onroot=\"2\">
+         <Program icon=\"folder-home\" label=\"Home\">xdg-open ~/</Program>
