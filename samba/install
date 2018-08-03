@@ -2,18 +2,6 @@
 
 ub_install DESTDIR="$UB_INSTALLDIR"
 
-# ldb ütközések
-rm -f "$UB_INSTALLDIR"/usr/bin/tdbbackup
-rm -f "$UB_INSTALLDIR"/usr/bin/tdbdump
-rm -f "$UB_INSTALLDIR"/usr/bin/tdbrestore
-rm -f "$UB_INSTALLDIR"/usr/bin/tdbtool
-rm -f "$UB_INSTALLDIR"/usr/lib/python2.7/site-packages/talloc.so
-rm -f "$UB_INSTALLDIR"/usr/lib/python2.7/site-packages/tdb.so
-rm -f "$UB_INSTALLDIR"/usr/lib/python2.7/site-packages/_tdb_text.py
-rm -f "$UB_INSTALLDIR"/usr/lib/python2.7/site-packages/ldb.so
-rm -f "$UB_INSTALLDIR"/usr/lib/python2.7/site-packages/_ldb_text.py
-rm -f "$UB_INSTALLDIR"/usr/bin/ldb*
-
 # systemd
 cd packaging/systemd
 mkdir "$UB_INSTALLDIR"/usr/lib/tmpfiles.d
@@ -26,3 +14,7 @@ for i in *; do
 	m="${i##*.}"
 	cp -a "$i" "$UB_INSTALLDIR"/usr/share/man/man${m}/
 done
+
+# usershare
+mkdir -p "$UB_INSTALLDIR"/var/lib/samba/usershare
+chmod 1770 "$UB_INSTALLDIR"/var/lib/samba/usershare
