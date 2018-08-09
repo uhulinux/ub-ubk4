@@ -5,10 +5,6 @@ if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 7 ]; then
 	exit 1
 fi
 
-# export CC="x86_64-gnu-linux-gcc"
-# export CXX="x86_64-gnu-linux-g++"
-# export AR="ar"
-# export NM="nm"
 cpu="x64"
 
 # -Drelease_extra_cflags=" -fno-delete-null-pointer-checks"

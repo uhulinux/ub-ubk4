@@ -1,7 +1,7 @@
 diff -Naur orig/chrome/browser/extensions/external_component_loader.cc patched/chrome/browser/extensions/external_component_loader.cc
---- orig/chrome/browser/extensions/external_component_loader.cc	2018-01-24 21:05:41.000000000 +0100
-+++ patched/chrome/browser/extensions/external_component_loader.cc	2018-01-27 01:16:59.413126066 +0100
-@@ -31,19 +31,6 @@
+--- orig/chrome/browser/extensions/external_component_loader.cc	2018-07-25 00:08:20.000000000 +0200
++++ patched/chrome/browser/extensions/external_component_loader.cc	2018-07-27 00:29:14.002122620 +0200
+@@ -32,24 +32,6 @@
  
  void ExternalComponentLoader::StartLoading() {
    auto prefs = std::make_unique<base::DictionaryValue>();
@@ -15,6 +15,11 @@ diff -Naur orig/chrome/browser/extensions/external_component_loader.cc patched/c
 -        base::CommandLine::ForCurrentProcess();
 -    if (!command_line->HasSwitch(chromeos::switches::kDisableNewZIPUnpacker))
 -      AddExternalExtension(extension_misc::kZIPUnpackerExtensionId,
+-                           prefs.get());
+-
+-    // Only load the Assessment Assistant if the current session is managed.
+-    if (policy::ProfilePolicyConnectorFactory::IsProfileManaged(profile_))
+-      AddExternalExtension(extension_misc::kAssessmentAssistantExtensionId,
 -                           prefs.get());
 -  }
 -#endif
