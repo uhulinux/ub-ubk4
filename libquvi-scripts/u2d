@@ -1,2 +1,3 @@
-minor=$(sflist quvi . | sort -V | tail -n 1)
-sflist quvi "$minor"/libquvi-scripts | parsever | sort -V | tail -n 1 
+minor=$(sflist quvi | grep [0-9.] | sort -V | tail -n 1)
+geturl https://sourceforge.net/projects/quvi/files/$minor/libquvi-scripts/ | grep tar.xz | sed s/\\.tar.*//g | sed s/.*libquvi-scripts-//g | sort -V | tail -n 1
+    
