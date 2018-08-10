@@ -1,1 +1,2 @@
-sflist ccrypt ccrypt | grep -E '^([0-9.]+)$' | sort -V | tail -n 1
+dir=$(sflist ccrypt | grep -E '^([0-9.]+)$' | sort -V | tail -n 1)
+geturl https://sourceforge.net/projects/ccrypt/files/$dir/ | grep tar.gz | sed s/\\.tar.*//g | sed s/.*ccrypt-//g | sort -V | tail  -n 1
