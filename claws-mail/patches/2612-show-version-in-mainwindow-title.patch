@@ -1,7 +1,7 @@
 diff -Naur orig/src/mainwindow.c patched/src/mainwindow.c
---- orig/src/mainwindow.c	2017-12-17 12:48:37.134739579 +0100
-+++ patched/src/mainwindow.c	2017-12-17 14:05:29.420338840 +0100
-@@ -1460,7 +1460,7 @@
+--- orig/src/mainwindow.c	2018-08-15 19:43:32.000000000 +0200
++++ patched/src/mainwindow.c	2018-08-15 23:26:06.346389452 +0200
+@@ -1445,7 +1445,7 @@
  
  	/* main window */
  	window = GTK_WIDGET(gtkut_window_new(GTK_WINDOW_TOPLEVEL, "mainwindow"));
@@ -10,7 +10,7 @@ diff -Naur orig/src/mainwindow.c patched/src/mainwindow.c
  	gtk_window_set_resizable(GTK_WINDOW(window), TRUE);
  #ifdef GENERIC_UMPC
  	prefs_common.layout_mode = SMALL_LAYOUT;
-@@ -2646,9 +2646,9 @@
+@@ -2624,9 +2624,9 @@
  			   : _("none"));
  
  	if (cur_account)
@@ -23,9 +23,9 @@ diff -Naur orig/src/mainwindow.c patched/src/mainwindow.c
  	g_free(buf);
  
 diff -Naur orig/src/prefs_common.c patched/src/prefs_common.c
---- orig/src/prefs_common.c	2017-12-17 12:48:41.134739579 +0100
-+++ patched/src/prefs_common.c	2017-12-17 14:05:29.420338840 +0100
-@@ -796,6 +796,8 @@
+--- orig/src/prefs_common.c	2018-08-15 19:43:32.000000000 +0200
++++ patched/src/prefs_common.c	2018-08-15 23:26:06.346389452 +0200
+@@ -797,6 +797,8 @@
  	{"layout_mode", "5", &prefs_common.layout_mode, P_INT,
  	 NULL, NULL, NULL},
  #endif
@@ -35,13 +35,13 @@ diff -Naur orig/src/prefs_common.c patched/src/prefs_common.c
  	 NULL, NULL, NULL}, */
  	{"open_selected_message_on_folder_open", "FALSE",
 diff -Naur orig/src/prefs_common.h patched/src/prefs_common.h
---- orig/src/prefs_common.h	2017-12-17 12:48:41.134739579 +0100
-+++ patched/src/prefs_common.h	2017-12-17 14:05:29.424338888 +0100
-@@ -359,6 +359,7 @@
- 
- 	/* Interface */
- 	gboolean layout_mode;
+--- orig/src/prefs_common.h	2018-08-15 19:43:32.000000000 +0200
++++ patched/src/prefs_common.h	2018-08-15 23:27:54.635581731 +0200
+@@ -398,6 +398,7 @@
+ 	gboolean immediate_exec;
+ 	SelectOnEntry select_on_entry;
+ 	gboolean show_tooltips;
 +	gboolean show_version_in_window_title;
  
- 	gint statusbar_update_step;
- 	gboolean emulate_emacs;
+ 	EntryAction summary_select_prio[SUMMARY_OPEN_ACTIONS-1];
+ 
