@@ -1,3 +1,9 @@
 #!/bin/sh -eux
 
 ub_install
+
+# compatibility symlinks
+install -dm755 "$UB_INSTALLDIR/usr/include/gdbm"
+ln -sf ../gdbm.h "$UB_INSTALLDIR/usr/include/gdbm/gdbm.h"
+ln -sf ../ndbm.h "$UB_INSTALLDIR/usr/include/gdbm/ndbm.h"
+ln -sf ../dbm.h  "$UB_INSTALLDIR/usr/include/gdbm/dbm.h"

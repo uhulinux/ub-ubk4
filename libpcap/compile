@@ -1,5 +1,5 @@
 #!/bin/sh -eux
 
-ub_configure \
-    --enable-ipv6
-ub_make
+rm -f CMakeLists.txt
+ub_compile \
+	--enable-ipv6

@@ -1,16 +1,10 @@
-Description: Re-add hb_version_check to unbreak API/ABI
-  This patch should be removed on the next API/ABI break by upstream.
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
-Bug-Debian: http://bugs.debian.org/755094
-Forwarded: not-needed
-
---- a/src/hb-common.cc
-+++ b/src/hb-common.cc
-@@ -989,3 +989,23 @@
- {
+diff -Naur orig/src/hb-common.cc patched/src/hb-common.cc
+--- orig/src/hb-common.cc	2018-08-02 11:03:42.000000000 +0200
++++ patched/src/hb-common.cc	2018-08-13 02:18:53.344964845 +0200
+@@ -641,6 +641,26 @@
    return HB_VERSION_ATLEAST (major, minor, micro);
  }
-+
+ 
 +/**
 + * hb_version_check:
 + * @major: 
@@ -30,8 +24,13 @@ Forwarded: not-needed
 +{
 +  return HB_VERSION_CHECK (major, minor, micro);
 +}
---- a/src/hb-version.h
-+++ b/src/hb-version.h
++
+ 
+ 
+ /* hb_feature_t and hb_variation_t */
+diff -Naur orig/src/hb-version.h patched/src/hb-version.h
+--- orig/src/hb-version.h	2018-08-09 07:01:38.000000000 +0200
++++ patched/src/hb-version.h	2018-08-13 02:15:23.534380748 +0200
 @@ -45,6 +45,9 @@
  #define HB_VERSION_ATLEAST(major,minor,micro) \
  	((major)*10000+(minor)*100+(micro) <= \
@@ -41,7 +40,7 @@ Forwarded: not-needed
 +	 HB_VERSION_MAJOR*10000+HB_VERSION_MINOR*100+HB_VERSION_MICRO)
  
  
- void
+ HB_EXTERN void
 @@ -60,6 +63,11 @@
  		    unsigned int minor,
  		    unsigned int micro);
@@ -54,8 +53,9 @@ Forwarded: not-needed
  
  HB_END_DECLS
  
---- a/src/hb-version.h.in
-+++ b/src/hb-version.h.in
+diff -Naur orig/src/hb-version.h.in patched/src/hb-version.h.in
+--- orig/src/hb-version.h.in	2018-06-13 00:50:09.000000000 +0200
++++ patched/src/hb-version.h.in	2018-08-13 02:15:23.534380748 +0200
 @@ -45,6 +45,10 @@
  #define HB_VERSION_ATLEAST(major,minor,micro) \
  	((major)*10000+(minor)*100+(micro) <= \
@@ -66,7 +66,7 @@ Forwarded: not-needed
 +
  
  
- void
+ HB_EXTERN void
 @@ -60,6 +64,11 @@
  		    unsigned int minor,
  		    unsigned int micro);

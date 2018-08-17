@@ -1,7 +1,7 @@
-diff -Naur libpcap-1.2.1-orig/Makefile.in libpcap-1.2.1/Makefile.in
---- libpcap-1.2.1-orig/Makefile.in	2012-01-02 01:47:37.000000000 +0100
-+++ libpcap-1.2.1/Makefile.in	2012-03-26 19:48:00.000000000 +0200
-@@ -23,6 +23,11 @@
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2018-07-22 19:08:39.000000000 +0200
++++ patched/Makefile.in	2018-08-17 04:59:26.907617992 +0200
+@@ -21,6 +21,11 @@
  # Various configurable paths (remember to edit Makefile.in, not Makefile)
  #
  
@@ -13,16 +13,16 @@ diff -Naur libpcap-1.2.1-orig/Makefile.in libpcap-1.2.1/Makefile.in
  # Top level hierarchy
  prefix = @prefix@
  exec_prefix = @exec_prefix@
-@@ -148,7 +153,7 @@
+@@ -154,7 +159,7 @@
  
- CLEANFILES = $(OBJ) libpcap.* $(TESTS) \
+ CLEANFILES = $(OBJ) libpcap.a libpcap.so.`cat $(srcdir)/VERSION` \
  	$(PROG)-`cat $(srcdir)/VERSION`.tar.gz $(GENSRC) $(GENHDR) \
--	lex.yy.c pcap-config
-+	lex.yy.c pcap-config libpcap.so.$(VERSION)
+-	lex.yy.c pcap-config libpcap.pc
++	lex.yy.c pcap-config libpcap.so.$(VERSION) libpcap.pc
  
  MAN1 = pcap-config.1
  
-@@ -643,6 +648,8 @@
+@@ -655,6 +660,8 @@
  	[ -d $(DESTDIR)$(libdir) ] || \
  	    (mkdir -p $(DESTDIR)$(libdir); chmod 755 $(DESTDIR)$(libdir))
  	$(INSTALL_DATA) libpcap.a $(DESTDIR)$(libdir)/libpcap.a

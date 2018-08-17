@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
+# test broken with gdbm >= 1.15. See: https://rt.perl.org/Public/Bug/Display.html?id=133295
+sed -i 's|BEGIN {|BEGIN { plan(skip_all => "fatal test unsupported with gdbm 1.15");|' ext/GDBM_File/t/fatal.t
+
 export UB_MAKE_PROCS=2
 
 sh Configure -des \
@@ -7,7 +10,7 @@ sh Configure -des \
 	-Dvendorprefix="/usr"        \
 	-Dsiteprefix="/usr"          \
 	-Dman3ext="3pm"              \
-	-Dcf_by="UHU Linux"          \
+	-Dcf_by="UHU-Linux"          \
 	-Dmyhostname="localhost"     \
 	-Dperladmin="root@localhost" \
 	-Ud_csh                      \
@@ -15,7 +18,7 @@ sh Configure -des \
 	-Dusethreads                 \
 	-Duse64bitint                \
 	-Dusemorebits				 \
-	-Dccdlflags='-fPIC'			 \
+	-Dcccdlflags='-fPIC'		 \
 	-Darchname=x86_64-linux
 
 make

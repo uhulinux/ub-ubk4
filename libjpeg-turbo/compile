@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
-
 ub_compile \
-	--with-jpeg8 \
-	--without-turbojpeg
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+	-DWITH_JPEG8=ON \
+	-DWITH_TURBOJPEG=ON

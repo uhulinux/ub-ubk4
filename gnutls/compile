@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+# valamiért nem jó neki a guile 2.2
 ub_compile \
+    --disable-guile \
 	--with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit" \
 	--with-default-trust-store-file="/etc/ssl/certs/ca-certificates.crt"
