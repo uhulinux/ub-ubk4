@@ -1,0 +1,12 @@
+diff -Naur orig/src/meson.build patched/src/meson.build
+--- orig/src/meson.build	2018-07-11 10:10:15.000000000 +0200
++++ patched/src/meson.build	2018-08-19 23:46:24.286323759 +0200
+@@ -4,7 +4,7 @@
+ config_cfg.set('INTEL_DRIVER_MAJOR_VERSION', intel_vaapi_driver_major_version)
+ config_cfg.set('INTEL_DRIVER_MINOR_VERSION', intel_vaapi_driver_minor_version)
+ config_cfg.set('INTEL_DRIVER_MICRO_VERSION', intel_vaapi_driver_micro_version)
+-config_cfg.set('INTEL_DRIVER_PRE_VERSION', intel_vaapi_driver_pre_version)
++config_cfg.set('INTEL_DRIVER_PRE_VERSION', '0')
+ config_cfg.set10('HAVE_HYBRID_CODEC', get_option('enable_hybrid_codec'))
+ if WITH_X11
+   config_cfg.set10('HAVE_VA_X11', 1)

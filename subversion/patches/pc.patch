@@ -1,16 +1,16 @@
 diff -Naur orig/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in patched/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in
---- orig/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in	2018-04-15 12:44:42.988529465 +0200
+--- orig/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_auth_gnome_keyring/libsvn_auth_gnome_keyring.pc.in	2018-08-18 20:06:31.715965269 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
- Requires:  apr-@SVN_APR_MAJOR_VERSION@ gnome-keyring-1
- Requires.private:  libsvn_subr
+ Requires:  apr-@SVN_APR_MAJOR_VERSION@
+ Requires.private:  libsvn_subr @SVN_GNOME_KEYRING_PCLIBS@
 -Libs: -L${libdir}  -lsvn_auth_gnome_keyring
 +Libs: -L${libdir}  -lsvn_auth_gnome_keyring-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in patched/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in
---- orig/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in	2018-04-15 12:44:42.988529465 +0200
+--- orig/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in	2018-08-18 20:05:38.231451677 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-@SVN_APR_MAJOR_VERSION@
@@ -19,8 +19,8 @@ diff -Naur orig/subversion/libsvn_auth_kwallet/libsvn_auth_kwallet.pc.in patched
 +Libs: -L${libdir}  -lsvn_auth_kwallet-1 @SVN_KWALLET_LIBS@
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_client/libsvn_client.pc.in patched/subversion/libsvn_client/libsvn_client.pc.in
---- orig/subversion/libsvn_client/libsvn_client.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_client/libsvn_client.pc.in	2018-04-15 12:44:42.988529465 +0200
+--- orig/subversion/libsvn_client/libsvn_client.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_client/libsvn_client.pc.in	2018-08-18 20:05:38.231451677 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-@SVN_APR_MAJOR_VERSION@
@@ -29,8 +29,8 @@ diff -Naur orig/subversion/libsvn_client/libsvn_client.pc.in patched/subversion/
 +Libs: -L${libdir}  -lsvn_client-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_delta/libsvn_delta.pc.in patched/subversion/libsvn_delta/libsvn_delta.pc.in
---- orig/subversion/libsvn_delta/libsvn_delta.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_delta/libsvn_delta.pc.in	2018-04-15 12:44:42.988529465 +0200
+--- orig/subversion/libsvn_delta/libsvn_delta.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_delta/libsvn_delta.pc.in	2018-08-18 20:05:38.231451677 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -39,8 +39,8 @@ diff -Naur orig/subversion/libsvn_delta/libsvn_delta.pc.in patched/subversion/li
 +Libs: -L${libdir}  -lsvn_delta-1 @SVN_ZLIB_LIBS@
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_diff/libsvn_diff.pc.in patched/subversion/libsvn_diff/libsvn_diff.pc.in
---- orig/subversion/libsvn_diff/libsvn_diff.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_diff/libsvn_diff.pc.in	2018-04-15 12:44:42.992529507 +0200
+--- orig/subversion/libsvn_diff/libsvn_diff.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_diff/libsvn_diff.pc.in	2018-08-18 20:05:38.231451677 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-@SVN_APR_MAJOR_VERSION@
@@ -49,8 +49,8 @@ diff -Naur orig/subversion/libsvn_diff/libsvn_diff.pc.in patched/subversion/libs
 +Libs: -L${libdir}  -lsvn_diff-1 @SVN_ZLIB_LIBS@
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_fs/libsvn_fs.pc.in patched/subversion/libsvn_fs/libsvn_fs.pc.in
---- orig/subversion/libsvn_fs/libsvn_fs.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_fs/libsvn_fs.pc.in	2018-04-15 12:44:42.992529507 +0200
+--- orig/subversion/libsvn_fs/libsvn_fs.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_fs/libsvn_fs.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -59,8 +59,8 @@ diff -Naur orig/subversion/libsvn_fs/libsvn_fs.pc.in patched/subversion/libsvn_f
 +Libs: -L${libdir}  -lsvn_fs-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_fs_base/libsvn_fs_base.pc.in patched/subversion/libsvn_fs_base/libsvn_fs_base.pc.in
---- orig/subversion/libsvn_fs_base/libsvn_fs_base.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_fs_base/libsvn_fs_base.pc.in	2018-04-15 12:44:42.992529507 +0200
+--- orig/subversion/libsvn_fs_base/libsvn_fs_base.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_fs_base/libsvn_fs_base.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -69,8 +69,8 @@ diff -Naur orig/subversion/libsvn_fs_base/libsvn_fs_base.pc.in patched/subversio
 +Libs: -L${libdir}  -lsvn_fs_base-1 @SVN_DB_LIBS@
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in patched/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in
---- orig/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in	2018-04-15 12:44:42.992529507 +0200
+--- orig/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -79,8 +79,8 @@ diff -Naur orig/subversion/libsvn_fs_fs/libsvn_fs_fs.pc.in patched/subversion/li
 +Libs: -L${libdir}  -lsvn_fs_fs-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_fs_util/libsvn_fs_util.pc.in patched/subversion/libsvn_fs_util/libsvn_fs_util.pc.in
---- orig/subversion/libsvn_fs_util/libsvn_fs_util.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_fs_util/libsvn_fs_util.pc.in	2018-04-15 12:44:42.996529549 +0200
+--- orig/subversion/libsvn_fs_util/libsvn_fs_util.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_fs_util/libsvn_fs_util.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -89,8 +89,8 @@ diff -Naur orig/subversion/libsvn_fs_util/libsvn_fs_util.pc.in patched/subversio
 +Libs: -L${libdir}  -lsvn_fs_util-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_fs_x/libsvn_fs_x.pc.in patched/subversion/libsvn_fs_x/libsvn_fs_x.pc.in
---- orig/subversion/libsvn_fs_x/libsvn_fs_x.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_fs_x/libsvn_fs_x.pc.in	2018-04-15 12:44:42.996529549 +0200
+--- orig/subversion/libsvn_fs_x/libsvn_fs_x.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_fs_x/libsvn_fs_x.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -99,8 +99,8 @@ diff -Naur orig/subversion/libsvn_fs_x/libsvn_fs_x.pc.in patched/subversion/libs
 +Libs: -L${libdir}  -lsvn_fs_x-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_ra/libsvn_ra.pc.in patched/subversion/libsvn_ra/libsvn_ra.pc.in
---- orig/subversion/libsvn_ra/libsvn_ra.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_ra/libsvn_ra.pc.in	2018-04-15 12:44:42.996529549 +0200
+--- orig/subversion/libsvn_ra/libsvn_ra.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_ra/libsvn_ra.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-@SVN_APR_MAJOR_VERSION@
@@ -109,8 +109,8 @@ diff -Naur orig/subversion/libsvn_ra/libsvn_ra.pc.in patched/subversion/libsvn_r
 +Libs: -L${libdir}  -lsvn_ra-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_ra_local/libsvn_ra_local.pc.in patched/subversion/libsvn_ra_local/libsvn_ra_local.pc.in
---- orig/subversion/libsvn_ra_local/libsvn_ra_local.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_ra_local/libsvn_ra_local.pc.in	2018-04-15 12:44:42.996529549 +0200
+--- orig/subversion/libsvn_ra_local/libsvn_ra_local.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_ra_local/libsvn_ra_local.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-@SVN_APR_MAJOR_VERSION@
@@ -119,8 +119,8 @@ diff -Naur orig/subversion/libsvn_ra_local/libsvn_ra_local.pc.in patched/subvers
 +Libs: -L${libdir}  -lsvn_ra_local-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in patched/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in
---- orig/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in	2018-04-15 12:45:38.041105487 +0200
+--- orig/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -129,8 +129,8 @@ diff -Naur orig/subversion/libsvn_ra_serf/libsvn_ra_serf.pc.in patched/subversio
 +Libs: -L${libdir}  -lsvn_ra_serf-1 @SVN_ZLIB_LIBS@
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in patched/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in
---- orig/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in	2018-04-15 12:44:43.000529591 +0200
+--- orig/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -139,8 +139,8 @@ diff -Naur orig/subversion/libsvn_ra_svn/libsvn_ra_svn.pc.in patched/subversion/
 +Libs: -L${libdir}  -lsvn_ra_svn-1 @SVN_SASL_LIBS@
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_repos/libsvn_repos.pc.in patched/subversion/libsvn_repos/libsvn_repos.pc.in
---- orig/subversion/libsvn_repos/libsvn_repos.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_repos/libsvn_repos.pc.in	2018-04-15 12:44:43.000529591 +0200
+--- orig/subversion/libsvn_repos/libsvn_repos.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_repos/libsvn_repos.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-@SVN_APR_MAJOR_VERSION@
@@ -149,8 +149,8 @@ diff -Naur orig/subversion/libsvn_repos/libsvn_repos.pc.in patched/subversion/li
 +Libs: -L${libdir}  -lsvn_repos-1
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_subr/libsvn_subr.pc.in patched/subversion/libsvn_subr/libsvn_subr.pc.in
---- orig/subversion/libsvn_subr/libsvn_subr.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_subr/libsvn_subr.pc.in	2018-04-15 12:46:46.497821757 +0200
+--- orig/subversion/libsvn_subr/libsvn_subr.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_subr/libsvn_subr.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
@@ -159,8 +159,8 @@ diff -Naur orig/subversion/libsvn_subr/libsvn_subr.pc.in patched/subversion/libs
 +Libs: -L${libdir}  -lsvn_subr-1 @SVN_XML_LIBS@ @SVN_ZLIB_LIBS@ @SVN_APR_MEMCACHE_LIBS@ @SVN_MAGIC_LIBS@ @SVN_INTL_LIBS@ @SVN_LZ4_LIBS@ @SVN_UTF8PROC_LIBS@
  Cflags: -I${includedir}
 diff -Naur orig/subversion/libsvn_wc/libsvn_wc.pc.in patched/subversion/libsvn_wc/libsvn_wc.pc.in
---- orig/subversion/libsvn_wc/libsvn_wc.pc.in	2018-04-11 08:47:50.000000000 +0200
-+++ patched/subversion/libsvn_wc/libsvn_wc.pc.in	2018-04-15 12:44:43.004529632 +0200
+--- orig/subversion/libsvn_wc/libsvn_wc.pc.in	2018-07-14 22:30:59.000000000 +0200
++++ patched/subversion/libsvn_wc/libsvn_wc.pc.in	2018-08-18 20:05:38.235451716 +0200
 @@ -8,5 +8,5 @@
  Version: @PACKAGE_VERSION@
  Requires:  apr-util-@SVN_APR_MAJOR_VERSION@ apr-@SVN_APR_MAJOR_VERSION@
