@@ -1,0 +1,39 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2016-04-19 17:08:35.000000000 +0200
++++ patched/CMakeLists.txt	2016-10-07 01:55:45.710480890 +0200
+@@ -58,7 +58,7 @@
+ find_library(PROTOBUF_STATIC_LIBRARY libprotobuf.a libprotobuf)
+ 
+ pkg_check_modules(CDIO libcdio)
+-pkg_check_modules(CHROMAPRINT REQUIRED libchromaprint)
++pkg_check_modules(CHROMAPRINT libchromaprint)
+ pkg_search_module(CRYPTOPP cryptopp libcrypto++)
+ pkg_check_modules(GIO gio-2.0)
+ pkg_check_modules(GLIB REQUIRED glib-2.0)
+@@ -395,6 +395,26 @@
+   set(SHA2_LIBRARIES sha2)
+ endif()
+ 
++# Use our 3rdparty chromaprint if a system one wasn't found
++if(NOT CHROMAPRINT_FOUND)
++  add_subdirectory(3rdparty/chromaprint)
++  set(CHROMAPRINT_LIBRARIES chromaprint_p)
++  set(CHROMAPRINT_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/3rdparty/chromaprint/src)
++
++  if(WIN32)
++    add_definitions(-DCHROMAPRINT_NODLL)
++  endif(WIN32)
++endif(NOT CHROMAPRINT_FOUND)
++
++# Use system libechonest if it's available
++find_path(ECHONEST_INCLUDE_DIRS echonest/echonest_export.h)
++find_library(ECHONEST_LIBRARIES echonest)
++if(NOT ECHONEST_INCLUDE_DIRS OR NOT ECHONEST_LIBRARIES)
++  add_subdirectory(3rdparty/libechonest)
++  set(ECHONEST_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/3rdparty/libechonest)
++  set(ECHONEST_LIBRARIES echonest)
++endif(NOT ECHONEST_INCLUDE_DIRS OR NOT ECHONEST_LIBRARIES)
++
+ # Use the system libmygpo-qt if a recent enough version was found
+ if(LIBMYGPO_QT_FOUND)
+   set(MYGPOQT_LIBRARIES ${LIBMYGPO_QT_LIBRARIES})
