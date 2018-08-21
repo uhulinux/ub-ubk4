@@ -1,0 +1,12 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2018-07-17 00:29:47.000000000 +0200
++++ patched/configure	2018-08-20 12:34:54.130230504 +0200
+@@ -18366,7 +18366,7 @@
+ WARN_CFLAGS=
+ test "X${GCC}" = Xyes && {
+   CFLAGS="$CFLAGS -Wno-format-contains-nul -fno-strict-aliasing"
+-  WARN_CFLAGS="$CFLAGS "`echo -Wall -Werror -Wcast-align -Wmissing-prototypes \
++  WARN_CFLAGS="$CFLAGS "`echo -Wall -Wcast-align -Wmissing-prototypes \
+ 	-Wpointer-arith -Wshadow -Wstrict-prototypes -Wwrite-strings \
+ 	-Wstrict-aliasing=3 -Wextra -Wno-cast-qual`
+ }

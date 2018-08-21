@@ -2,6 +2,10 @@
 
 ub_install
 
+cp prnt/hpcups/libImageProcessor-x86_64.so "$UB_INSTALLDIR"/usr/lib/
+chmod 755 "$UB_INSTALLDIR"/usr/lib/libImageProcessor-x86_64.so
+ln -s libImageProcessor-x86_64.so "$UB_INSTALLDIR"/usr/lib/libImageProcessor.so
+
 rm -rf "$UB_INSTALLDIR"/etc/sane.d/
 
 mv "$UB_INSTALLDIR"/usr/share/doc/hplip{-"$UB_VERSION",}

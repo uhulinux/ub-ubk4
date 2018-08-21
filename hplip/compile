@@ -1,12 +1,15 @@
 #!/bin/sh -eux
 
+export PYTHON=/usr/bin/python3
+
 ub_compile \
 	--enable-scan-build \
 	--enable-gui-build \
 	--enable-fax-build \
 	--enable-pp-build \
 	--enable-policykit \
-	--enable-qt4 \
+	--enable-qt5 \
+	--disable-qt4 \
 	--enable-hpcups-install \
 	--enable-hpijs-install \
 	--enable-cups-drv-install \
