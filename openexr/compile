@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
-ub_compile \
-    -DOPENEXR_BUILD_SHARED=ON \
-	-DOPENEXR_NAMESPACE_VERSIONING=OFF
+rm -f CMakeLists.txt
+ub_compile
+
+#ub_compile \
+#    -DOPENEXR_BUILD_SHARED=ON \
+#	-DOPENEXR_NAMESPACE_VERSIONING=OFF
