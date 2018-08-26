@@ -1,0 +1,33 @@
+diff -Naur orig/OpenEXR/CMakeLists.txt patched/OpenEXR/CMakeLists.txt
+--- orig/OpenEXR/CMakeLists.txt	2018-08-10 10:34:26.000000000 +0200
++++ patched/OpenEXR/CMakeLists.txt	2018-08-26 01:52:48.818491312 +0200
+@@ -199,6 +199,29 @@
+   ${CMAKE_INSTALL_PREFIX}/include/OpenEXR
+   )
+ 
++IF ( NOT WIN32 )
++  FILE ( WRITE ${CMAKE_BINARY_DIR}/OpenEXR.pc "prefix=${CMAKE_INSTALL_PREFIX}\n" )
++  FILE ( APPEND ${CMAKE_BINARY_DIR}/OpenEXR.pc "exec_prefix=\${prefix}
++libdir=\${exec_prefix}/lib
++includedir=\${prefix}/include
++OpenEXR_includedir=\${prefix}/include/OpenEXR
++
++Name: OpenEXR
++Description: OpenEXR image library
++Version: ${OPENEXR_VERSION}
++Libs: -L\${libdir} -lIlmImf${ILMBASE_LIBSUFFIX}
++Cflags: -I\${OpenEXR_includedir}
++Requires: IlmBase
++Libs.private: -lz
++")
++
++  INSTALL ( FILES
++    ${CMAKE_BINARY_DIR}/OpenEXR.pc
++    DESTINATION
++    lib/pkgconfig
++  )
++ENDIF()
++
+ # Documentation
+ INSTALL ( FILES
+   doc/TechnicalIntroduction.pdf
