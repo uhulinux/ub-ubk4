@@ -1,8 +1,6 @@
 #!/bin/sh -eux
 
-tar xf jdk-${UB_VERSION/.0./u}-linux-x64.tar.gz
-
-cd jdk1.${UB_VERSION/.0./.0_}/jre/lib/desktop/applications
+cd jre/lib/desktop/applications
 
 patch -i "$UB_SRCDIR"/patches/01desktop.patch.skip
 cd ../../../plugin/desktop
