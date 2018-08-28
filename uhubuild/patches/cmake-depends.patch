@@ -1,0 +1,23 @@
+diff -Naur orig/src/steps/depends patched/src/steps/depends
+--- orig/src/steps/depends	2018-07-05 00:44:22.000000000 +0200
++++ patched/src/steps/depends	2018-08-24 23:49:43.967557956 +0200
+@@ -358,7 +358,18 @@
+ 				fi
+ 			done
+ 			;;
+-		  *.la)
++			# cmake fájl analízise
++			./usr/lib/cmake/*/*Config.cmake|./usr/lib/qt5/lib/cmake/*/*Config.cmake)
++				for cmakedep in `grep find_dependency $file | sed 's/.*find_dependency[(]//g' | sed 's/\s.*//g'`;do
++					cmakefile="lib/cmake/${cmakedep}/${cmakedep}Config.cmake"               
++					if [ -f "/usr/${cmakefile}" ]; then
++						echo "/usr/${cmakefile}" >> "$UB_TMPDIR/file-noversion"
++					elif [ -f "/usr/lib/qt5/${cmakefile}" ]; then
++						echo "/usr/lib/qt5/${cmakefile}" >> "$UB_TMPDIR/file-noversion"
++					else
++						error "${cmakefile} is required by $file but not found"
++					fi
++				done
+ 			;;
+ 		esac
+ 
