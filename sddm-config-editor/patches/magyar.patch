@@ -1,6 +1,6 @@
-diff -Naur orig/cpp/sddm-config-editor_hu.ts mod/cpp/sddm-config-editor_hu.ts
---- orig/cpp/sddm-config-editor_hu.ts	1970-01-01 01:00:00.000000000 +0100
-+++ mod/cpp/sddm-config-editor_hu.ts	2015-11-13 11:08:08.806111459 +0100
+diff -Nur sddm-config-editor-8246144/cpp/sddm-config-editor_hu.ts sddm-config-editor-8246144.patched/cpp/sddm-config-editor_hu.ts
+--- sddm-config-editor-8246144/cpp/sddm-config-editor_hu.ts	1970-01-01 01:00:00.000000000 +0100
++++ sddm-config-editor-8246144.patched/cpp/sddm-config-editor_hu.ts	2018-08-27 14:22:59.557729094 +0200
 @@ -0,0 +1,211 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<!DOCTYPE TS>
@@ -213,25 +213,45 @@ diff -Naur orig/cpp/sddm-config-editor_hu.ts mod/cpp/sddm-config-editor_hu.ts
 +    </message>
 +</context>
 +</TS>
-diff -Naur orig/cpp/sddm-config-editor.pro mod/cpp/sddm-config-editor.pro
---- orig/cpp/sddm-config-editor.pro	2015-11-12 22:24:11.000000000 +0100
-+++ mod/cpp/sddm-config-editor.pro	2015-11-13 12:33:47.477353472 +0100
-@@ -9,7 +9,7 @@
- lupdate_only {
-   SOURCES += ui/*.qml config-strings.qml
+diff -Nur sddm-config-editor-8246144/cpp/sddm-config-editor.pro sddm-config-editor-8246144.patched/cpp/sddm-config-editor.pro
+--- sddm-config-editor-8246144/cpp/sddm-config-editor.pro	2018-08-27 13:42:40.000000000 +0200
++++ sddm-config-editor-8246144.patched/cpp/sddm-config-editor.pro	2018-08-27 14:19:18.000000000 +0200
+@@ -11,7 +11,8 @@
  }
--TRANSLATIONS = sddm-config-editor_zh_CN.ts
-+TRANSLATIONS = sddm-config-editor_zh_CN.ts sddm-config-editor_hu.ts
+ TRANSLATIONS = sddm-config-editor_zh_CN.ts \
+                sddm-config-editor_ru.ts \
+-               sddm-config-editor_it.ts
++               sddm-config-editor_it.ts \
++               sddm-config-editor_hu.ts
  QMAKE_EXTRA_COMPILERS += lrelease
  lrelease.input         = TRANSLATIONS
  lrelease.output        = ${QMAKE_FILE_BASE}.qm
-diff -Naur orig/cpp/translations.qrc mod/cpp/translations.qrc
---- orig/cpp/translations.qrc	2015-11-13 10:05:58.000000000 +0100
-+++ mod/cpp/translations.qrc	2015-11-13 12:34:32.899803297 +0100
-@@ -1,5 +1,6 @@
- <RCC>
-     <qresource prefix="/">
+diff -Nur sddm-config-editor-8246144/cpp/translations.qrc sddm-config-editor-8246144.patched/cpp/translations.qrc
+--- sddm-config-editor-8246144/cpp/translations.qrc	2018-08-27 13:42:40.000000000 +0200
++++ sddm-config-editor-8246144.patched/cpp/translations.qrc	2018-08-27 14:20:05.000000000 +0200
+@@ -3,5 +3,6 @@
          <file>sddm-config-editor_zh_CN.qm</file>
+         <file>sddm-config-editor_ru.qm</file>
+         <file>sddm-config-editor_it.qm</file>
 +        <file>sddm-config-editor_hu.qm</file>
      </qresource>
  </RCC>
+diff -Nur sddm-config-editor-8246144/data/sddm-config-editor.desktop sddm-config-editor-8246144.patched/data/sddm-config-editor.desktop
+--- sddm-config-editor-8246144/data/sddm-config-editor.desktop	2018-08-27 13:42:40.000000000 +0200
++++ sddm-config-editor-8246144.patched/data/sddm-config-editor.desktop	2018-08-27 13:55:34.619918297 +0200
+@@ -1,6 +1,7 @@
+ [Desktop Entry]
+ Type=Application
+ Name=SDDM Configuration
++Name[hu]=SDDM beállító
+ Name[ru]=Настройка входа в систему (SDDM)
+ Name[pl]=Konfiguracja SDDM
+ GenericName=Display Manager Configuration
+@@ -9,6 +10,7 @@
+ Name[it]=Configurazione di SDDM
+ Comment[it]=Editor di configurazione del display manager SDDM
+ Comment=Qt configuration editor for SDDM
++Comment[hu]=Az SDDM kinézetének és viselkedésének beállítása
+ Comment[pl]=Edytor konfiguracji menedżera wyświetlania SDDM napisany z użyciem Qt
+ Comment[ru]=Редактор конфигурации SDDM
+ Categories=Settings;System;Qt
