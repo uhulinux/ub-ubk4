@@ -1,0 +1,22 @@
+#!/bin/bash -eux
+
+#előkészület
+if [ "$UB_ARCH" == "amd64" ];then
+KVER="$(ls -1 /lib/modules | grep x86_64)"
+forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
+else
+KVER="$(ls -1 /lib/modules | grep i386)"
+forras="NVIDIA-Linux-x86-${UB_VERSION}"
+fi
+moduldir="$UB_COMPILEDIR/lib/modules/"$KVER"/kernel/drivers"
+mkdir -p $moduldir
+#kicsomagolás és belépés
+chmod +x $forras.run
+./"$forras".run -x
+mv $forras/* ./
+rm $forras.*
+sed -i 's/__NV_VK_ICD__/libGLX_nvidia.so.0/' nvidia_icd.json.template
+bsdtar -xf nvidia-persistenced-init.tar.bz2
+patch -i "$UB_SRCDIR"/patches/menu.patch.skip
+cd kernel
+make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
