@@ -1,0 +1,22 @@
+diff -Naur orig/makefile patched/makefile
+--- orig/makefile	2018-06-17 10:22:49.000000000 +0200
++++ patched/makefile	2018-09-03 23:34:54.343726343 +0200
+@@ -1,6 +1,7 @@
+ LIBS=
+ 
+-PREFIX= /usr/local
++PREFIX= /usr
++DESTDIR=
+ 
+ OSNAME := $(shell uname -s)
+ 
+@@ -22,6 +23,6 @@
+ 	$(MAKE) -C src clean
+ 
+ install:
+-	cp data/evisum.png $(PREFIX)/share/icons
+-	cp data/evisum.desktop $(PREFIX)/share/applications
+-	cp evisum $(PREFIX)/bin
++	cp data/evisum.png $(DESTDIR)/$(PREFIX)/share/icons
++	cp data/evisum.desktop $(DESTDIR)/$(PREFIX)/share/applications
++	cp evisum $(DESTDIR)/$(PREFIX)/bin
