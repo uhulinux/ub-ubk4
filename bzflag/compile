@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
-ub_compile
+autoreconf -vif
+ub_compile \
+    --with-SDL=2
