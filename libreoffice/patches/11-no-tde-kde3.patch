@@ -1,7 +1,24 @@
-diff -Naur orig/vcl/inc/unx/desktops.hxx patched/vcl/inc/unx/desktops.hxx
---- orig/vcl/inc/unx/desktops.hxx	2018-02-22 18:45:41.000000000 +0100
-+++ patched/vcl/inc/unx/desktops.hxx	2018-03-13 00:32:21.637000835 +0100
-@@ -31,8 +31,6 @@
+From 97836184c61075c4d25b85fff0e24874020632cd Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Tue, 4 Sep 2018 02:29:33 +0200
+Subject: remove unsupported TDE and KDE3 desktops from desktopdetect and
+ salplug
+
+Change-Id: I7b8468c3c451e67f30cacc80196ca7f46c2a000c
+Reviewed-on: https://gerrit.libreoffice.org/59959
+Tested-by: Jenkins
+Reviewed-by: Katarina Behrens <Katarina.Behrens@cib.de>
+---
+ vcl/inc/unx/desktops.hxx                          |  2 -
+ vcl/unx/generic/desktopdetect/desktopdetector.cxx | 82 -----------------------
+ vcl/unx/generic/plugadapt/salplug.cxx             |  7 +-
+ 3 files changed, 2 insertions(+), 89 deletions(-)
+
+diff --git a/vcl/inc/unx/desktops.hxx b/vcl/inc/unx/desktops.hxx
+index 89d6459..1b8a7f5 100644
+--- a/vcl/inc/unx/desktops.hxx
++++ b/vcl/inc/unx/desktops.hxx
+@@ -31,8 +31,6 @@ enum SAL_DLLPUBLIC_RTTI DesktopType {
      DESKTOP_UNITY,
      DESKTOP_XFCE,
      DESKTOP_MATE,
@@ -10,10 +27,11 @@ diff -Naur orig/vcl/inc/unx/desktops.hxx patched/vcl/inc/unx/desktops.hxx
      DESKTOP_KDE4,
      DESKTOP_KDE5
  }; // keep in sync with desktop_strings[] in salplug.cxx
-diff -Naur orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx patched/vcl/unx/generic/desktopdetect/desktopdetector.cxx
---- orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx	2018-02-22 18:45:41.000000000 +0100
-+++ patched/vcl/unx/generic/desktopdetect/desktopdetector.cxx	2018-03-13 00:29:37.389732496 +0100
-@@ -136,47 +136,6 @@
+diff --git a/vcl/unx/generic/desktopdetect/desktopdetector.cxx b/vcl/unx/generic/desktopdetect/desktopdetector.cxx
+index 02ac9be..e39348c 100644
+--- a/vcl/unx/generic/desktopdetect/desktopdetector.cxx
++++ b/vcl/unx/generic/desktopdetect/desktopdetector.cxx
+@@ -136,47 +136,6 @@ extern "C"
      typedef int(* XErrorHandler)(Display*,XErrorEvent*);
  }
  
@@ -61,7 +79,7 @@ diff -Naur orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx patched/vcl/un
  static int KDEVersion( Display* pDisplay )
  {
      int nRet = 0;
-@@ -218,39 +177,6 @@
+@@ -218,39 +177,6 @@ static int KDEVersion( Display* pDisplay )
      return nRet;
  }
  
@@ -101,7 +119,7 @@ diff -Naur orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx patched/vcl/un
  static bool is_kde4_desktop( Display* pDisplay )
  {
      static const char * pFullVersion = getenv( "KDE_FULL_SESSION" );
-@@ -288,8 +214,6 @@
+@@ -288,8 +214,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
      {
          OString aOver( pOverride );
  
@@ -110,7 +128,7 @@ diff -Naur orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx patched/vcl/un
          if ( aOver.equalsIgnoreAsciiCase( "kde5" ) )
              return DESKTOP_KDE5;
          if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
-@@ -304,8 +228,6 @@
+@@ -304,8 +228,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
              return DESKTOP_XFCE;
          if ( aOver.equalsIgnoreAsciiCase( "mate" ) )
              return DESKTOP_MATE;
@@ -119,7 +137,7 @@ diff -Naur orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx patched/vcl/un
          if ( aOver.equalsIgnoreAsciiCase( "none" ) )
              return DESKTOP_UNKNOWN;
      }
-@@ -389,10 +311,6 @@
+@@ -389,10 +311,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
              ret = DESKTOP_KDE4;
          else if ( is_gnome_desktop( pDisplay ) )
              ret = DESKTOP_GNOME;
@@ -130,10 +148,11 @@ diff -Naur orig/vcl/unx/generic/desktopdetect/desktopdetector.cxx patched/vcl/un
          else
              ret = DESKTOP_UNKNOWN;
  
-diff -Naur orig/vcl/unx/generic/plugadapt/salplug.cxx patched/vcl/unx/generic/plugadapt/salplug.cxx
---- orig/vcl/unx/generic/plugadapt/salplug.cxx	2018-02-22 18:45:41.000000000 +0100
-+++ patched/vcl/unx/generic/plugadapt/salplug.cxx	2018-03-13 00:31:19.811414437 +0100
-@@ -193,8 +193,6 @@
+diff --git a/vcl/unx/generic/plugadapt/salplug.cxx b/vcl/unx/generic/plugadapt/salplug.cxx
+index cadfb34..bce722b 100644
+--- a/vcl/unx/generic/plugadapt/salplug.cxx
++++ b/vcl/unx/generic/plugadapt/salplug.cxx
+@@ -197,8 +197,6 @@ static SalInstance* autodetect_plugin()
      else if ( desktop == DESKTOP_GNOME ||
                desktop == DESKTOP_UNITY ||
                desktop == DESKTOP_XFCE  ||
@@ -142,16 +161,16 @@ diff -Naur orig/vcl/unx/generic/plugadapt/salplug.cxx patched/vcl/unx/generic/pl
                desktop == DESKTOP_MATE )
          pList = pStandardFallbackList;
      else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
-@@ -234,7 +232,7 @@
+@@ -238,7 +236,7 @@ SalInstance *CreateSalInstance()
  
      // fallback, try everything
      static const char* const pPlugin[] = {
--        "gtk3", "gtk", "kde4", "kde", "tde", "gen" };
-+        "gtk3", "gtk", "kde4", "gen" };
+-        "gtk3", "gtk", "kde5", "kde4", "kde", "tde", "gen" };
++        "gtk3", "gtk", "kde5", "kde4", "gen" };
  
      for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
          pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
-@@ -293,8 +291,7 @@
+@@ -297,8 +295,7 @@ const OUString& SalGetDesktopEnvironment()
      // Order to match desktops.hxx' DesktopType
      static const char * const desktop_strings[] = {
          "none", "unknown", "GNOME", "UNITY",
@@ -161,3 +180,5 @@ diff -Naur orig/vcl/unx/generic/plugadapt/salplug.cxx patched/vcl/unx/generic/pl
      static OUString aRet;
      if( aRet.isEmpty())
      {
+-- 
+cgit v1.1

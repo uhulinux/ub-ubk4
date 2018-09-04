@@ -1,0 +1,22 @@
+diff -Naur orig/vcl/unx/generic/plugadapt/salplug.cxx patched/vcl/unx/generic/plugadapt/salplug.cxx
+--- orig/vcl/unx/generic/plugadapt/salplug.cxx	2018-09-03 23:52:32.772121161 +0200
++++ patched/vcl/unx/generic/plugadapt/salplug.cxx	2018-09-04 05:16:54.548487214 +0200
+@@ -163,6 +165,9 @@
+ {
+     static const char* const pKDEFallbackList[] =
+     {
++#if ENABLE_KDE5
++       "kde5",
++#endif
+ #if ENABLE_GTK3_KDE5
+         "gtk3_kde5",
+ #endif
+@@ -231,7 +236,7 @@
+ 
+     // fallback, try everything
+     static const char* const pPlugin[] = {
+-        "gtk3", "gtk", "kde4", "gen" };
++        "gtk3", "gtk", "kde5", "kde4", "gen" };
+ 
+     for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
+         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
