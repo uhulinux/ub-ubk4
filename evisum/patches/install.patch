@@ -1,22 +1,29 @@
 diff -Naur orig/makefile patched/makefile
---- orig/makefile	2018-06-17 10:22:49.000000000 +0200
-+++ patched/makefile	2018-09-03 23:34:54.343726343 +0200
-@@ -1,6 +1,7 @@
+--- orig/makefile	2018-06-19 10:49:10.000000000 +0200
++++ patched/makefile	2018-09-04 02:08:24.009579255 +0200
+@@ -1,6 +1,8 @@
  LIBS=
  
 -PREFIX= /usr/local
 +PREFIX= /usr
++
 +DESTDIR=
  
  OSNAME := $(shell uname -s)
  
-@@ -22,6 +23,6 @@
+@@ -26,9 +28,9 @@
  	$(MAKE) -C src clean
  
  install:
--	cp data/evisum.png $(PREFIX)/share/icons
--	cp data/evisum.desktop $(PREFIX)/share/applications
--	cp evisum $(PREFIX)/bin
-+	cp data/evisum.png $(DESTDIR)/$(PREFIX)/share/icons
-+	cp data/evisum.desktop $(DESTDIR)/$(PREFIX)/share/applications
-+	cp evisum $(DESTDIR)/$(PREFIX)/bin
+-	-mkdir -p $(PREFIX)/share/pixmaps
+-	-mkdir -p $(PREFIX)/share/applications
+-	-mkdir -p $(PREFIX)/bin
+-	install -m 0644 data/evisum.png $(PREFIX)/share/pixmaps
+-	install -m 0644 data/evisum.desktop $(PREFIX)/share/applications
+-	install -m 0755 evisum $(PREFIX)/bin
++	-mkdir -p $(DESTDIR)$(PREFIX)/share/pixmaps
++	-mkdir -p $(DESTDIR)$(PREFIX)/share/applications
++	-mkdir -p $(DESTDIR)$(PREFIX)/bin
++	install -m 0644 data/evisum.png $(DESTDIR)$(PREFIX)/share/pixmaps
++	install -m 0644 data/evisum.desktop $(DESTDIR)$(PREFIX)/share/applications
++	install -m 0755 evisum $(DESTDIR)$(PREFIX)/bin
