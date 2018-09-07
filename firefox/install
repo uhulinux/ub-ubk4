@@ -4,8 +4,6 @@ cd "$UB_OBJECTDIR"
 
 ub_install
 
-cp "$UB_COMPILEDIR"/browser/branding/official/default48.png "$UB_INSTALLDIR"/usr/share/pixmaps/firefox.png
-
 rm -f "$UB_INSTALLDIR"/usr/lib/firefox/firefox
 rm -f "$UB_INSTALLDIR"/usr/bin/firefox
 ln -s /usr/lib/firefox/firefox "$UB_INSTALLDIR"/usr/bin/firefox
@@ -16,3 +14,10 @@ fi
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org
 cp -aR "$UB_COMPILEDIR"/langpack-hu/. "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org/
+
+# install icons
+for i in 16 22 24 32 48 64 128 256; do
+    install -Dm644 "$UB_COMPILEDIR"/browser/branding/official/default$i.png \
+      "$UB_INSTALLDIR/usr/share/icons/hicolor/${i}x${i}/apps/firefox.png"
+done
+cp "$UB_COMPILEDIR"/browser/branding/official/default48.png "$UB_INSTALLDIR"/usr/share/pixmaps/firefox.png
