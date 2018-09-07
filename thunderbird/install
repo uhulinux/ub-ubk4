@@ -4,11 +4,21 @@ cd "$UB_OBJECTDIR"
 
 ub_install
 
-cp "$UB_COMPILEDIR"/other-licenses/branding/thunderbird/mailicon48.png "$UB_INSTALLDIR"/usr/share/pixmaps/thunderbird.png
-
 rm -f "$UB_INSTALLDIR"/usr/lib/thunderbird/thunderbird
 rm -f "$UB_INSTALLDIR"/usr/bin/thunderbird
 ln -s /usr/lib/thunderbird/thunderbird "$UB_INSTALLDIR"/usr/bin/thunderbird
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions/langpack-hu@thunderbird.mozilla.org
 cp -aR "$UB_COMPILEDIR"/langpack-hu/. "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions/langpack-hu@thunderbird.mozilla.org/
+
+# Use system-provided dictionaries
+rm -r "$UB_INSTALLDIR/usr/lib/thunderbird/dictionaries"
+ln -Ts /usr/share/hunspell "$UB_INSTALLDIR/usr/lib/thunderbird/dictionaries"
+ln -Ts /usr/share/hyphen "$UB_INSTALLDIR/usr/lib/thunderbird/hyphenation"
+
+# install icons
+for i in 16 22 24 32 48 64 128 256; do
+    install -Dm644 "$UB_COMPILEDIR"/comm/mail/branding/thunderbird/default${i}.png \
+      "$UB_INSTALLDIR/usr/share/icons/hicolor/${i}x${i}/apps/thunderbird.png"
+done
+cp "$UB_COMPILEDIR"/comm/mail/branding/thunderbird/default48.png "$UB_INSTALLDIR"/usr/share/pixmaps/thunderbird.png

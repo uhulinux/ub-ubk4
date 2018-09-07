@@ -1,6 +1,6 @@
-diff -Naur orig/mail/app/profile/all-thunderbird.js patched/mail/app/profile/all-thunderbird.js
---- orig/mail/app/profile/all-thunderbird.js	2017-03-22 00:14:45.134741323 +0100
-+++ patched/mail/app/profile/all-thunderbird.js	2017-04-04 01:45:03.629032826 +0200
+diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/profile/all-thunderbird.js
+--- orig/comm/mail/app/profile/all-thunderbird.js	2018-07-31 20:21:27.000000000 +0200
++++ patched/comm/mail/app/profile/all-thunderbird.js	2018-09-05 23:48:10.760615521 +0200
 @@ -11,6 +11,9 @@
  #endif
  #endif
@@ -8,10 +8,10 @@ diff -Naur orig/mail/app/profile/all-thunderbird.js patched/mail/app/profile/all
 +pref("intl.locale.matchOS", true);
 +pref("shell.checkDefaultApps", 0);
 +
- pref("general.useragent.locale", "@AB_CD@");
  pref("general.skins.selectedSkin", "classic/1.0");
  
-@@ -84,12 +87,12 @@
+ #ifdef XP_MACOSX
+@@ -76,12 +79,12 @@
  pref("app.update.certs.2.commonName", "aus5.mozilla.org");
  
  // Whether or not app updates are enabled
@@ -26,7 +26,7 @@ diff -Naur orig/mail/app/profile/all-thunderbird.js patched/mail/app/profile/all
  
  // If set to true, the Update Service will present no UI for any event.
  pref("app.update.silent", false);
-@@ -151,7 +154,8 @@
+@@ -147,7 +150,8 @@
  // Disable add-ons installed into the shared user and shared system areas by
  // default. This does not include the application directory. See the SCOPE
  // constants in AddonManager.jsm for values to use here
@@ -34,5 +34,5 @@ diff -Naur orig/mail/app/profile/all-thunderbird.js patched/mail/app/profile/all
 +pref("extensions.autoDisableScopes", 0);
 +pref("extensions.shownSelectionUI", true);
  
- // Preferences for AMO integration
- pref("extensions.getAddons.cache.enabled", true);
+ // Enable add-ons installed and owned by the application, like the default theme.
+ pref("extensions.startupScanScopes", 4);
