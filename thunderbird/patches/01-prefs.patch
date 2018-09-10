@@ -1,17 +1,18 @@
 diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/profile/all-thunderbird.js
 --- orig/comm/mail/app/profile/all-thunderbird.js	2018-07-31 20:21:27.000000000 +0200
-+++ patched/comm/mail/app/profile/all-thunderbird.js	2018-09-05 23:48:10.760615521 +0200
-@@ -11,6 +11,9 @@
++++ patched/comm/mail/app/profile/all-thunderbird.js	2018-09-09 20:08:12.684374807 +0200
+@@ -11,6 +11,10 @@
  #endif
  #endif
  
 +pref("intl.locale.matchOS", true);
++pref("intl.locale.requested", "");
 +pref("shell.checkDefaultApps", 0);
 +
  pref("general.skins.selectedSkin", "classic/1.0");
  
  #ifdef XP_MACOSX
-@@ -76,12 +79,12 @@
+@@ -76,12 +80,12 @@
  pref("app.update.certs.2.commonName", "aus5.mozilla.org");
  
  // Whether or not app updates are enabled
@@ -26,7 +27,7 @@ diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/p
  
  // If set to true, the Update Service will present no UI for any event.
  pref("app.update.silent", false);
-@@ -147,7 +150,8 @@
+@@ -147,7 +151,8 @@
  // Disable add-ons installed into the shared user and shared system areas by
  // default. This does not include the application directory. See the SCOPE
  // constants in AddonManager.jsm for values to use here
