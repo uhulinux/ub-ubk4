@@ -1,0 +1,21 @@
+diff -Naur orig/tools/clang/lib/Driver/ToolChains/Gnu.cpp patched/tools/clang/lib/Driver/ToolChains/Gnu.cpp
+--- orig/tools/clang/lib/Driver/ToolChains/Gnu.cpp	2017-12-09 01:34:01.000000000 +0100
++++ patched/tools/clang/lib/Driver/ToolChains/Gnu.cpp	2018-09-14 00:50:37.110935600 +0200
+@@ -1733,7 +1733,7 @@
+       "x86_64-linux-gnu",       "x86_64-unknown-linux-gnu",
+       "x86_64-pc-linux-gnu",    "x86_64-redhat-linux6E",
+       "x86_64-redhat-linux",    "x86_64-suse-linux",
+-      "x86_64-manbo-linux-gnu", "x86_64-linux-gnu",
++      "x86_64-manbo-linux-gnu", "x86_64-gnu-linux",
+       "x86_64-slackware-linux", "x86_64-linux-android",
+       "x86_64-unknown-linux"};
+   static const char *const X32LibDirs[] = {"/libx32"};
+@@ -1743,7 +1743,7 @@
+       "i386-linux-gnu",       "i386-redhat-linux6E",   "i686-redhat-linux",
+       "i586-redhat-linux",    "i386-redhat-linux",     "i586-suse-linux",
+       "i486-slackware-linux", "i686-montavista-linux", "i686-linux-android",
+-      "i586-linux-gnu"};
++      "i586-linux-gnu", "i686-gnu-linux"};
+ 
+   static const char *const MIPSLibDirs[] = {"/lib"};
+   static const char *const MIPSTriples[] = {"mips-linux-gnu", "mips-mti-linux",
