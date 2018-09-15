@@ -1,3 +1,9 @@
 #!/bin/sh -eux
 
 ub_install
+
+# régen törölt és nem pótolt sound témák autostartja nem működik
+
+rm -f "$UB_INSTALLDIR/usr/share/gnome/autostart/libcanberra-login-sound.desktop"
+rm -f "$UB_INSTALLDIR/usr/share/gnome/shutdown/libcanberra-logout-sound.sh"
+rm -f "$UB_INSTALLDIR/usr/share/gdm/autostart/LoginWindow/libcanberra-ready-sound.desktop"
