@@ -83,13 +83,14 @@ mv nvidia-persistenced-init/systemd/nvidia-persistenced.service.template \
 
 # minden áthelyezése a libekbe
 mv *.so.* "$cellibdir"/
-
-# remove conflicting libglvnd libs      # package vs libglvnd
-rm -f "$cellibdir"/libGLESv2.so.2       # file vs link
-rm -f "$cellibdir"/libGL.so.1.0.0       # file vs file
-rm -f "$cellibdir"/libGLX.so.0          # file vs link
-rm -f "$cellibdir"/libGLdispatch.so.0   # file vs link
-rm -f "$cellibdir"/libOpenGL.so.0       # file vs link
+# remove conflicting libglvnd libs          # package vs libglvnd
+rm -f "$cellibdir"/libEGL.so.1.1.0          # file vs file
+rm -f "$cellibdir"/libGLESv1_CM.so.1.2.0    # file vs file
+rm -f "$cellibdir"/libGLESv2.so.2.1.0       # file vs file
+rm -f "$cellibdir"/libGL.so.1.7.0           # file vs file
+rm -f "$cellibdir"/libGLX.so.0              # file vs link
+rm -f "$cellibdir"/libGLdispatch.so.0       # file vs link
+rm -f "$cellibdir"/libOpenGL.so.0           # file vs link
 
 #linkgyártások
 cd "$cellibdir"
