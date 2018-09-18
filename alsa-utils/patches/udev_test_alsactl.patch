@@ -1,0 +1,13 @@
+diff -Nur orig/alsactl/90-alsa-restore.rules.in mod/alsactl/90-alsa-restore.rules.in
+--- orig/alsactl/90-alsa-restore.rules.in	2018-04-03 09:01:37.000000000 +0200
++++ mod/alsactl/90-alsa-restore.rules.in	2018-09-18 20:29:36.749743782 +0200
+@@ -2,7 +2,7 @@
+ GOTO="alsa_restore_end"
+ 
+ LABEL="alsa_restore_go"
+-TEST!="@daemonswitch@", RUN+="@sbindir@/alsactl restore $attr{device/number}"
+-TEST=="@daemonswitch@", RUN+="@sbindir@/alsactl nrestore $attr{device/number}"
++TEST!="@daemonswitch@", TEST=="/usr/sbin/alsactl", RUN+="@sbindir@/alsactl -E HOME=@alsactlhome@ restore $attr{device/number}"
++TEST=="@daemonswitch@", TEST=="/usr/sbin/alsactl", RUN+="@sbindir@/alsactl -E HOME=@alsactlhome@ nrestore $attr{device/number}"
+ 
+ LABEL="alsa_restore_end"
