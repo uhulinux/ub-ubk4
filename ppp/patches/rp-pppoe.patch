@@ -1,0 +1,12 @@
+diff -Nur orig/pppd/plugins/rp-pppoe/plugin.c mod/pppd/plugins/rp-pppoe/plugin.c
+--- orig/pppd/plugins/rp-pppoe/plugin.c	2014-08-09 14:31:39.000000000 +0200
++++ mod/pppd/plugins/rp-pppoe/plugin.c	2018-09-23 21:10:11.139730345 +0200
+@@ -49,6 +49,8 @@
+ #include <net/ethernet.h>
+ #include <net/if_arp.h>
+ #include <linux/ppp_defs.h>
++#define _LINUX_IN_H
++#define _LINUX_IN6_H
+ #include <linux/if_pppox.h>
+ 
+ #ifndef _ROOT_PATH
