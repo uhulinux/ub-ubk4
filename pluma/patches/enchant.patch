@@ -1,0 +1,12 @@
+diff -Nur pluma-1.20.2/configure.ac pluma-1.20.2.patched/configure.ac
+--- pluma-1.20.2/configure.ac	2018-06-01 18:54:28.000000000 +0200
++++ pluma-1.20.2.patched/configure.ac	2018-09-25 15:09:25.472772882 +0200
+@@ -108,7 +108,7 @@
+ 
+ if test "x$enable_enchant" = "xyes" ; then
+ 
+-	PKG_CHECK_MODULES(ENCHANT, enchant >= $ENCHANT_REQUIRED, \
++	PKG_CHECK_MODULES(ENCHANT, enchant-2 >= $ENCHANT_REQUIRED, \
+ 			  have_enchant=yes, have_enchant=no)
+ 
+ 	if test "x$have_enchant" = "xyes"; then
