@@ -1,0 +1,34 @@
+diff -Nur orig/lxpanel/panel.in mod/lxpanel/panel.in
+--- orig/lxpanel/panel.in	2016-11-21 23:47:05.000000000 +0100
++++ mod/lxpanel/panel.in	2018-09-26 20:58:34.440881248 +0200
+@@ -82,16 +82,6 @@
+     }
+ }
+ 
+-Plugin {
+-    type = pager
+-}
+-
+-Plugin {
+-    type = space
+-    Config {
+-        Size=4
+-    }
+-}
+ 
+ Plugin {
+     type = taskbar
+@@ -116,12 +106,7 @@
+ }
+ 
+ Plugin {
+-    type = volume
+-    Config {
+-        VolumeMuteKey = XF86AudioMute
+-        VolumeDownKey = XF86AudioLowerVolume
+-        VolumeUpKey = XF86AudioRaiseVolume
+-    }
++    type = volumealsa
+ }
+ 
+ Plugin {
