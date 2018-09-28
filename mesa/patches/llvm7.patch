@@ -1,0 +1,62 @@
+From d424be0feda503307692db8447f5989fa8e4a843 Mon Sep 17 00:00:00 2001
+From: Jan Vesely <jan.vesely@rutgers.edu>
+Date: Tue, 22 May 2018 17:52:30 -0400
+Subject: [PATCH] clover: Fix build after llvm r332881.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+v2: fix whitespace and indentation
+
+r332881 added an extra parameter to the emit function.
+Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=106619
+Signed-off-by: Jan Vesely <jan.vesely@rutgers.edu>
+Reviewed-By: Aaron Watry <awatry@gmail.com>
+Tested-By: Aaron Watry <awatry@gmail.com>
+Tested-by: Kai Wasserbäch <kai@dev.carbon-project.org>
+---
+ .../state_trackers/clover/llvm/codegen/native.cpp     |  3 +--
+ src/gallium/state_trackers/clover/llvm/compat.hpp     | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/src/gallium/state_trackers/clover/llvm/codegen/native.cpp b/src/gallium/state_trackers/clover/llvm/codegen/native.cpp
+index 409f8ac32f0..21f6c8c88a8 100644
+--- a/src/gallium/state_trackers/clover/llvm/codegen/native.cpp
++++ b/src/gallium/state_trackers/clover/llvm/codegen/native.cpp
+@@ -126,13 +126,12 @@ namespace {
+       {
+          compat::pass_manager pm;
+          ::llvm::raw_svector_ostream os { data };
+-         compat::raw_ostream_to_emit_file fos(os);
+ 
+          mod.setDataLayout(compat::get_data_layout(*tm));
+          tm->Options.MCOptions.AsmVerbose =
+             (ft == TargetMachine::CGFT_AssemblyFile);
+ 
+-         if (tm->addPassesToEmitFile(pm, fos, ft))
++         if (compat::add_passes_to_emit_file(*tm, pm, os, ft))
+             fail(r_log, build_error(), "TargetMachine can't emit this file");
+ 
+          pm.run(mod);
+diff --git a/src/gallium/state_trackers/clover/llvm/compat.hpp b/src/gallium/state_trackers/clover/llvm/compat.hpp
+index 2e070b2eefc..42a671b7fa3 100644
+--- a/src/gallium/state_trackers/clover/llvm/compat.hpp
++++ b/src/gallium/state_trackers/clover/llvm/compat.hpp
+@@ -245,6 +245,17 @@ namespace clover {
+ 		::llvm::WriteBitcodeToFile(mod, os);
+ #else
+ 		::llvm::WriteBitcodeToFile(&mod, os);
++#endif
++	}
++
++	template<typename TM, typename PM, typename OS, typename FT>
++	bool add_passes_to_emit_file(TM &tm, PM &pm, OS &os, FT &ft)
++	{
++		compat::raw_ostream_to_emit_file fos(os);
++#if HAVE_LLVM >= 0x0700
++		return tm.addPassesToEmitFile(pm, fos, nullptr, ft);
++#else
++		return tm.addPassesToEmitFile(pm, fos, ft);
+ #endif
+ 	}
+       }
