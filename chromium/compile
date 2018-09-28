@@ -5,43 +5,40 @@ if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 7 ]; then
 	exit 1
 fi
 
-cpu="x64"
-
-# -Drelease_extra_cflags=" -fno-delete-null-pointer-checks"
-# -Dcomponent="shared_library" -> is_component_build=true
+# for gcc
+# export CC=gcc
+# export CXX=g++
 
 _google_api_key=AIzaSyDwr302FpOSkGRpLlUpPThNTDPbXcIn_FM
 _google_default_client_id=413772536636.apps.googleusercontent.com
 _google_default_client_secret=0ZChLK6AxeA3Isu96MkwqDR4
 
-# host_toolchain=\"//build/toolchain/linux/unbundle:host\"
-# v8_snapshot_toolchain=\"//build/toolchain/linux/unbundle:host\"
-# clang_base_path=\"/usr\"
-
 _flags=("
-host_cpu=\"${cpu}\"
-target_cpu=\"${cpu}\"
 is_debug=false
-is_clang=false
+is_clang=true
+clang_base_path=\"/usr\"
 clang_use_chrome_plugins=false
 linux_use_bundled_binutils=false
 fatal_linker_warnings=false
 treat_warnings_as_errors=false
 fieldtrial_testing_like_official_build=false
-use_sysroot=false
-use_gold=false
-use_allocator=\"none\"
-enable_nacl=false
-enable_nacl_nonsfi=false
-enable_swiftshader=true
-enable_widevine=false
-enable_hangout_services_extension=false
 ffmpeg_branding=\"Chrome\"
 proprietary_codecs=true
 remove_webcore_debug_symbols=true
 google_api_key=\"${_google_api_key}\"
 google_default_client_id=\"${_google_default_client_id}\"
 google_default_client_secret=\"${_google_default_client_secret}\"
+use_allocator=\"none\"
+use_jumbo_build=true
+use_gold=false
+use_lld=true
+use_sysroot=false
+enable_linux_installer=false
+enable_nacl=false
+enable_nacl_nonsfi=false
+enable_swiftshader=true
+enable_widevine=false
+enable_hangout_services_extension=false
 use_cups=true
 use_custom_libcxx=false
 use_gio=false
@@ -73,7 +70,7 @@ ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/node
 third_party/libaddressinput/chromium/tools/update-strings.py
 
 # gn a buildhoz
-tools/gn/bootstrap/bootstrap.py -v --no-clean --no-rebuild
+tools/gn/bootstrap/bootstrap.py --gn-gen-args=" ${_flags[@]} "
 
 # extra flags
 export LDFLAGS+="-Wl,-rpath,/usr/lib/chromium/ -Wl,--no-keep-memory"

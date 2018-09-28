@@ -3,11 +3,14 @@
 llvm-${UB_VERSION}.src.tar.xz llvm-${UB_VERSION}.src/
 	http://llvm.org/releases/${UB_VERSION}/
 
-cfe-${UB_VERSION}.src.tar.xz cfe-${UB_VERSION}.src/ :tools/clang
+cfe-${UB_VERSION}.src.tar.xz cfe-${UB_VERSION}.src/ :clang
 	http://llvm.org/releases/${UB_VERSION}/
 
-clang-tools-extra-${UB_VERSION}.src.tar.xz clang-tools-extra-${UB_VERSION}.src/ :tools/clang/tools/extra
+clang-tools-extra-${UB_VERSION}.src.tar.xz clang-tools-extra-${UB_VERSION}.src/ :clang/tools/extra
 	http://llvm.org/releases/${UB_VERSION}/
 
-compiler-rt-${UB_VERSION}.src.tar.xz compiler-rt-${UB_VERSION}.src/ :projects/compiler-rt
+compiler-rt-${UB_VERSION}.src.tar.xz compiler-rt-${UB_VERSION}.src/ :compiler-rt
 	http://llvm.org/releases/${UB_VERSION}/
+
+lld-${UB_VERSION}.src.tar.xz lld-${UB_VERSION}.src/ :lld
+	http://releases.llvm.org/${UB_VERSION}/
