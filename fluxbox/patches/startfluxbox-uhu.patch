@@ -1,6 +1,6 @@
 diff -Nur orig/util/startfluxbox.in mod/util/startfluxbox.in
 --- orig/util/startfluxbox.in	2018-09-30 09:03:17.000000000 +0200
-+++ mod/util/startfluxbox.in	2018-09-30 13:37:35.409119695 +0200
++++ mod/util/startfluxbox.in	2018-10-01 18:38:07.207466721 +0200
 @@ -23,6 +23,13 @@
      shift
  done
@@ -19,22 +19,34 @@ diff -Nur orig/util/startfluxbox.in mod/util/startfluxbox.in
  else
      if [ ! -d $fluxdir ]; then
          mkdir -p "$fluxdir/backgrounds" "$fluxdir/styles" "$fluxdir/pixmaps"
-+        ln -sf /usr/share/backgrounds/UHU/*.jpg "$fluxdir/backgrounds/"
++        ln -sf /usr/share/backgrounds/UHU/* "$fluxdir/backgrounds/"
      fi
      if [ ! -r "$startup" ]; then
          ( cat << EOF
-@@ -40,7 +48,13 @@
+@@ -40,11 +48,16 @@
  # Lines starting with a '#' are ignored.
  
  # Change your keymap:
 -xmodmap "$HOME/.Xmodmap"
+-
 +# xmodmap "$HOME/.Xmodmap"
 +#
+ # Applications you want to run with fluxbox.
+ # MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
+ #
 +# Start policykit agent
 +lxpolkit &
 +#
-+# Random background
-+fbsetbg -r $HOME/.fluxbox/backgrounds/
- 
- # Applications you want to run with fluxbox.
- # MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
++#xscreensaver &
++#
+ # unclutter -idle 2 &
+ # wmnd &
+ # wmsmixer -w &
+@@ -58,6 +71,7 @@
+ # exec @pkgprefix@fluxbox@pkgsuffix@ -log "$fluxdir/log"
+ EOF
+     ) > "$startup"
++    fluxbox-xdg-menu --with-icons --with-backgrounds
+     fi
+     chmod 644 "$startup"
+     exec sh "$startup"
