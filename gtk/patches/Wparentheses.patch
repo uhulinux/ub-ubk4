@@ -1,0 +1,36 @@
+diff -Naur orig/gtk/deprecated/gtkstatusicon.h patched/gtk/deprecated/gtkstatusicon.h
+--- orig/gtk/deprecated/gtkstatusicon.h	2017-11-16 14:21:24.000000000 +0100
++++ patched/gtk/deprecated/gtkstatusicon.h	2018-10-07 02:42:56.826327351 +0200
+@@ -71,10 +71,10 @@
+                                      gboolean        keyboard_mode,
+                                      GtkTooltip     *tooltip);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
+ };
+ 
+ GDK_AVAILABLE_IN_ALL
+diff -Naur orig/gtk/gtkfilechooserbutton.h patched/gtk/gtkfilechooserbutton.h
+--- orig/gtk/gtkfilechooserbutton.h	2017-11-16 14:21:24.000000000 +0100
++++ patched/gtk/gtkfilechooserbutton.h	2018-10-07 02:42:37.994097920 +0200
+@@ -63,10 +63,10 @@
+   /*< private >*/
+ 
+   /* Padding for future expansion */
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
+ };
+ 
+ 
