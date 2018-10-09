@@ -1,0 +1,25 @@
+diff -Naur orig/meson.build patched/meson.build
+--- orig/meson.build	2018-09-25 03:10:47.000000000 +0200
++++ patched/meson.build	2018-10-08 02:34:02.654473029 +0200
+@@ -248,7 +248,7 @@
+ 
+ # Commonly used deps
+ libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.29.92')
+-libgio_dep = dependency('gio-2.0', version: '>= 2.57.2')
++libgio_dep = dependency('gio-2.0', version: '>= 2.56.0')
+ libgiounix_dep = dependency('gio-unix-2.0')
+ libgtk_dep = dependency('gtk+-3.0', version: '>= 3.22.26')
+ libgtksource_dep = dependency('gtksourceview-4', version: '>= 4.0.0')
+diff -Naur orig/src/plugins/code-index/ide-code-index-builder.c patched/src/plugins/code-index/ide-code-index-builder.c
+--- orig/src/plugins/code-index/ide-code-index-builder.c	2018-09-25 03:10:47.000000000 +0200
++++ patched/src/plugins/code-index/ide-code-index-builder.c	2018-10-08 02:53:33.545260064 +0200
+@@ -1289,7 +1289,8 @@
+   g_assert (bd->changes->len > 0);
+   g_assert (IDE_IS_BUILD_SYSTEM (bd->build_system));
+ 
+-  data_dir = g_ptr_array_steal_index (bd->changes, bd->changes->len - 1);
++  data_dir = g_object_ref (g_ptr_array_index (bd->changes, bd->changes->len - 1));
++  g_ptr_array_remove_index (bd->changes, bd->changes->len - 1);
+   g_assert (G_IS_FILE (data_dir));
+ 
+   if (!(flags = ide_build_system_get_build_flags_for_dir_finish (build_system, result, &error)))
