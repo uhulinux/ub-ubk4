@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+export CDPARANOIA_CFLAGS='-I/usr/include'
+export CDPARANOIA_LIBS='-L/usr/lib'
 ub_configure \
 	--disable-gtk-doc-html \
 	--disable-examples
