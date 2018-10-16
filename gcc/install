@@ -14,8 +14,8 @@ make \
 rm -f "$UB_INSTALLDIR"/usr/lib/libstdc++*.py
 
 # Use symbolic links instead of hard ones.
-ln -sf "$arch"-gcc-"$UB_VERSION" "$UB_INSTALLDIR"/usr/bin/gcc
 ln -sf "$arch"-gcc-"$UB_VERSION" "$UB_INSTALLDIR"/usr/bin/cc
+ln -sf "$arch"-gcc-"$UB_VERSION" "$UB_INSTALLDIR"/usr/bin/gcc
 ln -sf "$arch"-gcc-"$UB_VERSION" "$UB_INSTALLDIR"/usr/bin/"$arch"-gcc
 ln -sf "$arch"-g++ "$UB_INSTALLDIR"/usr/bin/g++
 ln -sf "$arch"-g++ "$UB_INSTALLDIR"/usr/bin/c++
@@ -23,11 +23,6 @@ ln -sf "$arch"-g++ "$UB_INSTALLDIR"/usr/bin/"$arch"-c++
 ln -sf "$arch"-gcc-ar "$UB_INSTALLDIR"/usr/bin/gcc-ar
 ln -sf "$arch"-gcc-nm "$UB_INSTALLDIR"/usr/bin/gcc-nm
 ln -sf "$arch"-gcc-ranlib "$UB_INSTALLDIR"/usr/bin/gcc-ranlib
-# ln -sf "$arch"-gcj "$UB_INSTALLDIR"/usr/bin/gcj
 ln -sf "$arch"-gfortran "$UB_INSTALLDIR"/usr/bin/gfortran
 
 ln -s ../usr/bin/cpp "$UB_INSTALLDIR"/lib/cpp
-
-# remove conflicting files
-# rm "$UB_INSTALLDIR"/usr/lib/libffi.*
-# rm "$UB_INSTALLDIR"/usr/share/man/man3/ffi*.3

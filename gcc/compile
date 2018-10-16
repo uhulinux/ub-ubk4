@@ -1,24 +1,22 @@
 #!/bin/sh -eux
 
+# Do not run fixincludes
+sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+
 cd "$UB_OBJECTDIR"
 
-OPT_FLAGS="-O2 -mtune=generic"
+arch="x86_64-linux-gnu"
 
-CFLAGS="$OPT_FLAGS" \
-CXXFLAGS="$OPT_FLAGS" \
-XCFLAGS="$OPT_FLAGS" \
-TCFLAGS="$OPT_FLAGS" \
-GCJFLAGS="$OPT_FLAGS" \
+OPT_FLAGS="-march=k8 -m64 -O2 -mtune=generic"
 
-hostflags=(
---build=x86_64-linux-gnu
---host=x86_64-linux-gnu
---target=x86_64-linux-gnu
-)
-
+export CFLAGS="$OPT_FLAGS"
+export CXXFLAGS="$OPT_FLAGS"
 SED=sed \
 
 "$UB_COMPILEDIR"/configure \
+    --build=$arch \
+    --host=$arch \
+    --target=$arch \
 	--prefix=/usr \
 	--infodir=/usr/share/info \
 	--mandir=/usr/share/man \
@@ -27,7 +25,6 @@ SED=sed \
 	--enable-checking=release \
 	--enable-shared \
 	--enable-threads=posix \
-	--enable-default-pie \
 	--enable-lto \
 	--enable-plugin \
 	--enable-libmpx \
@@ -45,7 +42,6 @@ SED=sed \
 	--with-arch-64=k8 \
 	--with-cpu-32=i686 \
 	--with-cpu-64=k8 \
-	--with-tune=generic \
-	${hostflags[@]}
+	--with-tune=generic
 
 ub_make -j4
