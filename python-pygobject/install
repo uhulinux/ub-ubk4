@@ -1,10 +1,6 @@
 #!/bin/sh -eux
 
-# First install the python2 part
-export PYTHON=python2
-ub_install
-
-# Second install the python3 part
-export PYTHON=python3
+# And finally build and install the python3 part
 cd "$UB_OBJECTDIR"
-ub_install
+python3 setup.py build
+python3 setup.py install --root="$UB_INSTALLDIR"
