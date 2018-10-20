@@ -1,9 +1,10 @@
 #!/bin/sh -eux
 
 export UB_MAKE_PROCS=1
-export CFLAGS+="-O2"
+export CFLAGS+="-O2 -fPIC"
 mkdir -p include/curl
 touch include/curl/types.h
+
 ./configure \
     --prefix=/usr \
 	--enable-libxml2-backend	\
