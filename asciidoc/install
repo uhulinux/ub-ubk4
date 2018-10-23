@@ -9,3 +9,5 @@ cp -a stylesheets/*.css "$UB_INSTALLDIR"/usr/share/doc/asciidoc/stylesheets/
 cp -a javascripts/*.js "$UB_INSTALLDIR"/usr/share/doc/asciidoc/javascripts/
 ( cd images && cp -R * "$UB_INSTALLDIR"/usr/share/doc/asciidoc/images/ )
 ( cd doc && cp -R * "$UB_INSTALLDIR"/usr/share/doc/asciidoc/doc/ )
+
+ln -s asciidoc "$UB_INSTALLDIR"/usr/bin/asciidoctor
