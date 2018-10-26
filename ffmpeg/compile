@@ -3,60 +3,88 @@
 # --disable-openssl: GnuTLS and OpenSSL must not be enabled at the same time.
 # a gnutls kevésbé problémás (API változások probléma)
 
-./configure \
+configopts="
 	--prefix=/usr \
-	--mandir=/usr/share/man \
-	--disable-debug \
 	--disable-static \
 	--enable-shared \
-	--enable-avfilter\
-	--enable-avisynth \
-	--enable-avresample \
-	--enable-fontconfig \
-	--enable-gmp \
-	--enable-gnutls \
-	--enable-gpl \
 	--enable-gray \
+	--disable-debug \
+	--mandir=/usr/share/man \
+	--enable-pic \
+	--enable-pthreads \
+	--enable-postproc \
+"
+licensing="
+	--enable-gpl \
+	--enable-nonfree \
+	--enable-version3
+"
+doksik="
+	--disable-podpages \
+	--disable-htmlpages \
+	--disable-txtpages
+"
+components="
+	--enable-avresample \
+	--enable-pthreads
+"
+extlibs="
+	--enable-avisynth \
+	--enable-gcrypt \
+	--enable-gnutls \
+	--enable-gmp \
 	--enable-ladspa \
+	--enable-libaom \
 	--enable-libass \
 	--enable-libbluray \
 	--enable-libcaca \
-	--enable-libcdio \
 	--enable-libcelt \
-	--enable-libdc1394 \
+	--enable-libcdio \
+	--enable-libdc1394
+	--enable-libfdk-aac \
+	--enable-libfontconfig \
 	--enable-libfreetype \
 	--enable-libfribidi \
+	--enable-libgme \
 	--enable-libgsm \
+	--enable-libiec61883 \
 	--enable-libmodplug \
 	--enable-libmp3lame \
 	--enable-libopencore-amrnb \
 	--enable-libopencore-amrwb \
 	--enable-libopenjpeg \
- 	--enable-libopus \
+	--enable-libopus \
 	--enable-libpulse \
-	--enable-libsoxr \
+	--enable-librsvg \
+	--enable-libsmbclient \
 	--enable-libspeex \
+	--enable-libssh \
+	--enable-libsoxr \
+	--enable-libtesseract \
 	--enable-libtheora \
 	--enable-libv4l2 \
 	--enable-libvidstab \
 	--enable-libvorbis \
 	--enable-libvpx \
+	--enable-libwavpack \
 	--enable-libwebp \
 	--enable-libx264 \
 	--enable-libx265 \
-	--enable-libxcb \
 	--enable-libxvid \
-	--enable-libzvbi \
-	--enable-nonfree \
+	--enable-libxml2 \
+	--enable-libzmq \
+	--enable-libzvbi
 	--enable-openal \
 	--enable-opengl \
-	--enable-pic \
-	--enable-pthreads \
-	--enable-postproc \
-	--enable-swresample \
-	--enable-swscale \
-	--enable-version3 \
-	--disable-openssl \
+  "
+
+./configure \
+	$configopts \
+	$licensing \
+	$doksik \
+	$components \
+	$extlibs \
+	--enable-libdrm \
 	--disable-libopencv
 ub_make
 
