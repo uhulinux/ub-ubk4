@@ -1,0 +1,60 @@
+diff -Naur orig/gtk/gtkfilechooserbutton.h patched/gtk/gtkfilechooserbutton.h
+--- orig/gtk/gtkfilechooserbutton.h	2016-10-22 06:11:40.000000000 +0200
++++ patched/gtk/gtkfilechooserbutton.h	2018-10-27 01:57:04.575347026 +0200
+@@ -56,13 +56,13 @@
+ 
+   void (* file_set) (GtkFileChooserButton *fc);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
+-  void (*__gtk_reserved5);
+-  void (*__gtk_reserved6);
+-  void (*__gtk_reserved7);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
++  void *__gtk_reserved5;
++  void *__gtk_reserved6;
++  void *__gtk_reserved7;
+ };
+ 
+ 
+diff -Naur orig/gtk/gtkstatusicon.h patched/gtk/gtkstatusicon.h
+--- orig/gtk/gtkstatusicon.h	2016-10-22 06:11:41.000000000 +0200
++++ patched/gtk/gtkstatusicon.h	2018-10-27 01:57:22.315573199 +0200
+@@ -73,8 +73,8 @@
+                                      gboolean        keyboard_mode,
+                                      GtkTooltip     *tooltip);
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
+ };
+ 
+ GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
+diff -Naur orig/gtk/gtktrayicon.h patched/gtk/gtktrayicon.h
+--- orig/gtk/gtktrayicon.h	2016-10-22 06:12:39.000000000 +0200
++++ patched/gtk/gtktrayicon.h	2018-10-27 01:57:42.811834510 +0200
+@@ -46,12 +46,12 @@
+ {
+   GtkPlugClass parent_class;
+ 
+-  void (*__gtk_reserved1);
+-  void (*__gtk_reserved2);
+-  void (*__gtk_reserved3);
+-  void (*__gtk_reserved4);
+-  void (*__gtk_reserved5);
+-  void (*__gtk_reserved6);
++  void *__gtk_reserved1;
++  void *__gtk_reserved2;
++  void *__gtk_reserved3;
++  void *__gtk_reserved4;
++  void *__gtk_reserved5;
++  void *__gtk_reserved6;
+ };
+ 
+ GType          gtk_tray_icon_get_type         (void) G_GNUC_CONST;
