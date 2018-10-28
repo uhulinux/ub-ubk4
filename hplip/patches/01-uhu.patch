@@ -1,7 +1,7 @@
 diff -Naur orig/base/password.py patched/base/password.py
---- orig/base/password.py	2018-05-24 06:34:29.000000000 +0200
-+++ patched/base/password.py	2018-05-26 03:17:05.399039529 +0200
-@@ -55,6 +55,7 @@
+--- orig/base/password.py	2018-09-21 05:56:23.000000000 +0200
++++ patched/base/password.py	2018-10-28 23:05:38.581246139 +0100
+@@ -56,6 +56,7 @@
                'gos': 'sudo',
                'boss': 'su',
                'lfs': 'su',
@@ -10,9 +10,9 @@ diff -Naur orig/base/password.py patched/base/password.py
                }
  
 diff -Naur orig/installer/distros.dat patched/installer/distros.dat
---- orig/installer/distros.dat	2018-05-24 06:34:43.000000000 +0200
-+++ patched/installer/distros.dat	2018-05-26 03:32:22.095200386 +0200
-@@ -92,7 +92,7 @@
+--- orig/installer/distros.dat	2018-09-21 05:56:39.000000000 +0200
++++ patched/installer/distros.dat	2018-10-28 23:13:43.550966104 +0100
+@@ -94,7 +94,7 @@
  # ****************************************
  
  [distros]
@@ -21,11 +21,10 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
  
  # ****************************************
  
-@@ -10651,3 +10651,280 @@
+@@ -11167,3 +11167,279 @@
  packages=automake
  
  
-+
 +# ****************************************
 +[uhu-linux]
 +index=60
@@ -198,7 +197,7 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
 +ppd_dir=/usr/share/ppd/HP
 +fix_ppd_symlink=0
 +drv_dir=/usr/share/cups/drv/hp
-+ui_toolkit=qt4
++ui_toolkit=qt5
 +native_cups=1
 +policykit=1
 +
@@ -253,7 +252,7 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
 +packages=python2-pyqt4
 +
 +[uhu-linux:UBK3:pyqt4-dbus]
-+packages=python2-pyqt4
++packages=python2-pyqt5
 +
 +[uhu-linux:UBK3:python23]
 +packages=python2

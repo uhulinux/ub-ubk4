@@ -1,20 +1,20 @@
-diff -Nur orig/config_unix.py mod/config_unix.py
---- orig/config_unix.py	2016-08-20 22:28:55.000000000 +0200
-+++ mod/config_unix.py	2017-12-22 19:48:37.515482834 +0100
-@@ -179,8 +179,8 @@
+diff -Naur orig/config_unix.py patched/config_unix.py
+--- orig/config_unix.py	2018-07-17 15:28:16.000000000 +0200
++++ patched/config_unix.py	2018-10-28 23:38:44.817772052 +0100
+@@ -202,8 +202,8 @@
          Dependency('PNG', 'png.h', 'libpng', ['png']),
          Dependency('JPEG', 'jpeglib.h', 'libjpeg', ['jpeg']),
          Dependency('SCRAP', '', 'libX11', ['X11']),
 -        Dependency('PORTMIDI', 'portmidi.h', 'libportmidi.so', ['portmidi']),
 -        porttime_dep,
-+#        Dependency('PORTMIDI', 'portmidi.h', 'libportmidi.so', ['portmidi']),
-+#        porttime_dep,
-         DependencyProg('FREETYPE', 'FREETYPE_CONFIG', 'freetype-config', '2.0',
-                        ['freetype'], '--ftversion'),
++        #Dependency('PORTMIDI', 'portmidi.h', 'libportmidi.so', ['portmidi']),
++        #porttime_dep,
+         find_freetype(),
          #Dependency('GFX', 'SDL_gfxPrimitives.h', 'libSDL_gfx.so', ['SDL_gfx']),
-diff -Nur orig/Setup.in mod/Setup.in
---- orig/Setup.in	2016-05-06 17:05:22.000000000 +0200
-+++ mod/Setup.in	2017-12-22 19:52:10.231137764 +0100
+     ]
+diff -Naur orig/Setup.in patched/Setup.in
+--- orig/Setup.in	2018-07-15 08:51:55.000000000 +0200
++++ patched/Setup.in	2018-10-28 23:36:53.064605225 +0100
 @@ -14,8 +14,8 @@
  PNG = -lpng
  JPEG = -ljpeg
@@ -33,5 +33,5 @@ diff -Nur orig/Setup.in mod/Setup.in
 -pypm src/pypm.c $(SDL) $(PORTMIDI) $(PORTTIME) $(DEBUG)
 +#pypm src/pypm.c $(SDL) $(PORTMIDI) $(PORTTIME) $(DEBUG)
  
- GFX = src/SDL_gfx/SDL_gfxPrimitives.c 
- #GFX = src/SDL_gfx/SDL_gfxBlitFunc.c src/SDL_gfx/SDL_gfxPrimitives.c 
+ GFX = src/SDL_gfx/SDL_gfxPrimitives.c
+ #GFX = src/SDL_gfx/SDL_gfxBlitFunc.c src/SDL_gfx/SDL_gfxPrimitives.c
