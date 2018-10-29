@@ -13,9 +13,9 @@ for file in certutil cmsutil crlutil derdump modutil pk12util pp \
 	install -m 755 dist/*.OBJ/bin/"$file" "$UB_INSTALLDIR"/usr/bin
 done
 
-mkdir -p "$UB_INSTALLDIR"/usr/include/nss3
+mkdir -p "$UB_INSTALLDIR"/usr/include/nss
 for file in dist/public/nss/*.h; do
-	install -m 644 "$file" "$UB_INSTALLDIR"/usr/include/nss3
+	install -m 644 "$file" "$UB_INSTALLDIR"/usr/include/nss
 done
 
 # ln -s libnssckbi.so "$UB_INSTALLDIR"/usr/lib/libnssckbi-p11-kit.so
@@ -27,7 +27,7 @@ mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
 cat nss.pc.in | sed -e "s,%libdir%,/usr/lib,g" \
 					-e "s,%prefix%,/usr,g" \
 					-e "s,%exec_prefix%,/usr,g" \
-					-e "s,%includedir%,/usr/include/nss3,g" \
+					-e "s,%includedir%,/usr/include/nss,g" \
 					-e "s,%NSPR_VERSION%,$NSPR_VERSION,g" \
 					-e "s,%NSS_VERSION%,$UB_VERSION,g" > \
 					"$UB_INSTALLDIR"/usr/lib/pkgconfig/nss.pc
@@ -41,7 +41,7 @@ mkdir -p "$UB_INSTALLDIR"/usr/bin
 cat nss-config.in | sed -e "s,@libdir@,/usr/lib,g" \
                         -e "s,@prefix@,/usr,g" \
 						-e "s,@exec_prefix@,/usr,g" \
-						-e "s,@includedir@,/usr/include/nss3,g" \
+						-e "s,@includedir@,/usr/include/nss,g" \
 						-e "s,@MOD_MAJOR_VERSION@,$NSS_VMAJOR,g" \
 						-e "s,@MOD_MINOR_VERSION@,$NSS_VMINOR,g" \
 						-e "s,@MOD_PATCH_VERSION@,$NSS_VPATCH,g" \
