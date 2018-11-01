@@ -1,12 +1,12 @@
-diff -up bzflag-2.0.12/src/platform/BzfDisplay.cxx.findresolutions bzflag-2.0.12/src/platform/BzfDisplay.cxx
---- bzflag-2.0.12/src/platform/BzfDisplay.cxx.findresolutions	2008-04-06 07:30:37.000000000 +0200
-+++ bzflag-2.0.12/src/platform/BzfDisplay.cxx	2008-07-10 10:05:41.000000000 +0200
-@@ -137,9 +137,20 @@ bool			BzfDisplay::doSetDefaultResolutio
+diff -Naur bzflag-2.4.18-orig/src/platform/BzfDisplay.cxx bzflag-2.4.18/src/platform/BzfDisplay.cxx
+--- bzflag-2.4.18-orig/src/platform/BzfDisplay.cxx	2018-10-18 12:39:15.000000000 +0200
++++ bzflag-2.4.18/src/platform/BzfDisplay.cxx	2018-11-01 11:13:02.412276474 +0100
+@@ -139,9 +139,20 @@
  
- int			BzfDisplay::findResolution(const char* name) const
+ int         BzfDisplay::findResolution(const char* name) const
  {
--  for (int i = 0; i < numResolutions; i++)
--    if (strcmp(name, resolutions[i]->name) == 0)
+-    for (int i = 0; i < numResolutions; i++)
+-        if (strcmp(name, resolutions[i]->name) == 0)
 +  for (int i = 0; i < numResolutions; i++) {
 +    // only compare up to first space character
 +    const char *cp1, *cp2;
@@ -19,8 +19,8 @@ diff -up bzflag-2.0.12/src/platform/BzfDisplay.cxx.findresolutions bzflag-2.0.12
 +    i2 = cp2 ? (cp2 - resolutions[i]->name) : strlen (resolutions[i]->name);
 +
 +    if ((i1 == i2) && (strncmp(name, resolutions[i]->name, i1 + 1) == 0))
-       return i;
-+  }
-   return -1;
+             return i;
++    }
+     return -1;
  }
  
