@@ -1,11 +1,16 @@
 #!/bin/sh -eux
 
+export CC_OPTIMIZE='-O2'
 export LDLIBS+="-lncurses"
 ub_make READLINE=1
 cd primes
+ub_replace -O3 -O2 makefile
 ub_make
 cd ../lib
+ub_replace -O3 -O2 makefile
 ub_make
 cd ../examples
+ub_replace -O3 -O2 roots.c
+ub_replace -O3 -O2 compile.roots
 gcc limits.c -o c-limits
 ./compile.roots
