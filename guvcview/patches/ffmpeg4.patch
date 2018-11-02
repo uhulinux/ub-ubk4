@@ -1,7 +1,6 @@
-Index: guvcview-src-2.0.5/guvcview/gui_gtk3_callbacks.c
-===================================================================
---- guvcview-src-2.0.5.orig/guvcview/gui_gtk3_callbacks.c
-+++ guvcview-src-2.0.5/guvcview/gui_gtk3_callbacks.c
+diff -Naur guvcview-src-2.0.6-orig/guvcview/gui_gtk3_callbacks.c guvcview-src-2.0.6/guvcview/gui_gtk3_callbacks.c
+--- guvcview-src-2.0.6-orig/guvcview/gui_gtk3_callbacks.c	2018-10-07 00:15:28.000000000 +0200
++++ guvcview-src-2.0.6/guvcview/gui_gtk3_callbacks.c	2018-11-02 10:36:24.370868637 +0100
 @@ -2158,9 +2158,9 @@
  	gtk_grid_attach (GTK_GRID(table), lbl_me_method, 0, line, 1 ,1);
  	gtk_widget_show (lbl_me_method);
@@ -22,11 +21,11 @@ Index: guvcview-src-2.0.5/guvcview/gui_gtk3_callbacks.c
 +			defaults->me_method = gtk_entry_get_text (me_method);
  			defaults->mb_decision = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(mb_decision));
  			defaults->max_b_frames = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(max_b_frames));
- 			defaults->num_threads = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(num_threads));Index: guvcview-src-2.0.5/guvcview/gui_qt5_callbacks.cpp
-===================================================================
---- guvcview-src-2.0.5.orig/guvcview/gui_qt5_callbacks.cpp
-+++ guvcview-src-2.0.5/guvcview/gui_qt5_callbacks.cpp
-@@ -1590,10 +1590,8 @@ void MainWindow::video_codec_properties(
+ 			defaults->num_threads = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(num_threads));
+diff -Naur guvcview-src-2.0.6-orig/guvcview/gui_qt5_callbacks.cpp guvcview-src-2.0.6/guvcview/gui_qt5_callbacks.cpp
+--- guvcview-src-2.0.6-orig/guvcview/gui_qt5_callbacks.cpp	2018-10-07 00:15:28.000000000 +0200
++++ guvcview-src-2.0.6/guvcview/gui_qt5_callbacks.cpp	2018-11-02 10:39:09.777873129 +0100
+@@ -1590,10 +1590,8 @@
  	framerefs->setValue(defaults->framerefs);
  	form.addRow(_("framerefs:   "), framerefs);
  	/*me method*/
@@ -39,7 +38,7 @@ Index: guvcview-src-2.0.5/guvcview/gui_gtk3_callbacks.c
  	form.addRow(_("me method:   "), me_method);
  	/*mb decision*/
  	QSpinBox *mb_decision = new QSpinBox(&dialog);
-@@ -1645,7 +1643,7 @@ void MainWindow::video_codec_properties(
+@@ -1645,7 +1643,7 @@
  		defaults->qblur = qblur->value();
  		defaults->subq = subq->value();
  		defaults->framerefs = framerefs->value();
@@ -48,28 +47,26 @@ Index: guvcview-src-2.0.5/guvcview/gui_gtk3_callbacks.c
  		defaults->mb_decision = mb_decision->value();
  		defaults->max_b_frames = max_b_frames->value();
  		defaults->num_threads = num_threads->value();
-Index: guvcview-src-2.0.5/gview_encoder/encoder.c
-===================================================================
---- guvcview-src-2.0.5.orig/gview_encoder/encoder.c
-+++ guvcview-src-2.0.5/gview_encoder/encoder.c
-@@ -445,10 +445,8 @@ static encoder_video_context_t *encoder_
- #if !LIBAVCODEC_VER_AT_LEAST(56,60)
- 	video_codec_data->codec_context->me_method = video_defaults->me_method;
- #else
+diff -Naur guvcview-src-2.0.6-orig/gview_encoder/encoder.c guvcview-src-2.0.6/gview_encoder/encoder.c
+--- guvcview-src-2.0.6-orig/gview_encoder/encoder.c	2018-10-07 00:15:28.000000000 +0200
++++ guvcview-src-2.0.6/gview_encoder/encoder.c	2018-11-02 10:40:57.859870285 +0100
+@@ -443,10 +443,8 @@
+ 	video_codec_data->codec_context->trellis = video_defaults->trellis;
+ 
+ 	/*motion estimation method */
 -	if( video_defaults->codec_id == AV_CODEC_ID_H264 && video_defaults->me_method > 4)
 -		video_defaults->me_method = X264_ME_HEX;
 -
 -	av_dict_set_int(&video_codec_data->private_options, "motion-est", video_defaults->me_method, 0);
 +	if(video_defaults->me_method)
 +		av_dict_set(&video_codec_data->private_options, "motion-est", video_defaults->me_method, 0);
- #endif
+ 	av_dict_set_int(&video_codec_data->private_options, "mpeg_quant", video_defaults->mpeg_quant, 0);
+ 	av_dict_set_int(&video_codec_data->private_options, "mepre", video_defaults->pre_me, 0);
  
- #if !LIBAVCODEC_VER_AT_LEAST(57,00)
-Index: guvcview-src-2.0.5/gview_encoder/gviewencoder.h
-===================================================================
---- guvcview-src-2.0.5.orig/gview_encoder/gviewencoder.h
-+++ guvcview-src-2.0.5/gview_encoder/gviewencoder.h
-@@ -104,7 +104,7 @@ typedef struct _video_codec_t
+diff -Naur guvcview-src-2.0.6-orig/gview_encoder/gviewencoder.h guvcview-src-2.0.6/gview_encoder/gviewencoder.h
+--- guvcview-src-2.0.6-orig/gview_encoder/gviewencoder.h	2018-10-07 00:15:28.000000000 +0200
++++ guvcview-src-2.0.6/gview_encoder/gviewencoder.h	2018-11-02 10:42:04.169112954 +0100
+@@ -104,7 +104,7 @@
  	char codec_name[20];      //lavc codec_name
  	int mb_decision;          //lavc mb_decision
  	int trellis;              //lavc trellis quantization
@@ -78,11 +75,10 @@ Index: guvcview-src-2.0.5/gview_encoder/gviewencoder.h
  	int mpeg_quant;           //lavc mpeg quantization
  	int max_b_frames;         //lavc max b frames
  	int num_threads;          //lavc num threads
-Index: guvcview-src-2.0.5/gview_encoder/video_codecs.c
-===================================================================
---- guvcview-src-2.0.5.orig/gview_encoder/video_codecs.c
-+++ guvcview-src-2.0.5/gview_encoder/video_codecs.c
-@@ -97,7 +97,7 @@ static video_codec_t listSupCodecs[] =
+diff -Naur guvcview-src-2.0.6-orig/gview_encoder/video_codecs.c guvcview-src-2.0.6/gview_encoder/video_codecs.c
+--- guvcview-src-2.0.6-orig/gview_encoder/video_codecs.c	2018-10-07 00:15:28.000000000 +0200
++++ guvcview-src-2.0.6/gview_encoder/video_codecs.c	2018-11-02 10:46:37.041776521 +0100
+@@ -97,7 +97,7 @@
  		.codec_name   = "none",
  		.mb_decision  = 0,
  		.trellis      = 0,
@@ -91,75 +87,7 @@ Index: guvcview-src-2.0.5/gview_encoder/video_codecs.c
  		.mpeg_quant   = 0,
  		.max_b_frames = 0,
  		.num_threads  = 0,
-@@ -133,7 +133,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "mjpeg",
- 		.mb_decision  = 0,
- 		.trellis      = 0,
--		.me_method    = ME_EPZS,
-+		.me_method    = "epsz",
- 		.mpeg_quant   = 0,
- 		.max_b_frames = 0,
- 		.num_threads  = 0,
-@@ -169,7 +169,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "mpeg1video",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 1,
--		.me_method    = ME_EPZS,
-+		.me_method    = "epsz",
- 		.mpeg_quant   = 0,
- 		.max_b_frames = 0,
- 		.num_threads  = 1,
-@@ -205,11 +205,11 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "flv",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 1,
--		.me_method    = ME_EPZS,
-+		.me_method    = "epsz",
- 		.mpeg_quant   = 0,
- 		.max_b_frames = 0,
- 		.num_threads  = 1,
--		.flags        = CODEC_FLAG_4MV
-+		.flags        = AV_CODEC_FLAG_4MV
- 	},
- 	{
- 		.valid        = 1,
-@@ -241,7 +241,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "wmv1",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 1,
--		.me_method    = ME_EPZS,
-+		.me_method    = "epsz",
- 		.mpeg_quant   = 0,
- 		.max_b_frames = 0,
- 		.num_threads  = 1,
-@@ -277,7 +277,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "mpeg2video",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 1,
--		.me_method    = ME_EPZS,
-+		.me_method    = "epsz",
- 		.mpeg_quant   = 0,
- 		.max_b_frames = 0,
- 		.num_threads  = 1,
-@@ -313,7 +313,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "msmpeg4v3",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 1,
--		.me_method    = ME_EPZS,
-+		.me_method    = "epsz",
- 		.mpeg_quant   = 0,
- 		.max_b_frames = 0,
- 		.num_threads  = 1,
-@@ -349,7 +349,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "mpeg4",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 1,
--		.me_method    = ME_EPZS,
-+		.me_method    = "epsz",
- 		.mpeg_quant   = 1,
- 		.max_b_frames = 0,
- 		.num_threads  = 1,
-@@ -385,7 +385,7 @@ static video_codec_t listSupCodecs[] =
+@@ -385,7 +385,7 @@
  		.codec_name   = "libx264",
  		.mb_decision  = FF_MB_DECISION_RD,
  		.trellis      = 0,
@@ -168,52 +96,3 @@ Index: guvcview-src-2.0.5/gview_encoder/video_codecs.c
  		.mpeg_quant   = 1,
  		.max_b_frames = 16,
  		.num_threads  = 4,
-@@ -426,7 +426,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "libx265",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 0,
--		.me_method    = ME_HEX,
-+		.me_method    = "hex",
- 		.mpeg_quant   = 1,
- 		.max_b_frames = 16,
- 		.num_threads  = 4,
-@@ -463,7 +463,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "libvpx_vp8",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 0,
--		.me_method    = ME_HEX,
-+		.me_method    = "hex",
- 		.mpeg_quant   = 1,
- 		.max_b_frames = 0,
- 		.num_threads  = 4,
-@@ -500,7 +500,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "libvpx_vp9",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 0,
--		.me_method    = ME_HEX,
-+		.me_method    = "hex",
- 		.mpeg_quant   = 1,
- 		.max_b_frames = 16,
- 		.num_threads  = 4,
-@@ -537,7 +537,7 @@ static video_codec_t listSupCodecs[] =
- 		.codec_name   = "libtheora",
- 		.mb_decision  = FF_MB_DECISION_RD,
- 		.trellis      = 0,
--		.me_method    = ME_HEX,
-+		.me_method    = "hex",
- 		.mpeg_quant   = 1,
- 		.max_b_frames = 0,
- 		.num_threads  = 4,
-Index: guvcview-src-2.0.5/gview_v4l2core/uvc_h264.c
-===================================================================
---- guvcview-src-2.0.5.orig/gview_v4l2core/uvc_h264.c
-+++ guvcview-src-2.0.5/gview_v4l2core/uvc_h264.c
-@@ -1039,7 +1039,7 @@ int h264_init_decoder(int width, int hei
- 		exit(-1);
- 	}
- 	
--	h264_ctx->context->flags2 |= CODEC_FLAG2_FAST;
-+	h264_ctx->context->flags2 |= AV_CODEC_FLAG2_FAST;
- 	h264_ctx->context->pix_fmt = AV_PIX_FMT_YUV420P;
- 	h264_ctx->context->width = width;
- 	h264_ctx->context->height = height;
