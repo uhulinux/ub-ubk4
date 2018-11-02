@@ -1,3 +1,7 @@
 #!/bin/sh -eux
 
-cargo install --root=${UB_INSTALLDIR}/usr/bin
+cargo install --root=${UB_INSTALLDIR}/usr
+mkdir -p ${UB_INSTALLDIR}/usr/share/{pixmaps,man/man1}
+cp src/resources/images/me-tv.png ${UB_INSTALLDIR}/usr/share/pixmaps/
+cp doc/me-tv.1 ${UB_INSTALLDIR}/usr/share/man/man1/
+rm -f ${UB_INSTALLDIR}/usr/.crates.toml
