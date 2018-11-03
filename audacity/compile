@@ -1,6 +1,26 @@
 #!/bin/sh -eux
 
+rm -f CMakeLists.txt
 export WX_CONFIG=/usr/bin/wx-config
-UB_CONFIGURE_NO_DISABLE_STATIC=yes \
-ub_compile \
-	--disable-dynamic-loading
+autoreconf --no-recursive -ifv
+#UB_CONFIGURE_NO_DISABLE_STATIC=yes \
+export WX_CONFIG=/usr/bin/wx-config
+./configure \
+    --prefix=/usr \
+	--disable-dynamic-loading \
+    --with-libsndfile="system" \
+    --with-ffmpeg="system" \
+    --with-expat="system" \
+    --with-lame="system" \
+    --with-libsoxr="system" \
+    --with-portaudio \
+    --with-portmidi \
+    --with-libflac \
+    --with-libid3tag \
+    --with-libsamplerate \
+    --with-sbsms \
+    --with-soundtouch \
+    --with-libtwolame \
+    --with-libvorbis \
+    --with-lv2
+ub_make
