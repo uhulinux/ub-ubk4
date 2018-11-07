@@ -1,0 +1,33 @@
+From 3c92c347881eee4c63d111fc576c2fb2312f0de7 Mon Sep 17 00:00:00 2001
+From: Tamas Bunth <tamas.bunth@collabora.co.uk>
+Date: Mon, 5 Nov 2018 11:11:48 +0100
+Subject: mysql_jdbc should be enabled in Repository.mk..
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+..only if java is enabled:
+
+Change-Id: Iaf210e7044e854545518336ed7a40ce615443356
+Reviewed-on: https://gerrit.libreoffice.org/62882
+Reviewed-by: Tamás Bunth <btomi96@gmail.com>
+Tested-by: Tamás Bunth <btomi96@gmail.com>
+---
+ Repository.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Repository.mk b/Repository.mk
+index 4b06416..36b35b7 100644
+--- a/Repository.mk
++++ b/Repository.mk
+@@ -403,7 +403,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+ 	msfilter \
+ 	$(call gb_Helper_optional,SCRIPTING,msforms) \
+ 	mtfrenderer \
+-	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
++	$(if $(ENABLE_JAVA),mysql_jdbc) \
+ 	$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc) \
+ 	numbertext \
+ 	odbc \
+-- 
+cgit v1.1

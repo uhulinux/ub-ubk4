@@ -1,0 +1,12 @@
+diff -Naur orig/prnt/hpijs/hpijs.cpp patched/prnt/hpijs/hpijs.cpp
+--- orig/prnt/hpijs/hpijs.cpp	2018-05-24 06:34:30.000000000 +0200
++++ patched/prnt/hpijs/hpijs.cpp	2018-11-07 19:29:17.534157543 +0100
+@@ -676,7 +676,7 @@
+ 			case WARN_LOW_INK_MULTIPLE_PENS:
+                         {
+                            fputs("STATE: +marker-supply-low-warning\n", stderr);
+-                           break;
++                        //   break;
+                         }
+ 			default:
+                            fputs("STATE: +marker-supply-low-warning\n", stderr);
