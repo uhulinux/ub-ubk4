@@ -3,8 +3,10 @@
 extensions="nemo-fileroller nemo-image-converter nemo-preview nemo-python nemo-seahorse nemo-share"
 for progs in ${extensions}; do
 cd $progs
-  rm -f autogen.sh
-  autoreconf -vif
+  if [ -f autogen.sh ]; then
+    rm -f autogen.sh
+    autoreconf -vif
+  fi
   ub_compile
 cd ..
 done
