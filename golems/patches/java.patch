@@ -1,0 +1,8 @@
+diff -Nur orig/Golems.sh mod/Golems.sh
+--- orig/Golems.sh	2014-06-22 20:05:47.000000000 +0200
++++ mod/Golems.sh	2018-11-08 17:21:22.294751459 +0100
+@@ -1,2 +1,2 @@
+ #!/bin/sh
+-exec "java"  -jar "$(dirname $(readlink -f $0))/launcher.jar"
+\ Nincs új sor a fájl végén
++exec "/usr/lib/java/jre/bin/java"  -jar "$(dirname $(readlink -f $0))/launcher.jar"
