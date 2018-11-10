@@ -9,7 +9,7 @@ forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
 chmod +x $forras.run
 ./"$forras".run -x
 mv $forras/* ./
-rm *.run
+rm -f $forras.run
 sed -i 's/__NV_VK_ICD__/libGLX_nvidia.so.0/' nvidia_icd.json.template
 bsdtar -xf nvidia-persistenced-init.tar.bz2
 patch -i "$UB_SRCDIR"/patches/menu.patch.skip
