@@ -1,7 +1,7 @@
 diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
---- orig/common/sections_trans.cc	2017-01-06 22:22:49.000000000 +0100
-+++ patched/common/sections_trans.cc	2017-01-09 11:23:23.000000000 +0100
-@@ -8,128 +8,105 @@
+--- orig/common/sections_trans.cc	2018-11-08 08:50:31.000000000 +0100
++++ patched/common/sections_trans.cc	2018-11-09 19:27:02.892516065 +0100
+@@ -8,130 +8,105 @@
  #include "sections_trans.h"
  
  const char *transtable[][2] = {
@@ -39,6 +39,8 @@ diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
 -   {"gnu-r", _("GNU R statistical system")},
 -   // TRANSLATORS: Alias for the Debian package section "gnustep"
 -   {"gnustep", _("Gnustep Desktop Environment")},
+-   // TRANSLATORS: Alias for the Debian package section "golang"
+-   {"golang", _("Go Programming Language")},
 -   // TRANSLATORS: Alias for the Debian package section "hamradio"
 -   {"hamradio", _("Amateur Radio")},
 -   // TRANSLATORS: Alias for the Debian package section "haskell"
@@ -110,7 +112,7 @@ diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
 -   // TRANSLATORS: Alias for the Debian package section "web"
 -   {"web", _("World Wide Web")},
 -   // TRANSLATORS: Alias for the Debian package section "x11"
--   {"x11", _("Miscellaneous  - Graphical")},
+-   {"x11", _("Miscellaneous - Graphical")},
 -   // TRANSLATORS: Alias for the Debian package section "xfce"
 -   {"xfce", _("Xfce Desktop Environment")},
 -   // TRANSLATORS: Alias for the Debian package section "zope"
@@ -227,33 +229,30 @@ diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
 +   
 +   {"XFCE", _("Xfce Desktop Environment")},
  
-    // TRANSLATORS: Alias for the Debian package section "non-US"
-    //              Export to the outside of the USA is not allowed
-@@ -140,8 +117,7 @@
-    // TRANSLATORS: Alias for the Debian package section "contrib"
-    //              Free software that depends on non-free software
-    {"contrib", _("contrib")},
--   //{"non-free",_("<i>(non free)</i>")},
--   //{"contrib",_("<i>(contrib)</i>")},
-+
-    {NULL, NULL}
- };
- 
+    // TRANSLATORS: Alias for the Debian package section "non free"
+    {"non-free", _("non free")},
 diff -Naur orig/po/hu.po patched/po/hu.po
---- orig/po/hu.po	2017-01-06 22:22:49.000000000 +0100
-+++ patched/po/hu.po	2017-01-09 11:58:21.018000393 +0100
-@@ -7,7 +7,7 @@
+--- orig/po/hu.po	2018-11-08 08:50:31.000000000 +0100
++++ patched/po/hu.po	2018-11-09 19:40:03.455264508 +0100
+@@ -7,9 +7,9 @@
  msgstr ""
  "Project-Id-Version: synaptic\n"
  "Report-Msgid-Bugs-To: \n"
 -"POT-Creation-Date: 2016-01-11 10:17+0100\n"
+-"PO-Revision-Date: 2013-03-09 23:58+0000\n"
+-"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 +"POT-Creation-Date: 2017-01-09 11:27+0100\n"
- "PO-Revision-Date: 2013-03-09 23:58+0000\n"
- "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
++"PO-Revision-Date: 2018-11-09 19:40+0100\n"
++"Last-Translator: rezso <rezso@rezso.net>\n"
  "Language-Team: Hungarian <hu@li.org>\n"
-@@ -19,318 +19,219 @@
+ "Language: hu\n"
+ "MIME-Version: 1.0\n"
+@@ -17,320 +17,213 @@
+ "Content-Transfer-Encoding: 8bit\n"
+ "Plural-Forms: nplurals=2; plural=n != 1;\n"
  "X-Launchpad-Export-Date: 2013-04-19 04:32+0000\n"
- "X-Generator: Launchpad (build 16567)\n"
+-"X-Generator: Launchpad (build 16567)\n"
++"X-Generator: Poedit 2.1.1\n"
  
 -#. TRANSLATORS: Alias for the Debian package section "admin"
  #: ../common/sections_trans.cc:12
@@ -568,16 +567,16 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 -#: ../common/sections_trans.cc:102
 -msgid "Word Processing"
 -msgstr "Szövegszerkesztés"
+-
+-#. TRANSLATORS: Alias for the Debian package section "utils"
+-#: ../common/sections_trans.cc:104
+-msgid "Utilities"
+-msgstr "Eszközök"
 +#. desktops
 +#: ../common/sections_trans.cc:97
 +msgid "Cinnamon Desktop Environment"
 +msgstr "Cinnamon asztali környezet"
  
--#. TRANSLATORS: Alias for the Debian package section "utils"
--#: ../common/sections_trans.cc:104
--msgid "Utilities"
--msgstr "Eszközök"
--
 -#. TRANSLATORS: Alias for the Debian package section "vcs"
 -#: ../common/sections_trans.cc:106
 -msgid "Version Control Systems"
@@ -657,16 +656,14 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 -msgid "GObject Introspection data"
 -msgstr "GObject betekintési adatok"
 -
- #. TRANSLATORS: Alias for the Debian package section "non-US"
- #. Export to the outside of the USA is not allowed
- #. or restricted
+-#. TRANSLATORS: Alias for the Debian package section "non-US"
+-#. Export to the outside of the USA is not allowed
+-#. or restricted
 -#: ../common/sections_trans.cc:133 ../common/sections_trans.cc:151
 -#: ../common/sections_trans.cc:155
-+#: ../common/sections_trans.cc:114 ../common/sections_trans.cc:131
-+#: ../common/sections_trans.cc:135
- msgid "Restricted On Export"
- msgstr "Exportkorlátozás alatt"
- 
+-msgid "Restricted On Export"
+-msgstr "Exportkorlátozás alatt"
+-
  #. TRANSLATORS: Alias for the Debian package section "non free"
 -#: ../common/sections_trans.cc:135 ../common/sections_trans.cc:152
 +#: ../common/sections_trans.cc:116 ../common/sections_trans.cc:132
@@ -680,7 +677,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  msgid "contrib"
  msgstr "contrib"
  
-@@ -475,36 +376,36 @@
+@@ -475,36 +368,36 @@
  msgid "Unable to read %s"
  msgstr "A(z) %s nem olvasható"
  
@@ -724,7 +721,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  #, c-format
  msgid "couldn't open %s for writing"
  msgstr "Nem tudom megnyitni %s-t írásra"
-@@ -537,6 +438,10 @@
+@@ -537,6 +430,10 @@
  "Minden csomag sikeresen telepítve a jelenlegi adathordozóról. A telepítés "
  "folytatásához a következő adathordozóval, zárja be ezt az ablakot."
  
@@ -735,7 +732,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  #: ../common/rpackage.cc:243
  msgid "The list of installed files is only available for installed packages"
  msgstr ""
-@@ -1026,6 +931,10 @@
+@@ -1026,6 +923,10 @@
  msgid "Search Filter"
  msgstr "Keresési szűrő"
  
@@ -746,7 +743,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  #: ../common/rpackageview.cc:513
  msgid "Reduced View"
  msgstr "Csökkentett nézet"
-@@ -1351,7 +1260,7 @@
+@@ -1351,7 +1252,7 @@
  "The marked changes are now being applied. This can take some time. Please "
  "wait."
  msgstr ""
@@ -755,7 +752,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  "Ez eltarthat egy ideig, kis türelmet..."
  
  #: ../gtk/rgdebinstallprogress.cc:833
-@@ -1435,7 +1344,7 @@
+@@ -1435,7 +1336,7 @@
  msgstr "Intelligens frissítés"
  
  #: ../gtk/rgpreferenceswindow.cc:404 ../gtk/rgmainwindow.cc:1733
@@ -764,7 +761,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  msgid "An error occurred while saving configurations."
  msgstr "Hiba a beállítások mentése közben."
  
-@@ -1586,11 +1495,11 @@
+@@ -1586,11 +1487,11 @@
  "Az APT rendszer a következőt jelenti:\n"
  "%s"
  
@@ -778,7 +775,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  msgid ""
  "Expression was found, please see the list on the left for matching entries."
  msgstr ""
-@@ -1635,6 +1544,11 @@
+@@ -1635,6 +1536,11 @@
  msgid "Visit Homepage"
  msgstr "Honlap meglátogatása"
  
@@ -790,7 +787,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  #. TRANSLATORS: this the format of the available versions in
  #. the "Properties/Available versions" window
  #. e.g. "0.56 (unstable)"
-@@ -3743,14 +3657,122 @@
+@@ -3743,14 +3649,14 @@
  msgid "Package is supported"
  msgstr "A csomag támogatott"
  
@@ -808,117 +805,9 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 +#: ../gtk/rgterminstallprogress.cc:187
  msgid "<i>Can't close while running</i>"
  msgstr "<i>Futás közben nem zárhatja be</i>"
-+
-+#~ msgid "System Administration"
-+#~ msgstr "Rendszeradminisztráció"
-+
-+#~ msgid "Mono/CLI Infrastructure"
-+#~ msgstr "Mono/CLI infrastruktúra"
-+
-+#~ msgid "Communication"
-+#~ msgstr "Kommunikáció"
-+
-+#~ msgid "Debug"
-+#~ msgstr "Hibakeresés"
-+
-+#~ msgid "Electronics"
-+#~ msgstr "Elektronika"
-+
-+#~ msgid "Embedded Devices"
-+#~ msgstr "Beágyazott eszközök"
-+
-+#~ msgid "GNU R statistical system"
-+#~ msgstr "GNU R statisztikai rendszer"
-+
-+#~ msgid "Gnustep Desktop Environment"
-+#~ msgstr "Gnustep asztali környezet"
-+
-+#~ msgid "Amateur Radio"
-+#~ msgstr "Amatőr rádió"
-+
-+#~ msgid "Haskell Programming Language"
-+#~ msgstr "Haskell programnyelv"
-+
-+#~ msgid "Java Programming Language"
-+#~ msgstr "Java programozási nyelv"
-+
-+#~ msgid "Kernel and modules"
-+#~ msgstr "Kernel és moduljai"
-+
-+#~ msgid "Libraries - Development"
-+#~ msgstr "Könyvtárak - Fordításhoz"
-+
-+#~ msgid "Lisp Programming Language"
-+#~ msgstr "Lisp programozási nyelv"
-+
-+#~ msgid "Localization"
-+#~ msgstr "Honosítás"
-+
-+#~ msgid "Email"
-+#~ msgstr "E-mail"
-+
-+#~ msgid "Mathematics"
-+#~ msgstr "Matematika"
-+
-+#~ msgid "Miscellaneous - Text Based"
-+#~ msgstr "Egyéb - Szöveges"
-+
-+#~ msgid "Newsgroup"
-+#~ msgstr "Hírcsoportok"
-+
-+#~ msgid "OCaml Programming Language"
-+#~ msgstr "OCaml programozási nyelv"
-+
-+#~ msgid "Libraries - Old"
-+#~ msgstr "Könyvtárak - Régi"
-+
-+#~ msgid "Cross Platform"
-+#~ msgstr "Keresztplatform"
-+
-+#~ msgid "Perl Programming Language"
-+#~ msgstr "Perl programozási nyelv"
-+
-+#~ msgid "PHP Programming Language"
-+#~ msgstr "PHP programozási nyelv"
-+
-+#~ msgid "Python Programming Language"
-+#~ msgstr "Python programozási nyelv"
-+
-+#~ msgid "Ruby Programming Language"
-+#~ msgstr "Ruby programozási nyelv"
-+
-+#~ msgid "TeX Authoring"
-+#~ msgstr "TeX"
-+
-+#~ msgid "Word Processing"
-+#~ msgstr "Szövegszerkesztés"
-+
-+#~ msgid "Version Control Systems"
-+#~ msgstr "Verziókezelő rendszerek"
-+
-+#~ msgid "Video software"
-+#~ msgstr "Videoszoftverek"
-+
-+#~ msgid "Miscellaneous  - Graphical"
-+#~ msgstr "Egyéb - Grafika"
-+
-+#~ msgid "Zope/Plone Environment"
-+#~ msgstr "Zope/Plone környezet"
-+
-+#~ msgid "Converted From RPM by Alien"
-+#~ msgstr "RPM-ből Aliennel konvertálva"
-+
-+#~ msgid "Internationalization and localization"
-+#~ msgstr "Nemzetköziség és lokalizáció"
-+
-+#~ msgid "Education"
-+#~ msgstr "Oktatás"
-+
-+#~ msgid "GObject Introspection data"
-+#~ msgstr "GObject betekintési adatok"
 diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
---- orig/po/synaptic.pot	2017-01-06 22:22:49.000000000 +0100
-+++ patched/po/synaptic.pot	2017-01-09 11:31:12.135485126 +0100
+--- orig/po/synaptic.pot	2018-11-08 08:50:31.000000000 +0100
++++ patched/po/synaptic.pot	2018-11-09 19:39:46.039024845 +0100
 @@ -8,7 +8,7 @@
  msgstr ""
  "Project-Id-Version: PACKAGE VERSION\n"
@@ -928,7 +817,7 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
  "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
  "Language-Team: LANGUAGE <LL@li.org>\n"
-@@ -18,318 +18,219 @@
+@@ -18,318 +18,211 @@
  "Content-Transfer-Encoding: 8bit\n"
  "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
  
@@ -1181,67 +1070,67 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
 -#. TRANSLATORS: Alias for the Debian package section "shells"
  #: ../common/sections_trans.cc:94
 -msgid "Shells"
--msgstr ""
--
--#. TRANSLATORS: Alias for the Debian package section "sound"
--#: ../common/sections_trans.cc:96
--msgid "Multimedia"
--msgstr ""
--
--#. TRANSLATORS: Alias for the Debian package section "task"
--#: ../common/sections_trans.cc:98 ../common/rpackageview.cc:507
--msgid "Tasks"
 +msgid "X Server"
  msgstr ""
  
--#. TRANSLATORS: Alias for the Debian package section "tex"
--#: ../common/sections_trans.cc:100
--msgid "TeX Authoring"
+-#. TRANSLATORS: Alias for the Debian package section "sound"
+-#: ../common/sections_trans.cc:96
+-msgid "Multimedia"
 +#. desktops
 +#: ../common/sections_trans.cc:97
 +msgid "Cinnamon Desktop Environment"
  msgstr ""
  
+-#. TRANSLATORS: Alias for the Debian package section "task"
+-#: ../common/sections_trans.cc:98 ../common/rpackageview.cc:507
+-msgid "Tasks"
+-msgstr ""
+-
+-#. TRANSLATORS: Alias for the Debian package section "tex"
+-#: ../common/sections_trans.cc:100
+-msgid "TeX Authoring"
+-msgstr ""
+-
 -#. TRANSLATORS: Alias for the Debian package section "text"
 -#: ../common/sections_trans.cc:102
 -msgid "Word Processing"
--msgstr ""
--
++#: ../common/sections_trans.cc:99
++msgid "GNOME Desktop Environment"
+ msgstr ""
+ 
 -#. TRANSLATORS: Alias for the Debian package section "utils"
 -#: ../common/sections_trans.cc:104
 -msgid "Utilities"
-+#: ../common/sections_trans.cc:99
-+msgid "GNOME Desktop Environment"
++#: ../common/sections_trans.cc:101
++msgid "KDE Desktop Environment"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "vcs"
 -#: ../common/sections_trans.cc:106
 -msgid "Version Control Systems"
-+#: ../common/sections_trans.cc:101
-+msgid "KDE Desktop Environment"
++#: ../common/sections_trans.cc:103
++msgid "LXDE Desktop Environment"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "video"
 -#: ../common/sections_trans.cc:108
 -msgid "Video software"
-+#: ../common/sections_trans.cc:103
-+msgid "LXDE Desktop Environment"
++#: ../common/sections_trans.cc:105
++msgid "LXQt Desktop Environment"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "web"
 -#: ../common/sections_trans.cc:110
 -msgid "World Wide Web"
-+#: ../common/sections_trans.cc:105
-+msgid "LXQt Desktop Environment"
++#: ../common/sections_trans.cc:107
++msgid "MATE Desktop Environment"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "x11"
 -#: ../common/sections_trans.cc:112
 -msgid "Miscellaneous  - Graphical"
-+#: ../common/sections_trans.cc:107
-+msgid "MATE Desktop Environment"
- msgstr ""
- 
+-msgstr ""
+-
 -#. TRANSLATORS: Alias for the Debian package section "xfce"
 -#: ../common/sections_trans.cc:114
 +#: ../common/sections_trans.cc:109
@@ -1284,16 +1173,14 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
 -msgid "GObject Introspection data"
 -msgstr ""
 -
- #. TRANSLATORS: Alias for the Debian package section "non-US"
- #. Export to the outside of the USA is not allowed
- #. or restricted
+-#. TRANSLATORS: Alias for the Debian package section "non-US"
+-#. Export to the outside of the USA is not allowed
+-#. or restricted
 -#: ../common/sections_trans.cc:133 ../common/sections_trans.cc:151
 -#: ../common/sections_trans.cc:155
-+#: ../common/sections_trans.cc:114 ../common/sections_trans.cc:131
-+#: ../common/sections_trans.cc:135
- msgid "Restricted On Export"
- msgstr ""
- 
+-msgid "Restricted On Export"
+-msgstr ""
+-
  #. TRANSLATORS: Alias for the Debian package section "non free"
 -#: ../common/sections_trans.cc:135 ../common/sections_trans.cc:152
 +#: ../common/sections_trans.cc:116 ../common/sections_trans.cc:132
@@ -1307,7 +1194,7 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  msgid "contrib"
  msgstr ""
  
-@@ -472,36 +373,36 @@
+@@ -472,36 +365,36 @@
  msgid "Unable to read %s"
  msgstr ""
  
@@ -1351,7 +1238,7 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  #, c-format
  msgid "couldn't open %s for writing"
  msgstr ""
-@@ -526,6 +427,14 @@
+@@ -526,6 +419,10 @@
  "installation with the next medium close this window."
  msgstr ""
  
@@ -1359,14 +1246,10 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
 +msgid "Unknown"
 +msgstr ""
 +
-+#: ../common/rpackage.cc:115 ../common/rpackageview.cc:610
-+msgid "Unknown"
-+msgstr ""
-+
  #: ../common/rpackage.cc:243
  msgid "The list of installed files is only available for installed packages"
  msgstr ""
-@@ -984,6 +893,14 @@
+@@ -984,6 +881,10 @@
  msgid "Search Filter"
  msgstr ""
  
@@ -1374,14 +1257,10 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
 +msgid "Tasks"
 +msgstr ""
 +
-+#: ../common/rpackageview.cc:507
-+msgid "Tasks"
-+msgstr ""
-+
  #: ../common/rpackageview.cc:513
  msgid "Reduced View"
  msgstr ""
-@@ -1369,7 +1286,7 @@
+@@ -1369,7 +1270,7 @@
  msgstr ""
  
  #: ../gtk/rgpreferenceswindow.cc:404 ../gtk/rgmainwindow.cc:1733
@@ -1390,7 +1269,7 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  msgid "An error occurred while saving configurations."
  msgstr ""
  
-@@ -1500,11 +1417,11 @@
+@@ -1500,11 +1401,11 @@
  "%s"
  msgstr ""
  
@@ -1404,7 +1283,7 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  msgid ""
  "Expression was found, please see the list on the left for matching entries."
  msgstr ""
-@@ -1547,6 +1464,11 @@
+@@ -1547,6 +1448,11 @@
  msgid "Visit Homepage"
  msgstr ""
  
@@ -1416,7 +1295,7 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  #. TRANSLATORS: this the format of the available versions in
  #. the "Properties/Available versions" window
  #. e.g. "0.56 (unstable)"
-@@ -3497,14 +3419,14 @@
+@@ -3497,14 +3403,14 @@
  msgid "Package is supported"
  msgstr ""
  
