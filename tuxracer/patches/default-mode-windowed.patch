@@ -1,0 +1,26 @@
+diff -Nur orig/src/game_config.c mod/src/game_config.c
+--- orig/src/game_config.c	2018-11-11 20:44:52.000000000 +0100
++++ mod/src/game_config.c	2018-11-11 20:53:32.172681628 +0100
+@@ -469,11 +469,11 @@
+ 	"# Set this to true to display the current framerate in Hz." );
+ 
+     INIT_PARAM_INT( 
+-	x_resolution, 640,
++	x_resolution, 1024,
+ 	"# The horizontal size of the Tux Racer window" );
+ 
+     INIT_PARAM_INT( 
+-	y_resolution, 480,
++	y_resolution, 768,
+ 	"# The vertical size of the Tux Racer window" );
+ 
+     INIT_PARAM_BOOL( 
+@@ -505,7 +505,7 @@
+         "# decreasing this number, at the cost of lower image quality." );
+ 
+     INIT_PARAM_BOOL( 
+-	fullscreen, True,
++	fullscreen, False,
+ 	"# If true then the game will run in full-screen mode." );
+ 
+     INIT_PARAM_INT( 
