@@ -5,3 +5,6 @@ mv /usr/lib/xorg/modules/extensions/libglx.so /usr/lib/xorg/modules/extensions/l
 fi
 ln -sf /usr/lib/nvidia/libglx.so.* /usr/lib/xorg/modules/extensions/libglx.so
 ldconfig
+#nouveau blacklist a grub kernelsorba
+sed '1 i\GRUB_CMDLINE_LINUX=module_blacklist=nouveau' -i /etc/default/grub
+grub-mkconfig -o /boot/grub/grub.cfg
