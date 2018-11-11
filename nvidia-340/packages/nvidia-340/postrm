@@ -2,3 +2,7 @@
 
 ln -sf /usr/lib/xorg/modules/extensions/libglx.so.xorg /usr/lib/xorg/modules/extensions/libglx.so
 ldconfig
+depmod
+#nouveau blacklist eltávolítása
+sed /GRUB_CMDLINE/d -i /etc/default/grub
+grub-mkconfig -o /boot/grub/grub.cfg
