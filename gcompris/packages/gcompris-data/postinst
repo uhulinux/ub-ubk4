@@ -5,7 +5,7 @@ echo downloading data...
 mkdir -p /usr/share/gcompris/boards/{lang,piano_composition,paintings,babyshapes,instruments}
 mkdir -p /tmp/install
 cd /tmp/install
-curl -o gcompris-$version.tar.bz2 http://gcompris.net/download/gtk/src/gcompris-$version.tar.bz2
+wget --no-check-certificate http://gcompris.net/download/gtk/src/gcompris-$version.tar.bz2
 echo extracting...
 tar -xvf gcompris-$version.tar.bz2 -C /usr/share/
 mv -f /usr/share/gcompris-$version/boards/{dataset,mrpatate,music,skins,sounds,voices} /usr/share/gcompris/boards/
