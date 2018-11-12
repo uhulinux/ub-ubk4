@@ -3,7 +3,3 @@
 ub_install
 mkdir -p ${UB_INSTALLDIR}/usr/share/applications
 cp share/hedgewars/Data/misc/hedgewars.desktop ${UB_INSTALLDIR}/usr/share/applications/
-# data külön csomag
-rm -rf ${UB_INSTALLDIR}/usr/share/hedgewars/Data/{Fonts,Graphics,Maps,Missions,Music,Names,Scripts,Sounds,Themes,Forts}
-# data csomag postinst szkriptbe a verzió
-sed "s/ubversion/$UB_VERSION/" -i $UB_SRCDIR/packages/hedgewars-data/postinst

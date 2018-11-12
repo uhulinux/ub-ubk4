@@ -1,12 +1,10 @@
 #!/bin/sh -eux
 
-rm -r misc/liblua misc/libphysfs
-export QTDIR=/usr/lib/qt4
-UB_MAKE_PROCS=1
+export QTDIR=/usr/lib/qt5
 ub_compile \
+	-DCMAKE_BUILD_TYPE="Release" \
 	-DNOSERVER=1 \
 	-DMINIMAL_FLAGS=1 \
-	-DNOVIDEOREC=1 \
+	-DNOVIDEOREC=0 \
 	-DGHFLAGS=-dynamic \
-	-DFONTS_DIRS="/usr/share/fonts/truetype" \
-	-DFPFLAGS="-k/usr/lib/libgcc_s.so.1"
+	-DFONTS_DIRS="/usr/share/fonts/truetype"

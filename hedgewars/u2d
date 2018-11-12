@@ -1,1 +1,1 @@
-urllist https://github.com/hedgewars/hw/releases/ | splitver '^([0-9.]+)-release.tar.gz$' | sort -V | tail -n 1
+geturl https://www.hedgewars.org/download.html | grep .tar | sed s/.*-//g | sed s/\.tar.*//g | sort -V | tail -n1
