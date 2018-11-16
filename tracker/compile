@@ -1,10 +1,5 @@
 #!/bin/sh -eux
 
-rm -f meson.build
 ub_compile \
-    --disable-gtk-doc \
-    --with-unicode-support=libicu
-
-#ub_compile \
-#    -Ddocs=false \
-#    -Dunicode_support=icu
+    -Ddocs=false \
+    -Dunicode_support=icu
