@@ -1,2 +1,8 @@
-dir=$(urllist https://download.kde.org/stable/ktorrent/ | grep -E '^([0-9])' | sort -V | tail -n 1)
-urllist https://download.kde.org/stable/ktorrent/$dir/ | splitver '^libktorrent-([0-9.]+).tar.xz$' | sort -V | tail -n 1
+direk=$(urllist https://download.kde.org/stable/ktorrent/ | grep -E '^([0-9])' | sort -rV)
+for dir in $direk;do
+ver=$(u2d https://download.kde.org/stable/ktorrent/$dir/ libktorrent-)
+if [ "$ver" ];then
+    echo $ver
+    exit 0
+fi
+done
