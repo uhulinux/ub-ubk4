@@ -1,2 +1,8 @@
-minor=$(urllist http://web.mit.edu/kerberos/dist/krb5 | splitver '^([0-9.]+)$' | sort -V | tail -n 1)
-urllist http://web.mit.edu/kerberos/dist/krb5/"$minor"/ | splitver '^krb5-([0-9.]+).tar.(gz|bz2|xz)$' | sort -V | tail -n 1
+dirs=$(urllist http://web.mit.edu/kerberos/dist/krb5 | splitver '^([0-9.]+)$' | sort -Vr)
+for dir in $dirs;do
+    ver=$(u2d http://web.mit.edu/kerberos/dist/krb5/"$dir"/ krb5-)
+    if [ "$ver" ];then
+        echo $ver
+        exit 0
+    fi
+done
