@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+export EFIDIR="/boot/EFI"
+make \
+    libdir=/usr/lib \
+    EXTRA_CFLAGS="-Os"

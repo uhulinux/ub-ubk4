@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+make -j1 V=1 DESTDIR="${UB_INSTALLDIR}/" libdir="/usr/lib/" bindir="/usr/bin/" mandir="/usr/share/man/" includedir="/usr/include/" install
+
+cp src/test/tester ${UB_INSTALLDIR}/usr/bin/efivar-tester

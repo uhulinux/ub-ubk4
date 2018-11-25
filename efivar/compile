@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+sed 's|-rpath,$(TOPDIR)/src|-rpath,$(libdir)|g' -i "src/test/Makefile"
+make libdir="/usr/lib/" bindir="/usr/bin/" mandir="/usr/share/man/" includedir="/usr/include/" V=1 -j1
+cd src/test
+make libdir="/usr/lib/" bindir="/usr/bin/" mandir="/usr/share/man/" includedir="/usr/"
