@@ -1,0 +1,28 @@
+diff -Nur orig/src/GNUmakefile mod/src/GNUmakefile
+--- orig/src/GNUmakefile	2016-11-05 18:27:10.000000000 +0100
++++ mod/src/GNUmakefile	2018-11-26 18:10:35.518548515 +0100
+@@ -21,7 +21,7 @@
+ OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
+ DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
+ WARNINGS        ?= -Wall -Wextra -pedantic
+-OPTIMS          ?= -march=native -mtune=native -Ofast
++OPTIMS          ?= -march=native -mtune=native -O2
+ DMACROS         := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
+ INCDIRS         := -I'./include'
+ CXXFLAGS        += -std=c++11 $(WARNINGS) $(OPTIMS)
+@@ -32,12 +32,12 @@
+ INSTALL_DATA    := install --mode=0644
+ 
+ # standard GNU directories
+-prefix          ?= /usr/local
++prefix          ?= /usr
+ exec_prefix     ?= $(prefix)
+-bindir          := $(exec_prefix)/games
++bindir          := $(exec_prefix)/bin
+ datarootdir     := $(prefix)/share
+ datadir         := $(datarootdir)/games
+-docdir          := $(datarootdir)/doc/$(DISTNAME)
++docdir          := $(datarootdir)/doc/Packages/$(DISTNAME)
+ 
+ #
+ # phony targets, whose names aren't names of resulting files
