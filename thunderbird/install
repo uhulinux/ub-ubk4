@@ -8,7 +8,7 @@ rm -f "$UB_INSTALLDIR"/usr/lib/thunderbird/thunderbird
 rm -f "$UB_INSTALLDIR"/usr/bin/thunderbird
 ln -s /usr/lib/thunderbird/thunderbird "$UB_INSTALLDIR"/usr/bin/thunderbird
 
-if [ ! -f "$UB_INSTALLDIR"/usr/lib/firefox/run-mozilla.sh ]; then
+if [ ! -f "$UB_INSTALLDIR"/usr/lib/thunderbird/run-mozilla.sh ]; then
 	cp "$UB_COMPILEDIR"/build/unix/run-mozilla.sh "$UB_INSTALLDIR"/usr/lib/thunderbird/run-mozilla.sh
 fi
 
