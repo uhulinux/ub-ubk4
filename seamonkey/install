@@ -9,7 +9,10 @@ ub_install
 rm -f "$UB_INSTALLDIR"/usr/lib/seamonkey/seamonkey
 rm -f "$UB_INSTALLDIR"/usr/bin/seamonkey
 ln -s /usr/lib/seamonkey/seamonkey "$UB_INSTALLDIR"/usr/bin/seamonkey
-ln -s seamonkey "$UB_INSTALLDIR"/usr/lib/seamonkey-"$UB_VERSION"
+
+if [ ! -f "$UB_INSTALLDIR"/usr/lib/seamonkey/run-mozilla.sh ]; then
+	cp "$UB_COMPILEDIR"/build/unix/run-mozilla.sh "$UB_INSTALLDIR"/usr/lib/seamonkey/run-mozilla.sh
+fi
 
 cp "$UB_INSTALLDIR"/usr/lib/seamonkey/chrome/icons/default/default48.png "$UB_INSTALLDIR"/usr/share/pixmaps/seamonkey.png
 
