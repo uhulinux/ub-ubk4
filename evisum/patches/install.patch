@@ -1,6 +1,6 @@
 diff -Naur orig/makefile patched/makefile
---- orig/makefile	2018-06-19 10:49:10.000000000 +0200
-+++ patched/makefile	2018-09-04 02:08:24.009579255 +0200
+--- orig/makefile	2018-11-20 11:10:13.000000000 +0100
++++ patched/makefile	2018-11-27 02:29:51.570032404 +0100
 @@ -1,6 +1,8 @@
  LIBS=
  
@@ -11,8 +11,8 @@ diff -Naur orig/makefile patched/makefile
  
  OSNAME := $(shell uname -s)
  
-@@ -26,9 +28,9 @@
- 	$(MAKE) -C src clean
+@@ -28,10 +30,10 @@
+ 	$(MAKE) -C src/tingle clean
  
  install:
 -	-mkdir -p $(PREFIX)/share/pixmaps
@@ -21,9 +21,11 @@ diff -Naur orig/makefile patched/makefile
 -	install -m 0644 data/evisum.png $(PREFIX)/share/pixmaps
 -	install -m 0644 data/evisum.desktop $(PREFIX)/share/applications
 -	install -m 0755 evisum $(PREFIX)/bin
+-	install -m 0755 src/tingle/tingle $(PREFIX)/bin
 +	-mkdir -p $(DESTDIR)$(PREFIX)/share/pixmaps
 +	-mkdir -p $(DESTDIR)$(PREFIX)/share/applications
 +	-mkdir -p $(DESTDIR)$(PREFIX)/bin
 +	install -m 0644 data/evisum.png $(DESTDIR)$(PREFIX)/share/pixmaps
 +	install -m 0644 data/evisum.desktop $(DESTDIR)$(PREFIX)/share/applications
 +	install -m 0755 evisum $(DESTDIR)$(PREFIX)/bin
++	install -m 0755 src/tingle/tingle $(DESTDIR)$(PREFIX)/bin
