@@ -1,39 +1,54 @@
 #!/bin/sh -eux
 
-cp -r grub grub-bios
-cp -r grub grub-efi
-opts=" --prefix=/usr \
+opts=" \
+    --prefix=/usr \
     --sysconfdir=/etc \
     --localstatedir=/var \
     --mandir=/usr/share/man \
     --infodir=/usr/share/info \
+    --disable-silent-rules \
+    --enable-device-mapper \
+    --enable-grub-mkfont \
+    --enable-nls \
+    --enable-grub-mount
     --with-grubdir=grub \
-	--disable-werror \
-	--disable-silent-rules \
-	--enable-grub-mount \
+    --disable-werror \
 	--build=x86_64-linux-gnu \
 	--host=x86_64-linux-gnu \
-    "
+ "
+
+export FREETYPE="pkg-config freetype2"
+export BUILD_FREETYPE="pkg-config freetype2"
+export GRUB_CONTRIB=grub-extras
+
+cp -r grub grub-bios
+cp -r grub grub-efi
+cp -r grub-extras grub-bios/
 
 cd grub-bios
 ./autogen.sh
-./configure $opts \
-    --enable-efiemu \
-    --target="i386" \
-    --with-platform="pc"
+./configure \
+	$opts \
+	--enable-efiemu \
+	--target="i386" \
+	--enable-boot-time \
+	--with-platform="pc"
 make -j2
 
 cd ../grub-efi
 ./autogen.sh
-./configure $opts \
+./configure \
+	$opts \
 	--disable-efiemu \
 	--target=x86_64 \
-	--with-platform="efi"
+	--enable-boot-time \
+ 	--with-platform="efi"
 make -j2
 
 cd ../grub
 ./autogen.sh
-./configure $opts \
+./configure \
+	$opts \
 	--enable-grub-emu-usb=no \
 	--enable-grub-emu-sdl=no \
 	--disable-grub-emu-pci \
