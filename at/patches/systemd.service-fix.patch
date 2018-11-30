@@ -1,0 +1,12 @@
+diff -Nur at-3.1.23/atd.service.in at-3.1.23.patched/atd.service.in
+--- at-3.1.23/atd.service.in	2018-07-24 14:41:23.000000000 +0200
++++ at-3.1.23.patched/atd.service.in	2018-11-30 19:42:48.700208041 +0100
+@@ -4,7 +4,7 @@
+ After=remote-fs.target nss-user-lookup.target
+ 
+ [Service]
+-ExecStartPre=-find @atjobdir@ -type f -name "=*" -not -newercc /run/systemd -delete
++ExecStartPre=/usr/bin/find @atjobdir@ -type f -name "=*" -not -newercc /run/systemd -delete
+ ExecStart=@sbindir@/atd -f
+ IgnoreSIGPIPE=false
+ KillMode=process
