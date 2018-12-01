@@ -1,19 +1,16 @@
 #!/bin/sh -eux
 
-cd grub
-cp AUTHORS COPYING NEWS README THANKS TODO ../
+function installerem () {
+cd $1
+    make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
+    rm -f $instdir/$2/*.module
+    rm -f ${instdir}/$2/*.image
+    rm -f ${instdir}/$2/{kernel.exec,gdb_grub,gmodule.pl}
+cd ..
+}
 
-make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.module
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.image
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/{kernel.exec,gdb_grub,gmodule.pl}
-cd ../grub-efi
-make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.module
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/*.image
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/x86_64-efi"/{kernel.exec,gdb_grub,gmodule.pl}
-cd ../grub-bios
-make DESTDIR="${UB_INSTALLDIR}/" bashcompletiondir="/usr/share/bash-completion/completions" install
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/*.module
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/*.image
-rm -f "${UB_INSTALLDIR}/usr/lib/grub/i386-pc"/{kernel.exec,gdb_grub,gmodule.pl}
+instdir=${UB_INSTALLDIR}/usr/lib/grub
+cp grub/{AUTHORS,COPYING,NEWS,README,THANKS,TODO} ./
+installerem grub x86_64-emu
+installerem grub-efi x86_64-efi
+installerem grub-bios i386-pc
