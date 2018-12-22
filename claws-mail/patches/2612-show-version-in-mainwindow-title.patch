@@ -1,31 +1,31 @@
 diff -Naur orig/src/mainwindow.c patched/src/mainwindow.c
---- orig/src/mainwindow.c	2018-08-15 19:43:32.000000000 +0200
-+++ patched/src/mainwindow.c	2018-08-15 23:26:06.346389452 +0200
+--- orig/src/mainwindow.c	2018-12-01 11:25:00.000000000 +0100
++++ patched/src/mainwindow.c	2018-12-18 00:51:31.295422145 +0100
 @@ -1445,7 +1445,7 @@
  
  	/* main window */
  	window = GTK_WIDGET(gtkut_window_new(GTK_WINDOW_TOPLEVEL, "mainwindow"));
--	gtk_window_set_title(GTK_WINDOW(window), PROG_VERSION_FRIENDLY);
-+	gtk_window_set_title(GTK_WINDOW(window), (prefs_common.show_version_in_window_title ? PROG_VERSION_FRIENDLY : "Claws Mail"));
+-	gtk_window_set_title(GTK_WINDOW(window), PROG_VERSION);
++	gtk_window_set_title(GTK_WINDOW(window), (prefs_common.show_version_in_window_title ? PROG_VERSION : "Claws Mail"));
  	gtk_window_set_resizable(GTK_WINDOW(window), TRUE);
  #ifdef GENERIC_UMPC
  	prefs_common.layout_mode = SMALL_LAYOUT;
-@@ -2624,9 +2624,9 @@
+@@ -2626,9 +2626,9 @@
  			   : _("none"));
  
  	if (cur_account)
--		buf = g_strdup_printf("%s - %s", ac_name, PROG_VERSION_FRIENDLY);
-+		buf = g_strdup_printf("%s - %s", ac_name,  (prefs_common.show_version_in_window_title ? PROG_VERSION_FRIENDLY : "Claws Mail"));
+-		buf = g_strdup_printf("%s - %s", ac_name, PROG_VERSION);
++		buf = g_strdup_printf("%s - %s", ac_name, (prefs_common.show_version_in_window_title ? PROG_VERSION : "Claws Mail"));
  	else
--		buf = g_strdup(PROG_VERSION_FRIENDLY);
-+		buf = g_strdup_printf((prefs_common.show_version_in_window_title ? PROG_VERSION_FRIENDLY : "Claws Mail"));
+-		buf = g_strdup(PROG_VERSION);
++		buf = g_strdup_printf((prefs_common.show_version_in_window_title ? PROG_VERSION : "Claws Mail"));
  	gtk_window_set_title(GTK_WINDOW(mainwin->window), buf);
  	g_free(buf);
  
 diff -Naur orig/src/prefs_common.c patched/src/prefs_common.c
---- orig/src/prefs_common.c	2018-08-15 19:43:32.000000000 +0200
-+++ patched/src/prefs_common.c	2018-08-15 23:26:06.346389452 +0200
-@@ -797,6 +797,8 @@
+--- orig/src/prefs_common.c	2018-11-30 10:13:09.000000000 +0100
++++ patched/src/prefs_common.c	2018-12-18 00:45:25.788893389 +0100
+@@ -812,6 +812,8 @@
  	{"layout_mode", "5", &prefs_common.layout_mode, P_INT,
  	 NULL, NULL, NULL},
  #endif
@@ -35,9 +35,9 @@ diff -Naur orig/src/prefs_common.c patched/src/prefs_common.c
  	 NULL, NULL, NULL}, */
  	{"open_selected_message_on_folder_open", "FALSE",
 diff -Naur orig/src/prefs_common.h patched/src/prefs_common.h
---- orig/src/prefs_common.h	2018-08-15 19:43:32.000000000 +0200
-+++ patched/src/prefs_common.h	2018-08-15 23:27:54.635581731 +0200
-@@ -398,6 +398,7 @@
+--- orig/src/prefs_common.h	2018-11-30 10:13:09.000000000 +0100
++++ patched/src/prefs_common.h	2018-12-18 00:45:25.792893438 +0100
+@@ -404,6 +404,7 @@
  	gboolean immediate_exec;
  	SelectOnEntry select_on_entry;
  	gboolean show_tooltips;
