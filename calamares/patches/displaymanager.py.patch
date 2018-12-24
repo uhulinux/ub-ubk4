@@ -92,7 +92,7 @@ diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager
  
      # Setup lxdm
      if "lxdm" in displaymanagers:
-+        libcalamares.utils.target_env_call(['systemctl', 'enable', 'gdm'])
++        libcalamares.utils.target_env_call(['systemctl', 'enable', 'lxdm'])
          if have_dm("lxdm", root_mount_point):
              if enable_basic_setup:
                  if libcalamares.utils.target_env_call(
