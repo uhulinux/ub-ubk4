@@ -1,0 +1,17 @@
+diff -Nur orig/src/modules/partition/core/PartitionActions.cpp mod/src/modules/partition/core/PartitionActions.cpp
+--- orig/src/modules/partition/core/PartitionActions.cpp	2018-06-25 16:04:26.000000000 +0200
++++ mod/src/modules/partition/core/PartitionActions.cpp	2018-12-24 18:45:07.133001978 +0100
+@@ -203,7 +203,12 @@
+     PartitionInfo::setFormat( rootPartition, true );
+     PartitionInfo::setMountPoint( rootPartition, "/" );
+     core->createPartition( dev, rootPartition );
+-
++    // Some buggy (legacy) BIOSes test if the bootflag of at least one partition is set.
++    // Otherwise they ignore the device in boot-order, so add it here.
++    core->createPartition( dev, rootPartition,
++                           rootPartition->activeFlags() | ( isEfi ? PartitionTable::FlagNone : PartitionTable::FlagBoot )
++                         );
++    
+     if ( shouldCreateSwap )
+     {
+         Partition* swapPartition = nullptr;

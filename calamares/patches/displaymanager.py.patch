@@ -1,6 +1,6 @@
 diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager/main.py
---- orig/src/modules/displaymanager/main.py	2017-11-14 16:18:58.000000000 +0100
-+++ mod/src/modules/displaymanager/main.py	2017-11-26 22:53:05.000000000 +0100
+--- orig/src/modules/displaymanager/main.py	2018-06-25 16:04:26.000000000 +0200
++++ mod/src/modules/displaymanager/main.py	2018-12-24 19:01:14.966411296 +0100
 @@ -51,6 +51,8 @@
      DesktopEnvironment('/usr/bin/budgie-desktop', 'budgie-desktop'),
      DesktopEnvironment('/usr/bin/i3', 'i3'),
@@ -10,6 +10,15 @@ diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager
      DesktopEnvironment('/usr/bin/openbox-session', 'openbox')
  ]
  
+@@ -398,7 +400,7 @@
+     username = libcalamares.globalstorage.value("autologinUser")
+     root_mount_point = libcalamares.globalstorage.value("rootMountPoint")
+ 
+-    if "default_desktop_environment" in libcalamares.job.configuration:
++    if "defaultDesktopEnvironment" in libcalamares.job.configuration:
+         entry = libcalamares.job.configuration["defaultDesktopEnvironment"]
+         default_desktop_environment = DesktopEnvironment(
+             entry["executable"], entry["desktopFile"]
 @@ -415,57 +417,26 @@
  
      # Setup slim
@@ -83,7 +92,7 @@ diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager
  
      # Setup lxdm
      if "lxdm" in displaymanagers:
-+        libcalamares.utils.target_env_call(['systemctl', 'enable', 'lxdm'])
++        libcalamares.utils.target_env_call(['systemctl', 'enable', 'gdm'])
          if have_dm("lxdm", root_mount_point):
              if enable_basic_setup:
                  if libcalamares.utils.target_env_call(
