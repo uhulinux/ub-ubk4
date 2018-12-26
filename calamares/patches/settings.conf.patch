@@ -1,6 +1,6 @@
 diff -Nur orig/settings.conf mod/settings.conf
---- orig/settings.conf	2018-05-17 17:13:54.000000000 +0200
-+++ mod/settings.conf	2018-06-12 13:33:47.702505428 +0200
+--- orig/settings.conf	2018-09-04 14:03:59.000000000 +0200
++++ mod/settings.conf	2018-12-25 17:00:51.397426724 +0100
 @@ -78,6 +78,7 @@
    - partition
    - users
@@ -9,7 +9,7 @@ diff -Nur orig/settings.conf mod/settings.conf
    - summary
  - exec:
  #  - dummycpp
-@@ -86,26 +87,22 @@
+@@ -86,25 +87,21 @@
  #  - dummypythonqt
    - partition
    - mount
@@ -32,14 +32,12 @@ diff -Nur orig/settings.conf mod/settings.conf
    - displaymanager
 -  - networkcfg
    - hwclock
--  - services
+-  - services-systemd
  #  - dracut
 -  - initramfs
--#  - grubcfg
-+  - grubcfg
+ #  - grubcfg
    - bootloader
    - umount
- - show:
 @@ -146,3 +143,7 @@
  #
  # YAML: boolean.

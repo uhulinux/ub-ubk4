@@ -1,0 +1,36 @@
+diff -Nur orig/src/modules/displaymanager/displaymanager.conf mod/src/modules/displaymanager/displaymanager.conf
+--- orig/src/modules/displaymanager/displaymanager.conf	2018-09-04 14:03:59.000000000 +0200
++++ mod/src/modules/displaymanager/displaymanager.conf	2018-12-24 20:50:14.385756890 +0100
+@@ -9,9 +9,7 @@
+   - sddm
+   - lightdm
+   - gdm
+-  - mdm
+   - lxdm
+-  - kdm
+ 
+ #Enable the following settings to force a desktop environment in your displaymanager configuration file:
+ #defaultDesktopEnvironment:
+diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager/main.py
+--- orig/src/modules/displaymanager/main.py	2018-09-04 14:03:59.000000000 +0200
++++ mod/src/modules/displaymanager/main.py	2018-12-24 22:48:34.003185444 +0100
+@@ -79,9 +79,9 @@
+     DesktopEnvironment('/usr/bin/startlxde', 'LXDE'),
+     DesktopEnvironment('/usr/bin/lxqt-session', 'lxqt'),
+     DesktopEnvironment('/usr/bin/pekwm', 'pekwm'),
+-    DesktopEnvironment('/usr/bin/pantheon-session', 'pantheon'),
+     DesktopEnvironment('/usr/bin/i3', 'i3'),
+-    DesktopEnvironment('/usr/bin/startdde', 'deepin'),
++    DesktopEnvironment('/usr/bin/icewm-session', 'icewm-session'),
++    DesktopEnvironment('/usr/bin/start-lumina-desktop', 'Lumina-DE'),
+     DesktopEnvironment('/usr/bin/openbox-session', 'openbox')
+ ]
+ 
+@@ -799,6 +799,7 @@
+         libcalamares.utils.debug("Unsetting autologin.")
+ 
+     libcalamares.globalstorage.insert("displayManagers", displaymanagers)
++    libcalamares.utils.target_env_call(['systemctl', 'enable', dm])
+ 
+     # Do the actual configuration and collect messages
+     dm_setup_message = []
