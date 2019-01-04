@@ -1,1 +1,1 @@
-urllist ftp://ftp.stack.nl/pub/users/dimitri/ | splitver '^doxygen-([0-9.]+).src.tar.gz$' | sort -V | tail -n 1
+sflist doxygen | grep rel- | sed -e "s/rel-//" | sort -V | tail -n 1

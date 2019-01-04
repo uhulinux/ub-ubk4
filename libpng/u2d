@@ -1,3 +1,1 @@
-minor=$(urllist ftp://ftp.simplesystems.org/pub/libpng/png/src/ | splitver '^libpng([0-9.]+)' | sort -V | tail -n 1)
-u2d ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng"$minor"/ libpng-
-
+sflist libpng libpng16 | grep "1." | sort -V | tail -n 1

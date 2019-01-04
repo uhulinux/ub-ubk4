@@ -21,5 +21,10 @@ echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "$UB_INSTALLDIR"/usr/lib/l
 echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "$UB_INSTALLDIR"/usr/lib/libopcodes.so
 
 ## create a "host" named link like in gcc
-ln -sf ar "$UB_INSTALLDIR"/usr/bin/x86_64-gnu-linux-ar
-ln -sf as "$UB_INSTALLDIR"/usr/bin/x86_64-gnu-linux-as
+ln -sf ar "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-ar
+ln -sf as "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-as
+ln -sf nm "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-nm
+ln -sf objcopy "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-objcopy
+ln -sf objdump "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-objdump
+ln -sf ranlib "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-ranlib
+ln -sf strip "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-strip
