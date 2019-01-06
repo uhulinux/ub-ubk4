@@ -1,2 +1,2 @@
-version=$(urllist ftp://ftp.lyx.org/pub/lyx/stable/ | splitver '^([0-9.]+)' | sort -V | tail -n 1)
-urllist ftp://ftp.lyx.org/pub/lyx/stable/"$version"/ | splitver '^lyx-([0-9.]+).tar.(gz|xz)$' | sort -V | tail -n 1
+dir=$(urllist https://ba.mirror.garr.it/mirrors/lyx/stable/ | grep -E '^([0-9.x]+)' | sort -V | tail -n 1)
+u2d https://ba.mirror.garr.it/mirrors/lyx/stable/$dir lyx- | sed s/-/~/
