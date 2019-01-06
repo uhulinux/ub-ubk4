@@ -1,5 +1,5 @@
 #!/bin/sh -eux
 
-rm -f meson.build
 ub_compile \
-    --enable-tools
+    -Dtools=true \
+    -Dvalgrind=false
