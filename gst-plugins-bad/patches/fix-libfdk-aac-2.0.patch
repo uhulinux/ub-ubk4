@@ -1,0 +1,39 @@
+diff -Nur orig/ext/fdkaac/gstfdkaacdec.c mod/ext/fdkaac/gstfdkaacdec.c
+--- orig/ext/fdkaac/gstfdkaacdec.c	2018-03-23 21:45:15.000000000 +0100
++++ mod/ext/fdkaac/gstfdkaacdec.c	2019-01-07 13:41:36.536635725 +0100
+@@ -151,17 +151,13 @@
+     gst_buffer_unref (codec_data);
+   }
+ 
++  /* Choose WAV channel mapping to get interleaving even with libfdk-aac 2.0.0
++   * The pChannelIndices retain the indices from the standard MPEG mapping so
++   * we're agnostic to the actual order. */
+   if ((err =
+           aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_CHANNEL_MAPPING,
+-              0)) != AAC_DEC_OK) {
+-    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
+-    return FALSE;
+-  }
+-
+-  if ((err =
+-          aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_INTERLEAVED,
+               1)) != AAC_DEC_OK) {
+-    GST_ERROR_OBJECT (self, "Failed to set interleaved output: %d", err);
++    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
+     return FALSE;
+   }
+ 
+diff -Nur orig/ext/fdkaac/gstfdkaacenc.c mod/ext/fdkaac/gstfdkaacenc.c
+--- orig/ext/fdkaac/gstfdkaacenc.c	2018-03-23 21:45:15.000000000 +0100
++++ mod/ext/fdkaac/gstfdkaacenc.c	2019-01-07 13:42:20.224555416 +0100
+@@ -71,10 +71,6 @@
+   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
+           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
+           GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT}}, {
+-    3, MODE_2_1, {
+-  GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
+-          GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT,
+-          GST_AUDIO_CHANNEL_POSITION_LFE1}}, {
+     4, MODE_1_2_1, {
+   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
+           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
