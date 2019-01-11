@@ -1,8 +1,1 @@
-direk=$(urllist https://download.kde.org/stable/ktorrent/ | grep -E '^([0-9])' | sort -rV)
-for dir in $direk;do
-ver=$(u2d https://download.kde.org/stable/ktorrent/$dir/ libktorrent-)
-if [ "$ver" ];then
-    echo $ver
-    exit 0
-fi
-done
+u2dsubdir https://download.kde.org/stable/ktorrent/ libktorrent-
