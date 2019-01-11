@@ -1,52 +1,74 @@
 diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
---- orig/src/branding/default/show.qml	2018-05-17 17:13:54.000000000 +0200
-+++ mod/src/branding/default/show.qml	2018-06-12 12:41:42.406652251 +0200
-@@ -25,8 +25,8 @@
+--- orig/src/branding/default/show.qml	2019-01-09 13:00:52.000000000 +0100
++++ mod/src/branding/default/show.qml	2019-01-11 15:15:10.514831044 +0100
+@@ -26,42 +26,51 @@
  
      Timer {
          id: advanceTimer
 -        interval: 5000
 -        running: false
-+        interval: 20000
++        interval: 10000
 +        running: true
          repeat: true
          onTriggered: presentation.goToNextSlide()
      }
-@@ -35,7 +35,7 @@
  
+     Slide {
++        centeredText:"Ez a linux kevés, de lelkes ember munkájának gyümölcse."
++        }
+ 
++   Slide {
++        title: qsTr("UHU-Linux alapokról származik")
          Image {
-             id: background
+-            id: background
 -            source: "squid.png"
-+            source: "uhu-192x192.png"
++            id: uhuground
++            source: "uhu-linux.png"
              width: 200; height: 200
              fillMode: Image.PreserveAspectFit
              anchors.centerIn: parent
-@@ -43,11 +43,9 @@
-         Text {
-             anchors.horizontalCenter: background.horizontalCenter
-             anchors.top: background.bottom
+         }
+-        Text {
+-            anchors.horizontalCenter: background.horizontalCenter
+-            anchors.top: background.bottom
 -            text: "This is a customizable QML slideshow.<br/>"+
 -                  "Distributions should provide their own slideshow and list it in <br/>"+
 -                  "their custom branding.desc file.<br/>"+
 -                  "To create a Calamares presentation in QML, import calamares.slideshow,<br/>"+
 -                  "define a Presentation element with as many Slide elements as needed."
-+            text: "Az UHU-UBK3 (RIA)<br/>"+
-+                  "kevés, de lelkes ember munkájának gyümölcse.<br/>"+
-+                  "A telepítés ideje alatt kis diavetítés látható."
-             wrapMode: Text.WordWrap
-             width: presentation.width
-             horizontalAlignment: Text.Center
-@@ -55,11 +53,11 @@
+-            wrapMode: Text.WordWrap
+-            width: presentation.width
+-            horizontalAlignment: Text.Center
+-        }
      }
  
-     Slide {
+-    Slide {
 -        centeredText: "This is a second Slide element."
-+        centeredText: "UHU-Linux alapokról származik,"
++
++ Slide {
++
++        title: qsTr("De már teljesen független tőle.")
++        Image {
++            source: "ubkuhu.jpg"
++            width: 250; height: 250
++            fillMode: Image.PreserveAspectFit
++            anchors.centerIn: parent
++        }
      }
  
++
      Slide {
 -        centeredText: "This is a third Slide element."
-+        centeredText: "de mára már teljesen független tőle."
++
++        title: qsTr("UHU-UBK3")
++        Image {
++            source: "uhu-ubk.png"
++            width: 300; height: 300
++            fillMode: Image.PreserveAspectFit
++            anchors.centerIn: parent
++        }
      }
  
++
      Component.onCompleted: advanceTimer.running = true
+ }
