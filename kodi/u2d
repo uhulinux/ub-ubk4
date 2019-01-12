@@ -1,1 +1,1 @@
-urllist https://github.com/xbmc/xbmc/ | grep -E '^([0-9.]+)-' | sed s/-.*//g | sort -V | tail -n1
+urllist https://github.com/xbmc/xbmc/releases/ | grep -E '^([0-9][0-9]\.[0-9][0-9r])' | grep tar | sed s/-.*//g | sort -V | tail -n1 | sed s/r/~r/
