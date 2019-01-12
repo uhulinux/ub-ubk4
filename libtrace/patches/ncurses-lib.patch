@@ -1,0 +1,23 @@
+diff -Naur orig/tools/tracetop/Makefile.am patched/tools/tracetop/Makefile.am
+--- orig/tools/tracetop/Makefile.am	2015-09-03 05:03:00.000000000 +0200
++++ patched/tools/tracetop/Makefile.am	2019-01-09 20:45:15.919130398 +0100
+@@ -6,6 +6,6 @@
+ include ../Makefile.tools
+ 
+ tracetop_SOURCES = tracetop.cc
+-tracetop_LDADD = -lncurses 
++tracetop_LDADD = -lncurses -ltinfo
+ tracetop_CPPFLAGS = -fno-strict-aliasing $(AM_CFLAGS)
+ endif
+diff -Naur orig/tools/tracetop/Makefile.in patched/tools/tracetop/Makefile.in
+--- orig/tools/tracetop/Makefile.in	2018-11-08 04:19:46.000000000 +0100
++++ patched/tools/tracetop/Makefile.in	2019-01-09 20:45:56.107563351 +0100
+@@ -304,7 +304,7 @@
+ @HAVE_NCURSES_TRUE@       -ltrace @TOOLS_LIBS@
+ 
+ @HAVE_NCURSES_TRUE@tracetop_SOURCES = tracetop.cc
+-@HAVE_NCURSES_TRUE@tracetop_LDADD = -lncurses 
++@HAVE_NCURSES_TRUE@tracetop_LDADD = -lncurses -ltinfo
+ @HAVE_NCURSES_TRUE@tracetop_CPPFLAGS = -fno-strict-aliasing $(AM_CFLAGS)
+ all: all-am
+ 

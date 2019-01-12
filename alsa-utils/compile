@@ -4,6 +4,8 @@ cd po
 msgfmt -o hu.gmo hu.po
 cd ..
 
+sed -i -e "s/ncursesw5/ncursesw6/g" configure{,.ac}
+
 ub_compile \
 	--with-curses=ncursesw \
 	--disable-alsaconf \

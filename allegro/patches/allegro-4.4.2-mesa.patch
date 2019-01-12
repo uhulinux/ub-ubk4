@@ -1,0 +1,44 @@
+From 4d46f276f847a39db182fe55a2fbb244f4fc6b34 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20R=C3=B6nnquist?= <andreas@ronnquist.net>
+Date: Wed, 12 Dec 2018 16:27:37 +0100
+Subject: [PATCH] Fix building with Mesa 18.2.5 and later
+
+Based on the patch on Allegro5,
+https://github.com/liballeg/allegro5/commit/a40d30e21802ecf5c9382cf34af9b01bd3781e47
+---
+ addons/allegrogl/include/alleggl.h                      | 4 ++++
+ addons/allegrogl/include/allegrogl/GLext/glx_ext_defs.h | 2 ++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/addons/allegrogl/include/alleggl.h b/addons/allegrogl/include/alleggl.h
+index 12d71c3c5..fa36c9844 100644
+--- a/addons/allegrogl/include/alleggl.h
++++ b/addons/allegrogl/include/alleggl.h
+@@ -62,10 +62,14 @@ typedef __int64 INT64;
+ 
+ /* HACK: Prevent both Mesa and SGI's broken headers from screwing us */
+ #define __glext_h_
++#define __gl_glext_h_
+ #define __glxext_h_
++#define __glx_glxext_h_
+ #include <GL/gl.h>
+ #undef  __glext_h_
++#undef  __gl_glext_h_
+ #undef  __glxext_h_
++#undef  __glx_glxext_h_
+ 
+ #endif /* ALLEGRO_MACOSX */
+ 
+diff --git a/addons/allegrogl/include/allegrogl/GLext/glx_ext_defs.h b/addons/allegrogl/include/allegrogl/GLext/glx_ext_defs.h
+index 6b2e57120..30f0dce23 100644
+--- a/addons/allegrogl/include/allegrogl/GLext/glx_ext_defs.h
++++ b/addons/allegrogl/include/allegrogl/GLext/glx_ext_defs.h
+@@ -1,6 +1,8 @@
+ /* HACK: Prevent both Mesa and SGI's broken headers from screwing us */
+ #define __glxext_h_
++#define __glx_glxext_h_
+ #include <GL/glx.h>
++#undef __glx_glxext_h_
+ #undef __glxext_h_
+ 
+ #ifndef GLX_VERSION_1_3

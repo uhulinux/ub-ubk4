@@ -2,10 +2,8 @@
 
 ub_install
 
+rm -Rf "$UB_INSTALLDIR"/usr/share/doc/readline
+
 # Compatibility...
-# ln -s libhistory.so.6  "$UB_INSTALLDIR"/lib/libhistory.so.4
-# ln -s libreadline.so.6 "$UB_INSTALLDIR"/lib/libreadline.so.4
-# ln -s libhistory.so.6  "$UB_INSTALLDIR"/lib/libhistory.so.5
-# ln -s libreadline.so.6 "$UB_INSTALLDIR"/lib/libreadline.so.5
-# ln -s libhistory.so.7  "$UB_INSTALLDIR"/lib/libhistory.so.6
-# ln -s libreadline.so.7 "$UB_INSTALLDIR"/lib/libreadline.so.6
+ln -s libhistory.so.8  "$UB_INSTALLDIR"/usr/lib/libhistory.so.7
+ln -s libreadline.so.8 "$UB_INSTALLDIR"/usr/lib/libreadline.so.7
