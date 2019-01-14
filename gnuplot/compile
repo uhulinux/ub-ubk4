@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-export LDFLAGS+='-lX11'
+export LDFLAGS+='-lX11 -lglib-2.0 -lgobject-2.0'
 ub_compile \
 	--with-readline=gnu \
 	--with-lua
