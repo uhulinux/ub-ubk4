@@ -3,4 +3,5 @@
 autoreconf -vif
 ub_configure
 sed s%TEST_LOGS:%TEST_LOGS\):% -i Makefile
+export LDFLAGS=$(pkg-config --libs gio-2.0)
 ub_compile

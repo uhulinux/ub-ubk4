@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
 export UB_MAKE_PROCS=1
+ub_replace -O3 -O2 libAfterBase/configure
+ub_replace -O3 -O2 libAfterImage/configure
 ub_compile

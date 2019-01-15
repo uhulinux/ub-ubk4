@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
-ub_compile
+export LDFLAGS=$(pkg-config --libs gio-2.0)
+ub_compile \
+    -DCMAKE_BUILD_TYPE=RELEASE
