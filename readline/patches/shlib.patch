@@ -36,7 +36,7 @@ index 1f64433..40827a4 100644
 -	SHLIB_XLDFLAGS='-Wl,-rpath,$(libdir) -Wl,-soname,`basename $@ $(SHLIB_MINOR)`'
 +	SHLIB_XLDFLAGS='-Wl,-soname,`basename $@ $(SHLIB_MINOR)`'
  	SHLIB_LIBVERSION='$(SHLIB_LIBSUFF).$(SHLIB_MAJOR)$(SHLIB_MINOR)'
-+	SHLIB_LIBS='-ltinfo'
++	SHLIB_LIBS='-lncurses'
  	;;
 
  freebsd2*)
