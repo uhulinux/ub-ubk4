@@ -1,7 +1,7 @@
-diff -Naur orig/misc/ext.d/doc.sh.in patched/misc/ext.d/doc.sh.in
---- orig/misc/ext.d/doc.sh.in	2015-11-05 12:35:09.000000000 +0100
-+++ patched/misc/ext.d/doc.sh.in	2016-02-20 21:37:43.681649422 +0100
-@@ -92,7 +92,8 @@
+diff -Nur orig/misc/ext.d/doc.sh.in mod/misc/ext.d/doc.sh.in
+--- orig/misc/ext.d/doc.sh.in	2018-12-28 20:35:25.000000000 +0100
++++ mod/misc/ext.d/doc.sh.in	2019-01-12 19:05:58.693717412 +0100
+@@ -101,7 +101,8 @@
      case "${filetype}" in
      ps)
          if [ -n "$DISPLAY" ]; then
@@ -11,7 +11,7 @@ diff -Naur orig/misc/ext.d/doc.sh.in patched/misc/ext.d/doc.sh.in
          else
              ps2ascii "${MC_EXT_FILENAME}" | ${PAGER:-more}
          fi
-@@ -100,13 +101,12 @@
+@@ -109,13 +110,12 @@
      pdf)
          if [ ! -n "$DISPLAY" ]; then
              pdftotext -layout -nopgbrk "${MC_EXT_FILENAME}" - | ${PAGER:-more}
@@ -29,21 +29,21 @@ diff -Naur orig/misc/ext.d/doc.sh.in patched/misc/ext.d/doc.sh.in
          ;;
      ooffice)
          if [ -n "$DISPLAY" ]; then
-@@ -128,7 +128,7 @@
-         ;;
-     msdoc)
-         if [ -n "$DISPLAY" ]; then
--            (abiword "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-+            (loffice "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
+@@ -143,7 +143,7 @@
+             if [ -n "${OOFFICE}" ]; then
+                 (${OOFFICE} "${MC_EXT_FILENAME}" &)
+             else
+-                (abiword "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
++                (loffice "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
+             fi
          else
              tmp=`mktemp -d ${TMPDIR:-/tmp}/%p.XXXXXX`
-             wvHtml "${MC_EXT_FILENAME}" --targetdir="$tmp" page.html -1
-@@ -138,7 +138,7 @@
-         ;;
-     msxls)
-         if [ -n "$DISPLAY" ]; then
--            (gnumeric "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-+            (loffice "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
+@@ -158,7 +158,7 @@
+             if [ -n "${OOFFICE}" ]; then
+                 (${OOFFICE} "${MC_EXT_FILENAME}" &)
+             else
+-                (gnumeric "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
++                (loffice "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
+             fi
          else
              tmp=`mktemp -d ${TMPDIR:-/tmp}/%p.XXXXXX`
-             xlhtml -a "${MC_EXT_FILENAME}" > "$tmp/page.html"
