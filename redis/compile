@@ -6,4 +6,8 @@ sed -i 's|dir \./|dir /var/lib/redis/|' redis.conf
 sed -i 's|pidfile .*|pidfile /run/redis/redis.pid|' redis.conf
 sed -i 's|logfile stdout|logfile /var/log/redis.log|' redis.conf
 
+ub_replace -O3 -O2 deps/Makefile
+ub_replace -O3 -O2 deps/jemalloc/configure
+ub_replace -O3 -O2 deps/jemalloc/configure.ac
+ub_replace -O3 -O2 deps/hiredis/Makefile
 ub_compile
