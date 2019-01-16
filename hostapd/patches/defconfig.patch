@@ -1,6 +1,6 @@
-diff -Naur orig/hostapd/defconfig patched/hostapd/defconfig
---- orig/hostapd/defconfig	2015-09-27 21:02:05.000000000 +0200
-+++ patched/hostapd/defconfig	2016-07-06 23:33:33.882323309 +0200
+diff -Naur hostapd-2.7-orig/hostapd/defconfig hostapd-2.7/hostapd/defconfig
+--- hostapd-2.7-orig/hostapd/defconfig	2018-12-02 20:34:59.000000000 +0100
++++ hostapd-2.7/hostapd/defconfig	2019-01-16 18:10:02.824956252 +0100
 @@ -13,7 +13,7 @@
  CONFIG_DRIVER_HOSTAP=y
  
@@ -10,15 +10,6 @@ diff -Naur orig/hostapd/defconfig patched/hostapd/defconfig
  
  # Driver interface for drivers using the nl80211 kernel interface
  CONFIG_DRIVER_NL80211=y
-@@ -28,7 +28,7 @@
- #CONFIG_LIBNL20=y
- 
- # Use libnl 3.2 libraries (if this is selected, CONFIG_LIBNL20 is ignored)
--#CONFIG_LIBNL32=y
-+CONFIG_LIBNL32=y
- 
- 
- # Driver interface for FreeBSD net80211 layer (e.g., Atheros driver)
 @@ -78,50 +78,50 @@
  CONFIG_EAP_TTLS=y
  
@@ -51,8 +42,7 @@ diff -Naur orig/hostapd/defconfig patched/hostapd/defconfig
 +CONFIG_EAP_SAKE=y
  
  # EAP-GPSK for the integrated EAP server
--#CONFIG_EAP_GPSK=y
-+CONFIG_EAP_GPSK=y
+ #CONFIG_EAP_GPSK=y
  # Include support for optional SHA256 cipher suite in EAP-GPSK
 -#CONFIG_EAP_GPSK_SHA256=y
 +CONFIG_EAP_GPSK_SHA256=y
