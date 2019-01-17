@@ -1,7 +1,16 @@
-diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
---- orig/CMakeLists.txt	2017-03-25 13:13:06.134741211 +0100
-+++ patched/CMakeLists.txt	2017-05-23 01:34:32.116295986 +0200
-@@ -104,7 +104,7 @@
+diff -Nur orig/CMakeLists.txt mod/CMakeLists.txt
+--- orig/CMakeLists.txt	2018-06-25 22:22:38.000000000 +0200
++++ mod/CMakeLists.txt	2019-01-14 18:06:38.929881732 +0100
+@@ -84,7 +84,7 @@
+ 
+ SET (WITH_TEST_SUITE CACHE BOOL "")
+ SET (NO_OFFENSIVE CACHE BOOL "Exclude the offensive option.")
+-SET (LOCALDIR "${CMAKE_INSTALL_PREFIX}/local/share/games/fortunes" CACHE STRING "LOCALDIR fortunes dir")
++SET (LOCALDIR "${CMAKE_INSTALL_PREFIX}/share/games/fortunes" CACHE STRING "LOCALDIR fortunes dir")
+ SET (LOCALODIR "${LOCALDIR}/off" CACHE STRING "offensive fortunes localdir")
+ SET (COOKIEDIR "${CMAKE_INSTALL_PREFIX}/share/games/fortunes" CACHE STRING  "cookie dir not under /usr/local")
+ SET (OCOOKIEDIR "${COOKIEDIR}/off" CACHE STRING "offensive cookie dir not under /usr/local")
+@@ -113,7 +113,7 @@
  my_exe(
      "fortune"
      "fortune/fortune.c"
