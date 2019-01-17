@@ -1,6 +1,6 @@
-diff -Nur orig/Makefile mod/Makefile
+diff -Naur orig/Makefile patched/Makefile
 --- orig/Makefile	1994-12-18 03:16:09.000000000 +0100
-+++ mod/Makefile	2019-01-15 18:06:25.410309412 +0100
++++ patched/Makefile	2019-01-17 02:29:16.268038672 +0100
 @@ -6,8 +6,8 @@
  #LDFLAGS = -N
  
@@ -8,7 +8,7 @@ diff -Nur orig/Makefile mod/Makefile
 -CFLAGS	= -Wall -O3 -fomit-frame-pointer
 -LDFLAGS = -s -N
 +CFLAGS	= -Wall -O2 -fomit-frame-pointer
-+LDFLAGS = -s -ltinfo
++LDFLAGS = -s
  
  statserial:	statserial.o
  	$(LD) $(LDFLAGS) -o statserial statserial.o -lcurses
