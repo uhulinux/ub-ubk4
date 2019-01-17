@@ -1,6 +1,6 @@
-diff -Naur orig/libOSC/sendOSC/Makefile.in patched/libOSC/sendOSC/Makefile.in
---- orig/libOSC/sendOSC/Makefile.in	2017-04-23 00:11:52.134741211 +0200
-+++ patched/libOSC/sendOSC/Makefile.in	2017-05-22 00:24:01.251912013 +0200
+diff -Nur orig/libOSC/sendOSC/Makefile.in mod/libOSC/sendOSC/Makefile.in
+--- orig/libOSC/sendOSC/Makefile.in	2019-01-08 18:05:24.000000000 +0100
++++ mod/libOSC/sendOSC/Makefile.in	2019-01-17 19:38:01.393659215 +0100
 @@ -467,7 +467,7 @@
  @ENABLE_OSC_TRUE@sendOSC = sendOSC
  @ENABLE_OSC_TRUE@LIBOSCDIR = ../client
@@ -10,10 +10,10 @@ diff -Naur orig/libOSC/sendOSC/Makefile.in patched/libOSC/sendOSC/Makefile.in
  @ENABLE_OSC_TRUE@sendOSC_CFLAGS = -I.. $(mingw_CFLAGS)
  @ENABLE_OSC_TRUE@sendOSC_SOURCES = htmsocket.c htmsocket.h sendOSC.c
  all: all-am
-diff -Naur orig/src/Makefile.in patched/src/Makefile.in
---- orig/src/Makefile.in	2017-04-23 00:11:53.134741211 +0200
-+++ patched/src/Makefile.in	2017-05-22 00:25:17.528942089 +0200
-@@ -265,8 +265,8 @@
+diff -Nur orig/src/Makefile.in mod/src/Makefile.in
+--- orig/src/Makefile.in	2019-01-08 18:05:25.000000000 +0100
++++ mod/src/Makefile.in	2019-01-17 19:39:43.293482736 +0100
+@@ -271,8 +271,8 @@
  lives_exe_OBJECTS = $(am_lives_exe_OBJECTS)
  am__DEPENDENCIES_1 =
  @ENABLE_OSC_TRUE@am__DEPENDENCIES_2 =  \
@@ -21,10 +21,10 @@ diff -Naur orig/src/Makefile.in patched/src/Makefile.in
 -@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/client/.libs/libOSC_client.a
 +@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/.libs/libOSC.so \
 +@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/client/.libs/libOSC_client.so
- @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed_slice.la \
- @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@	$(abs_top_srcdir)/libweed/libweed-utils.la
- @DISABLE_GLSLICE_TRUE@@HAVE_SYSTEM_WEED_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed.la \
-@@ -658,7 +658,7 @@
+ @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@@IS_MINGW_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed_slice.la \
+ @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@@IS_MINGW_FALSE@	$(abs_top_srcdir)/libweed/libweed-utils.la
+ @DISABLE_GLSLICE_TRUE@@HAVE_SYSTEM_WEED_FALSE@@IS_MINGW_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed.la \
+@@ -665,7 +665,7 @@
  @HAVE_UNICAP_TRUE@unicap_SOURCES = videodev.c videodev.h
  @HAVE_UNICAP_TRUE@unicap_CFLAGS = -DHAVE_UNICAP=1
  @ENABLE_OSC_TRUE@osc_SOURCES = osc.c osc.h omc-learn.c omc-learn.h osc_notify.h
