@@ -1,14 +1,14 @@
-diff -Naurd orig/Makefile mod/Makefile
---- orig/Makefile	2009-10-12 07:11:41.000000000 +0200
-+++ mod/Makefile	2009-11-27 16:42:10.000000000 +0100
-@@ -26,8 +26,8 @@
- CFLAGS += -Wp,-MD,$(@D)/.$(@F).d
- endif
+diff -Naur sparse-0.6.0-orig/Makefile sparse-0.6.0/Makefile
+--- sparse-0.6.0-orig/Makefile	2018-12-26 08:07:42.000000000 +0100
++++ sparse-0.6.0/Makefile	2019-01-16 21:55:57.842055213 +0100
+@@ -14,8 +14,8 @@
+ CHECKER = CHECK=./sparse ./cgcc -no-compile
+ CHECKER_FLAGS = -Wno-vla
  
 -DESTDIR=
--PREFIX=$(HOME)
-+#DESTDIR=
+-PREFIX ?= $(HOME)
++# DESTDIR=
 +PREFIX=/usr
  BINDIR=$(PREFIX)/bin
- LIBDIR=$(PREFIX)/lib
  MANDIR=$(PREFIX)/share/man
+ MAN1DIR=$(MANDIR)/man1
