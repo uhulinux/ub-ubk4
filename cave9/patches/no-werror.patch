@@ -1,0 +1,12 @@
+diff -Naur orig/src/GNUmakefile patched/src/GNUmakefile
+--- orig/src/GNUmakefile	2019-01-18 01:40:47.000000000 +0100
++++ patched/src/GNUmakefile	2019-01-18 01:43:02.924287829 +0100
+@@ -2,7 +2,7 @@
+ 
+ TARGET = ../cave9
+ 
+-CFLAGS += -std=c99 -Wall -Werror -ggdb `sdl-config --cflags`
++CFLAGS += -std=c99 -Wall -ggdb `sdl-config --cflags`
+ LDFLAGS += -lSDL_ttf -lSDL_image `sdl-config --libs` -L/usr/X11/lib -lGL -lGLU -lm
+ 
+ ifdef GLOBAL_SCORE
