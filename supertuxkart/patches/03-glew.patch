@@ -1,0 +1,31 @@
+From 7cc4c92b31b0367623f39bed32dacc8cfea651f3 Mon Sep 17 00:00:00 2001
+From: Deve <deveee@gmail.com>
+Date: Wed, 14 Nov 2018 20:59:00 +0100
+Subject: [PATCH] Fixed compilation with current mesa.
+
+It fixes #3557.
+---
+ lib/glew/include/GL/glew.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/glew/include/GL/glew.h b/lib/glew/include/GL/glew.h
+index b5b6987fc7..a9f9e4b9ba 100644
+--- a/lib/glew/include/GL/glew.h
++++ b/lib/glew/include/GL/glew.h
+@@ -93,7 +93,7 @@
+ #if defined(__REGAL_H__)
+ #error Regal.h included before glew.h
+ #endif
+-#if defined(__glext_h_) || defined(__GLEXT_H_)
++#if defined(__glext_h_) || defined(__GLEXT_H_) || defined(__gl_glext_h_)
+ #error glext.h included before glew.h
+ #endif
+ #if defined(__gl_ATI_h_)
+@@ -109,6 +109,7 @@
+ #define __X_GL_H
+ #define __glext_h_
+ #define __GLEXT_H_
++#define __gl_glext_h_
+ #define __gl_ATI_h_
+ 
+ #if defined(_WIN32)
