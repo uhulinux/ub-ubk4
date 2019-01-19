@@ -1,0 +1,31 @@
+diff -Naur orig/src/units/frame.cpp patched/src/units/frame.cpp
+--- orig/src/units/frame.cpp	2018-09-16 09:27:00.000000000 +0200
++++ patched/src/units/frame.cpp	2019-01-19 00:45:36.166612968 +0100
+@@ -460,15 +460,15 @@
+ 	}
+ 
+ 	if(!boost::indeterminate(auto_vflip_)) {
+-		v.emplace_back("auto_vflip=" + utils::bool_string(auto_vflip_));
++		v.emplace_back("auto_vflip=" + utils::bool_string(static_cast<bool>(auto_vflip_)));
+ 	}
+ 
+ 	if(!boost::indeterminate(auto_hflip_)) {
+-		v.emplace_back("auto_hflip=" + utils::bool_string(auto_hflip_));
++		v.emplace_back("auto_hflip=" + utils::bool_string(static_cast<bool>(auto_hflip_)));
+ 	}
+ 
+ 	if(!boost::indeterminate(primary_frame_)) {
+-		v.emplace_back("primary_frame=" + utils::bool_string(primary_frame_));
++		v.emplace_back("primary_frame=" + utils::bool_string(static_cast<bool>(primary_frame_)));
+ 	}
+ 
+ 	if(!drawing_layer_.get_original().empty()) {
+@@ -772,7 +772,7 @@
+ 	}
+ 
+ 	// Convert the tribool to bool
+-	const bool primary = result.primary_frame == true || boost::logic::indeterminate(result.primary_frame);
++	const bool primary = static_cast<bool>(result.primary_frame) || boost::logic::indeterminate(result.primary_frame);
+ 
+ 	/** The engine provides a default image to use for the unit when none is available */
+ 	result.image = current_val.image.is_void() || current_val.image.get_filename().empty()

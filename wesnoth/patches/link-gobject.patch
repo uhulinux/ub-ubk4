@@ -1,0 +1,33 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2018-09-16 09:27:00.000000000 +0200
++++ patched/CMakeLists.txt	2019-01-19 01:49:54.687907478 +0100
+@@ -500,6 +500,7 @@
+ 	find_package( SDL2_ttf 2.0.12 REQUIRED )
+ 	find_package(VorbisFile REQUIRED)
+ 	find_package( PkgConfig REQUIRED )
++	pkg_check_modules( GOBJECT REQUIRED gobject-2.0 )
+ 	pkg_check_modules( CAIRO REQUIRED cairo>=1.10 )
+ 	pkg_check_modules( PANGOCAIRO REQUIRED pangocairo>=1.22.0 )
+ 	pkg_check_modules( FONTCONFIG REQUIRED fontconfig>=2.4.1 )
+diff -Naur orig/SConstruct patched/SConstruct
+--- orig/SConstruct	2018-09-16 09:27:00.000000000 +0200
++++ patched/SConstruct	2019-01-19 01:53:33.090627337 +0100
+@@ -389,6 +389,7 @@
+         conf.CheckOgg())) & \
+         conf.CheckPNG() & \
+         conf.CheckJPG() & \
++        conf.CheckPKG("gobject-2.0") & \
+         conf.CheckCairo(min_version = "1.10") & \
+         conf.CheckPango("cairo", require_version = "1.22.0") & \
+         conf.CheckPKG("fontconfig") & \
+diff -Naur orig/src/CMakeLists.txt patched/src/CMakeLists.txt
+--- orig/src/CMakeLists.txt	2018-09-16 09:27:00.000000000 +0200
++++ patched/src/CMakeLists.txt	2019-01-19 01:49:54.687907478 +0100
+@@ -78,6 +78,7 @@
+ 	${sdl_image-lib}
+ 	${sdl_mixer-lib}
+ 	${sdl_ttf-lib}
++	${GOBJECT_LIBRARIES}
+ 	${PANGOCAIRO_LIBRARIES}
+ 	${FONTCONFIG_LIBRARIES}
+ 	${LIBDBUS_LIBRARIES}
