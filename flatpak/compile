@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+git submodule update --init --recursive
+
+# https://github.com/flatpak/flatpak/issues/267
+sed -i '/locale\/C\./d' tests/make-test-runtime.sh
+
+NOCONFIGURE=1 ./autogen.sh
+ub_compile \
+	--with-privileged-group=root \
+    --with-priv-mode=setuid
