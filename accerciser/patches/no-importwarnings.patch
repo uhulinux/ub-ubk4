@@ -1,0 +1,22 @@
+diff -Nur orig/src/accerciser.in mod/src/accerciser.in
+--- orig/src/accerciser.in	2016-02-23 18:22:34.000000000 +0100
++++ mod/src/accerciser.in	2019-01-19 19:56:40.963919697 +0100
+@@ -14,6 +14,7 @@
+ '''
+ import gi
+ gi.require_version('Wnck', '3.0')
++gi.require_version('Gtk', '3.0')
+ 
+ from gi.repository import GLib
+ 
+diff -Nur orig/src/lib/accerciser/node.py mod/src/lib/accerciser/node.py
+--- orig/src/lib/accerciser/node.py	2016-02-23 18:22:34.000000000 +0100
++++ mod/src/lib/accerciser/node.py	2019-01-19 20:08:03.290515897 +0100
+@@ -12,6 +12,7 @@
+ is available at U{http://www.opensource.org/licenses/bsd-license.php}
+ '''
+ import gi
++gi.require_version('Rsvg', '2.0')
+ 
+ from gi.repository import Gtk as gtk
+ from gi.repository import Gdk as gdk
