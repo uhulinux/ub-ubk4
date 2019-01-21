@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+ub_compile \
+    --with-dri-driverdir=/usr/lib/xorg/modules/dri \
+    --with-dri-drivers=unichrome,i810,mach64,mga,r128,savage,sis,tdfx \
+    --with-gallium-drivers= \
+    --disable-gallium-llvm \
+    --enable-glx-tls \
+    --with-driver=dri \
+    --enable-xcb \
+    --disable-glut \
+    --enable-gles1 \
+    --enable-gles2 \
+    --enable-egl \
+    --enable-texture-float \
+    --disable-shared-dricore
