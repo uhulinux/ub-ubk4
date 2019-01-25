@@ -1,0 +1,143 @@
+From 1ff22741ff577bd1be504452eb3fa4ce1a652370 Mon Sep 17 00:00:00 2001
+From: Larry Gritz <lg@larrygritz.com>
+Date: Fri, 5 Oct 2018 13:33:23 -0700
+Subject: [PATCH] Add Compatibility with OIIO 1.9+ API changes (#601)
+
+This fix adds compatibility with OIIO 1.9+, minor ImageInput/ImageOutput API changes. At a certain point ImageInput::create switched from returning a raw pointer (that later needed to be deleted) to returning a std::unique_ptr.
+---
+ src/apps/ocioconvert/main.cpp  | 12 ++++++++----
+ src/apps/ociodisplay/main.cpp  |  7 +++----
+ src/apps/ociolutimage/main.cpp | 15 ++++++++-------
+ 3 files changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/src/apps/ocioconvert/main.cpp b/src/apps/ocioconvert/main.cpp
+index 44c02d2a..581f4505 100644
+--- a/src/apps/ocioconvert/main.cpp
++++ b/src/apps/ocioconvert/main.cpp
+@@ -119,7 +119,7 @@ int main(int argc, const char **argv)
+     std::cerr << "Loading " << inputimage << std::endl;
+     try
+     {
+-        OIIO::ImageInput* f = OIIO::ImageInput::create(inputimage);
++        auto f = OIIO::ImageInput::create(inputimage);
+         if(!f)
+         {
+             std::cerr << "Could not create image input." << std::endl;
+@@ -143,7 +143,9 @@ int main(int argc, const char **argv)
+         memset(&img[0], 0, imgwidth*imgheight*components*sizeof(float));
+         
+         f->read_image(OIIO::TypeDesc::TypeFloat, &img[0]);
+-        delete f;
++#if OIIO_VERSION < 10903
++        OIIO::ImageInput::destroy(f);
++#endif
+         
+         std::vector<int> kchannels;
+         //parse --ch argument
+@@ -308,7 +310,7 @@ int main(int argc, const char **argv)
+     // Write out the result
+     try
+     {
+-        OIIO::ImageOutput* f = OIIO::ImageOutput::create(outputimage);
++        auto f = OIIO::ImageOutput::create(outputimage);
+         if(!f)
+         {
+             std::cerr << "Could not create output input." << std::endl;
+@@ -318,7 +320,9 @@ int main(int argc, const char **argv)
+         f->open(outputimage, spec);
+         f->write_image(OIIO::TypeDesc::FLOAT, &img[0]);
+         f->close();
+-        delete f;
++#if OIIO_VERSION < 10903
++        OIIO::ImageInput::destroy(f);
++#endif
+     }
+     catch(...)
+     {
+diff --git a/src/apps/ociodisplay/main.cpp b/src/apps/ociodisplay/main.cpp
+index 484759e6..7e41dad3 100644
+--- a/src/apps/ociodisplay/main.cpp
++++ b/src/apps/ociodisplay/main.cpp
+@@ -41,9 +41,6 @@ namespace OCIO = OCIO_NAMESPACE;
+ 
+ #include <OpenImageIO/imageio.h>
+ #include <OpenImageIO/typedesc.h>
+-#if (OIIO_VERSION < 10100)
+-namespace OIIO = OIIO_NAMESPACE;
+-#endif
+ 
+ #ifdef __APPLE__
+ #include <OpenGL/gl.h>
+@@ -104,7 +101,7 @@ static void InitImageTexture(const char * filename)
+         std::cout << "loading: " << filename << std::endl;
+         try
+         {
+-            OIIO::ImageInput* f = OIIO::ImageInput::create(filename);
++            auto f = OIIO::ImageInput::create(filename);
+             if(!f)
+             {
+                 std::cerr << "Could not create image input." << std::endl;
+@@ -135,7 +132,9 @@ static void InitImageTexture(const char * filename)
+                 OIIO::TypeDesc::TypeFloat, 
+ #endif
+                 &img[0]);
++#if OIIO_VERSION < 10903
+             OIIO::ImageInput::destroy(f);
++#endif
+         }
+         catch(...)
+         {
+diff --git a/src/apps/ociolutimage/main.cpp b/src/apps/ociolutimage/main.cpp
+index c3cbd73d..7b3144de 100644
+--- a/src/apps/ociolutimage/main.cpp
++++ b/src/apps/ociolutimage/main.cpp
+@@ -32,9 +32,6 @@ OCIO_NAMESPACE_USING;
+ 
+ #include <OpenImageIO/imageio.h>
+ #include <OpenImageIO/typedesc.h>
+-#if (OIIO_VERSION < 10100)
+-namespace OIIO = OIIO_NAMESPACE;
+-#endif
+ 
+ #include "argparse.h"
+ 
+@@ -116,7 +113,7 @@ void Generate(int cubesize, int maxwidth,
+         processor->apply(imgdesc);
+     }
+ 
+-    OIIO::ImageOutput* f = OIIO::ImageOutput::create(outputfile);
++    auto f = OIIO::ImageOutput::create(outputfile);
+     if(!f)
+     {
+         throw Exception( "Could not create output image.");
+@@ -128,7 +125,9 @@ void Generate(int cubesize, int maxwidth,
+     f->open(outputfile, spec);
+     f->write_image(OIIO::TypeDesc::FLOAT, &img[0]);
+     f->close();
+-    delete f;
++#if OIIO_VERSION < 10903
++    OIIO::ImageInput::destroy(f);
++#endif
+ }
+ 
+ 
+@@ -137,7 +136,7 @@ void Extract(int cubesize, int maxwidth,
+              const std::string & outputfile)
+ {
+     // Read the image
+-    OIIO::ImageInput* f = OIIO::ImageInput::create(inputfile);
++    auto f = OIIO::ImageInput::create(inputfile);
+     if(!f)
+     {
+         throw Exception("Could not create input image.");
+@@ -183,7 +182,9 @@ void Extract(int cubesize, int maxwidth,
+     std::vector<float> img;
+     img.resize(spec.width*spec.height*spec.nchannels, 0);
+     f->read_image(OIIO::TypeDesc::TypeFloat, &img[0]);
+-    delete f;
++#if OIIO_VERSION < 10903
++    OIIO::ImageInput::destroy(f);
++#endif
+     
+     // Repack into rgb
+     // Convert the RGB[...] image to an RGB image, in place.
