@@ -1,3 +1,20 @@
 #!/bin/sh -eux
 
 python2 setup.py install --root="$UB_INSTALLDIR"
+
+mkdir -p ${UB_INSTALLDIR}/usr/share/{pixmaps,applications}
+cp icon.png ${UB_INSTALLDIR}/usr/share/pixmaps/ipython2.png
+
+#python3-ipython ütközések
+
+cd $UB_INSTALLDIR/usr/share/man/man1/
+for i in *; do
+    mv $i ${i/%.1/2.1}
+done
+find $UB_INSTALLDIR/usr/bin/ -type f -regex '.*[^2]$' -delete
+cd -
+
+cd "examples/IPython Kernel"
+sed -i 's/ython/ython2/g' *.desktop
+sed -i 's/gnome-netstatus-idle/ipython2/' *.desktop
+cp ipython.desktop ${UB_INSTALLDIR}/usr/share/applications/ipython2.desktop
