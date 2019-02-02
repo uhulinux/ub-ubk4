@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-ub_compile
-for model in $(grep 'getone ' getweb.in | \
-               cut -d'#' -f1 | awk '{ print $2; }'); do
-	if [[ $model != '$i' ]]; then
-		./getweb $model || true
-	fi
-done
