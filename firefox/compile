@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
-CC="ccache gcc -march=k8 -m64"
-CXX="ccache g++ -march=k8 -m64"
+CC="ccache clang -march=k8 -m64"
+CXX="ccache clang++ -march=k8 -m64"
 
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/firefox/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
