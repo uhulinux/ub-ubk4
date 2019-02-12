@@ -48,7 +48,7 @@ chmod -R a+rX,u+w,go-w "$UB_INSTALLDIR"
 
 # cpupower
 cd tools/power/cpupower
-ub_install mandir=/usr/share/man
+ub_install libdir=/usr/lib mandir=/usr/share/man
 
 # install startup scripts
 install -Dm 644 cpupower.default "$UB_INSTALLDIR/etc/default/cpupower"
