@@ -1,6 +1,6 @@
 diff -Naur orig/kde-modules/KDEInstallDirs.cmake patched/kde-modules/KDEInstallDirs.cmake
---- orig/kde-modules/KDEInstallDirs.cmake	2018-07-04 17:04:12.000000000 +0200
-+++ patched/kde-modules/KDEInstallDirs.cmake	2018-07-15 00:16:55.363256274 +0200
+--- orig/kde-modules/KDEInstallDirs.cmake	2019-02-02 14:13:24.000000000 +0100
++++ patched/kde-modules/KDEInstallDirs.cmake	2019-02-13 19:28:56.658772909 +0100
 @@ -232,34 +232,6 @@
  # GNUInstallDirs code deals with re-configuring, but that is dealt with
  # by the _define_* macros in this module).
@@ -13,7 +13,7 @@ diff -Naur orig/kde-modules/KDEInstallDirs.cmake patched/kde-modules/KDEInstallD
 -# reason is: amd64 ABI: http://www.x86-64.org/documentation/abi.pdf
 -# For Debian with multiarch, use 'lib/${CMAKE_LIBRARY_ARCHITECTURE}' if
 -# CMAKE_LIBRARY_ARCHITECTURE is set (which contains e.g. "i386-linux-gnu"
--# See http://wiki.debian.org/Multiarch
+-# See https://wiki.debian.org/Multiarch
 -if((CMAKE_SYSTEM_NAME MATCHES "Linux|kFreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "GNU")
 -   AND NOT CMAKE_CROSSCOMPILING
 -   AND NOT DEFINED ENV{FLATPAK_ID})
