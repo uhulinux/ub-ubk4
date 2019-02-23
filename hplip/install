@@ -9,3 +9,25 @@ ln -s libImageProcessor-x86_64.so "$UB_INSTALLDIR"/usr/lib/libImageProcessor.so
 rm -rf "$UB_INSTALLDIR"/etc/sane.d/
 
 mv "$UB_INSTALLDIR"/usr/share/doc/hplip{-"$UB_VERSION",}
+
+cd ${UB_INSTALLDIR}/usr/share/hplip
+sed 's%^#!/usr/bin/env python%#!/usr/bin/env python3%' -i *.py
+sed 's%^#!/usr/bin/python%#!/usr/bin/python3%' -i *.py
+cd base
+sed 's%^#!/usr/bin/env python%#!/usr/bin/env python3%' -i *.py
+sed 's%^#!/usr/bin/python%#!/usr/bin/python3%' -i *.py
+
+dirs="
+copier
+fax
+installer
+pcard
+prnt
+scan
+ui5"
+
+for dir in $dirs;do
+cd ../$dir
+sed 's%^#!/usr/bin/env python%#!/usr/bin/env python3%' -i *.py
+sed 's%^#!/usr/bin/python%#!/usr/bin/python3%' -i *.py
+done
