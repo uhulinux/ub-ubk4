@@ -1,7 +1,7 @@
 diff -Naur orig/configure.ac patched/configure.ac
---- orig/configure.ac	2018-01-30 09:12:44.000000000 +0100
-+++ patched/configure.ac	2018-02-08 00:55:20.957910847 +0100
-@@ -159,7 +159,6 @@
+--- orig/configure.ac	2019-02-23 16:59:32.000000000 +0100
++++ patched/configure.ac	2019-03-04 12:17:29.364771336 +0100
+@@ -156,7 +156,6 @@
  AS_AC_EXPAND(LIBEXECDIR, $libexecdir)
  
  AC_ARG_WITH(dbus-sys, [  --with-dbus-sys=<dir>   where D-BUS system.d directory is])
@@ -9,7 +9,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  
  if ! test -z "$with_dbus_sys" ; then
  	DBUS_SYS_DIR="$with_dbus_sys"
-@@ -167,16 +166,8 @@
+@@ -164,16 +163,8 @@
  	DBUS_SYS_DIR="$SYSCONFDIR/dbus-1/system.d"
  fi
  
@@ -26,7 +26,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  
  dnl ---------------------------------------------------------------------------
  dnl Turn on the additional warnings last
-@@ -241,7 +232,8 @@
+@@ -238,7 +229,8 @@
  AC_CONFIG_FILES([
  Makefile
  data/Makefile
@@ -36,7 +36,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  data/org.mate.NotificationDaemon.gschema.xml
  po/Makefile.in
  src/Makefile
-@@ -268,6 +260,5 @@
+@@ -265,6 +257,5 @@
  	cflags:		              ${AM_CFLAGS}
  
  	dbus-1 system.d           $DBUS_SYS_DIR
@@ -45,7 +45,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  "
 diff -Naur orig/data/Makefile.am patched/data/Makefile.am
 --- orig/data/Makefile.am	2018-01-30 09:03:19.000000000 +0100
-+++ patched/data/Makefile.am	2018-02-08 00:55:20.957910847 +0100
++++ patched/data/Makefile.am	2019-03-04 12:17:29.364771336 +0100
 @@ -12,9 +12,16 @@
  icon48_DATA = icons/48x48/mate-notification-properties.png
  iconscalable_DATA = icons/scalable/mate-notification-properties.svg
@@ -89,7 +89,7 @@ diff -Naur orig/data/Makefile.am patched/data/Makefile.am
  
 diff -Naur orig/data/mate-notification-daemon-autostart.desktop.in.in patched/data/mate-notification-daemon-autostart.desktop.in.in
 --- orig/data/mate-notification-daemon-autostart.desktop.in.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/mate-notification-daemon-autostart.desktop.in.in	2018-02-08 00:55:20.957910847 +0100
++++ patched/data/mate-notification-daemon-autostart.desktop.in.in	2019-03-04 12:17:29.364771336 +0100
 @@ -0,0 +1,8 @@
 +[Desktop Entry]
 +_Name=MATE Notification Daemon
@@ -101,7 +101,7 @@ diff -Naur orig/data/mate-notification-daemon-autostart.desktop.in.in patched/da
 +NoDisplay=true
 diff -Naur orig/data/mate-notification-daemon.desktop.in.in patched/data/mate-notification-daemon.desktop.in.in
 --- orig/data/mate-notification-daemon.desktop.in.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/mate-notification-daemon.desktop.in.in	2018-02-08 00:55:20.957910847 +0100
++++ patched/data/mate-notification-daemon.desktop.in.in	2019-03-04 12:17:29.364771336 +0100
 @@ -0,0 +1,8 @@
 +[Desktop Entry]
 +_Name=MATE Notification Daemon
@@ -120,7 +120,7 @@ diff -Naur orig/data/org.freedesktop.mate.Notifications.service.in patched/data/
 -Exec=@LIBEXECDIR@/mate-notification-daemon
 diff -Naur orig/po/POTFILES.in patched/po/POTFILES.in
 --- orig/po/POTFILES.in	2018-01-30 09:03:19.000000000 +0100
-+++ patched/po/POTFILES.in	2018-02-08 00:55:20.957910847 +0100
++++ patched/po/POTFILES.in	2019-03-04 12:17:29.364771336 +0100
 @@ -1,3 +1,5 @@
 +data/mate-notification-daemon-autostart.desktop.in.in
 +data/mate-notification-daemon.desktop.in.in
@@ -129,22 +129,22 @@ diff -Naur orig/po/POTFILES.in patched/po/POTFILES.in
  src/capplet/mate-notification-properties.desktop.in
 diff -Naur orig/po/POTFILES.skip patched/po/POTFILES.skip
 --- orig/po/POTFILES.skip	1970-01-01 01:00:00.000000000 +0100
-+++ patched/po/POTFILES.skip	2018-02-08 00:55:20.957910847 +0100
++++ patched/po/POTFILES.skip	2019-03-04 12:17:29.364771336 +0100
 @@ -0,0 +1,2 @@
 +data/mate-notification-daemon-autostart.desktop.in
 +data/mate-notification-daemon.desktop.in
 diff -Naur orig/src/daemon/daemon.c patched/src/daemon/daemon.c
---- orig/src/daemon/daemon.c	2018-01-30 09:09:57.000000000 +0100
-+++ patched/src/daemon/daemon.c	2018-02-08 00:56:51.798842592 +0100
-@@ -99,7 +99,6 @@
- struct _NotifyDaemonPrivate {
+--- orig/src/daemon/daemon.c	2019-01-26 14:43:28.000000000 +0100
++++ patched/src/daemon/daemon.c	2019-03-04 12:22:34.592364495 +0100
+@@ -105,7 +105,6 @@
+ 	GSettings* gsettings;
  	guint next_id;
  	guint timeout_source;
 -	guint exit_timeout_source;
  	GHashTable* idle_reposition_notify_ids;
  	GHashTable* monitored_window_hash;
  	GHashTable* notification_hash;
-@@ -149,33 +148,6 @@
+@@ -245,33 +244,6 @@
  	g_free(nt);
  }
  
@@ -158,71 +158,71 @@ diff -Naur orig/src/daemon/daemon.c patched/src/daemon/daemon.c
 -{
 -	g_assert (daemon != NULL);
 -
--	if (daemon->priv->exit_timeout_source > 0)
+-	if (daemon->exit_timeout_source > 0)
 -		return;
 -
--	daemon->priv->exit_timeout_source = g_timeout_add_seconds(IDLE_SECONDS, do_exit, NULL);
+-	daemon->exit_timeout_source = g_timeout_add_seconds(IDLE_SECONDS, do_exit, NULL);
 -}
 -
 -static void remove_exit_timeout(NotifyDaemon* daemon)
 -{
 -	g_assert (daemon != NULL);
 -
--	if (daemon->priv->exit_timeout_source == 0)
+-	if (daemon->exit_timeout_source == 0)
 -		return;
 -
--	g_source_remove(daemon->priv->exit_timeout_source);
--	daemon->priv->exit_timeout_source = 0;
+-	g_source_remove(daemon->exit_timeout_source);
+-	daemon->exit_timeout_source = 0;
 -}
 -
  static int
  _gtk_get_monitor_num (GdkMonitor *monitor)
  {
-@@ -359,8 +331,6 @@
- 	daemon->priv->next_id = 1;
- 	daemon->priv->timeout_source = 0;
+@@ -454,8 +426,6 @@
+ 	daemon->timeout_source = 0;
+ 	daemon->skeleton = notify_daemon_notifications_skeleton_new ();
  
 -	add_exit_timeout(daemon);
 -
  	daemon->gsettings = g_settings_new (GSETTINGS_SCHEMA);
  
  	g_signal_connect (daemon->gsettings, "changed::" GSETTINGS_KEY_POPUP_LOCATION, G_CALLBACK (on_popup_location_changed), daemon);
-@@ -416,8 +386,6 @@
- 		gdk_window_remove_filter(NULL, (GdkFilterFunc) _notify_x11_filter, daemon);
+@@ -521,8 +491,6 @@
+ 		g_clear_object (&daemon->skeleton);
  	}
  
 -	remove_exit_timeout(daemon);
 -
- 	g_hash_table_destroy(daemon->priv->monitored_window_hash);
- 	g_hash_table_destroy(daemon->priv->idle_reposition_notify_ids);
- 	g_hash_table_destroy(daemon->priv->notification_hash);
-@@ -516,10 +484,6 @@
+ 	g_hash_table_destroy(daemon->monitored_window_hash);
+ 	g_hash_table_destroy(daemon->idle_reposition_notify_ids);
+ 	g_hash_table_destroy(daemon->notification_hash);
+@@ -603,10 +571,6 @@
  
- 		g_hash_table_remove(priv->notification_hash, &id);
+ 		g_hash_table_remove(daemon->notification_hash, &id);
  
--		if (g_hash_table_size(daemon->priv->notification_hash) == 0)
+-		if (g_hash_table_size(daemon->notification_hash) == 0)
 -		{
 -			add_exit_timeout(daemon);
 -		}
  	}
  }
  
-@@ -737,11 +701,6 @@
+@@ -824,11 +788,6 @@
  	if (!has_more_timeouts)
  	{
- 		daemon->priv->timeout_source = 0;
+ 		daemon->timeout_source = 0;
 -
--		if (g_hash_table_size (daemon->priv->notification_hash) == 0)
+-		if (g_hash_table_size (daemon->notification_hash) == 0)
 -		{
 -			add_exit_timeout(daemon);
 -		}
  	}
  
  	return has_more_timeouts;
-@@ -819,7 +778,6 @@
+@@ -905,7 +864,6 @@
  	_calculate_timeout(daemon, nt, timeout);
  
- 	g_hash_table_insert(priv->notification_hash, g_memdup(&id, sizeof(guint)), nt);
+ 	g_hash_table_insert(daemon->notification_hash, g_memdup(&id, sizeof(guint)), nt);
 -	remove_exit_timeout(daemon);
  
  	return nt;
