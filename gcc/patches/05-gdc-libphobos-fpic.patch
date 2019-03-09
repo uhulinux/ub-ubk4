@@ -1,0 +1,24 @@
+diff -Naur a/libphobos/configure b/libphobos/configure
+--- a/libphobos/configure	2019-03-08 23:55:18.616043039 +0100
++++ b/libphobos/configure	2019-03-08 23:51:39.977846420 +0100
+@@ -13787,7 +13787,7 @@
+   phobos_compiler_pic_flag="$lt_prog_compiler_pic_D"
+   phobos_compiler_shared_flag="-fversion=Shared"
+ else
+-  phobos_compiler_pic_flag=
++  phobos_compiler_pic_flag="$lt_prog_compiler_pic_D"
+   phobos_compiler_shared_flag=
+ fi
+ 
+diff -Naur a/libphobos/configure.ac b/libphobos/configure.ac
+--- a/libphobos/configure.ac	2019-03-08 23:55:31.864176140 +0100
++++ b/libphobos/configure.ac	2019-03-08 23:51:07.877523914 +0100
+@@ -101,7 +101,7 @@
+   phobos_compiler_pic_flag="$lt_prog_compiler_pic_D"
+   phobos_compiler_shared_flag="-fversion=Shared"
+ else
+-  phobos_compiler_pic_flag=
++  phobos_compiler_pic_flag="$lt_prog_compiler_pic_D"
+   phobos_compiler_shared_flag=
+ fi
+ AC_SUBST(phobos_compiler_pic_flag)
