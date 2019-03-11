@@ -1,0 +1,12 @@
+diff -Naur orig/src/meson.build patched/src/meson.build
+--- orig/src/meson.build	2019-03-11 13:48:47.000000000 +0100
++++ patched/src/meson.build	2019-03-12 00:28:46.038570188 +0100
+@@ -78,7 +78,7 @@
+     '-UG_ENABLE_DEBUG',
+     '--prototypes',
+   ],
+-  install_header: true,
++  install_header: false,
+   install_dir: gtr_includedir,
+ )
+ 
