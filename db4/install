@@ -3,7 +3,7 @@
 cd build_unix
 ub_install \
 	docdir=/usr/share/doc/Packages/db4
-
+rm -rf ${UB_INSTALLDIR}/usr/share/doc
 ln -s libdb-4.so "$UB_INSTALLDIR"/usr/lib/libdb4.so
 
 ln -sf libdb-"$UB_VERSION_HEAD2".a "$UB_INSTALLDIR"/usr/lib/libdb.a

@@ -2,6 +2,4 @@
 
 ub_install \
 	HTML_DIR=/usr/share/doc/libxml2
-doksidir=${UB_INSTALLDIR}/usr/share/doc/
-mv $doksidir/libxml2-${UB_VERSION} $doksidir/libxml2/libxml2-${UB_VERSION}
-mv $doksidir/libxml2-python-${UB_VERSION} $doksidir/libxml2/libxml2-python-${UB_VERSION}
+rm -rf ${UB_INSTALLDIR}/usr/share/doc

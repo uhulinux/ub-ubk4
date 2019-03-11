@@ -5,3 +5,4 @@ ub_install
 mkdir -p "$UB_INSTALLDIR"/etc/udev/rules.d
 sed -e 's/GROUP="scanner"/GROUP="media"/g' -i tools/udev/libsane.rules
 cp tools/udev/libsane.rules "$UB_INSTALLDIR"/etc/udev/rules.d/60-libsane.rules
+rm -rf ${UB_INSTALLDIR}/usr/share/doc

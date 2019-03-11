@@ -1,0 +1,21 @@
+diff -Nur orig/doc/Makefile.in mod/doc/Makefile.in
+--- orig/doc/Makefile.in	2018-01-15 14:35:47.000000000 +0100
++++ mod/doc/Makefile.in	2019-03-09 17:45:06.285218346 +0100
+@@ -769,7 +769,7 @@
+ 
+ info-am: $(INFO_DEPS)
+ 
+-install-data-am: install-dist_htmlDATA install-info-am install-man
++install-data-am: install-info-am install-man
+ 
+ install-dvi: install-dvi-am
+ 
+@@ -790,7 +790,7 @@
+ 	done
+ install-exec-am:
+ 
+-install-html: install-html-am
++install-html:
+ 
+ install-html-am: $(HTMLS)
+ 	@$(NORMAL_INSTALL)
