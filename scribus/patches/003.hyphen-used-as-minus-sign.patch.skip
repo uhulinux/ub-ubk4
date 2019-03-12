@@ -1,0 +1,183 @@
+Description: fix hyphen-used-as-minus-sign lintian tag
+Author: Mattia Rizzolo <mattia@mapreri.org>
+Forwarded: no
+Last-Update: 2014-05-21
+
+--- a/resources/manpages/scribus.1
++++ b/resources/manpages/scribus.1
+@@ -2,7 +2,7 @@
+ .SH NAME
+ scribus - cross platform WYSIWYG desktop publishing app
+ .SH SYNOPSIS
+-scribus [-h|--help] [-v|--version] [-l|--lang language] [-la|--langs-available] [-f|--file|--] [filename] 
++scribus [\-h|\-\-help] [\-v|\-\-version] [\-l|\-\-lang language] [\-la|\-\-langs-available] [\-f|\-\-file|\-\-] [filename]
+ .SH DESCRIPTION
+ Scribus is an open source desktop publishing program. It provides true WYSIWYG editing, excellent PDF export facilities, and a wide range of other input and output options.
+ 
+@@ -13,47 +13,47 @@
+ This man page only provides summaries of some aspects of the program's use. It's main purpose is to make sure you can find the full documentation quickly and easily.
+ .SH OPTIONS
+ The definitive options are in the program's usage statement. Run:
+-.B scribus --help
++.B scribus \-\-help
+ to view the usage statement.
+ 
+ .TP
+-.B -l, --lang xx
++.B \-l, \-\-lang xx
+ Overrides the system locale and runs Scribus in language xx. The language is specified with the same POSIX language codes that are used in the LANG and LC_ALL environment variables. For example, English can be selected with 'en' (generic English), 'en_GB' (British English), 'en_US' (American english), etc. Similarly, Deutsch can be selected with 'de' or 'de_DE'.
+ .TP
+-.B -la, --langs-available
+-Print a list of languages for which user interface translations are available. To use that language run Scribus as 'scribus -l xx' where xx is the short language code, or set the locale environment variables as described below.
++.B \-la, \-\-langs-available
++Print a list of languages for which user interface translations are available. To use that language run Scribus as 'scribus \-l xx' where xx is the short language code, or set the locale environment variables as described below.
+ .TP
+-.B -v, --version
++.B \-v, \-\-version
+ Prints the Scribus version number and exits.
+ .TP
+-.B -f, --file
+-Open the specified file. It's possible to simply pass the file name as an unqualified argument instead of using this, though if the name begins with a - you will need to use --, eg 'scribus -- -myfile.sla'.
++.B \-f, \-\-file
++Open the specified file. It's possible to simply pass the file name as an unqualified argument instead of using this, though if the name begins with a \- you will need to use \-\-, eg 'scribus \-\- \-myfile.sla'.
+ .TP
+-.B -h, --help
++.B \-h, \-\-help
+ Print a brief usage summary.
+ .TP
+-.B -fi, --font-info 
++.B \-fi, \-\-font-info
+ Shows the font file listing as Scribus starts. This can be used for diagnosing missing glyphs within fonts or possible broken font files.
+ .TP
+-.B -pi, --profile-info 
++.B \-pi, \-\-profile-info
+ Shows the color profiles listing which Scribus can use. This can be used for diagnosing missing or broken color profiles.
+ .TP
+-.B -ns, --no-splash
++.B \-ns, \-\-no\-splash
+ Suppresses display of the splash screen during Scribus start-up.
+ .TP
+-.B -nns, --never-splash     
++.B \-nns, \-\-never\-splash
+ Stop the showing of the splashscreen on startup. Writes an empty file called .neversplash in ~/.scribus.
+ .TP
+-.B -sb, --swap-buttons
++.B \-sb, \-\-swap\-buttons
+ Use right to left dialog button ordering (eg. Cancel/No/Yes instead of Yes/No/Cancel)
+ .TP
+-.B -u, --upgradecheck
++.B \-u, \-\-upgradecheck
+ Downloads a file from our scribus server indicating latest available versions.
+ 
+ .SH ENVIRONMENT
+ Scribus respects the standard locale environment variables. Others may be used through underlying libraries, such as Qt, or by programs used by Scribus.
+ .I http://docs.scribus.net/
+-and the in-program documentation may note other environment variables used by Scribus or the programs and libraries it uses.
++and the in\-program documentation may note other environment variables used by Scribus or the programs and libraries it uses.
+ .TP
+ .B LC_ALL, LC_MESSAGES, LANG
+ POSIX locale. See
+@@ -73,7 +73,7 @@
+ .B GS_LIB
+ GhostScript library path. GhostScript searches this path for Fontmap files. Like
+ .B GS_FONTPATH
+-it's a colon separated list of directories. You will usually want to use 
++it's a colon separated list of directories. You will usually want to use
+ .B GS_FONTPATH
+ instead, though building a Fontmap file and using
+ .B GS_LIB
+@@ -119,7 +119,7 @@
+ See
+ .I
+ http://bugs.scribus.net/
+-for the Scribus on-line status tracker, which is used to track bug reports and feature requests.
++for the Scribus on\-line status tracker, which is used to track bug reports and feature requests.
+ .B If you intend to submit a bug report or feature request, please search the bug database first.
+ .SH AUTHORS
+ Please see the About Scribus option in the Help menu for a list of authors, translators, and contributors.
+--- a/resources/manpages/scribus.1.de
++++ b/resources/manpages/scribus.1.de
+@@ -1,8 +1,8 @@
+ .TH scribus "1" "Aktualisiert am 1. oktober 2007"
+ .SH NAME
+-scribus - ein plattformübergreifendes Desktop-Publishing-Programm
++scribus \- ein plattformübergreifendes Desktop-Publishing-Programm
+ .SH ÜBERSICHT
+-scribus [-h|--help] [-v|--version] [-l|--lang] [-la|--langs-available] [-f|--file|--] [Dateiname]
++scribus [\-h|\-\-help] [\-v|\-\-version] [\-l|\-\-lang] [\-la|\-\-langs\-available] [\-f|\-\-file|\-\-] [Dateiname]
+ .SH BESCHREIBUNG
+ Scribus ist ein quelloffenes Desktop-Publishing-Programm. Es bietet echte WYSIWYG-Bearbeitung, einen ausgezeichneten PDF-Export und zahlreiche andere Ein- und Ausgabemöglichkeiten.
+ 
+@@ -13,40 +13,40 @@
+ Diese Manpage bietet nur Zusammenfassungen einiger Aspekte der Programmbenutzung. Ihr Hauptzweck ist es, Ihnen das Auffinden der vollständigen Dokumentation zu erleichtern.
+ .SH OPTIONEN
+ Die vorhandenen Optionen erhalten Sie beim Programmaufruf. Geben Sie
+-.B scribus --help
++.B scribus \-\-help
+ ein, um die Optionen aufzulisten.
+ 
+ .TP
+-.B -l, --lang xx
++.B \-l, \-\-lang xx
+ Ignoriert die eingestellte Systemsprache und startet Scribus in der Sprache xx. Die Sprache wird mit denselben POSIX-Sprachcodes angegeben, die in den LANG- und LC_ALL-Umgebungsvariablen verwendet werden. Englisch kann beispielsweise mit "en" (Englisch allgemein), "en_GB" (britisches Englisch) oder "en_US" (amerikanisches Englisch) ausgewählt werden. Deutsch wird mit "de" oder "de_DE" aufgerufen.
+ .TP
+-.B -la, --langs-available
+-Gibt eine Liste der verfügbaren Übersetzungen aus. Um diese Sprache zu benutzen, starten Sie Scribus mit "scribus -l xx", wobei xx für den Sprachcode steht, oder ändern Sie die Umgebungsvariablen, wie weiter unten beschrieben.
++.B \-la, \-\-langs-available
++Gibt eine Liste der verfügbaren Übersetzungen aus. Um diese Sprache zu benutzen, starten Sie Scribus mit "scribus \-l xx", wobei xx für den Sprachcode steht, oder ändern Sie die Umgebungsvariablen, wie weiter unten beschrieben.
+ .TP
+-.B -v, --version
++.B \-v, \-\-version
+ Gibt die Versionsnummer von Scribus aus.
+ .TP
+-.B -f, --file
+-Öffnet die angegebene Datei. Es ist auch möglich, statt dessen einfach den Dateinamen ohne diesen Parameter anzugeben. Wenn der Dateiname jedoch mit einem - beginnt, werden Sie -- verwenden müssen, etwa: "scribus -- -meinedatei.sla'.
++.B \-f, \-\-file
++Öffnet die angegebene Datei. Es ist auch möglich, statt dessen einfach den Dateinamen ohne diesen Parameter anzugeben. Wenn der Dateiname jedoch mit einem \- beginnt, werden Sie \-\- verwenden müssen, etwa: "scribus \-\- \-meinedatei.sla'.
+ .TP
+-.B -h, --help
++.B \-h, \-\-help
+ Gibt diese kurze Übersicht aus.
+ .TP
+-.B -fi, --font-info 
++.B \-fi, \-\-font-info
+ Zeigt die Liste der während des Programmstarts geladenen Schriften an. Auf diese Weise können fehlende Zeichen in Schriften oder möglicherweise fehlerhafte Schriftdateien  identifiziert werden.
+ .TP
+-.B -pi, --profile-info
++.B \-pi, \-\-profile\-info
+ Zeigt eine Liste der Farbprofile, die von Scribus genutzt werden können. Diese Option kann genutzt werden, um fehlende oder fehlerhafte Farbprofile zu untersuchen.
+-.B -ns, --no-splash
++.B \-ns, \-\-no-splash
+ Unterdrückt die Anzeige des Scribus-Splash-Screens beim Programmstart.
+ .TP
+-.B -nns, --never-splash     
++.B \-nns, \-\-never-splash
+ Unterdrückt die Anzeige des Scribus-Splash-Screens beim Programmstart dauerhaft, indem eine leere Datei namens .neversplash im Verzeichnis ~/.scribus gespeichert wird.
+ .TP
+-.B -sb, --swap-buttons
++.B \-sb, \-\-swap\-buttons
+ Verwendet eine umgekehrte Anordnung von Buttons in einigen Dialogen (z.B Cancel/No/Yes statt Yes/No/Cancel)
+ .TP
+-.B -u, --upgradecheck
++.B \-u, \-\-upgradecheck
+ Lädt eine Datei vom Scribus-Server herunter, die Informationen über die neueste Programmversion enthält.
+ .SH UMGEBUNG
+ Scribus verwendet die gesetzten Umgebungsvariablen. Die zugrundeliegenden Bibliotheken wie Qt oder Programme, die Scribus verwendet, können andere Einstellungen verwenden.
+@@ -59,9 +59,9 @@
+ Scribus benutzt diese drei Umgebungsvariablen in der angegebenen Reihenfolge, um die Sprache (inklusive der Sprache der Benutzeroberfläche) zu bestimmen. Falls diese Variablen nicht gesetzt sind, verwendet Scribus die Spracheinstellungen der zugrundeliegenden Qt-Bibliothek.
+ .TP
+ .B PATH
+-Scribus sucht in den 
++Scribus sucht in den
+ .B PATH
+--Daten nach externen Programmen. Dies wird für Sie vor allem von Bedeutung sein, wenn Sie mehrere Versionen von gs(1) installiert haben. Sie können einen absoluten Pfad zur richtigen Version von gs(1) in den "Allgemeinen Einstellungen" eintragen und Scribus so
++\-Daten nach externen Programmen. Dies wird für Sie vor allem von Bedeutung sein, wenn Sie mehrere Versionen von gs(1) installiert haben. Sie können einen absoluten Pfad zur richtigen Version von gs(1) in den "Allgemeinen Einstellungen" eintragen und Scribus so
+ .B PATH
+ ignorieren lassen.
+ .PP
+@@ -123,4 +123,4 @@
+ ist der Scribus-Bugtracker, der zum Verfolgen von Fehlerberichten und Erweiterungswünschen dient.
+ .B Falls Sie einen Fehlerbericht oder einen Erweiterungswunsch eintragen möchten, durchsuchen Sie bitte erst die Datenbank des Bugtrackers.
+ .SH AUTHORS
+-Bitte beachten Sie den "Über Scribus"-Eintrag im Hilfemenü, um eine Liste der Autoren, Übersetzer und Mitwirkenden zu erhalten.
++Bitte beachten Sie den "Über Scribus"\-Eintrag im Hilfemenü, um eine Liste der Autoren, Übersetzer und Mitwirkenden zu erhalten.

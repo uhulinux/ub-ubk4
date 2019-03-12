@@ -1,0 +1,38 @@
+diff -Nur orig/CMakeLists.txt mod/CMakeLists.txt
+--- orig/CMakeLists.txt	2019-03-12 15:24:39.000000000 +0100
++++ mod/CMakeLists.txt	2019-03-12 16:26:30.008018492 +0100
+@@ -1,4 +1,4 @@
+-##############################################################################################################
++# r##############################################################################################################
+ ########## CMake Setup                                                                              ##########
+ 
+ #Set our CMake minimum version
+@@ -910,6 +910,7 @@
+ 
+ #Add our source subdirs
+ ADD_SUBDIRECTORY(scribus)
++ADD_SUBDIRECTORY(resources/dicts)
+ ADD_SUBDIRECTORY(resources/editorconfig)
+ ADD_SUBDIRECTORY(resources/icons)
+ ADD_SUBDIRECTORY(resources/keysets)
+@@ -922,20 +923,6 @@
+ ADD_SUBDIRECTORY(resources/unicodemap)
+ 
+ #Install our READMEs etc.
+-INSTALL(FILES
+-  AUTHORS
+-  BUILDING
+-  ChangeLog
+-  ChangeLogSVN
+-  COPYING
+-  LINKS
+-  NEWS
+-  PACKAGING
+-  README
+-  TODO
+-  TRANSLATION
+-  DESTINATION ${DOCDIR}
+-)
+ 
+ IF (APPLE)
+   INSTALL(FILES
