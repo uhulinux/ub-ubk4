@@ -2,8 +2,9 @@
 
 ub_replace -O3 -O2 configure
 # compile static lib
-ub_compile \
+./configure \
 	--prefix=/usr
+make
 
 # compile shared lib
 ./configure \
