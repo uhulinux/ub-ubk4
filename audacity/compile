@@ -2,10 +2,7 @@
 
 rm -f CMakeLists.txt
 export WX_CONFIG=/usr/bin/wx-config
-autoreconf --no-recursive -ifv
-#UB_CONFIGURE_NO_DISABLE_STATIC=yes \
-export WX_CONFIG=/usr/bin/wx-config
-./configure \
+ub_compile \
     --prefix=/usr \
 	--disable-dynamic-loading \
     --with-libsndfile="system" \
@@ -23,4 +20,3 @@ export WX_CONFIG=/usr/bin/wx-config
     --with-libtwolame \
     --with-libvorbis \
     --with-lv2
-ub_make
