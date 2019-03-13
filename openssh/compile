@@ -3,8 +3,7 @@
 export CPPFLAGS=-I/usr/include/openssl-1.0
 export LDFLAGS=-L/usr/lib/openssl-1.0
 
-autoreconf -vif
-./configure \
+ub_compile \
     --prefix=/usr \
 	--sysconfdir=/etc/ssh \
 	--datadir=/usr/share/openssh \
@@ -13,4 +12,3 @@ autoreconf -vif
 	--with-pam \
 	--with-md5-passwords \
 	--with-libedit
-ub_make
