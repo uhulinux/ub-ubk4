@@ -1,6 +1,5 @@
 #!/bin/sh -eux
 
-autoreconf -fiv
 export CFLAGS=`pkg-config --cflags MagickWand`
 export LDFLAGS=`pkg-config --libs MagickWand`
 ub_compile
