@@ -1,0 +1,12 @@
+diff -Naur orig/third_party/closure_compiler/compiler.py patched/third_party/closure_compiler/compiler.py
+--- orig/third_party/closure_compiler/compiler.py	2019-03-11 23:01:15.000000000 +0100
++++ patched/third_party/closure_compiler/compiler.py	2019-03-12 23:25:38.690123603 +0100
+@@ -24,7 +24,7 @@
+   and produce minified output."""
+ 
+   _JAR_COMMAND = [
+-    "java",
++    "/usr/lib/java/jre/bin/java",
+     "-jar",
+     "-Xms1024m",
+     "-client",

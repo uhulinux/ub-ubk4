@@ -1,0 +1,12 @@
+diff -Naur orig/ui/gfx/color_utils.cc patched/ui/gfx/color_utils.cc
+--- orig/ui/gfx/color_utils.cc	2019-03-11 23:01:19.000000000 +0100
++++ patched/ui/gfx/color_utils.cc	2019-03-13 03:55:17.348594572 +0100
+@@ -431,7 +431,7 @@
+   // GetContrastRatio(kWhiteLuminance, g_luminance_midpoint).  The formula below
+   // can be verified by plugging it into how GetContrastRatio() operates.
+   g_luminance_midpoint =
+-      std::sqrtf((dark_luminance + 0.05f) * (kWhiteLuminance + 0.05f)) - 0.05f;
++      std::sqrt((dark_luminance + 0.05f) * (kWhiteLuminance + 0.05f)) - 0.05f;
+ 
+   return previous_darkest_color;
+ }
