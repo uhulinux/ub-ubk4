@@ -1,0 +1,21 @@
+diff -Naur orig/gegl/mypaint-gegl-surface.c patched/gegl/mypaint-gegl-surface.c
+--- orig/gegl/mypaint-gegl-surface.c	2016-12-01 23:47:14.000000000 +0100
++++ patched/gegl/mypaint-gegl-surface.c	2019-03-15 00:40:39.877358977 +0100
+@@ -78,7 +78,7 @@
+ 
+     if (buffer_is_native(self)) {
+         GeglBufferIterator *iterator = gegl_buffer_iterator_new(self->buffer, &tile_bbox, 0, self->format,
+-                                      read_write_flags, GEGL_ABYSS_NONE);
++                                      read_write_flags, GEGL_ABYSS_NONE, 8);
+ 
+         // Read out
+         gboolean completed = gegl_buffer_iterator_next(iterator);
+@@ -88,7 +88,7 @@
+             g_critical("Unable to get tile aligned access to GeglBuffer");
+             request->buffer = NULL;
+         } else {
+-            request->buffer = (uint16_t *)(iterator->data[0]);
++            request->buffer = (uint16_t *)(iterator->items[0].data);
+         }
+ 
+         // So we can finish the iterator in tile_request_end()
