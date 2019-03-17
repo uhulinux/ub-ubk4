@@ -1,0 +1,1096 @@
+diff -Nur orig/po/hu.po mod/po/hu.po
+--- orig/po/hu.po	1970-01-01 01:00:00.000000000 +0100
++++ mod/po/hu.po	2019-03-16 21:07:27.000000000 +0100
+@@ -0,0 +1,1081 @@
++# SOME DESCRIPTIVE TITLE.
++# This file is put in the public domain.
++# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: chromium-bsu 0.9.16.1\n"
++"Report-Msgid-Bugs-To: https://sf.net/p/chromium-bsu/bugs\n"
++"POT-Creation-Date: 2016-09-06 12:13+0800\n"
++"PO-Revision-Date: 2019-03-16 21:07+0100\n"
++"Language-Team: \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++"X-Generator: Poedit 2.1.1\n"
++"Last-Translator: \n"
++"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++"Language: hu\n"
++
++#: misc/chromium-bsu.desktop.in:3
++msgid "Chromium B.S.U."
++msgstr "Chromium B.S.U."
++
++#: misc/chromium-bsu.desktop.in:4
++msgid "Shoot'em up space shooter"
++msgstr "Űrbéli lövöldöző"
++
++#: misc/chromium-bsu.desktop.in:5
++msgid "Scrolling space shooter"
++msgstr ""
++
++#: misc/chromium-bsu.desktop.in:7
++msgid "chromium-bsu"
++msgstr ""
++
++#: misc/chromium-bsu.desktop.in:12
++msgid "Shooter;Space;"
++msgstr ""
++
++#: src/Audio.cpp:111
++msgid "audio"
++msgstr "hang"
++
++#: src/Audio.cpp:112
++msgid "data"
++msgstr "adat"
++
++#: src/Audio.cpp:114
++#, c-format
++msgid "UNKNOWN(type=%d)"
++msgstr "ISMERETLEN(típus=%d)"
++
++#: src/Audio.cpp:125
++#, c-format
++msgid "%d CDROM drive(s).\n"
++msgstr "%d CDROM meghajtó\n"
++
++#: src/Audio.cpp:136
++#, c-format
++msgid "Tracks: %d\n"
++msgstr "Sávok: %d\n"
++
++#: src/Audio.cpp:140
++#, c-format
++msgid "track %2d: %s\n"
++msgstr "sáv %2d %s\n"
++
++#: src/Audio.cpp:149
++#, c-format
++msgid ""
++"\n"
++" Data track(s) only. CD audio not available.\n"
++"\n"
++msgstr ""
++"\n"
++" Csak adatsáv. CD hang nincs.\n"
++"\n"
++
++#: src/Audio.cpp:155
++#, c-format
++msgid ""
++"\n"
++" use_cdrom enabled. Set to '0' in the configuration file to disable.\n"
++msgstr ""
++"\n"
++"use-cdrom engedélyezett. A beállító fájlban egy '0' letiltja.\n"
++
++#: src/Audio.cpp:156
++#, c-format
++msgid ""
++" Press the 'N' key to skip to next CD track during a game.\n"
++"\n"
++msgstr ""
++" 'N' billentyű játék alatt a következő CD sáv átugrásához.\n"
++"\n"
++
++#: src/Audio.cpp:167
++#, c-format
++msgid "ERROR! Could not access CDROM device %d : %s\n"
++msgstr "HIBA! A %d: %s CDROM eszköz nem érhető el.\n"
++
++#: src/Audio.cpp:213
++#, c-format
++msgid "CDROM error in AudioOpenAL::pauseGameMusic(%d)\n"
++msgstr "CDROM hiba: AudioOpenAL::pauseGameMusic(%d)\n"
++
++#: src/Audio.cpp:214
++#, c-format
++msgid "CDROM status = %d\n"
++msgstr "CDROM állapot = %d\n"
++
++#: src/Audio.cpp:283
++#, c-format
++msgid "Could not set CD volume, amixer returned status %d\n"
++msgstr "A CD hangerő beállíthatatlan, amixer visszatérési kód: %d\n"
++
++#: src/Audio.cpp:310
++#, c-format
++msgid "Audio::setMusicIndex(%d)\n"
++msgstr "Audio::setMusicIndex(%d)\n"
++
++#: src/Audio.cpp:329
++#, c-format
++msgid "track %d is data - trying next track...\n"
++msgstr "a %d sáv adatsáv - a rákövetkezőre ugrás...\n"
++
++#: src/AudioOpenAL.cpp:143
++#, c-format
++msgid "alAttenuationScale == 0. Kludge it.\n"
++msgstr "alAttenuationScale == 0. Törlöm.\n"
++
++#: src/AudioOpenAL.cpp:160
++#, c-format
++msgid "AudioOpenAL::Audio done\n"
++msgstr "AudioOpenAL::Audio kész\n"
++
++#: src/AudioOpenAL.cpp:168
++#, c-format
++msgid "stopping OpenAL..."
++msgstr "az OpenAL leáll..."
++
++#: src/AudioOpenAL.cpp:182
++msgid "AudioOpenAL::~Audio()"
++msgstr "AudioOpenAL::~Audio()"
++
++#: src/AudioOpenAL.cpp:203
++#, c-format
++msgid "done.\n"
++msgstr "kész.\n"
++
++#: src/AudioOpenAL.cpp:249
++#, c-format
++msgid ""
++"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
++"!! ATTENTION !! - one or more errors were encountered during audio check.\n"
++"!!                Audio will be disabled.\n"
++"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
++msgstr ""
++"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
++"!! FIGYELEM !! - egy vagy több hiba lépett fel a hangrendszer "
++"ellenőrzésénél.\n"
++"!!                        A hang letilva.\n"
++"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
++
++#: src/AudioOpenAL.cpp:269
++#, c-format
++msgid "AudioOpenAL::initSound() begin...\n"
++msgstr "AudioOpenAL::initSound() indul...\n"
++
++#: src/AudioOpenAL.cpp:273
++#, c-format
++msgid ""
++"-OpenAL-----------------------------------------------------\n"
++"Vendor     : %s\n"
++"Renderer   : %s\n"
++"Version    : %s\n"
++msgstr ""
++"-OpenAL-----------------------------------------------------\n"
++"Készítő     : %s\n"
++"Megvalósító   : %s\n"
++"Verzió    : %s\n"
++
++#: src/AudioOpenAL.cpp:279 src/MainSDL.cpp:116
++#, c-format
++msgid "------------------------------------------------------------\n"
++msgstr "------------------------------------------------------------\n"
++
++#: src/AudioOpenAL.cpp:311
++#, c-format
++msgid "Audio.cpp - init %s"
++msgstr "Audio.cpp - indul a %s"
++
++#: src/AudioOpenAL.cpp:324
++#, c-format
++msgid "Audio.cpp - init explosion %d"
++msgstr "Audio.cpp - indul az explosion %d"
++
++#: src/AudioOpenAL.cpp:337
++#, c-format
++msgid "Audio.cpp - init exploPop %d"
++msgstr "Audio.cpp - indul at exploPop %d"
++
++#: src/AudioOpenAL.cpp:350
++msgid "Audio.cpp - initSound complete."
++msgstr "Audio.cpp - hangindítás kész."
++
++#: src/AudioOpenAL.cpp:432
++#, c-format
++msgid "AudioOpenAL::setMusicMode(SoundType mode)\n"
++msgstr "AudioOpenAL::setMusicMode(SoundType mode)\n"
++
++#: src/AudioOpenAL.cpp:471
++#, c-format
++msgid "AudioOpenAL::setSoundVolume(%f)\n"
++msgstr "AudioOpenAL::setSoundVolume(%f)\n"
++
++#: src/AudioOpenAL.cpp:516
++#, c-format
++msgid "Music volume = %f\n"
++msgstr "Zene hangereje = %f\n"
++
++#: src/AudioOpenAL.cpp:532
++#, c-format
++msgid ""
++"\n"
++"ERROR! - sound enumerant index %d does not have valid filename!\n"
++msgstr ""
++"\n"
++"HIBA! - A %d indexű hangminta fájlneve nem jó!\n"
++
++#: src/AudioOpenAL.cpp:555
++#, c-format
++msgid "alutLoadWAVFile(\"%s\",...);\n"
++msgstr "alutLoadWAVFile(\"%s\",...);\n"
++
++#: src/AudioOpenAL.cpp:571
++#, c-format
++msgid "ERROR!! <%s> alGetError() = %s\n"
++msgstr "HIBA!! <%s> alGetError() = %s\n"
++
++#: src/AudioOpenAL.cpp:576
++#, c-format
++msgid "ERROR!! <%s> alcGetError() = %s\n"
++msgstr "HIBA!! <%s> alcGetError() = %s\n"
++
++#: src/AudioOpenAL.cpp:581
++#, c-format
++msgid "ERROR!! <%s> alutGetError() = %s\n"
++msgstr "HIBA!! <%s> alutGetError() = %s\n"
++
++#: src/AudioOpenAL.cpp:738
++#, c-format
++msgid "ERROR: filename too long: \"%s\", line %d\n"
++msgstr "HIB: túl hosszú fájlnév: \"%s\", sor %d\n"
++
++#: src/AudioOpenAL.cpp:756
++#, c-format
++msgid "WARNING: MP3 support not available: \"%s\", line %d\n"
++msgstr "FIGYELEM: Nincs MP3 támogatás: \"%s\", sor %d\n"
++
++#: src/AudioOpenAL.cpp:767
++#, c-format
++msgid "WARNING: Ogg/Vorbis support not available: \"%s\", line %d\n"
++msgstr "FIGYELEM: Nincs Ogg/Vorbis támogatás: \"%s\", sor %d\n"
++
++#: src/AudioOpenAL.cpp:771
++#, c-format
++msgid "WARNING: file type not recognized: \"%s\": \"%s\", line %d\n"
++msgstr "FIGYELEM: A fájltípus értelmezhetetlen: \"%s\":\"%s\", sor %d\n"
++
++#: src/AudioOpenAL.cpp:786
++#, c-format
++msgid "music playlist:\n"
++msgstr "zene lejátszólista:\n"
++
++#: src/AudioOpenAL.cpp:789
++#, c-format
++msgid " %2d : %s\n"
++msgstr " %2d : %s\n"
++
++#: src/AudioOpenAL.cpp:791
++#, c-format
++msgid "loaded %s\n"
++msgstr "a %s betöltve\n"
++
++#: src/AudioOpenAL.cpp:820
++msgid "AudioOpenAL::setMusicIndex -- begin"
++msgstr "AudioOpenAL::setMusicIndex -- indulás"
++
++#: src/AudioOpenAL.cpp:833
++msgid "AudioOpenAL::setMusicIndex -- before setting source buffer to 0"
++msgstr "AudioOpenAL::setMusicIndex -- beállítás előtt a forráspuffer 0"
++
++#: src/AudioOpenAL.cpp:836
++msgid "AudioOpenAL::setMusicIndex -- after setting source buffer to 0"
++msgstr "AudioOpenAL::setMusicIndex -- beállítás után a forráspuffer 0"
++
++#: src/AudioOpenAL.cpp:871
++msgid "AudioOpenAL::setMusicIndex -- end"
++msgstr "AudioOpenAL::setMusicIndex -- vége"
++
++#: src/AudioOpenAL.cpp:921 src/AudioOpenAL.cpp:954 src/AudioOpenAL.cpp:1004
++#, c-format
++msgid "WARNING: PlayList support not compiled in (AudioOpenAL.cpp): %s\n"
++msgstr ""
++"FIGYELEM: A lejátszási lista támogatása nem lett befordítva (AudioOpenAL."
++"cpp): %s\n"
++
++#: src/AudioOpenAL.cpp:971
++#, c-format
++msgid "ERROR: Could not allocate memory in AudioOpenAL::loadMP3\n"
++msgstr "HIBA: Az AudioOpenAL::loadMP3 nem tud memóriát lefoglalni.\n"
++
++#: src/AudioOpenAL.cpp:977
++#, c-format
++msgid "ERROR: Could not open \"%s\" in AudioOpenAL::loadMP3\n"
++msgstr "HIBA: Az AudioOpenAL::loadMP3 nem tudja a %s -t megnyitni.\n"
++
++#: src/AudioOpenAL.cpp:983
++#, c-format
++msgid "ERROR: Could not read from \"%s\" in AudioOpenAL::loadMP3\n"
++msgstr "HIBA: Az AudioOpenAL::loadMP3 nem tud a %s -ból olvasni.\n"
++
++#: src/AudioOpenAL.cpp:991
++#, c-format
++msgid "ERROR: alutLoadMP3() failed in AudioOpenAL::loadMP3\n"
++msgstr "HIBA: Az alutLoadMP3() az AudioOpenAL::loadMP3 -ban hibázott.\n"
++
++#: src/AudioOpenAL.cpp:1023
++#, c-format
++msgid "ERROR: Could not allocate memory in AudioOpenAL::loadVorbis\n"
++msgstr "HIBA: Az AudioOpenAL::loadVorbis nem tud memóriát lefoglalni.\n"
++
++#: src/AudioOpenAL.cpp:1029
++#, c-format
++msgid "ERROR: Could not open \"%s\" in AudioOpenAL::loadVorbis\n"
++msgstr "HIBA: Az AudioOpenAL::loadVorbis nem tudja a %s -t megnyitni.\n"
++
++#: src/AudioOpenAL.cpp:1035
++#, c-format
++msgid "ERROR: Could not read from \"%s\" in AudioOpenAL::loadVorbis\n"
++msgstr "HIBA: Az AudioOpenAL::loadVorbis nem tud a %s -ból olvasni.\n"
++
++#: src/AudioOpenAL.cpp:1043
++#, c-format
++msgid "ERROR: alutLoadVorbis() failed in AudioOpenAL::loadVorbis\n"
++msgstr "HIBA: Az alutLoadVorbis() az AudioOpenAL::loadVorbis -ban hibázott.\n"
++
++#: src/AudioSDLMixer.cpp:65
++#, c-format
++msgid "ERROR initializing audio - AudioSDLMixer::initSound()\n"
++msgstr "HIBA a hang indításnál - AudioSDLMixer::initSound()\n"
++
++#: src/Config.cpp:118
++#, c-format
++msgid "WARNING: Config::init() has already been called.\n"
++msgstr "FIGYELEM: A Config::init() már végrehajtva.\n"
++
++#: src/Config.cpp:251
++#, c-format
++msgid "WARNING: could not read config file (%s)\n"
++msgstr "FIGYELEM: A konfiguráció nem olvasható (%s)\n"
++
++#: src/Config.cpp:314
++#, c-format
++msgid "wrote config file (%s)\n"
++msgstr "konfígurációs fájl írva (%s)\n"
++
++#: src/Config.cpp:319
++#, c-format
++msgid "WARNING: could not write config file (%s)\n"
++msgstr "FIGYELEM: A konfigurációs fájl nem írható (%s)\n"
++
++#: src/EnemyAircraft.cpp:111
++#, c-format
++msgid "%d EnemyAircraft allocated\n"
++msgstr "%d ellenségek észlelve\n"
++
++#: src/EnemyAircraft_Straight.cpp:98
++#, c-format
++msgid "EnemyAircraft_Straight %p ... pos[1] = %g, vel[1] = %g\n"
++msgstr "EnemyAircraft_Straight %p ... pos[1] = %g, vel[1] = %g\n"
++
++#: src/EnemyFleet.cpp:243
++#, c-format
++msgid "num enemies on screen = %d\n"
++msgstr "ellenfélszám a képen = %d\n"
++
++#: src/Global.cpp:114
++#, c-format
++msgid "WARNING: Global::init() has already been called.\n"
++msgstr "FIGYELEM: A Global::init() már végrehajtva.\n"
++
++#: src/Global.cpp:211
++#, c-format
++msgid "Starting up..."
++msgstr "Indulás..."
++
++#: src/Global.cpp:242
++#, c-format
++msgid "...startup complete.\n"
++msgstr "...indulás kész\n"
++
++#: src/Global.cpp:249
++#, c-format
++msgid "Shutting down...\n"
++msgstr "Befejezés...\n"
++
++#: src/Global.cpp:262
++#, c-format
++msgid "...shutdown complete.\n"
++msgstr "..befejezés kész.\n"
++
++#: src/Global.cpp:269
++#, c-format
++msgid "deleteTextures()\n"
++msgstr "deleteTextures()\n"
++
++#: src/Global.cpp:289
++#, c-format
++msgid "Global::loadTextures()\n"
++msgstr ""
++
++#: src/Global.cpp:352
++#, c-format
++msgid "Generating random sequences\n"
++msgstr "Véletlen sorozat előállítása\n"
++
++#: src/HeroAmmo.cpp:167
++#, c-format
++msgid "HeroAmmo::addAmmo(%d, <%f %f %f> )\n"
++msgstr ""
++
++#: src/HeroAmmo.cpp:190
++#, c-format
++msgid "%p <--%p--> %p\n"
++msgstr ""
++
++#: src/HiScore.cpp:58
++#, c-format
++msgid "nobody"
++msgstr "senki"
++
++#: src/HiScore.cpp:83
++#, c-format
++msgid "WARNING: HiScore::init() has already been called.\n"
++msgstr "FIGYELEM: A Hiscore::init() már végrehajtva.\n"
++
++#: src/HiScore.cpp:241
++#, c-format
++msgid "WARNING: could not write score file (%s)\n"
++msgstr "FIGYELEM: A dicsőséglista nem írható (%s)\n"
++
++#: src/HiScore.cpp:276
++#, c-format
++msgid "WARNING: error reading score file (%s)\n"
++msgstr "FIGYELEM: Dicsőséglista olvasási hiba (%s)\n"
++
++#: src/HiScore.cpp:319 src/HiScore.cpp:321 src/HiScore.cpp:323
++#: src/HiScore.cpp:343 src/HiScore.cpp:345 src/HiScore.cpp:347
++#, c-format
++msgid "WARNING: error reading old score file (%s)\n"
++msgstr "FIGYELEM: Régi dicsőséglista olvasási hiba (%s)\n"
++
++#: src/HiScore.cpp:332
++#, c-format
++msgid "WARNING: empty score file (%s)\n"
++msgstr "FIGYELEM: Üres a dicsőséglista (%s)\n"
++
++#: src/HiScore.cpp:357
++#, c-format
++msgid "WARNING: could not read score file (%s)\n"
++msgstr "FIGYELEM: A dicsőséglista nem olvasható (%s)\n"
++
++#: src/HiScore.cpp:449
++#, c-format
++msgid "high scores:\n"
++msgstr "csúcslista:\n"
++
++#: src/HiScore.cpp:455
++#, c-format
++msgid "%02d/%02d/%04d %16s %d\n"
++msgstr ""
++
++#: src/main.cpp:124
++#, c-format
++msgid ""
++"\n"
++"--------------------------------------------------\n"
++"Chromium B.S.U. options\n"
++"--------------------------------------------------\n"
++"   -f/--fullscreen     : run in fullscreen mode\n"
++"   -w/--window         : run in windowed mode\n"
++"   -v/--vidmode <mode> : mode 0 =  512 x  384\n"
++"                       :      1 =  640 x  480\n"
++"                       :      2 =  800 x  600\n"
++"                       :      3 = 1024 x  768\n"
++"                       :      4 = 1280 x  960\n"
++"  -na/--noaudio        : do not initialize audio\n"
++"  -nb/--noblend        : disable blending (OpenGL)\n"
++"  -nt/--notexborder    : do not set tex border color (OpenGL)\n"
++"  -V/--version         : show version information\n"
++"--------------------------------------------------\n"
++"\n"
++msgstr ""
++"\n"
++"--------------------------------------------------\n"
++"Chromium B.S.U. opciók\n"
++"--------------------------------------------------\n"
++"   -f/--fullscreen     : teljes képernyő\n"
++"   -w/--window         : ablakos mód\n"
++"   -v/--vidmode <mode> : mode 0 =  512 x  384\n"
++"                       :      1 =  640 x  480\n"
++"                       :      2 =  800 x  600\n"
++"                       :      3 = 1024 x  768\n"
++"                       :      4 = 1280 x  960\n"
++"  -na/--noaudio        : hang nélkül\n"
++"  -nb/--noblend        : blending tiltás (OpenGL)\n"
++"  -nt/--notexborder    : textúrák keretszín nélkül (OpenGL)\n"
++"  -V/--version         : Verzió kiírás\n"
++"--------------------------------------------------\n"
++"\n"
++
++#: src/main.cpp:237
++#, c-format
++msgid "!! ERROR !! - "
++msgstr "!! HIBA !! - "
++
++#: src/main.cpp:261
++#, c-format
++msgid "Extensions :"
++msgstr "Bővítmények:"
++
++#: src/MainGL.cpp:86
++#, c-format
++msgid "initGL()\n"
++msgstr ""
++
++#: src/MainGL.cpp:148
++#, c-format
++msgid "error loading font: %s\n"
++msgstr "betúkészlet betöltési hiba: %s\n"
++
++#: src/MainGL.cpp:153
++#, c-format
++msgid "error loading font\n"
++msgstr "betúkészlet betöltési hiba\n"
++
++#: src/MainGL.cpp:183
++#, c-format
++msgid "!!MainGL::drawGL() HUH?\n"
++msgstr "!!MainGL::drawGL() MICSODA?\n"
++
++#: src/MainGL.cpp:311
++#, c-format
++msgid ""
++"new high score!\n"
++"\n"
++"%d"
++msgstr ""
++"új csúcs!\n"
++"\n"
++"%d"
++
++#: src/MainGL.cpp:316
++#, c-format
++msgid ""
++"n o t   b a d !\n"
++"rank : %d\n"
++"\n"
++"%d"
++msgstr ""
++"n e m  r o s s z !\n"
++"helyezés : %d\n"
++"\n"
++"%d"
++
++#: src/MainGL.cpp:321
++msgid "l o s e r"
++msgstr "v e s z  t e t t"
++
++#: src/MainGL.cpp:379
++#, c-format
++msgid ""
++"congratulations!\n"
++" \n"
++"l e v e l\n"
++" %d \n"
++"c o m p l e t e\n"
++" \n"
++msgstr ""
++"nagyszerű!\n"
++" \n"
++"f e l a d a t\n"
++" %d \n"
++"t e l j e s í t v e\n"
++" \n"
++
++#: src/MainGLUT.cpp:77
++#, c-format
++msgid "MainGLUT::run()\n"
++msgstr ""
++
++#: src/MainGLUT.cpp:93 src/MainSDL.cpp:298
++#, c-format
++msgid "ERROR!!! OpenGL error: %s\n"
++msgstr "HIBA!!! OpenGL hiba: %s\n"
++
++#: src/MainGLUT.cpp:235
++#, c-format
++msgid "key = %d\n"
++msgstr "billentyű = %d\n"
++
++#: src/MainSDL.cpp:76
++#, c-format
++msgid "Couldn't initialize SDL: %s\n"
++msgstr "Nem indítható az SDL: %s\n"
++
++#: src/MainSDL.cpp:79
++#, c-format
++msgid "SDL initialized.\n"
++msgstr "SDL elindítva.\n"
++
++#: src/MainSDL.cpp:85
++#, c-format
++msgid "num joysticks = %d\n"
++msgstr "joystick darabszám = %d\n"
++
++#: src/MainSDL.cpp:87
++#, c-format
++msgid "   joystick 0 = %p\n"
++msgstr ""
++
++#: src/MainSDL.cpp:93
++#, c-format
++msgid "no joysticks found\n"
++msgstr "nincs joystick\n"
++
++#: src/MainSDL.cpp:102 src/MainSDL.cpp:384
++#, c-format
++msgid "Couldn't set video mode: %s\n"
++msgstr "A %s videó mód nem megy.\n"
++
++#: src/MainSDL.cpp:110
++#, c-format
++msgid ""
++"-OpenGL-----------------------------------------------------\n"
++"Vendor     : %s\n"
++"Renderer   : %s\n"
++"Version    : %s\n"
++msgstr ""
++"-OpenGL-----------------------------------------------------\n"
++"Készítő     : %s\n"
++"Megvalósító   : %s\n"
++"Verzió    : %s\n"
++
++#: src/MainSDL.cpp:227
++#, c-format
++msgid "init----> %3.2ffps gameSpeed = %g\n"
++msgstr ""
++
++#: src/MainSDL.cpp:234
++#, c-format
++msgid "init----> %3.2ffps targetAdj = %g, tmp = %g\n"
++msgstr ""
++
++#: src/MainSDL.cpp:247
++#, c-format
++msgid "adjust--> %3.2f targetAdj = %g -- game->speedAdj = %g\n"
++msgstr ""
++
++#: src/MainSDL.cpp:269
++#, c-format
++msgid ""
++"%d speed adjustments required.\n"
++"NOTE: The game was not able to maintain a steady 50 frames per\n"
++"      second. You should consider reducing your screen resolution\n"
++"      or lowering the graphics detail setting.\n"
++"      -OR-\n"
++"      make sure that you aren't running any system monitoring\n"
++"      tools (like 'top', 'xosview', etc.) These kinds of tools\n"
++"      can make it difficult to maintain a steady frame rate.\n"
++msgstr ""
++"%d sebesség beállítás szükséges.\n"
++"MEGJEGYZÉS: A játék nem volt képes tartósan másodpercenként 50\n"
++"      képváltásra. A képernyő felbontás, vagy a grafikai részletesség\n"
++"      csökkentése szükséges.\n"
++"      -OR-\n"
++"      A játék alatt ne fusson rendszerfigyelő, vagy más alkalmazás\n"
++"       (mint 'top', 'xosview', satöbbi). Ezek is okozhatják ezt..\n"
++
++#: src/MainSDL.cpp:281
++#, c-format
++msgid "exit.\n"
++msgstr "kilép.\n"
++
++#: src/MainSDL.cpp:306
++#, c-format
++msgid "ERROR!!! SDL error '%s'\n"
++msgstr "HIBA!!! SDL hiba: %s\n"
++
++#: src/MainSDL.cpp:372
++#, c-format
++msgid "Couldn't create window: %s\n"
++msgstr "Ablak nem készíthető: %s\n"
++
++#: src/MainSDL.cpp:378
++#, c-format
++msgid "Couldn't create context: %s\n"
++msgstr "Kontext nem készíthető: %s\n"
++
++#: src/MainSDL.cpp:389
++#, c-format
++msgid "video mode set "
++msgstr "videó mód állítva "
++
++#: src/MainSDL.cpp:398
++#, c-format
++msgid "(bpp=%d RGB=%d%d%d depth=%d)\n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:53
++#, c-format
++msgid "%-5d SDL_ACTIVEEVENT  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:54
++#, c-format
++msgid "%-5d SDL_KEYDOWN  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:55
++#, c-format
++msgid "%-5d SDL_KEYUP  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:56
++#, c-format
++msgid "%-5d SDL_MOUSEMOTION  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:57
++#, c-format
++msgid "%-5d SDL_MOUSEBUTTONDOWN  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:58
++#, c-format
++msgid "%-5d SDL_MOUSEBUTTONUP  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:59
++#, c-format
++msgid "%-5d SDL_JOYBUTTONDOWN  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:60
++#, c-format
++msgid "%-5d SDL_JOYBUTTONUP  \n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:284
++#, c-format
++msgid "MainSDL::getEvent HUH?\n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:294
++#, c-format
++msgid ""
++"buffer = \"%s\n"
++"\""
++msgstr ""
++"puffer = \"%s\n"
++"\""
++
++#: src/MainSDL_Event.cpp:475
++#, c-format
++msgid "key '%s' pressed\n"
++msgstr "a '%s' billentyű megnyomva\n"
++
++#: src/MainSDL_Event.cpp:476
++#, c-format
++msgid "game->gameFrame = %d\n"
++msgstr ""
++
++#: src/MainSDL_Event.cpp:640
++#, c-format
++msgid "MainSDL::grabMouse(%d)\n"
++msgstr ""
++
++#: src/MenuGL.cpp:43
++msgid ""
++"  d o   n o t   a l l o w  -a n y-   e n e m i e s   g e t   p a s t   y o "
++"u !"
++msgstr ""
++"   n e  e n g e d j  e l  e l l e n f e l e t  m a g a d  m e l l e t t !"
++
++#: src/MenuGL.cpp:44
++msgid ""
++"  e v e r y   e n e m y   t h a t   g e t s   b y   c o s t s   y o u   a   "
++"l i f e !"
++msgstr ""
++" m i n d e n  e l e n g e d e t t  e l l e n f é l  e g y  é l e t e d b e  "
++"k e r ü l !"
++
++#: src/MenuGL.cpp:45
++msgid ""
++"  a l l o w   p o w e r - u p s   t o   p a s s   b y   f o r   b i g   p o "
++"i n t s !"
++msgstr "   P o w e r - U p   e l e n g e d é s e  t ö b b  p o n t o t  a d !"
++
++#: src/MenuGL.cpp:46
++msgid "  c r a s h   i n t o   e n e m i e s   t o   d e s t r o y   t h e m !"
++msgstr ""
++"  a z  e l l e n f é l  l e g y ő z é s é h e z  r á  k e l l  r o n t a n "
++"i !"
++
++#: src/MenuGL.cpp:47
++msgid "  r i g h t   c l i c k   t w i c e   t o   s e l f - d e s t r u c t !"
++msgstr "  d u p l a  j o b b  k l i k k  -  ö n m e g s e m m i s í t é s !"
++
++#: src/MenuGL.cpp:48
++msgid ""
++"  s e l f - d e s t r u c t   t o   p r e s e r v e   y o u r   a m m u n i "
++"t i o n !"
++msgstr "  ö m e g s e m m í t é s  a  m u n í c i ó t  b i z t o s í t j a !"
++
++#: src/MenuGL.cpp:49
++msgid ""
++"  d o w n l o a d   C h r o m i u m   B. S. U.   a t   http://chromium-bsu."
++"sf.net/"
++msgstr ""
++"  C h r o m i u m  B . S . U .  l e t ö l t é s :  http://chromium-bsu.sf."
++"net/"
++
++#: src/MenuGL.cpp:70
++msgid "n e w    g a m e"
++msgstr "ú j  j á t é k"
++
++#: src/MenuGL.cpp:71
++msgid "l e v e l"
++msgstr "k ü l d e t é s"
++
++#: src/MenuGL.cpp:72
++msgid "s k i l l"
++msgstr "n e h é z s é g"
++
++#: src/MenuGL.cpp:73
++msgid "g f x    d e t a i l"
++msgstr "g r a f i k a"
++
++#: src/MenuGL.cpp:74
++msgid "f u l l s c r e e n"
++msgstr "t e l i  k é p"
++
++#: src/MenuGL.cpp:75
++msgid "s c r e e n    s i z e"
++msgstr "k é p  m é r e t"
++
++#: src/MenuGL.cpp:76
++msgid "s o u n d    f x    v o l u m e"
++msgstr "z ö r e j  e r ő s s é g"
++
++#: src/MenuGL.cpp:77
++msgid "m u s i c    v o l u m e"
++msgstr "z e n e  e r ő s s é g"
++
++#: src/MenuGL.cpp:78
++msgid "m o v e m e n t   s p e e d"
++msgstr "j á t é k  s e b e s s é g"
++
++#: src/MenuGL.cpp:79
++msgid "q u i t"
++msgstr "v é g e"
++
++#: src/MenuGL.cpp:143 src/MenuGL.cpp:417
++#, c-format
++msgid "ATTENTION: Using 'thin' text to improve framerate...\n"
++msgstr "FIGYELEM: A képváltási gyorsasághoz 'kicsiny' szkript használva...\n"
++
++#: src/MenuGL.cpp:147
++#, c-format
++msgid "MenuGL::createLists\n"
++msgstr ""
++
++#: src/MenuGL.cpp:162
++msgid "fish in a barrel"
++msgstr "homokozó"
++
++#: src/MenuGL.cpp:163
++msgid "wimp"
++msgstr "kezdő"
++
++#: src/MenuGL.cpp:164
++msgid "easy"
++msgstr "könnyű"
++
++#: src/MenuGL.cpp:165
++msgid "normal"
++msgstr "normál"
++
++#: src/MenuGL.cpp:166
++msgid "experienced"
++msgstr "haladó"
++
++#: src/MenuGL.cpp:167
++msgid "fun"
++msgstr "élvezetes"
++
++#: src/MenuGL.cpp:168
++msgid "insane"
++msgstr "valószerűtlen"
++
++#: src/MenuGL.cpp:169
++msgid "impossible"
++msgstr "lehetetlen"
++
++#: src/MenuGL.cpp:170
++msgid "-"
++msgstr ""
++
++#: src/MenuGL.cpp:292 src/MenuGL.cpp:320
++msgid "high scores"
++msgstr "csúcstartók"
++
++#: src/MenuGL.cpp:349
++msgid "the"
++msgstr ""
++
++#: src/MenuGL.cpp:353
++msgid "reptile"
++msgstr ""
++
++#: src/MenuGL.cpp:357
++msgid "labour"
++msgstr ""
++
++#: src/MenuGL.cpp:361
++msgid "project"
++msgstr ""
++
++#: src/MenuGL.cpp:422
++#, c-format
++msgid "ATTENTION: Reverting to 'thick' text...\n"
++msgstr "FIGYELEM: Visszatérés 'erős' szkripthez...\n"
++
++#: src/MenuGL.cpp:473
++#, c-format
++msgid "low"
++msgstr "alacsony"
++
++#: src/MenuGL.cpp:474
++#, c-format
++msgid "med"
++msgstr "közepes"
++
++#: src/MenuGL.cpp:475
++#, c-format
++msgid "high"
++msgstr "magas"
++
++#: src/MenuGL.cpp:480
++#, c-format
++msgid "%dx%d"
++msgstr ""
++
++#: src/MenuGL.cpp:484
++#, c-format
++msgid "true"
++msgstr "be"
++
++#: src/MenuGL.cpp:485
++#, c-format
++msgid "false"
++msgstr "ki"
++
++#: src/MenuGL.cpp:791 src/MenuGL.cpp:864 src/MenuGL.cpp:935
++#, c-format
++msgid "---- error setting full screen mode ----"
++msgstr "---- teljes képmód hiba ----"
++
++#: src/MenuGL.cpp:793
++#, c-format
++msgid "---- error setting window mode ----"
++msgstr "---- ablakos képmód hiba ----"
++
++#: src/MenuGL.cpp:834
++#, c-format
++msgid "---- you must complete level %d before you can select level %d ----"
++msgstr "---- A %d fokozat teljesítése kell a %d fokozathoz ----"
++
++#: src/MenuGL.cpp:850 src/MenuGL.cpp:921
++#, c-format
++msgid "---- error setting screen size ----"
++msgstr "---- képméret hiba ----"
++
++#: src/PowerUps.cpp:180
++#, c-format
++msgid "active power ups = %d\n"
++msgstr ""
++
++#: src/PowerUps.cpp:368
++#, c-format
++msgid "?? PowerUp::seal()"
++msgstr ""
++
++#: src/ScreenItemAdd.cpp:107
++#, c-format
++msgid "ScreenItemAdd::putScreenItems() Hero??? HUH???\n"
++msgstr ""
++
++#: src/StatusDisplay.cpp:653 src/StatusDisplay.cpp:657
++msgid "p a u s e d"
++msgstr "s z ü n e t"
++
++#: src/StatusDisplay.cpp:677
++msgid "do not let -any- ships past you! each one costs you a life!"
++msgstr "minden elengedett ellenfél egy életedbe kerül!"
++
++#: src/StatusDisplay.cpp:688
++msgid "let super shields pass by for an extra life!"
++msgstr "átengedett szuper pajzs egy életet ad!"
++
++#: src/TextFTGL.cpp:35
++#, c-format
++msgid "FTGL: error loading font: %s\n"
++msgstr "FTGL: betúkészlet betöltési hiba: %s\n"
++
++#: src/TextFTGL.cpp:38
++msgid "FTGL: error loading font"
++msgstr "FTGL: betúkészlet betöltési hiba"
++
++#. TRANSLATORS: If using the FTGL backend, this should be the font
++#. name of a font that contains all the Unicode characters in use in
++#. your translation.
++#.
++#. TRANSLATORS: If using the GLC backend, this should be the font
++#. name of a font that contains all the Unicode characters in use in
++#. your translation. The GLC renderer will fall back on other fonts
++#. if some characters are not available though, so choose a font
++#. that your language looks good in.
++#.
++#: src/TextFTGL.cpp:105 src/TextGLC.cpp:41
++msgid "Gothic Uralic"
++msgstr "Liberation Sans"
++
++#. TRANSLATORS: If using the FTGL backend, this should be the path of a bold
++#. font that contains all the Unicode characters in use in	your translation.
++#. If the font is available in Debian it should be the Debian path.
++#.
++#: src/TextFTGL.cpp:135
++msgid "/usr/share/fonts/truetype/uralic/gothub__.ttf"
++msgstr "/usr/share/fonts/truetype/LiberationSans-Bold.ttf"
++
++#. TRANSLATORS: If using the FTGL backend, this should be the path of a
++#. font that contains all the Unicode characters in use in	your translation.
++#. If the font is available in Debian it should be the Debian path.
++#.
++#: src/TextFTGL.cpp:141
++msgid "/usr/share/fonts/truetype/uralic/gothu___.ttf"
++msgstr "/usr/share/fonts/truetype/LiberationSans-Regular.ttf"
++
++#. TRANSLATORS: If using the FTGL backend, this should be the path of a bold
++#. font that contains all the Unicode characters in use in	your translation.
++#. If the font is available in Mandrake it should be the Mandrake path.
++#.
++#: src/TextFTGL.cpp:148
++msgid "/usr/share/fonts/TTF/uralic/GOTHUB__.TTF"
++msgstr "/usr/share/fonts/truetype/LiberationSans-Bold.ttf"
++
++#. TRANSLATORS: If using the FTGL backend, this should be the path of a
++#. font that contains all the Unicode characters in use in	your translation.
++#. If the font is available in Mandrake it should be the Mandrake path.
++#.
++#: src/TextFTGL.cpp:154
++msgid "/usr/share/fonts/TTF/uralic/GOTHU___.TTF"
++msgstr "/usr/share/fonts/truetype/LiberationSans-Regular.ttf"
++
++#: src/TextGLC.cpp:30
++msgid "GLC: couldn't set context"
++msgstr "GLC: kontext nem indítható"
+diff -Nur orig/po/LINGUAS mod/po/LINGUAS
+--- orig/po/LINGUAS	2016-09-06 05:56:57.000000000 +0200
++++ mod/po/LINGUAS	2019-03-16 19:55:44.941558066 +0100
+@@ -2,6 +2,7 @@
+ de
+ es
+ fr
++hu
+ it
+ ro
+ ru
