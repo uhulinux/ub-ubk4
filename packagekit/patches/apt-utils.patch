@@ -1,12 +1,12 @@
 diff -Nur orig/backends/aptcc/apt-utils.cpp mod/backends/aptcc/apt-utils.cpp
 --- orig/backends/aptcc/apt-utils.cpp	2018-10-25 10:38:17.000000000 +0200
-+++ mod/backends/aptcc/apt-utils.cpp	2019-02-07 13:20:48.000000000 +0100
-@@ -30,124 +30,112 @@
++++ mod/backends/aptcc/apt-utils.cpp	2019-03-18 14:09:34.517325098 +0100
+@@ -30,124 +30,104 @@
  
  PkGroupEnum get_enum_group(string group)
  {
 -    if (group.compare ("admin") == 0) {
-+    if (group.compare ("system") == 0) {
++    if (group.compare ("System") == 0) {
          return PK_GROUP_ENUM_ADMIN_TOOLS;
 -    } else if (group.compare ("base") == 0) {
 -        return PK_GROUP_ENUM_SYSTEM;
@@ -58,10 +58,10 @@ diff -Nur orig/backends/aptcc/apt-utils.cpp mod/backends/aptcc/apt-utils.cpp
 +    } else if (group.compare ("Edutainment") == 0) {
 +        return PK_GROUP_ENUM_EDUCATION;
 +    } else if (group.compare ("Fonts") == 0) {
++        return PK_GROUP_ENUM_FONTS;
++    } else if (group.compare ("Typesetting") == 0) {
          return PK_GROUP_ENUM_FONTS;
 -    } else if (group.compare ("games") == 0) {
-+    } else if (group.compare ("Typesetting") == 0) {
-+        return PK_GROUP_ENUM_FONTS;
 +    } else if (group.compare ("Games") == 0) {
          return PK_GROUP_ENUM_GAMES;
 -    } else if (group.compare ("gnome") == 0) {
@@ -86,10 +86,34 @@ diff -Nur orig/backends/aptcc/apt-utils.cpp mod/backends/aptcc/apt-utils.cpp
 -    } else if (group.compare ("interpreters") == 0) {
 -        return PK_GROUP_ENUM_PROGRAMMING;
 -    } else if (group.compare ("introspection") == 0) {
+-        return PK_GROUP_ENUM_PROGRAMMING;
+-    } else if (group.compare ("java") == 0) {
+-        return PK_GROUP_ENUM_PROGRAMMING;
+-    } else if (group.compare ("javascript") == 0) {
+-        return PK_GROUP_ENUM_PROGRAMMING;
+-    } else if (group.compare ("kde") == 0) {
+-        return PK_GROUP_ENUM_DESKTOP_KDE;
+-    } else if (group.compare ("kernel") == 0) {
+-        return PK_GROUP_ENUM_SYSTEM;
+-    } else if (group.compare ("libdevel") == 0) {
+-        return PK_GROUP_ENUM_PROGRAMMING;
+-    } else if (group.compare ("libs") == 0) {
+-        return PK_GROUP_ENUM_SYSTEM;
+-    } else if (group.compare ("lisp") == 0) {
+-        return PK_GROUP_ENUM_PROGRAMMING;
+-    } else if (group.compare ("mail") == 0) {
 +    } else if (group.compare ("Internet") == 0) {
-+        return PK_GROUP_ENUM_INTERNET;
+         return PK_GROUP_ENUM_INTERNET;
+-    } else if (group.compare ("math") == 0) {
+-        return PK_GROUP_ENUM_SCIENCE;
+-    } else if (group.compare ("misc") == 0) {
+-        return PK_GROUP_ENUM_OTHER;
+-    } else if (group.compare ("net") == 0) {
 +    } else if (group.compare ("Networking") == 0) {
-+        return PK_GROUP_ENUM_NETWORK;
+         return PK_GROUP_ENUM_NETWORK;
+-    } else if (group.compare ("news") == 0) {
+-        return PK_GROUP_ENUM_INTERNET;
+-    } else if (group.compare ("ocaml") == 0) {
 +    } else if (group.compare ("Multimedia") == 0) {
 +        return PK_GROUP_ENUM_MULTIMEDIA;
 +    } else if (group.compare ("Office") == 0) {
@@ -106,75 +130,36 @@ diff -Nur orig/backends/aptcc/apt-utils.cpp mod/backends/aptcc/apt-utils.cpp
 +        return PK_GROUP_ENUM_OTHER;
 +    } else if (group.compare ("Compilers") == 0) {
          return PK_GROUP_ENUM_PROGRAMMING;
--    } else if (group.compare ("java") == 0) {
-+    } else if (group.compare ("Headers") == 0) {
-+        return PK_GROUP_ENUM_LEGACY;
-+    } else if (group.compare ("Interpreters") == 0) {
-         return PK_GROUP_ENUM_PROGRAMMING;
-     } else if (group.compare ("javascript") == 0) {
-         return PK_GROUP_ENUM_PROGRAMMING;
--    } else if (group.compare ("kde") == 0) {
--        return PK_GROUP_ENUM_DESKTOP_KDE;
--    } else if (group.compare ("kernel") == 0) {
--        return PK_GROUP_ENUM_SYSTEM;
--    } else if (group.compare ("libdevel") == 0) {
-+    } else if (group.compare ("Sources") == 0) {
-+        return PK_GROUP_ENUM_REPOS;
-+    } else if (group.compare ("Development") == 0) {
-         return PK_GROUP_ENUM_PROGRAMMING;
--    } else if (group.compare ("libs") == 0) {
-+    } else if (group.compare ("Editors") == 0) {
-+        return PK_GROUP_ENUM_PUBLISHING;
-+    } else if (group.compare ("Servers") == 0) {
-+        return PK_GROUP_ENUM_SERVERS;
-+    } else if (group.compare ("FileSystems") == 0) {
-         return PK_GROUP_ENUM_SYSTEM;
--    } else if (group.compare ("lisp") == 0) {
--        return PK_GROUP_ENUM_PROGRAMMING;
--    } else if (group.compare ("mail") == 0) {
--        return PK_GROUP_ENUM_INTERNET;
--    } else if (group.compare ("math") == 0) {
--        return PK_GROUP_ENUM_SCIENCE;
--    } else if (group.compare ("misc") == 0) {
--        return PK_GROUP_ENUM_OTHER;
--    } else if (group.compare ("net") == 0) {
--        return PK_GROUP_ENUM_NETWORK;
--    } else if (group.compare ("news") == 0) {
--        return PK_GROUP_ENUM_INTERNET;
--    } else if (group.compare ("ocaml") == 0) {
--        return PK_GROUP_ENUM_PROGRAMMING;
 -    } else if (group.compare ("oldlibs") == 0) {
-+    } else if (group.compare ("Editors") == 0) {
-+        return PK_GROUP_ENUM_PUBLISHING;
-+    } else if (group.compare ("Servers") == 0) {
-+        return PK_GROUP_ENUM_SERVERS;
-+    } else if (group.compare ("FileSystems") == 0) {
-+        return PK_GROUP_ENUM_SYSTEM;
-+    } else if (group.compare ("Firmware") == 0) {
++    } else if (group.compare ("Headers") == 0) {
          return PK_GROUP_ENUM_LEGACY;
 -    } else if (group.compare ("otherosfs") == 0) {
-+    } else if (group.compare ("SoftwareManagement") == 0) {
-         return PK_GROUP_ENUM_SYSTEM;
+-        return PK_GROUP_ENUM_SYSTEM;
 -    } else if (group.compare ("perl") == 0) {
 -        return PK_GROUP_ENUM_PROGRAMMING;
 -    } else if (group.compare ("php") == 0) {
 -        return PK_GROUP_ENUM_PROGRAMMING;
 -    } else if (group.compare ("python") == 0) {
--        return PK_GROUP_ENUM_PROGRAMMING;
++    } else if (group.compare ("Interpreters") == 0) {
+         return PK_GROUP_ENUM_PROGRAMMING;
 -    } else if (group.compare ("ruby") == 0) {
--        return PK_GROUP_ENUM_PROGRAMMING;
++    } else if (group.compare ("Sources") == 0) {
++        return PK_GROUP_ENUM_REPOS;
++    } else if (group.compare ("Development") == 0) {
+         return PK_GROUP_ENUM_PROGRAMMING;
 -    } else if (group.compare ("rust") == 0) {
 -        return PK_GROUP_ENUM_PROGRAMMING;
 -    } else if (group.compare ("science") == 0) {
 -        return PK_GROUP_ENUM_SCIENCE;
-     } else if (group.compare ("shells") == 0) {
-         return PK_GROUP_ENUM_SYSTEM;
+-    } else if (group.compare ("shells") == 0) {
+-        return PK_GROUP_ENUM_SYSTEM;
 -    } else if (group.compare ("sound") == 0) {
 -        return PK_GROUP_ENUM_MULTIMEDIA;
 -    } else if (group.compare ("tex") == 0) {
 -        return PK_GROUP_ENUM_PUBLISHING;
 -    } else if (group.compare ("text") == 0) {
--        return PK_GROUP_ENUM_PUBLISHING;
++    } else if (group.compare ("Editors") == 0) {
+         return PK_GROUP_ENUM_PUBLISHING;
 -    } else if (group.compare ("utils") == 0) {
 -        return PK_GROUP_ENUM_ACCESSORIES;
 -    } else if (group.compare ("vcs") == 0) {
@@ -189,6 +174,16 @@ diff -Nur orig/backends/aptcc/apt-utils.cpp mod/backends/aptcc/apt-utils.cpp
 -        return PK_GROUP_ENUM_DESKTOP_XFCE;
 -    } else if (group.compare ("zope") == 0) {
 -        return PK_GROUP_ENUM_PROGRAMMING;
++    } else if (group.compare ("Servers") == 0) {
++        return PK_GROUP_ENUM_SERVERS;
++    } else if (group.compare ("FileSystems") == 0) {
++        return PK_GROUP_ENUM_SYSTEM;
++    } else if (group.compare ("Firmware") == 0) {
++        return PK_GROUP_ENUM_LEGACY;
++    } else if (group.compare ("SoftwareManagement") == 0) {
++        return PK_GROUP_ENUM_SYSTEM;
++    } else if (group.compare ("Shells") == 0) {
++        return PK_GROUP_ENUM_SYSTEM;
 +    } else if (group.compare ("Boot") == 0) {
 +        return PK_GROUP_ENUM_SYSTEM;
 +    } else if (group.compare ("Daemons") == 0) {
@@ -214,51 +209,3 @@ diff -Nur orig/backends/aptcc/apt-utils.cpp mod/backends/aptcc/apt-utils.cpp
      } else {
          return PK_GROUP_ENUM_UNKNOWN;
      }
-diff -Nur orig/backends/aptcc/pk-backend-aptcc.cpp mod/backends/aptcc/pk-backend-aptcc.cpp
---- orig/backends/aptcc/pk-backend-aptcc.cpp	2018-10-02 10:48:01.000000000 +0200
-+++ mod/backends/aptcc/pk-backend-aptcc.cpp	2019-02-07 13:25:25.000000000 +0100
-@@ -92,27 +92,43 @@
- PkBitfield pk_backend_get_groups(PkBackend *backend)
- {
-     return pk_bitfield_from_enums(
-+                PK_GROUP_ENUM_UNKNOWN,
-+                PK_GROUP_ENUM_ACCESSIBILITY,
-+                PK_GROUP_ENUM_MAPS,
-+                PK_GROUP_ENUM_POWER_MANAGEMENT,
-+                PK_GROUP_ENUM_REPOS,
-+                PK_GROUP_ENUM_SECURITY,
-+                PK_GROUP_ENUM_VIRTUALIZATION,
-+                PK_GROUP_ENUM_NEWEST,
-+                PK_GROUP_ENUM_LAST,
-+                PK_GROUP_ENUM_ELECTRONICS,
-+                PK_GROUP_ENUM_LOCALIZATION,
-                 PK_GROUP_ENUM_ACCESSORIES,
-                 PK_GROUP_ENUM_ADMIN_TOOLS,
-                 PK_GROUP_ENUM_COMMUNICATION,
-+                PK_GROUP_ENUM_COLLECTIONS,
-                 PK_GROUP_ENUM_DOCUMENTATION,
-                 PK_GROUP_ENUM_DESKTOP_GNOME,
-                 PK_GROUP_ENUM_DESKTOP_KDE,
-+                PK_GROUP_ENUM_DESKTOP_XFCE,
-                 PK_GROUP_ENUM_DESKTOP_OTHER,
--                PK_GROUP_ENUM_ELECTRONICS,
-                 PK_GROUP_ENUM_FONTS,
-                 PK_GROUP_ENUM_GAMES,
-                 PK_GROUP_ENUM_GRAPHICS,
-                 PK_GROUP_ENUM_INTERNET,
-                 PK_GROUP_ENUM_LEGACY,
-+                PK_GROUP_ENUM_OFFICE,
-                 PK_GROUP_ENUM_LOCALIZATION,
-                 PK_GROUP_ENUM_MULTIMEDIA,
-                 PK_GROUP_ENUM_NETWORK,
-                 PK_GROUP_ENUM_OTHER,
-                 PK_GROUP_ENUM_PROGRAMMING,
-                 PK_GROUP_ENUM_PUBLISHING,
-+                PK_GROUP_ENUM_SERVERS,
-                 PK_GROUP_ENUM_SCIENCE,
-                 PK_GROUP_ENUM_SYSTEM,
-+                PK_GROUP_ENUM_VENDOR,
-+                PK_GROUP_ENUM_EDUCATION,
-                 -1);
- }
- 
