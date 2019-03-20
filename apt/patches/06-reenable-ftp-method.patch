@@ -1,0 +1,12 @@
+diff -Naur orig/apt-pkg/acquire-worker.cc patched/apt-pkg/acquire-worker.cc
+--- orig/apt-pkg/acquire-worker.cc	2019-03-08 09:41:20.000000000 +0100
++++ patched/apt-pkg/acquire-worker.cc	2019-03-20 02:15:04.139707559 +0100
+@@ -98,7 +98,7 @@
+    std::string Method;
+    if (_config->Exists(confItem))
+ 	 Method = _config->FindFile(confItem.c_str());
+-   else if (Access == "ftp" || Access == "rsh" || Access == "ssh")
++   else if (Access == "rsh" || Access == "ssh")
+       return _error->Error(_("The method '%s' is unsupported and disabled by default. Consider switching to http(s). Set Dir::Bin::Methods::%s to \"%s\" to enable it again."), Access.c_str(), Access.c_str(), Access.c_str());
+    else
+ 	 Method = _config->FindDir(methodsDir) + Access;

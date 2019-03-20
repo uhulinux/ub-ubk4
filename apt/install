@@ -9,8 +9,8 @@ DIST=${DIST,,} # convert to lowercase
 cat > "$UB_INSTALLDIR"/etc/apt/sources.list <<END
 # /etc/apt/sources.list
 
-deb [arch=amd64] ftp://ftp.ubk.hu/pkg/$DIST/main/amd64 ./
+deb [arch=amd64] http://download.ubk.hu/pkg/$DIST/main/amd64 ./
 # deb [arch=amd64] ftp://download.ubk.hu/pkg/$DIST/main/amd64 ./
-# deb [arch=amd64] http://download.ubk.hu/pkg/$DIST/main/amd64 ./
+# deb [arch=amd64] ftp://ftp.ubk.hu/pkg/$DIST/main/amd64 ./
 
 END
