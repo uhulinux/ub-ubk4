@@ -1,0 +1,10 @@
+#!/usr/bin/env dl
+
+v${UB_VERSION}.tar.gz ldc-${UB_VERSION}/
+    https://github.com/ldc-developers/ldc/archive/
+
+druntime-v${UB_VERSION}.tar.gz druntime-ldc-v${UB_VERSION}/ :runtime/druntime
+    https://github.com/ldc-developers/druntime/archive/ldc-v${UB_VERSION}.tar.gz
+
+phobos-v${UB_VERSION}.tar.gz phobos-ldc-v${UB_VERSION}/ :runtime/phobos
+    https://github.com/ldc-developers/phobos/archive/ldc-v${UB_VERSION}.tar.gz
