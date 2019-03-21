@@ -1,7 +1,7 @@
-diff -Naur orig/Makefile.in mod/Makefile.in
---- orig/Makefile.in	2015-02-12 10:31:30.000000000 +0100
-+++ mod/Makefile.in	2016-03-24 20:56:45.115248759 +0100
-@@ -207,12 +207,10 @@
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2019-01-14 02:40:56.000000000 +0100
++++ patched/Makefile.in	2019-03-21 01:50:55.847670908 +0100
+@@ -233,12 +233,10 @@
  ################################################################################
  actual_xterm  = `echo xterm|        sed '$(transform)'`
  actual_resize = `echo resize|       sed '$(transform)'`
@@ -14,7 +14,7 @@ diff -Naur orig/Makefile.in mod/Makefile.in
  binary_k8term = $(actual_k8term)
  
  install \
-@@ -255,10 +253,6 @@
+@@ -281,10 +279,6 @@
  	@$(SHELL) -c "source=\"resize\"; \
  		target=\"$(binary_resize)\"; \
  		$(InstallBinLink)"
@@ -25,7 +25,7 @@ diff -Naur orig/Makefile.in mod/Makefile.in
  	@$(SHELL) -c "source=\"koi8rxterm\"; \
  		target=\"$(binary_k8term)\"; \
  		$(InstallScript); \
-@@ -267,7 +261,7 @@
+@@ -293,7 +287,7 @@
  install \
  install-man \
  install-full :: $(MANDIR)
@@ -34,7 +34,7 @@ diff -Naur orig/Makefile.in mod/Makefile.in
  		do \
  			target=\`echo \"\$$source\" | sed '@program_transform_name@'\`; \
  			$(SHELL) ./minstall \"$(INSTALL_DATA)\" \
-@@ -290,7 +284,7 @@
+@@ -316,7 +310,7 @@
  			) \
  		fi"
  
@@ -43,7 +43,7 @@ diff -Naur orig/Makefile.in mod/Makefile.in
  
  @no_appsdir@install \
  @no_appsdir@install-app \
-@@ -486,7 +480,7 @@
+@@ -511,7 +505,7 @@
  @no_pixmapdir@	@echo "... removed icons"
  ################################################################################
  # Desktop-utils does not provide an uninstall, and is not uniformly available.
@@ -52,7 +52,7 @@ diff -Naur orig/Makefile.in mod/Makefile.in
  @desktop_utils@DESKTOP_FLAGS = @DESKTOP_FLAGS@
  @desktop_utils@install-desktop \
  @desktop_utils@install-full ::
-@@ -548,12 +542,6 @@
+@@ -578,12 +572,6 @@
  xterm.ps : xterm.$(manext)
  xterm.txt : xterm.$(manext)
  ################################################################################
