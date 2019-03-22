@@ -1,0 +1,15 @@
+diff -Naur orig/src/new_game_tab.cpp patched/src/new_game_tab.cpp
+--- orig/src/new_game_tab.cpp	2018-05-29 13:21:21.000000000 +0200
++++ patched/src/new_game_tab.cpp	2019-03-22 12:26:11.915208491 +0100
+@@ -204,9 +204,9 @@
+ 		}
+ 
+ 		QString image = images.at(i);
+-		if (QDir::match(AddImage::supportedFormats(), image)) {
++//		if (QDir::match(AddImage::supportedFormats(), image)) {
+ 			addImage(image);
+-		}
++//		}
+ 
+ 		QApplication::processEvents();
+ 	}
