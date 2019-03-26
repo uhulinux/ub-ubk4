@@ -1,7 +1,7 @@
 diff -Naur orig/mate_menu/easybuttons.py patched/mate_menu/easybuttons.py
---- orig/mate_menu/easybuttons.py	2015-12-15 00:47:17.000000000 +0100
-+++ patched/mate_menu/easybuttons.py	2015-12-19 05:52:10.335117409 +0100
-@@ -229,11 +229,11 @@
+--- orig/mate_menu/easybuttons.py	2019-03-25 16:20:49.000000000 +0100
++++ patched/mate_menu/easybuttons.py	2019-03-26 05:07:35.503123873 +0100
+@@ -230,11 +230,11 @@
  
      def getIcon ( self, iconSize ):
          if not self.iconName:
@@ -10,7 +10,7 @@ diff -Naur orig/mate_menu/easybuttons.py patched/mate_menu/easybuttons.py
  
          icon = iconManager.getIcon( self.iconName, iconSize )
          if icon is None:
--            icon = iconManager.getIcon( "application-default-icon", iconSize )
+-            icon = iconManager.getIcon( "gtk-missing-image", iconSize )
 +            icon = iconManager.getIcon( "applications-other", iconSize )
  
          return icon
