@@ -14,4 +14,8 @@ sed -i 's/__NV_VK_ICD__/libGLX_nvidia.so.0/' nvidia_icd.json.template
 bsdtar -xf nvidia-persistenced-init.tar.bz2
 patch -i "$UB_SRCDIR"/patches/menu.patch.skip
 cd kernel
+patch -i "$UB_SRCDIR"/patches/kernel-4.16.patch.skip
+cd common/inc
+patch -i "$UB_SRCDIR"/patches/kernel-4.16-2.patch.skip
+cd -
 make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
