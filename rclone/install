@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+export GOPATH="$PWD/.gopath"
+ub_install
+mkdir -p ${UB_INSTALLDIR}/usr/share/man/man1
+cp rclone.1 ${UB_INSTALLDIR}/usr/share/man/man1/

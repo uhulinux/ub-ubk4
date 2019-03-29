@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+mkdir -p .gopath/src/github.com/ncw
+ln -sf "$PWD" .gopath/src/github.com/ncw/rclone
+export GOPATH="$PWD/.gopath"
+go get github.com/ncw/rclone
+
+cd .gopath/src/github.com/ncw/rclone
+    PATH="$GOPATH/bin:$PATH" make TAG=v${UB_VERSION} rclone
+  ./rclone genautocomplete bash rclone.bash_completion
+  ./rclone genautocomplete zsh rclone.zsh_completion
