@@ -1,0 +1,63 @@
+diff -Nur orig/src/polo-uninstall mod/src/polo-uninstall
+--- orig/src/polo-uninstall	2018-08-12 06:41:58.000000000 +0200
++++ mod/src/polo-uninstall	2019-03-29 17:47:59.359645250 +0100
+@@ -1,5 +1,7 @@
+ #!/bin/bash
+ 
++echo "A polo eltávolítása csak csomgtelepítővel lehetséges!"
++exit 0
+ app_name='polo'
+ app_fullname='Polo File Manager'
+ 
+diff -Nur orig/src/share/polo/files/install-p7zip.sh mod/src/share/polo/files/install-p7zip.sh
+--- orig/src/share/polo/files/install-p7zip.sh	2018-08-12 06:41:58.000000000 +0200
++++ mod/src/share/polo/files/install-p7zip.sh	2019-03-29 17:45:23.819862390 +0100
+@@ -1,5 +1,8 @@
+ #!/bin/bash
+ 
++echo "A p7zip már telepítve van"
++exit 0
++
+ tempDir=$(mktemp -d)
+ cd $tempDir
+ echo "Using tempdir: $tempDir"
+diff -Nur orig/src/share/polo/files/install-rclone.sh mod/src/share/polo/files/install-rclone.sh
+--- orig/src/share/polo/files/install-rclone.sh	2018-08-12 06:41:58.000000000 +0200
++++ mod/src/share/polo/files/install-rclone.sh	2019-03-29 17:44:02.383973004 +0100
+@@ -1,5 +1,8 @@
+ #!/bin/bash
+ 
++echo "Az rclone már telepítve van"
++exit 0
++
+ tempDir=$(mktemp -d)
+ cd $tempDir
+ echo "Using tempdir: $tempDir"
+diff -Nur orig/src/share/polo/files/udisks2/udisks2-automount-disable.sh mod/src/share/polo/files/udisks2/udisks2-automount-disable.sh
+--- orig/src/share/polo/files/udisks2/udisks2-automount-disable.sh	2018-08-12 06:41:58.000000000 +0200
++++ mod/src/share/polo/files/udisks2/udisks2-automount-disable.sh	2019-03-29 17:37:55.816571441 +0100
+@@ -2,8 +2,8 @@
+ 
+ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+ 
+-sudo cp -vf "$SCRIPTPATH/85-no-automount.rules" /etc/udev/rules.d/85-no-automount.rules
++su -c "cp -vf ${SCRIPTPATH}/85-no-automount.rules /etc/udev/rules.d/85-no-automount.rules"
+ 
+ if [ -x "$(command -v systemctl)" ]; then
+-  sudo systemctl restart udisks2.service
++  su -c "systemctl restart udisks2.service"
+ fi
+diff -Nur orig/src/share/polo/files/udisks2/udisks2-automount-enable.sh mod/src/share/polo/files/udisks2/udisks2-automount-enable.sh
+--- orig/src/share/polo/files/udisks2/udisks2-automount-enable.sh	2018-08-12 06:41:58.000000000 +0200
++++ mod/src/share/polo/files/udisks2/udisks2-automount-enable.sh	2019-03-29 17:36:43.780690491 +0100
+@@ -1,8 +1,7 @@
+ #!/bin/bash
+ 
+-sudo rm -vf /etc/udev/rules.d/85-no-automount.rules
++su -c "rm -vf /etc/udev/rules.d/85-no-automount.rules"
+ 
+ if [ -x "$(command -v systemctl)" ]; then
+-	sudo systemctl restart udisks2.service
++	su -c "systemctl restart udisks2.service"
+ fi
+-
