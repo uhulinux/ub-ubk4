@@ -1,0 +1,13 @@
+diff -Naur orig/qtbase/mkspecs/linux-g++-64/qmake.conf patched/qtbase/mkspecs/linux-g++-64/qmake.conf
+--- orig/qtbase/mkspecs/linux-g++-64/qmake.conf	2019-03-06 08:59:50.000000000 +0100
++++ patched/qtbase/mkspecs/linux-g++-64/qmake.conf	2019-03-28 19:19:19.679102320 +0100
+@@ -18,7 +18,7 @@
+ include(../common/g++-unix.conf)
+ 
+ 
+-QMAKE_LIBDIR_X11        = /usr/X11R6/lib64
+-QMAKE_LIBDIR_OPENGL     = /usr/X11R6/lib64
++QMAKE_LIBDIR_X11        = /usr/lib
++QMAKE_LIBDIR_OPENGL     = /usr/lib
+ 
+ load(qt_config)
