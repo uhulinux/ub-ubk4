@@ -1,0 +1,12 @@
+diff -Naur orig/etc/ldc2.conf patched/etc/ldc2.conf
+--- orig/etc/ldc2.conf	2019-03-24 02:32:41.000000000 +0100
++++ patched/etc/ldc2.conf	2019-03-31 03:41:41.440067374 +0200
+@@ -23,7 +23,7 @@
+     ];
+     // default switches appended after all explicit command-line switches
+     post-switches = [
+-        "-I%%ldcbinarypath%%/../import",
++        "-I/usr/include/import",
+     ];
+     // default directories to be searched for libraries when linking
+     lib-dirs = [

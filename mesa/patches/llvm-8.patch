@@ -1,0 +1,16 @@
+diff --git a/src/gallium/state_trackers/clover/llvm/compat.hpp b/src/gallium/state_trackers/clover/llvm/compat.hpp
+index 975012cbda..9c5b9d8917 100644
+--- a/src/gallium/state_trackers/clover/llvm/compat.hpp
++++ b/src/gallium/state_trackers/clover/llvm/compat.hpp
+@@ -58,7 +58,11 @@
+ #include <llvm/Analysis/TargetLibraryInfo.h>
+ 
+ #include <clang/Basic/TargetInfo.h>
++#if HAVE_LLVM >= 0x0800
++#include <clang/Basic/CodeGenOptions.h>
++#else
+ #include <clang/Frontend/CodeGenOptions.h>
++#endif
+ #include <clang/Frontend/CompilerInstance.h>
+ 
+ namespace clover {

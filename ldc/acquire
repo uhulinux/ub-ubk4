@@ -1,10 +1,15 @@
 #!/usr/bin/env dl
 
-v${UB_VERSION}.tar.gz ldc-${UB_VERSION}/
+# comment out if BINARY=0
+#ldc2-${UB_VERSION/~/-}-linux-x86_64.tar.xz ldc2-${UB_VERSION/~/-}-linux-x86_64/
+#    https://github.com/ldc-developers/ldc/releases/download/v${UB_VERSION/~/-}/
+
+# comment out if BINARY=1
+v${UB_VERSION/~/-}.tar.gz ldc-${UB_VERSION/~/-}/
     https://github.com/ldc-developers/ldc/archive/
 
-druntime-v${UB_VERSION}.tar.gz druntime-ldc-v${UB_VERSION}/ :runtime/druntime
-    https://github.com/ldc-developers/druntime/archive/ldc-v${UB_VERSION}.tar.gz
+druntime-v${UB_VERSION/~/-}.tar.gz druntime-ldc-v${UB_VERSION/~/-}/ :runtime/druntime
+    https://github.com/ldc-developers/druntime/archive/ldc-v${UB_VERSION/~/-}.tar.gz
 
-phobos-v${UB_VERSION}.tar.gz phobos-ldc-v${UB_VERSION}/ :runtime/phobos
-    https://github.com/ldc-developers/phobos/archive/ldc-v${UB_VERSION}.tar.gz
+phobos-v${UB_VERSION/~/-}.tar.gz phobos-ldc-v${UB_VERSION/~/-}/ :runtime/phobos
+    https://github.com/ldc-developers/phobos/archive/ldc-v${UB_VERSION/~/-}.tar.gz
