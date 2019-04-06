@@ -1,6 +1,6 @@
 diff -Naur orig/sysui/desktop/menus/base.desktop patched/sysui/desktop/menus/base.desktop
---- orig/sysui/desktop/menus/base.desktop	2018-05-24 19:00:05.000000000 +0200
-+++ patched/sysui/desktop/menus/base.desktop	2018-06-11 20:11:30.229417298 +0200
+--- orig/sysui/desktop/menus/base.desktop	2019-03-29 17:26:59.000000000 +0100
++++ patched/sysui/desktop/menus/base.desktop	2019-04-05 23:14:10.768968980 +0200
 @@ -20,7 +20,6 @@
  Terminal=false
  Icon=base
@@ -10,8 +10,8 @@ diff -Naur orig/sysui/desktop/menus/base.desktop patched/sysui/desktop/menus/bas
  MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base;
  Name=%PRODUCTNAME Base
 diff -Naur orig/sysui/desktop/menus/calc.desktop patched/sysui/desktop/menus/calc.desktop
---- orig/sysui/desktop/menus/calc.desktop	2018-05-24 19:00:05.000000000 +0200
-+++ patched/sysui/desktop/menus/calc.desktop	2018-06-11 20:11:30.229417298 +0200
+--- orig/sysui/desktop/menus/calc.desktop	2019-03-29 17:26:59.000000000 +0100
++++ patched/sysui/desktop/menus/calc.desktop	2019-04-05 23:14:10.768968980 +0200
 @@ -20,7 +20,6 @@
  Terminal=false
  Icon=calc
@@ -21,8 +21,8 @@ diff -Naur orig/sysui/desktop/menus/calc.desktop patched/sysui/desktop/menus/cal
  MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.sun.xml.calc;application/vnd.sun.xml.calc.template;application/msexcel;application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.ms-excel.sheet.macroEnabled.12;application/vnd.openxmlformats-officedocument.spreadsheetml.template;application/vnd.ms-excel.template.macroEnabled.12;application/vnd.ms-excel.sheet.binary.macroEnabled.12;text/csv;application/x-dbf;text/spreadsheet;application/csv;application/excel;application/tab-separated-values;application/vnd.lotus-1-2-3;application/vnd.oasis.opendocument.chart;application/vnd.oasis.opendocument.chart-template;application/x-dbase;application/x-dos_ms_excel;application/x-excel;application/x-msexcel;application/x-ms-excel;application/x-quattropro;application/x-123;text/comma-separated-values;text/tab-separated-values;text/x-comma-separated-values;text/x-csv;application/vnd.oasis.opendocument.spreadsheet-flat-xml;application/vnd.ms-works;application/clarisworks;application/x-iwork-numbers-sffnumbers;application/x-starcalc;
  Name=%PRODUCTNAME Calc
 diff -Naur orig/sysui/desktop/menus/draw.desktop patched/sysui/desktop/menus/draw.desktop
---- orig/sysui/desktop/menus/draw.desktop	2018-05-24 19:00:05.000000000 +0200
-+++ patched/sysui/desktop/menus/draw.desktop	2018-06-11 20:11:30.229417298 +0200
+--- orig/sysui/desktop/menus/draw.desktop	2019-03-29 17:26:59.000000000 +0100
++++ patched/sysui/desktop/menus/draw.desktop	2019-04-05 23:14:10.768968980 +0200
 @@ -20,7 +20,7 @@
  Terminal=false
  Icon=draw
@@ -30,11 +30,11 @@ diff -Naur orig/sysui/desktop/menus/draw.desktop patched/sysui/desktop/menus/dra
 -Categories=Office;FlowChart;Graphics;2DGraphics;VectorGraphics;X-Red-Hat-Base;X-MandrivaLinux-Office-Drawing;
 +Categories=Graphics;2DGraphics;VectorGraphics;
  Exec=${UNIXBASISROOTNAME} --draw %%FILE%%
- MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-flat-xml;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.visio;application/x-wpg;application/vnd.corel-draw;application/vnd.ms-publisher;image/x-freehand;application/clarisworks;application/x-pagemaker;application/pdf;application/x-stardraw;
+ MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-flat-xml;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.visio;application/x-wpg;application/vnd.corel-draw;application/vnd.ms-publisher;image/x-freehand;application/clarisworks;application/x-pagemaker;application/pdf;application/x-stardraw;image/x-emf;image/x-wmf;
  Name=%PRODUCTNAME Draw
 diff -Naur orig/sysui/desktop/menus/impress.desktop patched/sysui/desktop/menus/impress.desktop
---- orig/sysui/desktop/menus/impress.desktop	2018-05-24 19:00:05.000000000 +0200
-+++ patched/sysui/desktop/menus/impress.desktop	2018-06-11 20:11:30.229417298 +0200
+--- orig/sysui/desktop/menus/impress.desktop	2019-03-29 17:26:59.000000000 +0100
++++ patched/sysui/desktop/menus/impress.desktop	2019-04-05 23:14:10.768968980 +0200
 @@ -20,7 +20,6 @@
  Terminal=false
  Icon=impress
@@ -44,8 +44,8 @@ diff -Naur orig/sysui/desktop/menus/impress.desktop patched/sysui/desktop/menus/
  MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.ms-powerpoint.presentation.macroEnabled.12;application/vnd.openxmlformats-officedocument.presentationml.template;application/vnd.ms-powerpoint.template.macroEnabled.12;application/vnd.openxmlformats-officedocument.presentationml.slide;application/vnd.openxmlformats-officedocument.presentationml.slideshow;application/vnd.ms-powerpoint.slideshow.macroEnabled.12;application/vnd.oasis.opendocument.presentation-flat-xml;application/x-iwork-keynote-sffkey;
  Name=%PRODUCTNAME Impress
 diff -Naur orig/sysui/desktop/menus/math.desktop patched/sysui/desktop/menus/math.desktop
---- orig/sysui/desktop/menus/math.desktop	2018-05-24 19:00:05.000000000 +0200
-+++ patched/sysui/desktop/menus/math.desktop	2018-06-11 20:11:30.229417298 +0200
+--- orig/sysui/desktop/menus/math.desktop	2019-03-29 17:26:59.000000000 +0100
++++ patched/sysui/desktop/menus/math.desktop	2019-04-05 23:14:10.768968980 +0200
 @@ -21,7 +21,7 @@
  NoDisplay=false
  Icon=math
@@ -56,8 +56,8 @@ diff -Naur orig/sysui/desktop/menus/math.desktop patched/sysui/desktop/menus/mat
  MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.oasis.opendocument.formula-template;text/mathml;application/mathml+xml;
  Name=%PRODUCTNAME Math
 diff -Naur orig/sysui/desktop/menus/startcenter.desktop patched/sysui/desktop/menus/startcenter.desktop
---- orig/sysui/desktop/menus/startcenter.desktop	2018-05-24 19:00:05.000000000 +0200
-+++ patched/sysui/desktop/menus/startcenter.desktop	2018-06-11 20:11:37.837518744 +0200
+--- orig/sysui/desktop/menus/startcenter.desktop	2019-03-29 17:26:59.000000000 +0100
++++ patched/sysui/desktop/menus/startcenter.desktop	2019-04-05 23:14:10.768968980 +0200
 @@ -21,7 +21,6 @@
  NoDisplay=false
  Icon=startcenter
@@ -67,8 +67,8 @@ diff -Naur orig/sysui/desktop/menus/startcenter.desktop patched/sysui/desktop/me
  MimeType=application/vnd.openofficeorg.extension;x-scheme-handler/vnd.libreoffice.cmis;
  Name=%PRODUCTNAME
 diff -Naur orig/sysui/desktop/menus/writer.desktop patched/sysui/desktop/menus/writer.desktop
---- orig/sysui/desktop/menus/writer.desktop	2018-05-24 19:00:05.000000000 +0200
-+++ patched/sysui/desktop/menus/writer.desktop	2018-06-11 20:11:37.837518744 +0200
+--- orig/sysui/desktop/menus/writer.desktop	2019-03-29 17:26:59.000000000 +0100
++++ patched/sysui/desktop/menus/writer.desktop	2019-04-05 23:14:10.768968980 +0200
 @@ -20,7 +20,6 @@
  Terminal=false
  Icon=writer

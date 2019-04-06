@@ -1,8 +1,6 @@
 #!/bin/sh -eux
 
-mkdir -p "${UB_INSTALLDIR}"/usr/share/{avidemux6,pixmaps,applications}
-cp avidemux_icon.png ${UB_INSTALLDIR}/usr/share/pixmaps/avidemux.png
-cp avidemux2.desktop "${UB_INSTALLDIR}"/usr/share/applications/avidemux3.desktop
-cp man/avidemux.1 ${UB_INSTALLDIR}/usr/share/man/man1/
+# a build során minden az UB_INSTALLDIR alá kerül,
+# nem kell külön install
 ln -s avidemux3_qt5 "${UB_INSTALLDIR}"/usr/bin/avidemux
 rm -rf ${UB_INSTALLDIR}/usr/share/ADM6_addons
