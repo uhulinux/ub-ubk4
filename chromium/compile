@@ -46,12 +46,32 @@ use_gnome_keyring=false
 use_kerberos=false
 use_pulseaudio=true
 link_pulseaudio=true
+use_system_freetype=true
+use_system_harfbuzz=true
+use_system_lcms2=true
+use_system_libjpeg=true
+use_system_libpng=true
+use_system_zlib=true
+skia_use_system_libpng=true
 ")
 
-# a chromium szeret patkolt, nem kiadott libeket használni
-# (libjpeg, libpng, libvpx, libwebp, libxml, libevent, zlib stb.)
-# csak ezeket érdemes használni a rendszerből
+# rendszerből használadó libek
 _syslibs=(
+    ffmpeg
+    flac
+    fontconfig
+    freetype
+    harfbuzz-ng
+    icu
+    libdrm
+    libevent
+    libjpeg
+    libpng
+#   libvpx # 1.7.0 + git
+    libwebp
+    libxml
+    libxslt
+    opus
 	flac
 	yasm
 )
