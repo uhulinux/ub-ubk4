@@ -1,1 +1,2 @@
-u2d https://github.com/taq/ftmenu/releases/
+dir=$(sflist ftmenu ftmenu | sort -V | tail -n 1)
+sflist ftmenu ftmenu/$dir | parsever | sort -V | tail -n 1
