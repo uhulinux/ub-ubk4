@@ -1,0 +1,38 @@
+From: Anibal Avelar <aavelar@cofradia.org>
+Last-Update: 2013-01-04
+Description: changed_hiscore_name
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3
+--- a/src/njam.cpp
++++ b/src/njam.cpp
+@@ -227,7 +227,7 @@ NjamEngine::~NjamEngine()
+ 	}
+ 
+ 		// format: NAME#POINTS#LEVEL#
+-	fp = fopen("hiscore.dat", "w+");
++	fp = fopen("njam-hiscore.dat", "w+");
+ 	if (fp)
+ 	{
+ 		for (int i=0; i<10; i++)
+@@ -623,7 +623,7 @@ bool NjamEngine::Init(bool Fullscreen, b
+         LogFile("Failed to open conf file.\n");
+ 
+ 	// create default hiscore
+-    LogFile("Creating default hiscore.\n");
++    LogFile("Creating default njam-hiscore.\n");
+ 	char DefaultNames[10][10] = {
+ 		"MILAN", 		"TANJA",
+ 		"DULIO", 		"DJORDJE",
+@@ -639,10 +639,10 @@ bool NjamEngine::Init(bool Fullscreen, b
+ 
+ 	// load hiscore from file (if any)
+ 	// format: NAME#POINTS#LEVEL#
+-	fp = fopen("hiscore.dat", "r");
++	fp = fopen("njam-hiscore.dat", "r");
+ 	if (fp)
+ 	{
+-		LogFile("Reading hiscore.dat\n");
++		LogFile("Reading njam-hiscore.dat\n");
+ 		char buff[40];
+ 		int number = 0;
+ 		while (!feof(fp) && number < 10)
