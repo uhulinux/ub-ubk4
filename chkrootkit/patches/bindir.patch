@@ -1,7 +1,7 @@
-diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
---- chkrootkit-0.49-orig/chkrootkit	2009-07-30 16:10:54.000000000 +0200
-+++ chkrootkit-0.49/chkrootkit	2009-11-01 09:28:25.000000000 +0100
-@@ -31,6 +31,9 @@
+diff -Nur orig/chkrootkit mod/chkrootkit
+--- orig/chkrootkit	2019-02-12 00:58:02.000000000 +0100
++++ mod/chkrootkit	2019-04-15 15:13:14.160559368 +0200
+@@ -35,6 +35,9 @@
  # Tools
  TOOLS="aliens asp bindshell lkm rexedcs sniffer w55808 wted scalper slapper z2 chkutmp OSX_RSPLUG"
  
@@ -11,7 +11,7 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
  # Return Codes
  INFECTED=0
  NOT_INFECTED=1
-@@ -171,6 +174,7 @@
+@@ -183,6 +186,7 @@
  }
  
  sniffer () {
@@ -19,7 +19,7 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
      if [ "${ROOTDIR}" != "/" ]; then
        echo "not tested"
        return ${NOT_TESTED}
-@@ -181,23 +185,23 @@
+@@ -193,31 +197,31 @@
      fi
  
      if [ "${EXPERT}" = "t" ]; then
@@ -27,51 +27,50 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
 +        expertmode_output "$BIN/ifpromisc" -v
          return 5
      fi
-     if [ ! -x ./ifpromisc ]; then
+-    if [ ! -x ./ifpromisc ]; then
 -      echo "not tested: can't exec ./ifpromisc"
--      return ${NOT_TESTED}
-+     if [ ! -x "$BIN/ifpromisc" ]; then
++    if [ ! -x $BIN/ifpromisc ]; then
 +      echo "not tested: can't exec $BIN/ifpromisc"
+       return ${NOT_TESTED}
      else
 -      [ "${QUIET}" != "t" ] && ./ifpromisc -v || ./ifpromisc -q
-+      [ "${QUIET}" != "t" ] && "$BIN/ifpromisc" -v || "$BIN/ifpromisc" -q
++      [ "${QUIET}" != "t" ] && $BIN/ifpromisc -v || $BIN/ifpromisc -q
      fi
  }
  
  chkutmp() {
--    if [ ! -x ./chkutmp ]; then
+-    if [ ! -x ./chkutmp -o ${mode} = "pm" ]; then
 -      echo "not tested: can't exec ./chkutmp"
-+    if [ ! -x "$BIN/chkutmp" ]; then
++    if [ ! -x $BIN/chkutmp -o ${mode} = "pm" ]; then
 +      echo "not tested: can't exec $BIN/chkutmp"
        return ${NOT_TESTED}
      fi
 -    if ./chkutmp
-+    if "$BIN/chkutmp"
++    if $BIN/chkutmp
      then
        if [ "${QUIET}" != "t" ]; then echo "chkutmp: nothing deleted"; fi
      fi
-@@ -205,8 +209,8 @@
  }
  
  z2 () {
 -    if [ ! -x ./chklastlog ]; then
 -      echo "not tested: can't exec ./chklastlog"
-+     if [ ! -x "$BIN/chklastlog" ]; then
++    if [ ! -x $BIN/chklastlog ]; then
 +      echo "not tested: can't exec $BIN/chklastlog"
        return ${NOT_TESTED}
      fi
  
-@@ -219,32 +223,32 @@
+@@ -230,32 +234,32 @@
      fi
  
      if [ "${EXPERT}" = "t" ]; then
--        expertmode_output "./chklastlog -f ${WTMP} -l ${LASTLOG}"
-+        expertmode_output "$BIN/chklastlog -f ${WTMP} -l ${LASTLOG}"
+-        expertmode_output "./chklastlog -f ${ROOTDIR}${WTMP} -l ${ROOTDIR}${LASTLOG}"
++        expertmode_output "$BIN/chklastlog -f ${ROOTDIR}${WTMP} -l ${ROOTDIR}${LASTLOG}"
          return 5
      fi
  
--    if ./chklastlog -f ${WTMP} -l ${LASTLOG}
-+    if "$BIN/chklastlog" -f ${WTMP} -l ${LASTLOG}
+-    if ./chklastlog -f ${ROOTDIR}${WTMP} -l ${ROOTDIR}${LASTLOG}
++    if "$BIN/chklastlog" -f ${ROOTDIR}${WTMP} -l ${ROOTDIR}${LASTLOG}
      then
        if [ "${QUIET}" != "t" ]; then echo "chklastlog: nothing deleted"; fi
      fi
@@ -80,7 +79,7 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
  wted () {
 -    if [ ! -x ./chkwtmp ]; then
 -      echo "not tested: can't exec ./chkwtmp"
-+    if [ ! -x "$BIN/chkwtmp" ]; then
++    if [ ! -x $BIN/chkwtmp ]; then
 +      echo "not tested: can't exec $BIN/chkwtmp"
        return ${NOT_TESTED}
      fi
@@ -88,7 +87,7 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
     if [ "$SYSTEM" = "SunOS" ]; then
 -       if [ ! -x ./check_wtmpx ]; then
 -          echo "not tested: can't exec ./check_wtmpx"
-+       if [ ! -x "$BIN/check_wtmpx" ]; then
++       if [ ! -x $BIN/check_wtmpx ]; then
 +          echo "not tested: can't exec $BIN/check_wtmpx"
         else
            if [ "${EXPERT}" = "t" ]; then
@@ -98,11 +97,11 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
            fi
  	  if [ -f ${ROOTDIR}var/adm/wtmp ]; then
 -             if ./check_wtmpx
-+              if "$BIN/check_wtmpx"
++             if $BIN/check_wtmpx
                  then
                  if [ "${QUIET}" != "t" ]; then \
                     echo "check_wtmpx: nothing deleted in /var/adm/wtmpx"; fi
-@@ -255,12 +259,12 @@
+@@ -266,12 +270,12 @@
         WTMP=`loc wtmp wtmp "${ROOTDIR}var/log ${ROOTDIR}var/adm"`
  
         if [ "${EXPERT}" = "t" ]; then
@@ -117,18 +116,18 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
      then
        if [ "${QUIET}" != "t" ]; then echo "chkwtmp: nothing deleted"; fi
      fi
-@@ -298,8 +302,8 @@
+@@ -311,8 +315,8 @@
      prog=""
      if [  \( "${SYSTEM}" = "Linux"  -o \( "${SYSTEM}" = "FreeBSD" -a \
         `echo ${V} | ${awk} '{ if ($1 > 4.3 || $1 < 6.0) print 1; else print 0 }'` -eq 1 \) \) -a "${ROOTDIR}" = "/" ]; then
--      [  -x ./chkproc -a "`find /proc | wc -l`" -gt 1 ] && prog="./chkproc"
+-       [  -x ./chkproc -a "`find /proc 2>/dev/null| wc -l`" -gt 1 ] && prog="./chkproc"
 -      [  -x ./chkdirs ] && prog="$prog ./chkdirs"
-+      [ ! -x $BIN/chkproc ] && prog="$BIN/chkproc"
-+      [ ! -x $BIN/chkdirs ] && prog="$prog $BIN/chkdirs"
-       if [ "$prog" = "" ]; then
++       [  -x $BIN/chkproc -a "`find /proc 2>/dev/null| wc -l`" -gt 1 ] && prog="$BIN/chkproc"
++      [  -x $BIN/chkdirs ] && prog="$prog $BIN/chkdirs"
+       if [ "$prog" = "" -o ${mode} = "pm" ]; then
           echo "not tested: can't exec $prog"
           return ${NOT_TESTED}
-@@ -311,7 +315,7 @@
+@@ -324,7 +328,7 @@
           PV=`$ps -V 2>/dev/null| $cut -d " " -f 3 |${awk} -F . '{ print $1 "." $2 $3 }' | ${awk} '{ if ($0 > 3.19) print 3; else if ($0 < 2.015) print 1; else print 2 }'`
           [ "$PV" = "" ] &&  PV=2
           [ "${SYSTEM}" = "SunOS" ] && PV=0
@@ -137,7 +136,7 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
           return 5
        fi
  
-@@ -338,7 +342,7 @@
+@@ -351,7 +355,7 @@
        if [ "${DEBUG}" = "t" ]; then
             ${echo} "*** PV=$PV ***"
        fi
@@ -146,7 +145,16 @@ diff -Naur chkrootkit-0.49-orig/chkrootkit chkrootkit-0.49/chkrootkit
           if [ "${QUIET}" != "t" ]; then echo "chkproc: nothing detected"; fi
        else
           echo "chkproc: Warning: Possible LKM Trojan installed"
-@@ -1718,18 +1722,18 @@
+@@ -360,7 +364,7 @@
+       for i in /usr/share /usr/bin /usr/sbin /lib; do
+          [ -d $i ] && dirs="$dirs $i"
+       done
+-      if ./chkdirs $dirs;  then
++      if $BIN/chkdirs $dirs;  then
+          if [ "${QUIET}" != "t" ]; then echo "chkdirs: nothing detected"; fi
+       else
+ 	    echo "chkdirs: Warning: Possible LKM Trojan installed"
+@@ -1887,18 +1891,18 @@
  
     if [ "${SYSTEM}" = "Linux" ]
     then
