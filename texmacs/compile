@@ -1,12 +1,14 @@
 #!/bin/sh -eux
 
-export QMAKE=qmake-qt4
-export MOC=moc-qt4
-export UIC=uic-qt4
-export RCC=/usr/lib/qt4/bin/rcc
+export QMAKE=qmake-qt5
+export MOC=moc-qt5
+export UIC=uic-qt5
+export RCC=/usr/lib/qt5/bin/rcc
 export LDFLAGS="-lz"
 sed -i '/^LDPATH/d' src/makefile.in
 export GUILE_CONFIG='/usr/bin/guile-config1.8'
+export CXXFLAGS="-fPIC -I/usr/lib/qt5/include/QtPrintSupport"
+export LDFLAGS=`pkg-config --libs Qt5PrintSupport`
 ./configure \
 	--prefix=/usr \
 	--enable-pdf-renderer \
