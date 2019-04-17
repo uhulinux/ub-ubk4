@@ -1,5 +1,10 @@
 #!/bin/sh -eux
 
+cd py2
+ub_install \
+	HTML_DIR=/usr/share/doc/libxml2
+cd ../py3
 ub_install \
 	HTML_DIR=/usr/share/doc/libxml2
 rm -rf ${UB_INSTALLDIR}/usr/share/doc
+cp AUTHORS COPYING Copyright NEWS README TODO TODO_SCHEMAS ../
