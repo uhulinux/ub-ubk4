@@ -1,8 +1,54 @@
 #!/bin/sh -eux
 
-ub_install soinstall
+# alapinstalláció
+make DESTDIR="${UB_INSTALLDIR}" \
+    CUPSSERVERROOT="${UB_INSTALLDIR}$(cups-config --serverroot)" \
+    CUPSSERVERBIN="${UB_INSTALLDIR}$(cups-config --serverbin)" \
+    soinstall
 
+# elegendő egy szimlink
+ln -s gsc "${UB_INSTALLDIR}"/usr/bin/gs
+
+# remove useless broken doc/ symlink - FS#59507
+rm -f "${UB_INSTALLDIR}"/usr/share/ghostscript/${UB_VERSION}/doc
+
+# remove unwanted localized manpages
+rm -r "${UB_INSTALLDIR}"/usr/share/man/de
+
+# ez egy hagyaték
 cp "$UB_COMPILEDIR"/base/gserrors.h "$UB_INSTALLDIR"/usr/include/ghostscript/
 
+# tools
+mkdir -p ${UB_INSTALLDIR}/usr/share/ghostpcl
+if [ -d 'tools' ]; then
+    cp -pr 'tools' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+    cp -pr 'urwfonts' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+    #install -d "${UB_INSTALLDIR}/usr/share/ghostpcl/doc"
+    for _doc in 'README.txt' doc/ghost* 'doc/who_owns_what.txt'; do
+      install -Dpm644 "${_doc}" -t "${UB_INSTALLDIR}/usr/share/ghostpcl/doc/"
+    done
+  else # as of 9.18
+    cp -pr {xps,pcl}/'tools' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+    cp -pr 'pcl/urwfonts' "${UB_INSTALLDIR}/usr/share/ghostpcl/"
+fi
+
+# ghostxsp rész
+cp sobin/gxpsc "${UB_INSTALLDIR}"/usr/bin/
+ln -s gxpsc "${UB_INSTALLDIR}"/usr/bin/gxps
+cp sobin/libgxps.so.${UB_VERSION} "${UB_INSTALLDIR}"/usr/lib/
+ln -s libgxps.so.${UB_VERSION} "${UB_INSTALLDIR}"/usr/lib/libgxps.so.${UB_VERSION_HEAD1}
+ln -s libgxps.so.${UB_VERSION_HEAD1} "${UB_INSTALLDIR}"/usr/lib/libgxps.so
+
+# ghostpcl rész
+cp sobin/gpcl6c "${UB_INSTALLDIR}"/usr/bin/
+ln -s gpcl6c "${UB_INSTALLDIR}"/usr/bin/gpcl6
+ln -s gpcl6 "${UB_INSTALLDIR}"/usr/bin/pcl6
+ln -s "${UB_INSTALLDIR}"/usr/share/ghostpcl/tools/pcl2pdf "${UB_INSTALLDIR}"/usr/bin/pcl2pdf
+ln -s "${UB_INSTALLDIR}"/usr/share/ghostpcl/tools/pcl2pdfwr "${UB_INSTALLDIR}"/usr/bin/pcl2pdfwr
+cp sobin/libgpcl6.so.${UB_VERSION} "${UB_INSTALLDIR}"/usr/lib/
+ln -s libgpcl6.so.${UB_VERSION} "${UB_INSTALLDIR}"/usr/lib/libgpcl6.so.${UB_VERSION_HEAD1}
+ln -s libgpcl6.so.${UB_VERSION_HEAD1} "${UB_INSTALLDIR}"/usr/lib/libgpcl6.so
+
+# ijs
 cd ijs
 ub_install

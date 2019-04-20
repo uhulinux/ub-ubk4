@@ -1,11 +1,19 @@
 #!/bin/sh -eux
 
+rm -r  cups/libs expat libpng openjpeg tiff zlib
+rm -rf gpdl
 ub_configure \
-	--enable-cups \
-	--with-drivers=ALL \
+	--enable-dynamic \
 	--with-ijs \
+	--with-drivers=ALL \
 	--with-fontpath="/usr/share/fonts/ghostscript:/usr/share/fonts/Type1:/usr/share/fonts/truetype" \
-	--with-system-libtiff
+	--enable-fontconfig \
+	--enable-freetype \
+	--enable-openjpeg \
+	--without-luratech \
+	--with-system-libtiff \
+	--with-system-libpaper \
+	--disable-compile-inits
 
 ub_make so
 
