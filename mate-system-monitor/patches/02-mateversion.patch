@@ -1,7 +1,7 @@
 diff -Naur orig/src/sysinfo.cpp patched/src/sysinfo.cpp
---- orig/src/sysinfo.cpp	2015-07-02 23:46:27.000000000 +0200
-+++ patched/src/sysinfo.cpp	2015-09-12 22:36:17.203064237 +0200
-@@ -292,10 +292,9 @@
+--- orig/src/sysinfo.cpp	2019-04-24 23:41:08.879822452 +0200
++++ patched/src/sysinfo.cpp	2019-04-24 23:42:22.292565327 +0200
+@@ -330,10 +330,9 @@
          {
              xmlDocPtr document;
              xmlXPathContextPtr context;
@@ -15,7 +15,7 @@ diff -Naur orig/src/sysinfo.cpp patched/src/sysinfo.cpp
  
              if (not (document = xmlParseFile(DATADIR "/mate-about/mate-version.xml")))
                  return;
-@@ -303,7 +302,7 @@
+@@ -341,7 +340,7 @@
              if (not (context = xmlXPathNewContext(document)))
                  return;
  
@@ -24,7 +24,7 @@ diff -Naur orig/src/sysinfo.cpp patched/src/sysinfo.cpp
              {
                  xmlXPathObjectPtr xpath;
                  xpath = xmlXPathEvalExpression(BAD_CAST nodes[i].c_str(), context);
-@@ -317,8 +316,8 @@
+@@ -355,8 +354,8 @@
              xmlXPathFreeContext(context);
              xmlFreeDoc(document);
  
