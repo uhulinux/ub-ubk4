@@ -1,0 +1,13 @@
+diff -Naur orig/src-qt5/OS-detect.pri patched/src-qt5/OS-detect.pri
+--- orig/src-qt5/OS-detect.pri	2019-04-30 01:35:38.488758467 +0200
++++ patched/src-qt5/OS-detect.pri	2019-04-30 01:36:59.789741365 +0200
+@@ -81,6 +81,9 @@
+       isEmpty(L_ETCDIR){ L_ETCDIR = $${PREFIX}/../etc }
+       isEmpty(L_MANDIR){ L_MANDIR = $${PREFIX}/share/man }
+     }
++    equals(LINUX_DISTRO,"UHU-Linux"){
++      INCLUDEPATH *= /usr/include/poppler/qt5
++    }
+   }else{
+     OS="Unknown";
+   }

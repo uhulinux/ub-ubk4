@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+cd src-qt5
+qmake \
+	PREFIX="/usr" \
+	L_ETCDIR="/etc" \
+	L_MANDIR="/usr/share/man" \
+	QMAKE_LFLAGS="-Wl,--as-needed" \
+	QMAKE_CFLAGS_ISYSTEM= \
+	CONFIG+=WITH_I18N \
+	src-qt5.pro
+
+ub_compile
