@@ -1,6 +1,6 @@
-diff -Naur xfce4-power-manager-1.6.1-orig/settings/xfce4-power-manager-settings.desktop.in xfce4-power-manager-1.6.1/settings/xfce4-power-manager-settings.desktop.in
---- xfce4-power-manager-1.6.1-orig/settings/xfce4-power-manager-settings.desktop.in	2017-11-24 00:52:06.000000000 +0100
-+++ xfce4-power-manager-1.6.1/settings/xfce4-power-manager-settings.desktop.in	2017-12-30 19:02:43.100294857 +0100
+diff -Nur orig/settings/xfce4-power-manager-settings.desktop.in mod/settings/xfce4-power-manager-settings.desktop.in
+--- orig/settings/xfce4-power-manager-settings.desktop.in	2019-05-17 15:43:56.000000000 +0200
++++ mod/settings/xfce4-power-manager-settings.desktop.in	2019-05-20 20:36:34.096031025 +0200
 @@ -8,7 +8,7 @@
  Terminal=false
  Type=Application
@@ -10,13 +10,13 @@ diff -Naur xfce4-power-manager-1.6.1-orig/settings/xfce4-power-manager-settings.
  StartupNotify=true
  X-XfcePluggable=true
  X-XfceHelpComponent=xfce4-power-manager
-diff -Naur xfce4-power-manager-1.6.1-orig/src/xfce4-power-manager.desktop.in xfce4-power-manager-1.6.1/src/xfce4-power-manager.desktop.in
---- xfce4-power-manager-1.6.1-orig/src/xfce4-power-manager.desktop.in	2017-11-24 00:52:06.000000000 +0100
-+++ xfce4-power-manager-1.6.1/src/xfce4-power-manager.desktop.in	2017-12-30 18:55:43.213837242 +0100
+diff -Nur orig/src/xfce4-power-manager.desktop.in mod/src/xfce4-power-manager.desktop.in
+--- orig/src/xfce4-power-manager.desktop.in	2019-05-17 15:43:56.000000000 +0200
++++ mod/src/xfce4-power-manager.desktop.in	2019-05-20 20:37:05.184048178 +0200
 @@ -5,5 +5,5 @@
  Exec=xfce4-power-manager
  Terminal=false
  Type=Application
--NotShowIn=GNOME;KDE;Unity;MATE;
+-NotShowIn=GNOME;KDE;Unity;MATE;LXQt;
 +OnlyShowIn=XFCE;
  StartupNotify=false
