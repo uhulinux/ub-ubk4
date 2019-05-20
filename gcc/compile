@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
-# Do not run fixincludes
-sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+# ada, brig, jit, objcp
 
 cd "$UB_OBJECTDIR"
 
@@ -20,18 +19,21 @@ SED=sed \
 	--prefix=/usr \
 	--infodir=/usr/share/info \
 	--mandir=/usr/share/man \
-	--enable-languages=c,c++,d,fortran,objc \
+	--enable-languages=c,c++,d,fortran,go,objc \
 	--enable-targets=all \
 	--enable-checking=release \
 	--enable-shared \
 	--enable-threads=posix \
+	--enable-gold \
+	--enable-ld=default \
 	--enable-lto \
 	--enable-plugin \
 	--enable-libmpx \
-	--enable-libssp \
+	--enable-default-ssp \
 	--enable-tls \
 	--enable-install-libiberty \
 	--disable-multilib \
+	--disable-libssp \
 	--disable-libstdcxx-pch \
 	--disable-libunwind-exceptions \
 	--disable-werror \
