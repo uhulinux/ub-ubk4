@@ -30,11 +30,14 @@ for i in halt poweroff reboot shutdown; do
 	ln -s systemctl "$UB_INSTALLDIR"/usr/bin/$i
 done
 
+## initrd kell a sysinitbe, mert initrd -t használunk mindenképp
+#ln -s /usr/lib/systemd/system/initrd.target "$UB_INSTALLDIR"/usr/lib/systemd/system/sysinit.target.wants/initrd.target
+
 # postboot_run
-for target in graphical multi-user; do
-	mkdir -p "$UB_INSTALLDIR"/etc/systemd/system/"$target".target.wants
-	ln -s /usr/lib/systemd/system/postboot_run.service "$UB_INSTALLDIR"/etc/systemd/system/$target.target.wants/postboot_run.service
-done
+# for target in graphical multi-user; do
+#	mkdir -p "$UB_INSTALLDIR"/etc/systemd/system/"$target".target.wants
+#	ln -s /usr/lib/systemd/system/postboot_run.service "$UB_INSTALLDIR"/etc/systemd/system/$target.target.wants/postboot_run.service
+# done
 
 # compat symlinks
 # for i in libsystemd-{daemon,id128,journal,login}; do

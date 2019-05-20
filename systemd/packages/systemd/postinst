@@ -1,3 +1,6 @@
 #!/bin/bash
 
 systemd-machine-id-setup
+journalctl --update-catalog
+systemctl enable getty@tty1.service remote-fs.target
+systemctl set-default multi-user.target
