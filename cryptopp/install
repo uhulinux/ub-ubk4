@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
-export PREFIX='/usr'
-ub_install
+make DESTDIR=${UB_INSTALLDIR} PREFIX=/usr install
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
 cat >"$UB_INSTALLDIR"/usr/lib/pkgconfig/libcrypto++.pc <<EOF
@@ -17,3 +16,5 @@ Requires:
 Libs: -L\${libdir} -lcryptopp
 Cflags: -I\${includedir}
 EOF
+
+rm -rf ${UB_INSTALLDIR}/usr/bin  ${UB_INSTALLDIR}/usr/share/cryptopp

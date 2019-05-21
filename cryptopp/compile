@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
 export PREFIX='/usr'
-export CXXFLAGS="-DNDEBUG -g2 -O2"
-ub_compile \
-	-DBUILD_SHARED=OFF
+export CXXFLAGS+='-DNDEBUG -g2 -O2'
+ub_make dynamic
+ub_make cryptest.exe
