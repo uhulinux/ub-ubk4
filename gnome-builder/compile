@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
+export CFLAGS='-fstack-protector-all'
 ub_compile \
-    -Dwith_flatpak=false
+    -Dplugin_flatpak=false \
+    -Dplugin_glade=false
