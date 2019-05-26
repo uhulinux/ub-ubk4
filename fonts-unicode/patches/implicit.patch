@@ -1,0 +1,12 @@
+diff -Naur orig/src/unicoverage.c patched/src/unicoverage.c
+--- orig/src/unicoverage.c	2019-05-11 11:51:46.000000000 +0200
++++ patched/src/unicoverage.c	2019-05-22 22:22:32.015068813 +0200
+@@ -176,7 +176,7 @@
+             i = 0;
+             while (inbuf[i] != ' ') i++;  /* find first blank */
+             while (inbuf[i] == ' ') i++;  /* find next non-blank */
+-            strlcpy (coverstring, &inbuf[i], MAXBUF);
++            strncpy (coverstring, &inbuf[i], MAXBUF);
+          }
+          else retval = 0;
+       }

@@ -1,7 +1,7 @@
 diff -Naur orig/hw/xwayland/xwayland.c patched/hw/xwayland/xwayland.c
---- orig/hw/xwayland/xwayland.c	2018-08-07 18:31:04.000000000 +0200
-+++ patched/hw/xwayland/xwayland.c	2018-08-17 18:30:50.991808979 +0200
-@@ -642,10 +642,8 @@
+--- orig/hw/xwayland/xwayland.c	2019-02-26 20:28:50.000000000 +0100
++++ patched/hw/xwayland/xwayland.c	2019-05-26 01:32:54.596073712 +0200
+@@ -659,10 +659,8 @@
      struct xwl_screen *xwl_screen = xwl_screen_get(screen);
      Bool ret;
  
@@ -13,17 +13,22 @@ diff -Naur orig/hw/xwayland/xwayland.c patched/hw/xwayland/xwayland.c
      screen->DestroyWindow = xwl_screen->DestroyWindow;
  
 diff -Naur orig/hw/xwayland/xwayland.h patched/hw/xwayland/xwayland.h
---- orig/hw/xwayland/xwayland.h	2018-08-07 18:31:04.000000000 +0200
-+++ patched/hw/xwayland/xwayland.h	2018-08-17 18:48:45.798674393 +0200
-@@ -185,7 +185,6 @@
-     WindowPtr present_window;
+--- orig/hw/xwayland/xwayland.h	2019-02-26 20:28:50.000000000 +0100
++++ patched/hw/xwayland/xwayland.h	2019-05-26 01:35:21.393774701 +0200
+@@ -182,12 +182,9 @@
+     struct xorg_list link_damage;
+     struct wl_callback *frame_callback;
+     Bool allow_commits;
+-#ifdef GLAMOR_HAS_GBM
+     Bool present_flipped;
+-#endif
  };
  
 -#ifdef GLAMOR_HAS_GBM
  struct xwl_present_window {
      struct xwl_screen *xwl_screen;
-     WindowPtr window;
-@@ -217,7 +216,6 @@
+     struct xwl_present_event *sync_flip;
+@@ -220,7 +217,6 @@
  
      struct xorg_list list;
  };
@@ -31,7 +36,7 @@ diff -Naur orig/hw/xwayland/xwayland.h patched/hw/xwayland/xwayland.h
  
  #define MODIFIER_META 0x01
  
-@@ -423,7 +421,6 @@
+@@ -427,7 +423,6 @@
  Bool xwl_shm_destroy_pixmap(PixmapPtr pixmap);
  struct wl_buffer *xwl_shm_pixmap_get_wl_buffer(PixmapPtr pixmap);
  
@@ -39,13 +44,14 @@ diff -Naur orig/hw/xwayland/xwayland.h patched/hw/xwayland/xwayland.h
  void xwl_glamor_init_backends(struct xwl_screen *xwl_screen,
                                Bool use_eglstream);
  void xwl_glamor_select_backend(struct xwl_screen *xwl_screen,
-@@ -447,18 +444,14 @@
+@@ -451,19 +446,15 @@
  Bool xwl_glamor_allow_commits(struct xwl_window *xwl_window);
  void xwl_glamor_egl_make_current(struct xwl_screen *xwl_screen);
  
 -#ifdef GLAMOR_HAS_GBM
  Bool xwl_present_init(ScreenPtr screen);
  void xwl_present_cleanup(WindowPtr window);
+ void xwl_present_unrealize_window(WindowPtr window);
 -#endif /* GLAMOR_HAS_GBM */
  
  #ifdef XV
@@ -58,7 +64,7 @@ diff -Naur orig/hw/xwayland/xwayland.h patched/hw/xwayland/xwayland.h
  void xwl_screen_release_tablet_manager(struct xwl_screen *xwl_screen);
  
  void xwl_screen_init_xdg_output(struct xwl_screen *xwl_screen);
-@@ -467,13 +460,11 @@
+@@ -472,13 +463,11 @@
  void xwlVidModeExtensionInit(void);
  #endif
  

@@ -3,6 +3,7 @@
 ./configure \
 	--destdir="$UB_INSTALLDIR" \
 	--prefix="/usr"             \
+	--libdir="/usr/lib"         \
 	--sysconfdir="/etc"         \
 	--localstatedir="/var"      \
 	--mandir="/usr/share/man"   \
@@ -12,5 +13,6 @@
 	--bundled-libraries=NONE \
 	--builtin-libraries=replace \
 	--with-modulesdir=/usr/lib/ldb/modules \
-	--with-privatelibdir=/usr/lib/ldb
+	--with-privatelibdir=/usr/lib/ldb \
+	PKGCONFIGDIR=/usr/lib/pkgconfig
 ub_make

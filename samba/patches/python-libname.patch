@@ -1,0 +1,16 @@
+diff -Naur orig/source4/lib/policy/samba-policy.pc.in patched/source4/lib/policy/samba-policy.pc.in
+--- orig/source4/lib/policy/samba-policy.pc.in	2019-01-15 11:07:00.000000000 +0100
++++ patched/source4/lib/policy/samba-policy.pc.in	2019-05-25 01:56:03.132258564 +0200
+@@ -3,10 +3,10 @@
+ libdir=@libdir@
+ includedir=@includedir@
+ 
+-Name: samba-policy
++Name: samba-policy@PYTHON_SO_ABI_FLAG@
+ Description: Active Directory Group Policy library
+ Requires: talloc
+ Requires.private: ldb
+ Version: @PACKAGE_VERSION@
+-Libs: @LIB_RPATH@ -L${libdir} -lsamba-policy
++Libs: @LIB_RPATH@ -L${libdir} -lsamba-policy@PYTHON_LIBNAME_SO_ABI_FLAG@
+ Cflags: -I${includedir}  -DHAVE_IMMEDIATE_STRUCTURES=1
