@@ -1,20 +1,6 @@
-diff -Nur orig/CMakeLists.txt mod/CMakeLists.txt
---- orig/CMakeLists.txt	2017-08-17 12:05:38.000000000 +0200
-+++ mod/CMakeLists.txt	2017-08-22 21:31:37.313327034 +0200
-@@ -459,10 +459,6 @@
- #INSTALL_DOCUMENTATION(${CMAKE_BINARY_DIR}/Docs/INFO_SRC
- #                      ${CMAKE_BINARY_DIR}/Docs/INFO_BIN)
- 
--IF(UNIX)
--  INSTALL_DOCUMENTATION(Docs/INSTALL-BINARY Docs/README-wsrep COMPONENT Readme)
--ENDIF()
--
- INCLUDE(CPack)
- 
- IF(NON_DISTRIBUTABLE_WARNING)
-diff -Nur orig/man/CMakeLists.txt mod/man/CMakeLists.txt
---- orig/man/CMakeLists.txt	2017-08-17 12:05:38.000000000 +0200
-+++ mod/man/CMakeLists.txt	2017-08-22 21:32:36.977745370 +0200
+diff -Naur orig/man/CMakeLists.txt patched/man/CMakeLists.txt
+--- orig/man/CMakeLists.txt	2019-05-13 20:13:06.000000000 +0200
++++ patched/man/CMakeLists.txt	2019-05-22 04:15:26.070505769 +0200
 @@ -15,7 +15,7 @@
  
  SET(MAN1_SERVER innochecksum.1 my_print_defaults.1 myisam_ftdump.1 myisamchk.1
@@ -24,9 +10,9 @@ diff -Nur orig/man/CMakeLists.txt mod/man/CMakeLists.txt
  		mysql_convert_table_format.1 mysql_fix_extensions.1
  		mysql_install_db.1
  		mysql_secure_installation.1 mysql_setpermission.1
-diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
---- orig/support-files/CMakeLists.txt	2017-08-17 12:05:42.000000000 +0200
-+++ mod/support-files/CMakeLists.txt	2017-08-22 21:38:57.899921661 +0200
+diff -Naur orig/support-files/CMakeLists.txt patched/support-files/CMakeLists.txt
+--- orig/support-files/CMakeLists.txt	2019-05-13 20:13:14.000000000 +0200
++++ patched/support-files/CMakeLists.txt	2019-05-22 04:15:26.070505769 +0200
 @@ -50,8 +50,8 @@
  
  IF(UNIX)
@@ -69,7 +55,7 @@ diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
  
    INSTALL(FILES mysql.m4 DESTINATION ${INSTALL_SHAREDIR}/aclocal COMPONENT Development)
    
-@@ -133,9 +114,6 @@
+@@ -148,9 +129,6 @@
    IF (INSTALL_SYSCONFDIR)
      INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mysql-log-rotate DESTINATION ${INSTALL_SYSCONFDIR}/logrotate.d
              RENAME mysql COMPONENT SupportFiles)
@@ -79,7 +65,7 @@ diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
  
      INSTALL(FILES rpm/my.cnf DESTINATION ${INSTALL_SYSCONFDIR}
              COMPONENT Common)
-@@ -151,11 +129,5 @@
+@@ -166,11 +144,5 @@
                COMPONENT IniFiles)
      ENDIF()
  

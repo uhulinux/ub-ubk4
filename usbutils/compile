@@ -1,11 +1,5 @@
 #!/bin/sh -eux
 
-git clone https://github.com/DIGImend/usbhid-dump.git
-
-cd usbhid-dump
-./bootstrap
-cd ..
-
 ub_compile \
 	--disable-zlib \
 	--enable-usbmodules

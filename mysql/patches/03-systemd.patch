@@ -1,14 +1,13 @@
 diff -Naur orig/cmake/systemd.cmake patched/cmake/systemd.cmake
---- orig/cmake/systemd.cmake	2016-08-29 16:38:51.000000000 +0200
-+++ patched/cmake/systemd.cmake	2016-09-17 16:22:24.457980160 +0200
-@@ -63,8 +63,7 @@
-                                ${INSTALL_SYSTEMD_UNITDIR}/mariadb@.service
-                                ${INSTALL_SYSTEMD_UNITDIR}/mariadb@bootstrap.service.d/use_galera_new_cluster.conf")
+--- orig/cmake/systemd.cmake	2019-05-13 20:13:06.000000000 +0200
++++ patched/cmake/systemd.cmake	2019-05-22 04:13:33.300975988 +0200
+@@ -50,8 +50,7 @@
+         SET(HAVE_SYSTEMD TRUE)
+         SET(SYSTEMD_SCRIPTS mariadb-service-convert galera_new_cluster galera_recovery)
          IF(DEB)
 -          SET(SYSTEMD_EXECSTARTPRE "ExecStartPre=/usr/bin/install -m 755 -o mysql -g root -d /var/run/mysqld")
 -          SET(SYSTEMD_EXECSTARTPOST "ExecStartPost=/etc/mysql/debian-start")
 +          SET(SYSTEMD_EXECSTARTPOST "ExecStartPost=/usr/bin/mysqld-ping")
          ENDIF()
-         MESSAGE(STATUS "Systemd features enabled")
+         MESSAGE_ONCE(systemd "Systemd features enabled")
        ELSE()
-
