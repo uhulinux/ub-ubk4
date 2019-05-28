@@ -1,1 +1,2 @@
-urllist https://www.fltk.org/software.php | grep source.tar.gz | sed s/fltk-//g | sed s/-sou.*//g | sort -V | tail -n 1 | sed s/-/~/
+# urllist https://www.fltk.org/software.php | grep source.tar.gz | sed s/fltk-//g | sed s/-sou.*//g | sort -V | tail -n 1 | sed s/-/~/
+urllist https://www.fltk.org/software.php | grep source.tar.gz | grep -v [0-9]rc | sed s/fltk-//g | sed s/-sou.*//g | sort -V | tail -n 1 | sed s/-/~/

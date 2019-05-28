@@ -1,3 +1,6 @@
 #!/bin/sh -eux
 
 ub_install
+
+# libguul.a not installed
+sed -i -e "/Libs.private/d" $UB_INSTALLDIR/usr/lib/pkgconfig/*.pc
