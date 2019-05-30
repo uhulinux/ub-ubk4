@@ -1,7 +1,8 @@
-for i in `urllist http://get.geo.opera.com/ftp/pub/opera/desktop/ | grep -E '^([0-9.]+)$' | sort -Vr`;do
-if [ "$(urllist http://get.geo.opera.com/ftp/pub/opera/desktop/$i/ | grep linux)" ];then
-echo $i
+dirs=$(urllist http://get.geo.opera.com/ftp/pub/opera/desktop/ | grep -E '^([0-9.]+)$' | sort -Vr)
+for dir in $dirs;do
+ver=$(urllist http://get.geo.opera.com/ftp/pub/opera/desktop/$dir/linux/ | grep opera-stable_)
+if [ "$ver" ];then
+echo $dir
 exit 0
 fi
 done
-
