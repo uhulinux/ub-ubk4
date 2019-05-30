@@ -1,3 +1,6 @@
 #!/bin/sh -eux
 
 ub_install
+
+# Libs.private: not installed static libs
+sed -i -e "/Libs.private/d" $UB_INSTALLDIR/usr/lib/pkgconfig/*.pc

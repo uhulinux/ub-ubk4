@@ -1,0 +1,13 @@
+diff -Naur orig/LibtorrentRasterbarConfig.cmake.in patched/LibtorrentRasterbarConfig.cmake.in
+--- orig/LibtorrentRasterbarConfig.cmake.in	2019-05-28 03:32:09.000000000 +0200
++++ patched/LibtorrentRasterbarConfig.cmake.in	2019-05-28 13:06:34.126692669 +0200
+@@ -5,9 +5,6 @@
+ 
+ @PACKAGE_INIT@
+ 
+-include(CMakeFindDependencyMacro)
+-@_find_dependency_calls@
+-
+ include("${CMAKE_CURRENT_LIST_DIR}/LibtorrentRasterbarTargets.cmake")
+ 
+ get_target_property(@PROJECT_NAME@_INCLUDE_DIRS LibtorrentRasterbar::torrent-rasterbar INTERFACE_INCLUDE_DIRECTORIES)
