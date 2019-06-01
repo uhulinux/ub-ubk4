@@ -1,0 +1,12 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2019-05-30 23:40:23.000000000 +0200
++++ patched/CMakeLists.txt	2019-05-30 23:44:47.973344998 +0200
+@@ -17,7 +17,7 @@
+ set(FWB_INSTALL_BINDIR ${CMAKE_INSTALL_BINDIR})
+ 
+ set(CXX_DEFAULT_FLAGS # clang/GCC warnings
+-	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wall;-Wextra;-Werror;-Wno-overloaded-virtual>
++	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wall;-Wextra;-Wno-overloaded-virtual>
+                          # MSVC warnings
+     $<$<CXX_COMPILER_ID:MSVC>:/WX;/W4>)
+ 

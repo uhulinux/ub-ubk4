@@ -1,0 +1,11 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2019-05-30 23:40:23.000000000 +0200
++++ patched/CMakeLists.txt	2019-05-31 00:38:50.444671144 +0200
+@@ -10,6 +10,7 @@
+ find_package(Qt5Network REQUIRED)
+ find_package(Qt5PrintSupport REQUIRED)
+ find_package(LibXml2 REQUIRED)
++find_package(LibXslt REQUIRED)
+ 
+ include(GNUInstallDirs)
+ set(FWB_INSTALL_DATADIR ${CMAKE_INSTALL_DATADIR}/fwbuilder-${PROJECT_VERSION})
