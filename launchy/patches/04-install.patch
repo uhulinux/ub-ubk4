@@ -1,0 +1,36 @@
+diff -Naur orig/src/lib/lib.pro patched/src/lib/lib.pro
+--- orig/src/lib/lib.pro	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/lib/lib.pro	2019-06-06 21:59:48.418946359 +0200
+@@ -30,6 +30,12 @@
+     CONFIG(release, debug|release):DESTDIR = ../../release/
+ }
+ 
++unix:!macx {
++    PREFIX   = /usr
++    target.path   = $$PREFIX/lib/
++    INSTALLS += target
++}
++
+ win32 {
+    LIBS += user32.lib \
+            shell32.lib
+diff -Naur orig/src/pluginpy/pluginpy.pro patched/src/pluginpy/pluginpy.pro
+--- orig/src/pluginpy/pluginpy.pro	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/pluginpy/pluginpy.pro	2019-06-06 22:01:22.612289243 +0200
+@@ -38,9 +38,13 @@
+ CONFIG(release, debug|release):DESTDIR = ../../release/
+ 
+ unix:!macx {
+-#python3-config
+-INCLUDEPATH += /usr/include/python3.7m
+-LIBS += -lpython3.7m -lpthread -ldl  -lutil -lm
++    #python3-config
++    INCLUDEPATH += /usr/include/python3.7m
++    LIBS += -lpython3.7m -lpthread -ldl  -lutil -lm
++
++    PREFIX   = /usr
++    target.path   = $$PREFIX/lib/
++    INSTALLS += target
+ }
+ 
+ win32 {

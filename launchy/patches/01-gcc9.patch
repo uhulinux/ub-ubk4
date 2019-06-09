@@ -1,0 +1,740 @@
+diff -Naur orig/Launchy.pro patched/Launchy.pro
+--- orig/Launchy.pro	2019-05-21 04:11:59.000000000 +0200
++++ patched/Launchy.pro	2019-06-04 23:02:50.763033851 +0200
+@@ -6,12 +6,12 @@
+ 
+ win32 {
+ SUBDIRS += plugins/verby \
+-           plugins/tasky
++           plugins/tasky \
++           plugins/runner
+ 
+ #           plugins/calcy \
+ #           plugins/controly \
+ #           plugins/weby \
+-#           plugins/runner \
+ #           plugins/gcalc \
+ 
+ }
+diff -Naur orig/plugins/runner/runner.pro patched/plugins/runner/runner.pro
+--- orig/plugins/runner/runner.pro	2019-05-21 04:11:59.000000000 +0200
++++ patched/plugins/runner/runner.pro	2019-06-04 23:02:50.847034929 +0200
+@@ -1,59 +1,56 @@
+-TEMPLATE = lib
+-CONFIG += plugin \
+-    debug_and_release
+-VPATH += ../../src
+-INCLUDEPATH += ../../src
+-INCLUDEPATH += ../../common
+-INCLUDEPATH += c:/boost/
+-PRECOMPILED_HEADER = precompiled.h
+-UI_DIR = ../../plugins/runner/
+-FORMS = dlg.ui
+-HEADERS = plugin_interface.h \
+-    runner.h \
+-    gui.h \
+-    globals.h \
+-    ../../common/FileBrowserDelegate.h \
+-    ../../common/FileBrowser.h \
+-    ../../common/DropTableWidget.h \
+-    precompiled.h
+-SOURCES = plugin_interface.cpp \
+-    runner.cpp \
+-    gui.cpp \
+-	../../common/FileBrowser.cpp \
+-	../../common/FileBrowserDelegate.cpp \
+-	../../common/DropTableWidget.cpp
+-TARGET \
+-    = \
+-    runner
+-win32 { 
+-    CONFIG -= embed_manifest_dll
+-	LIBS += user32.lib shell32.lib
+-	QMAKE_CXXFLAGS_RELEASE += /Zi
+-	QMAKE_LFLAGS_RELEASE += /DEBUG
+-}
+- 
+-if(!debug_and_release|build_pass):CONFIG(debug, debug|release) {
+-    DESTDIR = ../../debug/plugins
+-}
+-
+-if(!debug_and_release|build_pass):CONFIG(release, debug|release) {
+-    DESTDIR = ../../release/plugins
+-}
+-
+-unix:!macx {
+- PREFIX = /usr
+- target.path = $$PREFIX/lib/launchy/plugins/
+- icon.path = $$PREFIX/lib/launchy/plugins/icons/
+- icon.files = runner.png
+- INSTALLS += target icon
+-}
+-
+-macx {
+-  if(!debug_and_release|build_pass):CONFIG(debug, debug|release):DESTDIR = ../../debug/Launchy.app/Contents/MacOS/plugins
+-  if(!debug_and_release|build_pass):CONFIG(release, debug|release):DESTDIR = ../../release/Launchy.app/Contents/MacOS/plugins
+-    CONFIG(debug, debug|release):icons.path = ../../debug/Launchy.app/Contents/MacOS/plugins/icons/
+-    CONFIG(release, debug|release):icons.path = ../../release/Launchy.app/Contents/MacOS/plugins/icons/
+-    icons.files = runner.png
+-    INSTALLS += icons
+-  INCLUDEPATH += /opt/local/include/
+-}
++TEMPLATE = lib
++
++QT += widgets
++
++CONFIG += plugin \
++          debug_and_release
++
++VPATH += ../../src
++INCLUDEPATH += ../../src \
++               ../../src/lib
++
++FORMS = dlg.ui
++
++HEADERS = runner.h \
++          gui.h \
++          globals.h \
++          precompiled.h
++
++SOURCES = runner.cpp \
++          gui.cpp \
++          globals.cpp
++
++PRECOMPILED_HEADER = precompiled.h
++
++TARGET = Runner
++
++#UI_DIR = ../../plugins/$$TARGET/
++CONFIG(debug, debug|release):DESTDIR = ../../debug/plugins/$$TARGET
++CONFIG(release, debug|release):DESTDIR = ../../release/plugins/$$TARGET
++
++win32 {
++#    CONFIG -= embed_manifest_dll
++    LIBS += user32.lib \
++            shell32.lib \
++            $$DESTDIR/../../Launchy.lib
++    QMAKE_CXXFLAGS_RELEASE += /Zi
++#    QMAKE_LFLAGS_RELEASE += /DEBUG
++}
++
++unix:!macx {
++    PREFIX = /usr
++    target.path = $$PREFIX/lib/launchy/plugins/
++    icon.path = $$PREFIX/lib/launchy/plugins/icons/
++    icon.files = runner.png
++    INSTALLS += target icon
++}
++
++macx {
++  if(!debug_and_release|build_pass):CONFIG(debug, debug|release):DESTDIR = ../../debug/Launchy.app/Contents/MacOS/plugins
++  if(!debug_and_release|build_pass):CONFIG(release, debug|release):DESTDIR = ../../release/Launchy.app/Contents/MacOS/plugins
++    CONFIG(debug, debug|release):icons.path = ../../debug/Launchy.app/Contents/MacOS/plugins/icons/
++    CONFIG(release, debug|release):icons.path = ../../release/Launchy.app/Contents/MacOS/plugins/icons/
++    icons.files = runner.png
++    INSTALLS += icons
++  INCLUDEPATH += /opt/local/include/
++}
+diff -Naur orig/plugins/tasky/tasky.pro patched/plugins/tasky/tasky.pro
+--- orig/plugins/tasky/tasky.pro	2019-05-21 04:11:59.000000000 +0200
++++ patched/plugins/tasky/tasky.pro	2019-06-04 23:02:50.863035134 +0200
+@@ -1,26 +1,26 @@
+-TEMPLATE = lib
+-
+-CONFIG += plugin \
+-          debug_and_release
+-INCLUDEPATH += ../../src \
+-               ../../src/lib
+-FORMS =
+-HEADERS = Tasky.h
+-SOURCES = Tasky.cpp
+-PRECOMPILED_HEADER = Precompiled.h
+-TARGET = Tasky
+-#VERSION = 0.2
+-
+-CONFIG(debug, debug|release):DESTDIR = ../../debug/plugins/$$TARGET
+-CONFIG(release, debug|release):DESTDIR = ../../release/plugins/$$TARGET
+-
+-win32 {
+-    QT += winextras
+-#    CONFIG -= embed_manifest_dll
+-    LIBS += psapi.lib \
+-            shell32.lib \
+-            user32.lib \
+-            Gdi32.lib \
+-            comctl32.lib \
+-            $$DESTDIR/../../Launchy.lib
+-}
++TEMPLATE = lib
++
++CONFIG += plugin \
++          debug_and_release
++INCLUDEPATH += ../../src \
++               ../../src/lib
++FORMS =
++HEADERS = Tasky.h
++SOURCES = Tasky.cpp
++PRECOMPILED_HEADER = Precompiled.h
++TARGET = Tasky
++#VERSION = 0.2
++
++CONFIG(debug, debug|release):DESTDIR = ../../debug/plugins/$$TARGET
++CONFIG(release, debug|release):DESTDIR = ../../release/plugins/$$TARGET
++
++win32 {
++    QT += winextras
++#    CONFIG -= embed_manifest_dll
++    LIBS += psapi.lib \
++            shell32.lib \
++            user32.lib \
++            Gdi32.lib \
++            comctl32.lib \
++            $$DESTDIR/../../Launchy.lib
++}
+diff -Naur orig/src/lib/CatalogItem.cpp patched/src/lib/CatalogItem.cpp
+--- orig/src/lib/CatalogItem.cpp	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/lib/CatalogItem.cpp	2019-06-04 23:02:50.899035597 +0200
+@@ -33,7 +33,7 @@
+ CatItem::CatItem(const QString& full, bool isDir)
+     : fullPath(full),
+       usage(0),
+-      data(NULL), 
++      data(NULL),
+       pluginId(0) {
+     int last = fullPath.lastIndexOf("/");
+     if (last == -1) {
+@@ -47,7 +47,7 @@
+     }
+ 
+     searchName[LOWER] = shortName.toLower();
+-    searchName[TRANS] = convertSearchName(searchName[0]);
++    searchName[TRANS] = convertSearchName(searchName[LOWER]);
+ }
+ 
+ CatItem::CatItem(const QString& full, const QString& shortN)
+@@ -58,7 +58,7 @@
+       pluginId(0) {
+ 
+     searchName[LOWER] = shortName.toLower();
+-    searchName[TRANS] = convertSearchName(searchName[0]);
++    searchName[TRANS] = convertSearchName(searchName[LOWER]);
+ }
+ 
+ CatItem::CatItem(const QString& full, const QString& shortN, uint id)
+@@ -69,7 +69,7 @@
+       pluginId(id) {
+ 
+     searchName[LOWER] = shortName.toLower();
+-    searchName[TRANS] = convertSearchName(searchName[0]);
++    searchName[TRANS] = convertSearchName(searchName[LOWER]);
+ }
+ 
+ CatItem::CatItem(const QString& full, const QString& shortN, uint id, const QString& iconPath)
+@@ -81,7 +81,7 @@
+       pluginId(id) {
+ 
+     searchName[LOWER] = shortName.toLower();
+-    searchName[TRANS] = convertSearchName(searchName[0]);
++    searchName[TRANS] = convertSearchName(searchName[LOWER]);
+ }
+ 
+ bool CatItem::operator!=(const CatItem& other) const {
+@@ -131,4 +131,4 @@
+     return result;
+ }
+ 
+-}
+\ Nincs új sor a fájl végén
++}
+diff -Naur orig/src/lib/CatalogItem.h patched/src/lib/CatalogItem.h
+--- orig/src/lib/CatalogItem.h	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/lib/CatalogItem.h	2019-06-04 23:02:50.899035597 +0200
+@@ -80,7 +80,6 @@
+     friend LAUNCHY_EXPORT QDataStream& operator<<(QDataStream& out, const CatItem& item);
+     friend LAUNCHY_EXPORT QDataStream& operator>>(QDataStream& in, CatItem& item);
+ 
+-private:
+     /** Convert short name to search name */
+     static QString convertSearchName(const QString& shortName);
+ };
+diff -Naur orig/src/linux/AppLinux.cpp patched/src/linux/AppLinux.cpp
+--- orig/src/linux/AppLinux.cpp	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/linux/AppLinux.cpp	2019-06-04 23:02:50.899035597 +0200
+@@ -132,60 +132,71 @@
+     return QX11Info::isCompositingManagerRunning();
+ }
+ 
+-
+ void AppLinux::alterItem(CatItem* item) {
+-    if (!item->fullPath.endsWith(".desktop", Qt::CaseInsensitive))
++    if (!item->fullPath.endsWith(".desktop", Qt::CaseInsensitive)) {
+         return;
+-
+-    QString locale = QLocale::system().name();
++    }
+ 
+     QFile file(item->fullPath);
+-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
++    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+         return;
++    }
+ 
+-    QString name = "";
+-    QString icon = "";
+-    QString exe = "";
++    QString locale = QLocale::system().name();
++
++    QString name;
++    QString icon;
++    QString exe;
+     while(!file.atEnd()) {
+         QString line = QString::fromUtf8(file.readLine());
+ 
+-        if (line.startsWith("Name[" + locale, Qt::CaseInsensitive))
++        if (line.startsWith("Name[" + locale, Qt::CaseInsensitive)) {
+             name = line.split("=")[1].trimmed();
+-        else if (line.startsWith("Name=", Qt::CaseInsensitive))
++        }
++        else if (line.startsWith("Name=", Qt::CaseInsensitive)) {
+             name = line.split("=")[1].trimmed();
+-        else if (line.startsWith("Icon", Qt::CaseInsensitive))
++        }
++        else if (line.startsWith("Icon", Qt::CaseInsensitive)) {
+             icon = line.split("=")[1].trimmed();
+-        else if (line.startsWith("Exec", Qt::CaseInsensitive))
++        }
++        else if (line.startsWith("Exec", Qt::CaseInsensitive)) {
+             exe = line.split("=")[1].trimmed();
++        }
+     }
++
+     if (name.size() >= item->shortName.size() - 8) {
+         item->shortName = name;
+-        item->searchName = item->shortName.toLower();
++        item->searchName[CatItem::LOWER] = item->shortName.toLower();
++        item->searchName[CatItem::TRANS] = CatItem::convertSearchName(item->searchName[CatItem::LOWER]);
+     }
+ 
+     // Don't index desktop items wthout icons
+-    if (icon.trimmed() == "")
++    if (icon.trimmed().isEmpty()) {
+         return;
++    }
+ 
+     /* fill in some specifiers while we have the info */
+     exe.replace("%i", "--icon " + icon);
+     exe.replace("%c", name);
+     exe.replace("%k", item->fullPath);
+ 
+-    QStringList allExe = exe.trimmed().split(" ",QString::SkipEmptyParts);
+-    if (allExe.size() == 0 || allExe[0].size() == 0 )
++    QStringList allExe = exe.trimmed().split(" ", QString::SkipEmptyParts);
++    if (allExe.isEmpty() || allExe[0].isEmpty()) {
+         return;
++    }
++
+     exe = allExe[0];
+     allExe.removeFirst();
+-    //    exe = exe.trimmed().split(" ")[0];
++    // exe = exe.trimmed().split(" ")[0];
+ 
+     /* if an absolute or relative path is supplied we can just skip this
+        everything else should be checked to avoid picking up [unwanted]
+        stuff from the working directory - if it doesnt exsist, use it anyway */
+     if(!exe.contains(QRegExp("^.?.?/"))) {
+         foreach(QString line, QProcess::systemEnvironment()) {
+-            if (!line.startsWith("Path", Qt::CaseInsensitive))
++            if (!line.startsWith("Path", Qt::CaseInsensitive)) {
+                 continue;
++            }
+ 
+             QStringList spl = line.split("=");
+             QStringList spl2 = spl[1].split(":");
+@@ -200,7 +211,6 @@
+         }
+     }
+ 
+-
+     item->fullPath = exe + " " + allExe.join(" ");
+ 
+     // Cache the icon for this desktop file
+@@ -218,7 +228,7 @@
+ 
+     item->iconPath = icon;
+ 
+-    file.close();
++    // file.close();
+     return;
+ }
+ 
+@@ -230,27 +240,24 @@
+ 	int curPos = txt.indexOf(delim, 0);
+ 	if (curPos == -1) return txt;
+ 
+-	while(curPos != -1)
+-	{
++	while(curPos != -1) {
+ 		int nextPos = txt.indexOf("$", curPos+1);
+-		if (nextPos == -1)
+-		{
++		if (nextPos == -1) {
+ 			out += txt.mid(curPos+1);
+ 			break;
+ 		}
+ 		QString var = txt.mid(curPos+1, nextPos-curPos-1);
+ 		bool found = false;
+-		foreach(QString s, list)
+-		{
+-			if (s.startsWith(var, Qt::CaseInsensitive))
+-			{
++		foreach(QString s, list) {
++			if (s.startsWith(var, Qt::CaseInsensitive)) {
+ 				found = true;
+ 				out += s.mid(var.length()+1);
+ 				break;
+ 			}
+ 		}
+-		if (!found)
+-			out += "$" + var;
++		if (!found) {
++            out += "$" + var;
++        }
+ 		curPos = nextPos;
+ 	}
+ 	return out;
+diff -Naur orig/src/linux/AppLinux.h patched/src/linux/AppLinux.h
+--- orig/src/linux/AppLinux.h	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/linux/AppLinux.h	2019-06-04 23:02:50.899035597 +0200
+@@ -43,6 +43,7 @@
+ 	virtual QString expandEnvironmentVars(QString txt);
+ 
+     bool supportsAlphaBorder() const;
++
+     /*
+       QIcon icon(const QFileInfo& info) {
+       shared_ptr<UnixIconProvider> u(dynamic_pointer_cast<UnixIconProvider>(icons));
+diff -Naur orig/src/linux/IconProviderLinux.cpp patched/src/linux/IconProviderLinux.cpp
+--- orig/src/linux/IconProviderLinux.cpp	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/linux/IconProviderLinux.cpp	2019-06-04 23:02:50.899035597 +0200
+@@ -10,12 +10,14 @@
+ 
+ IconProviderLinux::IconProviderLinux() {
+     foreach(QString line, QProcess::systemEnvironment()) {
+-        if (!line.startsWith("XDG_DATA_DIRS", Qt::CaseInsensitive))
++        if (!line.startsWith("XDG_DATA_DIRS", Qt::CaseInsensitive)) {
+             continue;
++        }
++
+         QStringList spl = line.split("=");
+-        xdgDataDirs = spl[1].split(":");
++        m_xdgDataDirs = spl[1].split(":");
+     }
+-    xdgDataDirs += "/usr/share/icons/";
++    m_xdgDataDirs += "/usr/share/icons/";
+ }
+ 
+ IconProviderLinux::~IconProviderLinux() {
+@@ -25,18 +27,21 @@
+ QIcon IconProviderLinux::icon(const QFileInfo& info) {
+     QString name = info.fileName();
+ 
+-    if (name.endsWith(".png", Qt::CaseInsensitive))
++    if (name.endsWith(".png", Qt::CaseInsensitive)) {
+         return QIcon(info.absoluteFilePath());
+-    if (name.endsWith(".ico", Qt::CaseInsensitive))
++    }
++
++    if (name.endsWith(".ico", Qt::CaseInsensitive)) {
+         return QIcon(info.absoluteFilePath());
+-    if (!name.contains("."))
++    }
++
++    if (!name.contains(".")) {
+         return QFileIconProvider::icon(QFileIconProvider::File);
++    }
+ 
+     QString end = name.mid(name.lastIndexOf(".")+1);
+-    if (!file2mime.contains(end.toLower())) {
+-
++    if (!m_file2mime.contains(end.toLower())) {
+         QProcess proc;
+-
+         QStringList args;
+         args += "query";
+         args += "filetype";
+@@ -46,12 +51,12 @@
+         proc.waitForFinished(10000);
+         QString mimeType = proc.readAll().trimmed();
+         proc.close();
+-        file2mime.insert(end.toLower(), mimeType);
++        m_file2mime.insert(end.toLower(), mimeType);
+     }
+ 
+-    QString mimeType = file2mime[end.toLower()];
++    QString mimeType = m_file2mime[end.toLower()];
+ 
+-    if (!mime2desktop.contains(mimeType)) {
++    if (!m_mime2desktop.contains(mimeType)) {
+         QProcess proc2;
+         QStringList args;
+         args += "query";
+@@ -62,47 +67,55 @@
+         QString desk = proc2.readAll().trimmed();
+         proc2.close();
+ 
+-        mime2desktop[mimeType] = desk;
++        m_mime2desktop[mimeType] = desk;
+     }
+ 
+ 
+-    QString desktop = mime2desktop[mimeType];
++    QString desktop = m_mime2desktop[mimeType];
+ 
+-    if (desktop == "")
++    if (desktop.isEmpty()) {
+         return QFileIconProvider::icon(QFileIconProvider::File);
++    }
+ 
+     return QIcon(getDesktopIcon(desktop));
+ }
+ 
+-QString IconProviderLinux::getDesktopIcon(QString desktopFile, QString IconName) {
+-    if (QFile::exists(desktopFile))
++QString IconProviderLinux::getDesktopIcon(QString desktopFile, QString iconName) {
++    if (QFile::exists(desktopFile)) {
+         desktopFile = desktopFile.mid(desktopFile.lastIndexOf("/")+1);
++    }
+ 
+-    if (desktopFile.contains("dolphin")) {
+-        int x = 1;
+-        x += 1;
++    /*
++      if (desktopFile.contains("dolphin")) {
++      int x = 1;
++      x += 1;
++      }
++    */
++
++    if (m_desktop2icon.contains(desktopFile) && iconName.isEmpty()) {
++        iconName = m_desktop2icon[desktopFile];
+     }
+ 
+-    if (desktop2icon.contains(desktopFile) && IconName == "")
+-        IconName = desktop2icon[desktopFile];
+-    if (IconName == "") {
++    if (iconName.isEmpty()) {
+         const char *dirs[] = { "/usr/share/applications/",
+                                "/usr/local/share/applications/",
+                                "/usr/share/gdm/applications/",
+                                "/usr/share/applications/kde/",
+-                               "~/.local/share/applications/"};
++                               "~/.local/share/applications/" };
+         for(int i = 0; i < 5; i++) {
+             QString dir = dirs[i];
+             QString path = dir + "/" + desktopFile;
+ 
+             if (QFile::exists(path)) {
+                 QFile file(path);
+-                if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
++                if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                     return "";
++                }
++
+                 while(!file.atEnd()) {
+                     QString line = file.readLine();
+                     if (line.startsWith("Icon", Qt::CaseInsensitive)) {
+-                        desktop2icon[desktopFile] = line.split("=")[1].trimmed();
++                        m_desktop2icon[desktopFile] = line.split("=")[1].trimmed();
+                     }
+                 }
+                 break;
+@@ -110,31 +123,33 @@
+         }
+     }
+ 
+-    if (IconName == "")
+-        IconName = desktop2icon[desktopFile];
++    if (iconName.isEmpty()) {
++        iconName = m_desktop2icon[desktopFile];
++    }
+ 
+-    if (IconName == "")
++    if (iconName.isEmpty()) {
+         return "";
++    }
+ 
+     // Find the icon path
+     QString iconPath;
+-    if (icon2path.contains(IconName)) {
+-        iconPath = icon2path[IconName];
++    if (m_icon2path.contains(iconName)) {
++        iconPath = m_icon2path[iconName];
+     }
+-    else if (QFile::exists(IconName)) {
+-        iconPath = IconName;
++    else if (QFile::exists(iconName)) {
++        iconPath = iconName;
+     }
+     else {
+         QStringList inames;
+-        if (IconName.endsWith(".png") || IconName.endsWith(".xpm") || IconName.endsWith(".svg"))
+-            inames += IconName;
++        if (iconName.endsWith(".png") || iconName.endsWith(".xpm") || iconName.endsWith(".svg")) {
++            inames += iconName;
++        }
+         else {
+-            inames += IconName + ".png";
+-            inames += IconName + ".xpm";
+-            inames += IconName + ".svg";
++            inames += iconName + ".png";
++            inames += iconName + ".xpm";
++            inames += iconName + ".svg";
+         }
+ 
+-
+         bool ifound = false;
+         QStringList themes;
+         themes += "/hicolor/32x32";
+@@ -143,11 +158,10 @@
+         themes += "/oxygen/32x32";
+         themes += "/gnome/32x32";
+ 
+-
+         QStringList dirs;
+         dirs += QDir::homePath() + "/.icons" + themes[0];
+ 
+-        foreach(QString dir, xdgDataDirs) {
++        foreach(QString dir, m_xdgDataDirs) {
+             foreach(QString thm, themes) {
+                 dirs += dir + "/icons" + thm;
+             }
+@@ -159,22 +173,25 @@
+         foreach(QString dir, dirs) {
+             QDir d(dir);
+             QStringList sdirs;
+-            if (!dir.endsWith("pixmaps"))
++            if (!dir.endsWith("pixmaps")) {
+                 sdirs = d.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
++            }
+             sdirs += ".";
+ 
+             foreach (QString subdir, sdirs) {
+                 foreach(QString iname, inames) {
+                     if (QFile::exists(dir + "/" + subdir + "/" +  iname)) {
+                         iconPath = dir + "/" + subdir + "/" + iname;
+-                        icon2path[IconName] = iconPath;
++                        m_icon2path[iconName] = iconPath;
+                         ifound = true;
+                         break;
+                     }
+                 }
+             }
+-            if (ifound)
++
++            if (ifound) {
+                 break;
++            }
+         }
+     }
+ 
+diff -Naur orig/src/linux/IconProviderLinux.h patched/src/linux/IconProviderLinux.h
+--- orig/src/linux/IconProviderLinux.h	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/linux/IconProviderLinux.h	2019-06-04 23:02:50.899035597 +0200
+@@ -15,14 +15,14 @@
+     IconProviderLinux();
+     virtual ~IconProviderLinux();
+     virtual QIcon icon(const QFileInfo& info);
+-    QString getDesktopIcon(QString desktopFile, QString IconName = "");
++    QString getDesktopIcon(QString desktopFile, QString iconName = "");
+ 
+ private:
+-    QHash<QString, QString> file2mime;
+-    QHash<QString, QString> mime2desktop;
+-    QHash<QString, QString> desktop2icon;
+-    QHash<QString, QString> icon2path;
+-    QStringList xdgDataDirs;
++    QHash<QString, QString> m_file2mime;
++    QHash<QString, QString> m_mime2desktop;
++    QHash<QString, QString> m_desktop2icon;
++    QHash<QString, QString> m_icon2path;
++    QStringList m_xdgDataDirs;
+ };
+ 
+ }
+diff -Naur orig/src/linux/LaunchyWidgetLinux.cpp patched/src/linux/LaunchyWidgetLinux.cpp
+--- orig/src/linux/LaunchyWidgetLinux.cpp	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/linux/LaunchyWidgetLinux.cpp	2019-06-04 23:02:50.899035597 +0200
+@@ -18,7 +18,11 @@
+ 
+ #include "LaunchyWidgetLinux.h"
+ 
+-namespace launhy {
++namespace launchy {
++
++LaunchyWidgetLinux::LaunchyWidgetLinux(CommandFlags command)
++    : LaunchyWidget(command) {
++}
+ 
+ void LaunchyWidgetLinux::focusLaunchy() {
+     /* Fix for bug 2994680: Not sure why this is necessary, perhaps someone with more
+diff -Naur orig/src/linux/LaunchyWidgetLinux.h patched/src/linux/LaunchyWidgetLinux.h
+--- orig/src/linux/LaunchyWidgetLinux.h	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/linux/LaunchyWidgetLinux.h	2019-06-04 23:02:50.899035597 +0200
+@@ -26,6 +26,7 @@
+     friend void createLaunchyWidget(CommandFlags command);
+ 
+ protected:
++    LaunchyWidgetLinux(CommandFlags command);
+     virtual void focusLaunchy();
+ };
+ 
+diff -Naur orig/src/src.pro patched/src/src.pro
+--- orig/src/src.pro	2019-05-21 04:11:59.000000000 +0200
++++ patched/src/src.pro	2019-06-04 23:02:50.907035699 +0200
+@@ -36,7 +36,9 @@
+     Logger.cpp \
+     OptionItem.cpp \
+     Directory.cpp \
+-    UpdateChecker.cpp
++    UpdateChecker.cpp \
++    TranslationManager.cpp
++
+ HEADERS = AppBase.h \
+     GlobalVar.h \
+     LaunchyWidget.h \
+@@ -62,7 +64,8 @@
+     Logger.h \
+     OptionItem.h \
+     Directory.h \
+-    UpdateChecker.h
++    UpdateChecker.h \
++    TranslationManager.h
+ 
+ FORMS = OptionDialog.ui
+ 
+@@ -85,8 +88,11 @@
+     QT += x11extras
+     ICON = Launchy.ico
+     SOURCES += linux/AppLinux.cpp \
++               linux/LaunchyWidgetLinux.cpp \
+                linux/IconProviderLinux.cpp
++
+     HEADERS += linux/AppLinux.h \
++               linux/LaunchyWidgetLinux.h \
+                linux/IconProviderLinux.h
+     LIBS += -L$$OUT_PWD/src/lib/ $$DESTDIR/liblaunchy.so $$DESTDIR/libpluginpy.so
+ 
+@@ -112,11 +118,13 @@
+     ICON = Launchy.ico
+     if(!debug_and_release|build_pass):CONFIG(debug, debug|release):CONFIG += console
+     SOURCES += win/AppWin.cpp \
++               win/LaunchyWidgetWin.cpp \
+                win/UtilWin.cpp \
+                win/IconProviderWin.cpp \
+                win/CrashDumper.cpp
+     HEADERS += win/AppWin.h \
+                win/IconProviderWin.h \
++               win/LaunchyWidgetWin.h \
+                win/UtilWin.h \
+                win/CrashDumper.h
+     CONFIG  += embed_manifest_exe
