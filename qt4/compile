@@ -37,12 +37,6 @@ export CXXFLAGS="-std=gnu++98"
 	-accessibility      \
 	-stl                \
 	\
-	-plugin-sql-mysql -I/usr/include/mysql \
-	-plugin-sql-psql -I/usr/include/postgresql -I/usr/include/postgresql/server \
-	-plugin-sql-odbc    \
-	-plugin-sql-sqlite  \
-	-system-sqlite      \
-	\
 	-no-qt3support      \
 	-xmlpatterns  		\
 	-multimedia         \
@@ -51,11 +45,11 @@ export CXXFLAGS="-std=gnu++98"
 	-no-phonon-backend  \
 	\
 	-svg                \
-	-webkit             \
-	-javascript-jit     \
-	-script             \
-	-scripttools        \
-	-declarative        \
+	-no-webkit          \
+	-no-javascript-jit  \
+	-no-script          \
+	-no-scripttools     \
+	-no-declarative     \
 	\
 	-system-zlib        \
 	-system-libtiff     \
@@ -99,5 +93,3 @@ ub_make
 #some options we may want to use in the future
 #	-phonon-backend     \
 #	-phonon             \
-#	-nomake demos       \
-#	-nomake docs

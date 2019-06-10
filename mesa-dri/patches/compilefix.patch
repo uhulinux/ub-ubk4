@@ -1,0 +1,42 @@
+diff -Naur orig/src/mapi/mapi/entry_x86-64_tls.h patched/src/mapi/mapi/entry_x86-64_tls.h
+--- orig/src/mapi/mapi/entry_x86-64_tls.h	2011-07-09 03:37:10.000000000 +0200
++++ patched/src/mapi/mapi/entry_x86-64_tls.h	2019-06-10 00:12:43.879803520 +0200
+@@ -76,8 +76,8 @@
+ {
+ }
+ 
+-static char
+-x86_64_entry_start[];
++extern char
++x86_64_entry_start[] __attribute__((visibility("hidden")));
+ 
+ mapi_func
+ entry_get_public(int slot)
+diff -Naur orig/src/mapi/mapi/entry_x86_tls.h patched/src/mapi/mapi/entry_x86_tls.h
+--- orig/src/mapi/mapi/entry_x86_tls.h	2011-07-09 03:37:10.000000000 +0200
++++ patched/src/mapi/mapi/entry_x86_tls.h	2019-06-10 00:13:32.468415437 +0200
+@@ -86,8 +86,8 @@
+ extern unsigned long
+ x86_current_tls();
+ 
+-static char x86_entry_start[];
+-static char x86_entry_end[];
++extern char x86_entry_start[] __attribute__((visibility("hidden")));
++extern char x86_entry_end[] __attribute__((visibility("hidden")));
+ 
+ void
+ entry_patch_public(void)
+diff -Naur orig/src/mapi/mapi/entry_x86_tsd.h patched/src/mapi/mapi/entry_x86_tsd.h
+--- orig/src/mapi/mapi/entry_x86_tsd.h	2011-07-09 03:37:10.000000000 +0200
++++ patched/src/mapi/mapi/entry_x86_tsd.h	2019-06-10 00:14:19.245013190 +0200
+@@ -60,8 +60,8 @@
+ #include <string.h>
+ #include "u_execmem.h"
+ 
+-static const char x86_entry_start[];
+-static const char x86_entry_end[];
++extern const char x86_entry_start[] __attribute__((visibility("hidden")));
++extern const char x86_entry_end[] __attribute__((visibility("hidden")));
+ 
+ void
+ entry_patch_public(void)

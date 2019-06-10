@@ -2,7 +2,7 @@
 
 mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
 cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
-cp libXNVCtrl.a "${UB_INSTALLDIR}"/usr/lib/libXNVCtrl.a
+cp _out/Linux_x86_64/libXNVCtrl.a "${UB_INSTALLDIR}"/usr/lib/libXNVCtrl.a
 
 cat <<'EOF' > "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 prefix=/usr
