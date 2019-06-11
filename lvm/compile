@@ -1,16 +1,14 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--enable-udev_sync \
-	--enable-udev_rules \
-	--enable-fsadm \
-	--enable-cmdlib \
-	--enable-dmeventd \
 	--libdir=/lib \
 	--sbindir=/sbin \
-	--with-clvmd=all \
+	--enable-udev_sync \
+	--enable-udev_rules \
+	--enable-cmdlib \
+	--enable-fsadm \
+	--enable-dmeventd \
+	--enable-lvmpolld \
 	--enable-pkgconfig \
-	--enable-applib \
-	--enable-python2-bindings \
-	--enable-python3-bindings \
-	--enable-lvmetad
+	--with-cache=internal \
+	--with-thin=internal
