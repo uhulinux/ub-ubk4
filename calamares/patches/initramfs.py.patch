@@ -1,7 +1,7 @@
-diff -Nur orig/src/modules/initramfs/main.py mod/src/modules/initramfs/main.py
---- orig/src/modules/initramfs/main.py	2017-11-14 16:18:58.000000000 +0100
-+++ mod/src/modules/initramfs/main.py	2017-11-24 21:46:22.705169540 +0100
-@@ -27,11 +27,10 @@
+diff -Naur orig/src/modules/initramfs/main.py patched/src/modules/initramfs/main.py
+--- orig/src/modules/initramfs/main.py	2019-04-27 20:12:03.000000000 +0200
++++ patched/src/modules/initramfs/main.py	2019-05-03 02:07:10.412081195 +0200
+@@ -40,12 +40,11 @@
  
      :return:
      """
@@ -10,8 +10,9 @@ diff -Nur orig/src/modules/initramfs/main.py mod/src/modules/initramfs/main.py
 +    return_code = target_env_call(["mkinitrd-installedkernel"])
  
      if return_code != 0:
+         libcalamares.utils.debug("update-initramfs returned {}".format(return_code))
          return (
--            "Failed to run update-initramfs on the target",
-+            "Failed to run mkinitrd-installedkernel on the target",
-             "The exit code was {}".format(return_code)
+-            _("Failed to run update-initramfs on the target"),
++            _("Failed to run mkinitrd-installedkernel on the target"),
+             _("The exit code was {}").format(return_code)
              )

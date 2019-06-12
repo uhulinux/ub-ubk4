@@ -1,6 +1,6 @@
-diff -Nur orig/settings.conf mod/settings.conf
---- orig/settings.conf	2018-09-04 14:03:59.000000000 +0200
-+++ mod/settings.conf	2018-12-25 17:00:51.397426724 +0100
+diff -Naur orig/settings.conf patched/settings.conf
+--- orig/settings.conf	2019-04-27 20:12:03.000000000 +0200
++++ patched/settings.conf	2019-05-03 02:12:34.231689869 +0200
 @@ -78,6 +78,7 @@
    - partition
    - users
@@ -38,10 +38,10 @@ diff -Nur orig/settings.conf mod/settings.conf
  #  - grubcfg
    - bootloader
    - umount
-@@ -146,3 +143,7 @@
+@@ -174,3 +171,7 @@
  #
  # YAML: boolean.
- dont-chroot: false
+ disable-cancel-during-exec: false
 +
 +packageOperations:
 +  -install
