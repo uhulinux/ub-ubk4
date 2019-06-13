@@ -1,4 +1,11 @@
 #!/bin/sh -eux
 
+rm -f modules/qt4/updater.{cpp,h}
+
 export UB_MAKE_PROCS=1
-ub_compile
+export CXXFLAGS="-std=c++11"
+
+./autogen.sh
+ub_compile \
+    --with-libqt4 \
+    --with-archlib="lib"

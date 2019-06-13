@@ -1,0 +1,31 @@
+diff -Naur orig/modules/Makefile.in patched/modules/Makefile.in
+--- orig/modules/Makefile.in	2018-07-03 13:16:40.000000000 +0200
++++ patched/modules/Makefile.in	2019-06-11 04:47:18.165414822 +0200
+@@ -41,7 +41,7 @@
+ LIBUSB_INC := @LIBUSB_INC@
+ LIBUSB_LIB := @LIBUSB_LIB@
+ SED := sed
+-DEFS :=
++DEFS := -DQT_DISABLE_DEPRECATED_BEFORE=0
+ INCLUDES := -I.. -I@top_srcdir@
+ CFLAGS := @CFLAGS@ @MODULE_CFLAGS@ @INLINE_FLAGS@
+ CPPFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
+@@ -126,7 +126,7 @@
+ 
+ ifneq (@HAVE_QT4@,no)
+ ifeq (@QT4_STATIC_MODULES@,no)
+-PROGS := $(PROGS) qt4/updater.yate qt4/customtable.yate qt4/customtext.yate \
++PROGS := $(PROGS) qt4/customtable.yate qt4/customtext.yate \
+ 	qt4/customtree.yate qt4/widgetlist.yate qt4/clientarchive.yate
+ endif
+ endif
+@@ -410,9 +410,6 @@
+ rmanager.yate: EXTERNFLAGS = $(COREDUMP_INC) $(MALLINFO_DEF)
+ rmanager.yate: EXTERNLIBS = $(COREDUMP_LIB)
+ 
+-qt4/updater.yate: EXTERNFLAGS = $(QT4_INC_NET)
+-qt4/updater.yate: EXTERNLIBS = $(QT4_LIB_NET)
+-
+ javascript.yate: ../libyatescript.so ../libs/ypbx/libyatepbx.a
+ javascript.yate: LOCALFLAGS = -I@top_srcdir@/libs/yscript -I@top_srcdir@/libs/ypbx
+ javascript.yate: LOCALLIBS = -lyatescript -L../libs/ypbx -lyatepbx
