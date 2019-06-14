@@ -1,0 +1,57 @@
+diff -Naur orig/buildconfig/config_unix.py patched/buildconfig/config_unix.py
+--- orig/buildconfig/config_unix.py	2019-04-25 08:14:17.000000000 +0200
++++ patched/buildconfig/config_unix.py	2019-06-13 18:42:15.912879629 +0200
+@@ -221,13 +221,6 @@
+         Dependency('SCRAP', '', 'libX11', ['X11']),
+         #Dependency('GFX', 'SDL_gfxPrimitives.h', 'libSDL_gfx.so', ['SDL_gfx']),
+     ])
+-    is_freebsd = platform.system() == 'FreeBSD'
+-    if not is_freebsd:
+-        porttime_dep = get_porttime_dep()
+-        DEPS.append(
+-            Dependency('PORTMIDI', 'portmidi.h', 'libportmidi.so', ['portmidi'])
+-        )
+-        DEPS.append(porttime_dep)
+     DEPS.append(find_freetype())
+ 
+     if not DEPS[0].found:
+diff -Naur orig/buildconfig/Setup.SDL1.in patched/buildconfig/Setup.SDL1.in
+--- orig/buildconfig/Setup.SDL1.in	2019-04-25 08:14:17.000000000 +0200
++++ patched/buildconfig/Setup.SDL1.in	2019-06-13 18:38:59.334235517 +0200
+@@ -14,8 +14,6 @@
+ PNG = -lpng
+ JPEG = -ljpeg
+ SCRAP = -lX11
+-PORTMIDI = -lportmidi
+-PORTTIME = -lporttime
+ FREETYPE = -lfreetype
+ #--EndConfig
+ 
+@@ -30,7 +28,6 @@
+ mixer src_c/mixer.c $(SDL) $(MIXER) $(DEBUG)
+ mixer_music src_c/music.c $(SDL) $(MIXER) $(DEBUG)
+ scrap src_c/scrap.c $(SDL) $(SCRAP) $(DEBUG)
+-pypm src_c/pypm.c $(SDL) $(PORTMIDI) $(PORTTIME) $(DEBUG)
+ 
+ GFX = src_c/SDL_gfx/SDL_gfxPrimitives.c
+ #GFX = src_c/SDL_gfx/SDL_gfxBlitFunc.c src_c/SDL_gfx/SDL_gfxPrimitives.c
+diff -Naur orig/buildconfig/Setup.SDL2.in patched/buildconfig/Setup.SDL2.in
+--- orig/buildconfig/Setup.SDL2.in	2019-04-25 08:14:17.000000000 +0200
++++ patched/buildconfig/Setup.SDL2.in	2019-06-13 18:39:28.750631187 +0200
+@@ -12,8 +12,6 @@
+ IMAGE = -lSDL2_image
+ MIXER = -lSDL2_mixer
+ SCRAP = -lX11
+-PORTMIDI = -lportmidi
+-PORTTIME = -lporttime
+ FREETYPE = -lfreetype
+ #--EndConfig
+ 
+@@ -28,7 +26,6 @@
+ mixer src_c/mixer.c $(SDL) $(MIXER) $(DEBUG)
+ mixer_music src_c/music.c $(SDL) $(MIXER) $(DEBUG)
+ #scrap src_c/scrap.c $(SDL) $(SCRAP) $(DEBUG)
+-pypm src_c/pypm.c $(SDL) $(PORTMIDI) $(PORTTIME) $(DEBUG)
+ 
+ _sdl2.sdl2 src_c/_sdl2/sdl2.c $(SDL) $(DEBUG)
+ _sdl2.audio src_c/_sdl2/audio.c $(SDL) $(DEBUG)

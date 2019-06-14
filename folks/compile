@@ -1,8 +1,5 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--enable-vala \
-	--disable-libsocialweb-backend \
-	--disable-fatal-warnings \
-	--enable-eds-backend \
-	--enable-bluez-backend
+    -Dbluez_backend=true \
+    -Deds_backend=true
