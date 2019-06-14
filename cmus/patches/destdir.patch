@@ -1,0 +1,40 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2019-01-29 10:09:08.000000000 +0100
++++ patched/Makefile	2019-06-13 19:57:05.648570501 +0200
+@@ -272,17 +272,17 @@
+ man: $(man1) $(man7)
+ 
+ install-main: main
+-	$(INSTALL) -m755 $(bindir) cmus cmus-remote
++	$(INSTALL) -m755 $(DESTDIR)/$(bindir) cmus cmus-remote
+ 
+ install-plugins: plugins
+-	$(INSTALL) -m755 $(libdir)/cmus/ip $(ip-y)
+-	$(INSTALL) -m755 $(libdir)/cmus/op $(op-y)
++	$(INSTALL) -m755 $(DESTDIR)/$(libdir)/cmus/ip $(ip-y)
++	$(INSTALL) -m755 $(DESTDIR)/$(libdir)/cmus/op $(op-y)
+ 
+ install-data: man
+-	$(INSTALL) -m644 $(datadir)/cmus $(data)
+-	$(INSTALL) -m644 $(mandir)/man1 $(man1)
+-	$(INSTALL) -m644 $(mandir)/man7 $(man7)
+-	$(INSTALL) -m755 $(exampledir) cmus-status-display
++	$(INSTALL) -m644 $(DESTDIR)/$(datadir)/cmus $(data)
++	$(INSTALL) -m644 $(DESTDIR)/$(mandir)/man1 $(man1)
++	$(INSTALL) -m644 $(DESTDIR)/$(mandir)/man7 $(man7)
++	$(INSTALL) -m755 $(DESTDIR)/$(exampledir) cmus-status-display
+ 
+ install: all install-main install-plugins install-data
+ 
+diff -Naur orig/scripts/install patched/scripts/install
+--- orig/scripts/install	2019-01-29 10:09:08.000000000 +0100
++++ patched/scripts/install	2019-06-13 20:07:28.888791053 +0200
+@@ -20,7 +20,7 @@
+ 
+ test $# -lt 2 && exit 0
+ 
+-to="${DESTDIR}${1}"
++to="${1}"
+ shift
+ $GINSTALL -d -m755 "${to}"
+ for i in "$@"
