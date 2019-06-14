@@ -1,0 +1,115 @@
+diff -Naur orig/clients/Makefile.in patched/clients/Makefile.in
+--- orig/clients/Makefile.in	2018-07-03 13:16:31.000000000 +0200
++++ patched/clients/Makefile.in	2019-06-13 07:06:49.715821193 +0200
+@@ -9,7 +9,7 @@
+ 
+ CXX := @CXX@ -Wall
+ SED := sed
+-DEFS :=
++DEFS := -DQT_DISABLE_DEPRECATED_BEFORE=0
+ MOC := @QT4_MOC@
+ QT4_INC := @QT4_INC@
+ QT4_LIB := @QT4_LIB@
+diff -Naur orig/clients/qt4/Makefile.in patched/clients/qt4/Makefile.in
+--- orig/clients/qt4/Makefile.in	2018-07-03 13:16:31.000000000 +0200
++++ patched/clients/qt4/Makefile.in	2019-06-13 07:06:49.715821193 +0200
+@@ -11,7 +11,7 @@
+ QT4_LIB := @QT4_LIB@
+ QT4_INC_NET := @QT4_INC_NET@
+ QT4_LIB_NET := @QT4_LIB_NET@
+-DEFS:=
++DEFS:= -DQT_DISABLE_DEPRECATED_BEFORE=0
+ 
+ INCLUDES:=-I. -I@srcdir@ -I@top_srcdir@ $(QT4_INC)
+ CFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
+diff -Naur orig/clients/qt4/qt4client.cpp patched/clients/qt4/qt4client.cpp
+--- orig/clients/qt4/qt4client.cpp	2018-07-03 13:16:31.000000000 +0200
++++ patched/clients/qt4/qt4client.cpp	2019-06-13 07:06:49.715821193 +0200
+@@ -21,6 +21,7 @@
+ 
+ #include "qt4client.h"
+ #include <QtUiTools>
++#include <QFileDialog>
+ 
+ #ifdef _WINDOWS
+ #define DEFAULT_DEVICE "dsound/*"
+@@ -2410,7 +2411,7 @@
+ 	QtClient::getUtf8(params,"file",fixPathSep(files[i]));
+     if (dlg->fileMode() != QFileDialog::DirectoryOnly &&
+ 	dlg->fileMode() != QFileDialog::Directory) {
+-	QString filter = dlg->selectedFilter();
++	QString filter = dlg->selectedNameFilter();
+ 	if (filter.length())
+ 	    QtClient::getUtf8(params,"filter",filter);
+     }
+@@ -3450,8 +3451,8 @@
+     imgRead = "read image formats '" + imgRead + "'";
+     Debug(ClientDriver::self(),DebugInfo,"QT client start running (version=%s) %s",
+ 	qVersion(),imgRead.c_str());
+-    if (!QSound::isAvailable())
+-	Debug(ClientDriver::self(),DebugWarn,"QT sounds are not available");
++//    if (!QSound::isAvailable())
++//	Debug(ClientDriver::self(),DebugWarn,"QT sounds are not available");
+     // Create events proxy
+     m_events.append(new QtEventProxy(QtEventProxy::Timer));
+     m_events.append(new QtEventProxy(QtEventProxy::AllHidden,m_app));
+@@ -3564,11 +3565,11 @@
+ 	for (ObjList* o = obj->skipNull(); o; o = o->skipNext())
+ 	    filters.append(QtClient::setUtf8(o->get()->toString()));
+ 	TelEngine::destruct(obj);
+-	dlg->setFilters(filters);
++	dlg->setNameFilters(filters);
+     }
+     QString flt = QtClient::setUtf8(params.getValue(YSTRING("selectedfilter")));
+     if (flt.length())
+-	dlg->selectFilter(flt);
++	dlg->selectNameFilter(flt);
+ 
+     if (params.getBoolValue(YSTRING("save")))
+ 	dlg->setAcceptMode(QFileDialog::AcceptSave);
+@@ -3604,8 +3605,8 @@
+ // Create a sound object. Append it to the global list
+ bool QtClient::createSound(const char* name, const char* file, const char* device)
+ {
+-    if (!(QSound::isAvailable() && name && *name && file && *file))
+-	return false;
++//    if (!(QSound::isAvailable() && name && *name && file && *file))
++//	return false;
+     Lock lock(ClientSound::s_soundsMutex);
+     if (ClientSound::s_sounds.find(name))
+ 	return false;
+diff -Naur orig/clients/qt4/qt4client.h patched/clients/qt4/qt4client.h
+--- orig/clients/qt4/qt4client.h	2018-07-03 13:16:31.000000000 +0200
++++ patched/clients/qt4/qt4client.h	2019-06-13 07:06:49.715821193 +0200
+@@ -57,6 +57,7 @@
+ 
+ #include <QtGui>
+ #include <QSound>
++#include <QtWidgets>
+ 
+ namespace TelEngine {
+ 
+diff -Naur orig/modules/Makefile.in patched/modules/Makefile.in
+--- orig/modules/Makefile.in	2018-07-03 13:16:40.000000000 +0200
++++ patched/modules/Makefile.in	2019-06-13 07:08:06.400911629 +0200
+@@ -41,7 +41,7 @@
+ LIBUSB_INC := @LIBUSB_INC@
+ LIBUSB_LIB := @LIBUSB_LIB@
+ SED := sed
+-DEFS :=
++DEFS := -DQT_DISABLE_DEPRECATED_BEFORE=0
+ INCLUDES := -I.. -I@top_srcdir@
+ CFLAGS := @CFLAGS@ @MODULE_CFLAGS@ @INLINE_FLAGS@
+ CPPFLAGS := @CFLAGS@ @MODULE_CPPFLAGS@ @INLINE_FLAGS@
+diff -Naur orig/modules/qt4/customtree.cpp patched/modules/qt4/customtree.cpp
+--- orig/modules/qt4/customtree.cpp	2018-07-03 13:16:41.000000000 +0200
++++ patched/modules/qt4/customtree.cpp	2019-06-13 07:06:49.719821250 +0200
+@@ -3778,7 +3778,7 @@
+     QVariant checkVar = index.data(Qt::CheckStateRole);
+     if (checkVar.isValid()) {
+ 	checkState = static_cast<Qt::CheckState>(checkVar.toInt());
+-	checkRect = check(opt,opt.rect,checkVar);
++	checkRect = doCheck(opt,opt.rect,checkVar);
+     }
+     // Retrieve image (decoration)
+     QPixmap pixmap;

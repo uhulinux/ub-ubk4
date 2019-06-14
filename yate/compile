@@ -1,11 +1,11 @@
 #!/bin/sh -eux
 
-rm -f modules/qt5/updater.{cpp,h}
+rm -f modules/qt4/updater.{cpp,h}
 
 export UB_MAKE_PROCS=1
 export CXXFLAGS="-std=c++11"
 
-# ./autogen.sh
+./autogen.sh
 ub_compile \
-    --with-libqt5 \
+    --with-libqt4 \
     --with-archlib="lib"
