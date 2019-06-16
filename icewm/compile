@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+export LDFLAGS='-lglfw -lXrandr -lXinerama'
 ub_compile \
 	-DPREFIX=/usr \
 	-DCFGDIR=/etc/icewm
