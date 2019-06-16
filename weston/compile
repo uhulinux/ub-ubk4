@@ -1,5 +1,4 @@
 #!/bin/sh -eux
 
-export LDFLAGS=$(pkg-config --libs gio-2.0)
 ub_compile \
-	--enable-demo-clients-install
+    -Dsimple-dmabuf-drm=auto
