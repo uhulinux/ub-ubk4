@@ -1,6 +1,6 @@
 diff -Naur orig/makefile patched/makefile
---- orig/makefile	2018-11-20 11:10:13.000000000 +0100
-+++ patched/makefile	2018-11-27 02:29:51.570032404 +0100
+--- orig/makefile	2019-06-09 20:09:50.000000000 +0200
++++ patched/makefile	2019-06-17 03:41:19.112907639 +0200
 @@ -1,6 +1,8 @@
  LIBS=
  
@@ -11,21 +11,23 @@ diff -Naur orig/makefile patched/makefile
  
  OSNAME := $(shell uname -s)
  
-@@ -28,10 +30,10 @@
- 	$(MAKE) -C src/tingle clean
+@@ -29,11 +31,11 @@
  
  install:
--	-mkdir -p $(PREFIX)/share/pixmaps
+ 	$(MAKE) default
+-	-mkdir -p $(PREFIX)/share/
 -	-mkdir -p $(PREFIX)/share/applications
 -	-mkdir -p $(PREFIX)/bin
--	install -m 0644 data/evisum.png $(PREFIX)/share/pixmaps
+-	-mkdir -p $(PREFIX)/share/icons/hicolor/512x512/apps
+-	install -m 0644 data/evisum.png $(PREFIX)/share/icons/hicolor/512x512/apps
 -	install -m 0644 data/evisum.desktop $(PREFIX)/share/applications
 -	install -m 0755 evisum $(PREFIX)/bin
 -	install -m 0755 src/tingle/tingle $(PREFIX)/bin
-+	-mkdir -p $(DESTDIR)$(PREFIX)/share/pixmaps
++	-mkdir -p $(DESTDIR)$(PREFIX)/share/
 +	-mkdir -p $(DESTDIR)$(PREFIX)/share/applications
 +	-mkdir -p $(DESTDIR)$(PREFIX)/bin
-+	install -m 0644 data/evisum.png $(DESTDIR)$(PREFIX)/share/pixmaps
++	-mkdir -p $(DESTDIR)$(PREFIX)/share/icons/hicolor/512x512/apps
++	install -m 0644 data/evisum.png $(DESTDIR)$(PREFIX)/share/icons/hicolor/512x512/apps
 +	install -m 0644 data/evisum.desktop $(DESTDIR)$(PREFIX)/share/applications
 +	install -m 0755 evisum $(DESTDIR)$(PREFIX)/bin
 +	install -m 0755 src/tingle/tingle $(DESTDIR)$(PREFIX)/bin
