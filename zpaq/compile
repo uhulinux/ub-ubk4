@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+cd zpaq-7.15
+
 g++ -fPIC -shared -Dunix -c -Wall -O2 -DNDEBUG libzpaq.cpp -o libzpaq.so
 chmod +x libzpaq.so
 
