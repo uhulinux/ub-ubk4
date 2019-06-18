@@ -1,13 +1,14 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--with-ssl \
-	--with-gss \
-	--with-gpgme \
-	--with-gtkspell \
-	--with-sqlite \
-	--with-compface \
-	--with-libsecret \
-	--with-canberra \
-	--with-ldap \
-	--with-html-widget=webkit2
+    -Dgpgme=true \
+    -Dautocrypt=true \
+    -Dcanberra=true \
+    -Dcompface=true \
+    -Dgss=true \
+    -Dhtml-widget=webkit2 \
+    -Dspell-checker=gtkspell \
+    -Dldap=true \
+    -Dsqlite=true \
+    -Dlibsecret=true \
+    -Dgtksourceview=true
