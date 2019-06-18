@@ -1,0 +1,24 @@
+diff -Naur orig/src/Makefile.am patched/src/Makefile.am
+--- orig/src/Makefile.am	2015-12-07 08:51:33.000000000 +0100
++++ patched/src/Makefile.am	2019-06-18 22:59:49.305520048 +0200
+@@ -15,7 +15,7 @@
+ GNULIB = $(top_builddir)/lib/libgnu.a
+ 
+ le_DEPENDENCIES = $(GNULIB)
+-le_LDADD = $(GNULIB) $(CURSES_LIBS) $(LIBINTL) $(LIBSOCKET) $(LIB_POLL) $(LIB_SELECT)
++le_LDADD = $(GNULIB) $(CURSES_LIBS) $(LIBINTL) $(LIBSOCKET) $(LIB_POLL) $(LIB_SELECT) -lstdc++
+ 
+ AM_CPPFLAGS = -I$(top_builddir)/lib -I$(top_srcdir)/lib $(CURSES_INCLUDES)
+ 
+diff -Naur orig/src/Makefile.in patched/src/Makefile.in
+--- orig/src/Makefile.in	2019-02-08 17:49:09.000000000 +0100
++++ patched/src/Makefile.in	2019-06-18 23:02:16.539478045 +0200
+@@ -1194,7 +1194,7 @@
+ 
+ GNULIB = $(top_builddir)/lib/libgnu.a
+ le_DEPENDENCIES = $(GNULIB)
+-le_LDADD = $(GNULIB) $(CURSES_LIBS) $(LIBINTL) $(LIBSOCKET) $(LIB_POLL) $(LIB_SELECT)
++le_LDADD = $(GNULIB) $(CURSES_LIBS) $(LIBINTL) $(LIBSOCKET) $(LIB_POLL) $(LIB_SELECT) -lstdc++
+ AM_CPPFLAGS = -I$(top_builddir)/lib -I$(top_srcdir)/lib $(CURSES_INCLUDES)
+ EXTRA_DIST = le.hlp make-action-enum.pl make-action-name-func.pl make-keymap.pl make-mainmenu.pl
+ pkgdata_DATA = le.hlp
