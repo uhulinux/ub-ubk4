@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
 ./autogen.sh
+export CFLAGS='-Wno-error=unused-parameter'
 ub_compile
