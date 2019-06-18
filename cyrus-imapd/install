@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
 # rename "master" to "cyrus-master" to avoid conflict with postfix
-for f in man/*.{5,8} doc/html/*.html; do
+for f in man/*.{5,8}; do
 	ub_replace "master(8)" "cyrus-master(8)" "$f"
 done
 
