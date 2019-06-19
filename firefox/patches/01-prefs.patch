@@ -1,13 +1,13 @@
 diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2019-01-24 19:48:38.000000000 +0100
-+++ patched/browser/app/profile/firefox.js	2019-01-29 23:26:56.521372545 +0100
-@@ -21,6 +21,19 @@
+--- orig/browser/app/profile/firefox.js	2019-06-09 10:15:50.000000000 +0200
++++ patched/browser/app/profile/firefox.js	2019-06-15 01:17:19.808556089 +0200
+@@ -21,6 +21,16 @@
  #endif
  #endif
  
 +// Use LANG environment variable to choose locale
 +pref("intl.locale.matchOS", true);
-+pref("intl.locale.requested", "");
++// pref("intl.locale.requested", "");
 +
 +// Use system-provided dictionaries
 +pref("spellchecker.dictionary_path", "/usr/share/hunspell");
@@ -15,13 +15,10 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
 +// Disable default browser checking
 +pref("shell.checkDefaultApps", 0);
 +
-+// google NS_ERROR_NET_INADEQUATE_SECURITY
-+// pref("network.http.spdy.enabled.http2", false);
-+
  pref("browser.hiddenWindowChromeURL", "chrome://browser/content/hiddenWindow.xul");
  
  // Enables some extra Extension System Logging (can reduce performance)
-@@ -53,7 +66,8 @@
+@@ -53,7 +63,8 @@
  
  // Disable add-ons that are not installed by the user in all scopes by default.
  // See the SCOPE constants in AddonManager.jsm for values to use here.
@@ -31,7 +28,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -76,8 +90,8 @@
+@@ -71,8 +82,8 @@
  pref("extensions.legacy.exceptions", "testpilot@cliqz.com,@testpilot-containers,jid1-NeEaf3sAHdKHPA@jetpack,@activity-streams,pulse@mozilla.com,@testpilot-addon,@min-vid,tabcentertest1@mozilla.com,snoozetabs@mozilla.com,speaktome@mozilla.com,hoverpad@mozilla.com");
  
  // Require signed add-ons by default
@@ -42,7 +39,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
  
  // Dictionary download preference
-@@ -140,7 +154,7 @@
+@@ -140,7 +151,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
  #ifndef XP_WIN
@@ -51,7 +48,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  #endif
  
  // If set to true, the Update Service will present no UI for any event.
-@@ -279,7 +293,7 @@
+@@ -283,7 +294,7 @@
  pref("browser.urlbar.ctrlCanonizesURLs", true);
  
  // Control autoFill behavior
@@ -60,7 +57,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.urlbar.speculativeConnect.enabled", true);
  
  // Whether bookmarklets should be filtered out of Address Bar matches.
-@@ -314,7 +328,7 @@
+@@ -318,7 +329,7 @@
  pref("browser.urlbar.maxCharsForSearchSuggestions", 20);
  
  pref("browser.urlbar.formatting.enabled", true);
@@ -69,7 +66,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  pref("browser.urlbar.oneOffSearches", true);
  
-@@ -731,11 +745,7 @@
+@@ -756,11 +767,7 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
