@@ -16,6 +16,9 @@ patch -i "$UB_SRCDIR"/patches/menu.patch.skip
 cd kernel
 patch -i "$UB_SRCDIR"/patches/kernel-4.16.patch.skip
 cd common/inc
-patch -i "$UB_SRCDIR"/patches/kernel-4.16-2.patch.skip
-cd -
+patch -i "$UB_SRCDIR"/patches/compile-fix.patch.skip
+cd ../..
+cd nvidia
+patch -i "$UB_SRCDIR"/patches/fs62142.patch.skip
+cd ..
 make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
