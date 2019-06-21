@@ -1,2 +1,7 @@
-dir=$(urllist https://kernel.org/pub/linux/utils/cryptsetup/ | grep ^v | sort -V | tail -n 1)
-u2d https://kernel.org/pub/linux/utils/cryptsetup/$dir/
+for dir in $(urllist https://kernel.org/pub/linux/utils/cryptsetup/| grep ^v  | sort -Vr);do
+ver=$(u2d https://kernel.org/pub/linux/utils/cryptsetup/$dir/)
+if [ $ver ];then
+echo $ver
+exit 0
+fi
+done
