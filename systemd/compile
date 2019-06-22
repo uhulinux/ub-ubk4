@@ -6,6 +6,7 @@
 # -Ddefault-dnssec=no: a dnssec experimental
 
 ub_compile \
+   	-Dsplit-usr=false \
 	-Dpamlibdir=/lib/security \
 	-Dntp-servers=pool.ntp.org \
 	-Ddefault-dnssec=no \
@@ -18,66 +19,5 @@ ub_compile \
 	-Dsystem-uid-max=999 \
 	-Dsystem-gid-max=999 \
     -Dfirstboot=false \
-	-Dsplit-usr=false
-#    -Dsysusers=false \
-
-# LFS 241
-
-#sed -i 's/GROUP="render", //' rules/50-udev-default.rules.in #A foltunk rendbeteszi
-
-#      -Dblkid=true          \ Ez az util-linux és auto, tehát felesleges, mert az util-linux a build-depends-ben van
-#      -Dbuildtype=release   \ Ez az opció nem szerepel a meson-options -ban
-#      -Ddefault-dnssec=no   \ Rendben van.
-#      -Dfirstboot=false     \ Ez kell!
-#      -Dinstall-tests=false \ Alapértelmezett a false, felesleges
-#      -Dldconfig=false      \ Ez kell majd később, mert nem kell dinamikus linker cache újraépítés a boot során
-#      -Drootprefix=         \ A / a default, felesleges
-#      -Drootlibdir=/lib     \ marad az alapértelmezett
-#      -Dsplit-usr=true      \ Alapértelmezett az auto, ha nem szimlink a /bin, vagy a /sbin, akkor hasít és használható lesz.
-#      -Dsysusers=false      \ Ez kell, mert így nem kezeli a /etc/grouo és /etc/passwd cuccost
-#      -Db_lto=false         \ Nincs ilyen opció
-
-# LFS 239
-
-#sed -i 's/GROUP="render", //' rules/50-udev-default.rules.in #A foltunk rendbeteszi
-
-#      -Dblkid=true                 \
-#      -Dbuildtype=release          \
-#      -Ddefault-dnssec=no          \
-#      -Dfirstboot=false            \
-#      -Dinstall-tests=false        \
-#      -Dkill-path=/bin/kill        \
-#      -Dkmod-path=/bin/kmod        \
-#      -Dldconfig=false             \
-#      -Dmount-path=/bin/mount      \
-#      -Drootprefix=                \
-#      -Drootlibdir=/lib            \
-#      -Dsplit-usr=true             \
-#      -Dsulogin-path=/sbin/sulogin \
-#      -Dsysusers=false             \
-#      -Dumount-path=/bin/umount    \
-#      -Db_lto=false                \
-
-#-D*-path=*
-#    These switches provide location of binaries needed by systemd at runtime that have not yet been installed, or who's pkgconfig files are currently only in /tools/lib/pkgconfig.
-
-#-Ddefault-dnssec=no
-#    This switch turns off the experimental DNSSEC support.
-
-#-Dfirstboot=false
-#    This switch prevents installation of systemd services responsible for setting up the system for the first time. They are not useful for LFS because everything is done manually.
-
-#-Dinstall-tests=false
-#    This switch prevents installation of the compiled tests.
-
-#-Dldconfig=false
-#    This switch prevents installation of a systemd unit that runs ldconfig at boot, which is not useful for source distributions such as LFS and makes the boot time longer. Remove it if the described feature is desired.
-
-#-Droot*
-#    These switches ensure that core programs and shared libraries are installed in the subdirectories of the root partition.
-
-#-Dsplit-usr=true
-#    This switch ensures that systemd will work on systems where /bin, /lib and /sbin directories are not symlinks to their /usr counterparts.
-
-#-Dsysusers=false
-#    This switch prevents installation of systemd services responsible for setting up the /etc/group and /etc/passwd files. Both files were created earlier in this chapter.
+	-Dldconfig=false \
+    -Dsysusers=false
