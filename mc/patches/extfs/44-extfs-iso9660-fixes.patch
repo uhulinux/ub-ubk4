@@ -10,7 +10,7 @@ diff -Naur orig/src/vfs/extfs/helpers/iso9660.in patched/src/vfs/extfs/helpers/i
  
      if [ $(echo "$ISOINFO_D_I" | @GREP@ "Joliet with UCS level 3 found" | wc -l) = 1 \
          -a $(echo "$ISOINFO_D_I" | @GREP@ "NO Rock Ridge" | wc -l) = 1 ] ; then
-@@ -133,9 +133,9 @@
+@@ -136,9 +136,9 @@
      $ISOINFO -l -i "$1" 2>/dev/null | @AWK@ -v SEMICOLON=$SEMICOLON '
  BEGIN {
    dir="";
