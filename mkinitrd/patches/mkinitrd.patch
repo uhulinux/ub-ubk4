@@ -1,0 +1,23 @@
+diff -Naur orig/mkinitrd patched/mkinitrd
+--- orig/mkinitrd	2019-06-21 16:02:21.210901268 +0200
++++ patched/mkinitrd	2019-07-07 17:56:07.281542360 +0200
+@@ -174,16 +174,15 @@
+ 
+ ln -s /proc/mounts "$dir"/etc/mtab
+ 
+-mkdir -p "$dir"/mnt
++mkdir -p "$dir"/{mnt,sysroot}
+ 
+ # old init script
+ if [ -d /usr/lib/mkinitrd ]; then
+     cp -ar /usr/lib/mkinitrd/. "$dir"/.
+ else
+     # systemd indítás init fájl nélkül
+-    ln -s /usr/lib/systemd/systemd "$dir"/init
+-    ln -sf /usr/lib/systemd/system/initrd.target "$dir"/usr/lib/systemd/system/sysinit.target.wants/initrd.target
+-    mkdir -p "$dir"/etc/initrd-release
++    ln -s /usr/lib/systemd/systemd "$dir"/sbin/init
++    touch "$dir"/etc/initrd-release
+ fi
+ 
+ cd "$dir"

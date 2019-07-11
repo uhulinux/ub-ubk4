@@ -1,13 +1,13 @@
 diff -Naur orig/external/more_fonts/Module_more_fonts.mk patched/external/more_fonts/Module_more_fonts.mk
---- orig/external/more_fonts/Module_more_fonts.mk	2018-10-22 01:02:34.000000000 +0200
-+++ patched/external/more_fonts/Module_more_fonts.mk	2018-11-06 23:57:14.905579299 +0100
+--- orig/external/more_fonts/Module_more_fonts.mk	2019-07-05 11:57:59.000000000 +0200
++++ patched/external/more_fonts/Module_more_fonts.mk	2019-07-10 01:12:50.997293816 +0200
 @@ -15,17 +15,13 @@
  	ExternalPackage_caladea \
  	ExternalPackage_carlito \
- 	ExternalPackage_culmus \
+ 	$(if $(MPL_SUBSET),,ExternalPackage_culmus) \
 -	ExternalPackage_dejavu \
  	ExternalPackage_gentium \
- 	ExternalPackage_kacst \
+ 	$(if $(MPL_SUBSET),,ExternalPackage_kacst) \
 -	ExternalPackage_liberation \
  	ExternalPackage_liberation_narrow \
 -	ExternalPackage_libertineg \
@@ -22,10 +22,10 @@ diff -Naur orig/external/more_fonts/Module_more_fonts.mk patched/external/more_f
 @@ -34,17 +30,13 @@
  	UnpackedTarball_caladea \
  	UnpackedTarball_carlito \
- 	UnpackedTarball_culmus \
+ 	$(if $(MPL_SUBSET),,UnpackedTarball_culmus) \
 -	UnpackedTarball_dejavu \
  	UnpackedTarball_gentium \
- 	UnpackedTarball_kacst \
+ 	$(if $(MPL_SUBSET),,UnpackedTarball_kacst) \
 -	UnpackedTarball_liberation \
  	UnpackedTarball_liberation_narrow \
 -	UnpackedTarball_libertineg \
@@ -38,16 +38,16 @@ diff -Naur orig/external/more_fonts/Module_more_fonts.mk patched/external/more_f
  	UnpackedTarball_scheherazade \
  	UnpackedTarball_EmojiOne_Color \
 diff -Naur orig/Repository.mk patched/Repository.mk
---- orig/Repository.mk	2018-10-22 01:02:34.000000000 +0200
-+++ patched/Repository.mk	2018-11-06 23:58:45.830458391 +0100
-@@ -976,15 +976,11 @@
+--- orig/Repository.mk	2019-07-05 11:57:59.000000000 +0200
++++ patched/Repository.mk	2019-07-10 01:11:19.396423862 +0200
+@@ -981,15 +981,11 @@
  		fonts_caladea \
  		fonts_carlito \
- 		fonts_culmus \
+ 		$(if $(MPL_SUBSET),,fonts_culmus) \
 -		fonts_dejavu \
  		fonts_emojione_color \
  		fonts_gentium \
- 		fonts_kacst \
+ 		$(if $(MPL_SUBSET),,fonts_kacst) \
 -		fonts_liberation \
  		fonts_liberation_narrow \
 -		fonts_libertineg \
