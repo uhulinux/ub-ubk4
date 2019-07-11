@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--enable-pixbuf \
-	--enable-introspection \
-	--disable-maintainer-mode \
-	--enable-t1lib
+	-Dpixbuf=true \
+	-Dintrospection=true \
+	-Dmathjax-directory=/usr/share/yelp/mathjax

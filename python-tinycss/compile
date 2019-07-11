@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+#rm tinycss/speedups.c
+# isort is not a sign of failing code
+sed -i '/addopts/d' setup.cfg
+
+python3 setup.py build

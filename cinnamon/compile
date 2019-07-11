@@ -2,6 +2,8 @@
 
 export ENABLE_GTK_DOC="0"
 ub_compile \
+  --disable-rpath \
   --disable-schemas-compile \
   --enable-introspection=yes \
-  --enable-compile-warnings=no
+  --enable-compile-warnings=no \
+  --with-session-tracking=systemd
