@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--disable-vala \
-	--disable-always-build-tests \
-	--disable-gtk-doc
+	-Dvapi=false \
+	-Dalways_build_tests=false \
+	-Dgtk_doc=false
