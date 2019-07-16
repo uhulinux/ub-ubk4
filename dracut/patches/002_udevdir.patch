@@ -1,0 +1,12 @@
+diff -Nur orig/dracut.sh mod/dracut.sh
+--- orig/dracut.sh	2018-10-08 15:38:33.000000000 +0200
++++ mod/dracut.sh	2019-07-14 18:56:37.946240304 +0200
+@@ -1315,6 +1315,8 @@
+     [[ -e /usr/lib/udev/collect ]] && udevdir=/usr/lib/udev
+ fi
+ 
++udevdir=/usr/lib/udev
++
+ [[ -d $systemdutildir ]] \
+     || systemdutildir=$(pkg-config systemd --variable=systemdutildir 2>/dev/null)
+ 

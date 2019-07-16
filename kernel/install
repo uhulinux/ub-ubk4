@@ -24,13 +24,13 @@ export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C LANG=C date)"
 cat >"$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel <<END
 #!/bin/sh
 
-mkinitrd $VERSION.x86_64
+dracut /boot/initrd-$VERSION.x86_64.img $UB_VERSION-$UB_RELEASE.x86_64
 
-rm -f /boot/initrd.x86_64.gz
-ln -s initrd-$VERSION.x86_64.gz /boot/initrd.x86_64.gz
+rm -f /boot/initrd.x86_64
+ln -s initrd-$VERSION.x86_64.img /boot/initrd.x86_64
 
-rm -f /boot/initrd.gz
-ln -s initrd.x86_64.gz /boot/initrd.gz
+rm -f /boot/initrd
+ln -s initrd.x86_64 /boot/initrd
 
 # update grub config
 if [ -f /boot/grub/grub.cfg ]; then
