@@ -24,7 +24,7 @@ export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C LANG=C date)"
 cat >"$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel <<END
 #!/bin/sh
 
-dracut /boot/initrd-$VERSION.x86_64.img $UB_VERSION-$UB_RELEASE.x86_64
+dracut -f -N /boot/initrd-$VERSION.x86_64.img $UB_VERSION-$UB_RELEASE.x86_64
 
 rm -f /boot/initrd.x86_64
 ln -s initrd-$VERSION.x86_64.img /boot/initrd.x86_64
