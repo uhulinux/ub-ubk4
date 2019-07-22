@@ -1,10 +1,5 @@
 #!/bin/bash -eux
 
-for i in `ls -1 modules.d/98dracut-systemd/*.sh`;do
-sed '1a\export PATH=/bin:/sbin:/usr/bin:/usr/sbin' -i $i
-done
-#sed '2a\export PATH=/bin:/sbin:/usr/bin:/usr/sbin' -i modules.d/99squasfs/setup-squash.sh
-
 ub_compile \
     --systemdsystemunitdir=$(pkg-config --variable=systemdsystemunitdir systemd) \
     --bashcompletiondir=$(pkg-config --variable=completionsdir bash-completion)

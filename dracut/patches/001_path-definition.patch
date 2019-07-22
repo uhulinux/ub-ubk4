@@ -1,0 +1,31 @@
+diff -Nur orig/modules.d/99base/dracut-lib.sh mod/modules.d/99base/dracut-lib.sh
+--- orig/modules.d/99base/dracut-lib.sh	2018-10-08 15:38:33.000000000 +0200
++++ mod/modules.d/99base/dracut-lib.sh	2019-07-22 17:58:51.305844848 +0200
+@@ -5,6 +5,7 @@
+ if [ -n "$NEWROOT" ]; then
+     [ -d $NEWROOT ] || mkdir -p -m 0755 $NEWROOT
+ fi
++export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+ 
+ if ! [ -d /run/initramfs ]; then
+     mkdir -p -m 0755 /run/initramfs/log
+diff -Nur orig/modules.d/99base/memtrace-ko.sh mod/modules.d/99base/memtrace-ko.sh
+--- orig/modules.d/99base/memtrace-ko.sh	2018-10-08 15:38:33.000000000 +0200
++++ mod/modules.d/99base/memtrace-ko.sh	2019-07-22 18:00:30.149697434 +0200
+@@ -8,6 +8,7 @@
+ # Therefore, tracing "mm_page_alloc"alone should be enough for the purpose.
+ 
+ # "sys/kernel/tracing" has the priority if exists.
++export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+ get_trace_base() {
+     # trace access through debugfs would be obsolete if "/sys/kernel/tracing" is available.
+     if [ -d "/sys/kernel/tracing" ]; then
+diff -Nur orig/modules.d/99base/rdsosreport.sh mod/modules.d/99base/rdsosreport.sh
+--- orig/modules.d/99base/rdsosreport.sh	2018-10-08 15:38:33.000000000 +0200
++++ mod/modules.d/99base/rdsosreport.sh	2019-07-22 18:01:12.537634217 +0200
+@@ -1,4 +1,5 @@
+ #!/bin/sh
++export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+ 
+ echo 'Generating "/run/initramfs/rdsosreport.txt"'
+ 
