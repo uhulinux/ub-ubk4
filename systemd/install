@@ -2,9 +2,6 @@
 
 ub_install
 
-# nem kell rpm macro
-rm -rf "$UB_INSTALLDIR"/usr/lib/rpm
-
 # udev symlinks
 for i in udev{monitor,trigger,settle,control,info,test}; do
 	ln -s udevadm "$UB_INSTALLDIR"/usr/bin/"$i"
@@ -30,16 +27,8 @@ for i in halt poweroff reboot shutdown; do
 	ln -s systemctl "$UB_INSTALLDIR"/usr/bin/$i
 done
 
-## initrd kell a sysinitbe, mert initrd -t használunk mindenképp
-#ln -s /usr/lib/systemd/system/initrd.target "$UB_INSTALLDIR"/usr/lib/systemd/system/sysinit.target.wants/initrd.target
+# /sbin/init
+ln -s /usr/lib/systemd/systemd "$UB_INSTALLDIR"/sbin/init
 
-# postboot_run
-# for target in graphical multi-user; do
-#	mkdir -p "$UB_INSTALLDIR"/etc/systemd/system/"$target".target.wants
-#	ln -s /usr/lib/systemd/system/postboot_run.service "$UB_INSTALLDIR"/etc/systemd/system/$target.target.wants/postboot_run.service
-# done
-
-# compat symlinks
-# for i in libsystemd-{daemon,id128,journal,login}; do
-#	ln -s libsystemd.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig/"$i".pc
-# done
+# /etc/initrd-release
+touch "$UB_INSTALLDIR"/etc/initrd-release
