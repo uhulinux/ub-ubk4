@@ -1,0 +1,20 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2019-07-22 23:14:08.256628352 +0200
++++ patched/CMakeLists.txt	2019-07-22 23:15:53.361994766 +0200
+@@ -38,7 +38,7 @@
+ find_package(Qt5Gui REQUIRED)
+ find_package(Qt5Widgets REQUIRED)
+ 
+-find_package(KF5 COMPONENTS REQUIRED I18n Config Su CoreAddons Auth WidgetsAddons DocTools XmlGui Solid KIO IconThemes)
++find_package(KF5 COMPONENTS REQUIRED I18n Config Su CoreAddons Auth WidgetsAddons XmlGui Solid KIO IconThemes)
+ 
+ else()
+ SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+@@ -124,7 +124,6 @@
+ add_subdirectory(icons)
+ add_subdirectory(data)
+ add_subdirectory(po)
+-add_subdirectory(doc)
+ 
+ include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/libdvdnav-NOW #from dvdnav
