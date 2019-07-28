@@ -10,3 +10,5 @@ for i in "$UB_INSTALLDIR"/usr/bin/dbus-{daemon,send,cleanup-sockets}; do
 	mv -f "$i" "$UB_INSTALLDIR"/bin/
 	ln -s ../../bin/"${i##*/}" "$i"
 done
+
+rm -rf "$UB_INSTALLDIR/var/run"
