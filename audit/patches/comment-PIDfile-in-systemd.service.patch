@@ -1,0 +1,12 @@
+diff -Nur orig/init.d/auditd.service mod/init.d/auditd.service
+--- orig/init.d/auditd.service	2019-03-01 21:19:13.000000000 +0100
++++ mod/init.d/auditd.service	2019-07-28 19:35:55.562811444 +0200
+@@ -17,7 +17,7 @@
+ 
+ [Service]
+ Type=forking
+-PIDFile=/run/auditd.pid
++#PIDFile=/run/auditd.pid
+ ExecStart=/sbin/auditd
+ ## To not use augenrules, copy this file to /etc/systemd/system/auditd.service
+ ## and comment/delete the next line and uncomment the auditctl line.

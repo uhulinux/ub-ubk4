@@ -1,0 +1,12 @@
+diff -Nur orig/examples/chronyd.service mod/examples/chronyd.service
+--- orig/examples/chronyd.service	2019-05-10 12:22:57.000000000 +0200
++++ mod/examples/chronyd.service	2019-07-29 17:33:23.455027518 +0200
+@@ -7,7 +7,7 @@
+ 
+ [Service]
+ Type=forking
+-PIDFile=/run/chrony/chronyd.pid
++#PIDFile=/run/chrony/chronyd.pid
+ EnvironmentFile=-/etc/sysconfig/chronyd
+ ExecStart=/usr/sbin/chronyd $OPTIONS
+ PrivateTmp=yes
