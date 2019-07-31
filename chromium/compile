@@ -76,7 +76,7 @@ _syslibs=(
 )
 
 # external usb.ids (hwdata)
-sed "s|//third_party/usb_ids/usb.ids|/usr/share/hwdata/usb.ids|g" -i device/usb/BUILD.gn
+sed "s|//third_party/usb_ids/usb.ids|/usr/share/hwdata/usb.ids|g" -i services/device/public/cpp/usb/BUILD.gn
 
 build/linux/unbundle/replace_gn_files.py --system-libraries "${_syslibs[@]}"
 
