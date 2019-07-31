@@ -1,16 +1,24 @@
-diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
---- orig/src/branding/default/show.qml	2019-01-09 13:00:52.000000000 +0100
-+++ mod/src/branding/default/show.qml	2019-01-11 15:15:10.514831044 +0100
-@@ -26,42 +26,51 @@
+diff -Naur orig/src/branding/default/show.qml patched/src/branding/default/show.qml
+--- orig/src/branding/default/show.qml	2019-07-06 00:52:35.000000000 +0200
++++ patched/src/branding/default/show.qml	2019-06-20 18:56:00.000000000 +0200
+@@ -24,53 +24,53 @@
+ {
+     id: presentation
  
+-    function nextSlide() {
+-        console.log("Next slide");
+-        presentation.goToNextSlide();
+-    }
+-
      Timer {
          id: advanceTimer
--        interval: 5000
+-        interval: 1000
 -        running: false
 +        interval: 10000
 +        running: true
          repeat: true
-         onTriggered: presentation.goToNextSlide()
+-        onTriggered: nextSlide()
++        onTriggered: presentation.goToNextSlide()
      }
  
      Slide {
@@ -43,7 +51,7 @@ diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
      }
  
 -    Slide {
--        centeredText: "This is a second Slide element."
+-        centeredText: qsTr("This is a second Slide element.")
 +
 + Slide {
 +
@@ -58,8 +66,13 @@ diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
  
 +
      Slide {
--        centeredText: "This is a third Slide element."
-+
+-        centeredText: qsTr("This is a third Slide element.")
+-    }
+ 
+-    function onActivate() {
+-        presentation.currentSlide = 0;
+-        advanceTimer.running = true
+-        console.log("QML Component (default slideshow) activated");
 +        title: qsTr("UHU-UBK3")
 +        Image {
 +            source: "uhu-ubk.png"
@@ -68,7 +81,7 @@ diff -Nur orig/src/branding/default/show.qml mod/src/branding/default/show.qml
 +            anchors.centerIn: parent
 +        }
      }
- 
 +
-     Component.onCompleted: advanceTimer.running = true
++
++    Component.onCompleted: advanceTimer.running = true
  }

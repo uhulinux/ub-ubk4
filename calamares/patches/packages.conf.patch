@@ -1,6 +1,6 @@
-diff -Nur orig/src/modules/packages/packages.conf mod/src/modules/packages/packages.conf
---- orig/src/modules/packages/packages.conf	2018-05-17 17:13:54.000000000 +0200
-+++ mod/src/modules/packages/packages.conf	2018-06-12 13:14:30.272149269 +0200
+diff -Naur orig/src/modules/packages/packages.conf patched/src/modules/packages/packages.conf
+--- orig/src/modules/packages/packages.conf	2019-07-06 00:52:35.000000000 +0200
++++ patched/src/modules/packages/packages.conf	2019-07-31 13:10:51.702346606 +0200
 @@ -12,7 +12,7 @@
  #  - entropy     - Sabayon package manager
  #  - dummy       - Dummy manager, only logs
@@ -8,9 +8,9 @@ diff -Nur orig/src/modules/packages/packages.conf mod/src/modules/packages/packa
 -backend: dummy
 +backend: apt
  
+ #
  # Often package installation needs an internet connection.
- # Since you may allow system installation without a connection
-@@ -129,13 +129,3 @@
+@@ -142,13 +142,3 @@
  # "binutils", and then a second time for "wget". When installing large numbers
  # of packages, this can lead to a considerable time savings.
  #

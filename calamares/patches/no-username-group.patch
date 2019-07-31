@@ -1,6 +1,6 @@
-diff -Nur calamares-3.2.1/src/modules/users/CreateUserJob.cpp calamares-3.2.1.patched/src/modules/users/CreateUserJob.cpp
---- calamares-3.2.1/src/modules/users/CreateUserJob.cpp	2018-06-25 16:04:26.000000000 +0200
-+++ calamares-3.2.1.patched/src/modules/users/CreateUserJob.cpp	2018-07-21 17:35:53.915208636 +0200
+diff -Naur orig/src/modules/users/CreateUserJob.cpp patched/src/modules/users/CreateUserJob.cpp
+--- orig/src/modules/users/CreateUserJob.cpp	2019-07-06 00:52:35.000000000 +0200
++++ patched/src/modules/users/CreateUserJob.cpp	2019-07-31 13:08:15.880355351 +0200
 @@ -147,7 +147,7 @@
          }
      }
@@ -11,11 +11,11 @@ diff -Nur calamares-3.2.1/src/modules/users/CreateUserJob.cpp calamares-3.2.1.pa
      if ( !shell.isEmpty() )
          useradd << "-s" << shell;
 @@ -169,7 +169,7 @@
-         return pres.explainProcess( "usermod", 10 );
+         return commandResult.explainProcess( "usermod", 10 );
      }
  
 -    QString userGroup = QString( "%1:%2" ).arg( m_userName ).arg( m_userName );
 +    QString userGroup = QString( "%1:%2" ).arg( m_userName ).arg( "users" );
      QString homeDir = QString( "/home/%1" ).arg( m_userName );
-     pres = CalamaresUtils::System::instance()->targetEnvCommand(
+     commandResult = CalamaresUtils::System::instance()->targetEnvCommand(
          { "chown", "-R", userGroup, homeDir } );

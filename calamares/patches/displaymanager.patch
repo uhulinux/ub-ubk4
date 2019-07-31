@@ -1,6 +1,6 @@
-diff -Nur orig/src/modules/displaymanager/displaymanager.conf mod/src/modules/displaymanager/displaymanager.conf
---- orig/src/modules/displaymanager/displaymanager.conf	2018-09-04 14:03:59.000000000 +0200
-+++ mod/src/modules/displaymanager/displaymanager.conf	2018-12-24 20:50:14.385756890 +0100
+diff -Naur orig/src/modules/displaymanager/displaymanager.conf patched/src/modules/displaymanager/displaymanager.conf
+--- orig/src/modules/displaymanager/displaymanager.conf	2019-07-06 00:52:35.000000000 +0200
++++ patched/src/modules/displaymanager/displaymanager.conf	2019-07-31 12:48:29.364093966 +0200
 @@ -9,9 +9,7 @@
    - sddm
    - lightdm
@@ -11,10 +11,10 @@ diff -Nur orig/src/modules/displaymanager/displaymanager.conf mod/src/modules/di
  
  #Enable the following settings to force a desktop environment in your displaymanager configuration file:
  #defaultDesktopEnvironment:
-diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager/main.py
---- orig/src/modules/displaymanager/main.py	2018-09-04 14:03:59.000000000 +0200
-+++ mod/src/modules/displaymanager/main.py	2018-12-24 22:48:34.003185444 +0100
-@@ -79,9 +79,9 @@
+diff -Naur orig/src/modules/displaymanager/main.py patched/src/modules/displaymanager/main.py
+--- orig/src/modules/displaymanager/main.py	2019-07-06 00:52:35.000000000 +0200
++++ patched/src/modules/displaymanager/main.py	2019-07-31 12:48:29.364093966 +0200
+@@ -80,9 +80,9 @@
      DesktopEnvironment('/usr/bin/startlxde', 'LXDE'),
      DesktopEnvironment('/usr/bin/lxqt-session', 'lxqt'),
      DesktopEnvironment('/usr/bin/pekwm', 'pekwm'),
@@ -26,7 +26,7 @@ diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager
      DesktopEnvironment('/usr/bin/openbox-session', 'openbox')
  ]
  
-@@ -799,6 +799,7 @@
+@@ -809,6 +809,7 @@
          libcalamares.utils.debug("Unsetting autologin.")
  
      libcalamares.globalstorage.insert("displayManagers", displaymanagers)
