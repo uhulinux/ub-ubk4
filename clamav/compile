@@ -1,5 +1,13 @@
 #!/bin/sh -eux
 
+autoreconf -vif
 ub_compile \
 	--disable-clamav \
-	--disable-zlib-vcheck
+	--enable-zlib-vcheck \
+	--with-dbdir=/var/lib/clamav \
+	--with-user=clamav \
+	--with-group=clamav \
+	--with-system-libmspack \
+	--disable-rpath \
+	--disable-llvm \
+	--enable-clamdtop
