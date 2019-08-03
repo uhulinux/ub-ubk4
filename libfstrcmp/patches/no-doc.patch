@@ -1,0 +1,21 @@
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2014-03-05 01:13:45.000000000 +0100
++++ patched/Makefile.in	2019-04-26 02:05:46.927859803 +0200
+@@ -588,7 +588,7 @@
+ 	$(LIBTOOL) --mode=link --tag=CC $(CC) $(CPPFLAGS) $(CFLAGS) -o $@ \
+ 		$(test_user_obj) lib/libfstrcmp.la $(LDFLAGS) $(LIBS)
+ 
+-all: all-bin all-doc
++all: all-bin
+ 
+ all-bin: bin/fstrcmp$(EXEEXT) bin/test_prelude$(EXEEXT) bin/test_user$(EXEEXT)
+ 
+@@ -657,7 +657,7 @@
+ distclean-directories:
+ 	rm -rf bin fstrcmp/.libs lib/.libs lib/ac/.libs test_user/.libs
+ 
+-install: install-bin install-doc install-include install-libdir install-man
++install: install-bin install-include install-libdir
+ 
+ install-bin: $(bindir)/fstrcmp$(EXEEXT)
+ 
