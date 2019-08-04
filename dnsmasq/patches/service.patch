@@ -1,0 +1,19 @@
+diff -Nur orig/contrib/systemd/dnsmasq.service mod/contrib/systemd/dnsmasq.service
+--- orig/contrib/systemd/dnsmasq.service	2018-10-18 20:21:55.000000000 +0200
++++ mod/contrib/systemd/dnsmasq.service	2019-08-04 15:44:42.077191579 +0200
+@@ -1,11 +1,13 @@
+ [Unit]
+ Description=dnsmasq - A lightweight DHCP and caching DNS server
++After=network.target
++Documentation=man:dnsmasq(8)
+ 
+ [Service]
+ Type=dbus
+ BusName=uk.org.thekelleys.dnsmasq
+-ExecStartPre=/usr/sbin/dnsmasq --test
+-ExecStart=/usr/sbin/dnsmasq -k
++ExecStartPre=/usr/bin/dnsmasq --test
++ExecStart=/usr/bin/dnsmasq -k --enable-dbus --pid-file
+ ExecReload=/bin/kill -HUP $MAINPID
+ 
+ [Install]

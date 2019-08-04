@@ -1,0 +1,12 @@
+diff -Nur orig/dnsmasq.conf.example mod/dnsmasq.conf.example
+--- orig/dnsmasq.conf.example	2018-10-18 20:21:55.000000000 +0200
++++ mod/dnsmasq.conf.example	2019-08-04 15:54:47.118235758 +0200
+@@ -22,7 +22,7 @@
+ 
+ # Uncomment these to enable DNSSEC validation and caching:
+ # (Requires dnsmasq to be built with DNSSEC option.)
+-#conf-file=%%PREFIX%%/share/dnsmasq/trust-anchors.conf
++#conf-file=/usr/share/dnsmasq/trust-anchors.conf
+ #dnssec
+ 
+ # Replies which are not DNSSEC signed may be legitimate, because the domain
