@@ -1,0 +1,44 @@
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2019-07-29 05:34:59.000000000 +0200
++++ patched/Makefile.am	2019-08-05 02:10:03.425972994 +0200
+@@ -1475,7 +1475,6 @@
+ 
+ dist_man8_MANS = \
+ 	man/arbitron.8 \
+-	man/backupd.8 \
+ 	man/chk_cyrus.8 \
+ 	man/ctl_backups.8 \
+ 	man/ctl_conversationsdb.8 \
+@@ -1483,7 +1482,6 @@
+ 	man/ctl_deliver.8 \
+ 	man/ctl_mboxlist.8 \
+ 	man/cvt_cyrusdb.8 \
+-	man/cyr_backup.8 \
+ 	man/cyr_buildinfo.8 \
+ 	man/cyr_dbtool.8 \
+ 	man/cyr_deny.8 \
+@@ -1506,12 +1504,23 @@
+ 	man/pop3d.8 \
+ 	man/quota.8 \
+ 	man/reconstruct.8 \
+-	man/restore.8 \
+ 	man/smmapd.8 \
+ 	man/timsieved.8 \
+ 	man/tls_prune.8 \
+ 	man/unexpunge.8
+ 
++if BACKUP
++dist_man8_MANS += \
++	man/backupd.8 \
++	man/cyr_backup.8 \
++	man/restore.8
++else
++EXTRA_DIST += \
++	man/backupd.8 \
++	man/cyr_backup.8 \
++	man/restore.8
++endif # BACKUP
++
+ if SQUATTER
+ dist_man8_MANS += \
+ 	man/squatter.8
