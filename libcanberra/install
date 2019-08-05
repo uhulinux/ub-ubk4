@@ -2,6 +2,11 @@
 
 ub_install
 
+#systemd hangminák
+mkdir -p $UB_INSTALLDIR/usr/share/sounds/freedesktop/stereo
+cp system-ready.oga $UB_INSTALLDIR/usr/share/sounds/freedesktop/stereo/system-bootup.oga
+cp system-shutdown.oga $UB_INSTALLDIR/usr/share/sounds/freedesktop/stereo/
+
 # régen törölt és nem pótolt sound témák autostartja nem működik
 
 rm -f "$UB_INSTALLDIR/usr/share/gnome/autostart/libcanberra-login-sound.desktop"
