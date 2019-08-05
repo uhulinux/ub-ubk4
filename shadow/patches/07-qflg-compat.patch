@@ -1,7 +1,7 @@
 diff -Naur orig/src/groupadd.c patched/src/groupadd.c
---- orig/src/groupadd.c	2018-04-29 18:42:37.000000000 +0200
-+++ patched/src/groupadd.c	2018-04-29 20:35:32.398039515 +0200
-@@ -387,13 +387,14 @@
+--- orig/src/groupadd.c	2018-10-24 05:37:21.000000000 +0200
++++ patched/src/groupadd.c	2019-08-05 00:47:52.466011908 +0200
+@@ -388,13 +388,14 @@
  		{"key",        required_argument, NULL, 'K'},
  		{"non-unique", no_argument,       NULL, 'o'},
  		{"password",   required_argument, NULL, 'p'},
@@ -17,7 +17,7 @@ diff -Naur orig/src/groupadd.c patched/src/groupadd.c
  		                 long_options, NULL)) != -1) {
  		switch (c) {
  		case 'f':
-@@ -445,6 +446,9 @@
+@@ -446,6 +447,9 @@
  			pflg = true;
  			group_passwd = optarg;
  			break;
@@ -28,9 +28,9 @@ diff -Naur orig/src/groupadd.c patched/src/groupadd.c
  			rflg = true;
  			break;
 diff -Naur orig/src/groupdel.c patched/src/groupdel.c
---- orig/src/groupdel.c	2018-04-29 18:42:37.000000000 +0200
-+++ patched/src/groupdel.c	2018-04-29 20:38:23.868172716 +0200
-@@ -322,17 +322,20 @@
+--- orig/src/groupdel.c	2018-10-24 05:37:21.000000000 +0200
++++ patched/src/groupdel.c	2019-08-05 00:47:52.466011908 +0200
+@@ -323,17 +323,20 @@
  	int c;
  	static struct option long_options[] = {
  		{"help", no_argument,       NULL, 'h'},
@@ -53,17 +53,17 @@ diff -Naur orig/src/groupdel.c patched/src/groupdel.c
  			break;
  		case 'P': /* no-op, handled in process_prefix_flag () */
 diff -Naur orig/src/useradd.c patched/src/useradd.c
---- orig/src/useradd.c	2018-04-29 20:30:35.130314514 +0200
-+++ patched/src/useradd.c	2018-04-29 20:43:19.227847185 +0200
-@@ -162,6 +162,7 @@
+--- orig/src/useradd.c	2019-08-05 00:45:55.152011889 +0200
++++ patched/src/useradd.c	2019-08-05 00:47:52.466011908 +0200
+@@ -163,6 +163,7 @@
      Mflg = false,		/* do not create user's home directory even if CREATE_HOME is set */
      Nflg = true,		/* do not create a group having the same name as the user, but add the user to def_group (or the group specified with -g) */
      oflg = false,		/* permit non-unique user ID to be specified with -u */
 +    qflg = false,		/* quiet, skip existing user */
      rflg = false,		/* create a system account */
      sflg = false,		/* shell program for new account */
-     uflg = false,		/* specify user ID for new account */
-@@ -826,6 +827,7 @@
+     subvolflg = false,		/* create subvolume home on BTRFS */
+@@ -847,6 +848,7 @@
  	(void) fputs (_("  -o, --non-unique              allow to create users with duplicate\n"
  	                "                                (non-unique) UID\n"), usageout);
  	(void) fputs (_("  -p, --password PASSWORD       encrypted password of the new account\n"), usageout);
@@ -71,7 +71,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  	(void) fputs (_("  -r, --system                  create a system account\n"), usageout);
  	(void) fputs (_("  -R, --root CHROOT_DIR         directory to chroot into\n"), usageout);
  	(void) fputs (_("  -P, --prefix PREFIX_DIR       prefix directory where are located the /etc/* files\n"), usageout);
-@@ -1101,6 +1103,7 @@
+@@ -1125,6 +1127,7 @@
  			{"no-user-group",  no_argument,       NULL, 'N'},
  			{"non-unique",     no_argument,       NULL, 'o'},
  			{"password",       required_argument, NULL, 'p'},
@@ -79,7 +79,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  			{"system",         no_argument,       NULL, 'r'},
  			{"root",           required_argument, NULL, 'R'},
  			{"prefix",         required_argument, NULL, 'P'},
-@@ -1114,9 +1117,9 @@
+@@ -1138,9 +1141,9 @@
  		};
  		while ((c = getopt_long (argc, argv,
  #ifdef WITH_SELINUX
@@ -91,7 +91,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  #endif				/* !WITH_SELINUX */
  		                         long_options, NULL)) != -1) {
  			switch (c) {
-@@ -1282,6 +1285,9 @@
+@@ -1309,6 +1312,9 @@
  				}
  				user_pass = optarg;
  				break;
@@ -101,7 +101,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  			case 'r':
  				rflg = true;
  				break;
-@@ -2086,7 +2092,7 @@
+@@ -2187,7 +2193,7 @@
  		else
  			sprintf (file, "%s/%s", spool, user_name);
  		fd = open (file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0);
@@ -110,7 +110,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  			perror (_("Creating mailbox file"));
  			return;
  		}
-@@ -2094,8 +2100,8 @@
+@@ -2195,8 +2201,8 @@
  		gid = user_gid;
  		mode = 0600;
  
@@ -121,7 +121,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  			perror (_("Setting mailbox file permissions"));
  		}
  
-@@ -2218,6 +2224,9 @@
+@@ -2319,6 +2325,9 @@
  	 * Start with a quick check to see if the user exists.
  	 */
  	if (prefix_getpwnam (user_name) != NULL) { /* local, no need for xgetpwnam */
@@ -131,7 +131,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  		fprintf (stderr, _("%s: user '%s' already exists\n"), Prog, user_name);
  #ifdef WITH_AUDIT
  		audit_logger (AUDIT_ADD_USER, Prog,
-@@ -2237,6 +2246,9 @@
+@@ -2338,6 +2347,9 @@
  	if (Uflg) {
  		/* local, no need for xgetgrnam */
  		if (prefix_getgrnam (user_name) != NULL) {
@@ -141,7 +141,7 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  			fprintf (stderr,
  			         _("%s: group %s exists - if you want to add this user to that group, use -g.\n"),
  			         Prog, user_name);
-@@ -2337,12 +2349,13 @@
+@@ -2438,12 +2450,13 @@
  			copy_tree (def_template, prefix_user_home, false, false,
  			           (uid_t)-1, user_id, (gid_t)-1, user_gid);
  		} else {
@@ -161,9 +161,9 @@ diff -Naur orig/src/useradd.c patched/src/useradd.c
  
  	/* Do not create mail directory for system accounts */
 diff -Naur orig/src/userdel.c patched/src/userdel.c
---- orig/src/userdel.c	2018-04-29 18:42:37.000000000 +0200
-+++ patched/src/userdel.c	2018-04-29 20:44:33.136766661 +0200
-@@ -1029,6 +1029,7 @@
+--- orig/src/userdel.c	2019-05-04 07:38:23.000000000 +0200
++++ patched/src/userdel.c	2019-08-05 00:47:52.466011908 +0200
+@@ -1030,6 +1030,7 @@
  		static struct option long_options[] = {
  			{"force",        no_argument,       NULL, 'f'},
  			{"help",         no_argument,       NULL, 'h'},
@@ -171,7 +171,7 @@ diff -Naur orig/src/userdel.c patched/src/userdel.c
  			{"remove",       no_argument,       NULL, 'r'},
  			{"root",         required_argument, NULL, 'R'},
  			{"prefix",       required_argument, NULL, 'P'},
-@@ -1038,10 +1039,10 @@
+@@ -1039,10 +1040,10 @@
  			{NULL, 0, NULL, '\0'}
  		};
  		while ((c = getopt_long (argc, argv,
@@ -185,7 +185,7 @@ diff -Naur orig/src/userdel.c patched/src/userdel.c
  #endif				/* !WITH_SELINUX */
  		                         long_options, NULL)) != -1) {
  			switch (c) {
-@@ -1051,6 +1052,9 @@
+@@ -1052,6 +1053,9 @@
  			case 'h':
  				usage (E_SUCCESS);
  				break;

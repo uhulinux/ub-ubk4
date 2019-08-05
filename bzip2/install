@@ -1,13 +1,14 @@
 #!/bin/sh -eux
 
-cp bzip2-shared "$UB_INSTALLDIR"/usr/bin/bzip2
-cp bzip2recover "$UB_INSTALLDIR"/usr/bin/
-cp bzip2.1 "$UB_INSTALLDIR"/usr/share/man/man1/
-cp bzlib.h "$UB_INSTALLDIR"/usr/include/
+install -m755 bzip2-shared "$UB_INSTALLDIR"/usr/bin/bzip2
+install -m755 bzip2recover bzdiff bzgrep bzmore "$UB_INSTALLDIR"/usr/bin/
+install -m644 bzip2.1 "$UB_INSTALLDIR"/usr/share/man/man1/
+install -m644 bzlib.h "$UB_INSTALLDIR"/usr/include/
+
 cp -dpR libbz2.so.* "$UB_INSTALLDIR"/usr/lib/
-cp libbz2.a "$UB_INSTALLDIR"/usr/lib/
 ln -sf /usr/lib/libbz2.so."$UB_VERSION" "$UB_INSTALLDIR"/usr/lib/libbz2.so
 ln -sf /usr/lib/libbz2.so."$UB_VERSION" "$UB_INSTALLDIR"/usr/lib/libbz2.so.1
+
 ln -sf bzip2 "$UB_INSTALLDIR"/usr/bin/bunzip2
 ln -sf bzip2 "$UB_INSTALLDIR"/usr/bin/bzcat
 ln -sf bzip2.1 "$UB_INSTALLDIR"/usr/share/man/man1/bunzip2.1
