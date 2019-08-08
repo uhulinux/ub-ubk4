@@ -1,16 +1,23 @@
 diff -Naur orig/settings.conf patched/settings.conf
 --- orig/settings.conf	2019-07-06 00:52:35.000000000 +0200
-+++ patched/settings.conf	2019-07-31 13:19:41.089949270 +0200
-@@ -93,6 +93,7 @@
++++ patched/settings.conf	2019-08-08 23:44:48.778185060 +0200
+@@ -87,44 +87,29 @@
+ sequence:
+ - show:
+   - welcome
+-#  - dummypythonqt
+   - locale
+   - keyboard
    - partition
    - users
- #  - tracking
+-#  - tracking
 +  - netinstall
    - summary
  - exec:
- #  - dummycpp
-@@ -101,25 +102,21 @@
- #  - dummypythonqt
+-#  - dummycpp
+-#  - dummyprocess
+-#  - dummypython
+-#  - dummypythonqt
    - partition
    - mount
 -  - unpackfs
@@ -22,10 +29,10 @@ diff -Naur orig/settings.conf patched/settings.conf
    - locale
 -  - keyboard
    - localecfg
- #  - luksbootkeyfile
- #  - luksopenswaphookcfg
- #  - dracutlukscfg
- #  - plymouthcfg
+-#  - luksbootkeyfile
+-#  - luksopenswaphookcfg
+-#  - dracutlukscfg
+-#  - plymouthcfg
 -  - initcpiocfg
 -  - initcpio
    - users
@@ -33,12 +40,18 @@ diff -Naur orig/settings.conf patched/settings.conf
 -  - networkcfg
    - hwclock
 -  - services-systemd
- #  - dracut
+-#  - dracut
 -  - initramfs
- #  - grubcfg
+-#  - grubcfg
++  - dracut
    - bootloader
    - umount
-@@ -189,3 +186,7 @@
+ - show:
+-#  - webview@owncloud
+   - finished
+ 
+ # A branding component is a directory, either in SHARE/calamares/branding or
+@@ -189,3 +174,7 @@
  #
  # YAML: boolean.
  disable-cancel-during-exec: false
