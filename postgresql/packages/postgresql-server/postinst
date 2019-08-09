@@ -3,4 +3,3 @@
 if [ ! -e /var/lib/postgres/data/postgresql.conf ]; then
 	su -c '/usr/bin/initdb --encoding=UTF8 -D /var/lib/postgres/data' postgres
 fi
-systemctl -f enable postgresql
