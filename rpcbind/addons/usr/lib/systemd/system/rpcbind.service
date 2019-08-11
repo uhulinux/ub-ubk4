@@ -8,7 +8,7 @@ Before=rpcbind.target
 [Service]
 Type=forking
 EnvironmentFile=/etc/sysconfig/rpcbind
-ExecStart=/usr/bin/rpcbind -w ${RPCBIND_ARGS}
+ExecStart=/usr/sbin/rpcbind -w ${RPCBIND_ARGS}
 Restart=always
 
 [Install]
