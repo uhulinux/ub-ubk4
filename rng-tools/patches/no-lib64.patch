@@ -1,0 +1,12 @@
+diff -Nur orig/rngd.c mod/rngd.c
+--- orig/rngd.c	2019-02-14 18:55:49.000000000 +0100
++++ mod/rngd.c	2019-08-12 19:47:58.828614984 +0200
+@@ -215,7 +215,7 @@
+ };
+ 
+ #ifndef DEFAULT_PKCS11_ENGINE
+-#define DEFAULT_PKCS11_ENGINE "/usr/lib64/opensc-pkcs11.so"
++#define DEFAULT_PKCS11_ENGINE "/usr/lib/opensc-pkcs11.so"
+ #endif
+ 
+ static struct rng_option pkcs11_options[] = {

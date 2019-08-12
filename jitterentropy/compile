@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+sed -e '/\tgzip .*\/man\// d' -i Makefile
+ub_compile
