@@ -1,0 +1,12 @@
+diff -Nur orig/src/tun.c mod/src/tun.c
+--- orig/src/tun.c	2014-06-16 22:28:43.000000000 +0200
++++ mod/src/tun.c	2019-08-13 17:01:22.347918623 +0200
+@@ -26,7 +26,7 @@
+ #include <fcntl.h>
+ 
+ #ifndef IFCONFIGPATH
+-#define IFCONFIGPATH "PATH=/sbin:/bin "
++#define IFCONFIGPATH "PATH=/sbin:/bin:/usr/bin:/usr/bin "
+ #endif
+ 
+ #ifdef WINDOWS32
