@@ -1,8 +1,13 @@
 #!/bin/sh -eux
 
 ub_compile \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+    -DCMAKE_INSTALL_SYSCONFDIR=/usr/etc \
     -DWITH_AQBANKING=OFF \
-	-DWITH_PYTHON=ON
+	-DWITH_PYTHON=ON \
+    -DHAVE_GWEN_GTK3=ON \
+    -DCOMPILE_GSCHEMAS=OFF
 
 cd gnucash-docs
 ub_compile
