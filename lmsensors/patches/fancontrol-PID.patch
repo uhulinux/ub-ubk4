@@ -1,0 +1,36 @@
+diff -Nur orig/prog/init/fancontrol.service mod/prog/init/fancontrol.service
+--- orig/prog/init/fancontrol.service	2019-08-06 09:08:45.000000000 +0200
++++ mod/prog/init/fancontrol.service	2019-08-06 10:35:09.037073068 +0200
+@@ -5,7 +5,7 @@
+ 
+ [Service]
+ Type=simple
+-PIDFile=/var/run/fancontrol.pid
++PIDFile=/run/fancontrol.pid
+ ExecStart=/usr/sbin/fancontrol
+ 
+ [Install]
+diff -Nur orig/prog/pwm/fancontrol mod/prog/pwm/fancontrol
+--- orig/prog/pwm/fancontrol	2019-08-06 10:11:56.000000000 +0200
++++ mod/prog/pwm/fancontrol	2019-08-06 10:35:41.665028625 +0200
+@@ -38,7 +38,7 @@
+ #
+ #
+ 
+-PIDFILE="/var/run/fancontrol.pid"
++PIDFILE="/run/fancontrol.pid"
+ 
+ #DEBUG=1
+ MAX=255
+diff -Nur orig/prog/pwm/pwmconfig mod/prog/pwm/pwmconfig
+--- orig/prog/pwm/pwmconfig	2019-08-06 09:08:45.000000000 +0200
++++ mod/prog/pwm/pwmconfig	2019-08-06 10:36:02.237000603 +0200
+@@ -31,7 +31,7 @@
+ 
+ REVISION=$(echo '$Revision$' | cut -d' ' -f2)
+ REVDATE=$(echo '$Date$' | cut -d' ' -f2)
+-PIDFILE="/var/run/fancontrol.pid"
++PIDFILE="/run/fancontrol.pid"
+ 
+ if [ -f "$PIDFILE" ]
+ then
