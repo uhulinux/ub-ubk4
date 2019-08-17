@@ -1,7 +1,19 @@
-diff -Nur orig/Makefile.in mod/Makefile.in
---- orig/Makefile.in	2019-01-08 18:05:23.000000000 +0100
-+++ mod/Makefile.in	2019-01-17 19:25:54.430920173 +0100
-@@ -482,7 +482,7 @@
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2019-08-13 15:48:42.000000000 +0200
++++ patched/Makefile.am	2019-08-16 21:25:33.355878366 +0200
+@@ -35,7 +35,7 @@
+ SUBDIRS = $(OSC_SUBDIRS) intl $(WEED_SUBDIRS) src m4 lives-plugins po resources
+ PACKAGE_CAPITALISED = LiVES
+ 
+-docdir = "$(prefix)/share/doc/$(PACKAGE)-$(VERSION)"
++docdir = "$(prefix)/share/doc/Packages/$(PACKAGE)"
+ sharedir = "$(prefix)/share"
+ 
+ if HAVE_DOXYGEN
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2019-08-13 15:49:00.000000000 +0200
++++ patched/Makefile.in	2019-08-16 21:24:20.791064815 +0200
+@@ -484,7 +484,7 @@
  builddir = @builddir@
  datadir = @datadir@
  datarootdir = @datarootdir@
