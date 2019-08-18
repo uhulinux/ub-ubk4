@@ -1,4 +1,8 @@
 #!/bin/bash
 
+if [ -e /etc/sddm.conf ]; then
+rm -f /etc/sddm.conf
+fi
+
 systemctl -f enable sddm
 systemctl set-default graphical.target
