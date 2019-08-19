@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+#UB_MAKE_PROCS=1 \
+ub_compile \
+	--with-pgsql \
+	--with-sqlite \
+	--with-mysql \
+	--with-gssapi=plugin \
+	--with-ldap=plugin \
+	--with-solr \
+	--with-zlib \
+	--with-bzlib \
+	--with-sql=plugin \
+	--with-sql-drivers \
+	--with-storages="mdbox sdbox maildir mbox cydir imapc pop3c" \
+	--enable-header-install \
+	--with-systemdsystemunitdir=/usr/lib/systemd/system/
