@@ -1,0 +1,11 @@
+[Unit]
+Description=BMC Watchdog Timer Daemon
+After=network.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/bmc-watchdog
+ExecStart=/usr/sbin/bmc-watchdog $OPTIONS
+
+[Install]
+WantedBy=multi-user.target
