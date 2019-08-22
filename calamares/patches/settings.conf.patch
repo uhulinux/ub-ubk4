@@ -1,7 +1,7 @@
-diff -Naur orig/settings.conf patched/settings.conf
---- orig/settings.conf	2019-07-06 00:52:35.000000000 +0200
-+++ patched/settings.conf	2019-08-08 23:44:48.778185060 +0200
-@@ -87,44 +87,29 @@
+diff -Nur orig/settings.conf mod/settings.conf
+--- orig/settings.conf	2019-08-07 12:58:22.000000000 +0200
++++ mod/settings.conf	2019-08-21 20:41:59.426795015 +0200
+@@ -87,44 +87,30 @@
  sequence:
  - show:
    - welcome
@@ -44,6 +44,7 @@ diff -Naur orig/settings.conf patched/settings.conf
 -  - initramfs
 -#  - grubcfg
 +  - dracut
++  - grubcfg
    - bootloader
    - umount
  - show:
@@ -51,7 +52,7 @@ diff -Naur orig/settings.conf patched/settings.conf
    - finished
  
  # A branding component is a directory, either in SHARE/calamares/branding or
-@@ -189,3 +174,7 @@
+@@ -189,3 +175,7 @@
  #
  # YAML: boolean.
  disable-cancel-during-exec: false
