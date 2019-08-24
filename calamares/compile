@@ -11,6 +11,10 @@
 #    libboost_python-foo.so then this variable should be set to 'python-foo'."
 #)
 
+cd lang/python/hu/LC_MESSAGES
+rm python.mo
+msgfmt -o python.mo python.po
+cd -
 ub_compile \
 	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
 	-DCMAKE_BUILD_TYPE=Release \
