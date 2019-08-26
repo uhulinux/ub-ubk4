@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-BINARY=0
-
-if [[ $BINARY == 0 ]]; then
-ub_compile
-else
-patch -p1 -i "$UB_SRCDIR"/patches/ldc-import-path.patch.skip
-fi
