@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# nouveau driverrel a fullscreen nem megy! (Ocsmány workaround...)
-if [ ! "$(grep nouveau /var/log/Xorg.0.log)" ];then
-    cd /usr/share/games/allegrodemos/shooter
-    padsp ./shooter "$@"
-fi
+cd /usr/share/games/allegrodemos/shooter
+padsp ./shooter "$@"
