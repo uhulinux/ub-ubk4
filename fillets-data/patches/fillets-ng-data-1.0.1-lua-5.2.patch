@@ -1,0 +1,1559 @@
+? filets_data-lua-5.2.patch
+Index: script/alibaba/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/alibaba/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/alibaba/code.lua	18 Aug 2004 12:02:03 -0000	1.1
++++ b/script/alibaba/code.lua	6 Apr 2014 22:12:54 -0000
+@@ -24,14 +24,14 @@
+                 else
+                     room.cas = random(1000) + 600
+                     pom1 = roompole[1]
+-                    if math.mod(pom1, 4) == 2 then
++                    if math.fmod(pom1, 4) == 2 then
+                         if room.zakaz == 1 then
+                             pom1 = pom1 + 1
+                         end
+                     end
+-                    pom2 = math.mod(pom1, 4)
++                    pom2 = math.fmod(pom1, 4)
+                     pom1 = pom1 + 1
+-                    pom1 = math.mod(pom1, 4)
++                    pom1 = math.fmod(pom1, 4)
+                     roompole[1] = pom1
+                 end
+             end
+Index: script/aztec/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/aztec/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/aztec/code.lua	8 Sep 2004 21:11:41 -0000	1.2
++++ b/script/aztec/code.lua	6 Apr 2014 22:12:57 -0000
+@@ -163,7 +163,7 @@
+     local function prog_init_lebzna()
+         return function()
+             if odd(game_getCycles()) then
+-                lebzna.afaze = math.mod(lebzna.afaze + 1, 4)
++                lebzna.afaze = math.fmod(lebzna.afaze + 1, 4)
+                 lebzna:updateAnim()
+             end
+         end
+Index: script/barrel/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/barrel/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/barrel/code.lua	18 Aug 2004 19:28:43 -0000	1.1
++++ b/script/barrel/code.lua	6 Apr 2014 22:12:59 -0000
+@@ -203,7 +203,7 @@
+                 if not kachnicka:isTalking() then
+                     kachnicka:talk("bar-x-kchkch", VOLUME_LOW, -1)
+                 end
+-                kachnicka.afaze = math.mod(kachnicka.afaze - 5 + 1, 4) + 5
++                kachnicka.afaze = math.fmod(kachnicka.afaze - 5 + 1, 4) + 5
+                 kachnicka.cinnost = kachnicka.cinnost + 1
+                 if kachnicka.cinnost == 0 then
+                     kachnicka.afaze = 0
+@@ -222,7 +222,7 @@
+         had.huba = random(3)
+ 
+         return function()
+-            if math.mod(game_getCycles(), 3) == 0 then
++            if math.fmod(game_getCycles(), 3) == 0 then
+                 if (had.huba == 0) then
+                         if random(1000) < 15 then
+                             had.huba = random(2) + 1
+@@ -235,7 +235,7 @@
+                         end
+                 end
+             end
+-            had.streva = math.mod(had.streva + 1, 4)
++            had.streva = math.fmod(had.streva + 1, 4)
+             had.afaze = 4 * had.huba + had.streva
+             had:updateAnim()
+         end
+@@ -368,7 +368,7 @@
+         kukajda.mrknuti = 0
+ 
+         return function()
+-            kukajda.ploutvicka = math.mod(kukajda.ploutvicka + 1, 6)
++            kukajda.ploutvicka = math.fmod(kukajda.ploutvicka + 1, 6)
+             if (kukajda.ploutvicka == 0) or (kukajda.ploutvicka == 1) then
+                     kukajda.afaze = 0
+             elseif (kukajda.ploutvicka == 2) or (kukajda.ploutvicka == 5) then
+@@ -429,7 +429,7 @@
+         hlubinna.zzzeni = 0
+ 
+         return function()
+-            hlubinna.ploutvicka = math.mod(hlubinna.ploutvicka + 1, 5)
++            hlubinna.ploutvicka = math.fmod(hlubinna.ploutvicka + 1, 5)
+             if (hlubinna.ploutvicka == 3) then
+                     hlubinna.afaze = 1
+             elseif (hlubinna.ploutvicka == 4) then
+@@ -502,7 +502,7 @@
+                     nozka.cinnost = -20 - random(60)
+                 end
+             else
+-                if math.mod(game_getCycles(), 3) == 0 then
++                if math.fmod(game_getCycles(), 3) == 0 then
+                     nozka.dup = 1 - nozka.dup
+                     if nozka.dup == 0 then
+                         nozka:talk("bar-x-tup", VOLUME_LOW)
+@@ -595,7 +595,7 @@
+                 elseif (pldik.suckfaze == 5) then
+                         pldik.suckani = pldik.suckani - 1
+                 end
+-                pldik.suckfaze = math.mod(pldik.suckfaze + 1, 6)
++                pldik.suckfaze = math.fmod(pldik.suckfaze + 1, 6)
+             end
+             pldik:updateAnim()
+         end
+@@ -662,9 +662,9 @@
+                     end
+ 
+                     if random(2) == 0 then
+-                        pldotec.afaze = math.mod(pldotec.afaze + 1, 4)
++                        pldotec.afaze = math.fmod(pldotec.afaze + 1, 4)
+                     else
+-                        pldotec.afaze = math.mod(pldotec.afaze + 3, 4)
++                        pldotec.afaze = math.fmod(pldotec.afaze + 3, 4)
+                     end
+                     pldotec.vlnit = pldotec.vlnit - 1
+                     if pldotec.vlnit == 0 then
+Index: script/bathroom/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/bathroom/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/bathroom/code.lua	13 Jul 2004 17:20:16 -0000	1.1
++++ b/script/bathroom/code.lua	6 Apr 2014 22:13:00 -0000
+@@ -12,7 +12,7 @@
+     local function prog_init_room()
+         local pom1, pom2, pomb1, pomb2 = 0, 0, false, false
+ 
+-        room.switch = 2 - math.mod(pokus, 2)
++        room.switch = 2 - math.fmod(pokus, 2)
+         room.kdy = 20 + random(20)
+         room.bav = random(150)
+         room.sprs = 0
+Index: script/cabin1/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/cabin1/code.lua,v
+retrieving revision 1.4
+diff -u -r1.4 code.lua
+--- a/script/cabin1/code.lua	14 Sep 2004 14:51:28 -0000	1.4
++++ b/script/cabin1/code.lua	6 Apr 2014 22:13:08 -0000
+@@ -245,7 +245,7 @@
+         return function()
+             if chobot.dir ~= dir_no then
+                 chobot.akcnost = 7
+-            elseif chobot.akcnost > 2 and math.mod(game_getCycles(), 5) == 0 then
++            elseif chobot.akcnost > 2 and math.fmod(game_getCycles(), 5) == 0 then
+                 chobot.akcnost = chobot.akcnost - 1
+             end
+             if chobot.dir ~= chobot.lastdir then
+@@ -268,7 +268,7 @@
+                 end
+                 chobot.lastdir = chobot.dir
+             end
+-            if chobot.dir == dir_no and math.mod(game_getCycles(), chobot.akcnost) == 0 then
++            if chobot.dir == dir_no and math.fmod(game_getCycles(), chobot.akcnost) == 0 then
+                 if random(2) == 0 then
+                     if chobot.chapadla < 2 then
+                         chobot.chapadla = chobot.chapadla + 1
+Index: script/cabin2/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/cabin2/code.lua,v
+retrieving revision 1.4
+diff -u -r1.4 code.lua
+--- a/script/cabin2/code.lua	17 Aug 2004 12:52:35 -0000	1.4
++++ b/script/cabin2/code.lua	6 Apr 2014 22:13:10 -0000
+@@ -173,7 +173,7 @@
+         return function()
+             if chobot.dir ~= dir_no then
+                 chobot.akcnost = 7
+-            elseif chobot.akcnost > 2 and math.mod(game_getCycles(), 5) == 0 then
++            elseif chobot.akcnost > 2 and math.fmod(game_getCycles(), 5) == 0 then
+                 chobot.akcnost = chobot.akcnost - 1
+             end
+             if chobot.dir ~= chobot.lastdir then
+@@ -196,7 +196,7 @@
+                 end
+                 chobot.lastdir = chobot.dir
+             end
+-            if chobot.dir == dir_no and math.mod(game_getCycles(), chobot.akcnost) == 0 then
++            if chobot.dir == dir_no and math.fmod(game_getCycles(), chobot.akcnost) == 0 then
+                 if random(2) == 0 then
+                     if chobot.chapadla < 2 then
+                         chobot.chapadla = chobot.chapadla + 1
+Index: script/cancan/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/cancan/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/cancan/code.lua	28 Jul 2004 12:16:17 -0000	1.1
++++ b/script/cancan/code.lua	6 Apr 2014 22:13:11 -0000
+@@ -51,7 +51,7 @@
+                 krab3.muze = 1
+                 krab4.muze = 1
+             end
+-            if math.mod(game_getCycles(), 2) == 0 then
++            if math.fmod(game_getCycles(), 2) == 0 then
+                 if krab1.krok == 7 then
+                     krab1.krok = 0
+                 else
+@@ -90,7 +90,7 @@
+                         end,
+                     }
+                 end
+-            elseif krab1.afaze > 5 or math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++            elseif krab1.afaze > 5 or math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                 krab1.afaze = random(6)
+             end
+             krab1:updateAnim()
+@@ -136,7 +136,7 @@
+                         end,
+                     }
+                 end
+-            elseif krab2.afaze > 5 or math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++            elseif krab2.afaze > 5 or math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                 krab2.afaze = random(6)
+             end
+             krab2:updateAnim()
+@@ -182,7 +182,7 @@
+                         end,
+                     }
+                 end
+-            elseif krab3.afaze > 5 or math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++            elseif krab3.afaze > 5 or math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                 krab3.afaze = random(6)
+             end
+             krab3:updateAnim()
+@@ -228,7 +228,7 @@
+                         end,
+                     }
+                 end
+-            elseif krab4.afaze > 5 or math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++            elseif krab4.afaze > 5 or math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                 krab4.afaze = random(6)
+             end
+             krab4:updateAnim()
+@@ -276,7 +276,7 @@
+                     klavir.mrknuti = klavir.mrknuti - 1
+                     klavir.otocka = klavir.otocka - 1
+                 else
+-                    klavir.ruce = math.mod(klavir.ruce + random(3) + 1, 4)
++                    klavir.ruce = math.fmod(klavir.ruce + random(3) + 1, 4)
+                     if klavir.otocka > 0 then
+                         klavir.afaze = 4 + klavir.ruce
+                         if random(100) < 7 then
+@@ -317,7 +317,7 @@
+             end
+             if pomb1 or not pomb2 then
+                 if odd(game_getCycles()) then
+-                    sepie.nohy = math.mod(sepie.nohy + 2 + random(2) * 2, 3)
++                    sepie.nohy = math.fmod(sepie.nohy + 2 + random(2) * 2, 3)
+                 end
+                 sepie.afaze = sepie.nohy
+                 if pomb1 then
+@@ -329,7 +329,7 @@
+                 end
+             else
+                 if sepie.dir == dir_left or sepie.dir == dir_down then
+-                    sepie.nohy = math.mod(sepie.nohy + 1, 2)
++                    sepie.nohy = math.fmod(sepie.nohy + 1, 2)
+                 else
+                     sepie.nohy = 0
+                 end
+@@ -351,7 +351,7 @@
+         rejnok.nespi = 0
+ 
+         return function()
+-            if math.mod(game_getCycles(), 2) == 0 or rejnok.nespi > 20 then
++            if math.fmod(game_getCycles(), 2) == 0 or rejnok.nespi > 20 then
+                 if rejnok.pozice == 5 then
+                     rejnok.pozice = 0
+                 else
+@@ -384,7 +384,7 @@
+ 
+         return function()
+             if isWater(sasanka.X, sasanka.Y - 1) then
+-                local cycle = math.mod(game_getCycles(), 8)
++                local cycle = math.fmod(game_getCycles(), 8)
+                 if isIn(cycle, {0, 1, 2, 3}) then
+                     sasanka.noha = 0
+                 else
+Index: script/cannons/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/cannons/code.lua,v
+retrieving revision 1.6
+diff -u -r1.6 code.lua
+--- a/script/cannons/code.lua	27 Jul 2004 23:07:57 -0000	1.6
++++ b/script/cannons/code.lua	6 Apr 2014 22:13:12 -0000
+@@ -61,7 +61,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_delo1()
+         return function()
+-            switch(math.mod(game_getCycles() + 1, 4)){
++            switch(math.fmod(game_getCycles() + 1, 4)){
+                 [0] = function()
+                     delo1.afaze = 2
+                 end,
+@@ -82,7 +82,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_delo3()
+         return function()
+-            switch(math.mod(game_getCycles(), 4)){
++            switch(math.fmod(game_getCycles(), 4)){
+                 [0] = function()
+                     delo3.afaze = 2
+                 end,
+@@ -103,7 +103,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_delo2()
+         return function()
+-            switch(math.mod(game_getCycles() + 3, 4)){
++            switch(math.fmod(game_getCycles() + 3, 4)){
+                 [0] = function()
+                     delo2.afaze = 2
+                 end,
+@@ -124,7 +124,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_delo4()
+         return function()
+-            switch(math.mod(game_getCycles() + 1, 4)){
++            switch(math.fmod(game_getCycles() + 1, 4)){
+                 [0] = function()
+                     delo4.afaze = 2
+                 end,
+Index: script/cave/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/cave/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/cave/code.lua	13 Aug 2004 22:43:41 -0000	1.1
++++ b/script/cave/code.lua	6 Apr 2014 22:13:14 -0000
+@@ -196,7 +196,7 @@
+         blbec.udivenej = 0
+ 
+         return function()
+-            if math.mod(game_getCycles(), 2) == 0 then
++            if math.fmod(game_getCycles(), 2) == 0 then
+                 switch(blbec.faze){
+                     [0] = function()
+                         blbec.faze = blbec.faze + 1
+Index: script/city/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/city/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/city/code.lua	4 Jul 2004 21:19:07 -0000	1.2
++++ b/script/city/code.lua	6 Apr 2014 22:13:19 -0000
+@@ -31,20 +31,20 @@
+                     if room.komentovaly > 1 and random(100) < 50 then
+                         switch(random(4)){
+                             [0] = function()
+-                                room.qnevsimla = math.mod(room.qnevsimla + 1, 4)
++                                room.qnevsimla = math.fmod(room.qnevsimla + 1, 4)
+                                 if room.qnevsimla == 1 then
+                                     addv(8, "vit-v-nevsimla")
+                                 end
+                             end,
+                             [1] = function()
+-                                room.qautomat = math.mod(room.qautomat + 1, 6)
++                                room.qautomat = math.fmod(room.qautomat + 1, 6)
+                                 if room.qautomat == 1 then
+                                     addv(8, "vit-v-automat")
+                                     addm(9, "vit-m-nebo")
+                                 end
+                             end,
+                             [2] = function()
+-                                room.qnezkusime = math.mod(room.qnezkusime + 1, 8)
++                                room.qnezkusime = math.fmod(room.qnezkusime + 1, 8)
+                                 if room.qnezkusime == 2 then
+                                     addm(8, "vit-m-nezkusime")
+                                     if room.komentovaly < 15 then
+@@ -53,7 +53,7 @@
+                                 end
+                             end,
+                             [3] = function()
+-                                room.qhlava = math.mod(room.qhlava + 1, 2)
++                                room.qhlava = math.fmod(room.qhlava + 1, 2)
+                                 if room.qautomat == 0 then
+                                     switch(random(2)){
+                                         [0] = function()
+@@ -366,7 +366,7 @@
+                 [0] = function()
+                 end,
+                 [1] = function()
+-                    if math.mod(game_getCycles(), 2) == 0 then
++                    if math.fmod(game_getCycles(), 2) == 0 then
+                         if vladce:isTalking() then
+                             pom1 = random(3)
+                         else
+@@ -611,7 +611,7 @@
+                     if room.globpole[pom1] < 3 then
+                         room.globpole[pom1] = 3
+                     end
+-                    room.globpole[pom1] = math.mod(room.globpole[pom1] - 2, 4) + 3
++                    room.globpole[pom1] = math.fmod(room.globpole[pom1] - 2, 4) + 3
+                     switch(room.globpole[pom1]){
+                         [3] = function()
+                             crabs[pom1].afaze = 0
+Index: script/columns/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/columns/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/columns/code.lua	31 Oct 2006 22:00:30 -0000	1.2
++++ b/script/columns/code.lua	6 Apr 2014 22:13:22 -0000
+@@ -47,7 +47,7 @@
+                         addm(10 + random(40), "sl-m-velkolepe")
+                         room.uvod = room.uvod - 10
+                     end
+-                    if math.mod(room.uvod, 10) >= 1 then
++                    if math.fmod(room.uvod, 10) >= 1 then
+                         addv(20, "sl-v-stopa")
+                     end
+                     if room.uvod > 10 then
+Index: script/corals/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/corals/code.lua,v
+retrieving revision 1.3
+diff -u -r1.3 code.lua
+--- a/script/corals/code.lua	15 Aug 2004 17:20:02 -0000	1.3
++++ b/script/corals/code.lua	6 Apr 2014 22:13:24 -0000
+@@ -138,7 +138,7 @@
+             else
+                 room.pobliz = 0
+             end
+-            if math.mod(game_getCycles(), 3000) == 0 then
++            if math.fmod(game_getCycles(), 3000) == 0 then
+                 room.rozhovor = 0
+             end
+         end
+@@ -171,7 +171,7 @@
+                     krab.spi = 1
+                 end
+             elseif krab:isTalking() then
+-                krab.afaze = math.mod(game_getCycles(), 4) + 2
++                krab.afaze = math.fmod(game_getCycles(), 4) + 2
+             elseif krab.dir == dir_down then
+                 krab.afaze = random(9) + 1
+             else
+@@ -207,7 +207,7 @@
+                 anim_table[27] = anim_table[26]
+                 anim_table[28] = anim_table[26]
+ 
+-                switch(math.mod(random(krab.spi), 100))(anim_table)
++                switch(math.fmod(random(krab.spi), 100))(anim_table)
+             end
+             if krab.spi > 0 then
+                 krab.spi = krab.spi + 1
+Index: script/crabshow/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/crabshow/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/crabshow/code.lua	5 Jul 2004 17:27:03 -0000	1.1
++++ b/script/crabshow/code.lua	6 Apr 2014 22:13:28 -0000
+@@ -389,7 +389,7 @@
+                                 end
+                             end,
+                             default = function()
+-                                switch(math.mod(game_getCycles(), 8)){
++                                switch(math.fmod(game_getCycles(), 8)){
+                                     [0] = function()
+                                         shrimp.afaze = 1
+                                     end,
+Index: script/creatures/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/creatures/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/creatures/code.lua	28 Jul 2004 11:53:04 -0000	1.1
++++ b/script/creatures/code.lua	6 Apr 2014 22:13:29 -0000
+@@ -179,7 +179,7 @@
+ 
+         return function()
+             if room:isTalking() then
+-                switch(math.mod(game_getCycles(), 4)){
++                switch(math.fmod(game_getCycles(), 4)){
+                     [0] = function()
+                         krab1.krabfaze = 7
+                     end,
+@@ -228,7 +228,7 @@
+             end
+             switch(balalajka.cinnost){
+                 [0] = function()
+-                    local cycle = math.mod(game_getCycles(), 18)
++                    local cycle = math.fmod(game_getCycles(), 18)
+                     switch(cycle){
+                         [0] = function()
+                             if balalajka.tcatcat == 0 then
+@@ -318,7 +318,7 @@
+ 
+         return function()
+             if room:isTalking() then
+-                local cycle = math.mod(game_getCycles(), 8)
++                local cycle = math.fmod(game_getCycles(), 8)
+                 if isIn(cycle, {0, 1, 2, 3}) then
+                     pom1 = 0
+                 else
+@@ -337,10 +337,10 @@
+                 if sas1.sasfaze >= 0 then
+                     sas1.afaze = sas1.sasfaze
+                 else
+-                    if math.mod(game_getCycles(), 3) == 0 and random(100) < 50 then
++                    if math.fmod(game_getCycles(), 3) == 0 and random(100) < 50 then
+                         sas1.kvet = random(2) * 2 + 1
+                     end
+-                    if math.mod(game_getCycles(), 4) == 0 and random(100) < 30 then
++                    if math.fmod(game_getCycles(), 4) == 0 and random(100) < 30 then
+                         sas1.noha = random(2)
+                     end
+                     sas1.afaze = sas1.noha * 4 + sas1.kvet
+@@ -364,10 +364,10 @@
+                 if sas1.sasfaze >= 0 then
+                     sas2.afaze = sas1.sasfaze
+                 else
+-                    if math.mod(game_getCycles(), 3) == 0 and random(100) < 50 then
++                    if math.fmod(game_getCycles(), 3) == 0 and random(100) < 50 then
+                         sas2.kvet = random(2) * 2 + 1
+                     end
+-                    if math.mod(game_getCycles(), 4) == 0 and random(100) < 30 then
++                    if math.fmod(game_getCycles(), 4) == 0 and random(100) < 30 then
+                         sas2.noha = random(2)
+                     end
+                     sas2.afaze = sas2.noha * 4 + sas2.kvet
+@@ -391,10 +391,10 @@
+                 if sas1.sasfaze >= 0 then
+                     sas3.afaze = sas1.sasfaze
+                 else
+-                    if math.mod(game_getCycles(), 3) == 0 and random(100) < 50 then
++                    if math.fmod(game_getCycles(), 3) == 0 and random(100) < 50 then
+                         sas3.kvet = random(2) * 2 + 1
+                     end
+-                    if math.mod(game_getCycles(), 4) == 0 and random(100) < 30 then
++                    if math.fmod(game_getCycles(), 4) == 0 and random(100) < 30 then
+                         sas3.noha = random(2)
+                     end
+                     sas3.afaze = sas3.noha * 4 + sas3.kvet
+@@ -418,10 +418,10 @@
+                 if sas1.sasfaze >= 0 then
+                     sas4.afaze = sas1.sasfaze
+                 else
+-                    if math.mod(game_getCycles(), 3) == 0 and random(100) < 50 then
++                    if math.fmod(game_getCycles(), 3) == 0 and random(100) < 50 then
+                         sas4.kvet = random(2) * 2 + 1
+                     end
+-                    if math.mod(game_getCycles(), 4) == 0 and random(100) < 30 then
++                    if math.fmod(game_getCycles(), 4) == 0 and random(100) < 30 then
+                         sas4.noha = random(2)
+                     end
+                     sas4.afaze = sas4.noha * 4 + sas4.kvet
+@@ -445,10 +445,10 @@
+                 if sas1.sasfaze >= 0 then
+                     sas5.afaze = sas1.sasfaze
+                 else
+-                    if math.mod(game_getCycles(), 3) == 0 and random(100) < 50 then
++                    if math.fmod(game_getCycles(), 3) == 0 and random(100) < 50 then
+                         sas5.kvet = random(2) * 2 + 1
+                     end
+-                    if math.mod(game_getCycles(), 4) == 0 and random(100) < 30 then
++                    if math.fmod(game_getCycles(), 4) == 0 and random(100) < 30 then
+                         sas5.noha = random(2)
+                     end
+                     sas5.afaze = sas5.noha * 4 + sas5.kvet
+@@ -472,10 +472,10 @@
+                 if sas1.sasfaze >= 0 then
+                     sas6.afaze = sas1.sasfaze
+                 else
+-                    if math.mod(game_getCycles(), 3) == 0 and random(100) < 50 then
++                    if math.fmod(game_getCycles(), 3) == 0 and random(100) < 50 then
+                         sas6.kvet = random(2) * 2 + 1
+                     end
+-                    if math.mod(game_getCycles(), 4) == 0 and random(100) < 30 then
++                    if math.fmod(game_getCycles(), 4) == 0 and random(100) < 30 then
+                         sas6.noha = random(2)
+                     end
+                     sas6.afaze = sas6.noha * 4 + sas6.kvet
+@@ -634,7 +634,7 @@
+             end
+             if pomb1 or not pomb2 then
+                 if odd(game_getCycles()) then
+-                    sepie.nohy = math.mod(sepie.nohy + 2 + random(2) * 2, 3)
++                    sepie.nohy = math.fmod(sepie.nohy + 2 + random(2) * 2, 3)
+                 end
+                 sepie.afaze = sepie.nohy
+                 if pomb1 then
+@@ -646,7 +646,7 @@
+                 end
+             else
+                 if sepie.dir == dir_left or sepie.dir == dir_right then
+-                    sepie.nohy = math.mod(sepie.nohy + 1, 2)
++                    sepie.nohy = math.fmod(sepie.nohy + 1, 2)
+                 else
+                     sepie.nohy = 0
+                 end
+Index: script/dump/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/dump/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/dump/code.lua	13 Jul 2004 22:33:48 -0000	1.1
++++ b/script/dump/code.lua	6 Apr 2014 22:13:31 -0000
+@@ -111,7 +111,7 @@
+             if meduza.keca ~= 101 then
+                 if meduza.X == mic.X and meduza.Y == mic.Y - 3 then
+                     mic.beha = 1
+-                    meduza.afaze = math.mod(meduza.afaze + 1, 3)
++                    meduza.afaze = math.fmod(meduza.afaze + 1, 3)
+                     meduza:updateAnim()
+                 else
+                     mic.beha = 0
+@@ -131,7 +131,7 @@
+ 
+         return function()
+             if mic.beha == 1 then
+-                mic.afaze = math.mod(mic.afaze + 1, 4)
++                mic.afaze = math.fmod(mic.afaze + 1, 4)
+                 mic:updateAnim()
+             end
+         end
+@@ -202,7 +202,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_budik()
+         return function()
+-            switch(math.mod(game_getCycles(), 9)){
++            switch(math.fmod(game_getCycles(), 9)){
+                 [0] = function()
+                     budik.afaze = 0
+                 end,
+Index: script/electromagnet/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/electromagnet/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/electromagnet/code.lua	10 Jan 2009 19:42:47 -0000	1.1
++++ b/script/electromagnet/code.lua	6 Apr 2014 22:13:33 -0000
+@@ -84,7 +84,7 @@
+                 end
+ 
+             local count = game_getCycles()
+-            plutonium.afaze=math.mod(count, 12)/3
++            plutonium.afaze=math.fmod(count, 12)/3
+             plutonium:updateAnim()
+             -- very specific because text wouldn't fit otherwise
+             if damage_wall.damagestate == 0 and killozap.Y == 2 and killozap.X == 3 and killozap.dir == dir_left and big.X < 9 and big.Y == 3 then
+Index: script/elk/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/elk/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/elk/code.lua	26 Jun 2004 13:52:24 -0000	1.1
++++ b/script/elk/code.lua	6 Apr 2014 22:13:37 -0000
+@@ -191,7 +191,7 @@
+         loos.cinnost = 0
+ 
+         return function()
+-            pomb1 = math.mod(game_getCycles(), 3) == 0
++            pomb1 = math.fmod(game_getCycles(), 3) == 0
+             switch(loos.cinnost){
+                 [0] = function()
+                     loos.afaze = 3
+Index: script/emulator/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/emulator/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/emulator/code.lua	26 Jul 2004 21:33:14 -0000	1.1
++++ b/script/emulator/code.lua	6 Apr 2014 22:13:38 -0000
+@@ -146,7 +146,7 @@
+                         knightik.poc = 300 - knightik.stav * 50
+                     else
+                         knightik.poc = knightik.poc - 1
+-                        if math.mod(knightik.poc, 3) == 2 then
++                        if math.fmod(knightik.poc, 3) == 2 then
+                             knightik.afaze = random(4) + 2
+                         end
+                     end
+Index: script/ending/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/ending/code.lua,v
+retrieving revision 1.3
+diff -u -r1.3 code.lua
+--- a/script/ending/code.lua	9 Sep 2004 21:49:48 -0000	1.3
++++ b/script/ending/code.lua	6 Apr 2014 22:13:40 -0000
+@@ -101,7 +101,7 @@
+                         end
+                     end
+                 end
+-                switch(math.floor(math.mod(room.cas, 1000) / 100)){
++                switch(math.floor(math.fmod(room.cas, 1000) / 100)){
+                     [0] = function()
+                     end,
+                     [1] = function()
+@@ -119,7 +119,7 @@
+                     [3] = function()
+                         pom1 = pom1 - 1
+                         if pom1 == 0 then
+-                            room:talk("z-c-"..(math.floor(math.mod(room.cas, 1000) / 100)))
++                            room:talk("z-c-"..(math.floor(math.fmod(room.cas, 1000) / 100)))
+                         end
+                         pom1 = pom1 - 1
+                         if pom1 == 0 then
+@@ -129,7 +129,7 @@
+                     [4] = function()
+                         pom1 = pom1 - 1
+                         if pom1 == 0 then
+-                            room:talk("z-c-"..(math.floor(math.mod(room.cas, 1000) / 100)))
++                            room:talk("z-c-"..(math.floor(math.fmod(room.cas, 1000) / 100)))
+                         end
+                         pom1 = pom1 - 1
+                         if pom1 == 0 then
+@@ -139,7 +139,7 @@
+                     default = function()
+                         pom1 = pom1 - 1
+                         if pom1 == 0 then
+-                            room:talk("z-c-"..(math.floor(math.mod(room.cas, 1000) / 100)))
++                            room:talk("z-c-"..(math.floor(math.fmod(room.cas, 1000) / 100)))
+                         end
+                         pom1 = pom1 - 1
+                         if pom1 == 0 then
+@@ -147,20 +147,20 @@
+                         end
+                     end,
+                 }
+-                if math.mod(room.cas, 100) < 20 and math.mod(room.cas, 100) > 0 then
++                if math.fmod(room.cas, 100) < 20 and math.fmod(room.cas, 100) > 0 then
+                     pom1 = pom1 - 1
+                     if pom1 == 0 then
+-                        room:talk("z-c-"..(math.mod(room.cas, 100)))
++                        room:talk("z-c-"..(math.fmod(room.cas, 100)))
+                     end
+-                elseif math.mod(room.cas, 100) >= 20 then
++                elseif math.fmod(room.cas, 100) >= 20 then
+                     pom1 = pom1 - 1
+                     if pom1 == 0 then
+-                        room:talk("z-c-"..(math.floor(math.mod(room.cas, 100) / 10) * 10))
++                        room:talk("z-c-"..(math.floor(math.fmod(room.cas, 100) / 10) * 10))
+                     end
+-                    if math.mod(room.cas, 10) > 0 then
++                    if math.fmod(room.cas, 10) > 0 then
+                         pom1 = pom1 - 1
+                         if pom1 == 0 then
+-                            room:talk("z-c-"..(math.mod(room.cas, 10)))
++                            room:talk("z-c-"..(math.fmod(room.cas, 10)))
+                         end
+                     end
+                 end
+@@ -246,7 +246,7 @@
+                         pldik.suckani = pldik.suckani - 1
+                     end,
+                 }
+-                pldik.suckfaze = math.mod(pldik.suckfaze + 1, 6)
++                pldik.suckfaze = math.fmod(pldik.suckfaze + 1, 6)
+             else
+                 model_killSound(ACTOR_SUCK)
+             end
+Index: script/engine/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/engine/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/engine/code.lua	8 Aug 2004 17:33:54 -0000	1.1
++++ b/script/engine/code.lua	6 Apr 2014 22:13:42 -0000
+@@ -54,7 +54,7 @@
+                 if not klicek:isTalking() then
+                     klicek:talk("mot-x-motor", VOLUME_FULL, -1)
+                 end
+-                if math.mod(game_getCycles(), 3) == 0 then
++                if math.fmod(game_getCycles(), 3) == 0 then
+                     if radius < 30 then
+                         radius = radius + 2
+                     end
+Index: script/experiments/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/experiments/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/experiments/code.lua	14 Aug 2004 19:37:26 -0000	1.2
++++ b/script/experiments/code.lua	6 Apr 2014 22:13:44 -0000
+@@ -47,7 +47,7 @@
+         room.nep = 0
+         room.vic = 0
+         room.mrt = 0
+-        if math.mod(pokus, 3) > 0 then
++        if math.fmod(pokus, 3) > 0 then
+             room.nedobre = 0
+         else
+             room.nedobre = 1
+@@ -125,7 +125,7 @@
+                     room.nep = 1
+                     addv(4, "bank-v-neproplavu"..(1 + random(2)))
+                 end
+-                if room.vic < 2 and math.mod(game_getCycles(), 8) == 1 then
++                if room.vic < 2 and math.fmod(game_getCycles(), 8) == 1 then
+                     pom2 = 0
+                     for key, model in pairs(getModelsTable()) do
+                         if model.Y < 21 and model.Y > 17 and model.X > 14 and model.X < 29 then
+@@ -210,7 +210,7 @@
+             if game_getCycles() > room.kdy2 then
+                 room.kdy2 = room.kdy2 + 1000 + random(10000)
+             end
+-            if math.mod(game_getCycles(), 800) == 777 then
++            if math.fmod(game_getCycles(), 800) == 777 then
+                 switch(random(10)){
+                     [1] = function()
+                         room.ruk = 0
+@@ -250,7 +250,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_klicka()
+         return function()
+-            klicka.afaze = math.mod(game_getCycles(), 2)
++            klicka.afaze = math.fmod(game_getCycles(), 2)
+             klicka:updateAnim()
+         end
+     end
+@@ -284,7 +284,7 @@
+                     end
+                 end
+             end
+-            if math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++            if math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                 horni1.oci = random(5)
+             end
+             if random(100) < 2 then
+@@ -314,7 +314,7 @@
+                 dolni1.zije = dolni1.zije + 1
+                 dolni1.afaze = 1
+             else
+-                if math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++                if math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                     dolni1.oci = random(4) + 2
+                 end
+                 pom1 = horni1.poloha
+@@ -355,9 +355,9 @@
+                     end
+                     if odd(game_getCycles() + key) then
+                         if random(2) > 0 then
+-                            tube.afaze = math.mod(tube.afaze + 1, 3)
++                            tube.afaze = math.fmod(tube.afaze + 1, 3)
+                         else
+-                            tube.afaze = math.mod(tube.afaze + 2, 3)
++                            tube.afaze = math.fmod(tube.afaze + 2, 3)
+                         end
+                     end
+                 else
+@@ -392,7 +392,7 @@
+                     end
+                 end
+             end
+-            if math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++            if math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                 horni2.oci = random(5)
+             end
+             if random(100) < 2 then
+@@ -422,7 +422,7 @@
+                 dolni2.zije = dolni2.zije + 1
+                 dolni2.afaze = 1
+             else
+-                if math.mod(game_getCycles(), 3) == 0 and random(100) < 40 then
++                if math.fmod(game_getCycles(), 3) == 0 and random(100) < 40 then
+                     dolni2.oci = random(4) + 2
+                 end
+                 pom1 = horni2.poloha
+@@ -608,7 +608,7 @@
+             if qldik1.dir ~= dir_no then
+                 qldik1.zije = 1
+             end
+-            if math.mod(game_getCycles(), 3) == 0 then
++            if math.fmod(game_getCycles(), 3) == 0 then
+                 if qldik1.zije > 0 then
+                     if random(100) < 20 then
+                         qldik1.oci = random(5)
+@@ -636,7 +636,7 @@
+             if qldik2.dir ~= dir_no then
+                 qldik2.zije = 1
+             end
+-            if math.mod(game_getCycles(), 3) == 0 then
++            if math.fmod(game_getCycles(), 3) == 0 then
+                 if qldik2.zije > 0 then
+                     if random(100) < 20 then
+                         qldik2.oci = random(5)
+@@ -660,7 +660,7 @@
+         qldik3.skace = 0
+ 
+         return function()
+-            if math.mod(game_getCycles(), 2) == 0 then
++            if math.fmod(game_getCycles(), 2) == 0 then
+                 if qldik3.skace == 0 then
+                     if random(100) < 1 then
+                         qldik3.skace = random(7) * 2 + 3
+@@ -699,13 +699,13 @@
+         return function()
+             switch(lahvac.rozbit){
+                 [0] = function()
+-                    if math.mod(game_getCycles(), 4) == 0 then
++                    if math.fmod(game_getCycles(), 4) == 0 then
+                         switch(random(4)){
+                             [0] = function()
+-                                lahvac.vnitrek = math.mod(lahvac.vnitrek + 1, 4)
++                                lahvac.vnitrek = math.fmod(lahvac.vnitrek + 1, 4)
+                             end,
+                             [1] = function()
+-                                lahvac.vnitrek = math.mod(lahvac.vnitrek + 3, 4)
++                                lahvac.vnitrek = math.fmod(lahvac.vnitrek + 3, 4)
+                             end,
+                         }
+                     end
+@@ -717,7 +717,7 @@
+                                 lahvac.afaze = 0
+                             elseif random(100) < 7 then
+                                 lahvac.stav = 1 + random(2)
+-                                lahvac.afaze = 7 + lahvac.stav * 4 + math.mod(lahvac.vnitrek, 2)
++                                lahvac.afaze = 7 + lahvac.stav * 4 + math.fmod(lahvac.vnitrek, 2)
+                             else
+                                 lahvac.afaze = lahvac.vnitrek
+                             end
+@@ -725,32 +725,32 @@
+                         [3] = function()
+                             if random(100) < 7 then
+                                 lahvac.stav = 2
+-                                lahvac.afaze = 15 + math.mod(lahvac.vnitrek, 2)
++                                lahvac.afaze = 15 + math.fmod(lahvac.vnitrek, 2)
+                             elseif random(100) < 7 then
+                                 lahvac.stav = 4
+-                                lahvac.afaze = 22 + math.mod(lahvac.vnitrek, 2)
+-                            elseif math.mod(lahvac.vnitrek, 2) == 1 and random(100) < 10 then
++                                lahvac.afaze = 22 + math.fmod(lahvac.vnitrek, 2)
++                            elseif math.fmod(lahvac.vnitrek, 2) == 1 and random(100) < 10 then
+                                 lahvac.afaze = 19
+                             else
+-                                lahvac.afaze = 20 + math.mod(lahvac.vnitrek, 2)
++                                lahvac.afaze = 20 + math.fmod(lahvac.vnitrek, 2)
+                             end
+                         end,
+                         [4] = function()
+                             if random(100) < 7 then
+                                 lahvac.stav = 3
+-                                lahvac.afaze = 20 + math.mod(lahvac.vnitrek, 2)
++                                lahvac.afaze = 20 + math.fmod(lahvac.vnitrek, 2)
+                             end
+                         end,
+                         default = function()
+                             if 1 <= lahvac.stav and lahvac.stav <= 2 then
+                                 if random(100) < 7 then
+-                                    lahvac.afaze = 7 + lahvac.stav * 4 + math.mod(lahvac.vnitrek, 2)
++                                    lahvac.afaze = 7 + lahvac.stav * 4 + math.fmod(lahvac.vnitrek, 2)
+                                     lahvac.stav = 0
+                                 elseif random(100) < 7 and lahvac.stav == 2 then
+                                     lahvac.stav = 3
+                                     lahvac.afaze = 19
+                                 else
+-                                    lahvac.afaze = 9 + 4 * lahvac.stav + math.mod(lahvac.vnitrek, 2)
++                                    lahvac.afaze = 9 + 4 * lahvac.stav + math.fmod(lahvac.vnitrek, 2)
+                                     if random(100) < 5 then
+                                         lahvac.afaze = lahvac.afaze - 2
+                                     end
+@@ -767,7 +767,7 @@
+                                     lahvac.stav = lahvac.stav + 1
+                                 end
+                             elseif 20 <= lahvac.stav and lahvac.stav <= 25 then
+-                                if math.mod(game_getCycles(), 3) == 0 then
++                                if math.fmod(game_getCycles(), 3) == 0 then
+                                     if lahvac.smer == 0 then
+                                         lahvac.afaze = lahvac.stav - 15
+                                     else
+@@ -845,9 +845,9 @@
+                     else
+                         if odd(game_getCycles()) then
+                             if random(2) == 0 then
+-                                lahvac.afaze = math.mod(lahvac.afaze - 30, 3) + 31
++                                lahvac.afaze = math.fmod(lahvac.afaze - 30, 3) + 31
+                             else
+-                                lahvac.afaze = math.mod(lahvac.afaze - 29, 3) + 31
++                                lahvac.afaze = math.fmod(lahvac.afaze - 29, 3) + 31
+                             end
+                         end
+                         lahvac.stav = lahvac.stav - 1
+@@ -952,7 +952,7 @@
+         malej.oci = 0
+ 
+         return function()
+-            if math.mod(game_getCycles(), 3) == 0 then
++            if math.fmod(game_getCycles(), 3) == 0 then
+                 if random(100) < 10 then
+                     malej.oci = random(5)
+                 end
+@@ -1041,9 +1041,9 @@
+                                 ruka.smer = 1 - ruka.smer
+                             end
+                             if ruka.smer == 0 then
+-                                ruka.faze = math.mod(ruka.faze + 1, 7)
++                                ruka.faze = math.fmod(ruka.faze + 1, 7)
+                             else
+-                                ruka.faze = math.mod(ruka.faze + 6, 7)
++                                ruka.faze = math.fmod(ruka.faze + 6, 7)
+                             end
+                             ruka.afaze = ruka.faze
+                         end
+Index: script/floppy/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/floppy/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/floppy/code.lua	16 Aug 2004 13:04:31 -0000	1.2
++++ b/script/floppy/code.lua	6 Apr 2014 22:13:47 -0000
+@@ -50,7 +50,7 @@
+                 elseif room.nepo == 2 then
+                     room.nepo = 3
+                     pom2 = 8
+-                elseif math.mod(svab.pohyby, 121) == 120 then
++                elseif math.fmod(svab.pohyby, 121) == 120 then
+                     svab.pohyby = svab.pohyby + 1
+                     pom2 = 9
+                 elseif stdBorderReport() then
+Index: script/gods/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/gods/code.lua,v
+retrieving revision 1.7
+diff -u -r1.7 code.lua
+--- a/script/gods/code.lua	9 Jan 2009 22:16:03 -0000	1.7
++++ b/script/gods/code.lua	6 Apr 2014 22:13:51 -0000
+@@ -366,7 +366,7 @@
+                         buh2.ruka = random(4)
+                     end
+                 elseif buh2.cinruky > 0 then
+-                    if math.mod(game_getCycles(), 3) == 0 then
++                    if math.fmod(game_getCycles(), 3) == 0 then
+                         if random(100) < 30 then
+                             buh2.ruka = xor1(buh2.ruka)
+                         else
+@@ -485,11 +485,11 @@
+                 end,
+             }
+             if buh1.mluveni > 100 then
+-                if odd(game_getCycles()) and buh1.mluveni > 101 or math.mod(game_getCycles(), 4) == 1 then
++                if odd(game_getCycles()) and buh1.mluveni > 101 or math.fmod(game_getCycles(), 4) == 1 then
+                     if random(2) == 1 then
+-                        buh1.pusa = math.mod(buh1.pusa + 1, 3)
++                        buh1.pusa = math.fmod(buh1.pusa + 1, 3)
+                     else
+-                        buh1.pusa = math.mod(buh1.pusa + 2, 3)
++                        buh1.pusa = math.fmod(buh1.pusa + 2, 3)
+                     end
+                 end
+             end
+@@ -539,7 +539,7 @@
+                     buh1.ruka = random(4)
+                 end
+             elseif buh1.cinruky > 0 then
+-                if math.mod(game_getCycles(), 2) == 0 then
++                if math.fmod(game_getCycles(), 2) == 0 then
+                     pom1 = random(3)
+                     if pom1 == buh1.ruka then
+                         pom1 = 3
+Index: script/imprisoned/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/imprisoned/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/imprisoned/code.lua	19 Jul 2004 20:41:42 -0000	1.1
++++ b/script/imprisoned/code.lua	6 Apr 2014 22:14:00 -0000
+@@ -94,18 +94,18 @@
+                 sasanka.fazec = 0
+                 sasanka.akcnost = 2 + random(2)
+             end
+-            if math.mod(game_getCycles(), sasanka.akcnost) == 0 then
++            if math.fmod(game_getCycles(), sasanka.akcnost) == 0 then
+                 cinnost_table = {
+                     [1] = function()
+                         sasanka.noha = math.floor(sasanka.fazec / 4)
+                         if sasanka.cinnost == 1 then
+-                            sasanka.kvet = math.mod(sasanka.fazec, 2) + 1
++                            sasanka.kvet = math.fmod(sasanka.fazec, 2) + 1
+                             sasanka.akcnost = 2
+                             if sasanka.kvet == 2 then
+                                 sasanka:talk("ncp-x-tup", VOLUME_FULL)
+                             end
+                         else
+-                            sasanka.kvet = math.mod(sasanka.fazec, 2) * 2 + 1
++                            sasanka.kvet = math.fmod(sasanka.fazec, 2) * 2 + 1
+                             sasanka.akcnost = 3
+                         end
+                         sasanka.fazec = sasanka.fazec + 1
+Index: script/key/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/key/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/key/code.lua	22 Dec 2008 21:52:03 -0000	1.1
++++ b/script/key/code.lua	6 Apr 2014 22:14:00 -0000
+@@ -46,7 +46,7 @@
+             end
+ 
+             if item_named_A.Y == 1 and item_named_B.Y == 1 and item_named_C.Y == 1 then
+-                if math.mod(room.keyupdown, 2) == 0 then
++                if math.fmod(room.keyupdown, 2) == 0 then
+                     room.keyupdown = room.keyupdown + 1
+                     if room.keyupdown < 2 then
+                         addv(0, "up-0-0")
+@@ -59,7 +59,7 @@
+                     end
+                 end
+             else
+-                if math.mod(room.keyupdown, 2) == 1 then
++                if math.fmod(room.keyupdown, 2) == 1 then
+                     room.keyupdown = room.keyupdown + 1
+                     if room.keyupdown < 3 then
+                         addv(0, "down-0-0")
+Index: script/library/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/library/code.lua,v
+retrieving revision 1.5
+diff -u -r1.5 code.lua
+--- a/script/library/code.lua	27 Jul 2004 23:07:57 -0000	1.5
++++ b/script/library/code.lua	6 Apr 2014 22:14:05 -0000
+@@ -113,7 +113,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_sklibak()
+         return function()
+-            if math.mod(game_getCycles(), 2) == 0 then
++            if math.fmod(game_getCycles(), 2) == 0 then
+                 local anim_table = {
+                     [0] = function() 
+                         if random(100) < 5 then
+Index: script/party1/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/party1/code.lua,v
+retrieving revision 1.7
+diff -u -r1.7 code.lua
+--- a/script/party1/code.lua	14 Aug 2004 13:37:57 -0000	1.7
++++ b/script/party1/code.lua	6 Apr 2014 22:14:14 -0000
+@@ -528,7 +528,7 @@
+                     glass.afaze = 0
+                 else
+                     pom2 = pom2 - 1
+-                    glass.afaze = 2 - math.mod(math.floor(pom2 / 3), 2)
++                    glass.afaze = 2 - math.fmod(math.floor(pom2 / 3), 2)
+                 end
+                 room.globpole[1000 + pom1] = pom2
+                 glass:updateAnim()
+Index: script/party2/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/party2/code.lua,v
+retrieving revision 1.3
+diff -u -r1.3 code.lua
+--- a/script/party2/code.lua	10 Aug 2004 21:25:10 -0000	1.3
++++ b/script/party2/code.lua	6 Apr 2014 22:14:15 -0000
+@@ -597,7 +597,7 @@
+                     glass.afaze = 0
+                 else
+                     pom2 = pom2 - 1
+-                    glass.afaze = 2 - math.mod(math.floor(pom2 / 3), 2)
++                    glass.afaze = 2 - math.fmod(math.floor(pom2 / 3), 2)
+                 end
+                 glass.wav = pom2
+                 glass:updateAnim()
+Index: script/pavement/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/pavement/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/pavement/code.lua	4 Jul 2004 21:19:07 -0000	1.2
++++ b/script/pavement/code.lua	6 Apr 2014 22:14:16 -0000
+@@ -78,7 +78,7 @@
+                     end
+                 end,
+                 [1] = function()
+-                    if math.mod(game_getCycles(), 2) == 0 then
++                    if math.fmod(game_getCycles(), 2) == 0 then
+                         if vladce:isTalking() then
+                             pom1 = random(3)
+                         else
+@@ -328,7 +328,7 @@
+         return function()
+             if chobot.dir ~= dir_no then
+                 chobot.akcnost = 7
+-            elseif chobot.akcnost > 2 and math.mod(game_getCycles(), 5) == 0 then
++            elseif chobot.akcnost > 2 and math.fmod(game_getCycles(), 5) == 0 then
+                 chobot.akcnost = chobot.akcnost - 1
+             end
+             if chobot.dir ~= chobot.lastdir then
+@@ -351,7 +351,7 @@
+                 end
+                 chobot.lastdir = chobot.dir
+             end
+-            if chobot.dir == dir_no and math.mod(game_getCycles(), chobot.akcnost) == 0 then
++            if chobot.dir == dir_no and math.fmod(game_getCycles(), chobot.akcnost) == 0 then
+                 if random(2) == 0 then
+                     if chobot.chapadla < 2 then
+                         chobot.chapadla = chobot.chapadla + 1
+Index: script/propulsion/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/propulsion/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/propulsion/code.lua	16 Aug 2004 13:04:47 -0000	1.2
++++ b/script/propulsion/code.lua	6 Apr 2014 22:14:19 -0000
+@@ -185,7 +185,7 @@
+                     end
+                 end,
+                 [2] = function()
+-                    if math.mod(game_getCycles(), 4) == 0 then
++                    if math.fmod(game_getCycles(), 4) == 0 then
+                         switch(veve.afaze){
+                             [6] = function()
+                                 veve.afaze = 7
+@@ -307,7 +307,7 @@
+                     else
+                         nasrany.nohy = 1
+                     end
+-                elseif math.mod(game_getCycles(), 3) == 0 and random(100) < 9 then
++                elseif math.fmod(game_getCycles(), 3) == 0 and random(100) < 9 then
+                     nasrany.vyraz = random(4)
+                 end
+                 if nasrany.vyraz ~= 4 and random(100) < 1 and not odd(nasrany.nohy) then
+@@ -367,12 +367,12 @@
+                         if random(100) < 5 then
+                             smutny.cinnost = 0
+                         end
+-                        if math.mod(game_getCycles(), 3) == 0 then
++                        if math.fmod(game_getCycles(), 3) == 0 then
+                             smutny.strana = 1 - smutny.strana
+                         end
+                     end,
+                 }
+-                if math.mod(game_getCycles(), 3) == 0 and random(100) < 6 then
++                if math.fmod(game_getCycles(), 3) == 0 and random(100) < 6 then
+                     smutny.vyraz = random(4) + 1
+                 end
+             end
+@@ -388,7 +388,7 @@
+     -- -------------------------------------------------------------
+     local function prog_init_plut1()
+         return function()
+-            plut1.afaze = math.mod(plut1.afaze + 1, 3)
++            plut1.afaze = math.fmod(plut1.afaze + 1, 3)
+             plut1:updateAnim()
+         end
+     end
+Index: script/puzzle/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/puzzle/code.lua,v
+retrieving revision 1.3
+diff -u -r1.3 code.lua
+--- a/script/puzzle/code.lua	19 Jul 2004 20:50:46 -0000	1.3
++++ b/script/puzzle/code.lua	6 Apr 2014 22:14:21 -0000
+@@ -173,9 +173,9 @@
+                     end
+ 
+                     if random(2) == 0 then
+-                        pld.afaze = math.mod(pld.afaze + 1, 4)
++                        pld.afaze = math.fmod(pld.afaze + 1, 4)
+                     else
+-                        pld.afaze = math.mod(pld.afaze + 3, 4)
++                        pld.afaze = math.fmod(pld.afaze + 3, 4)
+                     end
+                     pld.vlnit = pld.vlnit - 1
+                     if pld.vlnit == 0 then
+Index: script/reactor/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/reactor/code.lua,v
+retrieving revision 1.3
+diff -u -r1.3 code.lua
+--- a/script/reactor/code.lua	26 Jul 2004 17:39:49 -0000	1.3
++++ b/script/reactor/code.lua	6 Apr 2014 22:14:23 -0000
+@@ -72,7 +72,7 @@
+         return function()
+             local count = game_getCycles()
+             for index, model in pairs(tyce) do
+-                model.afaze = 2 - math.floor(math.mod(count, 6) / 2)
++                model.afaze = 2 - math.floor(math.fmod(count, 6) / 2)
+                 model:updateAnim()
+             end
+             for pom1, model in pairs(tyce) do
+@@ -130,9 +130,9 @@
+                         pld.del = 1
+                     end
+                     if random(2) == 0 then
+-                        pld.afaze = math.mod(pld.afaze + 1, 4)
++                        pld.afaze = math.fmod(pld.afaze + 1, 4)
+                     else
+-                        pld.afaze = math.mod(pld.afaze + 3, 4)
++                        pld.afaze = math.fmod(pld.afaze + 3, 4)
+                     end
+                     pld.vlnit = pld.vlnit - 1
+                     if pld.vlnit == 0 then
+Index: script/rotate/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/rotate/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/rotate/code.lua	9 Dec 2007 19:05:50 -0000	1.1
++++ b/script/rotate/code.lua	6 Apr 2014 22:14:25 -0000
+@@ -242,7 +242,7 @@
+ 		 and valecek[i].X ~= 8) or
+ 	         (valecek[i].X == 8 and valecek[i].Y == 11) then
+ 
+-	        nastavvalec(i, math.mod(valecek[i].X, 2)*2-1)
++	        nastavvalec(i, math.fmod(valecek[i].X, 2)*2-1)
+ 
+ 	        svetelko[i].afaze = room.energie
+ 	        model_setViewShift(svetelko[i].index,
+Index: script/share/Pickle.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/share/Pickle.lua,v
+retrieving revision 1.3
+diff -u -r1.3 Pickle.lua
+--- a/script/share/Pickle.lua	1 Dec 2007 17:03:16 -0000	1.3
++++ b/script/share/Pickle.lua	6 Apr 2014 22:14:26 -0000
+@@ -24,7 +24,7 @@
+   self:ref_(root)
+   local s = {"{"}
+ 
+-  while table.getn(self._refToTable) > savecount do
++  while (#self._refToTable) > savecount do
+     savecount = savecount + 1
+     local t = self._refToTable[savecount]
+     table.insert(s, "{\n")
+@@ -59,7 +59,7 @@
+   if not ref then 
+     if t == self then error("can't pickle the pickle class") end
+     table.insert(self._refToTable, t)
+-    ref = table.getn(self._refToTable)
++    ref = (#self._refToTable)
+     self._tableToRef[t] = ref
+   end
+   return ref
+@@ -81,7 +81,7 @@
+   if type(tables) ~= "table" then
+     error("can't unpickle a "..type(tables)..", only tables")
+   end
+-  for tnum = 1, table.getn(tables) do
++  for tnum = 1, (#tables) do
+     local t = tables[tnum]
+     local tcopy = {}; for i, v in pairs(t) do tcopy[i] = v end
+     for i, v in pairs(tcopy) do
+Index: script/share/borejokes.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/share/borejokes.lua,v
+retrieving revision 1.9
+diff -u -r1.9 borejokes.lua
+--- a/script/share/borejokes.lua	5 Jan 2009 21:17:47 -0000	1.9
++++ b/script/share/borejokes.lua	6 Apr 2014 22:14:29 -0000
+@@ -7,7 +7,7 @@
+     return isIn(n, usedJokes)
+ end
+ local function rememberUsed(n)
+-    peek = math.mod(peek + 1, usedJokesCapacity)
++    peek = math.fmod(peek + 1, usedJokesCapacity)
+     usedJokes[peek] = n
+ end
+ 
+@@ -15,7 +15,7 @@
+ 
+ function insertBoreJoke(joke)
+     table.insert(boredDialogTable, joke)
+-    if usedJokesCapacity * 3 < table.getn(boredDialogTable) then
++    if usedJokesCapacity * 3 < (#boredDialogTable) then
+         usedJokesCapacity = usedJokesCapacity + 1
+     end
+ end
+@@ -250,9 +250,9 @@
+     if boredUnits() and no_dialog() then
+         boredRate = 0
+         delayForJoke = delayForJoke * randint(100, 150) / 100
+-        n = random(table.getn(boredDialogTable))
++        n = random(#boredDialogTable)
+         while wasUsedRecently(n) do
+-            n = random(table.getn(boredDialogTable))
++            n = random(#boredDialogTable)
+         end
+         rememberUsed(n)
+         selectJoke(n)
+Index: script/share/level_creation.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/share/level_creation.lua,v
+retrieving revision 1.28
+diff -u -r1.28 level_creation.lua
+--- a/script/share/level_creation.lua	13 Jan 2009 22:11:30 -0000	1.28
++++ b/script/share/level_creation.lua	6 Apr 2014 22:14:30 -0000
+@@ -184,7 +184,7 @@
+ local function addBodyAnimBackward(model, directory, anim, phase)
+     local picture_00 = directory.."/left/body_"..phase..".png"
+     local list = imgList(picture_00)
+-    for index = table.getn(list), 1, -1 do
++    for index = (#list), 1, -1 do
+         local filename = list[index]
+         model:addAnim(anim, filename)
+         model:addAnim(anim,
+Index: script/share/level_update.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/share/level_update.lua,v
+retrieving revision 1.6
+diff -u -r1.6 level_update.lua
+--- a/script/share/level_update.lua	7 Jun 2009 06:50:05 -0000	1.6
++++ b/script/share/level_update.lua	6 Apr 2014 22:14:30 -0000
+@@ -35,8 +35,8 @@
+         if "talking" == state or model_isTalking(TALK_INDEX_BOTH) then
+             if not model.talk_phase then
+                 model.talk_phase = random(3)
+-            elseif math.mod(game_getCycles(), 2) == 0 then
+-                model.talk_phase = math.mod(
++            elseif math.fmod(game_getCycles(), 2) == 0 then
++                model.talk_phase = math.fmod(
+                     model.talk_phase + randint(1, 2), 3)
+             end
+         else
+Index: script/share/prog_compatible.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/share/prog_compatible.lua,v
+retrieving revision 1.9
+diff -u -r1.9 prog_compatible.lua
+--- a/script/share/prog_compatible.lua	8 Sep 2004 21:11:41 -0000	1.9
++++ b/script/share/prog_compatible.lua	6 Apr 2014 22:14:30 -0000
+@@ -18,7 +18,7 @@
+ end
+ 
+ function odd(number)
+-    return math.mod(number, 2) == 1
++    return math.fmod(number, 2) == 1
+ end
+ 
+ function getRestartCount()
+Index: script/share/prog_finder.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/share/prog_finder.lua,v
+retrieving revision 1.2
+diff -u -r1.2 prog_finder.lua
+--- a/script/share/prog_finder.lua	14 Sep 2004 14:51:29 -0000	1.2
++++ b/script/share/prog_finder.lua	6 Apr 2014 22:14:30 -0000
+@@ -82,7 +82,7 @@
+     table.insert(fifo, {dir=dir_up, x=locX, y=locY - 1})
+     table.insert(fifo, {dir=dir_down, x=locX, y=locY + 1})
+ 
+-    while table.getn(fifo) > 0 do
++    while (#fifo) > 0 do
+         local place = table.remove(fifo, 1)
+         if tryPlace(data, place) then
+             if isInRect(place.x, place.y, w, h, destX, destY) then
+Index: script/stairs/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/stairs/code.lua,v
+retrieving revision 1.7
+diff -u -r1.7 code.lua
+--- a/script/stairs/code.lua	27 Jul 2004 23:07:57 -0000	1.7
++++ b/script/stairs/code.lua	6 Apr 2014 22:14:32 -0000
+@@ -147,9 +147,9 @@
+                     end
+                 end,
+                 [2] = function()
+-                    if math.mod(snecek.sour, 3) == 0 and random(100) < 30 then
++                    if math.fmod(snecek.sour, 3) == 0 and random(100) < 30 then
+                         snecek.cinnost = 0
+-                    elseif math.mod(snecek.sour, 3) == 0 and random(100) < 10 then
++                    elseif math.fmod(snecek.sour, 3) == 0 and random(100) < 10 then
+                         snecek.cinnost = 3
+                     elseif random(100) < 2 or snecek.smer == -1 and snecek.sour == 0 or snecek.smer == 1 and snecek.sour == 15 then
+                         snecek.smer = -snecek.smer
+Index: script/start/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/start/code.lua,v
+retrieving revision 1.9
+diff -u -r1.9 code.lua
+--- a/script/start/code.lua	24 Sep 2004 21:42:21 -0000	1.9
++++ b/script/start/code.lua	6 Apr 2014 22:14:33 -0000
+@@ -206,7 +206,7 @@
+                         if trubka.afaze == 4 then
+                             trubka.afaze = 5
+                         end
+-                        if math.mod(game_getCycles(), 3) == 1 then
++                        if math.fmod(game_getCycles(), 3) == 1 then
+                             if random(2) == 0 then
+                                 trubka.afaze = trubka.afaze + 1
+                             else
+Index: script/steel/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/steel/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/steel/code.lua	13 Aug 2004 22:46:53 -0000	1.1
++++ b/script/steel/code.lua	6 Apr 2014 22:14:35 -0000
+@@ -29,7 +29,7 @@
+                 else
+                 end
+             else
+-                switch(math.mod(room.houk, 10)){
++                switch(math.fmod(room.houk, 10)){
+                     [2] = function()
+                         room:talk("steel-x-redalert", VOLUME_FULL)
+                         bgfaze = 1
+Index: script/submarine/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/submarine/code.lua,v
+retrieving revision 1.2
+diff -u -r1.2 code.lua
+--- a/script/submarine/code.lua	26 Jun 2004 00:22:13 -0000	1.2
++++ b/script/submarine/code.lua	6 Apr 2014 22:14:36 -0000
+@@ -130,7 +130,7 @@
+                     peri.cinnost = peri.cinnost + 1
+                 end,
+                 [9] = function()
+-                    if math.mod(game_getCycles(), 3) == 0 then
++                    if math.fmod(game_getCycles(), 3) == 0 then
+                         peri.afaze = 6 + random(2)
+                     end
+                     if peri.delay == 0 then
+Index: script/turtle/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/turtle/code.lua,v
+retrieving revision 1.3
+diff -u -r1.3 code.lua
+--- a/script/turtle/code.lua	16 Aug 2004 22:40:28 -0000	1.3
++++ b/script/turtle/code.lua	6 Apr 2014 22:14:38 -0000
+@@ -531,7 +531,7 @@
+                 end,
+                 [2] = function()
+                     goanim(rybka)
+-                    if math.mod(game_getCycles(), 3) == 0 then
++                    if math.fmod(game_getCycles(), 3) == 0 then
+                         rybka.afaze = random(3) + 1
+                     end
+                 end,
+Index: script/viking2/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/viking2/code.lua,v
+retrieving revision 1.1
+diff -u -r1.1 code.lua
+--- a/script/viking2/code.lua	1 Jul 2004 16:57:23 -0000	1.1
++++ b/script/viking2/code.lua	6 Apr 2014 22:14:43 -0000
+@@ -731,7 +731,7 @@
+         hlavadr.mluvi = 0
+ 
+         return function()
+-            if math.mod(game_getCycles(), 3) == 1 then
++            if math.fmod(game_getCycles(), 3) == 1 then
+                 if hlavadr.mluvi ~= 0 then
+                     pom1 = hlavadr.afaze
+                     repeat
+Index: script/windoze/code.lua
+===================================================================
+RCS file: /cvsroot/fillets/fillets_data/script/windoze/code.lua,v
+retrieving revision 1.7
+diff -u -r1.7 code.lua
+--- a/script/windoze/code.lua	24 Sep 2004 20:57:46 -0000	1.7
++++ b/script/windoze/code.lua	6 Apr 2014 22:14:47 -0000
+@@ -196,7 +196,7 @@
+         notepad.napsano = 0
+ 
+         return function()
+-            notepad.afaze = notepad.napsano * 2 + math.floor(math.mod(game_getCycles(), 10) / 5)
++            notepad.afaze = notepad.napsano * 2 + math.floor(math.fmod(game_getCycles(), 10) / 5)
+             notepad:updateAnim()
+         end
+     end
