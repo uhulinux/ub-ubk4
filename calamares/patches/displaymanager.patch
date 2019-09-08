@@ -1,6 +1,6 @@
-diff -Naur orig/src/modules/displaymanager/displaymanager.conf patched/src/modules/displaymanager/displaymanager.conf
---- orig/src/modules/displaymanager/displaymanager.conf	2019-07-06 00:52:35.000000000 +0200
-+++ patched/src/modules/displaymanager/displaymanager.conf	2019-07-31 12:48:29.364093966 +0200
+diff -Nur orig/src/modules/displaymanager/displaymanager.conf mod/src/modules/displaymanager/displaymanager.conf
+--- orig/src/modules/displaymanager/displaymanager.conf	2019-08-07 12:58:22.000000000 +0200
++++ mod/src/modules/displaymanager/displaymanager.conf	2019-08-26 08:48:29.000000000 +0200
 @@ -9,9 +9,7 @@
    - sddm
    - lightdm
@@ -11,9 +11,9 @@ diff -Naur orig/src/modules/displaymanager/displaymanager.conf patched/src/modul
  
  #Enable the following settings to force a desktop environment in your displaymanager configuration file:
  #defaultDesktopEnvironment:
-diff -Naur orig/src/modules/displaymanager/main.py patched/src/modules/displaymanager/main.py
---- orig/src/modules/displaymanager/main.py	2019-07-06 00:52:35.000000000 +0200
-+++ patched/src/modules/displaymanager/main.py	2019-07-31 12:48:29.364093966 +0200
+diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager/main.py
+--- orig/src/modules/displaymanager/main.py	2019-08-07 12:58:22.000000000 +0200
++++ mod/src/modules/displaymanager/main.py	2019-09-08 21:18:00.000000000 +0200
 @@ -80,9 +80,9 @@
      DesktopEnvironment('/usr/bin/startlxde', 'LXDE'),
      DesktopEnvironment('/usr/bin/lxqt-session', 'lxqt'),
@@ -26,11 +26,12 @@ diff -Naur orig/src/modules/displaymanager/main.py patched/src/modules/displayma
      DesktopEnvironment('/usr/bin/openbox-session', 'openbox')
  ]
  
-@@ -809,6 +809,7 @@
-         libcalamares.utils.debug("Unsetting autologin.")
+@@ -774,6 +774,8 @@
  
-     libcalamares.globalstorage.insert("displayManagers", displaymanagers)
-+    libcalamares.utils.target_env_call(['systemctl', 'enable', dm])
+         if dm_instance is None:
+             libcalamares.utils.debug("{!s} selected but not installed".format(dm))
++        else:
++            libcalamares.utils.target_env_call(['systemctl', '-f', 'enable', dm])
+             if dm in displaymanagers:
+                 displaymanagers.remove(dm)
  
-     # Do the actual configuration and collect messages
-     dm_setup_message = []
