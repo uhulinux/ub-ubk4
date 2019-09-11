@@ -1,0 +1,52 @@
+From 6bb5c1feecdb7063abf937bcaa4cb53ce8f3fcf6 Mon Sep 17 00:00:00 2001
+From: Carlos Garnacho <carlosg@gnome.org>
+Date: Fri, 19 Jul 2019 16:17:54 +0000
+Subject: [PATCH] shell: Ignore non-toplevels for
+ ShellWindowTracker::tracked-windows-changed
+
+Popups and other override-redirect windows are meaningless to everything
+that depends on the ShellWindowTracker. Ignoring those windows will result
+in less ShellApp::windows-changed signal emissions, and less activity in
+the AppMenuButton and everything else that depends on them.
+
+Reduces gnome-shell CPU activity while typing on the Epiphany addressbar,
+as the pop up animation there results in a number of xdg_popup being
+created and destroyed.
+
+https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/642
+https://gitlab.gnome.org/GNOME/mutter/issues/556
+
+
+(cherry picked from commit db9a7ea7a9b4c9485428a63a0bb4b8c2446ba801)
+---
+ src/shell-window-tracker.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/src/shell-window-tracker.c b/src/shell-window-tracker.c
+index 487bc9b29..b19bdf251 100644
+--- a/src/shell-window-tracker.c
++++ b/src/shell-window-tracker.c
+@@ -535,12 +535,17 @@ track_window (ShellWindowTracker *self,
+ 
+ static void
+ shell_window_tracker_on_window_added (MetaWorkspace   *workspace,
+-                                   MetaWindow      *window,
+-                                   gpointer         user_data)
++                                      MetaWindow      *window,
++                                      gpointer         user_data)
+ {
+   ShellWindowTracker *self = SHELL_WINDOW_TRACKER (user_data);
++  MetaWindowType window_type = meta_window_get_window_type (window);
+ 
+-  track_window (self, window);
++  if (window_type == META_WINDOW_NORMAL ||
++      window_type == META_WINDOW_DIALOG ||
++      window_type == META_WINDOW_UTILITY ||
++      window_type == META_WINDOW_MODAL_DIALOG)
++    track_window (self, window);
+ }
+ 
+ static void
+-- 
+2.20.1
+

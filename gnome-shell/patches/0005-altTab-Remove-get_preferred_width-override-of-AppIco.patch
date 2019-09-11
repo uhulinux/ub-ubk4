@@ -1,0 +1,46 @@
+From ae05679498ff78b88ede8f15bd646716366b2ff8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jonas=20Dre=C3=9Fler?= <verdre@v0yd.nl>
+Date: Thu, 20 Jun 2019 21:10:26 +0000
+Subject: [PATCH] altTab: Remove get_preferred_width override of AppIcon
+
+This vfunc override has been introduced to ensure app icons are always
+squared, but since the container of the AppIcon gets a square allocation
+anyway if the 'square' property of the SwitcherButton is set, there's
+no need to return a special width here.
+
+Without the override we can also stop setting the size of the iconBin
+manually. And since shell_app_create_icon_texture() uses logical pixels
+but clutter_actor_set_size() uses screen pixels, that means we now no
+longer set the size of the icon back to the unscaled value after it was
+already correct.
+
+Fixes https://gitlab.gnome.org/GNOME/gnome-shell/issues/1325
+
+
+(cherry picked from commit 074129682bc134f4ca0005a8d9edef210e30da69)
+---
+ js/ui/altTab.js | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/js/ui/altTab.js b/js/ui/altTab.js
+index 3c23d68e5..c0f9431ad 100644
+--- a/js/ui/altTab.js
++++ b/js/ui/altTab.js
+@@ -665,14 +665,6 @@ class AppIcon extends St.BoxLayout {
+     set_size(size) {
+         this.icon = this.app.create_icon_texture(size);
+         this._iconBin.child = this.icon;
+-        this._iconBin.set_size(size, size);
+-    }
+-
+-    vfunc_get_preferred_width(forHeight) {
+-        let [minWidth, ] = super.vfunc_get_preferred_width(forHeight);
+-
+-        minWidth = Math.max(minWidth, forHeight);
+-        return [minWidth, minWidth];
+     }
+ });
+ 
+-- 
+2.20.1
+

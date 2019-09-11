@@ -1,0 +1,33 @@
+From 2483b603869009f7294c00e8a5bdb778eb948b6d Mon Sep 17 00:00:00 2001
+From: Cosimo Cecchi <cosimo@endlessm.com>
+Date: Sun, 26 May 2019 10:24:25 -0700
+Subject: [PATCH] shell-global: don't warn when unsetting non-existent state
+
+If the state we're trying to delete does not exist, do not log an
+error.
+Prevents this journal warning at startup:
+
+gnome-shell[1082]: Could not delete runtime/persistent state file: Error removing file /run/user/1000/gnome-shell/runtime-state-LE.:0/screenShield.locked: No such file or directory
+
+https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/555
+---
+ src/shell-global.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/shell-global.c b/src/shell-global.c
+index df84b6b0d..b6be44c0e 100644
+--- a/src/shell-global.c
++++ b/src/shell-global.c
+@@ -1560,7 +1560,8 @@ delete_variant_cb (GObject      *object,
+ 
+   if (!g_file_delete_finish (G_FILE (object), result, &error))
+     {
+-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
++      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
++          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+         {
+           g_warning ("Could not delete runtime/persistent state file: %s\n",
+                      error->message);
+-- 
+2.20.1
+

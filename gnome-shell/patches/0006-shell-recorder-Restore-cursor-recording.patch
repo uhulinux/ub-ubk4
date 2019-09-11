@@ -1,0 +1,31 @@
+From 8b98740897e016d2794add7f5094bd822692fbf4 Mon Sep 17 00:00:00 2001
+From: Illya Klymov <xanf@xanf.me>
+Date: Mon, 8 Jul 2019 03:29:36 +0000
+Subject: [PATCH] shell-recorder: Restore cursor recording
+
+Due to changes introduced in 5357e0a1 cursor recording interaction with
+magnifier was reversed. This fix restores original correct behavior
+Related issue: https://gitlab.gnome.org/GNOME/gnome-shell/issues/1208
+
+
+(cherry picked from commit 55b036170b5aafa542bbe84492066c2315be231b)
+---
+ src/shell-recorder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/shell-recorder.c b/src/shell-recorder.c
+index 0203ecf1c..cf1cc336f 100644
+--- a/src/shell-recorder.c
++++ b/src/shell-recorder.c
+@@ -465,7 +465,7 @@ recorder_record_frame (ShellRecorder *recorder,
+ 
+       g_object_get (settings, "magnifier-active", &magnifier_active, NULL);
+ 
+-      if (magnifier_active)
++      if (!magnifier_active)
+         recorder_draw_cursor (recorder, buffer);
+     }
+ 
+-- 
+2.20.1
+

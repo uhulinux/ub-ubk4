@@ -1,0 +1,118 @@
+From e8ddb23b3a6a7f2981b09feaaaf5250f63d14f36 Mon Sep 17 00:00:00 2001
+From: Cosimo Cecchi <cosimo@endlessm.com>
+Date: Sun, 26 May 2019 08:31:07 -0700
+Subject: [PATCH] windowAttentionHandler: disconnect signals before destruction
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The 'destroy' signal is emitted at the end of the destroy() method.
+However the implementation of destroy() can end up emitting one of the
+signals we connect to on the window, causing us to re-enter destroy
+from its callback.
+That will in turn lead to some objects getting disposed twice, which
+produces a stack trace like the following one.
+
+This commit fixes the issue by overriding the destroy() method instead
+of connecting to the signal, which allows us to disconnect the signal
+handlers from the window at an earlier time and avoid re-entrancy.
+
+--
+
+gnome-shell[1082]: Object Gio.Settings (0x7f0af8143f00), has been already deallocated — impossible to access it. This might be caused by the object having been destroyed from C code using something such as destroy(), dispose(), or remove() vfuncs.
+org.gnome.Shell.desktop[1082]: == Stack trace for context 0x5627f7d1e220 ==
+org.gnome.Shell.desktop[1082]: #0   5627f9e801a8 i   resource:///org/gnome/shell/ui/messageTray.js:238 (7f0aefa9eca0 @ 22)
+org.gnome.Shell.desktop[1082]: #1   5627f9e80108 i   resource:///org/gnome/shell/ui/messageTray.js:802 (7f0aefaa2ee0 @ 28)
+org.gnome.Shell.desktop[1082]: #2   5627f9e80070 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:79 (7f0aef7b29d0 @ 62)
+org.gnome.Shell.desktop[1082]: #3   7fffa69fbfc0 b   self-hosted:979 (7f0aefa515e0 @ 440)
+org.gnome.Shell.desktop[1082]: #4   5627f9e7ffe0 i   resource:///org/gnome/shell/ui/messageTray.js:121 (7f0aefa9e1f0 @ 71)
+org.gnome.Shell.desktop[1082]: #5   5627f9e7ff38 i   resource:///org/gnome/shell/ui/messageTray.js:1408 (7f0aefaa58b0 @ 22)
+org.gnome.Shell.desktop[1082]: #6   5627f9e7fe80 i   resource:///org/gnome/shell/ui/messageTray.js:1237 (7f0aefaa51f0 @ 729)
+org.gnome.Shell.desktop[1082]: #7   5627f9e7fde8 i   resource:///org/gnome/shell/ui/messageTray.js:1055 (7f0aefaa3d30 @ 124)
+org.gnome.Shell.desktop[1082]: #8   7fffa69ff8e0 b   self-hosted:979 (7f0aefa515e0 @ 440)
+org.gnome.Shell.desktop[1082]: #9   7fffa69ff9d0 b   resource:///org/gnome/gjs/modules/signals.js:142 (7f0aefccb670 @ 386)
+org.gnome.Shell.desktop[1082]: #10   5627f9e7fd58 i   resource:///org/gnome/shell/ui/messageTray.js:479 (7f0aefaa0940 @ 50)
+org.gnome.Shell.desktop[1082]: #11   5627f9e7fcb8 i   resource:///org/gnome/shell/ui/messageTray.js:808 (7f0aefaa2ee0 @ 99)
+org.gnome.Shell.desktop[1082]: #12   5627f9e7fc28 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:69 (7f0aef7b28b0 @ 13)
+org.gnome.Shell.desktop[1082]: #13   5627f9e7fb80 i   resource:///org/gnome/shell/ui/main.js:566 (7f0aefcd8820 @ 216)
+org.gnome.Shell.desktop[1082]: #14   5627f9e7fad0 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:103 (7f0aef7b2c10 @ 27)
+org.gnome.Shell.desktop[1082]: #15   5627f9e7fa58 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:43 (7f0aef7b2700 @ 17)
+org.gnome.Shell.desktop[1082]: #16   7fffa6a03350 b   resource:///org/gnome/gjs/modules/signals.js:142 (7f0aefccb670 @ 386)
+org.gnome.Shell.desktop[1082]: #17   5627f9e7f9d0 i   resource:///org/gnome/shell/ui/messageTray.js:471 (7f0aefaa08b0 @ 22)
+org.gnome.Shell.desktop[1082]: #18   5627f9e7f950 i   resource:///org/gnome/shell/ui/calendar.js:752 (7f0aefaabdc0 @ 22)
+org.gnome.Shell.desktop[1082]: #19   7fffa6a048f0 b   self-hosted:979 (7f0aefa515e0 @ 440)
+org.gnome.Shell.desktop[1082]: == Stack trace for context 0x5627f7d1e220 ==
+org.gnome.Shell.desktop[1082]: #0   5627f9e801a8 i   resource:///org/gnome/shell/ui/messageTray.js:239 (7f0aefa9eca0 @ 42)
+org.gnome.Shell.desktop[1082]: #1   5627f9e80108 i   resource:///org/gnome/shell/ui/messageTray.js:802 (7f0aefaa2ee0 @ 28)
+org.gnome.Shell.desktop[1082]: #2   5627f9e80070 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:79 (7f0aef7b29d0 @ 62)
+org.gnome.Shell.desktop[1082]: #3   7fffa69fbfc0 b   self-hosted:979 (7f0aefa515e0 @ 440)
+org.gnome.Shell.desktop[1082]: #4   5627f9e7ffe0 i   resource:///org/gnome/shell/ui/messageTray.js:121 (7f0aefa9e1f0 @ 71)
+org.gnome.Shell.desktop[1082]: #5   5627f9e7ff38 i   resource:///org/gnome/shell/ui/messageTray.js:1408 (7f0aefaa58b0 @ 22)
+org.gnome.Shell.desktop[1082]: #6   5627f9e7fe80 i   resource:///org/gnome/shell/ui/messageTray.js:1237 (7f0aefaa51f0 @ 729)
+org.gnome.Shell.desktop[1082]: #7   5627f9e7fde8 i   resource:///org/gnome/shell/ui/messageTray.js:1055 (7f0aefaa3d30 @ 124)
+org.gnome.Shell.desktop[1082]: #8   7fffa69ff8e0 b   self-hosted:979 (7f0aefa515e0 @ 440)
+org.gnome.Shell.desktop[1082]: #9   7fffa69ff9d0 b   resource:///org/gnome/gjs/modules/signals.js:142 (7f0aefccb670 @ 386)
+org.gnome.Shell.desktop[1082]: #10   5627f9e7fd58 i   resource:///org/gnome/shell/ui/messageTray.js:479 (7f0aefaa0940 @ 50)
+org.gnome.Shell.desktop[1082]: #11   5627f9e7fcb8 i   resource:///org/gnome/shell/ui/messageTray.js:808 (7f0aefaa2ee0 @ 99)
+org.gnome.Shell.desktop[1082]: #12   5627f9e7fc28 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:69 (7f0aef7b28b0 @ 13)
+org.gnome.Shell.desktop[1082]: #13   5627f9e7fb80 i   resource:///org/gnome/shell/ui/main.js:566 (7f0aefcd8820 @ 216)
+org.gnome.Shell.desktop[1082]: #14   5627f9e7fad0 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:103 (7f0aef7b2c10 @ 27)
+org.gnome.Shell.desktop[1082]: #15   5627f9e7fa58 i   resource:///org/gnome/shell/ui/windowAttentionHandler.js:43 (7f0aef7b2700 @ 17)
+org.gnome.Shell.desktop[1082]: #16   7fffa6a03350 b   resource:///org/gnome/gjs/modules/signals.js:142 (7f0aefccb670 @ 386)
+org.gnome.Shell.desktop[1082]: #17   5627f9e7f9d0 i   resource:///org/gnome/shell/ui/messageTray.js:471 (7f0aefaa08b0 @ 22)
+org.gnome.Shell.desktop[1082]: #18   5627f9e7f950 i   resource:///org/gnome/shell/ui/calendar.js:752 (7f0aefaabdc0 @ 22)
+org.gnome.Shell.desktop[1082]: #19   7fffa6a048f0 b   self-hosted:979 (7f0aefa515e0 @ 440)
+gnome-shell[1082]: g_object_run_dispose: assertion 'G_IS_OBJECT (object)' failed
+gnome-shell[1082]: Object Gio.Settings (0x7f0af8161750), has been already deallocated — impossible to access it. This might be caused by the object having been destroyed from C code using something such as destroy(), dispose(), or remove() vfuncs.
+gnome-shell[1082]: g_object_run_dispose: assertion 'G_IS_OBJECT (object)' failed
+
+https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/555
+---
+ js/ui/windowAttentionHandler.js | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/js/ui/windowAttentionHandler.js b/js/ui/windowAttentionHandler.js
+index abdb8a444..a9a7111ba 100644
+--- a/js/ui/windowAttentionHandler.js
++++ b/js/ui/windowAttentionHandler.js
+@@ -69,8 +69,6 @@ var Source = class WindowAttentionSource extends MessageTray.Source {
+                                                  () => { this.destroy(); }));
+         this.signalIDs.push(this._window.connect('unmanaged',
+                                                  () => { this.destroy(); }));
+-
+-        this.connect('destroy', this._onDestroy.bind(this));
+     }
+ 
+     _sync() {
+@@ -79,13 +77,6 @@ var Source = class WindowAttentionSource extends MessageTray.Source {
+         this.destroy();
+     }
+ 
+-    _onDestroy() {
+-        for(let i = 0; i < this.signalIDs.length; i++) {
+-           this._window.disconnect(this.signalIDs[i]);
+-        }
+-        this.signalIDs = [];
+-    }
+-
+     _createPolicy() {
+         if (this._app && this._app.get_app_info()) {
+             let id = this._app.get_id().replace(/\.desktop$/,'');
+@@ -99,6 +90,14 @@ var Source = class WindowAttentionSource extends MessageTray.Source {
+         return this._app.create_icon_texture(size);
+     }
+ 
++    destroy(params) {
++        for (let i = 0; i < this.signalIDs.length; i++)
++            this._window.disconnect(this.signalIDs[i]);
++        this.signalIDs = [];
++
++        super.destroy(params);
++    }
++
+     open() {
+         Main.activateWindow(this._window);
+     }
+-- 
+2.20.1
+
