@@ -1,12 +1,8 @@
 #!/bin/sh -eux
 
-autoreconf -vif
 ub_compile \
-	--disable-xdm-auth \
-	--disable-static \
 	--with-xdmconfigdir=/etc/X11/xdm \
 	--with-xdmscriptdir=/etc/X11/xdm \
-	--with-pixmapdir=/usr/share/xdm/pixmaps \
 	--with-xdmlibdir=/usr/lib/xdm \
 	--with-default-vt=vt7 \
 	--with-pam

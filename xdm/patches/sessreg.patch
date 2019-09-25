@@ -1,0 +1,57 @@
+diff -Naur orig/config/Makefile.in patched/config/Makefile.in
+--- orig/config/Makefile.in	2019-03-02 23:06:24.000000000 +0100
++++ patched/config/Makefile.in	2019-03-20 04:48:48.846365155 +0100
+@@ -376,8 +376,6 @@
+ 	Xstartup
+ 
+ dist_xdmscript_SCRIPTS = \
+-	GiveConsole \
+-	TakeConsole \
+ 	Xsetup_0 \
+ 	Xwilling
+ 
+diff -Naur orig/config/xdm-config.in patched/config/xdm-config.in
+--- orig/config/xdm-config.in	2019-03-02 23:06:13.000000000 +0100
++++ patched/config/xdm-config.in	2019-03-20 04:49:59.387248224 +0100
+@@ -10,7 +10,7 @@
+ DisplayManager.servers:		XDMCONFIGDIR/Xservers
+ DisplayManager.accessFile:	XDMCONFIGDIR/Xaccess
+ DisplayManager*resources:	XDMCONFIGDIR/Xresources
+-DisplayManager.willing:		SU nobody -s /bin/sh -c XDMSCRIPTDIR/Xwilling
++DisplayManager.willing:		SU nobody -s /bin/bash -c XDMSCRIPTDIR/Xwilling
+ ! All displays should use authorization, but we cannot be sure
+ ! X terminals may not be configured that way, so they will require
+ ! individual resource settings.
+@@ -23,8 +23,8 @@
+ DisplayManager*authComplain:	true
+ ! The following three resources set up display :0 as the console.
+ DisplayManager._0.setup:	XDMSCRIPTDIR/Xsetup_0
+-DisplayManager._0.startup:	XDMSCRIPTDIR/GiveConsole
+-DisplayManager._0.reset:	XDMSCRIPTDIR/TakeConsole
++DisplayManager._0.startup:	XDMSCRIPTDIR/Xstartup
++DisplayManager._0.reset:	XDMSCRIPTDIR/Xreset
+ #ifdef XPM
+ DisplayManager*loginmoveInterval:	10
+ #endif /* XPM */
+diff -Naur orig/config/Xreset.in patched/config/Xreset.in
+--- orig/config/Xreset.in	2019-03-02 23:06:13.000000000 +0100
++++ patched/config/Xreset.in	2019-03-20 04:54:09.930255082 +0100
+@@ -1,5 +1,4 @@
+ XCOMM!/bin/sh
+-XCOMM Deregister a login. (Derived from TakeConsole as follows:)
++XCOMM Xreset - Run as root after session exits
+ XCOMM
+-BINDIR/sessreg -d WTMP_FLAG UTMP_FLAG \
+-	-x XDMCONFIGDIR/Xservers -l $DISPLAY -h "" $USER
++BINDIR/sessreg -d -l "$DISPLAY" "$USER"
+diff -Naur orig/config/Xstartup.in patched/config/Xstartup.in
+--- orig/config/Xstartup.in	2019-03-02 23:06:13.000000000 +0100
++++ patched/config/Xstartup.in	2019-03-20 04:55:09.246962790 +0100
+@@ -1,5 +1,4 @@
+ XCOMM!/bin/sh
+-XCOMM Register a login (derived from GiveConsole as follows:)
++XCOMM Xstartup - Run as root before session starts
+ XCOMM
+-exec BINDIR/sessreg -a WTMP_FLAG UTMP_FLAG \
+-	-x XDMCONFIGDIR/Xservers -l $DISPLAY -h "" $USER
++exec BINDIR/sessreg  -a -l "$DISPLAY" "$USER"

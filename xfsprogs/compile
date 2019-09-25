@@ -1,8 +1,9 @@
 #!/bin/sh -eux
 
 make configure
-ub_compile \
-	--libdir=/lib \
-	--sbindir=/sbin \
+ub_configure \
+    --sbindir=/usr/sbin \
 	--enable-readline \
 	--enable-static
+
+ub_make PKG_ROOT_SBIN_DIR="/usr/bin" PKG_ROOT_LIB_DIR="/usr/lib"

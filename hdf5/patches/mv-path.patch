@@ -1,0 +1,36 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2019-02-26 05:28:04.000000000 +0100
++++ patched/configure	2019-09-05 11:00:49.210243247 +0200
+@@ -34890,12 +34890,12 @@
+   sed 's/#define /#define H5_/' <src/H5config.h |\
+     sed 's/#undef /#undef H5_/' >pubconf
+   if test ! -f src/H5pubconf.h; then
+-    /bin/mv -f pubconf src/H5pubconf.h
++    mv -f pubconf src/H5pubconf.h
+   elif (diff pubconf src/H5pubconf.h >/dev/null); then
+     rm -f pubconf
+     echo "src/H5pubconf.h is unchanged"
+   else
+-    /bin/mv -f pubconf src/H5pubconf.h
++    mv -f pubconf src/H5pubconf.h
+   fi
+   echo "Post process src/libhdf5.settings"
+   sed '/^#/d' < src/libhdf5.settings > libhdf5.settings.TMP
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2019-02-26 05:27:44.000000000 +0100
++++ patched/configure.ac	2019-09-05 11:01:03.818390386 +0200
+@@ -68,12 +68,12 @@
+   sed 's/#define /#define H5_/' <src/H5config.h |\
+     sed 's/#undef /#undef H5_/' >pubconf
+   if test ! -f src/H5pubconf.h; then
+-    /bin/mv -f pubconf src/H5pubconf.h
++    mv -f pubconf src/H5pubconf.h
+   elif (diff pubconf src/H5pubconf.h >/dev/null); then
+     rm -f pubconf
+     echo "src/H5pubconf.h is unchanged"
+   else
+-    /bin/mv -f pubconf src/H5pubconf.h
++    mv -f pubconf src/H5pubconf.h
+   fi
+   echo "Post process src/libhdf5.settings"
+   sed '/^#/d' < src/libhdf5.settings > libhdf5.settings.TMP

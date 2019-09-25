@@ -1,0 +1,12 @@
+diff -Naur orig/src/app/meson.build patched/src/app/meson.build
+--- orig/src/app/meson.build	2019-09-09 21:26:25.000000000 +0200
++++ patched/src/app/meson.build	2019-09-18 04:48:33.454484372 +0200
+@@ -46,7 +46,7 @@
+   app_gtk3_deps = app_common_deps + [libvte_gtk3_dep]
+ 
+   app_gtk3 = executable(
+-    'vte-' + vte_gtk3_api_version,
++    'vte',
+     app_gtk3_sources,
+     dependencies: app_gtk3_deps,
+     cpp_args: app_common_cppflags,

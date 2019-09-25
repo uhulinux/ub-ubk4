@@ -1,10 +1,18 @@
 #!/bin/bash -eux
 
+ub_configure \
+    --includedir=/usr/include \
+    --with-gtk=3 \
+    --with-opengl \
+    --enable-unicode \
+    --enable-graphics_ctx \
+    --disable-precomp-headers \
+    --with-regex=sys \
+    --with-libpng=sys \
+    --with-libxpm=sys \
+    --with-libjpeg=sys \
+    --with-libtiff=sys \
+    --with-wx-config=/usr/bin/wx-config-gtk3
+
 cd wxPython
-
-export CFLAGS=`wx-config --cxxflags`
-export CFLAGS="$CFLAGS "`pkg-config --cflags gtk+-3.0`
-export LDFLAGS=`wx-config --libs`
-export LDFLAGS="$LDFLAGS "`pkg-config --libs gtk+-3.0`
-
-ub_compile
+python2 setup.py build

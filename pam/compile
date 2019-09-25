@@ -5,7 +5,7 @@ msgfmt -o po/hu.gmo po/hu.po
 cp -a modules/pam_envfeed/Makefile{,.in}
 cp -a modules/pam_locallogin/Makefile{,.in}
 
-autoreconf -i
+autoreconf -vif
 
 export UB_MAKE_PROCS=1
 CFLAGS="-fPIC -O2" \
@@ -14,9 +14,8 @@ SGML2LATEX=no \
 PS2PDF=no \
 SGML2PS=no \
 ub_compile \
-	--bindir=/bin \
-	--libdir=/lib \
-	--sbindir=/sbin \
+	--sbindir=/usr/sbin \
+	--libdir=/usr/lib \
 	--docdir=/usr/share/doc/Packages/pam \
 	--disable-nis
 

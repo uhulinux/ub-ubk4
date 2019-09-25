@@ -1,0 +1,15 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2019-08-31 18:00:14.087264034 +0200
++++ patched/configure	2019-08-31 18:09:12.329580405 +0200
+@@ -48,9 +48,9 @@
+ relconf=`basename $0`
+ # the directory of this script is the "source tree"
+ relpath=`dirname $0`
+-relpath=`(cd "$relpath"; /bin/pwd)`
++relpath=`(cd "$relpath"; pwd)`
+ # the current directory is the "build tree" or "object tree"
+-outpath=`/bin/pwd`
++outpath=`pwd`
+ 
+ #license file location
+ LICENSE_FILE="$QT_LICENSE_FILE"

@@ -1,23 +1,12 @@
-diff -Nur orig/man/Makefile mod/man/Makefile
---- orig/man/Makefile	2017-06-30 17:44:38.000000000 +0200
-+++ mod/man/Makefile	2017-08-31 15:48:39.144449696 +0200
-@@ -211,19 +211,15 @@
- 	echo Converting man pages to HTML...
- 	for file in $(MAN1); do \
- 		echo "    $$file..."; \
--		./mantohtml `basename $$file .$(MAN1EXT)`.man >../doc/help/man-`basename $$file .$(MAN1EXT)`.html; \
- 	done
- 	for file in $(MAN5); do \
- 		echo "    $$file..."; \
--		./mantohtml `basename $$file .$(MAN5EXT)`.man >../doc/help/man-`basename $$file .$(MAN5EXT)`.html; \
- 	done
- 	for file in $(MAN7); do \
- 		echo "    $$file..."; \
--		./mantohtml `basename $$file .$(MAN7EXT)`.man >../doc/help/man-`basename $$file .$(MAN7EXT)`.html; \
- 	done
- 	for file in $(MAN8); do \
- 		echo "    $$file..."; \
--		./mantohtml `basename $$file .$(MAN8EXT)`.man >../doc/help/man-`basename $$file .$(MAN8EXT)`.html; \
- 	done
+diff -Naur orig/man/Makefile mod/man/Makefile
+--- orig/man/Makefile	2019-08-23 17:19:38.000000000 +0200
++++ mod/man/Makefile	2019-08-25 19:59:01.188909882 +0200
+@@ -196,7 +196,7 @@
+ # Local programs (not built when cross-compiling...)
+ #
  
- mantohtml:	mantohtml.o ../cups/$(LIBCUPSSTATIC)
+-local:	html
++local:
+ 
+ 
+ #

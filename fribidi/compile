@@ -1,7 +1,4 @@
 #!/bin/sh -eux
 
-#ub_compile
-
-./bootstrap &&
-./configure --prefix=/usr &&
-make
+ub_compile \
+	-Ddocs=false

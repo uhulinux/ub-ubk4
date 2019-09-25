@@ -1,0 +1,9 @@
+diff -Naur xdm.orig/config/Xservers.ws.in xdm/config/Xservers.ws.in
+--- xdm.orig/config/Xservers.ws.in	2003-11-14 17:49:22.000000000 +0100
++++ xdm/config/Xservers.ws.in	2005-12-01 15:34:06.000000000 +0100
+@@ -9,4 +9,4 @@
+ XCOMM look like:
+ XCOMM	XTerminalName:0 foreign
+ XCOMM
+-:0 local BINDIR/X :0 DEFAULTVT
++:0 local BINDIR/X :0 -nolisten tcp DEFAULTVT

@@ -1,7 +1,11 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--disable-broadway-backend \
-	--enable-wayland-backend \
-	--enable-x11-backend \
-	--enable-colord
+    -Dx11_backend=true \
+    -Dwayland_backend=true \
+	-Dbroadway_backend=false \
+	-Dcolord=yes \
+	-Ddemos=false \
+	-Dexamples=false \
+	-Dtests=false \
+	-Dinstalled_tests=false

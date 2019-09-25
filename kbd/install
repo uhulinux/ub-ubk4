@@ -4,13 +4,6 @@ make KEYCODES_PROGS=yes RESIZECONS_PROGS=yes DESTDIR="$UB_INSTALLDIR" install
 
 # ro_win.map.gz is useless
 rm -f ${UB_INSTALLDIR}/usr/share/keymaps/i386/qwerty/ro_win.map.gz
-#rm -f ${UB_INSTALLDIR}/usr/lib/kbd/keymaps/i386/qwerty/ro_win.map.gz
 
 # Create additional name for Serbian latin keyboard
 ln -s sr-cy.map.gz ${UB_INSTALLDIR}/usr/share/keymaps/i386/qwerty/sr-latin.map.gz
-
-# Move binaries which we use before /usr is mounted from %{_bindir} to /bin.
-for binary in setfont dumpkeys kbd_mode unicode_start unicode_stop loadkeys ; do
-  mv ${UB_INSTALLDIR}/usr/bin/$binary ${UB_INSTALLDIR}/bin/
-  ln -s ../../bin/$binary "$UB_INSTALLDIR"/usr/bin/
-done

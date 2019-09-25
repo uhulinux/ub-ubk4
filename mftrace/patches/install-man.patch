@@ -1,0 +1,21 @@
+diff -Naur orig/GNUmakefile.in patched/GNUmakefile.in
+--- orig/GNUmakefile.in	2019-09-19 12:34:24.556806058 +0200
++++ patched/GNUmakefile.in	2019-09-19 12:34:13.088729447 +0200
+@@ -14,7 +14,7 @@
+ srcdir=@srcdir@
+ VPATH=$(srcdir)
+ NAME=mftrace
+-MANPAGES=mftrace.1 gf2pbm.1
++MANPAGES=mftrace.1
+ VERSION=@VERSION@
+ distdir=$(NAME)-$(VERSION)
+ prefix=@prefix@
+@@ -35,6 +35,8 @@
+ 
+ compile: mftrace gf2pbm
+ 
++man: $(MANPAGES)
++
+ version.texi: GNUmakefile
+ 	echo -e '@macro mftversion\n$(VERSION)\n@end macro\n' > $@
+ 

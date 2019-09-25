@@ -3,7 +3,7 @@ Description=OpenLDAP server daemon
 
 [Service]
 Type=forking
-PIDFile=/var/run/openldap/slapd.pid
+PIDFile=/run/openldap/slapd.pid
 ExecStart=/usr/sbin/slapd -h "ldapi:/// ldap:///"
 
 [Install]

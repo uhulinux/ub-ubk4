@@ -1,4 +1,9 @@
 #!/bin/sh -eux
 
-ub_install
+ub_install \
+    rootbindir=/usr/bin rootsbindir=/usr/sbin rootlibdir=/usr/lib
+
+ln -s /usr/bin/ntfs-3g ${UB_INSTALLDIR}/usr/bin/mount.ntfs
+
+rm ${UB_INSTALLDIR}/usr/share/man/man8/ntfsfallocate.8 # uninstalled binary
 rm -rf ${UB_INSTALLDIR}/usr/share/doc

@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
+sed -i "s|-ffast-math||" configure
+export CFLAGS=" -fPIC "
 ub_compile

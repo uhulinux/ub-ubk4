@@ -1,0 +1,353 @@
+diff --git a/Makefile.am b/Makefile.am
+index 9664cde..b145e62 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -7,7 +7,6 @@ SUBDIRS = \
+ 	src \
+ 	extensions \
+ 	data \
+-	python \
+ 	test \
+ 	examples \
+ 	po \
+diff --git a/Makefile.in b/Makefile.in
+index 395df47..f68dac0 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -195,7 +195,7 @@ am__define_uniq_tagged_files = \
+ ETAGS = etags
+ CTAGS = ctags
+ CSCOPE = cscope
+-DIST_SUBDIRS = libzeitgeist src extensions data python test examples \
++DIST_SUBDIRS = libzeitgeist src extensions data test examples \
+ 	po doc datahub
+ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
+ 	$(top_srcdir)/build-aux/compile \
+@@ -343,11 +343,6 @@ PKG_CONFIG = @PKG_CONFIG@
+ PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+ PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+ POSUB = @POSUB@
+-PYTHON = @PYTHON@
+-PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+-PYTHON_PLATFORM = @PYTHON_PLATFORM@
+-PYTHON_PREFIX = @PYTHON_PREFIX@
+-PYTHON_VERSION = @PYTHON_VERSION@
+ RANLIB = @RANLIB@
+ SED = @SED@
+ SET_MAKE = @SET_MAKE@
+@@ -411,12 +406,10 @@ mkdir_p = @mkdir_p@
+ oldincludedir = @oldincludedir@
+ pdfdir = @pdfdir@
+ pkgpyexecdir = @pkgpyexecdir@
+-pkgpythondir = @pkgpythondir@
+ prefix = @prefix@
+ program_transform_name = @program_transform_name@
+ psdir = @psdir@
+ pyexecdir = @pyexecdir@
+-pythondir = @pythondir@
+ runstatedir = @runstatedir@
+ sbindir = @sbindir@
+ sharedstatedir = @sharedstatedir@
+@@ -428,7 +421,7 @@ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ NULL = 
+ ACLOCAL_AMFLAGS = --install -I m4 ${ACLOCAL_FLAGS}
+-SUBDIRS = libzeitgeist src extensions data python test examples po doc \
++SUBDIRS = libzeitgeist src extensions data test examples po doc \
+ 	$(NULL) $(am__append_1)
+ zeitgeistdocdir = $(pkgdatadir)/doc
+ zeitgeistdoc_DATA = \
+diff --git a/configure b/configure
+index dd39c48..86708cd 100755
+--- a/configure
++++ b/configure
+@@ -812,15 +812,6 @@ CPPFLAGS
+ LDFLAGS
+ CFLAGS
+ CC
+-pkgpyexecdir
+-pyexecdir
+-pkgpythondir
+-pythondir
+-PYTHON_PLATFORM
+-PYTHON_EXEC_PREFIX
+-PYTHON_PREFIX
+-PYTHON_VERSION
+-PYTHON
+ MAINT
+ MAINTAINER_MODE_FALSE
+ MAINTAINER_MODE_TRUE
+@@ -921,7 +912,6 @@ enable_introspection
+       ac_precious_vars='build_alias
+ host_alias
+ target_alias
+-PYTHON
+ CC
+ CFLAGS
+ LDFLAGS
+@@ -1619,7 +1609,6 @@ Optional Packages:
+                           Build the FTS extension with dee-icu
+ 
+ Some influential environment variables:
+-  PYTHON      the Python interpreter
+   CC          C compiler command
+   CFLAGS      C compiler flags
+   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+@@ -3224,215 +3213,6 @@ fi
+   MAINT=$MAINTAINER_MODE_TRUE
+ 
+ 
+-
+-
+-
+-
+-
+-
+-
+-        # Find any Python interpreter.
+-    if test -z "$PYTHON"; then
+-      for ac_prog in python python2 python3  python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3  python3.2 python3.1 python3.0  python2.7 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1  python2.0
+-do
+-  # Extract the first word of "$ac_prog", so it can be a program name with args.
+-set dummy $ac_prog; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_path_PYTHON+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  case $PYTHON in
+-  [\\/]* | ?:[\\/]*)
+-  ac_cv_path_PYTHON="$PYTHON" # Let the user override the test with a path.
+-  ;;
+-  *)
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_path_PYTHON="$as_dir/$ac_word$ac_exec_ext"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-  ;;
+-esac
+-fi
+-PYTHON=$ac_cv_path_PYTHON
+-if test -n "$PYTHON"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON" >&5
+-$as_echo "$PYTHON" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-  test -n "$PYTHON" && break
+-done
+-test -n "$PYTHON" || PYTHON=":"
+-
+-    fi
+-    am_display_PYTHON=python
+-
+-
+-  if test "$PYTHON" = :; then
+-      as_fn_error $? "no suitable Python interpreter found" "$LINENO" 5
+-  else
+-
+-
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON version" >&5
+-$as_echo_n "checking for $am_display_PYTHON version... " >&6; }
+-if ${am_cv_python_version+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  am_cv_python_version=`$PYTHON -c "import sys; sys.stdout.write(sys.version[:3])"`
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_version" >&5
+-$as_echo "$am_cv_python_version" >&6; }
+-  PYTHON_VERSION=$am_cv_python_version
+-
+-
+-
+-  PYTHON_PREFIX='${prefix}'
+-
+-  PYTHON_EXEC_PREFIX='${exec_prefix}'
+-
+-
+-
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON platform" >&5
+-$as_echo_n "checking for $am_display_PYTHON platform... " >&6; }
+-if ${am_cv_python_platform+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  am_cv_python_platform=`$PYTHON -c "import sys; sys.stdout.write(sys.platform)"`
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_platform" >&5
+-$as_echo "$am_cv_python_platform" >&6; }
+-  PYTHON_PLATFORM=$am_cv_python_platform
+-
+-
+-  # Just factor out some code duplication.
+-  am_python_setup_sysconfig="\
+-import sys
+-# Prefer sysconfig over distutils.sysconfig, for better compatibility
+-# with python 3.x.  See automake bug#10227.
+-try:
+-    import sysconfig
+-except ImportError:
+-    can_use_sysconfig = 0
+-else:
+-    can_use_sysconfig = 1
+-# Can't use sysconfig in CPython 2.7, since it's broken in virtualenvs:
+-# <https://github.com/pypa/virtualenv/issues/118>
+-try:
+-    from platform import python_implementation
+-    if python_implementation() == 'CPython' and sys.version[:3] == '2.7':
+-        can_use_sysconfig = 0
+-except ImportError:
+-    pass"
+-
+-
+-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON script directory" >&5
+-$as_echo_n "checking for $am_display_PYTHON script directory... " >&6; }
+-if ${am_cv_python_pythondir+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "x$prefix" = xNONE
+-     then
+-       am_py_prefix=$ac_default_prefix
+-     else
+-       am_py_prefix=$prefix
+-     fi
+-     am_cv_python_pythondir=`$PYTHON -c "
+-$am_python_setup_sysconfig
+-if can_use_sysconfig:
+-    sitedir = sysconfig.get_path('purelib', vars={'base':'$am_py_prefix'})
+-else:
+-    from distutils import sysconfig
+-    sitedir = sysconfig.get_python_lib(0, 0, prefix='$am_py_prefix')
+-sys.stdout.write(sitedir)"`
+-     case $am_cv_python_pythondir in
+-     $am_py_prefix*)
+-       am__strip_prefix=`echo "$am_py_prefix" | sed 's|.|.|g'`
+-       am_cv_python_pythondir=`echo "$am_cv_python_pythondir" | sed "s,^$am__strip_prefix,$PYTHON_PREFIX,"`
+-       ;;
+-     *)
+-       case $am_py_prefix in
+-         /usr|/System*) ;;
+-         *)
+-	  am_cv_python_pythondir=$PYTHON_PREFIX/lib/python$PYTHON_VERSION/site-packages
+-	  ;;
+-       esac
+-       ;;
+-     esac
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_pythondir" >&5
+-$as_echo "$am_cv_python_pythondir" >&6; }
+-  pythondir=$am_cv_python_pythondir
+-
+-
+-
+-  pkgpythondir=\${pythondir}/$PACKAGE
+-
+-
+-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON extension module directory" >&5
+-$as_echo_n "checking for $am_display_PYTHON extension module directory... " >&6; }
+-if ${am_cv_python_pyexecdir+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "x$exec_prefix" = xNONE
+-     then
+-       am_py_exec_prefix=$am_py_prefix
+-     else
+-       am_py_exec_prefix=$exec_prefix
+-     fi
+-     am_cv_python_pyexecdir=`$PYTHON -c "
+-$am_python_setup_sysconfig
+-if can_use_sysconfig:
+-    sitedir = sysconfig.get_path('platlib', vars={'platbase':'$am_py_prefix'})
+-else:
+-    from distutils import sysconfig
+-    sitedir = sysconfig.get_python_lib(1, 0, prefix='$am_py_prefix')
+-sys.stdout.write(sitedir)"`
+-     case $am_cv_python_pyexecdir in
+-     $am_py_exec_prefix*)
+-       am__strip_prefix=`echo "$am_py_exec_prefix" | sed 's|.|.|g'`
+-       am_cv_python_pyexecdir=`echo "$am_cv_python_pyexecdir" | sed "s,^$am__strip_prefix,$PYTHON_EXEC_PREFIX,"`
+-       ;;
+-     *)
+-       case $am_py_exec_prefix in
+-         /usr|/System*) ;;
+-         *)
+-	   am_cv_python_pyexecdir=$PYTHON_EXEC_PREFIX/lib/python$PYTHON_VERSION/site-packages
+-	   ;;
+-       esac
+-       ;;
+-     esac
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_pyexecdir" >&5
+-$as_echo "$am_cv_python_pyexecdir" >&6; }
+-  pyexecdir=$am_cv_python_pyexecdir
+-
+-
+-
+-  pkgpyexecdir=\${pyexecdir}/$PACKAGE
+-
+-
+-
+-  fi
+-
+-
+-
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+@@ -18776,7 +18556,7 @@ $as_echo "yes" >&6; }
+ fi
+ 
+ 
+-ac_config_files="$ac_config_files Makefile src/Makefile libzeitgeist/Makefile libzeitgeist/zeitgeist-2.0.pc datahub/Makefile extensions/Makefile extensions/fts++/Makefile extensions/fts++/test/Makefile data/Makefile data/ontology/Makefile python/Makefile test/Makefile test/dbus/Makefile test/direct/Makefile test/c/Makefile test/data/Makefile examples/Makefile examples/c/Makefile examples/vala/Makefile doc/Makefile doc/libzeitgeist/Makefile po/Makefile.in"
++ac_config_files="$ac_config_files Makefile src/Makefile libzeitgeist/Makefile libzeitgeist/zeitgeist-2.0.pc datahub/Makefile extensions/Makefile extensions/fts++/Makefile extensions/fts++/test/Makefile data/Makefile data/ontology/Makefile test/Makefile test/dbus/Makefile test/direct/Makefile test/c/Makefile test/data/Makefile examples/Makefile examples/c/Makefile examples/vala/Makefile doc/Makefile doc/libzeitgeist/Makefile po/Makefile.in"
+ 
+ 
+ #################################################
+@@ -19531,24 +19311,6 @@ fi
+ 
+ 
+ 
+-fi
+-
+-#################################################
+-# Ontology parsing dependencies
+-#################################################
+-
+-# check for python-rdflib
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for python-rdflib" >&5
+-$as_echo_n "checking for python-rdflib... " >&6; }
+-echo "import rdflib" | $PYTHON - 2>/dev/null
+-if test $? -ne 0 ; then
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "failed.  Please install the python-rdflib package.
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+ fi
+ 
+ #################################################
+@@ -20727,7 +20489,6 @@ do
+     "extensions/fts++/test/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/fts++/test/Makefile" ;;
+     "data/Makefile") CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
+     "data/ontology/Makefile") CONFIG_FILES="$CONFIG_FILES data/ontology/Makefile" ;;
+-    "python/Makefile") CONFIG_FILES="$CONFIG_FILES python/Makefile" ;;
+     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
+     "test/dbus/Makefile") CONFIG_FILES="$CONFIG_FILES test/dbus/Makefile" ;;
+     "test/direct/Makefile") CONFIG_FILES="$CONFIG_FILES test/direct/Makefile" ;;

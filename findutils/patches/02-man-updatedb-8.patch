@@ -1,7 +1,7 @@
-diff -Naur findutils-4.6.0-orig/find/find.1 findutils-4.6.0/find/find.1
---- findutils-4.6.0-orig/find/find.1	2015-12-28 22:10:23.000000000 +0100
-+++ findutils-4.6.0/find/find.1	2016-02-13 17:27:31.929318197 +0100
-@@ -2088,8 +2088,8 @@
+diff -Naur orig/find/find.1 patched/find/find.1
+--- orig/find/find.1	2019-06-23 11:00:40.000000000 +0200
++++ patched/find/find.1	2019-09-14 09:15:58.194340480 +0200
+@@ -2256,8 +2256,8 @@
  
  
  .SH "SEE ALSO"
@@ -12,19 +12,10 @@ diff -Naur findutils-4.6.0-orig/find/find.1 findutils-4.6.0/find/find.1
  \fBlstat\fP(2), \fBls\fP(1), \fBprintf\fP(3), \fBstrftime\fP(3),
  \fBctime\fP(3)
  
-@@ -2213,7 +2213,7 @@
- The best way to report a bug is to use the form at
- http://savannah.gnu.org/bugs/?group=findutils.
- The reason for this is that you will then be able to track progress in
--fixing the problem.   Other comments about \fBfind\fP(1) and about
-+fixing the problem.   Other comments about \fBfind\fP(8) and about
- the findutils package in general can be sent to the
- .I bug\-findutils
- mailing list.  To join the list, send email to
-diff -Naur findutils-4.6.0-orig/locate/locate.1 findutils-4.6.0/locate/locate.1
---- findutils-4.6.0-orig/locate/locate.1	2015-12-28 22:10:23.000000000 +0100
-+++ findutils-4.6.0/locate/locate.1	2016-02-13 17:30:10.961317756 +0100
-@@ -51,7 +51,7 @@
+diff -Naur orig/locate/locate.1 patched/locate/locate.1
+--- orig/locate/locate.1	2019-06-23 11:00:40.000000000 +0200
++++ patched/locate/locate.1	2019-09-14 09:15:58.194340480 +0200
+@@ -52,7 +52,7 @@
  when the databases were last updated.  The system administrator can
  choose the file name of the default database, the frequency with which
  the databases are updated, and the directories for which they contain
@@ -33,7 +24,7 @@ diff -Naur findutils-4.6.0-orig/locate/locate.1 findutils-4.6.0/locate/locate.1
  .P
  If
  .BR locate 's
-@@ -207,7 +207,7 @@
+@@ -215,7 +215,7 @@
  .BR locate .
  
  .SH "SEE ALSO"
@@ -42,9 +33,9 @@ diff -Naur findutils-4.6.0-orig/locate/locate.1 findutils-4.6.0/locate/locate.1
  \fBglob\fP(3)
  
  The full documentation for
-diff -Naur findutils-4.6.0-orig/locate/locatedb.5 findutils-4.6.0/locate/locatedb.5
---- findutils-4.6.0-orig/locate/locatedb.5	2015-12-28 22:10:23.000000000 +0100
-+++ findutils-4.6.0/locate/locatedb.5	2016-02-13 17:31:14.725317580 +0100
+diff -Naur orig/locate/locatedb.5 patched/locate/locatedb.5
+--- orig/locate/locatedb.5	2019-06-23 11:00:40.000000000 +0200
++++ patched/locate/locatedb.5	2019-09-14 09:15:58.194340480 +0200
 @@ -15,7 +15,7 @@
  databases are updated, and the directories for which they contain
  entries.  Normally, file name databases are updated by running the
@@ -54,22 +45,22 @@ diff -Naur findutils-4.6.0-orig/locate/locatedb.5 findutils-4.6.0/locate/located
  
  .SH GNU LOCATE02 database format
  This is the default format of databases produced by
-diff -Naur findutils-4.6.0-orig/locate/updatedb.1 findutils-4.6.0/locate/updatedb.1
---- findutils-4.6.0-orig/locate/updatedb.1	2015-12-28 22:10:23.000000000 +0100
-+++ findutils-4.6.0/locate/updatedb.1	2016-02-13 17:32:10.389317426 +0100
-@@ -147,7 +147,7 @@
+diff -Naur orig/locate/updatedb.1 patched/locate/updatedb.1
+--- orig/locate/updatedb.1	2019-06-23 11:00:40.000000000 +0200
++++ patched/locate/updatedb.1	2019-09-14 09:15:58.194340480 +0200
+@@ -140,7 +140,7 @@
  The best way to report a bug is to use the form at
- http://savannah.gnu.org/bugs/?group=findutils.
+ https://savannah.gnu.org/bugs/?group=findutils.
  The reason for this is that you will then be able to track progress in
 -fixing the problem.   Other comments about \fBupdatedb\fP(1) and about
 +fixing the problem.   Other comments about \fBupdatedb\fP(8) and about
  the findutils package in general can be sent to the
  .I bug-findutils
  mailing list.  To join the list, send email to
-diff -Naur findutils-4.6.0-orig/xargs/xargs.1 findutils-4.6.0/xargs/xargs.1
---- findutils-4.6.0-orig/xargs/xargs.1	2015-12-28 22:10:23.000000000 +0100
-+++ findutils-4.6.0/xargs/xargs.1	2016-02-13 17:33:08.397317265 +0100
-@@ -417,7 +417,7 @@
+diff -Naur orig/xargs/xargs.1 patched/xargs/xargs.1
+--- orig/xargs/xargs.1	2019-06-23 11:00:40.000000000 +0200
++++ patched/xargs/xargs.1	2019-09-14 09:15:58.194340480 +0200
+@@ -390,7 +390,7 @@
  
  
  .SH "SEE ALSO"

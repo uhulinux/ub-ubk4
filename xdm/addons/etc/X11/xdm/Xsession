@@ -1,0 +1,195 @@
+#!/bin/bash --
+
+#
+# Négy egymáshoz nagyon hasonló fájl:
+#     /etc/X11/xdm/Xsetup
+#  -> /etc/X11/xdm/Xsession
+#     /etc/X11/xinit/xinitrc
+#     /etc/gdm/Xsession
+#
+# (c) 2002-2004 UHU-Linux Kft.
+# Koblinger Egmont <egmont@uhulinux.hu>
+#
+
+# Kikapcsoljuk a TV kimenetet mert bekavarhat
+xrandr --output TV --off
+
+# Bizonyos display manager-ek beállítják az XAUTHORITY változót az egyébként
+# is alapértelmezett értékre. Ez a su programnak bekavarhat.
+
+if [ "$XAUTHORITY" = ~/.Xauthority ]; then
+	unset XAUTHORITY
+fi
+
+# A failsafe opciót nézzük meg minél előbb, hogy ez mindig működjön.
+
+if [ "$1" = "failsafe" ]; then
+	exec xterm -geometry 80x24+0+0
+fi
+
+# A későbbiekben használt fájlok...
+
+startup=~/.xsession
+errfile=~/.xsession-errors
+startup_apps=~/.xstartup
+
+userresources=~/.Xresources
+usercursor=~/.Xcursor
+usermodmap=~/.Xmodmap
+userxkbmap=~/.Xkbmap
+userpointermap=~/.Xpointermap
+usernumlock=~/.Xnumlock
+
+sysresources=/etc/X11/Xresources
+syscursor=/etc/X11/Xcursor
+sysmodmap=/etc/X11/Xmodmap
+sysxkbmap=/etc/X11/Xkbmap
+syspointermap=/etc/X11/Xpointermap
+sysnumlock=/etc/X11/Xnumlock
+
+# Ha van saját ~/.xsession, azt folytatjuk.
+
+if [ -s "$startup" ]; then
+	if [ -x "$startup" ]; then
+		exec "$startup" "$@"
+	else
+		exec /bin/sh "$startup" "$@"
+	fi
+fi
+
+# Kimenet átirányítása a ~/.xsession-errors fájlba.
+
+if [ ! -f "$errfile" ]; then
+	umask=$(umask)
+	umask 0077
+	touch "$errfile"
+	umask $umask
+fi
+exec >"$errfile" 2>&1
+
+# X erőforrások betöltése.
+
+if [ -x /usr/bin/cpp ]; then
+	cppflag=""
+else
+	cppflag="-nocpp"
+fi
+
+for i in "$sysresources" "$userresources"; do
+	if [ -f "$i" ]; then
+		xrdb $cppflag -merge "$i"
+	fi
+done
+
+# Egérkurzor beállítása.
+
+for i in "$usercursor" "$syscursor"; do
+	if [ -f "$i" ]; then
+		echo "Xcursor.theme: $(<$i)" | xrdb -nocpp -merge && break
+	fi
+done
+xsetroot -cursor_name left_ptr
+
+# Billentyűzetkiosztás betöltése.
+# Az XKB használatát preferáljuk az xmodmappal szemben.
+
+xkb_in_use=no
+for i in "$userxkbmap" "$sysxkbmap"; do
+	if [ -f "$i" ]; then
+		setxkbmap $(<"$i") && { xkb_in_use=yes; break; }
+	fi
+done
+
+if [ "$xkb_in_use" = "no" ]; then
+	for i in "$usermodmap" "$sysmodmap"; do
+		if [ -f "$i" ]; then
+			xmodmap "$i" &&	break
+		fi
+	done
+fi
+
+# Balkezes egér és társai.
+
+for i in "$userpointermap" "$syspointermap"; do
+	if [ -f "$i" ]; then
+		pmap=($(<"$i"))
+		case "${pmap[0]}" in
+			right*)	pmap=(1 2 3);;
+			left*)	pmap=(3 2 1);;
+		esac
+		case "${pmap[0]}" in
+			[0-9]*)
+				oldpmap=($(xmodmap -pp | sed 1,4d | while read a b; do echo $b; done))
+				while [ ${#pmap[@]} -lt ${#oldpmap[@]} ]; do
+					pmap[${#pmap[@]}]="${oldpmap[${#pmap[@]}]}"
+				done
+		esac
+		xmodmap -e "pointer = ${pmap[*]}" && break
+	fi
+done
+
+# NumLock.
+
+if [ "$(type -p numlockx)" != "" ]; then
+	for i in "$usernumlock" "$sysnumlock"; do
+		if [ -f "$i" ]; then
+			numlockx $(<"$i") && break
+		fi
+	done
+fi
+
+# Forróbillentyűk.
+
+if [ -f ~/.xbindkeysrc ]; then
+	xbindkeys
+fi
+
+# dbus-daemon indítása.
+
+if [ "$(type -p dbus-launch)" != "" -a -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+	eval $(dbus-launch --sh-syntax --exit-with-session)
+fi
+
+# Saját alkalmazások indítása ~/.xstartup-ból.
+
+if [ -s "$startup_apps" ]; then
+	if [ -x "$startup_apps" ]; then
+		"$startup_apps" "$@"
+	else
+		/bin/sh "$startup_apps" "$@"
+	fi
+fi
+
+# ssh-agent
+
+sshagent=
+if [ -f ~/.startsshagent ] && type -f ssh-agent; then
+	sshagent=ssh-agent
+fi
+
+# access control
+
+xhost "+si:localuser:$USER"
+xhost "+si:localuser:root"
+
+# Végül a kívánt rendszer indítása.
+
+session="$1"
+shift
+if [ "$session" = "" -a -f ~/.dmrc ]; then
+	session="$(grep '^Session=' ~/.dmrc | cut -d= -f2-)"
+fi
+if [ "$session" != "" -a "${session%/*}" = "$session" \
+  -a -f "/usr/share/xsessions/$session.desktop" ]; then
+	session="$(grep '^Exec=' "/usr/share/xsessions/$session.desktop" | cut -d= -f2-)"
+fi
+
+if [ "$session" != "" -a "$session" != "default" -a "$session" != "custom" ]; then
+	exec $session "$@"
+fi
+for i in gnome kde xfce icewm-session fluxbox blackbox twm; do
+	if type -p $i >/dev/null 2>&1; then
+		exec $i
+	fi
+done
+exec xterm -geometry 80x24+0+0

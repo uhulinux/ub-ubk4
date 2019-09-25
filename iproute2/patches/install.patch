@@ -1,8 +1,15 @@
-diff -Nur orig/Makefile mod/Makefile
---- orig/Makefile	2017-09-05 18:39:32.000000000 +0200
-+++ mod/Makefile	2017-09-15 16:04:57.275720454 +0200
-@@ -10,7 +10,7 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2019-07-08 20:09:59.000000000 +0200
++++ patched/Makefile	2019-08-28 01:00:27.198374931 +0200
+@@ -14,13 +14,13 @@
+ 
+ PREFIX?=/usr
+ LIBDIR?=$(PREFIX)/lib
+-SBINDIR?=/sbin
++SBINDIR?=$(PREFIX)/sbin
  CONFDIR?=/etc/iproute2
+ NETNS_RUN_DIR?=/var/run/netns
+ NETNS_ETC_DIR?=/etc/netns
  DATADIR?=$(PREFIX)/share
  HDRDIR?=$(PREFIX)/include/iproute2
 -DOCDIR?=$(DATADIR)/doc/iproute2

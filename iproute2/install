@@ -1,10 +1,6 @@
 #!/bin/sh -eux
 
 ub_install
-for i in "$UB_INSTALLDIR"/sbin/*; do
-	ln -s ../../sbin/"${i##*/}" "$UB_INSTALLDIR"/usr/sbin/"${i##*/}"
-done
-ln -s ../../sbin/ip "$UB_INSTALLDIR"/bin/ip
 
 cp -a doc ${UB_INSTALLDIR}/usr/share/doc/iproute2
 mv -f ${UB_INSTALLDIR}/usr/share/doc/Packages/iproute2/examples ${UB_INSTALLDIR}/usr/share/doc/iproute2/

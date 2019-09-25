@@ -12,6 +12,9 @@ make \
 	install_root="$UB_INSTALLDIR" \
 	localedata/install-locales
 
+mv "$UB_INSTALLDIR"/sbin/{ldconfig,sln} "$UB_INSTALLDIR"/usr/sbin
+rm -rf "$UB_INSTALLDIR"/sbin
+
 cp -p "$UB_COMPILEDIR"/nscd/nscd.conf    "$UB_INSTALLDIR"/etc/
 cp -p "$UB_COMPILEDIR"/nss/nsswitch.conf "$UB_INSTALLDIR"/etc/
 cp -p "$UB_COMPILEDIR"/posix/gai.conf    "$UB_INSTALLDIR"/etc/

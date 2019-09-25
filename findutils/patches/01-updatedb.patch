@@ -1,7 +1,7 @@
-diff -Naur findutils-4.6.0-orig/locate/updatedb.sh findutils-4.6.0/locate/updatedb.sh
---- findutils-4.6.0-orig/locate/updatedb.sh	2015-12-28 22:10:23.000000000 +0100
-+++ findutils-4.6.0/locate/updatedb.sh	2016-02-13 17:15:29.585320197 +0100
-@@ -161,9 +161,17 @@
+diff -Naur orig/locate/updatedb.sh patched/locate/updatedb.sh
+--- orig/locate/updatedb.sh	2019-06-23 11:00:40.000000000 +0200
++++ patched/locate/updatedb.sh	2019-09-14 09:13:54.201006511 +0200
+@@ -160,9 +160,17 @@
  : ${PRUNEPATHS="
  /afs
  /amd
@@ -19,18 +19,19 @@ diff -Naur findutils-4.6.0-orig/locate/updatedb.sh findutils-4.6.0/locate/update
  /usr/tmp
  /var/tmp
  "}
-@@ -186,17 +194,11 @@
- : ${LOCATE_DB=@LOCATE_DB@}
+@@ -186,18 +194,12 @@
  
  # Directory to hold intermediate files.
--if test -d /var/tmp; then
--  : ${TMPDIR=/var/tmp}
--elif test -d /usr/tmp; then
--  : ${TMPDIR=/usr/tmp}
--else
--  : ${TMPDIR=/tmp}
--fi
+ if test -z "$TMPDIR"; then
+-  if test -d /var/tmp; then
+-    : ${TMPDIR=/var/tmp}
+-  elif test -d /usr/tmp; then
+-    : ${TMPDIR=/usr/tmp}
+-  else
+-    : ${TMPDIR=/tmp}
+-  fi
 +: ${TMPDIR=/tmp}
+ fi
  export TMPDIR
  
  # The user to search network directories as.
@@ -39,7 +40,7 @@ diff -Naur findutils-4.6.0-orig/locate/updatedb.sh findutils-4.6.0/locate/update
  
  # The directory containing the subprograms.
  if test -n "$LIBEXECDIR" ; then
-@@ -260,19 +262,30 @@
+@@ -259,19 +261,30 @@
  afs
  autofs
  cifs

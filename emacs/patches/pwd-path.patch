@@ -1,0 +1,113 @@
+diff -Naur orig/lib-src/Makefile.in patched/lib-src/Makefile.in
+--- orig/lib-src/Makefile.in	2019-01-07 15:26:06.000000000 +0100
++++ patched/lib-src/Makefile.in	2019-09-04 23:25:19.873785097 +0200
+@@ -273,8 +273,8 @@
+ 	@echo
+ 	@echo "Installing utilities run internally by Emacs."
+ 	umask 022 && ${MKDIR_P} "$(DESTDIR)${archlibdir}"
+-	exp_archlibdir=`cd "$(DESTDIR)${archlibdir}" && /bin/pwd` && \
+-	if [ "$$exp_archlibdir" != "`/bin/pwd`" ]; then \
++	exp_archlibdir=`cd "$(DESTDIR)${archlibdir}" && pwd` && \
++	if [ "$$exp_archlibdir" != "`pwd`" ]; then \
+ 	  for file in ${UTILITIES}; do \
+ 	    $(INSTALL_PROGRAM) $(INSTALL_STRIP) $$file \
+ 	      "$(DESTDIR)${archlibdir}/$$file" || exit; \
+@@ -300,8 +300,8 @@
+ 	 chmod u=rwx,g=rwx,o=rx "$(DESTDIR)${gamedir}"
+     endif
+   endif
+-	exp_archlibdir=`cd "$(DESTDIR)${archlibdir}" && /bin/pwd` && \
+-	if [ "$$exp_archlibdir" != "`cd ${srcdir} && /bin/pwd`" ]; then \
++	exp_archlibdir=`cd "$(DESTDIR)${archlibdir}" && pwd` && \
++	if [ "$$exp_archlibdir" != "`cd ${srcdir} && pwd`" ]; then \
+ 	  for file in ${SCRIPTS}; do \
+ 	    $(INSTALL_SCRIPT) ${srcdir}/$$file \
+ 	      "$(DESTDIR)${archlibdir}/$$file" || exit; \
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2019-01-07 15:26:06.000000000 +0100
++++ patched/Makefile.in	2019-09-04 23:25:48.321940529 +0200
+@@ -570,8 +570,8 @@
+ 	  [ -d $${dir} ] || exit 1 ; \
+ 	  dest="$$1" ; shift ; \
+ 	  if [ -d "$${dest}" ]; then \
+-	    exp_dest=`cd "$${dest}" && /bin/pwd`; \
+-	    [ "$$exp_dest" = "`cd $${dir} && /bin/pwd`" ] && continue ; \
++	    exp_dest=`cd "$${dest}" && pwd`; \
++	    [ "$$exp_dest" = "`cd $${dir} && pwd`" ] && continue ; \
+ 	  else true; \
+ 	  fi; \
+ 	  rm -rf "$${dest}" ; \
+@@ -627,8 +627,8 @@
+ install-etcdoc: src install-arch-indep
+ 	-unset CDPATH; \
+ 	umask 022; ${MKDIR_P} "$(DESTDIR)${etcdocdir}" ; \
+-	exp_etcdocdir=`cd "$(DESTDIR)${etcdocdir}"; /bin/pwd`; \
+-	if [ "`cd ./etc; /bin/pwd`" != "$$exp_etcdocdir" ]; \
++	exp_etcdocdir=`cd "$(DESTDIR)${etcdocdir}"; pwd`; \
++	if [ "`cd ./etc; pwd`" != "$$exp_etcdocdir" ]; \
+ 	then \
+ 	   docfile="DOC"; \
+ 	   printf 'Copying %s to %s ...\n' "etc/$$docfile" \
+@@ -648,9 +648,9 @@
+ install-info: info
+ 	umask 022; ${MKDIR_P} "$(DESTDIR)${infodir}"
+ 	-unset CDPATH; \
+-	thisdir=`/bin/pwd`; \
+-	exp_infodir=`cd "$(DESTDIR)${infodir}" && /bin/pwd`; \
+-	if [ "`cd ${srcdir}/info && /bin/pwd`" = "$$exp_infodir" ]; then \
++	thisdir=`pwd`; \
++	exp_infodir=`cd "$(DESTDIR)${infodir}" && pwd`; \
++	if [ "`cd ${srcdir}/info && pwd`" = "$$exp_infodir" ]; then \
+ 	  true; \
+ 	else \
+ 	   [ -f "$(DESTDIR)${infodir}/dir" ] || \
+@@ -680,7 +680,7 @@
+ ## but not sure if portable.
+ install-man:
+ 	umask 022; ${MKDIR_P} "$(DESTDIR)${man1dir}"
+-	thisdir=`/bin/pwd`; \
++	thisdir=`pwd`; \
+ 	cd ${mansrcdir}; \
+ 	for page in *.1; do \
+ 	  test "$$page" = ChangeLog.1 && continue; \
+@@ -722,7 +722,7 @@
+ 	  ${srcdir}/etc/emacs.service > $${tmp}; \
+ 	$(INSTALL_DATA) $${tmp} "$(DESTDIR)$(systemdunitdir)/${EMACS_NAME}.service"; \
+ 	rm -f $${tmp}
+-	thisdir=`/bin/pwd`; \
++	thisdir=`pwd`; \
+ 	cd ${iconsrcdir} || exit 1; umask 022 ; \
+ 	for dir in */*/apps */*/mimetypes; do \
+ 	  [ -d $${dir} ] || continue ; \
+@@ -751,8 +751,8 @@
+ 	-unset CDPATH; \
+ 	for dir in "$(DESTDIR)${lispdir}" "$(DESTDIR)${etcdir}" ; do 	\
+ 	  if [ -d "$${dir}" ]; then			\
+-	    case `cd "$${dir}" ; /bin/pwd` in		\
+-	      "`cd ${srcdir} ; /bin/pwd`"* ) ;;		\
++	    case `cd "$${dir}" ; pwd` in		\
++	      "`cd ${srcdir} ; pwd`"* ) ;;		\
+ 	      * ) rm -rf "$${dir}" ;;			\
+ 	    esac ;					\
+ 	    case "$${dir}" in				\
+@@ -763,7 +763,7 @@
+ 	  fi ;						\
+ 	done
+ 	-rm -rf "$(DESTDIR)${libexecdir}/emacs/${version}"
+-	thisdir=`/bin/pwd`; \
++	thisdir=`pwd`; \
+ 	(info_misc=`$(MAKE) --no-print-directory -s -C doc/misc echo-info`; \
+ 	 if cd "$(DESTDIR)${infodir}"; then \
+ 	   for elt in ${INFO_NONMISC} $${info_misc}; do \
+diff -Naur orig/nextstep/Makefile.in patched/nextstep/Makefile.in
+--- orig/nextstep/Makefile.in	2019-01-07 15:26:07.000000000 +0100
++++ patched/nextstep/Makefile.in	2019-09-04 23:25:32.217852496 +0200
+@@ -51,7 +51,7 @@
+ 	${MKDIR_P} ${ns_appdir}
+ 	( cd ${srcdir}/${ns_appsrc} ; tar cfh - . ) | \
+ 	  ( cd ${ns_appdir} ; umask 022; tar xf - )
+-	[ "`cd ${srcdir} && /bin/pwd`" = "`/bin/pwd`" ] || \
++	[ "`cd ${srcdir} && pwd`" = "`pwd`" ] || \
+ 	  ( cd ${ns_appsrc} ; tar cfh - . ) | \
+ 	    ( cd ${ns_appdir} ; umask 022; tar xf - )
+ 	touch ${ns_appdir}

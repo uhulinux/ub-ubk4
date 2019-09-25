@@ -1,0 +1,56 @@
+diff -Naur orig/wxPython/build_options.py patched/wxPython/build_options.py
+--- orig/wxPython/build_options.py	2014-11-27 22:47:51.000000000 +0100
++++ patched/wxPython/build_options.py	2019-09-04 02:03:21.689247808 +0200
+@@ -6,5 +6,5 @@
+ EP_ADD_OPTS=1
+ EP_FULL_VER=0
+ WX_CONFIG="wx-config"
+-WXPORT="gtk2"
++WXPORT="gtk3"
+ MONOLITHIC=1
+diff -Naur orig/wxPython/build-wxpython.py patched/wxPython/build-wxpython.py
+--- orig/wxPython/build-wxpython.py	2014-11-27 22:15:14.000000000 +0100
++++ patched/wxPython/build-wxpython.py	2019-09-04 02:03:33.641402440 +0200
+@@ -69,7 +69,7 @@
+     "reswig"        : (False, "Allow SWIG to regenerate the wrappers"),
+     "jobs"          : (defJobs, "Number of make jobs to run at one time, if supported. Default: %s" % defJobs),
+     "unicode"       : (True, "Build wxPython with unicode support (always on for wx3.0)"),
+-    "gtk3"          : (False, "On Linux build for gtk3 (default gtk2)"),
++    "gtk3"          : (True, "On Linux build for gtk3 (default gtk2)"),
+     "osx_cocoa"     : (False, "Build the OS X Cocoa port on Mac"),
+     "osx_carbon"    : (True,  "Build the Carbon port on Mac (default)"),
+     "mac_arch"      : ("", "Build the specified architectures on Mac, (comma-separated list)"),
+diff -Naur orig/wxPython/config.py patched/wxPython/config.py
+--- orig/wxPython/config.py	2014-10-14 00:37:51.000000000 +0200
++++ patched/wxPython/config.py	2019-09-04 02:03:44.269539858 +0200
+@@ -171,7 +171,7 @@
+                      # build_options.py, if it is different to that.  The default
+                      # is to use the value of WX_CONFIG.
+ 
+-WXPORT = 'gtk2'    # On Linux/Unix there are several ports of wxWidgets available.
++WXPORT = 'gtk3'    # On Linux/Unix there are several ports of wxWidgets available.
+                    # Setting this value lets you select which will be used for
+                    # the wxPython build.  Possibilities are 'gtk', 'gtk2',
+                    # 'gtk3', and 'x11'.  Currently only gtk2, and gtk3 work.
+diff -Naur orig/wxPython/wx/build/build_options.py patched/wxPython/wx/build/build_options.py
+--- orig/wxPython/wx/build/build_options.py	2014-11-27 22:47:51.000000000 +0100
++++ patched/wxPython/wx/build/build_options.py	2019-09-04 02:04:47.582356841 +0200
+@@ -6,5 +6,5 @@
+ EP_ADD_OPTS=1
+ EP_FULL_VER=0
+ WX_CONFIG="wx-config"
+-WXPORT="gtk2"
++WXPORT="gtk3"
+ MONOLITHIC=1
+diff -Naur orig/wxPython/wx/build/config.py patched/wxPython/wx/build/config.py
+--- orig/wxPython/wx/build/config.py	2014-10-14 00:37:51.000000000 +0200
++++ patched/wxPython/wx/build/config.py	2019-09-04 02:04:55.430457918 +0200
+@@ -171,7 +171,7 @@
+                      # build_options.py, if it is different to that.  The default
+                      # is to use the value of WX_CONFIG.
+ 
+-WXPORT = 'gtk2'    # On Linux/Unix there are several ports of wxWidgets available.
++WXPORT = 'gtk3'    # On Linux/Unix there are several ports of wxWidgets available.
+                    # Setting this value lets you select which will be used for
+                    # the wxPython build.  Possibilities are 'gtk', 'gtk2',
+                    # 'gtk3', and 'x11'.  Currently only gtk2, and gtk3 work.

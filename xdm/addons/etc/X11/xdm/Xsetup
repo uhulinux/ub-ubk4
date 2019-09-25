@@ -1,0 +1,110 @@
+#!/bin/bash --
+
+#
+# Négy egymáshoz nagyon hasonló fájl:
+#  -> /etc/X11/xdm/Xsetup
+#     /etc/X11/xdm/Xsession
+#     /etc/X11/xinit/xinitrc
+#     /etc/gdm/Xsession
+#
+# Ez a fájl lehetne jóval egyszerűbb is, de akkor kevésbé hasonlítana a másik
+# kettőhöz, és ezáltal nehezebb lenne mindet konzisztensen karbantartani.
+#
+# (c) 2002-2004 UHU-Linux Kft.
+# Koblinger Egmont <egmont@uhulinux.hu>
+#
+
+# Kikapcsoljuk a TV kimenetet mert bekavarhat
+xrandr --output TV --off
+
+# A későbbiekben használt fájlok...
+
+sysresources=/etc/X11/Xresources
+syscursor=/etc/X11/Xcursor
+sysmodmap=/etc/X11/Xmodmap
+sysxkbmap=/etc/X11/Xkbmap
+syspointermap=/etc/X11/Xpointermap
+sysnumlock=/etc/X11/Xnumlock
+
+# X erőforrások betöltése.
+
+if [ -x /usr/bin/cpp ]; then
+	cppflag=""
+else
+	cppflag="-nocpp"
+fi
+
+for i in "$sysresources"; do
+	if [ -f "$i" ]; then
+		xrdb $cppflag -merge "$i"
+	fi
+done
+
+# Egérkurzor beállítása.
+
+for i in "$syscursor"; do
+	if [ -f "$i" ]; then
+		echo "Xcursor.theme: $(<$i)" | xrdb -nocpp -merge && break
+	fi
+done
+xsetroot -cursor_name left_ptr
+
+# Billentyűzetkiosztás betöltése.
+# Az XKB használatát preferáljuk az xmodmappal szemben.
+
+xkb_in_use=no
+for i in "$sysxkbmap"; do
+	if [ -f "$i" ]; then
+		setxkbmap $(<"$i") && { xkb_in_use=yes; break; }
+	fi
+done
+
+if [ "$xkb_in_use" = "no" ]; then
+	for i in "$sysmodmap"; do
+		if [ -f "$i" ]; then
+			xmodmap "$i" &&	break
+		fi
+	done
+fi
+
+# Balkezes egér és társai.
+
+for i in "$syspointermap"; do
+	if [ -f "$i" ]; then
+		pmap=($(<"$i"))
+		case "${pmap[0]}" in
+			right*)	pmap=(1 2 3);;
+			left*)	pmap=(3 2 1);;
+		esac
+		case "${pmap[0]}" in
+			[0-9]*)
+				oldpmap=($(xmodmap -pp | sed 1,4d | while read a b; do echo $b; done))
+				while [ ${#pmap[@]} -lt ${#oldpmap[@]} ]; do
+					pmap[${#pmap[@]}]="${oldpmap[${#pmap[@]}]}"
+				done
+		esac
+		xmodmap -e "pointer = ${pmap[*]}" && break
+	fi
+done
+
+# NumLock.
+
+if [ "$(type -p numlockx)" != "" ]; then
+	for i in "$sysnumlock"; do
+		if [ -f "$i" ]; then
+			numlockx $(<"$i") && break
+		fi
+	done
+fi
+
+# VNC
+
+if [ -x /usr/bin/x11vnc ]; then
+	if [ -r /var/run/vncpasswd ]; then
+		x11vnc -rfbauth /var/run/vncpasswd -forever -bg -o /var/log/x11vnc$DISPLAY.log -xkb
+	elif [ -r /etc/X11/vncpasswd ]; then
+		x11vnc -rfbauth /etc/X11/vncpasswd -forever -bg -o /var/log/x11vnc$DISPLAY.log -xkb
+	elif [ -r ~/.vnc/passwd ]; then
+		x11vnc -rfbauth ~/.vnc/passwd -forever -bg -o /var/log/x11vnc$DISPLAY.log -xkb
+	fi
+fi

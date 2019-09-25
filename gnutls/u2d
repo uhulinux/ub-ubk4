@@ -1,2 +1,2 @@
-minor=$(urllist ftp://ftp.gnutls.org/gcrypt/gnutls/ | splitver '^v([0-9.]+)' | sort -V | tail -n 1)
-u2d ftp://ftp.gnutls.org/gcrypt/gnutls/v"$minor"
+minor=$(urllist https://www.gnupg.org/ftp/gcrypt/gnutls/ | splitver '^v([0-9.]+)' | sort -V | tail -n 1)
+u2d https://www.gnupg.org/ftp/gcrypt/gnutls/v"$minor"

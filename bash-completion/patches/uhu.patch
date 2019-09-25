@@ -1,0 +1,12 @@
+diff -Naur orig/completions/dpkg patched/completions/dpkg
+--- orig/completions/dpkg	2019-04-27 10:51:01.000000000 +0200
++++ patched/completions/dpkg	2019-08-24 00:30:08.013974900 +0200
+@@ -51,7 +51,7 @@
+     case $prev in
+         --install|--unpack|--record-avail|--contents|--info|--fsys-tarfile|\
+         --field|--control|--extract|--vextract|-!(-*)[ciAIfexW])
+-            _filedir '?(u|d)deb'
++            _filedir '?(u|d)deb|uhu'
+             return
+             ;;
+         --build|-!(-*)b)

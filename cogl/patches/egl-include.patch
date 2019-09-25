@@ -1,0 +1,12 @@
+diff -Naur orig/cogl/cogl-egl-defines.h.in patched/cogl/cogl-egl-defines.h.in
+--- orig/cogl/cogl-egl-defines.h.in	2018-12-18 14:09:25.000000000 +0100
++++ patched/cogl/cogl-egl-defines.h.in	2019-08-26 20:44:33.843634416 +0200
+@@ -33,6 +33,8 @@
+ 
+ #ifdef COGL_HAS_EGL_SUPPORT
+ 
++#include <EGL/egl.h>
++
+ @COGL_EGL_INCLUDES@
+ 
+ #endif /* COGL_HAS_EGL_SUPPORT */

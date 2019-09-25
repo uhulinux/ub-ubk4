@@ -1,4 +1,10 @@
 #!/bin/sh -eux
 
+sed 's|$(DESTDIR)/sbin|$(DESTDIR)/usr/sbin|' -i {ntfsprogs,src}/Makefile.in
+
 ub_compile \
+    --with-fuse=external \
+	--enable-xattr-mappings \
+	--enable-posix-acls \
+	--enable-extras \
 	--disable-ldconfig

@@ -1,23 +1,14 @@
-diff -Nur orig/init.d/auditd.restart mod/init.d/auditd.restart
---- orig/init.d/auditd.restart	2018-05-21 19:38:08.000000000 +0200
-+++ mod/init.d/auditd.restart	2018-09-09 16:17:59.513874621 +0200
-@@ -7,7 +7,7 @@
+diff -Naur orig/init.d/auditd.restart patched/init.d/auditd.restart
+--- orig/init.d/auditd.restart	2019-02-04 15:26:52.000000000 +0100
++++ patched/init.d/auditd.restart	2019-09-03 11:40:39.558304175 +0200
+@@ -6,8 +6,8 @@
+ 
  /usr/libexec/initscripts/legacy-actions/auditd/stop
  sleep 1
- echo "Redirecting start to /bin/systemctl start auditd.service"
+-echo "Redirecting start to /bin/systemctl start auditd.service"
 -/bin/systemctl start auditd.service
++echo "Redirecting start to /usr/bin/systemctl start auditd.service"
 +/usr/bin/systemctl start auditd.service
  RETVAL="$?"
  
  exit $RETVAL
-diff -Nur orig/init.d/augenrules mod/init.d/augenrules
---- orig/init.d/augenrules	2018-05-21 19:38:08.000000000 +0200
-+++ mod/init.d/augenrules	2018-09-09 09:42:56.652790650 +0200
-@@ -25,6 +25,7 @@
- #   Suffix for previous audit.rules file if this script replaces it.
- #   The file is left in the destination directory with suffix with $ASuffix
- 
-+export PATH=$PATH:/bin:/sbin
- DestinationFile=/etc/audit/audit.rules
- SourceRulesDir=/etc/audit/rules.d
- TmpRules=`mktemp /tmp/aurules.XXXXXXXX`

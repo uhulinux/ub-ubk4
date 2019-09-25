@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
+find . -iname "*" -exec sed -i -e "s,/bin/false,/usr/bin/false," {} \;
 ub_compile

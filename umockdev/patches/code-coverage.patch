@@ -1,0 +1,50 @@
+diff -Naur orig/autogen.sh patched/autogen.sh
+--- orig/autogen.sh	2019-08-28 13:05:32.000000000 +0200
++++ patched/autogen.sh	2019-08-30 01:40:54.903542997 +0200
+@@ -27,12 +27,6 @@
+     echo 'EXTRA_DIST =' > docs/gtk-doc.make
+ fi
+ 
+-ax_coverage="$(aclocal --print)/ax_code_coverage.m4"
+-if ! cp --verbose "$ax_coverage" m4; then
+-    echo "ax_code_coverage.m4 (from autoconf-archive) not available, using dummy"
+-    echo 'AC_DEFUN([AX_CODE_COVERAGE],[[CODE_COVERAGE_RULES=''] AC_SUBST([CODE_COVERAGE_RULES])])' > m4/ax_code_coverage.m4
+-fi
+-
+ if type lcov >/dev/null 2>&1; then
+     args="$args --enable-code-coverage"
+ else
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2019-08-28 13:05:32.000000000 +0200
++++ patched/configure.ac	2019-08-30 01:40:04.642871804 +0200
+@@ -84,8 +84,16 @@
+ AM_PROG_VALAC([0.16.1])
+ 
+ # code coverage support
+-AX_CODE_COVERAGE
+-CPPFLAGS="$CPPFLAGS $CODE_COVERAGE_CPPFLAGS"
++# code coverage support
++AC_MSG_CHECKING(for GNOME code coverage support)
++m4_ifdef([GNOME_CODE_COVERAGE],
++         [AC_MSG_RESULT(yes)
++          GNOME_CODE_COVERAGE],
++         [AC_MSG_RESULT(no)
++          GNOME_CODE_COVERAGE_RULES=''
++          AC_SUBST([GNOME_CODE_COVERAGE_RULES])
++          enable_code_coverage="no"])
++
+ CFLAGS="$CFLAGS $CODE_COVERAGE_CFLAGS"
+ LDFLAGS="$LDFLAGS $CODE_COVERAGE_LIBS"
+ 
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2019-08-28 13:05:32.000000000 +0200
++++ patched/Makefile.am	2019-08-30 01:43:14.977413774 +0200
+@@ -432,7 +432,7 @@
+ # umockdev-scan is something internal from gcov/lcov, ignore that
+ CODE_COVERAGE_IGNORE_PATTERN = */docs/* */usr/* *umockdev-scan*
+ CODE_COVERAGE_LCOV_OPTIONS = --base-directory $(top_builddir)
+-@CODE_COVERAGE_RULES@
++@GNOME_CODE_COVERAGE_RULES@
+ 
+ # -------------------------------------------------------------
+ # developer tools
