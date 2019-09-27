@@ -1,6 +1,6 @@
 diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/profile/all-thunderbird.js
---- orig/comm/mail/app/profile/all-thunderbird.js	2018-07-31 20:21:27.000000000 +0200
-+++ patched/comm/mail/app/profile/all-thunderbird.js	2018-09-09 20:08:12.684374807 +0200
+--- orig/comm/mail/app/profile/all-thunderbird.js	2019-09-24 16:38:00.000000000 +0200
++++ patched/comm/mail/app/profile/all-thunderbird.js	2019-09-27 02:49:25.336755240 +0200
 @@ -11,6 +11,10 @@
  #endif
  #endif
@@ -12,22 +12,52 @@ diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/p
  pref("general.skins.selectedSkin", "classic/1.0");
  
  #ifdef XP_MACOSX
-@@ -76,12 +80,12 @@
- pref("app.update.certs.2.commonName", "aus5.mozilla.org");
+@@ -55,7 +59,7 @@
+ // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
+ // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
+ #ifndef XP_WIN
+- pref("app.update.auto", true);
++ pref("app.update.auto", false);
+ #endif
+ 
+ // If set to true, the Update Service will present no UI for any event.
+@@ -131,7 +135,8 @@
+ // Disable add-ons installed into the shared user and shared system areas by
+ // default. This does not include the application directory. See the SCOPE
+ // constants in AddonManager.jsm for values to use here
+-pref("extensions.autoDisableScopes", 15);
++pref("extensions.autoDisableScopes", 0);
++pref("extensions.shownSelectionUI", true);
+ 
+ // Enable add-ons installed and owned by the application, like the default theme.
+ pref("extensions.startupScanScopes", 4);
+diff -Naur orig/comm/suite/browser/browser-prefs.js patched/comm/suite/browser/browser-prefs.js
+--- orig/comm/suite/browser/browser-prefs.js	2019-09-24 16:38:00.000000000 +0200
++++ patched/comm/suite/browser/browser-prefs.js	2019-09-27 02:47:03.314841305 +0200
+@@ -16,6 +16,9 @@
+  *  - Computed values (e.g. 50 * 1024) don't work.
+  */
+ 
++pref("intl.locale.requested", "");
++pref("shell.checkDefaultApps", 0);
++
+ pref("startup.homepage_override_url","chrome://navigator-region/locale/region.properties");
+ pref("general.skins.selectedSkin", "classic/1.0");
+ 
+@@ -489,10 +492,10 @@
+ // App-specific update preferences
  
  // Whether or not app updates are enabled
 -pref("app.update.enabled", true);
 +pref("app.update.enabled", false);
  
- // If set to true, the Update Service will automatically download updates when
- // app updates are enabled per the app.update.enabled preference and if the user
- // can apply updates.
+ // This preference allows automatic download and install to take place.
 -pref("app.update.auto", true);
 +pref("app.update.auto", false);
  
  // If set to true, the Update Service will present no UI for any event.
  pref("app.update.silent", false);
-@@ -147,7 +151,8 @@
+@@ -578,7 +581,8 @@
  // Disable add-ons installed into the shared user and shared system areas by
  // default. This does not include the application directory. See the SCOPE
  // constants in AddonManager.jsm for values to use here

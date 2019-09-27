@@ -1,0 +1,14 @@
+diff -Naur orig/src/pluginpy/pluginpy.pro patched/src/pluginpy/pluginpy.pro
+--- orig/src/pluginpy/pluginpy.pro	2019-08-17 03:33:43.000000000 +0200
++++ patched/src/pluginpy/pluginpy.pro	2019-09-27 13:18:36.173548285 +0200
+@@ -39,8 +39,8 @@
+ 
+ unix:!macx {
+     #python3-config
+-    INCLUDEPATH += /usr/include/python3.6m
+-    LIBS += -lpython3.6m -lpthread -ldl  -lutil -lm
++    INCLUDEPATH += /usr/include/python3.7m
++    LIBS += -lpython3.7m -lpthread -ldl  -lutil -lm
+ 
+     PREFIX   = /usr
+     target.path   = $$PREFIX/lib/

@@ -1,11 +1,10 @@
 #!/bin/sh -eux
 
-CC="ccache gcc -march=k8 -m64"
-CXX="ccache g++ -march=k8 -m64"
+CC="ccache clang -march=k8 -m64"
+CXX="ccache clang++ -march=k8 -m64"
 
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/thunderbird/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
-# jpeg: jpeg-turbo, png: >= 1.6.17 + APNG support
 
 : > .mozconfig
 cat > .mozconfig << _EOF_
@@ -15,8 +14,8 @@ ac_add_options --enable-application=comm/mail
 ac_add_options --enable-calendar
 ac_add_options --enable-release
 ac_add_options --enable-official-branding
+ac_add_options --enable-crashreporter
 ac_add_options --enable-optimize=-O2
-ac_add_options --with-pthreads
 ac_add_options --with-system-bz2
 ac_add_options --with-system-icu
 ac_add_options --with-system-jpeg
@@ -26,12 +25,10 @@ ac_add_options --with-system-nspr
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
 ac_add_options --without-system-libevent
-ac_add_options --enable-system-hunspell
 ac_add_options --enable-system-sqlite
 ac_add_options --enable-startup-notification
 ac_add_options --enable-default-toolkit=cairo-gtk3-wayland
 ac_add_options --disable-clang-plugin
-ac_add_options --disable-stylo
 ac_add_options --disable-debug
 ac_add_options --disable-gconf
 ac_add_options --disable-necko-wifi
@@ -44,9 +41,11 @@ ac_add_options --host=x86_64-linux-gnu
 ac_add_options --target=x86_64-linux-gnu
 _EOF_
 
-cd "$UB_OBJECTDIR"
+# cd "$UB_OBJECTDIR"
 
 # az UB_CONFIGURE_DIR="$UB_COMPILEDIR" forma nem jó, linker hiba lesz belőle
-"$UB_COMPILEDIR"/configure
+# "$UB_COMPILEDIR"/configure
 
-ub_make
+# ub_make
+
+"$UB_COMPILEDIR"/mach build
