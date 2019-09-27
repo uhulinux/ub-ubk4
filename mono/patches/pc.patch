@@ -40,21 +40,6 @@ diff -Naur orig/data/mono-lineeditor.pc.in patched/data/mono-lineeditor.pc.in
  assemblies_dir=${prefix}/lib/mono-source-libs
  Sources=${assemblies_dir}/getline.cs
  
-diff -Naur orig/data/mono-nunit.pc.in patched/data/mono-nunit.pc.in
---- orig/data/mono-nunit.pc.in	2016-11-02 14:40:22.000000000 +0100
-+++ patched/data/mono-nunit.pc.in	2016-11-08 03:35:46.231131259 +0100
-@@ -1,4 +1,4 @@
--prefix=${pcfiledir}/../..
-+prefix=@prefix@
- exec_prefix=${prefix}
- libdir=${exec_prefix}/lib
- 
-@@ -6,4 +6,4 @@
- Name: Mono NUnit
- Description: Mono's version of NUnit
- Version: @VERSION@
--Libs: -r:${libdir}/mono/4.5/nunit.core.dll -r:${libdir}/mono/4.5/nunit.core.interfaces.dll -r:${libdir}/mono/4.5/nunit.core.extensions.dll -r:${libdir}/mono/4.5/nunit.framework.dll -r:${libdir}/mono/4.5/nunit.framework.extensions.dll -r:${libdir}/mono/4.5/nunit.mocks.dll -r:${libdir}/mono/4.5/nunit.util.dll -r:${libdir}/mono/4.5/nunit-console-runner.dll 
-+Libs: -r:${libdir}/mono/4.5/nunit.core.dll -r:${libdir}/mono/4.5/nunit.core.interfaces.dll -r:${libdir}/mono/4.5/nunit.core.extensions.dll -r:${libdir}/mono/4.5/nunit.framework.dll -r:${libdir}/mono/4.5/nunit.framework.extensions.dll -r:${libdir}/mono/4.5/nunit.mocks.dll -r:${libdir}/mono/4.5/nunit.util.dll -r:${libdir}/mono/4.5/nunit-console-runner.dll
 diff -Naur orig/data/mono-options.pc.in patched/data/mono-options.pc.in
 --- orig/data/mono-options.pc.in	2016-11-02 14:40:22.000000000 +0100
 +++ patched/data/mono-options.pc.in	2016-11-08 03:36:00.371349613 +0100
