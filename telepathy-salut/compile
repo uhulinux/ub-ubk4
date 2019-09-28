@@ -1,8 +1,8 @@
 #!/bin/sh -eux
 
-ub_configure \
+export PYTHON=python2
+ub_compile \
         --with-tls=gnutls \
         --enable-avahi-tests=no \
         --disable-Werror \
         --disable-plugins
-make
