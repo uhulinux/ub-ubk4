@@ -1,0 +1,12 @@
+diff -Naur espeak-1.48.04-source-orig/src/Makefile espeak-1.48.04-source/src/Makefile
+--- espeak-1.48.04-source-orig/src/Makefile	2014-02-02 11:58:11.000000000 +0100
++++ espeak-1.48.04-source/src/Makefile	2019-09-30 16:20:24.763585937 +0200
+@@ -22,7 +22,7 @@
+ EXTRA_LIBS =
+ 
+ INSTALL = install
+-LN_SF = /bin/ln -sf
++LN_SF = $(PREFIX)/bin/ln -sf
+ MKDIR = mkdir -p
+ 
+ # 'runtime' uses pulseaudio if it is running, else uses portaudio
