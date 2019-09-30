@@ -1,0 +1,56 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2007-01-20 13:30:22.000000000 +0100
++++ patched/configure	2019-09-30 20:48:02.789139007 +0200
+@@ -22460,7 +22460,7 @@
+ 
+ fi
+ 
+-                                                                                                              ac_config_files="$ac_config_files Makefile dnet-config include/Makefile include/dnet/Makefile man/Makefile src/Makefile python/Makefile python/setup.py test/Makefile test/check/Makefile test/dnet/Makefile"
++                                                                                                              ac_config_files="$ac_config_files Makefile dnet-config include/Makefile include/dnet/Makefile man/Makefile src/Makefile test/Makefile test/check/Makefile test/dnet/Makefile"
+           ac_config_commands="$ac_config_commands default"
+ cat >confcache <<\_ACEOF
+ # This file is a shell script that caches the results of configure
+@@ -23038,8 +23038,6 @@
+   "include/dnet/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/dnet/Makefile" ;;
+   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
+   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+-  "python/Makefile" ) CONFIG_FILES="$CONFIG_FILES python/Makefile" ;;
+-  "python/setup.py" ) CONFIG_FILES="$CONFIG_FILES python/setup.py" ;;
+   "test/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
+   "test/check/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/check/Makefile" ;;
+   "test/dnet/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/dnet/Makefile" ;;
+diff -Naur orig/configure.in patched/configure.in
+--- orig/configure.in	2007-01-20 13:30:22.000000000 +0100
++++ patched/configure.in	2019-09-30 20:46:41.351939164 +0200
+@@ -314,6 +314,6 @@
+ fi
+ 
+ AC_OUTPUT([Makefile dnet-config include/Makefile include/dnet/Makefile
+-	man/Makefile src/Makefile python/Makefile python/setup.py
++	man/Makefile src/Makefile
+ 	test/Makefile test/check/Makefile test/dnet/Makefile],
+ 	[chmod 755 dnet-config])
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2007-01-20 13:30:22.000000000 +0100
++++ patched/Makefile.am	2019-09-30 20:45:25.338818024 +0200
+@@ -2,7 +2,7 @@
+ 
+ include $(top_srcdir)/Makefile.am.common
+ 
+-SUBDIRS =	include man src python test
++SUBDIRS =	include man src test
+ 
+ bin_SCRIPTS =	dnet-config
+ 
+diff -Naur orig/Makefile.in patched/Makefile.in
+--- orig/Makefile.in	2007-01-20 13:30:22.000000000 +0100
++++ patched/Makefile.in	2019-09-30 20:45:48.019152667 +0200
+@@ -103,7 +103,7 @@
+ 
+ AM_CPPFLAGS = -I$(top_srcdir)/include
+ 
+-SUBDIRS = include man src python test
++SUBDIRS = include man src test
+ 
+ bin_SCRIPTS = dnet-config
+ 
