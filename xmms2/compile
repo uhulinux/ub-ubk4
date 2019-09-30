@@ -1,8 +1,9 @@
 #!/bin/sh -eux
 
-./waf configure \
+export PYTHON=python2
+python2 ./waf configure \
 	--prefix=/usr \
 	--with-optionals=python,launcher,xmmsclient++,xmmsclient++-glib,perl,nycli \
 	--with-default-output-plugin=pulse
 
-./waf build
+python2 ./waf build
