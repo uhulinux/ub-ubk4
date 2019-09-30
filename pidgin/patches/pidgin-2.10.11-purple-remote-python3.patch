@@ -1,0 +1,17 @@
+Actually make things work in python3.
+
+Author: Jan Synacek <jsynacek@redhat.com>
+
+Index: pidgin-2.13.0/libpurple/purple-remote
+===================================================================
+--- pidgin-2.13.0.orig/libpurple/purple-remote
++++ pidgin-2.13.0/libpurple/purple-remote
+@@ -14,7 +14,7 @@ import sys
+ import xml.dom.minidom 
+ 
+ sys.stdin = codecs.getwriter('utf-8')(sys.stdin);
+-sys.stdout = codecs.getwriter('utf-8')(sys.stdout);
++sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach());
+ 
+ xml.dom.minidom.Element.all   = xml.dom.minidom.Element.getElementsByTagName
+ 
