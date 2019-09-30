@@ -1,0 +1,12 @@
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2019-09-29 23:25:13.120494728 +0200
++++ patched/configure.ac	2019-09-30 01:40:13.181736337 +0200
+@@ -21,7 +21,7 @@
+ AC_CONFIG_HEADERS([config.h])
+ AC_CONFIG_AUX_DIR([build-aux])
+ 
+-AM_INIT_AUTOMAKE([1.11 foreign silent-rules dist-bzip2 no-dist-gzip])
++AM_INIT_AUTOMAKE([1.11 foreign silent-rules subdir-objects dist-bzip2 no-dist-gzip])
+ AM_MAINTAINER_MODE
+ AM_SILENT_RULES([yes])
+ 
