@@ -3,6 +3,7 @@
 mkdir -p build
 cd build
 
-qmake ../qtwebengine.pro -- -proprietary-codecs -system-ffmpeg
-
+qmake \
+    QMAKE_EXTRA_ARGS+="-system-webengine-icu -proprietary-codecs -system-ffmpeg -spellchecker" \
+    ../qtwebengine.pro
 ub_make
