@@ -1,0 +1,2015 @@
+diff -up syncevolution-1.5.3/build/source2html.py.python3 syncevolution-1.5.3/build/source2html.py
+--- syncevolution-1.5.3/build/source2html.py.python3	2014-04-25 09:55:47.000000000 +0200
++++ syncevolution-1.5.3/build/source2html.py	2019-05-21 17:35:12.461672604 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ """
+ Converts source code (first parameter, can be - for stdin) to HTML
+@@ -29,8 +29,8 @@ try:
+     pygments.highlight(code, lexer, formatter, out)
+ except:
+     import cgi
+-    print >>sys.stderr, "source2html.py failed with pygments:", sys.exc_info()
+-    print >>sys.stderr, "falling back to internal code"
++    print("source2html.py failed with pygments:", sys.exc_info(), file=sys.stderr)
++    print("falling back to internal code", file=sys.stderr)
+ 
+     out.write('''<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+ <html>
+diff -up syncevolution-1.5.3/configure.ac.python3 syncevolution-1.5.3/configure.ac
+--- syncevolution-1.5.3/configure.ac.python3	2018-01-09 16:53:28.000000000 +0100
++++ syncevolution-1.5.3/configure.ac	2019-05-21 17:35:12.462672604 +0200
+@@ -62,6 +62,11 @@ dnl check for programs.
+ AC_PROG_CXX
+ AC_PROG_MAKE_SET
+ 
++AC_PATH_PROGS(PYTHON, python3 python, "")
++if test "x$PYTHON" = "x" ; then
++   AC_ERROR([python3 not found])
++fi
++
+ dnl Use the most recent C++ standard that is supported by the code.
+ dnl We can fall back to older versions, but not below C++11.
+ dnl Akonadi/Qt don't work with C++17 yet, so we can't enable that.
+diff -up syncevolution-1.5.3/src/dbus/server/pim/examples/search.py.python3 syncevolution-1.5.3/src/dbus/server/pim/examples/search.py
+--- syncevolution-1.5.3/src/dbus/server/pim/examples/search.py.python3	2014-10-30 17:54:09.000000000 +0100
++++ syncevolution-1.5.3/src/dbus/server/pim/examples/search.py	2019-05-21 17:35:12.462672604 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python -u
++#!/usr/bin/python3 -u
+ # -*- coding: utf-8 -*-
+ # vim: set fileencoding=utf-8 :#
+ #
+@@ -140,21 +140,21 @@ dbus_type_mapping = {
+     dbus.Double: float,
+     dbus.Int16: int,
+     dbus.Int32: int,
+-    dbus.Int64: long,
++    dbus.Int64: int,
+     dbus.ObjectPath: str,
+     dbus.Signature: str,
+-    dbus.String: unicode,
++    dbus.String: str,
+     dbus.Struct: tuple,
+     dbus.UInt16: int,
+     dbus.UInt32: int,
+-    dbus.UInt64: long,
+-    dbus.UTF8String: unicode
++    dbus.UInt64: int,
++    dbus.UTF8String: str
+     }
+ 
+ def strip_dbus(instance):
+     base = dbus_type_mapping.get(type(instance), None)
+     if base == dict or isinstance(instance, dict):
+-        return dict([(strip_dbus(k), strip_dbus(v)) for k, v in instance.iteritems()])
++        return dict([(strip_dbus(k), strip_dbus(v)) for k, v in instance.items()])
+     if base == list or isinstance(instance, list):
+         l = [strip_dbus(v) for v in instance]
+         l.sort()
+@@ -163,7 +163,7 @@ def strip_dbus(instance):
+         return tuple([strip_dbus(v) for v in instance])
+     if base == None:
+         return instance
+-    if base == unicode:
++    if base == str:
+         # try conversion to normal string
+         try:
+             return str(instance)
+@@ -178,7 +178,7 @@ def checkpoint(operation):
+     global starttime, running
+     if running:
+         now = time.time()
+-        print "+%04.3fs %s stopping '%s', duration %fs" % (now - begin, time.ctime(now), running, now - starttime)
++        print("+%04.3fs %s stopping '%s', duration %fs" % (now - begin, time.ctime(now), running, now - starttime))
+         if options.end_operation:
+             subprocess.check_call(options.end_operation % {'operation': running},
+                                   shell=True)
+@@ -188,7 +188,7 @@ def checkpoint(operation):
+             subprocess.check_call(options.start_operation % {'operation': operation},
+                                   shell=True)
+         now = time.time()
+-        print "+%04.3fs %s starting '%s'" % (now - begin, time.ctime(now), operation)
++        print("+%04.3fs %s starting '%s'" % (now - begin, time.ctime(now), operation))
+         starttime = now
+         running = operation
+ 
+@@ -200,7 +200,7 @@ def nothrow(fn):
+         try:
+             fn(*a, **b)
+         except:
+-            print traceback.format_exc()
++            print(traceback.format_exc())
+ 
+     return wrapper
+ 
+@@ -224,7 +224,7 @@ class ContactsView(dbus.service.Object):
+ 
+      def search(self, filter):
+           '''Start a search.'''
+-          print 'searching: %s' % filter
++          print('searching: %s' % filter)
+           self.viewPath = manager.Search(filter, self.path,
+                                          timeout=100000)
+           # This example uses the ViewControl to read contact data.
+@@ -254,19 +254,19 @@ class ContactsView(dbus.service.Object):
+          for index, contact in enumerate(self.contacts):
+              if start == index:
+                  # empty line with marker where range starts
+-                 print '=> '
+-             print '%s %03d %s' % \
++                 print('=> ')
++             print('%s %03d %s' % \
+                  (start != None and index >= start and index < start + count and '*' or ' ',
+                   index,
+-                  isinstance(contact, dict) and contact.get('full-name', '<<unnamed>>') or '<<reading...>>')
++                  isinstance(contact, dict) and contact.get('full-name', '<<unnamed>>') or '<<reading...>>'))
+              if options.verbosity >= VERBOSITY_DATA_FULL:
+-                 print '    ', strip_dbus(contact)
+-                 print
++                 print('    ', strip_dbus(contact))
++                 print()
+ 
+      @nothrow
+      def ContactsRead(self, ids, contacts):
+          if options.verbosity >= VERBOSITY_DATA_FULL:
+-             print 'got contact data %s => %s ' % (ids, strip_dbus(contacts))
++             print('got contact data %s => %s ' % (ids, strip_dbus(contacts)))
+          min = len(contacts)
+          max = -1
+          for index, contact in contacts:
+@@ -283,17 +283,17 @@ class ContactsView(dbus.service.Object):
+ 
+      @nothrow
+      def ReadFailed(self, ids, error):
+-         print 'request for contact data %s failed: %s' % \
+-             (ids, error)
++         print('request for contact data %s failed: %s' % \
++             (ids, error))
+ 
+      @nothrow
+      @dbus.service.method(dbus_interface='org._01.pim.contacts.ViewAgent',
+                           in_signature='oias', out_signature='')
+      def ContactsModified(self, view, start, ids):
+          if options.verbosity >= VERBOSITY_NOTIFICATIONS:
+-             print 'contacts modified: %s, start %d, count %d, ids %s' % \
++             print('contacts modified: %s, start %d, count %d, ids %s' % \
+                  (view, start, len(ids),
+-                  options.verbosity >= VERBOSITY_DATA_SUMMARY and strip_dbus(ids) or '<...>')
++                  options.verbosity >= VERBOSITY_DATA_SUMMARY and strip_dbus(ids) or '<...>'))
+          self.contacts[start:start + len(ids)] = ids
+          self.dump(start, len(ids))
+          if not options.read_all:
+@@ -304,9 +304,9 @@ class ContactsView(dbus.service.Object):
+                           in_signature='oias', out_signature='')
+      def ContactsAdded(self, view, start, ids):
+          if options.verbosity >= VERBOSITY_NOTIFICATIONS:
+-             print 'contacts added: %s, start %d, count %d, ids %s' % \
++             print('contacts added: %s, start %d, count %d, ids %s' % \
+                  (view, start, len(ids),
+-                  options.verbosity >= VERBOSITY_DATA_SUMMARY and strip_dbus(ids) or '<...>')
++                  options.verbosity >= VERBOSITY_DATA_SUMMARY and strip_dbus(ids) or '<...>'))
+          self.contacts[start:start] = ids
+          self.dump(start, len(ids))
+          if not options.read_all:
+@@ -317,9 +317,9 @@ class ContactsView(dbus.service.Object):
+                           in_signature='oii', out_signature='')
+      def ContactsRemoved(self, view, start, count):
+          if options.verbosity >= VERBOSITY_NOTIFICATIONS:
+-             print 'contacts removed: %s, start %d, count %d, ids %s' % \
++             print('contacts removed: %s, start %d, count %d, ids %s' % \
+                  (view, start, len(ids),
+-                  options.verbosity >= VERBOSITY_DATA_SUMMARY and strip_dbus(ids) or '<...>')
++                  options.verbosity >= VERBOSITY_DATA_SUMMARY and strip_dbus(ids) or '<...>'))
+          # Remove obsolete entries.
+          del self.contacts[start:start + len(ids)]
+          self.dump(start, 0)
+@@ -329,7 +329,7 @@ class ContactsView(dbus.service.Object):
+                           in_signature='o', out_signature='')
+      def Quiescent(self, view):
+          if options.verbosity >= VERBOSITY_NOTIFICATIONS:
+-             print 'view is stable'
++             print('view is stable')
+          if options.read_all:
+              # Avoid reading in parallel, if quiescence signal repeats.
+              if running != 'read':
+@@ -340,26 +340,26 @@ class ContactsView(dbus.service.Object):
+ 
+ checkpoint('getallpeers')
+ peers = strip_dbus(manager.GetAllPeers())
+-print 'peers: %s' % peers
+-print 'available databases: %s' % ([''] + ['peer-' + uid for uid in peers.keys()])
++print('peers: %s' % peers)
++print('available databases: %s' % ([''] + ['peer-' + uid for uid in list(peers.keys())]))
+ 
+ checkpoint('getactiveaddressbooks')
+ address_books = strip_dbus(manager.GetActiveAddressBooks())
+ if options.address_books:
+-    print 'active address books %s -> %s' % (address_books, options.address_books)
++    print('active address books %s -> %s' % (address_books, options.address_books))
+     checkpoint('setactiveaddressbooks')
+     manager.SetActiveAddressBooks(options.address_books)
+ else:
+-    print 'active address books: %s' % options.address_books
++    print('active address books: %s' % options.address_books)
+ 
+ checkpoint('getsortorder')
+ order = strip_dbus(manager.GetSortOrder())
+ if options.order:
+-    print 'active sort order %s -> %s' % (order, options.order)
++    print('active sort order %s -> %s' % (order, options.order))
+     checkpoint('setsortorder')
+     manager.SetSortOrder(options.order)
+ else:
+-    print 'active sort order: %s' % order
++    print('active sort order: %s' % order)
+ 
+ if options.search != None:
+     checkpoint('search')
+@@ -367,6 +367,6 @@ if options.search != None:
+     view.search(eval(options.search))
+     loop.run()
+ else:
+-    print 'no search expression given, quitting'
++    print('no search expression given, quitting')
+ 
+ checkpoint(None)
+diff -up syncevolution-1.5.3/src/dbus/server/pim/examples/sync.py.python3 syncevolution-1.5.3/src/dbus/server/pim/examples/sync.py
+--- syncevolution-1.5.3/src/dbus/server/pim/examples/sync.py.python3	2014-10-30 17:54:09.000000000 +0100
++++ syncevolution-1.5.3/src/dbus/server/pim/examples/sync.py	2019-05-21 17:35:12.462672604 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python -u
++#!/usr/bin/python3 -u
+ # -*- coding: utf-8 -*-
+ # vim: set fileencoding=utf-8 :#
+ #
+@@ -112,7 +112,7 @@ manager = dbus.Interface(bus.get_object(
+ 
+ # Capture and print debug output.
+ def log_output(path, level, output, component):
+-    print '%s %s: %s' % (level, (component or 'sync'), output)
++    print('%s %s: %s' % (level, (component or 'sync'), output))
+ 
+ # Format seconds as mm:ss[.mmm].
+ def format_seconds(seconds, with_milli):
+@@ -137,9 +137,9 @@ def log_progress(uid, event, data):
+         bar = int(percent * BAR_LENGTH) * '-'
+         if len(bar) > 0 and len(bar) < BAR_LENGTH:
+             bar = bar[0:-1] + '>'
+-        print prefix, '|%s%s| %.1f%% %s' % (bar, (BAR_LENGTH - len(bar)) * ' ', percent * 100, strip_dbus(data))
++        print(prefix, '|%s%s| %.1f%% %s' % (bar, (BAR_LENGTH - len(bar)) * ' ', percent * 100, strip_dbus(data)))
+     else:
+-        print prefix, '%s = %s' % (event, strip_dbus(data))
++        print(prefix, '%s = %s' % (event, strip_dbus(data)))
+     last = now
+ 
+ if options.debug:
+@@ -167,21 +167,21 @@ dbus_type_mapping = {
+     dbus.Double: float,
+     dbus.Int16: int,
+     dbus.Int32: int,
+-    dbus.Int64: long,
++    dbus.Int64: int,
+     dbus.ObjectPath: str,
+     dbus.Signature: str,
+-    dbus.String: unicode,
++    dbus.String: str,
+     dbus.Struct: tuple,
+     dbus.UInt16: int,
+     dbus.UInt32: int,
+-    dbus.UInt64: long,
+-    dbus.UTF8String: unicode
++    dbus.UInt64: int,
++    dbus.UTF8String: str
+     }
+ 
+ def strip_dbus(instance):
+     base = dbus_type_mapping.get(type(instance), None)
+     if base == dict or isinstance(instance, dict):
+-        return dict([(strip_dbus(k), strip_dbus(v)) for k, v in instance.iteritems()])
++        return dict([(strip_dbus(k), strip_dbus(v)) for k, v in instance.items()])
+     if base == list or isinstance(instance, list):
+         l = [strip_dbus(v) for v in instance]
+         l.sort()
+@@ -190,7 +190,7 @@ def strip_dbus(instance):
+         return tuple([strip_dbus(v) for v in instance])
+     if base == None:
+         return instance
+-    if base == unicode:
++    if base == str:
+         # try conversion to normal string
+         try:
+             return str(instance)
+@@ -217,13 +217,13 @@ def run(syncing=False):
+     global result
+     result = None
+     if syncing:
+-        print 'Running a sync, press CTRL-C to control it interactively.'
++        print('Running a sync, press CTRL-C to control it interactively.')
+         while result is None and error is None:
+             try:
+                 loop.run()
+             except KeyboardInterrupt:
+                 while True:
+-                    print '[a]bort, [s]uspend, [r]esume, continue? ',
++                    print('[a]bort, [s]uspend, [r]esume, continue? ', end=' ')
+                     response = sys.stdin.readline()
+                     try:
+                         if response == 'a\n':
+@@ -238,16 +238,16 @@ def run(syncing=False):
+                         elif response == '\n':
+                             break
+                         else:
+-                            print 'Unknown response, try again.'
+-                    except dbus.exceptions.DBusException, ex:
+-                        print 'operation %s failed: %s' % (response, ex)
++                            print('Unknown response, try again.')
++                    except dbus.exceptions.DBusException as ex:
++                        print('operation %s failed: %s' % (response, ex))
+     else:
+         loop.run()
+ 
+     if error:
+-        print
+-        print error
+-        print
++        print()
++        print(error)
++        print()
+     return result
+ async_args = {
+     'reply_handler': done,
+@@ -257,8 +257,8 @@ async_args = {
+ 
+ manager.GetAllPeers(**async_args)
+ peers = strip_dbus(run())
+-print 'peers: %s' % peers
+-print 'available databases: %s' % ([''] + ['peer-' + uid for uid in peers.keys()])
++print('peers: %s' % peers)
++print('available databases: %s' % ([''] + ['peer-' + uid for uid in list(peers.keys())]))
+ 
+ if not error and options.configure:
+     peer = json.loads(options.peer_config)
+@@ -267,13 +267,13 @@ if not error and options.configure:
+             peer['protocol'] = 'PBAP'
+         if not 'address' in peer:
+             peer['address'] = options.mac
+-    print 'adding peer config %s = %s' % (peername, peer)
++    print('adding peer config %s = %s' % (peername, peer))
+     manager.SetPeer(peername, peer, **async_args)
+     run()
+ 
+ def pull_progress():
+     status = manager.GetPeerStatus(peername)
+-    print 'Poll status:', strip_dbus(status)
++    print('Poll status:', strip_dbus(status))
+     return True
+ 
+ if not error and options.sync:
+@@ -281,7 +281,7 @@ if not error and options.sync:
+     if options.poll_progress is not None:
+         pull_progress()
+ 
+-    print 'syncing peer %s' % peername
++    print('syncing peer %s' % peername)
+     flags = json.loads(options.sync_flags)
+     if options.progress_frequency != 0.0:
+         flags['progress-frequency'] = options.progress_frequency
+@@ -307,10 +307,10 @@ if not error and options.sync:
+         timeout.destroy()
+ 
+ if not error and options.remove:
+-    print 'removing peer %s' % peername
++    print('removing peer %s' % peername)
+     manager.RemovePeer(peername, **async_args)
+     run()
+ 
+ if options.debug:
+-    print "waiting for further debug output, press CTRL-C to stop"
++    print("waiting for further debug output, press CTRL-C to stop")
+     loop.run()
+diff -up syncevolution-1.5.3/src/dbus/server/pim/testpim.py.python3 syncevolution-1.5.3/src/dbus/server/pim/testpim.py
+--- syncevolution-1.5.3/src/dbus/server/pim/testpim.py.python3	2014-10-30 17:54:09.000000000 +0100
++++ syncevolution-1.5.3/src/dbus/server/pim/testpim.py	2019-05-21 17:35:12.463672604 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python -u
++#!/usr/bin/python3 -u
+ # -*- coding: utf-8 -*-
+ # vim: set fileencoding=utf-8 :#
+ #
+@@ -44,7 +44,7 @@ import itertools
+ import codecs
+ import pprint
+ import shutil
+-import ConfigParser
++import configparser
+ import io
+ 
+ import localed
+@@ -274,7 +274,7 @@ class Watchdog():
+           self.timeout.set_callback(self._ping)
+           self.timeout.attach(loop.get_context())
+           if self.threshold < 0:
+-               print '\nPinging server at intervals of %fs.' % self.interval
++               print('\nPinging server at intervals of %fs.' % self.interval)
+ 
+      def stop(self):
+           if self.timeout:
+@@ -298,7 +298,7 @@ class Watchdog():
+           logging.printf('ping results for %s: %s', name, self.results)
+           if self.threshold < 0:
+                for result in self.results:
+-                    print '%s: ping duration: %f' % (name, result[1])
++                    print('%s: ping duration: %f' % (name, result[1]))
+           self.reset()
+ 
+      def _ping(self):
+@@ -528,7 +528,7 @@ VERSION:3.0\r?
+         # text, but some other error messages) and the servers stdout.
+         def unicodeLog(test, log):
+              open('/tmp/out', 'wb').write(log)
+-             print re.match(r'ERROR(?! SUMMARY:)', log)
++             print(re.match(r'ERROR(?! SUMMARY:)', log))
+         # Using assertNotRegexMatches with a negative lookahead led to unicode errors?!
+         # Therefore stick to plain text checks and avoid false matches against valgind's
+         # 'ERROR SUMMARY' by replacing that first.
+@@ -553,7 +553,7 @@ VERSION:3.0\r?
+                 dest = os.path.join(dirname, dir)
+                 try:
+                     os.rmdir(dest)
+-                except OSError, ex:
++                except OSError as ex:
+                     if ex.errno != errno.ENOTEMPTY:
+                         raise
+             for file in files:
+@@ -635,7 +635,7 @@ XDG root.
+ 
+     def testUIDError(self):
+         '''TestContacts.testUIDError - check that invalid UID is properly detected and reported'''
+-        with self.assertRaisesRegexp(dbus.DBusException,
++        with self.assertRaisesRegex(dbus.DBusException,
+                                      'invalid peer uid: CAPITAL-LETTERS-NOT-ALLOWED'):
+             self.manager.SetPeer('CAPITAL-LETTERS-NOT-ALLOWED',
+                                  {})
+@@ -671,7 +671,7 @@ XDG root.
+ 
+         # PIM Manager must not allow overwriting an existing config.
+         # Uses the new name for SetPeer().
+-        with self.assertRaisesRegexp(dbus.DBusException,
++        with self.assertRaisesRegex(dbus.DBusException,
+                                      'org._01.pim.contacts.Manager.AlreadyExists: uid ' + uid + ' is already in use') as cm:
+              self.manager.CreatePeer(uid,
+                                      peers[uid])
+@@ -830,11 +830,11 @@ XDG root.
+         testcases = os.environ.get('TESTPIM_TEST_SYNC_TESTCASES', None)
+         if testcases:
+              def progress(step, duration):
+-                  print
++                  print()
+                   edslogs = [x for x in os.listdir(logdir) if x.startswith('eds@')]
+                   edslogs.sort()
+-                  print '%s: %fs, see %s' % (step, duration,
+-                                             os.path.join(logdir, edslogs[-1]))
++                  print('%s: %fs, see %s' % (step, duration,
++                                             os.path.join(logdir, edslogs[-1])))
+         else:
+              def progress(*args1, **args2):
+                   pass
+@@ -880,7 +880,7 @@ XDG root.
+              self.assertEqual(len(newsessions), 1)
+              session = newsessions[0]
+              targetsessions.extend(newsessions)
+-             config = ConfigParser.ConfigParser()
++             config = configparser.ConfigParser()
+              content = '[fake]\n' + open(os.path.join(session, 'status.ini')).read()
+              config.readfp(io.BytesIO(content))
+              content = dict(config.items('fake'))
+@@ -1309,7 +1309,7 @@ END:VCARD'''
+ 
+         # Test invalid maxsession values.
+         if not testcases:
+-             with self.assertRaisesRegexp(dbus.DBusException,
++             with self.assertRaisesRegex(dbus.DBusException,
+                                           "negative 'maxsessions' not allowed: -1"):
+                   self.manager.SetPeer(uid,
+                                        {'protocol': 'PBAP',
+@@ -1318,7 +1318,7 @@ END:VCARD'''
+              if not "SYNCEVOLUTION_LOGLEVEL" in os.environ:
+                   self.assertEqual(files, listsyncevo(exclude=exclude))
+ 
+-             with self.assertRaisesRegexp(dbus.DBusException,
++             with self.assertRaisesRegex(dbus.DBusException,
+                                           'bad lexical cast: source type value could not be interpreted as target'):
+                   self.manager.SetPeer(uid,
+                                        {'protocol': 'PBAP',
+@@ -1707,7 +1707,7 @@ END:VCARD''')
+         self.assertEqual("first/last", self.manager.GetSortOrder())
+ 
+         # Expect an error, no change to sort order.
+-        with self.assertRaisesRegexp(dbus.DBusException,
++        with self.assertRaisesRegex(dbus.DBusException,
+                                      'sort order.*not supported'):
+              self.manager.SetSortOrder('no-such-order')
+         self.assertEqual("first/last", self.manager.GetSortOrder())
+@@ -1716,17 +1716,17 @@ END:VCARD''')
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Äbraham
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Bénjamin
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Chàrly Xing
+ N:Xing;Chàrly
+@@ -1756,9 +1756,9 @@ END:VCARD''']):
+         self.runUntil('contacts',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0))
+-        self.assertEqual(u'Äbraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Bénjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Chàrly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Äbraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Bénjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Chàrly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Invert sort order.
+         self.manager.SetSortOrder("last/first")
+@@ -1796,9 +1796,9 @@ END:VCARD''']):
+         self.runUntil('contacts',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0))
+-        self.assertEqual(u'Äbraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Bénjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Chàrly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Äbraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Bénjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Chàrly', self.view.contacts[2]['structured-name']['given'])
+ 
+     @timeout(60)
+     @property("snapshot", "simple-sort")
+@@ -1913,9 +1913,9 @@ END:VCARD
+         contact = copy.deepcopy(self.view.contacts[0])
+         # Simplify the photo URI, if there was one. Avoid any assumptions
+         # about the filename, except that it is a file:/// uri.
+-        if contact.has_key('photo'):
++        if 'photo' in contact:
+              contact['photo'] = re.sub('^file:///.*', 'file:///<stripped>', contact['photo'])
+-        if contact.has_key('id'):
++        if 'id' in contact:
+              contact['id'] = '<stripped>'
+         self.assertEqual({'full-name': 'John Doe',
+                           'groups': ['TEST1', 'TEST2'],
+@@ -2307,8 +2307,7 @@ END:VCARD''' % {'peer': peer, 'index': i
+ 
+         # Now test all subsets until we are back at 'all active'.
+         current = ['', 'a', 'b', 'c']
+-        for active in [filter(lambda x: x != None,
+-                              [s, a, b, c])
++        for active in [[x for x in [s, a, b, c] if x != None]
+                        for s in [None, '']
+                        for a in [None, 'a']
+                        for b in [None, 'b']
+@@ -2340,7 +2339,7 @@ END:VCARD''' % {'peer': peer, 'index': i
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:Ace
+@@ -2351,7 +2350,7 @@ TEL:089/7888-99
+ EMAIL:az@example.com
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ TEL:+1-89-7888-99
+@@ -2360,7 +2359,7 @@ END:VCARD''',
+ # Chárleß has chárless as representation after folding the case.
+ # This is different from lower case.
+ # See http://www.boost.org/doc/libs/1_51_0/libs/locale/doc/html/glossary.html#term_case_folding
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -2390,9 +2389,9 @@ END:VCARD''']):
+         self.runUntil('contacts',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 3))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Find Charly by his FN (case insensitive by default).
+         view = ContactsView(self.manager)
+@@ -2405,7 +2404,7 @@ END:VCARD''']):
+         self.runUntil('charles',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
+ 
+         # We can expand the search with ReplaceSearch().
+         view.view.ReplaceSearch([], False)
+@@ -2416,9 +2415,9 @@ END:VCARD''']):
+         self.runUntil('expanded contacts',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 3))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Find Charly by his FN (case insensitive explicitly).
+         view = ContactsView(self.manager)
+@@ -2431,7 +2430,7 @@ END:VCARD''']):
+         self.runUntil('charles',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Charly by his FN (case sensitive explicitly).
+         view = ContactsView(self.manager)
+@@ -2444,7 +2443,7 @@ END:VCARD''']):
+         self.runUntil('charles',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
+ 
+         # Do not find Charly by his FN (case sensitive explicitly).
+         view = ContactsView(self.manager)
+@@ -2465,8 +2464,8 @@ END:VCARD''']):
+         self.runUntil('two contacts',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[1]['structured-name']['given'])
+ 
+         # Refine search without actually changing the result.
+         for refine in [True, False]:
+@@ -2475,8 +2474,8 @@ END:VCARD''']):
+              self.runUntil('end of search refinement',
+                            check=lambda: self.assertEqual([], view.errors),
+                            until=lambda: view.quiescentCount > 0)
+-             self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-             self.assertEqual(u'Benjamin', view.contacts[1]['structured-name']['given'])
++             self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++             self.assertEqual('Benjamin', view.contacts[1]['structured-name']['given'])
+ 
+         # Restrict search to Benjamin. The result is a view
+         # which has different indices than the full view.
+@@ -2486,7 +2485,7 @@ END:VCARD''']):
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.quiescentCount > 0)
+         self.assertEqual(1, len(view.contacts))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
+ 
+         # Refine again, without changes.
+         view.quiescentCount = 0
+@@ -2495,7 +2494,7 @@ END:VCARD''']):
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.quiescentCount > 0)
+         self.assertEqual(1, len(view.contacts))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
+ 
+         # Refine to empty view.
+         view.quiescentCount = 0
+@@ -2516,7 +2515,7 @@ END:VCARD''']):
+         self.runUntil('two contacts',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham by his email.
+         view = ContactsView(self.manager)
+@@ -2529,7 +2528,7 @@ END:VCARD''']):
+         self.runUntil('two contacts',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham by his 1234 telephone number.
+         view = ContactsView(self.manager)
+@@ -2542,7 +2541,7 @@ END:VCARD''']):
+         self.runUntil('1234 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham by his 1234 telephone number, as sub-string.
+         view = ContactsView(self.manager)
+@@ -2555,7 +2554,7 @@ END:VCARD''']):
+         self.runUntil('23 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham by his 1234 telephone number, ignoring
+         # formatting.
+@@ -2569,7 +2568,7 @@ END:VCARD''']):
+         self.runUntil('12/34 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham by his 56/78 telephone number, ignoring
+         # slash in contact.
+@@ -2583,7 +2582,7 @@ END:VCARD''']):
+         self.runUntil('5678 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham via the +1-800-FOOBAR vanity number.
+         view = ContactsView(self.manager)
+@@ -2596,7 +2595,7 @@ END:VCARD''']):
+         self.runUntil('+1-800-foobar data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham via the +1-800-FOOBAR vanity number, with digits
+         # instead of alpha characters.
+@@ -2610,7 +2609,7 @@ END:VCARD''']):
+         self.runUntil('366227 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham via caller ID for +1-800-FOOBAR.
+         view = ContactsView(self.manager)
+@@ -2623,7 +2622,7 @@ END:VCARD''']):
+         self.runUntil('+1800366227 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham via caller ID for 089/7888-99 (country is Germany).
+         view = ContactsView(self.manager)
+@@ -2636,7 +2635,7 @@ END:VCARD''']):
+         self.runUntil('+4989788899 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham via caller ID for +44 89 7888-99 (Abraham has no country code
+         # set and matches, whereas Benjamin has +1 as country code and does not match).
+@@ -2650,7 +2649,7 @@ END:VCARD''']):
+         self.runUntil('+4489788899 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Find Abraham and Benjamin via 089/7888-99 (not a full caller
+         # ID, but at least a valid phone number).  Benjamin matches
+@@ -2666,8 +2665,8 @@ END:VCARD''']):
+         self.runUntil('089788899 data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[1]['structured-name']['given'])
+ 
+         # Don't find anyone.
+         view = ContactsView(self.manager)
+@@ -2695,7 +2694,7 @@ END:VCARD''']):
+                        names.append(contact[0])
+                   else:
+                        # just the name
+-                       output.write(u'''BEGIN:VCARD
++                       output.write('''BEGIN:VCARD
+ VERSION:3.0
+ FN:%(name)s
+ N:%(name)s;;;;
+@@ -2726,30 +2725,30 @@ END:VCARD
+                            check=lambda: self.assertEqual([], self.view.errors),
+                            until=lambda: self.view.haveData(0, numtestcases))
+              for i, name in enumerate(names):
+-                  msg = u'contact #%d with name %s in\n%s' % (i, name, pprint.pformat(self.stripDBus(self.view.contacts, sortLists=False)))
++                  msg = 'contact #%d with name %s in\n%s' % (i, name, pprint.pformat(self.stripDBus(self.view.contacts, sortLists=False)))
+                   self.assertEqual(name, self.view.contacts[i]['full-name'])
+ 
+              # Run searches and compare results.
+              for i, (query, names) in enumerate(searches):
+-                  msg = u'query %s, names %s' % (query, names)
++                  msg = 'query %s, names %s' % (query, names)
+                   view = ContactsView(self.manager)
+                   view.search(query)
+                   self.runUntil('search %d: %s' % (i, query),
+                                 check=lambda: self.assertEqual([], view.errors),
+                                 until=lambda: view.quiescentCount > 0)
+-                  msg = u'query %s, names %s in\n%s' % (query, names, pprint.pformat(self.stripDBus(view.contacts, sortLists=False)))
++                  msg = 'query %s, names %s in\n%s' % (query, names, pprint.pformat(self.stripDBus(view.contacts, sortLists=False)))
+                   self.assertEqual(len(names), len(view.contacts))
+                   view.read(0, len(names))
+                   self.runUntil('data %d: %s' % (i, query),
+                                 check=lambda: self.assertEqual([], view.errors),
+                                 until=lambda: view.haveData(0, len(names)))
+                   for e, name in enumerate(names):
+-                       msg = u'query %s, names %s, name #%d %s in\n%s' % (query, names, e, name, pprint.pformat(self.stripDBus(view.contacts, sortLists=False)))
++                       msg = 'query %s, names %s, name #%d %s in\n%s' % (query, names, e, name, pprint.pformat(self.stripDBus(view.contacts, sortLists=False)))
+                        self.assertEqual(name, view.contacts[e]['full-name'])
+-        except Exception, ex:
++        except Exception as ex:
+              if msg:
+                   info = sys.exc_info()
+-                  raise Exception('%s:\n%s' % (msg, repr(ex))), None, info[2]
++                  raise Exception('%s:\n%s' % (msg, repr(ex))).with_traceback(info[2])
+              else:
+                   raise
+         return view
+@@ -2758,11 +2757,11 @@ END:VCARD
+     @property("ENV", "LC_TYPE=ja_JP.UTF-8 LC_ALL=ja_JP.UTF-8 LANG=ja_JP.UTF-8")
+     def testFilterJapanese(self):
+          self.doFilter(# Names of all contacts, sorted as expected.
+-                       ('111', u'1月', 'Bad'),
++                       ('111', '1月', 'Bad'),
+                        # Query + expected results.
+-                       (([], ('111', u'1月', 'Bad')),
+-                        ([['any-contains', '1']], ('111', u'1月')),
+-                        ([['any-contains', u'1月']], (u'1月',)))
++                       (([], ('111', '1月', 'Bad')),
++                        ([['any-contains', '1']], ('111', '1月')),
++                        ([['any-contains', '1月']], ('1月',)))
+                        )
+ 
+     @timeout(60)
+@@ -2771,19 +2770,19 @@ END:VCARD
+          self.doFilter(# Names of all contacts, sorted as expected.
+                        # 江 = jiāng = Jiang when using Pinyin and thus after Jeffries and before Meadows.
+                        # 鳥 = niǎo before 女性 = nǚ xìng (see FDO #66618)
+-                       ('Adams', 'Jeffries', u'江', 'jiang', 'Meadows', u'鳥', u'女性' ),
++                       ('Adams', 'Jeffries', '江', 'jiang', 'Meadows', '鳥', '女性' ),
+                        # 'J' may or may not match Jiang; by default, it matches.
+-                       (([['any-contains', 'J']], ('Jeffries', u'江', 'jiang')),
++                       (([['any-contains', 'J']], ('Jeffries', '江', 'jiang')),
+                         ([['any-contains', 'J', 'no-transliteration']], ('Jeffries', 'jiang')),
+                         ([['any-contains', 'J', 'no-transliteration', 'case-sensitive']], ('Jeffries',)),
+-                        ([['any-contains', u'江']], (u'江', 'jiang')),
+-                        ([['any-contains', u'jiang']], (u'江', 'jiang')),
+-                        ([['any-contains', u'jiāng']], (u'江', 'jiang')),
+-                        ([['any-contains', u'jiāng', 'no-transliteration']], ('jiang',)),
+-                        ([['any-contains', u'jiāng', 'accent-sensitive']], (u'江',)),
+-                        ([['any-contains', u'jiāng', 'accent-sensitive', 'case-sensitive']], (u'江',)),
+-                        ([['any-contains', u'Jiāng', 'accent-sensitive', 'case-sensitive']], ()),
+-                        ([['any-contains', u'Jiang']], (u'江', 'jiang')),
++                        ([['any-contains', '江']], ('江', 'jiang')),
++                        ([['any-contains', 'jiang']], ('江', 'jiang')),
++                        ([['any-contains', 'jiāng']], ('江', 'jiang')),
++                        ([['any-contains', 'jiāng', 'no-transliteration']], ('jiang',)),
++                        ([['any-contains', 'jiāng', 'accent-sensitive']], ('江',)),
++                        ([['any-contains', 'jiāng', 'accent-sensitive', 'case-sensitive']], ('江',)),
++                        ([['any-contains', 'Jiāng', 'accent-sensitive', 'case-sensitive']], ()),
++                        ([['any-contains', 'Jiang']], ('江', 'jiang')),
+                         ),
+                        )
+ 
+@@ -2794,7 +2793,7 @@ END:VCARD
+                        # DIN 5007 Variant 2 defines phone book sorting in
+                        # Germany. It does not apply to Austria.
+                        # Example from http://de.wikipedia.org/wiki/Alphabetische_Sortierung
+-                       (u'Göbel', u'Goethe', u'Göthe', u'Götz', u'Goldmann'),
++                       ('Göbel', 'Goethe', 'Göthe', 'Götz', 'Goldmann'),
+                        (),
+                        )
+ 
+@@ -2802,8 +2801,8 @@ END:VCARD
+     @property("ENV", "LC_TYPE=zh_CN.UTF-8 LANG=zh_CN.UTF-8")
+     def testLocaled(self):
+          # Use mixed Chinese/Western names, because then the locale really matters.
+-         namespinyin = ('Adams', 'Jeffries', u'江', 'Meadows', u'鳥', u'女性' )
+-         namesgerman = ('Adams', 'Jeffries', 'Meadows', u'女性', u'江', u'鳥' )
++         namespinyin = ('Adams', 'Jeffries', '江', 'Meadows', '鳥', '女性' )
++         namesgerman = ('Adams', 'Jeffries', 'Meadows', '女性', '江', '鳥' )
+          numtestcases = len(namespinyin)
+          self.doFilter(namespinyin, ())
+ 
+@@ -2822,7 +2821,7 @@ END:VCARD
+                             check=lambda: self.assertEqual([], self.view.errors),
+                             until=lambda: self.view.haveData(0, numtestcases))
+               for i, name in enumerate(namesgerman):
+-                   msg = u'contact #%d with name %s in\n%s' % (i, name, pprint.pformat(self.stripDBus(self.view.contacts, sortLists=False)))
++                   msg = 'contact #%d with name %s in\n%s' % (i, name, pprint.pformat(self.stripDBus(self.view.contacts, sortLists=False)))
+                    self.assertEqual(name, self.view.contacts[i]['full-name'])
+ 
+               # Switch back to Pinyin without including the new value.
+@@ -2837,12 +2836,12 @@ END:VCARD
+                             check=lambda: self.assertEqual([], self.view.errors),
+                             until=lambda: self.view.haveData(0, numtestcases))
+               for i, name in enumerate(namespinyin):
+-                   msg = u'contact #%d with name %s in\n%s' % (i, name, pprint.pformat(self.stripDBus(self.view.contacts, sortLists=False)))
++                   msg = 'contact #%d with name %s in\n%s' % (i, name, pprint.pformat(self.stripDBus(self.view.contacts, sortLists=False)))
+                    self.assertEqual(name, self.view.contacts[i]['full-name'])
+-         except Exception, ex:
++         except Exception as ex:
+              if msg:
+                   info = sys.exc_info()
+-                  raise Exception('%s:\n%s' % (msg, repr(ex))), None, info[2]
++                  raise Exception('%s:\n%s' % (msg, repr(ex))).with_traceback(info[2])
+              else:
+                   raise
+          finally:
+@@ -2908,10 +2907,10 @@ END:VCARD
+                             check=lambda: self.assertEqual([], view.errors),
+                             until=lambda: view.quiescentCount > (usingEDS and 2 or 1))
+               self.assertEqual(len(view.contacts), 1)
+-         except Exception, ex:
++         except Exception as ex:
+              if msg:
+                   info = sys.exc_info()
+-                  raise Exception('%s:\n%s' % (msg, repr(ex))), None, info[2]
++                  raise Exception('%s:\n%s' % (msg, repr(ex))).with_traceback(info[2])
+              else:
+                   raise
+          finally:
+@@ -3088,7 +3087,7 @@ END:VCARD
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:Ace
+@@ -3096,7 +3095,7 @@ TEL:1234
+ EMAIL:az@example.com
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ END:VCARD''',
+@@ -3104,7 +3103,7 @@ END:VCARD''',
+ # Chárleß has chárless as representation after folding the case.
+ # This is different from lower case.
+ # See http://www.boost.org/doc/libs/1_51_0/libs/locale/doc/html/glossary.html#term_case_folding
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -3144,16 +3143,16 @@ END:VCARD''']):
+                                      self.assertEqual([], self.view.errors)),
+                       until=lambda: view.haveData(0) and \
+                            self.view.haveData(0, 3))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Unmatched contact remains unmatched.
+         # Modified phone number no longer matched.
+         item = os.path.join(self.contacts, 'contact%d.vcf' % 0)
+         output = codecs.open(item, "w", "utf-8")
+-        output.write(u'''BEGIN:VCARD
++        output.write('''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:King
+@@ -3178,8 +3177,8 @@ END:VCARD''')
+         self.runUntil('Abraham nickname read',
+                       check=check,
+                       until=lambda: self.view.haveData(0))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
+ 
+         # No longer part of the telephone search view.
+         self.runUntil('phone results',
+@@ -3191,7 +3190,7 @@ END:VCARD''')
+         check1 = view.setCheck(lambda: self.assertEqual(1, len(view.contacts)))
+         item = os.path.join(self.contacts, 'contact%d.vcf' % 2)
+         output = codecs.open(item, "w", "utf-8")
+-        output.write(u'''BEGIN:VCARD
++        output.write('''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ NICKNAME:Angel
+@@ -3210,14 +3209,14 @@ END:VCARD''')
+                       check=check,
+                       until=lambda: self.view.haveData(2) and \
+                            view.haveData(0))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Unmatched contact gets matched.
+         check1 = view.setCheck(lambda: self.assertLess(0, len(view.contacts)))
+         item = os.path.join(self.contacts, 'contact%d.vcf' % 0)
+         output = codecs.open(item, "w", "utf-8")
+-        output.write(u'''BEGIN:VCARD
++        output.write('''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:Chárleß alter ego
+@@ -3240,9 +3239,9 @@ END:VCARD''')
+                       check=check,
+                       until=lambda: self.view.haveData(0) and \
+                            view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Charly', view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
+ 
+         # Invert sort order.
+         check1 = view.setCheck(None)
+@@ -3259,12 +3258,12 @@ END:VCARD''')
+                       until=lambda: self.view.haveData(0, 3) and \
+                            view.haveData(0, 2))
+         self.assertEqual(2, len(view.contacts))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[1]['structured-name']['given'])
+         self.assertEqual(3, len(self.view.contacts))
+-        self.assertEqual(u'Charly', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[2]['structured-name']['given'])
+ 
+         # And back again.
+         self.manager.SetSortOrder("first/last")
+@@ -3280,18 +3279,18 @@ END:VCARD''')
+                       until=lambda: self.view.haveData(0, 3) and \
+                            view.haveData(0, 2))
+         self.assertEqual(2, len(view.contacts))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Charly', view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[1]['structured-name']['given'])
+         self.assertEqual(3, len(self.view.contacts))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Matched contact gets unmatched.
+         check1 = view.setCheck(lambda: self.assertLess(0, len(view.contacts)))
+         item = os.path.join(self.contacts, 'contact%d.vcf' % 0)
+         output = codecs.open(item, "w", "utf-8")
+-        output.write(u'''BEGIN:VCARD
++        output.write('''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:None
+@@ -3312,8 +3311,8 @@ END:VCARD''')
+         self.runUntil('Abraham nickname read, None',
+                       check=check,
+                       until=lambda: self.view.haveData(0))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
+ 
+         # Finally, remove everything.
+         logging.log('remove contacts')
+@@ -3339,7 +3338,7 @@ END:VCARD''')
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:Ace
+@@ -3350,7 +3349,7 @@ TEL:089/7888-99
+ EMAIL:az@example.com
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ TEL:+1-89-7888-99
+@@ -3359,7 +3358,7 @@ END:VCARD''',
+ # Chárleß has chárless as representation after folding the case.
+ # This is different from lower case.
+ # See http://www.boost.org/doc/libs/1_51_0/libs/locale/doc/html/glossary.html#term_case_folding
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -3389,9 +3388,9 @@ END:VCARD''']):
+         self.runUntil('contacts',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 3))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Browse initial two contacts (= uses MatchAll filter with limit).
+         view = ContactsView(self.manager)
+@@ -3404,8 +3403,8 @@ END:VCARD''']):
+         self.runUntil('browse data',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0, 2))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
+         view.close()
+ 
+         # Find Abraham and Benjamin but stop at first contact.
+@@ -3419,10 +3418,10 @@ END:VCARD''']):
+         self.runUntil('one contact',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Changing the limit is not supported.
+-        with self.assertRaisesRegexp(dbus.DBusException,
++        with self.assertRaisesRegex(dbus.DBusException,
+                                      r'.*: refining the search must not change the maximum number of results$'):
+              view.view.RefineSearch([['limit', '3'], ['any-contains', 'foo']])
+ 
+@@ -3433,7 +3432,7 @@ END:VCARD''']):
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.quiescentCount > 0)
+         self.assertEqual(1, len(view.contacts))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+ 
+         # Restrict search to Benjamin. We can leave out the limit, the old
+         # stays active automatically. Abraham drops out of the view
+@@ -3449,7 +3448,7 @@ END:VCARD''']):
+         self.runUntil('Benjamin',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
+ 
+         # Refine again, without changes.
+         view.quiescentCount = 0
+@@ -3458,7 +3457,7 @@ END:VCARD''']):
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.quiescentCount > 0)
+         self.assertEqual(1, len(view.contacts))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
+ 
+         # Refine to empty view.
+         view.quiescentCount = 0
+@@ -3479,7 +3478,7 @@ END:VCARD''']):
+         self.runUntil('Benjamin',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: view.haveData(0))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
+ 
+     @timeout(60)
+     @property("ENV", "LC_TYPE=de_DE.UTF-8 LC_ALL=de_DE.UTF-8 LANG=de_DE.UTF-8")
+@@ -3501,14 +3500,14 @@ END:VCARD''']):
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ FN:Abraham Zoo
+ NICKNAME:Ace
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ END:VCARD''',
+@@ -3516,7 +3515,7 @@ END:VCARD''',
+ # Chárleß has chárless as representation after folding the case.
+ # This is different from lower case.
+ # See http://www.boost.org/doc/libs/1_51_0/libs/locale/doc/html/glossary.html#term_case_folding
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -3552,15 +3551,15 @@ END:VCARD''']):
+                       check=check,
+                       until=lambda: view.haveData(0) and \
+                            self.view.haveData(0, 3))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Matched contact remains matched.
+         item = os.path.join(self.contacts, 'contact%d.vcf' % 0)
+         output = codecs.open(item, "w", "utf-8")
+-        output.write(u'''BEGIN:VCARD
++        output.write('''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ FN:Abraham Zoo
+@@ -3578,13 +3577,13 @@ END:VCARD''')
+         self.runUntil('Abraham nickname read',
+                       check=check,
+                       until=lambda: self.view.haveData(0) and view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
+ 
+         # Unmatched contact gets matched, but stays out of view.
+         item = os.path.join(self.contacts, 'contact%d.vcf' % 0)
+         output = codecs.open(item, "w", "utf-8")
+-        output.write(u'''BEGIN:VCARD
++        output.write('''BEGIN:VCARD
+ VERSION:3.0
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+@@ -3601,17 +3600,17 @@ END:VCARD''')
+         check1 = view.setCheck(lambda: self.assertEqual(1, len(view.contacts)))
+         self.assertEqual(1, len(view.contacts))
+         self.assertTrue(view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+         self.assertFalse(self.view.haveData(2))
+         self.view.read(2, 1)
+         self.runUntil('Abraham nickname read, II',
+                       check=check,
+                       until=lambda: self.view.haveData(2) and \
+                            view.haveData(0))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Invert sort order.
+         check1 = view.setCheck(None)
+@@ -3628,11 +3627,11 @@ END:VCARD''')
+                       until=lambda: self.view.haveData(0, 3) and \
+                            view.haveData(0, 1))
+         self.assertEqual(1, len(view.contacts))
+-        self.assertEqual(u'Charly', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', view.contacts[0]['structured-name']['given'])
+         self.assertEqual(3, len(self.view.contacts))
+-        self.assertEqual(u'Charly', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[2]['structured-name']['given'])
+ 
+         # And back again.
+         self.manager.SetSortOrder("first/last")
+@@ -3648,16 +3647,16 @@ END:VCARD''')
+                       until=lambda: self.view.haveData(0, 3) and \
+                            view.haveData(0, 1))
+         self.assertEqual(1, len(view.contacts))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
+         self.assertEqual(3, len(self.view.contacts))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Matched contact gets unmatched.
+         item = os.path.join(self.contacts, 'contact%d.vcf' % 0)
+         output = codecs.open(item, "w", "utf-8")
+-        output.write(u'''BEGIN:VCARD
++        output.write('''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abrahan
+ FN:Abrahan Zoo
+@@ -3677,8 +3676,8 @@ END:VCARD''')
+         self.runUntil('Abrahan read',
+                       check=check,
+                       until=lambda: self.view.haveData(0) and view.haveData(0))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abrahan', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abrahan', self.view.contacts[0]['structured-name']['given'])
+ 
+         # Finally, remove everything.
+         logging.log('remove contacts')
+@@ -3709,14 +3708,14 @@ END:VCARD''')
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ FN:Abraham Zoo
+ NICKNAME:Ace
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ FN:Benjamin Yeah
+@@ -3725,7 +3724,7 @@ END:VCARD''',
+ # Chárleß has chárless as representation after folding the case.
+ # This is different from lower case.
+ # See http://www.boost.org/doc/libs/1_51_0/libs/locale/doc/html/glossary.html#term_case_folding
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -3757,10 +3756,10 @@ END:VCARD''']):
+                                      self.assertEqual([], self.view.errors)),
+                       until=lambda: view.haveData(0) and \
+                            self.view.haveData(0, 3))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[2]['structured-name']['given'])
+ 
+     @timeout(60)
+     @property("ENV", "LC_TYPE=de_DE.UTF-8 LC_ALL=de_DE.UTF-8 LANG=de_DE.UTF-8")
+@@ -3782,14 +3781,14 @@ END:VCARD''']):
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ FN:Abraham Zoo
+ NICKNAME:Ace
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ END:VCARD''',
+@@ -3797,7 +3796,7 @@ END:VCARD''',
+ # Chárleß has chárless as representation after folding the case.
+ # This is different from lower case.
+ # See http://www.boost.org/doc/libs/1_51_0/libs/locale/doc/html/glossary.html#term_case_folding
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -3829,10 +3828,10 @@ END:VCARD''']):
+                                      self.assertEqual([], self.view.errors)),
+                       until=lambda: view.haveData(0) and \
+                            self.view.haveData(0, 3))
+-        self.assertEqual(u'Abraham', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[2]['structured-name']['given'])
++        self.assertEqual('Abraham', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[2]['structured-name']['given'])
+ 
+         # Remove Abraham. Gets replaced by Benjamin in the view.
+         self.runCmdline(['--delete-items', '@' + self.managerPrefix + self.uid, 'local', luids[0]])
+@@ -3845,16 +3844,16 @@ END:VCARD''']):
+                                      self.assertEqual([], self.view.errors)),
+                       until=lambda: view.haveData(0) and \
+                            self.view.haveData(0, 2))
+-        self.assertEqual(u'Benjamin', view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Charly', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Benjamin', view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[1]['structured-name']['given'])
+ 
+         # Remove Benjamin.
+         self.runCmdline(['--delete-items', '@' + self.managerPrefix + self.uid, 'local', luids[1]])
+         self.runUntil('view without Benjamin',
+                       check=lambda: self.assertEqual([], view.errors),
+                       until=lambda: len(view.contacts) == 0 and len(self.view.contacts) == 1)
+-        self.assertEqual(u'Charly', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Charly', self.view.contacts[0]['structured-name']['given'])
+ 
+     @timeout(60)
+     @property("snapshot", "simple-sort")
+@@ -3939,14 +3938,14 @@ END:VCARD''']):
+                   ],
+              }
+ 
+-        with self.assertRaisesRegexp(dbus.DBusException,
++        with self.assertRaisesRegex(dbus.DBusException,
+                                      r'.*: only the system address book is writable'):
+              self.manager.AddContact('no-such-address-book',
+                                      john)
+ 
+         # Add new contact.
+         localID = self.manager.AddContact('', john)
+-        john['source'] = [('', unicode(localID))]
++        john['source'] = [('', str(localID))]
+ 
+         self.runUntil('view with one contact',
+                       check=lambda: self.assertEqual([], self.view.errors),
+@@ -3960,7 +3959,7 @@ END:VCARD''']):
+         john['id'] = contact.get('id', '<???>')
+         self.assertEqual(john, contact, sortLists=True)
+ 
+-        with self.assertRaisesRegexp(dbus.DBusException,
++        with self.assertRaisesRegex(dbus.DBusException,
+                                      r'''.*: contact with local ID 'no-such-local-id' not found in system address book'''):
+              self.manager.ModifyContact('',
+                                         'no-such-local-id',
+@@ -4107,7 +4106,7 @@ END:VCARD''']):
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:Ace
+@@ -4118,13 +4117,13 @@ TEL:089/788899
+ EMAIL:az@example.com
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ TEL:+49-89-788899
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -4148,8 +4147,8 @@ END:VCARD''']):
+         self.runUntil('phone results',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 2))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
+ 
+         # Wait for final results from folks. The same in this case.
+         self.runUntil('phone results',
+@@ -4160,8 +4159,8 @@ END:VCARD''']):
+         self.runUntil('phone results',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 2))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
+ 
+         # Nothing changed when folks became active.
+         self.assertEqual([
+@@ -4183,7 +4182,7 @@ END:VCARD''']):
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:Ace
+@@ -4197,13 +4196,13 @@ END:VCARD''',
+ # Extra space, breaks suffix match in EDS.
+ # A more intelligent phone number search in EDS
+ # will find this again.
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ TEL:+49-89-7888 99
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -4232,9 +4231,9 @@ END:VCARD''']):
+         self.runUntil('phone results',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, simpleSearch and 1 or 2))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
+         if not simpleSearch:
+-             self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
++             self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
+ 
+         # Wait for final results from folks. Also finds Benjamin.
+         self.runUntil('phone results',
+@@ -4245,8 +4244,8 @@ END:VCARD''']):
+         self.runUntil('phone results',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 2))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
+ 
+         if simpleSearch:
+              # One contact added by folks.
+@@ -4294,7 +4293,7 @@ END:VCARD''']):
+         #
+         # The names are chosen so that sorting by first name and sorting by last name needs to
+         # reverse the list.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ N:Zoo;Abraham
+ NICKNAME:Ace
+@@ -4305,13 +4304,13 @@ TEL:089/788899
+ EMAIL:az@example.com
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ N:Yeah;Benjamin
+ TEL:+49-89-788899
+ END:VCARD''',
+ 
+-u'''BEGIN:VCARD
++'''BEGIN:VCARD
+ VERSION:3.0
+ FN:Charly 'Chárleß' Xing
+ N:Xing;Charly
+@@ -4336,8 +4335,8 @@ END:VCARD''']):
+         self.runUntil('phone results',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 2))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
+ 
+         # Wait for final results from folks. The same in this case.
+         self.runUntil('phone results',
+@@ -4348,8 +4347,8 @@ END:VCARD''']):
+         self.runUntil('phone results',
+                       check=lambda: self.assertEqual([], self.view.errors),
+                       until=lambda: self.view.haveData(0, 2))
+-        self.assertEqual(u'Abraham', self.view.contacts[0]['structured-name']['given'])
+-        self.assertEqual(u'Benjamin', self.view.contacts[1]['structured-name']['given'])
++        self.assertEqual('Abraham', self.view.contacts[0]['structured-name']['given'])
++        self.assertEqual('Benjamin', self.view.contacts[1]['structured-name']['given'])
+ 
+         # Nothing changed when folks became active.
+         self.assertEqual([
+@@ -4365,7 +4364,7 @@ END:VCARD''']):
+         self.setUpView(search=None, peers=[], withSystemAddressBook=True)
+ 
+         # Insert new contact.
+-        for i, contact in enumerate([u'''BEGIN:VCARD
++        for i, contact in enumerate(['''BEGIN:VCARD
+ VERSION:3.0
+ FN:John Doe
+ N:Doe;John
+@@ -4407,7 +4406,7 @@ END:VCARD''',
+                          self.view.events)
+ 
+         # Expect an error, view should have been closed already.
+-        with self.assertRaisesRegexp(dbus.DBusException,
++        with self.assertRaisesRegex(dbus.DBusException,
+                                      "org.freedesktop.DBus.Error.UnknownMethod: .*"):
+              self.view.close()
+ 
+diff -up syncevolution-1.5.3/src/src.am.python3 syncevolution-1.5.3/src/src.am
+--- syncevolution-1.5.3/src/src.am.python3	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/src.am	2019-05-21 17:35:12.463672604 +0200
+@@ -42,12 +42,12 @@ if COND_DBUS
+ nodist_bin_SCRIPTS += src/syncevo-http-server
+ endif
+ src/syncevo-http-server: $(top_srcdir)/test/syncevo-http-server.py
+-	$(AM_V_GEN)cp $< $@
++	$(AM_V_GEN)sed -e 's|\@PYTHON\@|$(PYTHON)|' $< > $@
+ CLEANFILES += src/syncevo-http-server
+ 
+ nodist_bin_SCRIPTS += src/syncevo-phone-config
+ src/syncevo-phone-config: $(top_srcdir)/test/syncevo-phone-config.py
+-	$(AM_V_GEN)cp $< $@
++	$(AM_V_GEN)sed -e 's|\@PYTHON\@|$(PYTHON)|' $< > $@
+ CLEANFILES += src/syncevo-phone-config
+ 
+ SYNCEVOLUTION_DEP =
+@@ -72,7 +72,7 @@ src/synccompare : $(top_srcdir)/test/Alg
+ bin_SCRIPTS += src/synclog2html
+ CLEANFILES += src/synclog2html
+ src/synclog2html: $(top_srcdir)/test/log2html.py
+-	$(AM_V_GEN)cp $< $@ && chmod u+x $@
++	$(AM_V_GEN)sed -e 's|\@PYTHON\@|$(PYTHON)|' $< > $@ && chmod u+x $@
+ 
+ CORE_SOURCES =
+ 
+@@ -367,7 +367,7 @@ testcase2patch: $(TEST_FILES_GENERATED)
+ nodist_noinst_DATA += src/ClientTest.cpp.html
+ CLEANFILES += src/ClientTest.cpp.html
+ src/ClientTest.cpp.html: build/source2html.py test/ClientTest.cpp
+-	$(AM_V_GEN)python $+ >$@
++	$(AM_V_GEN)$(PYTHON) $+ >$@
+ 
+ # copy base test files
+ $(filter-out %.tem, $(filter src/testcases/%, $(subst $(top_srcdir)/test/,src/,$(CLIENT_LIB_TEST_FILES)))) : src/% : $(top_srcdir)/test/%
+diff -up syncevolution-1.5.3/test/log2html.py.python3 syncevolution-1.5.3/test/log2html.py
+--- syncevolution-1.5.3/test/log2html.py.python3	2014-04-25 09:55:47.000000000 +0200
++++ syncevolution-1.5.3/test/log2html.py	2019-05-21 17:35:12.463672604 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!@PYTHON@
+ 
+ """
+ Converts the .log output for a client-test test into HTML, with
+diff -up syncevolution-1.5.3/test/syncevo-http-server.py.python3 syncevolution-1.5.3/test/syncevo-http-server.py
+--- syncevolution-1.5.3/test/syncevo-http-server.py.python3	2016-09-26 13:20:05.000000000 +0200
++++ syncevolution-1.5.3/test/syncevo-http-server.py	2019-05-22 10:16:30.254545191 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python
++#!@PYTHON@
+ 
+ '''Usage: syncevo-http-server.py <URL>
+ Runs a SyncML HTTP server under the given base URL.'''
+@@ -10,9 +10,8 @@ DBusGMainLoop(set_as_default=True)
+ glib2reactor.install()
+ 
+ import dbus
+-import gobject
+ import sys
+-import urlparse
++import urllib.parse
+ import optparse
+ import os
+ import atexit
+@@ -138,7 +137,7 @@ class SyncMLSession:
+         if self.connection:
+             try:
+                 self.connection.Close(False, message, timeout=timeout)
+-            except dbus.exceptions.DBusException, ex:
++            except dbus.exceptions.DBusException as ex:
+                 if ex.get_dbus_name() == "org.freedesktop.DBus.Error.UnknownMethod":
+                     # triggered if connection instance is already gone, hide from user
+                     logger.debug("self.connection.Close() failed, connection probably already gone: %s", ex)
+@@ -329,7 +328,7 @@ class SyncMLPost(resource.Resource):
+             logger.info("new SyncML session for %s", request.getClientIP())
+             session = SyncMLSession()
+             session.start(request, config,
+-                          urlparse.urljoin(self.url.geturl(), request.path))
++                          urllib.parse.urljoin(self.url.geturl(), request.path))
+             return server.NOT_DONE_YET
+         else:
+             data = request.content.read()
+@@ -536,7 +535,7 @@ syncevo-http-server itself is installed"
+                             # use this X11 session to find D-Bus session bus
+                             os.environ["DISPLAY"] = dpy
+                             havedbus = True
+-            except dbus.exceptions.DBusException, ex:
++            except dbus.exceptions.DBusException as ex:
+                 if ex.get_dbus_name() == "org.freedesktop.DBus.Error.ServiceUnknown":
+                     logger.debug("org.freedesktop.ConsoleKit service not available")
+                 else:
+@@ -586,7 +585,7 @@ syncevo-http-server itself is installed"
+         logger.error("need exactly on URL as command line parameter")
+         exit(1)
+ 
+-    url = urlparse.urlparse(args[0])
++    url = urllib.parse.urlparse(args[0])
+     root = resource.Resource()
+     root.putChild(url.path[1:], SyncMLPost(url))
+     site = server.Site(root)
+diff -up syncevolution-1.5.3/test/syncevo-phone-config.py.python3 syncevolution-1.5.3/test/syncevo-phone-config.py
+--- syncevolution-1.5.3/test/syncevo-phone-config.py.python3	2014-04-25 09:55:48.000000000 +0200
++++ syncevolution-1.5.3/test/syncevo-phone-config.py	2019-05-21 17:35:12.463672604 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!@PYTHON@
+ #
+ # Copyright (C) 2010 Intel Corporation
+ #
+@@ -23,7 +23,7 @@ SyncEvolution.
+ '''
+ import sys, optparse, os, time, tempfile
+ import shutil
+-import ConfigParser
++import configparser
+ import glob
+ import os.path
+ 
+@@ -94,13 +94,13 @@ class ConfigurationParameter:
+         self.identifier = identifier
+ 
+     def printMe(self):
+-        print "Test parameter: "
+-        print "With CTCap:     %s" %(self.ctcap,)
+-        print "Identifier:     %s" %(self.identifier,)
+-        print "SyncML version: %s" %(self.version,)
+-        print "Sync Source:    %s" %(self.source,)
+-        print "URI:            %s" %(self.uri,)
+-        print "Content Type:   %s" %(self.type,)
++        print("Test parameter: ")
++        print("With CTCap:     %s" %(self.ctcap,))
++        print("Identifier:     %s" %(self.identifier,))
++        print("SyncML version: %s" %(self.version,))
++        print("Sync Source:    %s" %(self.source,))
++        print("URI:            %s" %(self.uri,))
++        print("Content Type:   %s" %(self.type,))
+ 
+     def __str__(self):
+         res = []
+@@ -249,10 +249,10 @@ def compareSyncData(sources, type):
+         except:
+             return False
+         if (options.verbose > 1):
+-            print "comparing received file:"
+-            print received
+-            print "with built in keywords in test case:"
+-            print keys
++            print("comparing received file:")
++            print(received)
++            print("with built in keywords in test case:")
++            print(keys)
+         for key in keys:
+             if (received.find(key) <0):
+                 return False
+@@ -262,7 +262,7 @@ def compareSyncData(sources, type):
+ def runCommand(cmd, exception = True):
+     """Log and run the given command, throwing an exception if it fails."""
+     if (options.verbose > 1):
+-        print "%s: %s" % (os.getcwd(), cmd)
++        print("%s: %s" % (os.getcwd(), cmd))
+     else:
+         cmd += ' >/dev/null'
+     sys.stdout.flush()
+@@ -298,7 +298,7 @@ def runSync(sync):
+             else:
+                 return self.fp.readline()
+ 
+-    ini = ConfigParser.ConfigParser({"status": "0", "error": ""})
++    ini = configparser.ConfigParser({"status": "0", "error": ""})
+     ini.readfp(IniFile(resultFile))
+     statuscode = ini.get("main", "status")
+     if statuscode == "20015":
+@@ -307,7 +307,7 @@ def runSync(sync):
+         interrupt = True
+     if statuscode == "22002":
+         # syncevolution failed (for example, kill -9), warn and abort
+-        print "\nSyncEvolution binary died prematurely, aborting testing."
++        print("\nSyncEvolution binary died prematurely, aborting testing.")
+         status = False
+         interrupt = True
+     return (status, interrupt)
+@@ -320,7 +320,7 @@ def rm_r(dirname):
+ def hash2ini(hash):
+     """convert key/value pairs into .ini file without sections"""
+     res = []
+-    for key, value in hash.items():
++    for key, value in list(hash.items()):
+         res.append("%s = %s" % (key, value))
+     return "\n".join(res)
+ 
+@@ -399,29 +399,29 @@ class TestingConfiguration():
+         # 3) we already found a working configuration for combined calendar and
+         # task, thus seperate testing for calendar and task is not needed.
+         skip = False
+-        for source, config in self.wConfigs.items():
++        for source, config in list(self.wConfigs.items()):
+             if (config):
+                 if ( (config.source == self.source) or (config.identifier != self.identifier ) or (config.ctcap != self.ctcap) or (config.version != self.version)):
+                     skip = True
+         if (skip):
+             if (options.verbose > 1):
+-                print "Test %d/%d skipped because already found a working configuration" % (curconfig, allconfigs)
++                print("Test %d/%d skipped because already found a working configuration" % (curconfig, allconfigs))
+             elif options.verbose > 0:
+-                print "Test %d/%d skipped" %(curconfig, allconfigs), \
+-                    ConfigurationParameter(self.version, self.source, self.uri, self.type, self.ctcap, self.identifier)
++                print("Test %d/%d skipped" %(curconfig, allconfigs), \
++                    ConfigurationParameter(self.version, self.source, self.uri, self.type, self.ctcap, self.identifier))
+             else:
+-                print "Test %d/%d skipped" %(curconfig, allconfigs)
++                print("Test %d/%d skipped" %(curconfig, allconfigs))
+         else:
+-            print ("Start %d/%d test" % (curconfig, allconfigs)),
++            print(("Start %d/%d test" % (curconfig, allconfigs)), end=' ')
+             if (options.verbose > 0):
+                 config = ConfigurationParameter(self.version, self.source, self.uri, self.type, self.ctcap, self.identifier)
+                 if (options.verbose > 1):
+-                    print
++                    print()
+                     config.printMe()
+                 else:
+-                    print config
++                    print(config)
+             else:
+-                print
++                print()
+ 
+         return skip
+ 
+@@ -526,7 +526,7 @@ class TestingConfiguration():
+                         for self.uri in self.uris[self.source]:
+                             for self.type in self.types[self.source]:
+                                 allconfigs +=1
+-        print "Starting test for %d configurations..." %(allconfigs,)
++        print("Starting test for %d configurations..." %(allconfigs,))
+ 
+         curconfig = 0
+         self.wConfigs = {}
+@@ -557,33 +557,33 @@ class TestingConfiguration():
+                                    (status, interrupt) = self.testWithCurrentConfiguration ()
+                                    if (status and not interrupt):
+                                        self.wConfigs[self.source] = ConfigurationParameter (self.version, self.source, self.uri, self.type, self.ctcap, self.identifier)
+-                                       print "Found a working configuration for %s" % (self.source,)
++                                       print("Found a working configuration for %s" % (self.source,))
+                                        if (options.verbose > 0):
+                                            self.wConfigs[self.source].printMe()
+                                if (interrupt):
+                                    break;
+         if(interrupt):
+-            print "Test Interrupted"
++            print("Test Interrupted")
+             return 1
+ 
+-        print "Test Ended"
++        print("Test Ended")
+ 
+         #Test finished, print summary and generating configurations
+-        print "****************SUMMARY****************"
++        print("****************SUMMARY****************")
+         found = False
+-        for source,config in self.wConfigs.items():
++        for source,config in list(self.wConfigs.items()):
+             if (config):
+                 found = True
+-                print "------------------------------------------"
+-                print "Configuration parameter for %s:" % (source,)
++                print("------------------------------------------")
++                print("Configuration parameter for %s:" % (source,))
+                 config.printMe()
+ 
+         if (not found):
+-            print "No working configuration found"
++            print("No working configuration found")
+         else:
+             have_combined = \
+-                self.wConfigs.has_key('calendar') and \
+-                self.wConfigs.has_key('todo') and \
++                'calendar' in self.wConfigs and \
++                'todo' in self.wConfigs and \
+                 self.wConfigs['calendar'] and \
+                 self.wConfigs['todo'] and \
+                 self.wConfigs['calendar'].uri == self.wConfigs['todo'].uri
+@@ -606,7 +606,7 @@ class TestingConfiguration():
+                     runCommand(cmd)
+ 
+                 syncCreated = False
+-                for source,config in self.wConfigs.items():
++                for source,config in list(self.wConfigs.items()):
+                     if (config):
+                         if (not syncCreated):
+                             #set the sync parameter
+@@ -628,17 +628,17 @@ class TestingConfiguration():
+ 
+ 
+             if (options.advanced):
+-                print ""
+-                print "We have conducted basic test by sending and receiving"
+-                print "data to the phone. You can help the SyncEvolution project"
+-                print "and other users by submitting the following configuration"
+-                print "template at http://syncevolution.org/wiki/phone-compatibility-template"
+-                print ""
++                print("")
++                print("We have conducted basic test by sending and receiving")
++                print("data to the phone. You can help the SyncEvolution project")
++                print("and other users by submitting the following configuration")
++                print("template at http://syncevolution.org/wiki/phone-compatibility-template")
++                print("")
+ 
+                 configini = { "peerIsClient": "1" }
+                 sourceConfigInis = {}
+ 
+-                for source,config in self.wConfigs.items():
++                for source,config in list(self.wConfigs.items()):
+                     if(config):
+                         sourceini = {}
+                         if (config.identifier):
+@@ -667,27 +667,27 @@ class TestingConfiguration():
+ 
+                 # print template to stdout
+                 sep = "--------------------> snip <--------------------"
+-                print sep
+-                print "=== template.ini ==="
+-                print "fingerprint = <Model> <Manufacturer>"
+-                print "=== config.ini ==="
+-                print hash2ini(configini)
+-                print "consumerReady = 1"
+-                for source, configini in sourceConfigInis.items():
+-                    print "=== sources/%s/config.ini ===" % source
+-                    print hash2ini(configini)
+-                print sep
++                print(sep)
++                print("=== template.ini ===")
++                print("fingerprint = <Model> <Manufacturer>")
++                print("=== config.ini ===")
++                print(hash2ini(configini))
++                print("consumerReady = 1")
++                for source, configini in list(sourceConfigInis.items()):
++                    print("=== sources/%s/config.ini ===" % source)
++                    print(hash2ini(configini))
++                print(sep)
+             else:
+-                print ""
+-                print "We just conducted minimum test by syncing with the phone"
+-                print "without checking received data. For more reliable result,"
+-                print "use the --advanced option, but beware that it will overwrite"
+-                print "contacts, events, tasks and memos on the phone."
++                print("")
++                print("We just conducted minimum test by syncing with the phone")
++                print("without checking received data. For more reliable result,")
++                print("use the --advanced option, but beware that it will overwrite")
++                print("contacts, events, tasks and memos on the phone.")
+ 
+             if (options.create):
+-                print ""
+-                print "Created configuration: %s" %(options.create)
+-                print "You may start syncing with: syncevolution %s" %(options.create)
++                print("")
++                print("Created configuration: %s" %(options.create))
++                print("You may start syncing with: syncevolution %s" %(options.create))
+ 
+ def main():
+     versions = []
+@@ -721,7 +721,7 @@ def main():
+     testFolder = tmpdir+'/data'
+     testResult = tmpdir+'/cache'
+     testConfig = tmpdir+'/config'
+-    print "Running test with test data inside %s and test results inside %s" %(testFolder, testResult)
++    print("Running test with test data inside %s and test results inside %s" %(testFolder, testResult))
+     config.run()
+ 
+ if __name__ == "__main__":
