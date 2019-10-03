@@ -1,0 +1,379 @@
+diff -Nur orig/configure mod/configure
+--- orig/configure	2016-12-04 19:54:11.000000000 +0100
++++ mod/configure	2019-10-03 21:45:45.957895922 +0200
+@@ -1129,7 +1129,7 @@
+ 		if [ "$libc" = "" ] ; then
+ 			libc_sysroot=`"${CC-gcc}" -v 2>&1 | sed -n '/with-libc_sysroot/{s/^.*--with-libc_sysroot=//;s/ .*//;p;q;}'`	# Only results in non-empty with a GCC cross-compiler
+ 
+-			libc_file=`/bin/ls -1 -t "${libc_sysroot}"/lib/libc.so.* 2>/dev/null | sed -n 1,1p`
++			libc_file=`ls -1 -t "${libc_sysroot}"/lib/libc.so.* 2>/dev/null | sed -n 1,1p`
+ 			if [ "$libc_file" != "" ] ; then
+ 				libc_file=`echo "$libc_file" | sed 's|^.*/||'`
+ 				libc_file="$libc_sysroot/lib/$libc_file"
+@@ -2037,7 +2037,7 @@
+ EOF
+ 	${CC-cc} $CFLAGS $CPPFLAGS conftest.c -o conftest 1>&5
+ 	wi_cv_prog_ldd=`ldd ./conftest 2>&1 | sed -n -e '/lib/{s/.*/yes/g;p;q;}' -e '${s/.*/no/g;p;q;}'`
+-	/bin/rm -rf conftest*
++	rm -rf conftest*
+ 
+ fi
+ 
+@@ -2108,7 +2108,7 @@
+ EOF
+ 		${CC-cc} $CFLAGS $CPPFLAGS conftest.c -o conftest 1>&5
+ 		wi_cv_shared_libgcc=`ldd ./conftest 2>&1 | sed -n -e '/libgcc/{s/.*/yes/g;p;q;}' -e '${s/.*/no/g;p;q;}'`
+-		/bin/rm -rf conftest*
++		rm -rf conftest*
+ 	fi
+ 
+ fi
+@@ -3201,7 +3201,7 @@
+ EOF
+ 	${CC-cc} $CFLAGS $CPPFLAGS conftest.c -o conftest 1>&5
+ 	wi_cv_prog_ldd=`ldd ./conftest 2>&1 | sed -n -e '/lib/{s/.*/yes/g;p;q;}' -e '${s/.*/no/g;p;q;}'`
+-	/bin/rm -rf conftest*
++	rm -rf conftest*
+ 
+ fi
+ 
+@@ -3272,7 +3272,7 @@
+ EOF
+ 		${CC-cc} $CFLAGS $CPPFLAGS conftest.c -o conftest 1>&5
+ 		wi_cv_shared_libgcc=`ldd ./conftest 2>&1 | sed -n -e '/libgcc/{s/.*/yes/g;p;q;}' -e '${s/.*/no/g;p;q;}'`
+-		/bin/rm -rf conftest*
++		rm -rf conftest*
+ 	fi
+ 
+ fi
+@@ -4372,7 +4372,7 @@
+ echo "configure:4373: checking if MACOSX_DEPLOYMENT_TARGET environment variable is set" >&5
+ 	echo "$ac_t""${MACOSX_DEPLOYMENT_TARGET-no}" 1>&6
+ 
+-	test_macosx_sdk_path=`/bin/ls -1d /Developer/SDKs/MacOSX10.*u.sdk 2>/dev/null | sed -n 1,1p`
++	test_macosx_sdk_path=`ls -1d /Developer/SDKs/MacOSX10.*u.sdk 2>/dev/null | sed -n 1,1p`
+ 	if test "${test_macosx_sdk_path}" = "" ; then
+ 		test_macosx_sdk_path="no"
+ 	fi
+@@ -4765,7 +4765,7 @@
+ fi
+ 
+ if test $ac_cv_header_stdc = yes; then
+-  # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
++  # cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
+ if test "$cross_compiling" = yes; then
+   :
+ else
+@@ -8934,7 +8934,7 @@
+ 
+ 
+ if test "${SYS}" = sunos ; then
+-	# Use getwd on SunOS -- getcwd does a "popen("/bin/pwd")" -- aaaccck.
++	# Use getwd on SunOS -- getcwd does a "popen("pwd")" -- aaaccck.
+ 	#
+ 	for ac_func in getwd
+ do
+@@ -12100,7 +12100,7 @@
+ 		if cmp -s "$h_file" "$h_tmp" ; then
+ 			:
+ 		else
+-			/bin/mv "$h_tmp" "$h_file"
++			mv "$h_tmp" "$h_file"
+ 			chmod a+r "$h_file"
+ 		fi
+ 	fi
+@@ -12109,11 +12109,11 @@
+ 			datestr=`date '+%Y-%m-%d %H:%M:%S'`
+ 			sed '/^#define longest_u?int/{s!$!    /* set by configure at '"${datestr}"' */!;}' "$h_tmp" > "$h_file"
+ 			unset datestr
+-			/bin/rm -f "$h_tmp"
++			rm -f "$h_tmp"
+ 			chmod a+r "$h_file"
+ 		fi
+ 	fi
+-	/bin/rm -f "$h_tmp"
++	rm -f "$h_tmp"
+ 	unset h_tmp longest_int_subst
+ fi
+ unset h_file
+@@ -12128,7 +12128,7 @@
+ 		if cmp -s "$h_file" "$h_tmp" ; then
+ 			:
+ 		else
+-			/bin/mv "$h_tmp" "$h_file"
++			mv "$h_tmp" "$h_file"
+ 			chmod a+r "$h_file"
+ 		fi
+ 	fi
+@@ -12140,7 +12140,7 @@
+ 				datestr=`date '+%Y-%m-%d %H:%M:%S'`
+ 				sed '/^#define [SLFs]*tat /{s!$!    /* set by configure at '"${datestr}"' */!;}' "$h_tmp" > "$h_file"
+ 				unset datestr
+-				/bin/rm -f "$h_tmp"
++				rm -f "$h_tmp"
+ 				chmod a+r "$h_file"
+ 			fi
+ 		fi
+@@ -12152,12 +12152,12 @@
+ 				datestr=`date '+%Y-%m-%d %H:%M:%S'`
+ 				sed '/^#define [SLFs]*tat /{s!$!    /* set by configure at '"${datestr}"' */!;}' "$h_tmp" > "$h_file"
+ 				unset datestr
+-				/bin/rm -f "$h_tmp"
++				rm -f "$h_tmp"
+ 				chmod a+r "$h_file"
+ 			fi
+ 		fi
+ 	fi
+-	/bin/rm -f "$h_tmp"
++	rm -f "$h_tmp"
+ 	unset h_tmp longest_int_subst
+ fi
+ unset h_file
+@@ -12560,7 +12560,7 @@
+ #
+ # Also take the opportunity to do some post-configure clean-up
+ #
+-/bin/rm -rf "conftest.dSYM" "a.out"
++rm -rf "conftest.dSYM" "a.out"
+ 
+ 
+ 
+@@ -12970,7 +12970,7 @@
+ 
+ EOF
+ cat >> $CONFIG_STATUS <<\EOF
+-/bin/rm -f ./ncftp/readln.o
++rm -f ./ncftp/readln.o
+ 
+ exit 0
+ EOF
+diff -Nur orig/libncftp/Makefile.in mod/libncftp/Makefile.in
+--- orig/libncftp/Makefile.in	2016-08-13 21:06:14.000000000 +0200
++++ mod/libncftp/Makefile.in	2019-10-03 21:57:38.480894191 +0200
+@@ -20,12 +20,12 @@
+ CPPFLAGS=@CPPFLAGS@
+ LDFLAGS=@LDFLAGS@
+ 
+-DELETE=/bin/rm -rf
+-COPY=/bin/cp -pr
+-LIST=/bin/ls -l
++DELETE=rm -rf
++COPY=cp -pr
++LIST=ls -l
+ MKDIR=mkdir -m 755 -p
+-SYMLINK=/bin/ln -s
+-HARDLINK=/bin/ln
++SYMLINK=ln -s
++HARDLINK=ln
+ 
+ LIB=libncftp.a
+ LIBSO=libncftp.so.3
+diff -Nur orig/Makefile.bin.in mod/Makefile.bin.in
+--- orig/Makefile.bin.in	2001-10-25 23:46:50.000000000 +0200
++++ mod/Makefile.bin.in	2019-10-03 21:53:36.897234459 +0200
+@@ -15,23 +15,23 @@
+ 	-@echo '..... Installing the programs .....'
+ 	-mkdir $(prefix)/bin $(mandir) $(mandir)/man1 2>/dev/null
+ 	-for f in ncftp ncftpget ncftpput ncftpbatch ncftpspooler ncftpls ; do \
+-		/bin/rm -f $(prefix)/bin/$$f ; \
++		rm -f $(prefix)/bin/$$f ; \
+ 		cp bin/$$f $(prefix)/bin/$$f ; \
+ 		chmod 755 $(prefix)/bin/$$f ; \
+ 		chown bin $(prefix)/bin/$$f 2>/dev/null ; \
+ 		chgrp bin $(prefix)/bin/$$f 2>/dev/null ; \
+ 		: ; \
+ 	done
+-	-@/bin/rm -f $(prefix)/bin/ncftpspooler
++	-@rm -f $(prefix)/bin/ncftpspooler
+ 	-ln $(prefix)/bin/ncftpbatch $(prefix)/bin/ncftpspooler
+ 	-@cp bin/ncftpbookmarks $(prefix)/bin/ncftpbookmarks 2>/dev/null
+ 	-@chmod 755 $(prefix)/bin/ncftpbookmarks 2>/dev/null
+ 	-@chown bin $(prefix)/bin/ncftpbookmarks 2>/dev/null
+ 	-@chgrp bin $(prefix)/bin/ncftpbookmarks 2>/dev/null
+-	-@/bin/ls -l $(prefix)/bin/ncftp $(prefix)/bin/ncftpget $(prefix)/bin/ncftpput $(prefix)/bin/ncftpbatch $(prefix)/bin/ncftpspooler $(prefix)/bin/ncftpls $(prefix)/bin/ncftpbookmarks
++	-@ls -l $(prefix)/bin/ncftp $(prefix)/bin/ncftpget $(prefix)/bin/ncftpput $(prefix)/bin/ncftpbatch $(prefix)/bin/ncftpspooler $(prefix)/bin/ncftpls $(prefix)/bin/ncftpbookmarks
+ 	-@echo '..... Installing the manual pages .....'
+ 	for f in ncftp.1 ncftpget.1 ncftpput.1 ncftpbatch.1 ncftpspooler.1  ncftpls.1 ; do \
+-		/bin/rm -f $(mandir)/man1/$$f ; \
++		rm -f $(mandir)/man1/$$f ; \
+ 		cp doc/man/$$f $(mandir)/man1/$$f ; \
+ 		chmod 644 $(mandir)/man1/$$f ; \
+ 	done
+diff -Nur orig/Makefile.in mod/Makefile.in
+--- orig/Makefile.in	2016-08-14 04:16:09.000000000 +0200
++++ mod/Makefile.in	2019-10-03 21:47:52.893717598 +0200
+@@ -23,7 +23,7 @@
+ SHELL=/bin/sh
+ 
+ all: progs
+-	-@/bin/ls -l bin
++	-@ls -l bin
+ 	-@echo 'Done.'
+ 	-@echo
+ 	-@echo '** Please report any problems to http://www.NcFTP.com/contact/ **'
+@@ -51,7 +51,7 @@
+ 	$(INSTALL_PROGRAM) bin/ncftpput@EXEEXT@ "$(DESTDIR)$(BINDIR)/ncftpput@EXEEXT@"
+ 	$(INSTALL_PROGRAM) bin/ncftpls@EXEEXT@ "$(DESTDIR)$(BINDIR)/ncftpls@EXEEXT@"
+ 	$(INSTALL_PROGRAM) bin/ncftpbatch@EXEEXT@ "$(DESTDIR)$(BINDIR)/ncftpbatch@EXEEXT@"
+-	-@test -f "$(DESTDIR)$(BINDIR)/ncftpspooler@EXEEXT@" && echo /bin/rm "$(DESTDIR)$(BINDIR)/ncftpspooler@EXEEXT@" && /bin/rm "$(DESTDIR)$(BINDIR)/ncftpspooler@EXEEXT@"
++	-@test -f "$(DESTDIR)$(BINDIR)/ncftpspooler@EXEEXT@" && echo rm "$(DESTDIR)$(BINDIR)/ncftpspooler@EXEEXT@" && rm "$(DESTDIR)$(BINDIR)/ncftpspooler@EXEEXT@"
+ 	ln "$(DESTDIR)$(BINDIR)/ncftpbatch@EXEEXT@" "$(DESTDIR)$(BINDIR)/ncftpspooler@EXEEXT@"
+ #
+ # The visual programs are only built if a working Curses was found.
+@@ -65,11 +65,11 @@
+ 	$(INSTALL_DATA) doc/man/ncftpspooler.1 "$(DESTDIR)$(mandir)/man1/ncftpspooler.1"
+ 	$(INSTALL_DATA) doc/man/ncftpls.1 "$(DESTDIR)$(mandir)/man1/ncftpls.1"
+ 	-@echo '..... Finishing up .....'
+-	-@( cd "$(DESTDIR)$(BINDIR)" ; echo ""; echo "$(DESTDIR)$(BINDIR):" ; /bin/ls -l "ncftp@EXEEXT@" "ncftpget@EXEEXT@" "ncftpput@EXEEXT@" "ncftpls@EXEEXT@" "ncftpbatch@EXEEXT@" "ncftpspooler@EXEEXT@" "ncftpbookmarks@EXEEXT@" 2>/dev/null | sed 's/^/  /;' ; echo "" )
++	-@( cd "$(DESTDIR)$(BINDIR)" ; echo ""; echo "$(DESTDIR)$(BINDIR):" ; ls -l "ncftp@EXEEXT@" "ncftpget@EXEEXT@" "ncftpput@EXEEXT@" "ncftpls@EXEEXT@" "ncftpbatch@EXEEXT@" "ncftpspooler@EXEEXT@" "ncftpbookmarks@EXEEXT@" 2>/dev/null | sed 's/^/  /;' ; echo "" )
+ 	-@echo 'Done installing NcFTP.'
+ 
+ clean:
+-	/bin/rm -rf ncftp_all.ncb ncftp_all.opt ncftp_all.plg *.pch SunWS_cache
++	rm -rf ncftp_all.ncb ncftp_all.opt ncftp_all.plg *.pch SunWS_cache
+ 	@( cd ./Strn ; $(MAKE) clean )
+ 	@( cd ./sio ; $(MAKE) clean )
+ 	@( cd ./libncftp ; $(MAKE) clean )
+@@ -78,8 +78,8 @@
+ 	@( cd ./vis ; $(MAKE) clean )
+ 
+ distclean: clean
+-	/bin/rm -f config.cache config.h config.log config.status libncftp/Makefile libncftp/config.h ncftp/Makefile sh_util/Makefile vis/Makefile Makefile.bin Strn/Makefile Strn/config.h Strn/Strn.version sio/Makefile sio/config.h sio/sio.version Makefile ccdv
+-	/bin/rm -rf bin
++	rm -f config.cache config.h config.log config.status libncftp/Makefile libncftp/config.h ncftp/Makefile sh_util/Makefile vis/Makefile Makefile.bin Strn/Makefile Strn/config.h Strn/Strn.version sio/Makefile sio/config.h sio/sio.version Makefile ccdv
++	rm -rf bin
+ 	@echo "Warning: configure may have automatically patched libncftp/ncftp.h"
+ 
+ TMPDIR=/tmp
+@@ -109,17 +109,17 @@
+ 	-@cp -p $(TMPDIR)/TAR/$(DTARFILE) .
+ 	-@chmod 644 $(DTARFILE)
+ 	-@rm -rf $(TMPDIR)/TAR
+-	-@/bin/ls -l $(DTARFILE)
++	-@ls -l $(DTARFILE)
+ 
+ dgz: dtar
+ 	gzip $(DTARFILE)
+ 	-@chmod 644 $(DTGZFILE)
+-	-@/bin/ls -l $(DTGZFILE)
++	-@ls -l $(DTGZFILE)
+ 
+ dbz: dtar
+ 	bzip2 $(DTARFILE)
+ 	-@chmod 644 $(DTBZFILE)
+-	-@/bin/ls -l $(DTBZFILE)
++	-@ls -l $(DTBZFILE)
+ 
+ sgz gz:
+ 	./sh/mksrctar.sh $(TARDIR) $(STGZFILE) '@TAR@' '@TARFLAGS@'
+diff -Nur orig/ncftp/cmds.c mod/ncftp/cmds.c
+--- orig/ncftp/cmds.c	2016-11-13 01:07:27.000000000 +0100
++++ mod/ncftp/cmds.c	2019-10-03 22:01:57.596524445 +0200
+@@ -2005,7 +2005,7 @@
+ 	(void) fflush(stdin);
+ 	outfp = OpenPager();
+ 
+-	(void) STRNCPY(incmd, "/bin/ls");
++	(void) STRNCPY(incmd, "ls");
+ 	for (i=1, dashopts=0; i<argc; i++) {
+ 		(void) STRNCAT(incmd, " ");
+ 		if (argv[i][0] == '-')
+@@ -2014,7 +2014,7 @@
+ 	}
+ 
+ 	if (dashopts == 0) {
+-		(void) STRNCPY(incmd, "/bin/ls -CF");
++		(void) STRNCPY(incmd, "ls -CF");
+ 		for (i=1; i<argc; i++) {
+ 			(void) STRNCAT(incmd, " ");
+ 			(void) STRNCAT(incmd, argv[i]);
+@@ -2109,7 +2109,7 @@
+ LocalChmodCmd(const int argc, char **const argv, const CommandPtr cmdp, const ArgvInfoPtr aip)
+ {
+ 	ARGSUSED(gUnusedArg);
+-	Sys(argc, argv, aip, "/bin/chmod", 1);
++	Sys(argc, argv, aip, "chmod", 1);
+ }	/* LocalChmodCmd */
+ #endif
+ 
+@@ -2130,7 +2130,7 @@
+ 	}
+ #else
+ 	ARGSUSED(gUnusedArg);
+-	Sys(argc, argv, aip, "/bin/mkdir", 0);
++	Sys(argc, argv, aip, "mkdir", 0);
+ #endif
+ }	/* LocalMkdirCmd */
+ 
+@@ -2159,7 +2159,7 @@
+ 	}
+ #else
+ 	ARGSUSED(gUnusedArg);
+-	Sys(argc, argv, aip, "/bin/mv", 1);
++	Sys(argc, argv, aip, "mv", 1);
+ #endif
+ }	/* LocalRenameCmd */
+ 
+@@ -2193,7 +2193,7 @@
+ 	}
+ #else
+ 	ARGSUSED(gUnusedArg);
+-	Sys(argc, argv, aip, "/bin/rm", 1);
++	Sys(argc, argv, aip, "rm", 1);
+ #endif
+ }	/* LocalRmCmd */
+ 
+@@ -2227,7 +2227,7 @@
+ 	}
+ #else
+ 	ARGSUSED(gUnusedArg);
+-	Sys(argc, argv, aip, "/bin/rmdir", 1);
++	Sys(argc, argv, aip, "rmdir", 1);
+ #endif
+ }	/* LocalRmdirCmd */
+ 
+diff -Nur orig/ncftp/Makefile.in mod/ncftp/Makefile.in
+--- orig/ncftp/Makefile.in	2006-01-05 09:26:01.000000000 +0100
++++ mod/ncftp/Makefile.in	2019-10-03 21:59:53.152701989 +0200
+@@ -36,7 +36,7 @@
+ 	-@$(STRIP) ../bin/ncftp@EXEEXT@
+ 
+ clean:
+-	/bin/rm -rf $(DPROGS) *.@OBJEXT@ core *.pch SunWS_cache
++	rm -rf $(DPROGS) *.@OBJEXT@ core *.pch SunWS_cache
+ 
+ SHELL=/bin/sh
+ .SUFFIXES: .c .@OBJEXT@
+diff -Nur orig/sh_util/Makefile.in mod/sh_util/Makefile.in
+--- orig/sh_util/Makefile.in	2010-04-05 23:39:00.000000000 +0200
++++ mod/sh_util/Makefile.in	2019-10-03 22:03:58.528351976 +0200
+@@ -67,7 +67,7 @@
+ 	@CCDV@$(CC) $(CFLAGS) $(DEFS) $(CPPFLAGS) ../ncftp/version.c -c
+ 
+ clean:
+-	/bin/rm -rf $(DPROGS) ../bin/ncftpspooler@EXEEXT@ *.@OBJEXT@ core *.pch SunWS_cache
++	rm -rf $(DPROGS) ../bin/ncftpspooler@EXEEXT@ *.@OBJEXT@ core *.pch SunWS_cache
+ 
+ PACKAGE=Makefile.in   gpshare.c     gpshare.h	  ncftpbatch.c \
+ 	ncftpget.c    ncftpput.c    syshdrs.h	  ncftpls.c
+diff -Nur orig/sio/Makefile.in mod/sio/Makefile.in
+--- orig/sio/Makefile.in	2016-11-15 00:17:43.000000000 +0100
++++ mod/sio/Makefile.in	2019-10-03 22:05:39.924207424 +0200
+@@ -22,12 +22,12 @@
+ MAKE=@MAKE@
+ CCDV=@CCDV@
+ 
+-DELETE=/bin/rm -rf
+-COPY=/bin/cp -pr
+-LIST=/bin/ls -l
++DELETE=rm -rf
++COPY=cp -pr
++LIST=ls -l
+ MKDIR=mkdir -m 755 -p
+-SYMLINK=/bin/ln -s
+-HARDLINK=/bin/ln
++SYMLINK=ln -s
++HARDLINK=ln
+ 
+ OBJS_U=\
+ 	UAccept.o  UBind.o	UConnectByName.o  UConnect.o \
