@@ -1,57 +1,64 @@
 diff -Nur orig/thirdparty/fetch-geoip-db.sh mod/thirdparty/fetch-geoip-db.sh
---- orig/thirdparty/fetch-geoip-db.sh	2017-10-30 17:35:18.000000000 +0100
-+++ mod/thirdparty/fetch-geoip-db.sh	2017-10-30 18:56:54.121517300 +0100
-@@ -13,6 +13,7 @@
+--- orig/thirdparty/fetch-geoip-db.sh	2019-03-14 20:32:26.000000000 +0100
++++ mod/thirdparty/fetch-geoip-db.sh	2019-10-03 15:27:47.778519521 +0200
+@@ -13,10 +13,5 @@
  if [ ! -e $filename ] || [ -n "$(find . -name $filename -mtime +30 -print)" ]; then
  	rm -f $filename
  	echo "Updating GeoIP country database from MaxMind."
--	curl -s -L -O http://geolite.maxmind.com/download/geoip/database/$filename
+-	if command -v curl >/dev/null 2>&1; then
+-		curl -s -L -O http://geolite.maxmind.com/download/geoip/database/$filename
+-	else
+-		wget -cq http://geolite.maxmind.com/download/geoip/database/$filename
+-	fi
 +    mv ../../$filename .
-+#	curl -s -L -O http://geolite.maxmind.com/download/geoip/database/$filename
  fi
- 
+-
 diff -Nur orig/thirdparty/fetch-thirdparty-deps.sh mod/thirdparty/fetch-thirdparty-deps.sh
---- orig/thirdparty/fetch-thirdparty-deps.sh	2017-10-30 17:35:18.000000000 +0100
-+++ mod/thirdparty/fetch-thirdparty-deps.sh	2017-10-30 18:53:21.973874807 +0100
-@@ -81,19 +81,22 @@
+--- orig/thirdparty/fetch-thirdparty-deps.sh	2019-03-14 20:32:26.000000000 +0100
++++ mod/thirdparty/fetch-thirdparty-deps.sh	2019-10-03 15:29:57.974325741 +0200
+@@ -81,33 +81,17 @@
  
- if [ ! -f SDL2-CS.dll -o ! -f SDL2-CS.dll.config ]; then
+ if [ ! -f SDL2-CS.dll ] || [ ! -f SDL2-CS.dll.config ]; then
  	echo "Fetching SDL2-CS from GitHub."
--	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll
--	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll.config
+-	if command -v curl >/dev/null 2>&1; then
+-		curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll
+-		curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll.config
+-	else
+-		wget -cq https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll
+-		wget -cq https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll.config
+-	fi
 +	mv ../../SDL2-CS* .
-+#	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll
-+#	curl -s -L -O https://github.com/OpenRA/SDL2-CS/releases/download/20161223/SDL2-CS.dll.config
  fi
  
- if [ ! -f OpenAL-CS.dll -o ! -f OpenAL-CS.dll.config ]; then
+ if [ ! -f OpenAL-CS.dll ] || [ ! -f OpenAL-CS.dll.config ]; then
  	echo "Fetching OpenAL-CS from GitHub."
--	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll
--	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll.config
+-	if command -v curl >/dev/null 2>&1; then
+-		curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll
+-		curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll.config
+-	else
+-		wget -cq https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll
+-		wget -cq https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll.config
+-	fi
 +	mv ../../OpenAL-CS* .
-+#	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll
-+#	curl -s -L -O https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/OpenAL-CS.dll.config
  fi
  
  if [ ! -f Eluant.dll ]; then
  	echo "Fetching Eluant from GitHub."
--	curl -s -L -O https://github.com/OpenRA/Eluant/releases/download/20160124/Eluant.dll
+-	if command -v curl >/dev/null 2>&1; then
+-		curl -s -L -O https://github.com/OpenRA/Eluant/releases/download/20160124/Eluant.dll
+-	else
+-		wget -cq https://github.com/OpenRA/Eluant/releases/download/20160124/Eluant.dll
+-	fi
 +	mv ../../Eluant.dll .
-+#	curl -s -L -O https://github.com/OpenRA/Eluant/releases/download/20160124/Eluant.dll
  fi
  
- if [ ! -f SmarIrc4net.dll ]; then
+ if [ ! -f rix0rrr.BeaconLib.dll ]; then
 diff -Nur orig/thirdparty/noget.sh mod/thirdparty/noget.sh
---- orig/thirdparty/noget.sh	2017-10-30 17:35:18.000000000 +0100
-+++ mod/thirdparty/noget.sh	2017-10-30 18:36:15.647595911 +0100
-@@ -8,6 +8,7 @@
- 
- archive="$1"
- version="$2"
--curl -o "$archive.zip" -Ls https://nuget.org/api/v2/package/"$archive"/"$version"
-+#curl -o "$archive.zip" -Ls https://nuget.org/api/v2/package/"$archive"/"$version"
+--- orig/thirdparty/noget.sh	2019-03-14 20:32:26.000000000 +0100
++++ mod/thirdparty/noget.sh	2019-10-03 15:31:38.098173351 +0200
+@@ -16,4 +16,5 @@
+ 	wget -cq https://nuget.org/api/v2/package/"$archive"/"$version" -O "$archive.zip"
+ fi
  mkdir -p "$archive"
--unzip -o -qq "$archive.zip" -d "$archive" && rm "$archive.zip"
-\ Nincs új sor a fájl végén
 +mv ../../"$archive".zip ./
-+unzip -o -qq "$archive.zip" -d "$archive" && rm "$archive.zip"
+ unzip -o -qq "$archive.zip" -d "$archive" && rm "$archive.zip"
