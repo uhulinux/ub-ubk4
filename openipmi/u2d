@@ -1,1 +1,2 @@
-urllist http://ftp.debian.org/debian/pool/main/o/openipmi/ | splitver 'openipmi_([0-9.]+).orig.tar.gz$' | sort -V | tail -1
+
+geturl https://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/ | grep tar | sed s/.*OpenIPMI-//g | sed s/\.tar.*//g | sort -V | tail -n 1

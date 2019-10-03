@@ -1,0 +1,10 @@
+diff -Nur orig/OpenIPMIpthread.pc.in mod/OpenIPMIpthread.pc.in
+--- orig/OpenIPMIpthread.pc.in	2017-08-18 23:11:24.000000000 +0200
++++ mod/OpenIPMIpthread.pc.in	2019-10-03 20:22:46.504727857 +0200
+@@ -7,5 +7,5 @@
+ Description: Pthread OS handler for OpenIPMI
+ Version: @VERSION@
+ Requires: OpenIPMI
+-Libs: -L${libdir} -lOpenIPMIutils -lOpenIPMIpthread
++Libs: -L${libdir} -lOpenIPMIutils -lOpenIPMIpthread -lpthread
+ Cflags: -I${includedir} -pthread
