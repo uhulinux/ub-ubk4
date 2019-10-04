@@ -1,0 +1,30 @@
+diff -Nur orig/src/mkinclud.mak mod/src/mkinclud.mak
+--- orig/src/mkinclud.mak	2015-03-19 00:00:00.000000000 +0100
++++ mod/src/mkinclud.mak	2019-10-04 21:13:22.100861065 +0200
+@@ -474,7 +474,7 @@
+ mnemodoc:	$(DOC)/mnemodoc.html
+ $(DOC)/mnemodoc.html:	mnemos.sup $(DOC)/mined.html mkmnemodoc
+ 	CC=$(CC) $(SH) ./mkmnemodoc > $(DOC)/mnemodoc.html.new
+-	/bin/mv $(DOC)/mnemodoc.html.new $(DOC)/mnemodoc.html
++	mv $(DOC)/mnemodoc.html.new $(DOC)/mnemodoc.html
+ 	$(SH) ./mkmnemocheck
+ 
+ 
+@@ -678,7 +678,7 @@
+ 	$(makelinks) linkdir=$(DESTDIR)$(bindir)
+ 	# ==== install runtime support library
+ 	mkdir -p $(DESTDIR)$(rundir)
+-	/bin/cp -pr ../usrshare/* $(DESTDIR)$(rundir)
++	cp -pr ../usrshare/* $(DESTDIR)$(rundir)
+ 	rm -fr $(DESTDIR)$(rundir)/doc_user/fonts
+ 	# ==== install manual page
+ 	mkdir -p $(DESTDIR)$(mandir)/man1
+@@ -786,7 +786,7 @@
+ tags:	*.c *.h
+ 	ctags -w *.c *.h
+ 	cat tags | grep -a -v 'v.......\.c' > tags1
+-	/bin/mv tags1 tags
++	mv tags1 tags
+ 
+ # generated doc files (targets also included in main release target):
+ doc:	mnemodoc quotesdoc
