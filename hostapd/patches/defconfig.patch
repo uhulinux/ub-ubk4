@@ -1,6 +1,6 @@
-diff -Naur hostapd-2.7-orig/hostapd/defconfig hostapd-2.7/hostapd/defconfig
---- hostapd-2.7-orig/hostapd/defconfig	2018-12-02 20:34:59.000000000 +0100
-+++ hostapd-2.7/hostapd/defconfig	2019-01-16 18:10:02.824956252 +0100
+diff -Naur hostapd-2.9-orig/hostapd/defconfig hostapd-2.9/hostapd/defconfig
+--- hostapd-2.9-orig/hostapd/defconfig	2019-08-07 15:25:25.000000000 +0200
++++ hostapd-2.9/hostapd/defconfig	2019-10-04 19:06:09.359899169 +0200
 @@ -13,7 +13,7 @@
  CONFIG_DRIVER_HOSTAP=y
  
@@ -10,7 +10,7 @@ diff -Naur hostapd-2.7-orig/hostapd/defconfig hostapd-2.7/hostapd/defconfig
  
  # Driver interface for drivers using the nl80211 kernel interface
  CONFIG_DRIVER_NL80211=y
-@@ -78,50 +78,50 @@
+@@ -81,34 +81,34 @@
  CONFIG_EAP_TTLS=y
  
  # EAP-SIM for the integrated EAP server
@@ -48,11 +48,13 @@ diff -Naur hostapd-2.7-orig/hostapd/defconfig hostapd-2.7/hostapd/defconfig
 +CONFIG_EAP_GPSK_SHA256=y
  
  # EAP-FAST for the integrated EAP server
- # Note: If OpenSSL is used as the TLS library, OpenSSL 1.0 or newer is needed
- # for EAP-FAST support. Older OpenSSL releases would need to be patched, e.g.,
- # with openssl-0.9.8x-tls-extensions.patch, to add the needed functions.
 -#CONFIG_EAP_FAST=y
 +CONFIG_EAP_FAST=y
+ 
+ # EAP-TEAP for the integrated EAP server
+ # Note: The current EAP-TEAP implementation is experimental and should not be
+@@ -121,17 +121,17 @@
+ #CONFIG_EAP_TEAP=y
  
  # Wi-Fi Protected Setup (WPS)
 -#CONFIG_WPS=y
@@ -74,7 +76,7 @@ diff -Naur hostapd-2.7-orig/hostapd/defconfig hostapd-2.7/hostapd/defconfig
  
  # EAP-EKE for the integrated EAP server
  #CONFIG_EAP_EKE=y
-@@ -132,20 +132,20 @@
+@@ -142,20 +142,20 @@
  
  # RADIUS authentication server. This provides access to the integrated EAP
  # server from external hosts using RADIUS.
