@@ -7,9 +7,8 @@ UB_MAKEINSTALL_USE_DESTDIR=yes ub_makeinstall \
 # rm "$UB_INSTALLDIR"/usr/bin/gvim
 mv "$UB_INSTALLDIR"/usr/bin/vim "$UB_INSTALLDIR"/usr/bin/gvim
 
-install Install/vi  "$UB_INSTALLDIR"/bin/
+install Install/vi  "$UB_INSTALLDIR"/usr/bin/
 install Install/vim "$UB_INSTALLDIR"/usr/bin/
-ln -s ../../bin/vi  "$UB_INSTALLDIR"/usr/bin/vi
 
 ln -sf gvim "$UB_INSTALLDIR"/usr/bin/gview
 ln -sf gvim "$UB_INSTALLDIR"/usr/bin/gvimdiff
