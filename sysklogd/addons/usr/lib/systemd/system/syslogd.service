@@ -5,7 +5,7 @@ Documentation=man:syslogd(8)
 [Service]
 Type=forking
 Sockets=syslog.socket
-ExecStart=/sbin/syslogd
+ExecStart=/usr/sbin/syslogd
 ExecReload=/bin/kill -HUP $MAINPID
 StandardOutput=null
 Restart=on-failure
