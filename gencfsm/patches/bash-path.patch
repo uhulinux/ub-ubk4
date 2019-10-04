@@ -1,0 +1,15 @@
+diff -Nur orig/dist/Makefile.am mod/dist/Makefile.am
+--- orig/dist/Makefile.am	2019-10-04 09:34:58.000000000 +0200
++++ mod/dist/Makefile.am	2019-10-04 09:45:27.748860942 +0200
+@@ -10,9 +10,9 @@
+ 	chmod 0755 $(shell find $(dist) -type d)
+ 	chmod 0644 $(shell find $(dist) -type f)
+ 	chmod 0755 $(shell find "scripts" -type f)
+-	test -z "$(DESTDIR)$(datadir)/dbus-1/services/" || /bin/mkdir -p "$(DESTDIR)$(datadir)/dbus-1/services/"
++	test -z "$(DESTDIR)$(datadir)/dbus-1/services/" || mkdir -p "$(DESTDIR)$(datadir)/dbus-1/services/"
+ 	cp "extra/com.libertyzero.gnome-encfs-manager.service" "$(DESTDIR)$(datadir)/dbus-1/services/"
+-	test -z "$(gencfsmdir)" || /bin/mkdir -p "$(gencfsmdir)"
++	test -z "$(gencfsmdir)" || mkdir -p "$(gencfsmdir)"
+ 	cp --parent -rf $(dist) "$(gencfsmdir)"
+ 	cp --parent -rf $(icons) $(DESTDIR)$(datadir)
+ 
