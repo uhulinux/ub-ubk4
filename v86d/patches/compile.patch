@@ -1,7 +1,7 @@
-diff -Naurdp a/Makefile b/Makefile
---- a/Makefile	2007-11-04 16:00:20.000000000 +0100
-+++ b/Makefile	2007-11-10 22:00:40.000000000 +0100
-@@ -10,7 +10,6 @@ ifeq ($(call config_opt,CONFIG_KLIBC),tr
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2011-02-25 22:27:39.000000000 +0100
++++ mod/Makefile	2019-10-04 13:28:34.151242439 +0200
+@@ -10,7 +10,6 @@
  endif
  
  CFLAGS ?= -Wall -g -O2
@@ -9,3 +9,13 @@ diff -Naurdp a/Makefile b/Makefile
  
  ifeq ($(call config_opt,CONFIG_X86EMU),true)
  	CFLAGS += -Ilibs/x86emu
+@@ -60,7 +59,7 @@
+ 	rm -rf config.h
+ 
+ install: $(DEBUG_INSTALL)
+-	$(INSTALL) -D v86d $(DESTDIR)/sbin/v86d
++	$(INSTALL) -D v86d $(DESTDIR)/usr/sbin/v86d
+ 
+ install_testvbe:
+-	$(INSTALL) -D testvbe $(DESTDIR)/sbin/testvbe
++	$(INSTALL) -D testvbe $(DESTDIR)/usr/sbin/testvbe

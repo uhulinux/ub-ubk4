@@ -10,7 +10,8 @@ for i in capiinfo capifax; do
 done
 for i in eicon isdnlog ipppd; do
 	cd "$i"
-	autoconf
+	export CONFIG_CARD_SBINDIR=/usr/sbin
+    	autoconf
 	cd ..
 done
 
@@ -23,5 +24,4 @@ for i in xisdnload xmonisdn; do
 	sed -i 's,$(EXTRAXAWCLIENTLIBS) ,,' Makefile
 	cd ..
 done
-
 make
