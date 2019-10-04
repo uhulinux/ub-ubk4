@@ -1,4 +1,8 @@
 #!/bin/sh -eux
 
+autoreconf -vif
 ub_compile \
-	--disable-gss
+	--enable-gss \
+	--enable-ipv6 \
+	--enable-libmount-mount \
+	--enable-mountconfig

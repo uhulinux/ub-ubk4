@@ -1,0 +1,36 @@
+diff -Nur orig/utils/mount/Makefile.am mod/utils/mount/Makefile.am
+--- orig/utils/mount/Makefile.am	2019-06-10 16:34:37.000000000 +0200
++++ mod/utils/mount/Makefile.am	2019-10-04 22:23:19.402913658 +0200
+@@ -2,7 +2,7 @@
+ 
+ # These binaries go in /sbin (not /usr/sbin), and that cannot be
+ # overridden at config time.
+-sbindir = /sbin
++sbindir = /usr/sbin
+ 
+ man8_MANS	= mount.nfs.man umount.nfs.man
+ man5_MANS	= nfs.man
+diff -Nur orig/utils/nfsdcld/Makefile.am mod/utils/nfsdcld/Makefile.am
+--- orig/utils/nfsdcld/Makefile.am	2019-06-10 16:34:37.000000000 +0200
++++ mod/utils/nfsdcld/Makefile.am	2019-10-04 22:23:19.406913652 +0200
+@@ -2,7 +2,7 @@
+ 
+ # These binaries go in /sbin (not /usr/sbin), and that cannot be
+ # overridden at config time. The kernel "knows" the /sbin name.
+-sbindir = /sbin
++sbindir = /usr/sbin
+ 
+ man8_MANS	= nfsdcld.man
+ EXTRA_DIST	= $(man8_MANS)
+diff -Nur orig/utils/nfsdcltrack/Makefile.am mod/utils/nfsdcltrack/Makefile.am
+--- orig/utils/nfsdcltrack/Makefile.am	2019-06-10 16:34:37.000000000 +0200
++++ mod/utils/nfsdcltrack/Makefile.am	2019-10-04 22:23:19.406913652 +0200
+@@ -2,7 +2,7 @@
+ 
+ # These binaries go in /sbin (not /usr/sbin), and that cannot be
+ # overridden at config time. The kernel "knows" the /sbin name.
+-sbindir = /sbin
++sbindir = /usr/sbin
+ 
+ man8_MANS	= nfsdcltrack.man
+ EXTRA_DIST	= $(man8_MANS)
