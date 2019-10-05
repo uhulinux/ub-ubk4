@@ -1,0 +1,24 @@
+diff -Nur orig/afm/make_fonts_map.sh mod/afm/make_fonts_map.sh
+--- orig/afm/make_fonts_map.sh	2019-10-05 08:17:53.000000000 +0200
++++ mod/afm/make_fonts_map.sh	2019-10-05 09:24:53.119179228 +0200
+@@ -26,7 +26,7 @@
+ # Exit whenever there is a problem
+ set -e
+ 
+-/bin/rm -rf fonts.map.new fonts.map.tmp
++rm -rf fonts.map.new fonts.map.tmp
+ LC_ALL=C
+ export LC_ALL
+ 
+diff -Nur orig/tests/defs.in mod/tests/defs.in
+--- orig/tests/defs.in	2007-04-22 09:53:46.000000000 +0200
++++ mod/tests/defs.in	2019-10-05 09:35:45.470299860 +0200
+@@ -100,7 +100,7 @@
+ tmpdir=$TMPDIR/a2$$
+ 
+ # Remove the junk files.
+-trap "/bin/rm -rf $tmpdir" 0 1 2 3 13 15
++trap "rm -rf $tmpdir" 0 1 2 3 13 15
+ 
+ # Make sure the directories exist
+ for dir in $REF_DIR $CHK_DIR $tmpdir
