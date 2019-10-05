@@ -1,0 +1,23 @@
+diff -Nur orig/scripts/drbd mod/scripts/drbd
+--- orig/scripts/drbd	2018-12-13 11:40:24.000000000 +0100
++++ mod/scripts/drbd	2019-10-05 15:48:54.992478548 +0200
+@@ -36,8 +36,8 @@
+ DRBDADM="drbdadm"
+ DRBDSETUP="drbdsetup"
+ PROC_DRBD="/proc/drbd"
+-MODPROBE="/sbin/modprobe"
+-RMMOD="/sbin/rmmod"
++MODPROBE="modprobe"
++RMMOD="rmmod"
+ UDEV_TIMEOUT=10
+ ADD_MOD_PARAM=""
+ 
+@@ -64,7 +64,7 @@
+ 	exit 5 # LSB for "not installed"
+     }
+     # tell klogd to reload module symbol information ...
+-    [ -e /var/run/klogd.pid ] && [ -x /sbin/klogd ] && /sbin/klogd -i
++    [ -e /var/run/klogd.pid ] && [ -x klogd ] && klogd -i
+ }
+ 
+ drbd_pretty_status()
