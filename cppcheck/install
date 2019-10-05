@@ -1,6 +1,11 @@
 #!/bin/sh -eux
 
-ub_install
+LANG='en_US.UTF-8' \
+make DESTDIR=${UB_INSTALLDIR} \
+FILESDIR=/usr/share/cppcheck \
+CFGDIR=/usr/share/cppcheck/cfg \
+USE_MATCHCOMPILER=yes \
+HAVE_RULES=yes install
 
 cp -a cppcheck.1 "$UB_INSTALLDIR"/usr/share/man/man1/cppcheck.1
 cp -a gui/cppcheck-gui "$UB_INSTALLDIR"/usr/bin/
