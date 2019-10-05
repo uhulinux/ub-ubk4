@@ -1,0 +1,36 @@
+diff -Naur orig/src/Gtk/ProgressPanel.vala patched/src/Gtk/ProgressPanel.vala
+--- orig/src/Gtk/ProgressPanel.vala	2018-08-12 06:41:58.000000000 +0200
++++ patched/src/Gtk/ProgressPanel.vala	2019-10-05 22:10:20.248998558 +0200
+@@ -65,7 +65,7 @@
+ 
+ 	public signal void task_complete();
+ 
+-	public ProgressPanel(FileViewPane _pane, Gee.ArrayList<FileItem>? _items, FileActionType _action){
++	protected ProgressPanel(FileViewPane _pane, Gee.ArrayList<FileItem>? _items, FileActionType _action){
+ 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
+ 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 6); // work-around
+ 		margin = 6;
+diff -Naur orig/src/Utility/AsyncTask.vala patched/src/Utility/AsyncTask.vala
+--- orig/src/Utility/AsyncTask.vala	2018-08-12 06:41:58.000000000 +0200
++++ patched/src/Utility/AsyncTask.vala	2019-10-05 22:10:57.765406867 +0200
+@@ -87,7 +87,7 @@
+ 	public signal void stderr_line_read(string line);
+ 	public signal void task_complete();
+ 
+-	public AsyncTask(){
++	protected AsyncTask(){
+ 		init_temp_directories();
+ 	}
+ 
+diff -Naur orig/src/Utility/MediaFile.vala patched/src/Utility/MediaFile.vala
+--- orig/src/Utility/MediaFile.vala	2018-08-12 06:41:58.000000000 +0200
++++ patched/src/Utility/MediaFile.vala	2019-10-05 22:11:56.186076725 +0200
+@@ -634,7 +634,7 @@
+     public string Description = "";
+ 	public bool IsSelected = true;
+ 	
+-	public MediaStream(MediaStreamType _type){
++	protected MediaStream(MediaStreamType _type){
+ 		Type = _type;
+ 	}
+ 	
