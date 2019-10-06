@@ -3,5 +3,5 @@
 sed -i "/ADDITIONAL_OBJCFLAGS/s/=/= -fobjc-exceptions/" GNUmakefile
 
 export UB_TARGET="x86_64-unknown-linux"
-
+export PYTHON=python2
 CC=gcc make GNUSTEP_MAKEFILES="/usr/share/GNUstep/Makefiles" -f Makefile release-deployment
