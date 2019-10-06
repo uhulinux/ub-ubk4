@@ -1,0 +1,12 @@
+diff -Naur a/common/fs.c b/common/fs.c
+--- a/common/fs.c	2017-09-21 23:15:05.000000000 +0200
++++ b/common/fs.c	2019-10-06 18:48:17.749940633 +0200
+@@ -204,7 +204,7 @@
+ int
+ fs_getid( char *mnts, uuid_t *idb )
+ {
+-	xfs_fsop_geom_v1_t geo;
++	struct xfs_fsop_geom_v1 geo;
+ 	int fd;
+ 
+ 	fd = open( mnts, O_RDONLY );

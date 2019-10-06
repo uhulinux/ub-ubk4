@@ -1,5 +1,4 @@
 #!/bin/sh -eux
 
-export DIST_ROOT="$UB_INSTALLDIR"
-make install
-make install-dev
+make DIST_ROOT="$UB_INSTALLDIR" PKG_ROOT_SBIN_DIR="/usr/bin" PKG_ROOT_LIB_DIR="/usr/lib" install
+make DIST_ROOT="$UB_INSTALLDIR" PKG_ROOT_SBIN_DIR="/usr/bin" PKG_ROOT_LIB_DIR="/usr/lib" install-dev
