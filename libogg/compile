@@ -2,4 +2,5 @@
 
 sed -i "s|-ffast-math||" configure
 export CFLAGS=" -fPIC "
-ub_compile
+ub_compile \
+    -DBUILD_SHARED_LIBS=ON
