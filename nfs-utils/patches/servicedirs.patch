@@ -1,0 +1,19 @@
+diff -Nur orig/systemd/auth-rpcgss-module.service mod/systemd/auth-rpcgss-module.service
+--- orig/systemd/auth-rpcgss-module.service	2019-06-10 16:34:37.000000000 +0200
++++ mod/systemd/auth-rpcgss-module.service	2019-10-07 21:39:09.549758858 +0200
+@@ -13,5 +13,5 @@
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/sbin/modprobe -q auth_rpcgss
++ExecStart=/usr/sbin/modprobe -q auth_rpcgss
+ RemainAfterExit=yes
+diff -Nur orig/systemd/nfs-utils.service mod/systemd/nfs-utils.service
+--- orig/systemd/nfs-utils.service	2019-06-10 16:34:37.000000000 +0200
++++ mod/systemd/nfs-utils.service	2019-10-07 21:39:53.081657532 +0200
+@@ -14,4 +14,4 @@
+ [Service]
+ Type=oneshot
+ RemainAfterExit=yes
+-ExecStart=/bin/true
++ExecStart=/usr/bin/true

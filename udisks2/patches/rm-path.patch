@@ -1,0 +1,9 @@
+diff -Nur orig/data/clean-mount-point@.service mod/data/clean-mount-point@.service
+--- orig/data/clean-mount-point@.service	2019-07-22 18:24:44.000000000 +0200
++++ mod/data/clean-mount-point@.service	2019-10-07 21:52:35.615629368 +0200
+@@ -7,4 +7,4 @@
+ [Service]
+ Type=oneshot
+ RemainAfterExit=true
+-ExecStop=/bin/rm -fd %f
++ExecStop=/usr/bin/rm -fd %f
