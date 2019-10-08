@@ -1,0 +1,12 @@
+diff -Nur orig/units/rescue.service.in mod/units/rescue.service.in
+--- orig/units/rescue.service.in	2019-04-11 18:28:36.000000000 +0200
++++ mod/units/rescue.service.in	2019-10-08 09:55:04.764260315 +0200
+@@ -18,7 +18,7 @@
+ [Service]
+ Environment=HOME=/root
+ WorkingDirectory=-/root
+-ExecStartPre=-/bin/plymouth --wait quit
++ExecStartPre=-/usr/bin/plymouth --wait quit
+ ExecStart=-@rootlibexecdir@/systemd-sulogin-shell rescue
+ Type=idle
+ StandardInput=tty-force

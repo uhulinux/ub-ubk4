@@ -15,7 +15,7 @@ diff -Naur orig/units/getty@.service.m4 patched/units/getty@.service.m4
  # option to preserve environment (-p), followed by '--' for safety, and then
  # the entered username.
 -ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
-+ExecStart=-/sbin/fbgetty %I
++ExecStart=-/usr/sbin/fbgetty %I
  Type=idle
  Restart=always
  RestartSec=0

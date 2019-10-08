@@ -1,0 +1,12 @@
+diff -Nur orig/units/emergency.service.in mod/units/emergency.service.in
+--- orig/units/emergency.service.in	2019-04-11 18:28:36.000000000 +0200
++++ mod/units/emergency.service.in	2019-10-08 10:01:09.731742939 +0200
+@@ -19,7 +19,7 @@
+ [Service]
+ Environment=HOME=/root
+ WorkingDirectory=-/root
+-ExecStartPre=-/bin/plymouth --wait quit
++ExecStartPre=-/usr/bin/plymouth --wait quit
+ ExecStart=-@rootlibexecdir@/systemd-sulogin-shell emergency
+ Type=idle
+ StandardInput=tty-force

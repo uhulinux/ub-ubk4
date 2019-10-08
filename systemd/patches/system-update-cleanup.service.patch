@@ -1,0 +1,9 @@
+diff -Nur orig/units/system-update-cleanup.service mod/units/system-update-cleanup.service
+--- orig/units/system-update-cleanup.service	2019-04-11 18:28:36.000000000 +0200
++++ mod/units/system-update-cleanup.service	2019-10-08 10:20:53.442149232 +0200
+@@ -32,4 +32,4 @@
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/bin/rm -fv /system-update
++ExecStart=/usr/bin/rm -fv /system-update
