@@ -1,0 +1,40 @@
+diff -Nur orig/etc/systemd/iscsid.service mod/etc/systemd/iscsid.service
+--- orig/etc/systemd/iscsid.service	2019-09-12 21:02:11.000000000 +0200
++++ mod/etc/systemd/iscsid.service	2019-10-08 19:02:56.375693466 +0200
+@@ -8,7 +8,7 @@
+ [Service]
+ Type=notify
+ NotifyAccess=main
+-ExecStart=/sbin/iscsid -f
++ExecStart=/usr/sbin/iscsid -f
+ KillMode=mixed
+ Restart=on-failure
+ 
+diff -Nur orig/etc/systemd/iscsi.service mod/etc/systemd/iscsi.service
+--- orig/etc/systemd/iscsi.service	2019-09-12 21:02:11.000000000 +0200
++++ mod/etc/systemd/iscsi.service	2019-10-08 19:02:36.431691629 +0200
+@@ -8,9 +8,9 @@
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/sbin/iscsiadm -m node --loginall=automatic
+-ExecStop=/sbin/iscsiadm -m node --logoutall=automatic
+-ExecStop=/sbin/iscsiadm -m node --logoutall=manual
++ExecStart=/usr/sbin/iscsiadm -m node --loginall=automatic
++ExecStop=/usr/sbin/iscsiadm -m node --logoutall=automatic
++ExecStop=/usr/sbin/iscsiadm -m node --logoutall=manual
+ SuccessExitStatus=21
+ RemainAfterExit=true
+ 
+diff -Nur orig/etc/systemd/iscsiuio.service mod/etc/systemd/iscsiuio.service
+--- orig/etc/systemd/iscsiuio.service	2019-09-12 21:02:11.000000000 +0200
++++ mod/etc/systemd/iscsiuio.service	2019-10-08 19:03:29.543696173 +0200
+@@ -11,7 +11,7 @@
+ [Service]
+ Type=notify
+ NotifyAccess=main
+-ExecStart=/sbin/iscsiuio -f
++ExecStart=/usr/sbin/iscsiuio -f
+ KillMode=mixed
+ Restart=on-failure
+ 
