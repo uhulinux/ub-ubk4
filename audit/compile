@@ -1,8 +1,5 @@
 #!/bin/sh -eux
 
-ub_replace "=/sbin/auditd" "=/usr/sbin/auditd" init.d/auditd.service
-ub_replace "=-/sbin/augenrules --load" "=-/usr/sbin/augenrules --load" init.d/auditd.service
-
 ub_compile \
 	--enable-gssapi-krb5=yes \
 	--enable-systemd

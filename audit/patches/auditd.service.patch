@@ -1,0 +1,26 @@
+diff -Nur orig/init.d/auditd.service mod/init.d/auditd.service
+--- orig/init.d/auditd.service	2019-03-01 21:19:13.000000000 +0100
++++ mod/init.d/auditd.service	2019-10-08 17:54:25.842779995 +0200
+@@ -17,17 +17,16 @@
+ 
+ [Service]
+ Type=forking
+-PIDFile=/run/auditd.pid
+-ExecStart=/sbin/auditd
++#PIDFile=/run/auditd.pid
++ExecStart=/usr/sbin/auditd
+ ## To not use augenrules, copy this file to /etc/systemd/system/auditd.service
+ ## and comment/delete the next line and uncomment the auditctl line.
+ ## NOTE: augenrules expect any rules to be added to /etc/audit/rules.d/
+-ExecStartPost=-/sbin/augenrules --load
+-#ExecStartPost=-/sbin/auditctl -R /etc/audit/audit.rules
++ExecStartPost=-/usr/sbin/augenrules --load
++#ExecStartPost=-/usr/sbin/auditctl -R /etc/audit/audit.rules
+ # By default we don't clear the rules on exit. To enable this, uncomment
+ # the next line after copying the file to /etc/systemd/system/auditd.service
+-#ExecStopPost=/sbin/auditctl -R /etc/audit/audit-stop.rules
++#ExecStopPost=/usr/sbin/auditctl -R /etc/audit/audit-stop.rules
+ 
+ [Install]
+ WantedBy=multi-user.target
+-

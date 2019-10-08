@@ -1,0 +1,12 @@
+diff -Nur orig/init.d/auditd.conf mod/init.d/auditd.conf
+--- orig/init.d/auditd.conf	2019-03-01 21:19:13.000000000 +0100
++++ mod/init.d/auditd.conf	2019-10-08 17:59:01.166574564 +0200
+@@ -13,7 +13,7 @@
+ num_logs = 5
+ priority_boost = 4
+ disp_qos = lossy
+-dispatcher = /sbin/audispd
++dispatcher = /usr/sbin/audispd
+ name_format = NONE
+ ##name = mydomain
+ max_log_file_action = ROTATE
