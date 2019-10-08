@@ -1,12 +1,15 @@
-diff -Naur orig/prog/init/lm_sensors.service patched/prog/init/lm_sensors.service
---- orig/prog/init/lm_sensors.service	2014-01-19 17:57:33.000000000 +0100
-+++ patched/prog/init/lm_sensors.service	2016-04-01 07:46:37.779742277 +0200
-@@ -2,7 +2,7 @@
- Description=Initialize hardware monitoring sensors
- 
- [Service]
--EnvironmentFile=/etc/sysconfig/lm_sensors
-+EnvironmentFile=-/etc/sysconfig/lm_sensors
+diff -Nur orig/prog/init/lm_sensors.service mod/prog/init/lm_sensors.service
+--- orig/prog/init/lm_sensors.service	2019-08-06 09:08:45.000000000 +0200
++++ mod/prog/init/lm_sensors.service	2019-10-08 21:41:29.646653184 +0200
+@@ -5,9 +5,9 @@
+ EnvironmentFile=/etc/sysconfig/lm_sensors
  Type=oneshot
  RemainAfterExit=yes
- ExecStart=-/sbin/modprobe -qab $BUS_MODULES $HWMON_MODULES
+-ExecStart=-/sbin/modprobe -qab $BUS_MODULES $HWMON_MODULES
++ExecStart=-/usr/sbin/modprobe -qab $BUS_MODULES $HWMON_MODULES
+ ExecStart=/usr/bin/sensors -s
+-ExecStop=-/sbin/modprobe -qabr $BUS_MODULES $HWMON_MODULES
++ExecStop=-/usr/sbin/modprobe -qabr $BUS_MODULES $HWMON_MODULES
+ 
+ [Install]
+ WantedBy=multi-user.target
