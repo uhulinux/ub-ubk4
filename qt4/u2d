@@ -1,2 +1,0 @@
-release=$(urllist http://download.qt.io/archive/qt/ | splitver '^(4.[0-9])' | sort -V | tail -n 1)
-urllist http://download.qt.io/archive/qt/$release/ | splitver '^([0-9.]+)' | sort -V | tail -n 1
