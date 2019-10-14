@@ -1,0 +1,24 @@
+diff -Nur orig/README mod/README
+--- orig/README	2003-08-15 04:52:27.000000000 +0200
++++ mod/README	2019-10-14 20:41:49.565543008 +0200
+@@ -68,13 +68,13 @@
+ Note the pam_smb_auth.so line.
+ 
+ #%PAM-1.0
+-auth       required	/lib/security/pam_securetty.so
+-auth	   required	/lib/security/pam_smb_auth.so
+-auth       required	/lib/security/pam_nologin.so
+-account    required	/lib/security/pam_pwdb.so
+-password   required	/lib/security/pam_cracklib.so
+-password   required	/lib/security/pam_pwdb.so shadow nullok use_authtok
+-session    required	/lib/security/pam_pwdb.so
++auth       required	/usr/lib/security/pam_securetty.so
++auth	   required	/usr/lib/security/pam_smb_auth.so
++auth       required	/usr/lib/security/pam_nologin.so
++account    required	/usr/lib/security/pam_pwdb.so
++password   required	/usr/lib/security/pam_cracklib.so
++password   required	/usr/lib/security/pam_pwdb.so shadow nullok use_authtok
++session    required	/usr/lib/security/pam_pwdb.so
+ 
+ For Solaris:
+ 	You need to change the /etc/pam.conf other line to
