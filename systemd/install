@@ -7,11 +7,11 @@ for i in udev{monitor,trigger,settle,control,info,test}; do
 	ln -s udevadm "$UB_INSTALLDIR"/usr/bin/"$i"
 done
 
-ln -s /usr/lib/systemd/systemd-udevd "$UB_INSTALLDIR"/sbin/udevd
+ln -s /usr/lib/systemd/systemd-udevd "$UB_INSTALLDIR"/usr/sbin/udevd
 
 find "$UB_INSTALLDIR"/usr/lib/udev/ -type f -maxdepth 1 | while read n; do
 	name="$(basename $n)"
-	ln -s ../usr/lib/udev/"$name" "$UB_INSTALLDIR"/sbin/"$name"
+	ln -s ../usr/lib/udev/"$name" "$UB_INSTALLDIR"/usr/sbin/"$name"
 done
 
 # hiányzó csoportok helyettesítése
@@ -26,9 +26,6 @@ done
 for i in halt poweroff reboot shutdown; do
 	ln -s systemctl "$UB_INSTALLDIR"/usr/bin/$i
 done
-
-# /sbin/init
-ln -s /usr/lib/systemd/systemd "$UB_INSTALLDIR"/sbin/init
 
 # /etc/initrd-release
 touch "$UB_INSTALLDIR"/etc/initrd-release
