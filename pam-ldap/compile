@@ -7,4 +7,5 @@ export LDFLAGS+=" -L/usr/lib/openssl-1.0"
 ub_compile \
 	--prefix=/ \
 	--with-ldap-conf-file=/etc/ldap.conf \
-	--with-ldap-secret-file=/etc/ldap.secret
+	--with-ldap-secret-file=/etc/ldap.secret \
+	--libdir=/usr/lib
