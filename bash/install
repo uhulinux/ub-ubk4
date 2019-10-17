@@ -5,6 +5,7 @@ ub_install
 ln -s bash "$UB_INSTALLDIR"/usr/bin/sh
 ln -s bash.1 "$UB_INSTALLDIR"/usr/share/man/man1/sh.1
 
-# compat symlink
-ln -s "$UB_INSTALLDIR"/usr/bin/bash "$UB_INSTALLDIR"/bin/sh
-ln -s "$UB_INSTALLDIR"/usr/bin/bash "$UB_INSTALLDIR"/bin/bash
+if [ -d $UB_INSTALLDIR/bin ];then
+    rm -rf $UB_INSTALLDIR/bin
+    ln -s usr/bin $UB_INSTALLDIR/bin
+fi
