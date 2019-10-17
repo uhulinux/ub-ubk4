@@ -1,1 +1,1 @@
-u2d http://hostap.epitest.fi/releases/ hostapd-
+urllist https://w1.fi/cgit/hostap/ | grep tar | grep hostap | sort -u | tail -n 1 |sed s/hostap_/hostap-/ | sed s/_/\./ | parsever
