@@ -1,0 +1,11 @@
+--- mutter-3.34.1/clutter/clutter/clutter-stage.c.orig	2019-10-08 18:15:10.000000000 +0100
++++ mutter-3.34.1/clutter/clutter/clutter-stage.c	2019-10-10 11:48:33.156297051 +0100
+@@ -1095,7 +1095,7 @@
+   gboolean first_event;
+   ClutterInputDevice *device;
+ 
+-  g_return_if_fail (CLUTTER_IS_STAGE (stage));
++  if (!(CLUTTER_IS_STAGE (stage))) return;
+ 
+   priv = stage->priv;
+ 
