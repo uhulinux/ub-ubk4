@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
+git submodule init
+git config --local submodule.subprojects/gvc.url libgnome-volume-control
+git submodule update
+
 ub_compile \
-	-Dwith-gtk-doc=false \
-	-Dwith-desktop-icons=none
+	-Dwith-gtk-doc=false
