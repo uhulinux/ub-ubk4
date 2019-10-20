@@ -2,5 +2,7 @@
 
 ub_install
 
+rm -Rf "$UB_INSTALLDIR"/usr/include
+
 ln -s system-auth "$UB_INSTALLDIR"/etc/pam.d/sudo
 ln -s system-auth-rootok "$UB_INSTALLDIR"/etc/pam.d/sudo-i

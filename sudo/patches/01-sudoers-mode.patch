@@ -1,7 +1,19 @@
-diff -urN sudo-1.8.6p6.orig/configure sudo-1.8.6p6/configure
---- sudo-1.8.6p6.orig/configure	2013-01-31 22:07:43.000000000 +0100
-+++ sudo-1.8.6p6/configure	2013-02-10 13:43:48.705392431 +0100
-@@ -2968,7 +2968,7 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2019-10-10 18:33:04.000000000 +0200
++++ patched/configure	2019-10-20 13:19:25.094193902 +0200
+@@ -3140,7 +3140,7 @@
+ : ${MANDIRTYPE='man'}
+ : ${mansrcdir='.'}
+ : ${SHLIB_MODE='0644'}
+-: ${SUDOERS_MODE='0440'}
++: ${SUDOERS_MODE='0640'}
+ : ${SUDOERS_UID='0'}
+ : ${SUDOERS_GID='0'}
+ DEVEL=
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2019-10-10 18:33:04.000000000 +0200
++++ patched/configure.ac	2019-10-20 13:20:47.059241468 +0200
+@@ -219,7 +219,7 @@
  : ${MANDIRTYPE='man'}
  : ${mansrcdir='.'}
  : ${SHLIB_MODE='0644'}
