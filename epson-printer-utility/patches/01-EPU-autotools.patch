@@ -1,0 +1,25 @@
+diff -Naur orig/epson-printer-utility-1.0.2/configure.ac patched/epson-printer-utility-1.0.2/configure.ac
+--- orig/epson-printer-utility-1.0.2/configure.ac	2017-04-24 03:51:11.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/configure.ac	2018-12-29 23:41:32.312986045 +0100
+@@ -15,9 +15,9 @@
+ PACKAGE_NAME=$EPS_PREFIX-utility
+ AC_SUBST(PACKAGE_NAME)
+ 
+-#CC=/opt/lsb/bin/lsbcc
+-CC=/opt/lsb/bin/lsbc++
+-CXX=/opt/lsb/bin/lsbc++
++AC_PROG_CC
++AC_PROG_CXX
++AM_PROG_AR
+ 
+ # EPS_INSTALL_DIR=/opt/$PACKAGE_NAME
+ # AC_SUBST(EPS_INSTALL_DIR)
+@@ -46,7 +46,7 @@
+ LIBARCH=lib
+ BUILD_MACHINE_ARCH=`uname -m`
+ if test "x$BUILD_MACHINE_ARCH" = "xx86_64"; then
+-	LIBARCH=lib64
++	LIBARCH=lib
+ fi
+ AC_SUBST(LIBARCH)
+ 

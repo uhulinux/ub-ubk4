@@ -1,0 +1,25 @@
+#!/bin/sh -eux
+
+# előre generált felesleges Makefile-k törlése
+find . -iname Makefile -delete
+
+cd epson-printer-utility-1.0.2
+autoreconf -vif
+ub_configure
+ub_make clean
+
+# regenerate old moc files
+cd PrinterUtility
+for file in EPUMaintenanceGuideView.h EPUMainView.h EPUMainWindow.h EPUOperationView.h EPUPrinterListDialog.h EPUView.h; do
+moc $file -o moc_${file/.h/}.cpp
+done
+moc ../EPUCommon/EThread.h -o moc_EThread.cpp
+cd ..
+
+ub_make
+
+cd ../epson-backend-1.0.1
+autoreconf -vif
+ub_configure
+ub_make clean
+ub_make

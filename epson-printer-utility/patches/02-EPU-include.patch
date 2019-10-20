@@ -1,0 +1,23 @@
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp	2016-07-22 08:19:11.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp	2018-12-30 00:46:00.885601445 +0100
+@@ -1,7 +1,7 @@
+ #include "EPUMainController.h"
+ #include "EPUPrinterController.h"
+ #include <QTimer>
+-//#include "err.h"
++#include "unistd.h"
+ 
+ EPUMainController::EPUMainController()
+ {
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp patched/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp	2016-07-22 07:46:17.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp	2018-12-30 00:50:42.017187558 +0100
+@@ -1,6 +1,7 @@
+ #include "EPUPrinterListDialog.h"
+ #include "EPUPrinterController.h"
+ #include "EPUPrinter.h"
++#include <unistd.h>
+ 
+ EPUPrinterListDialog::EPUPrinterListDialog(QWidget *parent)
+     : QDialog(parent)

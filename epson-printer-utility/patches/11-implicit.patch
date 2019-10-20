@@ -1,0 +1,23 @@
+diff -Naur orig/epson-backend-1.0.1/daemon/cbtd_comserv.c patched/epson-backend-1.0.1/daemon/cbtd_comserv.c
+--- orig/epson-backend-1.0.1/daemon/cbtd_comserv.c	2017-02-08 07:23:11.000000000 +0100
++++ patched/epson-backend-1.0.1/daemon/cbtd_comserv.c	2019-10-09 22:42:15.566032040 +0200
+@@ -103,6 +103,8 @@
+ /* When flag stands, get status from a printer without qualification */
+ static int _comserv_first_flag;
+ 
++EPS_ERR_CODE epsMakeMainteCmd (EPS_INT32 cmd, EPS_UINT8* buffer, EPS_UINT32* buffersize);
++void get_device_id (char* device_id);
+ 
+ /* communication thread */
+ void
+diff -Naur orig/epson-backend-1.0.1/daemon/epmnt.c patched/epson-backend-1.0.1/daemon/epmnt.c
+--- orig/epson-backend-1.0.1/daemon/epmnt.c	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-backend-1.0.1/daemon/epmnt.c	2019-10-09 22:25:12.510980058 +0200
+@@ -1,5 +1,7 @@
+ #include "epson-typdefs.h"
+ #include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ #include <time.h>
+ 
+ static const EPS_UINT8 ExitPacketMode[]= {

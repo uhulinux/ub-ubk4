@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+cd epson-printer-utility-1.0.2
+ub_install
+mkdir -p $UB_INSTALLDIR/usr/lib/udev/rules.d
+cp PrinterUtility/epson-printer-utility $UB_INSTALLDIR/usr/bin/
+cp EPSCommonLib/libEPSCommonLib.a $UB_INSTALLDIR/usr/lib/
+cp support-tool/79-udev-epson.rules $UB_INSTALLDIR/usr/lib/udev/rules.d/
+
+cd ../epson-backend-1.0.1
+ub_install
+
+# rm -Rf $UB_INSTALLDIR/usr/include
+rm -Rf $UB_INSTALLDIR/usr/resource

@@ -1,0 +1,202 @@
+diff -Naur orig/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am patched/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am
+--- orig/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am	2019-09-29 00:22:57.436747515 +0200
+@@ -1,3 +1,5 @@
++export CC=g++
++
+ noinst_LIBRARIES = libEPSCommonLib.a
+ 
+ 
+@@ -16,28 +18,33 @@
+   		-DGCOMSW_EL_CDLABEL	\
+   		-DGCOMSW_EF_MAINTE
+ 
+-AM_CFLAGS=-w -c \
++AM_CFLAGS=-w -c -fPIC \
+ 	-I./escpr-lib/inc \
+ 	-I./epsmp/linux \
+ 	-I./epsmp	\
+ 	-I./..
+-AM_CXXFLAGS=-w -c
++AM_CXXFLAGS=-w -c -fPIC
+ 
+ AM_CPPFLAGS = \
+ 	-I./escpr-lib/inc \
+ 	-I./epsmp/linux \
+ 	-I./epsmp	\
+ 	-I./..	\
+-	-I/opt/lsb/include/QtCore	\
+-	-I/opt/lsb/include
++	-I/usr/$(LIBARCH)/qt5/include/QtCore \
++	-I/usr/$(LIBARCH)/qt5/include/QtGui \
++	-I/usr/$(LIBARCH)/qt5/include/QtWidgets \
++	-I/usr/$(LIBARCH)/qt5/include/QtNetwork \
++	-I/usr/$(LIBARCH)/qt5/include	\
++	-I/usr/include
+ 
+ libEPSCommonLib_a_LIBADD = \
+-	/opt/lsb/$(LIBARCH)/libQtCore.so \
+-	/opt/lsb/$(LIBARCH)/libQtGui.so \
+-	/opt/lsb/$(LIBARCH)/libpthread.so \
+-	/opt/lsb/$(LIBARCH)/libcupsimage.so \
+-	/opt/lsb/$(LIBARCH)/libcups.so \
+-   /opt/lsb/$(LIBARCH)/libQtNetwork.so
++	/usr/$(LIBARCH)/qt5/lib/libQt5Core.so \
++	/usr/$(LIBARCH)/qt5/lib/libQt5Gui.so \
++	/usr/$(LIBARCH)/qt5/lib/libQt5Widgets.so \
++	/usr/$(LIBARCH)/qt5/lib/libQt5Network.so \
++	/usr/$(LIBARCH)/libpthread.so \
++	/usr/$(LIBARCH)/libcupsimage.so \
++	/usr/$(LIBARCH)/libcups.so
+ 	
+ libEPSCommonLib_a_SOURCES = \
+ 	escpr-lib/src/epson-cbt.c	\
+@@ -58,7 +65,7 @@
+ 	escpr-lib/src/epson-usb.c	\
+ 	escpr-lib/src/epson-wifi.c	\
+ 	epsmp/linux/epsmp-linux-portal-io.c \
+-	epsmp/linux/XAsyncSocket.c \
++	epsmp/linux/XAsyncSocket.cpp \
+ 	epsmp/linux/linux_cmn.c	\
+ 	epsmp/linux/linux_net.c	\
+ 	epsmp/epsmp-scale.c	\
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp	2019-09-29 01:01:13.385695736 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainController.cpp	2019-09-29 01:01:24.741858187 +0200
+@@ -1,6 +1,7 @@
+ #include "EPUMainController.h"
+ #include "EPUPrinterController.h"
+ #include <QTimer>
++#include <QApplication>
+ #include "unistd.h"
+ 
+ EPUMainController::EPUMainController()
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMaintenanceGuideView.h patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMaintenanceGuideView.h
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMaintenanceGuideView.h	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMaintenanceGuideView.h	2019-09-29 00:39:29.811003055 +0200
+@@ -1,6 +1,7 @@
+ #ifndef EPUMAINTENANCEGUIDEVIEW_H
+ #define EPUMAINTENANCEGUIDEVIEW_H
+ 
++#include <QPushButton>
+ #include "EPUOperationView.h"
+ #include "EPUPrinterController.h"
+ 
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainView.h patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainView.h
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainView.h	2017-02-15 08:52:02.000000000 +0100
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainView.h	2019-09-29 00:42:39.581711194 +0200
+@@ -4,6 +4,8 @@
+ #include "EPUView.h"
+ #include "EPUMainWindow.h"
+ #include <QTimer>
++#include <QGroupBox>
++#include <QListView>
+ #include "EPUPrinterListDialog.h"
+ #include "EPUInkLevelView.h"
+ 
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainWindow.cpp patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainWindow.cpp
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUMainWindow.cpp	2016-07-22 07:24:53.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUMainWindow.cpp	2019-09-29 00:53:15.010834270 +0200
+@@ -1,5 +1,7 @@
+ #include "EPUMainWindow.h"
+ #include <QFont>
++#include <QDesktopWidget>
++#include <QApplication>
+ #include "EPUGlobal.h"
+ 
+ EPUMainWindow::EPUMainWindow(QWidget* parent)
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp patched/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp	2016-07-22 07:46:17.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.cpp	2019-10-09 21:43:04.066296047 +0200
+@@ -1,3 +1,5 @@
++#include <QApplication>
++
+ #include "EPUPrinterListDialog.h"
+ #include "EPUPrinterController.h"
+ #include "EPUPrinter.h"
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.h patched/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.h
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.h	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUPrinterListDialog.h	2019-10-09 21:25:38.659833446 +0200
+@@ -2,6 +2,10 @@
+ #define EPUPRINTERLISTDIALOG_H
+ 
+ #include <QDialog>
++#include <QVBoxLayout>
++#include <QHBoxLayout>
++#include <QListView>
++#include <QPushButton>
+ #include "../EPUCommon/EPUCommonDef.h"
+ #include "EPUPrinter.h"
+ #include "../EPUCommon/EThread.h"
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/EPUView.h patched/epson-printer-utility-1.0.2/PrinterUtility/EPUView.h
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/EPUView.h	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/EPUView.h	2019-09-29 00:34:18.774552623 +0200
+@@ -2,6 +2,9 @@
+ #define EPUVIEW_H
+ 
+ #include <QWidget>
++#include <QVBoxLayout>
++#include <QHBoxLayout>
++#include <QLabel>
+ #include "../EPUCommon/EPUCommonDef.h"
+ #include "EPUCallbackObject.h"
+ 
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am patched/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am	2016-07-21 07:38:30.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am	2019-09-29 00:23:47.329468348 +0200
+@@ -3,8 +3,8 @@
+ bindir=$(EPS_BIN_DIR)
+ bin_PROGRAMS =$(EPS_PREFIX)-utility
+ 
+-AM_CFLAGS=-g -w -c
+-AM_CXXFLAGS=-g -w 
++AM_CFLAGS=-g -w -c -fPIC
++AM_CXXFLAGS=-g -w -fPIC
+ 
+ if ARCH_CON
+     DEFS+=-DX86_64
+@@ -14,20 +14,19 @@
+ 	-DQT_NO_DEBUG_OUTPUT
+ 
+ __EPS_PREFIX__utility_CPPFLAGS = \
+-	-I/opt/lsb/include/QtCore \
+-	-I/opt/lsb/include/QtCore \
+-	-I/opt/lsb/include/QtGui \
+-	-I/opt/lsb/include/QtGui \
+-   -I/opt/lsb/include/QtNetwork \
++	-I/usr/$(LIBARCH)/qt5/include/QtCore \
++	-I/usr/$(LIBARCH)/qt5/include/QtGui \
++	-I/usr/$(LIBARCH)/qt5/include/QtWidgets \
++    -I/usr/$(LIBARCH)/qt5/include/QtNetwork \
++    -I/usr/$(LIBARCH)/qt5/include \
+ 	-I/../EPUCommon	\
+ 	-I/..	\
+-	-I/opt/lsb/include \
++	-I/usr/include \
+ 	-I../EPSCommonLib/	\
+ 	-I../EPSCommonLib/escpr-lib/inc \
+ 	-I../EPSCommonLib/epsmp/linux \
+ 	-I../EPSCommonLib/epsmp
+ 
+-
+ __EPS_PREFIX__utility_SOURCES = \
+ 	Main.cpp \
+ 	EPUMainWindow.cpp \
+@@ -53,10 +52,11 @@
+ 	qrc_Resources.cpp
+ 
+ __EPS_PREFIX__utility_LDADD = \
+-	/opt/lsb/$(LIBARCH)/libQtCore.so \
+-	/opt/lsb/$(LIBARCH)/libQtGui.so \
+-	/opt/lsb/$(LIBARCH)/libpthread.so \
+-	/opt/lsb/$(LIBARCH)/libcupsimage.so \
+-	/opt/lsb/$(LIBARCH)/libcups.so \
+-   /opt/lsb/$(LIBARCH)/libQtNetwork.so \
++	/usr/$(LIBARCH)/qt5/lib/libQt5Core.so \
++	/usr/$(LIBARCH)/qt5/lib/libQt5Gui.so \
++	/usr/$(LIBARCH)/qt5/lib/libQt5Widgets.so \
++	/usr/$(LIBARCH)/qt5/lib/libQt5Network.so \
++	/usr/$(LIBARCH)/libpthread.so \
++	/usr/$(LIBARCH)/libcupsimage.so \
++	/usr/$(LIBARCH)/libcups.so \
+ 	../EPSCommonLib/libEPSCommonLib.a

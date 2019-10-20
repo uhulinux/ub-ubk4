@@ -1,0 +1,12 @@
+diff -Naur orig/epson-printer-utility-1.0.2/EPSCommonLib/epsmp/epsmp-image.c patched/epson-printer-utility-1.0.2/EPSCommonLib/epsmp/epsmp-image.c
+--- orig/epson-printer-utility-1.0.2/EPSCommonLib/epsmp/epsmp-image.c	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/EPSCommonLib/epsmp/epsmp-image.c	2018-12-30 00:28:53.168515996 +0100
+@@ -765,7 +765,7 @@
+ 
+ EPS_INT32 epsmpIsImageFile (const char* fileName)
+ {
+-	char* pExt = strrchr(fileName, '.');
++	const char* pExt = strrchr(fileName, '.');
+ 	if(pExt){
+ 		if( 0 == strcmp(pExt, ".JPG")	||
+ 			0 == strcmp(pExt, ".JPEG")	||

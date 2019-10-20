@@ -1,0 +1,29 @@
+diff -Naur orig/epson-backend-1.0.1/src/Makefile.am patched/epson-backend-1.0.1/src/Makefile.am
+--- orig/epson-backend-1.0.1/src/Makefile.am	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-backend-1.0.1/src/Makefile.am	2019-10-09 21:57:24.698498763 +0200
+@@ -19,21 +19,15 @@
+ 
+ cupsbackend_PROGRAMS =ecblp
+ 
+-noinst_LTLIBRARIES = libcutils.la
+-
+ MODEL_FULL = LITE
+ MODEL = lite
+ 
+-libcutils_la_SOURCES = \
++ecblp_LDFLAGS = \
++	@CUPS_LIBS@
++ecblp_SOURCES = \
++	backend.c \
+ 	gettext.h \
+ 	str.c str.h \
+ 	err.c err.h \
+ 	mem.c mem.h \
+ 	def.h
+-
+-
+-ecblp_LDFLAGS = \
+-	@CUPS_LIBS@ \
+-	libcutils.la
+-ecblp_SOURCES = \
+-	backend.c
