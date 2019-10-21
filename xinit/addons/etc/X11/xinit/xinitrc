@@ -187,6 +187,10 @@ fi
 if [ "$session" != "" -a "$session" != "default" -a "$session" != "custom" ]; then
 	exec $sshagent $session "$@"
 fi
+
+# nem wayland indítás van, hanem X
+export XDG_SESSION_TYPE=x11
+
 for i in gnome startkde mate cinnamon-session-cinnamon xfce4-session startlxqt startlxde enlightenment_start icewm-session pekwm fluxbox blackbox openbox windowmaker jwm startede twm dwm; do
 	if type -p $i >/dev/null 2>&1; then
 		exec $sshagent $i
