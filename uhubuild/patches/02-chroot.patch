@@ -1,0 +1,15 @@
+diff -Naur uhubuild-1.3.19-orig/src/uhubuild-prepare-chroot uhubuild-1.3.19/src/uhubuild-prepare-chroot
+--- uhubuild-1.3.19-orig/src/uhubuild-prepare-chroot	2019-09-27 13:55:41.000000000 +0200
++++ uhubuild-1.3.19/src/uhubuild-prepare-chroot	2019-10-22 18:23:13.915825008 +0200
+@@ -206,6 +206,11 @@
+ 	fi
+ fi
+ 
++if [ "$UHUBUILD_DISTR"!="UBK3" ]; then
++    cp $UHUBUILD_CHROOTDIR/sbin/uhu-pkg $UHUBUILD_CHROOTDIR/usr/sbin/
++    cp $UHUBUILD_CHROOTDIR/sbin/ldconfig $UHUBUILD_CHROOTDIR/usr/sbin/
++fi
++
+ echo "Running \`/usr/sbin/uhu-pkg postinst +' ..."
+ unset UHU_PKG_SKIP || true
+ chroot $UHUBUILD_CHROOTDIR /usr/sbin/uhu-pkg postinst +
