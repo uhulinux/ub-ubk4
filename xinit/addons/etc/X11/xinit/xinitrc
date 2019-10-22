@@ -47,6 +47,9 @@ sysxkbmap=/etc/X11/Xkbmap
 syspointermap=/etc/X11/Xpointermap
 sysnumlock=/etc/X11/Xnumlock
 
+# Soha nem wayland indítás van a startx szkripttel, hanem X
+export XDG_SESSION_TYPE=x11
+
 # Ha van saját ~/.xinitrc, azt folytatjuk.
 
 if [ -s "$startup" ]; then
@@ -187,9 +190,6 @@ fi
 if [ "$session" != "" -a "$session" != "default" -a "$session" != "custom" ]; then
 	exec $sshagent $session "$@"
 fi
-
-# nem wayland indítás van, hanem X
-export XDG_SESSION_TYPE=x11
 
 for i in gnome startkde mate cinnamon-session-cinnamon xfce4-session startlxqt startlxde enlightenment_start icewm-session pekwm fluxbox blackbox openbox windowmaker jwm startede twm dwm; do
 	if type -p $i >/dev/null 2>&1; then
