@@ -1,12 +1,12 @@
 diff -Nur orig/MenuMaker/BlackBox.py mod/MenuMaker/BlackBox.py
---- orig/MenuMaker/BlackBox.py	2017-01-09 12:25:03.000000000 +0100
-+++ mod/MenuMaker/BlackBox.py	2017-10-07 19:44:15.016715347 +0200
+--- orig/MenuMaker/BlackBox.py	2019-07-01 14:08:13.000000000 +0200
++++ mod/MenuMaker/BlackBox.py	2019-10-23 20:48:48.000000000 +0200
 @@ -1,3 +1,4 @@
 +# -*- coding: utf-8 -*-
  import os.path
  import MenuMaker
  import Prophet
-@@ -23,7 +24,7 @@
+@@ -23,11 +24,12 @@
  
  
  class StylesMenu(MenuMaker.Menu):
@@ -14,8 +14,14 @@ diff -Nur orig/MenuMaker/BlackBox.py mod/MenuMaker/BlackBox.py
 +    name = "Stílusok"
  
      def __init__(self, dirs):
++        utvonal = ["/usr/share/blackbox/styles"]
          super(StylesMenu, self).__init__(
-@@ -35,7 +36,7 @@
+-            [X(x, "stylesdir") for x in dirs if os.path.isdir(os.path.expanduser(x))])
++            [X(x, "stylesdir") for x in utvonal])
+         self.align = MenuMaker.Entry.StickBottom
+ 
+ 
+@@ -35,7 +37,7 @@
      name = "BlackBox"
  
      def __init__(self):
@@ -24,7 +30,7 @@ diff -Nur orig/MenuMaker/BlackBox.py mod/MenuMaker/BlackBox.py
          try:
              subs += [StylesMenu([os.path.join(blackbox().prefix,
                                                "share/blackbox/styles"),
-@@ -43,10 +44,10 @@
+@@ -43,10 +45,10 @@
          except Prophet.NotSet:
              pass
          subs += [
