@@ -1,7 +1,1 @@
-urlcim=ftp://tcl.activestate.com/pub/tcl/
-dirs=$(urllist ${urlcim} | splitver '^tcl([0-9_]+)$')
-for dir in $dirs;do
-ver=$(urllist ${urlcim}tcl${dir}/ | splitver '^tcl([0-9.]+)-src.tar.gz$' | sort -V | tail -n 1)
-endver=$(echo -e "$ver\n$endver" | sort -V | tail -n 1)
-done
-echo $endver
+urllist http://www.tcl.tk/software/tcltk/download.html | grep tcl | grep tar | sed s/tcl//g | grep -E '([0-9]\.[0-9]\.)' |sed s/-src.*//g | sort -V | tail -n 1 

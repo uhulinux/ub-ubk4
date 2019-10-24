@@ -1,0 +1,26 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2019-10-24 17:06:28.000000000 +0200
++++ mod/configure.ac	2019-10-24 17:20:17.026572089 +0200
+@@ -1023,8 +1023,8 @@
+   if test "x$use_swig" != "xYes"; then
+     use_perl="No (swig not available)"
+   else
+-    if test `$SWIG -help 2>&1 | $EGREP -c '\-perl *- Generate'` = 0; then
+-      use_perl="No (swig does not support -perl option)"
++    if test `$SWIG -help 2>&1 | $EGREP -c '\-perl5 *- Generate'` = 0; then
++      use_perl="No (swig does not support -perl5 option)"
+     else
+       AC_CHECK_PROG(PERL,perl,perl)
+       if test "x$PERL" = "x"; then
+diff -Nur orig/tclpkg/gv/Makefile.am mod/tclpkg/gv/Makefile.am
+--- orig/tclpkg/gv/Makefile.am	2016-08-09 23:02:10.000000000 +0200
++++ mod/tclpkg/gv/Makefile.am	2019-10-24 17:03:38.327925260 +0200
+@@ -171,7 +171,7 @@
+ libgv_perl_la_CPPFLAGS = $(BASECPPFLAGS) $(PERL_CC)
+ $(PERL_data): gv_perl.cpp
+ gv_perl.cpp: gv.i
+-	$(SWIG) -c++ -perl -o gv_perl.cpp $(srcdir)/gv.i
++	$(SWIG) -c++ -perl5 -o gv_perl.cpp $(srcdir)/gv.i
+ 
+ pkgphpdir = $(pkglibdir)/php
+ PHP_data = gv.php
