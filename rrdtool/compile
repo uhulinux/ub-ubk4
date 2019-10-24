@@ -3,8 +3,12 @@
 # workaround for perl 5.10, see https://bugzilla.redhat.com/show_bug.cgi?id=441359
 perl -pi.orig -e 's|1.299907080300|1.29990708|' bindings/perl-shared/RRDs.pm bindings/perl-piped/RRDp.pm
 
+export PYTHON=python2
+
 ub_configure \
-	--enable-tcl-site
+	--enable-tcl-site \
+	--enable-perl \
+	--enable-perl-site-install
 ub_make LIBS+="-lglib-2.0"
 
 cd bindings/perl-piped
