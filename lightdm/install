@@ -6,6 +6,10 @@ install -dm 755 "${UB_INSTALLDIR}"/var/cache/lightdm
 install -dm 770 "${UB_INSTALLDIR}"/var/lib/lightdm{,-data}
 install -dm 711 "${UB_INSTALLDIR}"/var/log/lightdm
 
+# Dbus
+mv ${UB_INSTALLDIR}/{etc,usr/share}/dbus-1/system.d
+rmdir ${UB_INSTALLDIR}/etc/dbus-1
+
 # ubuntu cucc felesleges
 rm -rf "${UB_INSTALLDIR}"/etc/apparmor.d
 rm -rf "${UB_INSTALLDIR}"/etc/init
