@@ -1,4 +1,8 @@
 #!/bin/sh -eux
 
-autoreconf -vif
-ub_compile
+export SASS_LIBSASS_PATH=./libsass
+export SASS_SPEC_PATH=./spec
+export BUILD=static
+export AUTOTOOLS=yes
+
+./script/ci-build-libsass
