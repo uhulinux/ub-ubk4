@@ -1,0 +1,21 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2018-12-19 22:24:58.000000000 +0100
++++ mod/configure.ac	2019-10-30 21:45:02.795080221 +0100
+@@ -1602,7 +1602,7 @@
+     if test x"$GCC" = "xyes" ; then
+       warnings_cxx="-Wall -Winline"
+       warnings_c="-Wstrict-prototypes $warnings_cxx"
+-      optimization_c="-O3 -mmacosx-version-min=10.9 $march"
++      optimization_c="-O2 -mmacosx-version-min=10.9 $march"
+       optimization_cxx="-fno-exceptions $optimization_c"
+       if test x"$ac_cv_prog_cc_g" = "xyes" ; then
+         CFLAGS="$CFLAGS -g $optimization_c $warnings_c"
+@@ -1727,7 +1727,7 @@
+       dnl if using GCC.
+       dnl If the user has specified her own `CFLAGS', we do not override them.
+ 
+-      optimization_c="-O3 $march"
++      optimization_c="-O2 $march"
+       optimization_cxx="-fno-exceptions $optimization_c"
+       dnl Use -g if available.
+       if test x"$ac_cv_prog_cc_g" = "xyes" ; then
