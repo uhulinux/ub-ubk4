@@ -1,23 +1,27 @@
-diff -Naur orig/data/org.mate.session.gschema.xml.in patched/data/org.mate.session.gschema.xml.in
---- orig/data/org.mate.session.gschema.xml.in	2015-10-08 22:26:58.000000000 +0200
-+++ patched/data/org.mate.session.gschema.xml.in	2015-10-17 17:46:59.839621985 +0200
-@@ -32,7 +32,7 @@
+diff -Nur orig/data/org.mate.session.gschema.xml.in mod/data/org.mate.session.gschema.xml.in
+--- orig/data/org.mate.session.gschema.xml.in	2019-09-22 13:54:16.000000000 +0200
++++ mod/data/org.mate.session.gschema.xml.in	2019-11-01 16:26:54.850191184 +0100
+@@ -37,7 +37,7 @@
        <description>List of applications that are part of the default session.</description>
      </key>
      <key name="required-components-list" type="as">
 -      <default>[ 'windowmanager', 'panel', 'filemanager', 'dock' ]</default>
-+      <default>[ 'windowmanager', 'panel', 'filemanager', 'dock', 'notification-daemon' ]</default>
++      <default>[ 'windowmanager', 'panel', 'filemanager', 'notification-daemon' ]</default>
        <summary>Required session components</summary>
        <description>List of components that are required as part of the session. (Each element names a key under "/org/mate/desktop/session/required_components"). The Startup Applications preferences tool will not normally allow users to remove a required component from the session, and the session manager will automatically add the required components back to the session at login time if they do get removed.</description>
      </key>
-@@ -64,5 +64,10 @@
-       <summary>Dock</summary>
-       <description>A dock provides a dockable area, simliar to a panel, for launching and switching applications.</description>
+@@ -64,10 +64,10 @@
+       <summary>File Manager</summary>
+       <description>The file manager provides the desktop icons and allows you to interact with your saved files.</description>
      </key>
+-    <key name="dock" type="s">
+-      <default>''</default>
+-      <summary>Dock</summary>
+-      <description>A dock provides a dockable area, similar to a panel, for launching and switching applications.</description>
 +    <key name="notification-daemon" type="s">
 +      <default>'mate-notification-daemon'</default>
 +      <summary>Notification</summary>
 +      <description>The notification daemon provides desktop notifications.</description>
-+    </key>
+     </key>
    </schema>
  </schemalist>
