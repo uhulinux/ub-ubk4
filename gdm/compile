@@ -4,10 +4,12 @@ ub_compile \
 	--enable-console-helper=no \
 	--enable-authentication-scheme=pam \
 	--enable-profiling \
-	--with-dmconfdir=/usr/share/xsessions \
 	--with-initial-vt=7 \
 	--with-user=gdm \
+	--with-dmconfdir=/usr/share/xsessions \
 	--with-group=gdm \
 	--without-tcp-wrappers \
 	--without-plymouth \
-	--without-seelinux
+	--without-selinux \
+	--enable-gdm-xsession \
+	--enable-ipv6
