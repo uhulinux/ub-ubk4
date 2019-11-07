@@ -4,5 +4,9 @@ ub_install
 
 install Install/aumix "$UB_INSTALLDIR"/usr/bin/gaumix
 
+# oss hiányában a pulseaudio használatos
+mv "$UB_INSTALLDIR"/usr/bin/aumix "$UB_INSTALLDIR"/usr/bin/aumix.bin
+mv "$UB_INSTALLDIR"/usr/bin/gaumix "$UB_INSTALLDIR"/usr/bin/gaumix.bin
+
 # Az xaumix elég felejthető, mi több, nem működik.
 rm "$UB_INSTALLDIR"/usr/bin/xaumix
