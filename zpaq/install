@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
-cd zpaq-7.15
 cp -a zpaq "$UB_INSTALLDIR"/usr/bin/
 cp -a libzpaq.h "$UB_INSTALLDIR"/usr/include/
 cp -a libzpaq.so "$UB_INSTALLDIR"/usr/lib/
 cp -a libzpaq.a "$UB_INSTALLDIR"/usr/lib/
+mkdir -p "$UB_INSTALLDIR"/usr/share/man/man1
+cp zpaq.1 "$UB_INSTALLDIR"/usr/share/man/man1/
