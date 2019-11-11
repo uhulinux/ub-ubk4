@@ -2,19 +2,22 @@
 
 ub_compile \
     -Dplatforms=x11,drm,wayland,surfaceless \
-    -Dswr-arches=avx,avx2 \
     -Ddri3=true \
     -Dgallium-extra-hud=true \
+    -Dgallium-vdpau=true \
+    -Dgallium-xvmc=true \
+    -Dgallium-va=true \
+    -Dgallium-xa=true \
     -Dgallium-nine=true \
     -Dgallium-opencl=icd \
-    -Dgallium-va=true \
-    -Dgallium-vdpau=true \
-    -Dgallium-xa=true \
-    -Dgallium-xvmc=true \
+    -Dgles1=false \
+    -Dgles2=true \
 	-Dgbm=true \
-	-Dglvnd=true \
 	-Dglx=dri \
-	-Dlibunwind=true \
+    -Degl=true \
+	-Dglvnd=true \
 	-Dllvm=true \
+	-Dlibunwind=true \
 	-Dlmsensors=true \
+    -Dswr-arches=avx,avx2 \
 	-Dtools=all
