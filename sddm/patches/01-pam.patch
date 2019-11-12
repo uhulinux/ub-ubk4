@@ -1,8 +1,11 @@
 diff -Nur orig/services/sddm-autologin.pam mod/services/sddm-autologin.pam
---- orig/services/sddm-autologin.pam	2017-08-31 14:59:49.000000000 +0200
-+++ mod/services/sddm-autologin.pam	2017-09-25 08:05:04.753839955 +0200
-@@ -3,11 +3,11 @@
- auth        required    pam_tally.so file=/var/log/faillog onerr=succeed
+--- orig/services/sddm-autologin.pam	2019-03-13 10:22:35.000000000 +0100
++++ mod/services/sddm-autologin.pam	2019-11-12 09:31:09.195411186 +0100
+@@ -1,13 +1,13 @@
+ #%PAM-1.0
+ auth        required    pam_env.so
+-auth        required    pam_tally.so file=/var/log/faillog onerr=succeed
++auth        required    pam_tally2.so file=/var/log/faillog onerr=succeed
  auth        required    pam_shells.so
  auth        required    pam_nologin.so
 +auth        [success=1 default=ignore]  pam_succeed_if.so user ingroup users
@@ -19,8 +22,8 @@ diff -Nur orig/services/sddm-autologin.pam mod/services/sddm-autologin.pam
 --session    optional    pam_gnome_keyring.so auto_start
  -session    optional    pam_kwallet5.so auto_start
 diff -Nur orig/services/sddm.pam mod/services/sddm.pam
---- orig/services/sddm.pam	2017-08-31 14:59:49.000000000 +0200
-+++ mod/services/sddm.pam	2017-09-25 08:06:29.561703684 +0200
+--- orig/services/sddm.pam	2019-03-13 10:22:35.000000000 +0100
++++ mod/services/sddm.pam	2019-11-12 09:32:05.299396218 +0100
 @@ -1,15 +1,15 @@
  #%PAM-1.0
  
