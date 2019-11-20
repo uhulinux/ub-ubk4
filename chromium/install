@@ -22,7 +22,7 @@ mv out/Release/locales/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/locales/
 
 # mv out/Release/resources/ "$UB_INSTALLDIR"/usr/lib/chromium/
 
-for size in 16 22 24 32 48 64 128 256; do
+for size in 16 24 32 48 64 128 256; do
 	mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/
 	case ${size} in
 	    16|32) iconpath="chrome/app/theme/default_100_percent/chromium" ;;

@@ -5,4 +5,5 @@ pepperflash_version=`grep -i version /usr/lib/adobe-flashplugin/manifest.json | 
 exec /usr/lib/chromium/chrome \
 		--ppapi-flash-path=/usr/lib/adobe-flashplugin/libpepflashplayer.so \
 		--ppapi-flash-version="$pepperflash_version" \
+		--no-experiments \
 		"$@"
