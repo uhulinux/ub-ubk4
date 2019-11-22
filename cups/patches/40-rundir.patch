@@ -1,0 +1,24 @@
+diff -Naur orig/config.h.in patched/config.h.in
+--- orig/config.h.in	2019-08-23 17:19:38.000000000 +0200
++++ patched/config.h.in	2019-11-22 16:10:35.280796748 +0100
+@@ -124,7 +124,7 @@
+ #define CUPS_SBINDIR	"/usr/sbin"
+ #define CUPS_SERVERBIN	"/usr/lib/cups"
+ #define CUPS_SERVERROOT	"/etc/cups"
+-#define CUPS_STATEDIR	"/var/run/cups"
++#define CUPS_STATEDIR	"/run/cups"
+ 
+ 
+ /*
+diff -Naur orig/man/cups-files.conf.5 patched/man/cups-files.conf.5
+--- orig/man/cups-files.conf.5	2019-08-23 17:19:38.000000000 +0200
++++ patched/man/cups-files.conf.5	2019-11-22 16:11:06.921124596 +0100
+@@ -202,7 +202,7 @@
+ .TP 5
+ \fBStateDir \fIdirectory\fR
+ Specifies the directory to use for PID and local certificate files.
+-The default is "/var/run/cups" or "/etc/cups" depending on the platform.
++The default is "/run/cups" or "/etc/cups" depending on the platform.
+ .\"#SyncOnClose
+ .TP 5
+ \fBSyncOnClose Yes\fR
