@@ -8,7 +8,8 @@ ub_replace -O3 -O2 js/src/configure.in
 
 cd js/src
 rm -rf ctypes/libffi editline
-export SHELL=/bin/bash
+export SHELL=/usr/bin/bash
+export PYTHON=python2
 ub_compile \
 	--with-system-nspr \
 	--enable-threadsafe \
