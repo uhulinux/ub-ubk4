@@ -5,11 +5,13 @@ autoconf -I config-scripts
 export CFLAGS='-fcond-mismatch'
 ub_compile \
 	--exec_prefix=/usr \
-	--disable-pam \
-	--enable-raw-printing \
 	--libdir=/usr/lib \
+	--disable-pam \
 	--with-logdir=/var/log/cups \
 	--with-docdir=/usr/share/cups/doc \
+	--with-rundir=/run/cups \
+	--with-cupsd-file-perm=0755 \
+	--with-log-file-perm=0600 \
 	--enable-raw-printing \
 	--enable-ssl=yes \
 	--enable-threads \
@@ -17,6 +19,4 @@ ub_compile \
 	--enable-libpaper \
 	--enable-gnutls \
 	--enable-webif \
-	--with-cupsd-file-perm=0755 \
-	--with-log-file-perm=0600 \
 	--enable-relro
