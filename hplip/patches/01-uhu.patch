@@ -1,6 +1,6 @@
-diff -Nur orig/base/password.py mod/base/password.py
---- orig/base/password.py	2019-01-24 11:42:27.000000000 +0100
-+++ mod/base/password.py	2019-02-25 16:18:37.654184686 +0100
+diff -Naur orig/base/password.py patched/base/password.py
+--- orig/base/password.py	2019-11-04 11:48:05.000000000 +0100
++++ patched/base/password.py	2019-11-23 21:24:47.572412593 +0100
 @@ -56,6 +56,7 @@
                'gos': 'sudo',
                'boss': 'su',
@@ -9,9 +9,9 @@ diff -Nur orig/base/password.py mod/base/password.py
                'manjarolinux': 'sudo',
                }
  
-diff -Nur orig/installer/distros.dat mod/installer/distros.dat
---- orig/installer/distros.dat	2019-01-24 10:33:47.000000000 +0100
-+++ mod/installer/distros.dat	2019-02-25 16:24:10.101670995 +0100
+diff -Naur orig/installer/distros.dat patched/installer/distros.dat
+--- orig/installer/distros.dat	2019-11-04 11:02:03.000000000 +0100
++++ patched/installer/distros.dat	2019-11-23 21:34:25.272493816 +0100
 @@ -94,7 +94,7 @@
  # ****************************************
  
@@ -21,11 +21,10 @@ diff -Nur orig/installer/distros.dat mod/installer/distros.dat
  
  # ****************************************
  
-@@ -11831,3 +11831,280 @@
- 
- [manjarolinux:18.0:automake]
+@@ -13674,4 +13674,279 @@
+ [manjarolinux:18.1.0:automake]
  packages=automake
-+
+ 
 +# ****************************************
 +[uhu-linux]
 +index=60
@@ -92,7 +91,7 @@ diff -Nur orig/installer/distros.dat mod/installer/distros.dat
 +
 +[uhu-linux:UBK1:libpthread]
 +packages=glibc
-+
+ 
 +[uhu-linux:UBK1:libtool]
 +packages=libtool
 +
@@ -244,16 +243,16 @@ diff -Nur orig/installer/distros.dat mod/installer/distros.dat
 +commands=su -c "modprobe ppdev",su -c cp -f /etc/modules /etc/modules.hplip,echo ppdev | su -c tee -a /etc/modules
 +
 +[uhu-linux:UBK3:python-devel]
-+packages=python2-dev
++packages=python3-dev
 +
 +[uhu-linux:UBK3:pyqt]
 +packages=
 +
 +[uhu-linux:UBK3:pyqt4]
-+packages=python2-pyqt4
++packages=
 +
 +[uhu-linux:UBK3:pyqt4-dbus]
-+packages=python2-pyqt5
++packages=python3-pyqt5
 +
 +[uhu-linux:UBK3:python23]
 +packages=python2
@@ -262,7 +261,7 @@ diff -Nur orig/installer/distros.dat mod/installer/distros.dat
 +packages=python2
 +
 +[uhu-linux:UBK3:reportlab]
-+packages=python2-reportlab
++packages=python3-reportlab
 +
 +[uhu-linux:UBK3:sane]
 +packages=sane
@@ -280,7 +279,7 @@ diff -Nur orig/installer/distros.dat mod/installer/distros.dat
 +packages=
 +
 +[uhu-linux:UBK3:python-dbus]
-+packages=dbus-python2,python2-pygobject
++packages=dbus-python3,python3-pygobject
 +
 +[uhu-linux:UBK3:dbus]
 +packages=dbus-dev
@@ -295,7 +294,7 @@ diff -Nur orig/installer/distros.dat mod/installer/distros.dat
 +packages=policykit,policykit-gnome
 +
 +[uhu-linux:UBK3:python-notify]
-+packages=python2-notify
++packages=python3-notify
 +
 +[uhu-linux:UBK3:network]
 +packages=wget
