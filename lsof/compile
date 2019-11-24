@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
+sed -i "s|.so ./version|.ds VN ${UB_VERSION}|" -i Lsof.8
 yes "" | ./Configure linux
 make
