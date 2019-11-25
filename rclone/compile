@@ -1,11 +1,9 @@
 #!/bin/sh -eux
 
-mkdir -p .gopath/src/github.com/ncw
-ln -sf "$PWD" .gopath/src/github.com/ncw/rclone
-export GOPATH="$PWD/.gopath"
-go get github.com/ncw/rclone
+sed -i "1s/python$/&2/" bin/make_manual.py bin/make_backend_docs.py
 
-cd .gopath/src/github.com/ncw/rclone
-    PATH="$GOPATH/bin:$PATH" make TAG=v${UB_VERSION} rclone
-  ./rclone genautocomplete bash rclone.bash_completion
-  ./rclone genautocomplete zsh rclone.zsh_completion
+mkdir -p .gopath/src/github.com/rclone
+ln -sf "$PWD" .gopath/src/github.com/rclone/rclone
+export GOPATH="$PWD/.gopath"
+
+go get github.com/rclone/rclone
