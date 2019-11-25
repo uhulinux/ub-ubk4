@@ -1,8 +1,9 @@
 #!/bin/sh -eux
 
-git submodule init
-git config --local submodule.subprojects/gvc.url libgnome-volume-control
-git submodule update
+if [ -d .git ]; then
+git clone https://gitlab.gnome.org/GNOME/libgnome-volume-control.git subprojects/gvc
+git clone https://github.com/getsolus/budgie-translations.git subprojects/translations
+fi
 
 ub_compile \
 	-Dwith-gtk-doc=false
