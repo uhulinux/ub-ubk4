@@ -1,0 +1,11 @@
+diff -Nur orig/configure.inc mod/configure.inc
+--- orig/configure.inc	2019-04-15 17:28:20.000000000 +0200
++++ mod/configure.inc	2019-11-26 14:34:17.178022270 +0100
+@@ -1501,7 +1501,6 @@
+ 	$PROG_LN_S -f \$FULLNAME \$1/\$LIBNAME.\$MAJOR
+ 	$PROG_LN_S -f \$FULLNAME \$1/\$LIBNAME
+ EOF
+-    test "$LDCONFIG" && echo '	'$LDCONFIG '"$1"' >> librarian.sh
+     cat >> librarian.sh << EOF
+ 	;;
+ esac
