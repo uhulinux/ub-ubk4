@@ -1,0 +1,42 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2008-02-28 05:35:01.000000000 +0100
++++ patched/configure	2019-11-26 11:23:36.791876163 +0100
+@@ -6645,7 +6645,7 @@
+ 	        ;;
+ 	esac
+     else
+-	if test ! -f "${TCL_SRC_DIR}/generic/tclInt.h" ; then
++	if test ! -f "${TCL_SRC_DIR}/tclInt.h" ; then
+ 	    { { echo "$as_me:$LINENO: error: Cannot find private header tclInt.h in ${TCL_SRC_DIR}" >&5
+ echo "$as_me: error: Cannot find private header tclInt.h in ${TCL_SRC_DIR}" >&2;}
+    { (exit 1); exit 1; }; }
+@@ -6700,7 +6700,7 @@
+ 	        ;;
+ 	esac
+     else
+-	if test ! -f "${TK_SRC_DIR}/generic/tkInt.h" ; then
++	if test ! -f "${TK_SRC_DIR}/tkInt.h" ; then
+ 	    { { echo "$as_me:$LINENO: error: Cannot find private header tkInt.h in ${TK_SRC_DIR}" >&5
+ echo "$as_me: error: Cannot find private header tkInt.h in ${TK_SRC_DIR}" >&2;}
+    { (exit 1); exit 1; }; }
+diff -Naur orig/tclconfig/tcl.m4 patched/tclconfig/tcl.m4
+--- orig/tclconfig/tcl.m4	2007-02-21 23:09:05.000000000 +0100
++++ patched/tclconfig/tcl.m4	2019-11-26 11:23:51.516088386 +0100
+@@ -3407,7 +3407,7 @@
+ 	        ;;
+ 	esac
+     else
+-	if test ! -f "${TCL_SRC_DIR}/generic/tclInt.h" ; then
++	if test ! -f "${TCL_SRC_DIR}/tclInt.h" ; then
+ 	    AC_MSG_ERROR([Cannot find private header tclInt.h in ${TCL_SRC_DIR}])
+ 	fi
+     fi
+@@ -3568,7 +3568,7 @@
+ 	        ;;
+ 	esac
+     else
+-	if test ! -f "${TK_SRC_DIR}/generic/tkInt.h" ; then
++	if test ! -f "${TK_SRC_DIR}/tkInt.h" ; then
+ 	    AC_MSG_ERROR([Cannot find private header tkInt.h in ${TK_SRC_DIR}])
+ 	fi
+     fi
