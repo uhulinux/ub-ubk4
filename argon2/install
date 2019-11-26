@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-ub_install
+ub_install LIBRARY_REL=lib
 
 # install pkg-config file
 sed -i -e "s/@UPSTREAM_VER@/${UB_VERSION}/" libargon2.pc
