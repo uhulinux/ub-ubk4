@@ -5,6 +5,7 @@ CXX="ccache g++ -m64"
 
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/seamonkey/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
+export PYTHON=python2
 
 : > .mozconfig
 cat > .mozconfig << _EOF_
