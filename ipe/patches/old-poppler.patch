@@ -1,0 +1,86 @@
+diff -Naur orig/pdftoipe/pdftoipe.cpp patched/pdftoipe/pdftoipe.cpp
+--- orig/pdftoipe/pdftoipe.cpp	2019-01-08 23:31:55.000000000 +0100
++++ patched/pdftoipe/pdftoipe.cpp	2019-11-27 17:59:26.251610844 +0100
+@@ -104,18 +104,18 @@
+     return 1;
+   
+   // construct XML file name
+-  std::string xmlFileName;
++  GooString *xmlFileName;
+   if (argc == 3) {
+-    xmlFileName = argv[2];
++    xmlFileName = new GooString(argv[2]);
+   } else {
+-    const char *p = fileName->c_str() + fileName->getLength() - 4;
++    const char *p = fileName->getCString() + fileName->getLength() - 4;
+     if (!strcmp(p, ".pdf") || !strcmp(p, ".PDF")) {
+-        xmlFileName = std::string(fileName->c_str(),
++        xmlFileName = new GooString(fileName->getCString(),
+                                   fileName->getLength() - 4);
+     } else {
+-      xmlFileName = fileName->c_str();
++      xmlFileName = fileName->copy();
+     }
+-    xmlFileName += ".ipe";
++    xmlFileName->append(".ipe");
+   }
+ 
+   // get page range
+@@ -127,7 +127,7 @@
+ 
+   // write XML file
+   XmlOutputDev *xmlOut = 
+-    new XmlOutputDev(xmlFileName, doc->getXRef(),
++    new XmlOutputDev(xmlFileName->getCString(), doc->getXRef(),
+                      doc->getCatalog(), firstPage, lastPage);
+ 
+   // tell output device about text handling
+@@ -152,6 +152,7 @@
+ 
+   // clean up
+   delete xmlOut;
++  delete xmlFileName;
+   delete doc;
+   delete globalParams;
+ 
+diff -Naur orig/pdftoipe/xmloutputdev.cpp patched/pdftoipe/xmloutputdev.cpp
+--- orig/pdftoipe/xmloutputdev.cpp	2019-01-08 23:31:55.000000000 +0100
++++ patched/pdftoipe/xmloutputdev.cpp	2019-11-27 17:54:11.098796559 +0100
+@@ -6,8 +6,6 @@
+ #include <stddef.h>
+ #include <stdarg.h>
+ 
+-#include <string>
+-
+ #include "Object.h"
+ #include "Error.h"
+ #include "Gfx.h"
+@@ -26,13 +24,13 @@
+ // XmlOutputDev
+ //------------------------------------------------------------------------
+ 
+-XmlOutputDev::XmlOutputDev(const std::string& fileName, XRef *xrefA, Catalog *catalog,
++XmlOutputDev::XmlOutputDev(const char *fileName, XRef *xrefA, Catalog *catalog,
+                            int firstPage, int lastPage)
+ {
+   FILE *f;
+ 
+-  if (!(f = fopen(fileName.c_str(), "wb"))) {
+-    fprintf(stderr, "Couldn't open output file '%s'\n", fileName.c_str());
++  if (!(f = fopen(fileName, "wb"))) {
++    fprintf(stderr, "Couldn't open output file '%s'\n", fileName);
+     ok = false;
+     return;
+   }
+diff -Naur orig/pdftoipe/xmloutputdev.h patched/pdftoipe/xmloutputdev.h
+--- orig/pdftoipe/xmloutputdev.h	2019-01-08 23:31:55.000000000 +0100
++++ patched/pdftoipe/xmloutputdev.h	2019-11-27 17:52:38.813382448 +0100
+@@ -21,7 +21,7 @@
+ public:
+ 
+   // Open an XML output file, and write the prolog.
+-  XmlOutputDev(const std::string& fileName, XRef *xrefA, Catalog *catalog,
++  XmlOutputDev(const char *fileName, XRef *xrefA, Catalog *catalog,
+                int firstPage, int lastPage);
+   
+   // Destructor -- writes the trailer and closes the file.
