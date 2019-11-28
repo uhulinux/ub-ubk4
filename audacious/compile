@@ -1,4 +1,13 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--with-buildstamp='UHU Linux'
+	--with-buildstamp='UHU-Linux'
+
+ub_install
+
+cd plugins
+export AUDACIOUS_CFLAGS=-I$UB_INSTALLDIR/usr/include
+export AUDACIOUS_LIBS="-L$UB_INSTALLDIR/usr/lib -laudcore"
+sed -i -e "s#^plugindir=.*#plugindir=/usr/lib/audacious#" configure{,.ac}
+ub_compile \
+	--enable-aac
