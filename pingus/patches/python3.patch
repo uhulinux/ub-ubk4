@@ -1,0 +1,20 @@
+diff -Naur orig/SConscript patched/SConscript
+--- orig/SConscript	2011-12-24 22:46:47.000000000 +0100
++++ patched/SConscript	2019-11-28 20:34:01.359015482 +0100
+@@ -126,12 +126,12 @@
+     def configure_end(self):
+         self.env = self.conf.Finish()
+ 
+-        print "Reports:"
+-        print self.reports
++        print ("Reports:")
++        print (self.reports)
+ 
+         if not self.fatal_error == "":
+-            print "Fatal Errors:"
+-            print self.fatal_error
++            print ("Fatal Errors:")
++            print (self.fatal_error)
+             Exit(1)
+ 
+     def configure_gxx(self): 
