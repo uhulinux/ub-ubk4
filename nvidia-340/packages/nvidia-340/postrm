@@ -3,6 +3,5 @@
 ln -sf /usr/lib/xorg/modules/extensions/libglx.so.xorg /usr/lib/xorg/modules/extensions/libglx.so
 ldconfig
 depmod
-#nouveau blacklist eltávolítása
-#sed 's/GRUB_CMDLINE_LINUX="module_blacklist=nouveau /GRUB_CMDLINE_LINUX="/' -i /etc/default/grub
-#grub-mkconfig -o /boot/grub/grub.cfg
+# esetleges gdm szemét eltávolítása és a wayland sessionok engedélyezése a gdm-ben
+rm -f /var/run/gdm/custom.conf
