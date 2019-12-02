@@ -6,3 +6,8 @@ ub_install
 for staticlib in buildsystem draw_opt ector_opt evas_opt http-parser libunibreak lz4 triangulator wayland_protocol; do
     sed -i -e "s/-l$staticlib//g" $UB_INSTALLDIR/usr/lib/pkgconfig/*.pc
 done
+
+for size in 16 24 32 48 64; do
+	mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/
+	cp data/elementary/desktop/elementary_${size}.png ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/elementary.png
+done
