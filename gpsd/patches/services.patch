@@ -1,0 +1,23 @@
+diff -Nur orig/systemd/gpsdctl@.service mod/systemd/gpsdctl@.service
+--- orig/systemd/gpsdctl@.service	2019-06-05 03:28:35.000000000 +0200
++++ mod/systemd/gpsdctl@.service	2019-12-03 20:10:37.255344582 +0100
+@@ -10,5 +10,5 @@
+ EnvironmentFile=-/etc/default/gpsd
+ EnvironmentFile=-/etc/sysconfig/gpsd
+ RemainAfterExit=yes
+-ExecStart=/bin/sh -c "[ \"$USBAUTO\" = true ] && /usr/local/sbin/gpsdctl add /dev/%I || :"
+-ExecStop=/bin/sh -c "[ \"$USBAUTO\" = true ] && /usr/local/sbin/gpsdctl remove /dev/%I || :"
++ExecStart=/bin/sh -c "[ \"$USBAUTO\" = true ] && /usr/sbin/gpsdctl add /dev/%I || :"
++ExecStop=/bin/sh -c "[ \"$USBAUTO\" = true ] && /usr/sbin/gpsdctl remove /dev/%I || :"
+diff -Nur orig/systemd/gpsd.service mod/systemd/gpsd.service
+--- orig/systemd/gpsd.service	2019-06-05 03:28:35.000000000 +0200
++++ mod/systemd/gpsd.service	2019-12-03 20:09:39.231426529 +0100
+@@ -8,7 +8,7 @@
+ Type=forking
+ EnvironmentFile=-/etc/default/gpsd
+ EnvironmentFile=-/etc/sysconfig/gpsd
+-ExecStart=/usr/local/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
++ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
+ 
+ [Install]
+ WantedBy=multi-user.target

@@ -1,4 +1,12 @@
 #!/bin/sh -eux
 
 export DESTDIR="$UB_INSTALLDIR"
-scons install prefix=/usr
+scons install
+cp gpsinit "${UB_INSTALLDIR}"/usr/bin
+mkdir -p ${UB_INSTALLDIR}/usr/lib/{systemd/system,udev/rules.d}
+mkdir -p ${UB_INSTALLDIR}/usr/share/{applications,gpsd}
+cp gpsd.rules ${UB_INSTALLDIR}/usr/lib/udev/rules.d/25-gpsd-usb.rules
+cp gpsd.hotplug ${UB_INSTALLDIR}/usr/lib/udev/
+cp packaging/X11/{xgps.desktop,xgpsspeed.desktop} ${UB_INSTALLDIR}/usr/share/applications/
+cp packaging/X11/gpsd-logo.png ${UB_INSTALLDIR}/usr/share/gpsd/
+cp systemd/{gpsd.service,gpsd.socket,gpsdctl@.service} ${UB_INSTALLDIR}/usr/lib/systemd/system/
