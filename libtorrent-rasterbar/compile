@@ -1,6 +1,8 @@
 #!/bin/sh -eux
 
-export PYTHON=/usr/bin/python2
-./bootstrap.sh
+./autotool.sh
+
 ub_configure \
     --enable-python-binding
+
+ub_make
