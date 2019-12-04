@@ -1,12 +1,39 @@
-diff -Naurd a/Makefile b/Makefile
---- a/Makefile	2012-11-24 23:45:42.000000000 +0100
-+++ b/Makefile	2012-11-25 18:06:20.000000000 +0100
-@@ -85,7 +85,7 @@
- 	install -m 755 -o 0 -g 0 filterator $(ROOT)/usr/bin/filterator
- 	install -m 755 -o 0 -g 0 -d $(ROOT)/usr/share/man/man1/
- 	install -m 755 -o 0 -g 0 comparator.1 $(ROOT)/usr/share/man/man1/comparator.1
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2019-06-12 14:03:08.000000000 +0200
++++ mod/Makefile	2019-12-04 18:23:34.294767157 +0100
+@@ -12,7 +12,7 @@
+ EXTRAS  = shredtree.py shredcompare.py
+ TEST    = test
+ SOURCES = $(CODE) $(SCRIPTS) $(DOCS) $(EXTRAS) $(TEST) Makefile
+-CFLAGS  = -O3
++CFLAGS  = -O2
+ LDFLAGS = 
+ 
+ all: comparator comparator.1
+@@ -84,17 +84,17 @@
+ 	done
+ 
+ install: comparator.1 uninstall
+-	install -m 755 -o 0 -g 0 -d $(ROOT)/usr/bin/
+-	install -m 755 -o 0 -g 0 comparator $(ROOT)/usr/bin/comparator
+-	install -m 755 -o 0 -g 0 filterator $(ROOT)/usr/bin/filterator
+-	install -m 755 -o 0 -g 0 -d $(ROOT)/usr/share/man/man1/
+-	install -m 755 -o 0 -g 0 comparator.1 $(ROOT)/usr/share/man/man1/comparator.1
 -	python setup.py install
-+#	python setup.py install
++	install -m 755 -o 0 -g 0 -d $(DESTDIR)/usr/bin/
++	install -m 755 -o 0 -g 0 comparator $(DESTDIR)/usr/bin/comparator
++	install -m 755 -o 0 -g 0 filterator $(DESTDIR)/usr/bin/filterator
++	install -m 755 -o 0 -g 0 -d $(DESTDIR)/usr/share/man/man1/
++	install -m 755 -o 0 -g 0 comparator.1 $(DESTDIR)/usr/share/man/man1/comparator.1
++	python2 setup.py install --root=$(DESTDIR)
  
  uninstall:
- 	rm -f ${ROOT}/usr/bin/comparator 
+-	rm -f ${ROOT}/usr/bin/comparator 
+-	rm -f ${ROOT}/usr/bin/filterator 
+-	rm -f ${ROOT}/usr/share/man/man1/comparator.1
++	rm -f ${DESTDIR}/usr/bin/comparator 
++	rm -f ${DESTDIR}/usr/bin/filterator 
++	rm -f ${DESTDIR}/usr/share/man/man1/comparator.1
+ 	#python setup.py uninstall
+ 
+ comparator-$(VERS).tar.gz: $(SOURCES) comparator.1
