@@ -1,0 +1,35 @@
+diff -Naur orig/config/Makefile.am patched/config/Makefile.am
+--- orig/config/Makefile.am	2019-11-26 23:48:42.000000000 +0100
++++ patched/config/Makefile.am	2019-12-04 17:15:08.932941714 +0100
+@@ -33,7 +33,10 @@
+ 	     debuginfod.service debuginfod.sysconfig
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+-pkgconfig_DATA = libelf.pc libdw.pc libdebuginfod.pc
++pkgconfig_DATA = libelf.pc libdw.pc
++if DEBUGINFOD
++pkgconfig_DATA += libdebuginfod.pc
++endif
+ 
+ if MAINTAINER_MODE
+ $(srcdir)/elfutils.spec.in: $(top_srcdir)/NEWS
+diff -Naur orig/config/Makefile.in patched/config/Makefile.in
+--- orig/config/Makefile.in	2019-11-26 23:48:46.000000000 +0100
++++ patched/config/Makefile.in	2019-12-04 17:21:13.477098894 +0100
+@@ -88,6 +88,7 @@
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
++@DEBUGINFOD_TRUE@am__append_1 = libdebuginfod.pc
+ subdir = config
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \
+@@ -308,7 +309,7 @@
+ 	     debuginfod.service debuginfod.sysconfig
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+-pkgconfig_DATA = libelf.pc libdw.pc libdebuginfod.pc
++pkgconfig_DATA = libelf.pc libdw.pc $(am__append_1)
+ all: all-am
+ 
+ .SUFFIXES:
