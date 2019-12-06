@@ -1,4 +1,10 @@
 #!/bin/sh -eux
 
+export CPPFLAGS=" -I/usr/include/tirpc/"
+export LDFLAGS+=" -ltirpc"
 autoreconf -vif
-ub_compile
+ub_compile \
+	--enable-turbo \
+	--disable-doxygen \
+	--disable-sdl1 \
+	--enable-toonz

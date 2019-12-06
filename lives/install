@@ -4,3 +4,10 @@ ub_install
 
 rm -f $UB_INSTALLDIR/usr/bin/lives
 ln -s $UB_INSTALLDIR/usr/bin/lives-exe $UB_INSTALLDIR/usr/bin/lives
+cd $UB_INSTALLDIR/usr/bin
+for py in `ls -1 *_encoder`;do
+	rm ${py}
+	ln -s ${py}3 ${py}
+done
+rm -rf $UB_INSTALLDIR/usr/include
+rm -rf $UB_INSTALLDIR/usr/lib/pkgconfig
