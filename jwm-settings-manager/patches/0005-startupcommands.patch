@@ -1,14 +1,7 @@
-From 8847f687dad22ee2039524bccd1633c02b1beb57 Mon Sep 17 00:00:00 2001
-From: attus <attus@enterpriseforever.com>
-Date: Mon, 30 Jul 2018 18:03:34 +0200
-Subject: default startupcommands in UHU
-
-
-diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
-index 55f40f9..77b53ba 100644
---- a/data/themes/CMakeLists.txt
-+++ b/data/themes/CMakeLists.txt
-@@ -40,9 +40,10 @@ set(TWITTER "https://twitter.com/ToriOS_Official")
+diff -Nur orig/data/themes/CMakeLists.txt mod/data/themes/CMakeLists.txt
+--- orig/data/themes/CMakeLists.txt	2019-12-05 16:09:35.000000000 +0100
++++ mod/data/themes/CMakeLists.txt	2019-12-06 09:29:22.587106171 +0100
+@@ -41,9 +41,9 @@
  set(LP "https://launchpad.net/~torios")
  
  ##Startup commands
@@ -17,7 +10,6 @@ index 55f40f9..77b53ba 100644
 -   <StartupCommand>nice-start</StartupCommand>")
 +set (STARTUP "<StartupCommand>nm-applet</StartupCommand>
 +	<StartupCommand>/usr/libexec/lxpolkit</StartupCommand>
-+	<StartupCommand>retrovol -hide</StartupCommand>
 +	<StartupCommand>synclient MaxTapTime=0</StartupCommand>")
  
  ## Desktop Background
