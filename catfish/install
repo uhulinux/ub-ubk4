@@ -1,7 +1,4 @@
 #!/bin/sh -eux
 
-export PYTHON=python2
-ub_install
-
-find "$UB_INSTALLDIR"/usr/share/ -type f -exec chmod -x {} \;
+python3 setup.py install --root=${UB_INSTALLDIR}
 rm -rf ${UB_INSTALLDIR}/usr/share/doc/catfish
