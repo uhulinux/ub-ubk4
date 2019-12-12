@@ -1,0 +1,66 @@
+diff -Naur orig/src/nautilus-canvas-item.c patched/src/nautilus-canvas-item.c
+--- orig/src/nautilus-canvas-item.c	2019-11-22 13:57:04.000000000 +0100
++++ patched/src/nautilus-canvas-item.c	2019-12-12 12:22:44.700553871 +0100
+@@ -1381,14 +1381,12 @@
+     GString *str;
+     char *zeroified_text;
+     const char *p;
+-    PangoAttrList *attr_list;
+ 
+     canvas_item = EEL_CANVAS_ITEM (item);
+ 
+     container = NAUTILUS_CANVAS_CONTAINER (canvas_item->canvas);
+     context = gtk_widget_get_pango_context (GTK_WIDGET (canvas_item->canvas));
+     layout = pango_layout_new (context);
+-    attr_list = pango_attr_list_new ();
+ 
+     zeroified_text = NULL;
+ 
+@@ -1417,9 +1415,6 @@
+     pango_layout_set_spacing (layout, LABEL_LINE_SPACING);
+     pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
+ 
+-    pango_attr_list_insert (attr_list, pango_attr_insert_hyphens_new (FALSE));
+-    pango_layout_set_attributes (layout, attr_list);
+-
+     /* Create a font description */
+     if (container->details->font)
+     {
+@@ -1432,7 +1427,6 @@
+     pango_layout_set_font_description (layout, desc);
+     pango_font_description_free (desc);
+     g_free (zeroified_text);
+-    pango_attr_list_unref (attr_list);
+ 
+     return layout;
+ }
+diff -Naur orig/src/nautilus-view-icon-item-ui.c patched/src/nautilus-view-icon-item-ui.c
+--- orig/src/nautilus-view-icon-item-ui.c	2019-11-22 13:57:04.000000000 +0100
++++ patched/src/nautilus-view-icon-item-ui.c	2019-12-12 12:24:31.285823104 +0100
+@@ -128,7 +128,6 @@
+     GtkBox *container;
+     GtkBox *item_selection_background;
+     GtkLabel *label;
+-    PangoAttrList *attr_list;
+     GtkStyleContext *style_context;
+     NautilusFile *file;
+     guint icon_size;
+@@ -150,9 +149,6 @@
+ 
+     label = GTK_LABEL (gtk_label_new (nautilus_file_get_display_name (file)));
+     gtk_widget_show (GTK_WIDGET (label));
+-    attr_list = pango_attr_list_new ();
+-    pango_attr_list_insert (attr_list, pango_attr_insert_hyphens_new (FALSE));
+-    gtk_label_set_attributes (label, attr_list);
+     gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_MIDDLE);
+     gtk_label_set_line_wrap (label, TRUE);
+     gtk_label_set_line_wrap_mode (label, PANGO_WRAP_WORD_CHAR);
+@@ -182,8 +178,6 @@
+                       (GCallback) on_view_item_size_changed, self);
+     g_signal_connect (self->model, "notify::file",
+                       (GCallback) on_view_item_file_changed, self);
+-
+-    pango_attr_list_unref (attr_list);
+ }
+ 
+ static void
