@@ -1,30 +1,30 @@
 diff -Naur orig/src/branding/default/show.qml patched/src/branding/default/show.qml
---- orig/src/branding/default/show.qml	2019-07-06 00:52:35.000000000 +0200
-+++ patched/src/branding/default/show.qml	2019-06-20 18:56:00.000000000 +0200
-@@ -24,53 +24,53 @@
+--- orig/src/branding/default/show.qml	2019-12-03 11:37:28.000000000 +0100
++++ patched/src/branding/default/show.qml	2019-12-14 22:13:53.187482650 +0100
+@@ -24,50 +24,51 @@
  {
      id: presentation
  
 -    function nextSlide() {
--        console.log("Next slide");
+-        console.log("QML Component (default slideshow) Next slide");
 -        presentation.goToNextSlide();
 -    }
 -
      Timer {
          id: advanceTimer
 -        interval: 1000
--        running: false
 +        interval: 10000
-+        running: true
+         running: presentation.activatedInCalamares
          repeat: true
 -        onTriggered: nextSlide()
 +        onTriggered: presentation.goToNextSlide()
      }
  
      Slide {
+-
 +        centeredText:"Ez a linux kevés, de lelkes ember munkájának gyümölcse."
 +        }
- 
++ 
 +   Slide {
 +        title: qsTr("UHU-Linux alapokról származik")
          Image {
@@ -50,11 +50,8 @@ diff -Naur orig/src/branding/default/show.qml patched/src/branding/default/show.
 -        }
      }
  
--    Slide {
+     Slide {
 -        centeredText: qsTr("This is a second Slide element.")
-+
-+ Slide {
-+
 +        title: qsTr("De már teljesen független tőle.")
 +        Image {
 +            source: "ubkuhu.jpg"
@@ -64,16 +61,9 @@ diff -Naur orig/src/branding/default/show.qml patched/src/branding/default/show.
 +        }
      }
  
-+
      Slide {
 -        centeredText: qsTr("This is a third Slide element.")
--    }
- 
--    function onActivate() {
--        presentation.currentSlide = 0;
--        advanceTimer.running = true
--        console.log("QML Component (default slideshow) activated");
-+        title: qsTr("UHU-UBK3")
++        title: qsTr("UHU-Linux UBK3")
 +        Image {
 +            source: "uhu-ubk.png"
 +            width: 300; height: 300
@@ -81,7 +71,9 @@ diff -Naur orig/src/branding/default/show.qml patched/src/branding/default/show.
 +            anchors.centerIn: parent
 +        }
      }
-+
-+
+ 
 +    Component.onCompleted: advanceTimer.running = true
- }
++    
+     // When this slideshow is loaded as a V1 slideshow, only
+     // activatedInCalamares is set, which starts the timer (see above).
+     //

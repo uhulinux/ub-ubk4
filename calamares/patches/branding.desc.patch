@@ -1,9 +1,9 @@
-diff -Nur orig/src/branding/default/branding.desc mod/src/branding/default/branding.desc
---- orig/src/branding/default/branding.desc	2019-06-03 15:04:41.000000000 +0200
-+++ mod/src/branding/default/branding.desc	2019-06-20 18:55:31.201775941 +0200
-@@ -57,17 +57,18 @@
- # are not supported (the rest are). Remember to quote the string
- # if it contains substitutions, or you'll get YAML exceptions.
+diff -Naur orig/src/branding/default/branding.desc patched/src/branding/default/branding.desc
+--- orig/src/branding/default/branding.desc	2019-12-03 11:37:28.000000000 +0100
++++ patched/src/branding/default/branding.desc	2019-12-14 21:56:09.493380157 +0100
+@@ -61,17 +61,18 @@
+ # are visible as buttons there if the corresponding *show* keys
+ # are set to "true" (they can also be overridden).
  strings:
 -    productName:         "@{NAME}"
 -    shortProductName:    Generic
@@ -31,9 +31,9 @@ diff -Nur orig/src/branding/default/branding.desc mod/src/branding/default/brand
  
  # These images are loaded from the branding module directory.
  #
-@@ -86,9 +87,8 @@
+@@ -90,9 +91,8 @@
  #
- # These strings can also use substitutions from os-release (see above).
+ # These filenames can also use substitutions from os-release (see above).
  images:
 -    productLogo:         "squid.png"
 -    productIcon:         "squid.png"
