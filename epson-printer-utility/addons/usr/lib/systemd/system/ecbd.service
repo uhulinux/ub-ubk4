@@ -1,0 +1,11 @@
+[Unit]
+Description=Epson Custom Backend Daemon
+After=syslog.target
+
+[Service]
+Type=simple
+PIDFile=/run/ecbd.pid
+ExecStart=/usr/lib/epson-backend/ecbd
+
+[Install]
+WantedBy=multi-user.target
