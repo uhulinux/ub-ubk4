@@ -1,6 +1,6 @@
 diff -Naur orig/Makefile patched/Makefile
---- orig/Makefile	2017-12-31 10:34:02.000000000 +0100
-+++ patched/Makefile	2019-07-17 11:52:16.375057896 +0200
+--- orig/Makefile	2019-11-11 21:45:13.000000000 +0100
++++ patched/Makefile	2019-12-16 14:56:46.542756303 +0100
 @@ -9,7 +9,7 @@
  ETCDIR      = $(DESTDIR)/etc
  SYSDIR      = $(ETCDIR)/systemd/system
@@ -9,8 +9,8 @@ diff -Naur orig/Makefile patched/Makefile
 +UDEVDIR     = $(DESTDIR)/usr/lib/udev
  SBINDIR     = $(PREFIX)/sbin
  MANDIR      = $(PREFIX)/share/man/man1
- VPATH       = jimtcl
-@@ -85,7 +85,7 @@
+ 
+@@ -62,7 +62,7 @@
  	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
  	install -d $(DESTDIR)/var/lib/usb_modeswitch
  	test -d $(UPSDIR) -a -e /sbin/initctl && install --mode=644 usb-modeswitch-upstart.conf $(UPSDIR) || test 1
