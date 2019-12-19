@@ -1,5 +1,5 @@
 urlcim=http://www.python.org/ftp/python/
-dirs=$(urllist ${urlcim} | grep ^3)
+dirs=$(urllist ${urlcim} | grep ^3.7)
 for dir in $dirs;do
 ver=$(urllist ${urlcim}${dir}/ | splitver '^Python-([0-9.]+).tar.xz$' | sort -V | tail -n 1)
 endver=$(echo -e "$ver\n$endver" | sort -V | tail -n 1)
