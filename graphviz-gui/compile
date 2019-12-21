@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+autoreconf -vif
+export LIBPOSTFIX=/
+ub_compile \
+    --prefix=/usr \
+	--enable-ocaml=no \
+	--enable-perl=no \
+	--enable-tk=no \
+	--enable-tcl=no \
+	--enable-ruby=no \
+	--enable-lua=no \
+	--enable-python=no

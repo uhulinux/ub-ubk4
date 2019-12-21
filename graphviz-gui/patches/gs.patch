@@ -1,0 +1,18 @@
+diff -Naur orig/plugin/gs/gvloadimage_gs.c patched/plugin/gs/gvloadimage_gs.c
+--- orig/plugin/gs/gvloadimage_gs.c	2014-04-13 22:40:25.000000000 +0200
++++ patched/plugin/gs/gvloadimage_gs.c	2016-02-14 18:18:27.692138845 +0100
+@@ -72,11 +72,11 @@
+ 
+     assert (err < 0);
+ 
+-    if (err >= e_VMerror) 
++    if (err >= gs_error_VMerror) 
+ 	errsrc = "PostScript Level 1"; 
+-    else if (err >= e_unregistered)
++    else if (err >= gs_error_unregistered)
+ 	errsrc = "PostScript Level 2";
+-    else if (err >= e_invalidid)
++    else if (err >= gs_error_invalidid)
+ 	errsrc = "DPS error";
+     else
+ 	errsrc = "Ghostscript internal error";
