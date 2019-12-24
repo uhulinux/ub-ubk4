@@ -4,12 +4,12 @@ DefaultDependencies=no
 After=systemd-sysctl.service
 Before=sysinit.target
 ConditionPathExists=|/etc/ufw/ufw.conf
-ConditionDirectoryNotEmpty=|/lib/ufw
+ConditionDirectoryNotEmpty=|/usr/lib/ufw
 
 [Service]
 Type=oneshot
-ExecStart=/lib/ufw/ufw-init start
-ExecStop=/lib/ufw/ufw-init stop
+ExecStart=/usr/lib/ufw/ufw-init start
+ExecStop=/usr/lib/ufw/ufw-init stop
 RemainAfterExit=yes
 
 [Install]
