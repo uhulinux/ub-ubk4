@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+# vulkan-overlay-layer: https://github.com/KhronosGroup/glslang
+
 ub_compile \
     -Dplatforms=x11,drm,wayland,surfaceless \
     -Ddri3=true \
@@ -10,7 +12,9 @@ ub_compile \
     -Dgallium-xa=true \
     -Dgallium-nine=true \
     -Dgallium-opencl=icd \
-    -Dgles1=true \
+    -Dvulkan-drivers=amd,intel \
+    -Dvulkan-overlay-layer=true \
+    -Dgles1=false \
     -Dgles2=true \
 	-Dgbm=true \
 	-Dglx=dri \
