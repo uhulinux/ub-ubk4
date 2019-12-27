@@ -2,7 +2,7 @@ diff --git a/qtbase/src/gui/kernel/qguiapplication.cpp b/qtbase/src/gui/kernel/q
 index b8bfad4f16..676fdfad5e 100644
 --- a/qtbase/src/gui/kernel/qguiapplication.cpp
 +++ b/qtbase/src/gui/kernel/qguiapplication.cpp
-@@ -1376,14 +1376,7 @@ void QGuiApplicationPrivate::createPlatformIntegration()
+@@ -1383,14 +1383,7 @@ void QGuiApplicationPrivate::createPlatformIntegration()
          if (sessionType == QByteArrayLiteral("x11") && !platformName.contains(QByteArrayLiteral("xcb"))) {
              platformName = QByteArrayLiteral("xcb");
          } else if (sessionType == QByteArrayLiteral("wayland") && !platformName.contains(QByteArrayLiteral("wayland"))) {
