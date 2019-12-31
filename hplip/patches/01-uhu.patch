@@ -1,6 +1,6 @@
 diff -Naur orig/base/password.py patched/base/password.py
---- orig/base/password.py	2019-11-04 11:48:05.000000000 +0100
-+++ patched/base/password.py	2019-11-23 21:24:47.572412593 +0100
+--- orig/base/password.py	2019-12-10 06:00:33.000000000 +0100
++++ patched/base/password.py	2019-12-31 00:08:44.487843606 +0100
 @@ -56,6 +56,7 @@
                'gos': 'sudo',
                'boss': 'su',
@@ -10,8 +10,8 @@ diff -Naur orig/base/password.py patched/base/password.py
                }
  
 diff -Naur orig/installer/distros.dat patched/installer/distros.dat
---- orig/installer/distros.dat	2019-11-04 11:02:03.000000000 +0100
-+++ patched/installer/distros.dat	2019-11-23 21:34:25.272493816 +0100
+--- orig/installer/distros.dat	2019-12-10 06:00:31.000000000 +0100
++++ patched/installer/distros.dat	2019-12-31 00:18:37.345686400 +0100
 @@ -94,7 +94,7 @@
  # ****************************************
  
@@ -21,11 +21,10 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
  
  # ****************************************
  
-@@ -13674,4 +13674,279 @@
- [manjarolinux:18.1.0:automake]
- packages=automake
+@@ -111,6 +111,283 @@
+ supported=0
  
-+# ****************************************
+ # ****************************************
 +[uhu-linux]
 +index=60
 +versions=UBK1,UBK2,UBK3
@@ -91,7 +90,7 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
 +
 +[uhu-linux:UBK1:libpthread]
 +packages=glibc
- 
++ 
 +[uhu-linux:UBK1:libtool]
 +packages=libtool
 +
@@ -236,7 +235,7 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
 +packages=make
 +
 +[uhu-linux:UBK3:pil]
-+packages=python2-pillow
++packages=python3-pillow
 +
 +[uhu-linux:UBK3:ppdev]
 +packages=
@@ -301,3 +300,8 @@ diff -Naur orig/installer/distros.dat patched/installer/distros.dat
 +
 +[uhu-linux:UBK3:avahi-utils]
 +packages=avahi
++
++# ****************************************
+ 
+ [suse]
+ index=3
