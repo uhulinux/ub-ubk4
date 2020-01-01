@@ -1,2 +1,2 @@
-dir=$(urllist https://ba.mirror.garr.it/mirrors/lyx/stable/ | grep -E '^([0-9.x]+)' | sort -V | tail -n 1)
-u2d https://ba.mirror.garr.it/mirrors/lyx/stable/$dir lyx- | sed s/-/~/
+dir=$(urllist http://ftp.lyx.org/pub/lyx/stable/ | grep -E '^([0-9.x]+)' | sort -V | tail -n 1)
+u2d http://ftp.lyx.org/pub/lyx/stable/$dir lyx- | sed s/-/~/
