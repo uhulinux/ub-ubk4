@@ -1,9 +1,6 @@
 #!/bin/sh -eux
 
 export LDFLAGS="-ldl"
-cmake . \
-	-DCMAKE_INSTALL_PREFIX=/usr \
+ub_compile \
 	-DWANT_DOCS=OFF \
-	-DMANDIR=share/man \
-	-DINFODIR=share/info
-ub_make
+	-DWANT_EXAMPLES=OFF

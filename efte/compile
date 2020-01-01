@@ -1,9 +1,5 @@
 #!/bin/sh -eux
 
-cd src
-cmake \
+ub_compile \
 	-DBUILD_X=ON \
-	-DBUILD_CONSOLE=ON \
-	-DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=/usr .
-make all
+	-DBUILD_CONSOLE=ON
