@@ -8,11 +8,9 @@ if [ "$host" == "x86_64" ] && [ "$UB_ARCH" == "amd64" ];then
 fi
 
 ub_compile \
-    -DCMAKE_BUILD_TYPE=Release \
     -DCROSS_COMPILE32=$cross \
     -DBUNDLED_LIBS=0 \
     -DCMAKE_LIBRARY_PATH=/usr/lib \
-    -DCMAKE_INSTALL_PREFIX=/usr \
     -DINSTALL_DEFAULT_BASEDIR=/usr/lib/etlegacy\
     -DINSTALL_DEFAULT_BINDIR=bin \
     -DINSTALL_DEFAULT_MODDIR=lib/etlegacy \
