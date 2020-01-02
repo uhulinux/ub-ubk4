@@ -14,8 +14,10 @@ UB_CONFIGURE_DIR="$UB_COMPILEDIR" ub_configure \
 	--disable-werror \
 	--disable-timezone-tools \
 	--enable-bind-now \
+	--enable-cet \
 	--disable-profile \
 	--enable-lock-elision \
+	--enable-stack-protector=strong \
 	libc_cv_slibdir=/lib \
 	libc_cv_rtlddir=/lib
 

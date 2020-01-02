@@ -1,0 +1,106 @@
+diff -Nur orig/src/useradd.c mod/src/useradd.c
+--- orig/src/useradd.c	2019-12-29 01:56:59.000000000 +0100
++++ mod/src/useradd.c	2019-12-29 09:04:09.184853006 +0100
+@@ -165,6 +165,7 @@
+     Mflg = false,		/* do not create user's home directory even if CREATE_HOME is set */
+     Nflg = true,		/* do not create a group having the same name as the user, but add the user to def_group (or the group specified with -g) */
+     oflg = false,		/* permit non-unique user ID to be specified with -u */
++    qflg = false,		/* quiet, skip existing user */
+     rflg = false,		/* create a system account */
+     sflg = false,		/* shell program for new account */
+     subvolflg = false,		/* create subvolume home on BTRFS */
+@@ -850,6 +851,7 @@
+ 	(void) fputs (_("  -o, --non-unique              allow to create users with duplicate\n"
+ 	                "                                (non-unique) UID\n"), usageout);
+ 	(void) fputs (_("  -p, --password PASSWORD       encrypted password of the new account\n"), usageout);
++	(void) fputs (_("  -q, --quiet                   succeed quietly if user+uid already exists\n"), usageout);
+ 	(void) fputs (_("  -r, --system                  create a system account\n"), usageout);
+ 	(void) fputs (_("  -R, --root CHROOT_DIR         directory to chroot into\n"), usageout);
+ 	(void) fputs (_("  -P, --prefix PREFIX_DIR       prefix directory where are located the /etc/* files\n"), usageout);
+@@ -1130,6 +1132,7 @@
+ 			{"no-user-group",  no_argument,       NULL, 'N'},
+ 			{"non-unique",     no_argument,       NULL, 'o'},
+ 			{"password",       required_argument, NULL, 'p'},
++			{"quiet",    	   no_argument,       NULL, 'q'},
+ 			{"system",         no_argument,       NULL, 'r'},
+ 			{"root",           required_argument, NULL, 'R'},
+ 			{"prefix",         required_argument, NULL, 'P'},
+@@ -1143,9 +1146,9 @@
+ 		};
+ 		while ((c = getopt_long (argc, argv,
+ #ifdef WITH_SELINUX
+-		                         "b:c:d:De:f:g:G:hk:K:lmMNop:rR:P:s:u:UZ:",
++		                         "b:c:d:De:f:g:G:hk:K:lmMNop:qrR:P:s:u:UZ:",
+ #else				/* !WITH_SELINUX */
+-		                         "b:c:d:De:f:g:G:hk:K:lmMNop:rR:P:s:u:U",
++		                         "b:c:d:De:f:g:G:hk:K:lmMNop:qrR:P:s:u:U",
+ #endif				/* !WITH_SELINUX */
+ 		                         long_options, NULL)) != -1) {
+ 			switch (c) {
+@@ -1317,6 +1320,9 @@
+ 				}
+ 				user_pass = optarg;
+ 				break;
++			case 'q':
++				qflg = true;
++				break;
+ 			case 'r':
+ 				rflg = true;
+ 				break;
+@@ -2198,7 +2204,7 @@
+ 		else
+ 			sprintf (file, "%s/%s", spool, user_name);
+ 		fd = open (file, O_CREAT | O_WRONLY | O_TRUNC | O_EXCL, 0);
+-		if (fd < 0) {
++		if (!qflg && (fd < 0)) {
+ 			perror (_("Creating mailbox file"));
+ 			return;
+ 		}
+@@ -2206,8 +2212,8 @@
+ 		gid = user_gid;
+ 		mode = 0600;
+ 
+-		if (   (fchown (fd, user_id, gid) != 0)
+-		    || (fchmod (fd, mode) != 0)) {
++		if (!qflg && ((fchown (fd, user_id, gid) != 0)
++		    || (fchmod (fd, mode) != 0))) {
+ 			perror (_("Setting mailbox file permissions"));
+ 		}
+ 
+@@ -2330,6 +2336,9 @@
+ 	 * Start with a quick check to see if the user exists.
+ 	 */
+ 	if (prefix_getpwnam (user_name) != NULL) { /* local, no need for xgetpwnam */
++		if (qflg) {
++			exit (E_SUCCESS);
++		}
+ 		fprintf (stderr, _("%s: user '%s' already exists\n"), Prog, user_name);
+ #ifdef WITH_AUDIT
+ 		audit_logger (AUDIT_ADD_USER, Prog,
+@@ -2349,6 +2358,9 @@
+ 	if (Uflg) {
+ 		/* local, no need for xgetgrnam */
+ 		if (prefix_getgrnam (user_name) != NULL) {
++			if (qflg) {
++				exit (E_SUCCESS);
++			}
+ 			fprintf (stderr,
+ 			         _("%s: group %s exists - if you want to add this user to that group, use -g.\n"),
+ 			         Prog, user_name);
+@@ -2449,10 +2461,12 @@
+ 			copy_tree (def_template, prefix_user_home, false, false,
+ 			           (uid_t)-1, user_id, (gid_t)-1, user_gid);
+ 		} else {
+-			fprintf (stderr,
+-			         _("%s: warning: the home directory %s already exists.\n"
+-			           "%s: Not copying any file from skel directory into it.\n"),
+-			         Prog, user_home, Prog);
++			if (!qflg) {
++				fprintf (stderr,
++				         _("%s: warning: the home directory already exists.\n"
++				           "Not copying any file from skel directory into it.\n"),
++				         Prog, user_home, Prog);
++			}
+ 		}
+ 
+ 	}

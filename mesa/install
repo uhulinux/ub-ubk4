@@ -2,17 +2,8 @@
 
 ub_install
 
-# libglvnd ütközés
-rm -f "$UB_INSTALLDIR"/usr/lib/libGLESv*
-# rm -f "$UB_INSTALLDIR"/usr/lib/pkgconfig/gles*.pc
-
-# wayland 1.15 ütközés
-rm -f "$UB_INSTALLDIR"/usr/lib/libwayland-egl.so*
-rm -f "$UB_INSTALLDIR"/usr/lib/pkgconfig/wayland-*.pc
-
 # indirect rendering
 ln -s /usr/lib/libGLX_mesa.so.0 ${UB_INSTALLDIR}/usr/lib/libGLX_indirect.so.0
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/xorg/modules/extensions
 ln -s libglx.so.xorg "$UB_INSTALLDIR"/usr/lib/xorg/modules/extensions/libglx.so
-rm -f "$UB_INSTALLDIR"/usr/include/GL/{glew,glxew,wglew}.h

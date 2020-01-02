@@ -1,8 +1,6 @@
 #!/bin/sh -eux
 
 rm -rf pkgs/sqlite3*
-sed -i 's/#define DUPTRAVERSE_MAX_DEPTH 500/#define DUPTRAVERSE_MAX_DEPTH 5000/' \
-	generic/regc_nfa.c
 
 cd unix
 ub_compile \

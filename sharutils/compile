@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
+sed 's/FUNC_FFLUSH_STDIN/-1/g' -i lib/fseeko.c
 ub_compile

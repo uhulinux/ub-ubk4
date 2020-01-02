@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
 ub_install
+# mesa-dev ütközés
+rm  "$UB_INSTALLDIR"/usr/lib/pkgconfig/glesv2.pc

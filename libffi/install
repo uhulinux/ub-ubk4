@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
-ub_install
+make DESTDIR=$UB_INSTALLDIR install
 
-ln -sf libffi.so.6 ${UB_INSTALLDIR}/usr/lib/libffi.so.5
-ln -sf ../lib/libffi-${UB_VERSION}/include/ffi.h ${UB_INSTALLDIR}/usr/include
-ln -sf ../lib/libffi-${UB_VERSION}/include/ffitarget.h ${UB_INSTALLDIR}/usr/include
+ln -sf libffi.so.7 ${UB_INSTALLDIR}/usr/lib/libffi.so.6
+ln -sf libffi.so.7.1.0 ${UB_INSTALLDIR}/usr/lib/libffi.so.7
