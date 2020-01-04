@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+cd $UB_OBJECTDIR
+
 make INSTALL_ROOT="$UB_INSTALLDIR" install
 
 # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
@@ -14,13 +16,13 @@ ln -s ../lib/qt5/bin/linguist "$UB_INSTALLDIR"/usr/bin/linguist-qt5
 ln -s ../lib/qt5/bin/qdbusviewer "$UB_INSTALLDIR"/usr/bin/qdbusviewer-qt5
 
 # ikonok a desktop fájlokhoz
-install -Dm644 qttools/src/assistant/assistant/images/assistant-128.png \
+install -Dm644 $UB_COMPILEDIR/qttools/src/assistant/assistant/images/assistant-128.png \
                   "$UB_INSTALLDIR"/usr/share/pixmaps/assistant-qt5.png
-install -Dm644 qttools/src/designer/src/designer/images/designer.png \
+install -Dm644 $UB_COMPILEDIR/qttools/src/designer/src/designer/images/designer.png \
                   "$UB_INSTALLDIR"/usr/share/pixmaps/designer-qt5.png
-install -Dm644 qttools/src/linguist/linguist/images/icons/linguist-128-32.png \
+install -Dm644 $UB_COMPILEDIR/qttools/src/linguist/linguist/images/icons/linguist-128-32.png \
                   "$UB_INSTALLDIR"/usr/share/pixmaps/linguist-qt5.png
-install -Dm644 qttools/src/qdbus/qdbusviewer/images/qdbusviewer-128.png \
+install -Dm644 $UB_COMPILEDIR/qttools/src/qdbus/qdbusviewer/images/qdbusviewer-128.png \
                   "$UB_INSTALLDIR"/usr/share/pixmaps/qdbusviewer-qt5.png
 
 # pkgconfig linkek
