@@ -2,14 +2,14 @@
 
 ub_install
 
-mkdir -p ${UB_INSTALLDIR}/usr/lib/ccache/bin
+mkdir -p ${UB_INSTALLDIR}/usr/lib/ccache
 
 _host="x86_64-linux-gnu"
 
 for _prog in gcc g++ c++; do
-    ln -s /usr/bin/ccache "${UB_INSTALLDIR}/usr/lib/ccache/bin/$_prog"
-    ln -s /usr/bin/ccache "${UB_INSTALLDIR}/usr/lib/ccache/bin/$_host-$_prog"
+    ln -s ../../bin/ccache "${UB_INSTALLDIR}/usr/lib/ccache/$_prog"
+    ln -s ../../bin/ccache "${UB_INSTALLDIR}/usr/lib/ccache/$_host-$_prog"
 done
 for _prog in cc clang clang++; do
-    ln -s /usr/bin/ccache "${UB_INSTALLDIR}/usr/lib/ccache/bin/$_prog"
+    ln -s ../../bin/ccache "${UB_INSTALLDIR}/usr/lib/ccache/$_prog"
 done
