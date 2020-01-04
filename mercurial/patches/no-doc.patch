@@ -1,0 +1,21 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2019-12-05 15:17:36.000000000 +0100
++++ mod/Makefile	2020-01-04 18:57:55.202007024 +0100
+@@ -44,7 +44,7 @@
+ 	@echo 'Example for a local installation (usable in this directory):'
+ 	@echo '  make local && ./hg version'
+ 
+-all: build doc
++all: build
+ 
+ local:
+ 	$(PYTHON) setup.py $(PURE) \
+@@ -79,7 +79,7 @@
+ clean: cleanbutpackages
+ 	rm -rf packages
+ 
+-install: install-bin install-doc
++install: install-bin
+ 
+ install-bin: build
+ 	$(PYTHON) setup.py $(PURE) install --root="$(DESTDIR)/" --prefix="$(PREFIX)" --force
