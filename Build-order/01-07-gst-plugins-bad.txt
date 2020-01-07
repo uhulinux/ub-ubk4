@@ -1,15 +1,19 @@
 qt5
-openal
-mpg123
-gpgme
-volume-key
-libblockdev
-udisks2
-libv4l
-ffmpeg
-xine-lib
-libquicktime
-gst-libav
-mjpegtools
-opencv
-gst-plugins-bad
+libv4l #qt5
+gpgme #qt5
+openal #qt5
+mpg123 #openal
+ffmpeg #openal
+volume-key #gpgme
+libblockdev #volume-key
+fuse-ntfs-3g
+mtools
+xfsprogs
+udisks2 # libblockdev
+xine-lib #ffmpeg
+libquicktime #ffmpeg
+mjpegtools #libquicktime
+gst-libav #ffmpeg
+opencv #qt5,ffmpeg,xine-lib
+vulkan-loader
+gst-plugins-bad #libnice,libssh2,mjpegtools,mpg123,openal,opencv,qt5,spandsp,vulcan-loader
