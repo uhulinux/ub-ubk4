@@ -1,47 +1,41 @@
-webkit2gtk
-libproxy
-glib-networking
-libsoup
-gst-plugins-good
-networkmanager
-telepathy-mission-control
-packagekit
-packagekit-qt5
-libosinfo
-osinfo-db-tools
-osinfo-db
-libchamplain
-appstream-glib
-spice-gtk
-appdata-tools
-libquvi
-openconnect
-yelp
-gnumeric
-gnome-online-accounts
-gvfs
-libdmapsharing
-gssdp
-rest
-gupnp
-gupnp-dlna
-gupnp-igd
-libnice
-gst-plugins-bad
-farstream
-geocode-glib
-geoclue
-libpeas
-wxwidgets
-wxwidgets2.8
-xdg-utils
-libdbusmenu-qt
-poppler
-zziplib
-texlive
-gdal
-wxpython
-python3-matplotlib
+networkmanager #libsoup
+telepathy-mission-control #networkmanager
+packagekit #networkmanager
+packagekit-qt5 #packagekit
+
+glib-networking #libproxy
+webkit2gtk #geoclue,gst-plugins-bad,gst-plugins-good,libsoup
+libproxy #networkmanager,webkit2gtk
+libsoup #glib-networking
+spice-gtk #libsoup
+appstream-glib #libsoup
+libchamplain #libsoup
+libosinfo #libsoup
+osinfo-db-tools #libsoup
+gst-plugins-good #libsoup
+libdmapsharing #libsoup
+gssdp #libsoup
+rest #libsoup
+geocode-glib #libsoup
+appdata-tools #appstream-glib,libsoup
+osinfo-db #osinfo-db-tools
+openconnect #libproxy
+libquvi #libproxy
+yelp #webkit2gtk
+gnumeric #yelp
+gnome-online-accounts #geoclue,libsoup,rest,webkit2gtk
+gvfs #gnome-online-accounts,libsoup
+gupnp #libsoup,gssdp
+gupnp-dlna #gupnp
+gupnp-igd #gupnp
+libnice #gupnp-igd
+gst-plugins-bad #libnice
+farstream #gupnp-igd,libnice
+geoclue #geocode-glib,libsoup
+libpeas #geoclue
+wxwidgets #webkit2gtk
+wxpython #wxwidgets,webkit2gtk
+python3-matplotlib #wxpython
 libvirt
 libvirt-python
 libvirt-glib
