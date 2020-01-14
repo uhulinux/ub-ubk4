@@ -1,0 +1,23 @@
+diff -Nur orig/meson.build mod/meson.build
+--- orig/meson.build	2019-06-21 04:01:33.000000000 +0200
++++ mod/meson.build	2020-01-13 17:47:24.992876410 +0100
+@@ -121,13 +121,13 @@
+   libebook_dep = dependency('libebook-1.2', version: '>=' + min_eds_version)
+ endif
+ 
+-if bluez_backend_enabled
+-  libebook_dep = dependency('libebook-1.2', version: '>=' + min_eds_version)
++#if bluez_backend_enabled
++#  libebook_dep = dependency('libebook-1.2', version: '>=' + min_eds_version)
+   # Needed for the BlueZ tests
+-  pymod = import('python')
+-  py_installation = pymod.find_installation('python3')
+-  python_dbusmock = py_installation.dependency('dbusmock')
+-endif
++#  pymod = import('python')
++#  py_installation = pymod.find_installation('python3')
++#  python_dbusmock = py_installation.dependency('dbusmock')
++#endif
+ 
+ if import_tool_enabled
+   libxml_dep = dependency('libxml-2.0')
