@@ -1,0 +1,24 @@
+diff -Nur orig/growisofs.c mod/growisofs.c
+--- orig/growisofs.c	2008-03-04 10:15:03.000000000 +0100
++++ mod/growisofs.c	2020-01-14 17:54:58.145279230 +0100
+@@ -442,6 +442,9 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <assert.h>
++#include <limits.h>
++#include <sys/sysmacros.h>
++
+ #include "mp.h"
+ 
+ #if defined(__unix) || defined(__unix__)
+diff -Nur orig/transport.hxx mod/transport.hxx
+--- orig/transport.hxx	2008-03-01 11:34:43.000000000 +0100
++++ mod/transport.hxx	2020-01-14 17:53:49.889372663 +0100
+@@ -16,6 +16,7 @@
+ #include <fcntl.h>
+ #include <poll.h>
+ #include <sys/time.h>
++#include <limits.h>
+ 
+ inline long getmsecs()
+ { struct timeval tv;
