@@ -1,0 +1,12 @@
+diff -Nur orig/contrib/command-not-found/pk-command-not-found.c mod/contrib/command-not-found/pk-command-not-found.c
+--- orig/contrib/command-not-found/pk-command-not-found.c	2018-11-02 17:42:32.000000000 +0100
++++ mod/contrib/command-not-found/pk-command-not-found.c	2020-01-15 11:00:13.861473477 +0100
+@@ -57,7 +57,7 @@
+ 
+ /* bash reserved code */
+ #define EXIT_COMMAND_NOT_FOUND	127
+-
++#define GETTEXT_PACKAGE "Packagekit"
+ /**
+  *
+  * Swizzle ordering, e.g. amke -> make
