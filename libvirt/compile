@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+#nss -el nem fordítható, a glibc-2.30 miatt a gnulib foltozandó
 ub_compile \
 	--without-hal \
-	--without-macvtap
+	--without-macvtap \
+	--without-nss-plugin
