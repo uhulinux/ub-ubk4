@@ -1,0 +1,33 @@
+diff -Naur orig/src/legacy/i810/xvmc/meson.build patched/src/legacy/i810/xvmc/meson.build
+--- orig/src/legacy/i810/xvmc/meson.build	2020-01-16 22:39:13.000000000 +0100
++++ patched/src/legacy/i810/xvmc/meson.build	2020-01-16 23:57:03.759749229 +0100
+@@ -4,6 +4,7 @@
+ 	       sources : 'I810XvMC.c',
+ 	       dependencies : [
+ 		 dependency('x11', required : true),
++		 dependency('xv', required : true),
+ 		 dependency('xvmc', required : true),
+ 		 dependency('xorg-server', required : true),
+ 		 dependency('libdrm', required : true),
+diff -Naur orig/tools/meson.build patched/tools/meson.build
+--- orig/tools/meson.build	2020-01-16 22:39:13.000000000 +0100
++++ patched/tools/meson.build	2020-01-16 23:58:35.612697914 +0100
+@@ -67,7 +67,6 @@
+ 	       dependency('xrandr', required : true),
+ 	       dependency('xxf86vm', required : true),
+ 	       dependency('dri3proto', required : true),
+-	       dependency('dri', required : true),
+ 	       dependency('libdrm', required : true),
+ 	     ],
+ 	     install : false)
+diff -Naur orig/xvmc/meson.build patched/xvmc/meson.build
+--- orig/xvmc/meson.build	2020-01-16 22:39:13.000000000 +0100
++++ patched/xvmc/meson.build	2020-01-17 00:04:04.904344218 +0100
+@@ -14,6 +14,7 @@
+ 	       dependencies : [
+ 		 dependency('threads', required : true),
+ 		 dependency('x11', required : true),
++		 dependency('xv', required : true),
+ 		 dependency('xvmc', required : true),
+ 		 dependency('xorg-server', required : true),
+ 		 dependency('x11-xcb', required : true),

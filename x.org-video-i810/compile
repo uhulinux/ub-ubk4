@@ -1,5 +1,5 @@
 #!/bin/sh -eux
 
-rm -f meson.build
 ub_compile \
-	--with-default-dri=3
+    -Dvalgrind=false \
+	-Ddefault-dri=3
