@@ -2,7 +2,6 @@
 
 export LDFLAGS='-lglfw -lXrandr -lXinerama'
 
-ub_compile \
-	-DPREFIX=/usr \
-	-DCFGDIR=/etc/icewm
-cp "$UB_COMPILEDIR"/lib/IceWM.jpg "$UB_COMPILEDIR"/build/lib/
+autoreconf -vif
+ub_configure
+ub_make
