@@ -1,6 +1,6 @@
 diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
---- orig/src/filemanager/boxes.c	2019-06-16 19:49:31.000000000 +0200
-+++ patched/src/filemanager/boxes.c	2019-06-30 21:15:38.354889960 +0200
+--- orig/src/filemanager/boxes.c	2020-01-01 16:52:34.000000000 +0100
++++ patched/src/filemanager/boxes.c	2020-01-19 19:50:04.395511582 +0100
 @@ -104,9 +104,11 @@
  static unsigned long panel_list_formats_id, panel_user_format_id, panel_brief_cols_id;
  static unsigned long mini_user_status_id, mini_user_format_id;
@@ -46,8 +46,8 @@ diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
  /* --------------------------------------------------------------------------------------------- */
  /** Show tree in a box, not on a panel */
 diff -Naur orig/src/filemanager/boxes.h patched/src/filemanager/boxes.h
---- orig/src/filemanager/boxes.h	2019-06-16 19:49:31.000000000 +0200
-+++ patched/src/filemanager/boxes.h	2019-06-30 21:15:38.354889960 +0200
+--- orig/src/filemanager/boxes.h	2020-01-01 16:52:34.000000000 +0100
++++ patched/src/filemanager/boxes.h	2020-01-19 19:52:57.181311588 +0100
 @@ -25,7 +25,9 @@
                         int *brief_cols);
  const panel_field_t *sort_box (dir_sort_options_t * op, const panel_field_t * sort_field);
@@ -55,13 +55,13 @@ diff -Naur orig/src/filemanager/boxes.h patched/src/filemanager/boxes.h
 +#if 0
  void display_bits_box (void);
 +#endif
- void configure_vfs (void);
- void jobs_cmd (void);
- char *cd_dialog (void);
+ void configure_vfs_box (void);
+ void jobs_box (void);
+ char *cd_box (void);
 diff -Naur orig/src/filemanager/midnight.c patched/src/filemanager/midnight.c
---- orig/src/filemanager/midnight.c	2019-06-16 19:49:31.000000000 +0200
-+++ patched/src/filemanager/midnight.c	2019-06-30 21:15:38.354889960 +0200
-@@ -1165,9 +1165,11 @@
+--- orig/src/filemanager/midnight.c	2020-01-01 16:52:34.000000000 +0100
++++ patched/src/filemanager/midnight.c	2020-01-19 19:50:04.399511623 +0100
+@@ -1214,9 +1214,11 @@
          diff_view_cmd ();
          break;
  #endif
@@ -74,9 +74,9 @@ diff -Naur orig/src/filemanager/midnight.c patched/src/filemanager/midnight.c
          edit_cmd ();
          break;
 diff -Naur orig/src/setup.c patched/src/setup.c
---- orig/src/setup.c	2019-06-16 19:49:31.000000000 +0200
-+++ patched/src/setup.c	2019-06-30 21:15:38.354889960 +0200
-@@ -296,11 +296,13 @@
+--- orig/src/setup.c	2020-01-01 16:52:34.000000000 +0100
++++ patched/src/setup.c	2020-01-19 19:50:04.399511623 +0100
+@@ -304,11 +304,13 @@
      { "confirm_view_dir", &confirm_view_dir },
      { "safe_delete", &safe_delete },
      { "safe_overwrite", &safe_overwrite },
