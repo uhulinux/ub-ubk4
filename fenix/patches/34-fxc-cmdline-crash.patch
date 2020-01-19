@@ -1,0 +1,17 @@
+Description: Fix a crash in the hand-rolled command-line argument processing.
+Bug-Debian: https://bugs.debian.org/715899
+Forwarded: no
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2019-01-21
+
+--- a/fxc/src/main.c
++++ b/fxc/src/main.c
+@@ -193,7 +193,7 @@
+ 					// -f "filename": Embed a file to the DCB
+ 
+                     if (argv[i][j+1])
+-                           dcb_add_file (argv[i+j]+1) ;
++                           dcb_add_file (argv[i]+j+1) ;
+                     else while (argv[i+1])
+                     {
+                             if (argv[i+1][0] == '-')
