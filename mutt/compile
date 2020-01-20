@@ -3,15 +3,17 @@
 chmod +x txt2c.sh
 
 ub_compile \
-	--with-curses \
+	--enable-gpgme \
 	--enable-pop \
 	--enable-imap \
 	--enable-smtp \
-	--with-sasl \
-	--with-gss \
-	--with-ssl \
-	--enable-mailtool \
 	--enable-hcache \
-	--without-gdbm \
-	--with-bdb=/usr \
+	--enable-sidebar \
+	--enable-autocrypt \
+	--with-curses=/usr \
+	--with-gss=/usr \
+	--with-ssl=/usr \
+	--with-sqlite3 \
+	--with-sasl \
+	--with-idn2 \
 	--with-docdir=/usr/share/doc/Packages/mutt
