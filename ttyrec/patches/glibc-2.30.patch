@@ -1,0 +1,35 @@
+diff -Nur orig/ttyrec.c mod/ttyrec.c
+--- orig/ttyrec.c	2006-06-11 17:52:50.000000000 +0200
++++ mod/ttyrec.c	2020-01-21 18:51:51.150760163 +0100
+@@ -57,7 +57,6 @@
+ 
+ #if defined(SVR4)
+ #include <fcntl.h>
+-#include <stropts.h>
+ #endif /* SVR4 */
+ 
+ #include <sys/time.h>
+@@ -449,23 +448,6 @@
+ 		perror("open(fd, O_RDWR)");
+ 		fail();
+ 	}
+-	if (isastream(slave)) {
+-		if (ioctl(slave, I_PUSH, "ptem") < 0) {
+-			perror("ioctl(fd, I_PUSH, ptem)");
+-			fail();
+-		}
+-		if (ioctl(slave, I_PUSH, "ldterm") < 0) {
+-			perror("ioctl(fd, I_PUSH, ldterm)");
+-			fail();
+-		}
+-#ifndef _HPUX_SOURCE
+-		if (ioctl(slave, I_PUSH, "ttcompat") < 0) {
+-			perror("ioctl(fd, I_PUSH, ttcompat)");
+-			fail();
+-		}
+-#endif
+-		(void) ioctl(0, TIOCGWINSZ, (char *)&win);
+-	}
+ #else /* !SVR4 */
+ #ifndef HAVE_openpty
+ 	line[strlen("/dev/")] = 't';
