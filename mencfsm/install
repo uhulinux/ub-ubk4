@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+#ub_install
+
+cp MolchEncfsManager/MolchEncfsManager $UB_INSTALLDIR/usr/bin/
+
+for size in 24 48 72 96; do
+	mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/
+    cp MolchEncfsManager/Resources/icons/encfsmanager/${size}/MolchEncfsManager.png \
+       ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/MolchEncfsManager.png
+done
