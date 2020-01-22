@@ -9,14 +9,14 @@ if [ ! -f "$UB_INSTALLDIR"/usr/bin/rexx ]; then
 	ln -s rexx32 "$UB_INSTALLDIR"/usr/bin/rexx
 fi
 
-cp -a regina.pdf "$UB_INSTALLDIR"/usr/share/Regina-REXX/
-cp -a regina64.xpm "$UB_INSTALLDIR"/usr/share/Regina-REXX/
-cp -a regutil.pdf "$UB_INSTALLDIR"/usr/share/Regina-REXX/
+cp -a regina.pdf "$UB_INSTALLDIR"/usr/share/regina-rexx/
+cp -a regina64.xpm "$UB_INSTALLDIR"/usr/share/regina-rexx/
+cp -a regutil.pdf "$UB_INSTALLDIR"/usr/share/regina-rexx/
 
 for i in animal block dateconv gci-try newstr rexxcps timeconv; \
 	do 	echo "#!/usr/bin/rexx" >demo/$i; \
 		cat demo/$i.rexx >>demo/$i; chmod 755 demo/$i; \
-		cp -a demo/$i "$UB_INSTALLDIR"/usr/share/Regina-REXX/$i.rexx; \
+		cp -a demo/$i "$UB_INSTALLDIR"/usr/share/regina-rexx/$i.rexx; \
 	done;
 
-cp -a trip "$UB_INSTALLDIR"/usr/share/Regina-REXX/
+cp -a trip "$UB_INSTALLDIR"/usr/share/regina-rexx/
