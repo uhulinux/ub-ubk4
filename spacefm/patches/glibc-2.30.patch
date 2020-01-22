@@ -1,0 +1,23 @@
+diff -Nur orig/src/main.c mod/src/main.c
+--- orig/src/main.c	2018-03-04 17:04:33.000000000 +0100
++++ mod/src/main.c	2020-01-22 15:46:41.126912800 +0100
+@@ -23,6 +23,7 @@
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#include <sys/sysmacros.h>
+ 
+ #include <signal.h>
+ 
+diff -Nur orig/src/settings.c mod/src/settings.c
+--- orig/src/settings.c	2018-03-04 17:04:33.000000000 +0100
++++ mod/src/settings.c	2020-01-22 15:44:02.075113234 +0100
+@@ -21,7 +21,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <sys/stat.h>
+-
++#include <sys/sysmacros.h>
+ #include "glib-utils.h" /* for g_mkdir_with_parents() */
+ #include <glib/gi18n.h>
+ 
