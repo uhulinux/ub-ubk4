@@ -1,6 +1,6 @@
 diff -Naur orig/sysusers.d/basic.conf.in patched/sysusers.d/basic.conf.in
---- orig/sysusers.d/basic.conf.in	2019-09-03 11:27:19.000000000 +0200
-+++ patched/sysusers.d/basic.conf.in	2019-11-18 10:19:03.739952629 +0100
+--- orig/sysusers.d/basic.conf.in	2019-11-29 17:32:36.000000000 +0100
++++ patched/sysusers.d/basic.conf.in	2020-01-19 19:13:46.354270490 +0100
 @@ -18,20 +18,11 @@
  g wheel   -     -            -
  
@@ -23,8 +23,8 @@ diff -Naur orig/sysusers.d/basic.conf.in patched/sysusers.d/basic.conf.in
  
  # Default group for normal users
 diff -Naur orig/tmpfiles.d/static-nodes-permissions.conf.in patched/tmpfiles.d/static-nodes-permissions.conf.in
---- orig/tmpfiles.d/static-nodes-permissions.conf.in	2019-09-03 11:27:19.000000000 +0200
-+++ patched/tmpfiles.d/static-nodes-permissions.conf.in	2019-11-18 10:20:23.568632472 +0100
+--- orig/tmpfiles.d/static-nodes-permissions.conf.in	2019-11-29 17:32:36.000000000 +0100
++++ patched/tmpfiles.d/static-nodes-permissions.conf.in	2020-01-19 19:13:46.354270490 +0100
 @@ -11,7 +11,7 @@
  
  z /dev/snd/seq      0660 - audio -
@@ -36,20 +36,20 @@ diff -Naur orig/tmpfiles.d/static-nodes-permissions.conf.in patched/tmpfiles.d/s
 -z /dev/kvm          @DEV_KVM_MODE@ - kvm -
 +z /dev/kvm          @DEV_KVM_MODE@ - users -
 diff -Naur orig/tmpfiles.d/systemd.conf.m4 patched/tmpfiles.d/systemd.conf.m4
---- orig/tmpfiles.d/systemd.conf.m4	2019-09-03 11:27:19.000000000 +0200
-+++ patched/tmpfiles.d/systemd.conf.m4	2019-11-18 10:19:03.739952629 +0100
-@@ -8,7 +8,7 @@
- # See tmpfiles.d(5) for details
+--- orig/tmpfiles.d/systemd.conf.m4	2019-11-29 17:32:36.000000000 +0100
++++ patched/tmpfiles.d/systemd.conf.m4	2020-01-19 19:15:35.915552461 +0100
+@@ -9,7 +9,7 @@
  
  d /run/user 0755 root root -
+ m4_ifdef(`ENABLE_UTMP',
 -F! /run/utmp 0664 root utmp -
 +F! /run/utmp 0664 root root -
+ )m4_dnl
  
  d /run/systemd/ask-password 0755 root root -
- d /run/systemd/seats 0755 root root -
 diff -Naur orig/tmpfiles.d/var.conf.m4 patched/tmpfiles.d/var.conf.m4
---- orig/tmpfiles.d/var.conf.m4	2019-09-03 11:27:19.000000000 +0200
-+++ patched/tmpfiles.d/var.conf.m4	2019-11-18 10:19:03.743952662 +0100
+--- orig/tmpfiles.d/var.conf.m4	2019-11-29 17:32:36.000000000 +0100
++++ patched/tmpfiles.d/var.conf.m4	2020-01-19 19:13:46.354270490 +0100
 @@ -13,9 +13,9 @@
  
  d /var/log 0755 - - -

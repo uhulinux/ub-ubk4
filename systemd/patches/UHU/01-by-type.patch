@@ -1,6 +1,6 @@
-diff -Naur orig/rules/60-persistent-storage.rules patched/rules/60-persistent-storage.rules
---- orig/rules/60-persistent-storage.rules	2019-04-11 18:28:36.000000000 +0200
-+++ patched/rules/60-persistent-storage.rules	2019-04-24 00:36:55.632919608 +0200
+diff -Naur orig/rules.d/60-persistent-storage.rules patched/rules.d/60-persistent-storage.rules
+--- orig/rules.d/60-persistent-storage.rules	2019-04-11 18:28:36.000000000 +0200
++++ patched/rules.d/60-persistent-storage.rules	2019-04-24 00:36:55.632919608 +0200
 @@ -97,6 +97,7 @@
  # by-label/by-uuid links (filesystem metadata)
  ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
