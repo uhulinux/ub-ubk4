@@ -29,3 +29,9 @@ install -m 644 "$UB_COMPILEDIR"/nscd/nscd.service "$UB_INSTALLDIR"/usr/lib/syste
 
 # compat symlinks
 ln -sT lib "$UB_INSTALLDIR"/lib64
+
+# freepascalnak
+ln -s /usr/lib/crt1.o ${UB_INSTALLDIR}/lib/crti1.o
+ln -s /usr/lib/crti.o ${UB_INSTALLDIR}/lib/crti.o
+ln -s /usr/lib/crtn.o ${UB_INSTALLDIR}/lib/crtn.o
+ln -s /usr/lib/gcrt1.o ${UB_INSTALLDIR}/lib/gcrt1.o
