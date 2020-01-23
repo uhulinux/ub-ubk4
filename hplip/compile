@@ -1,7 +1,10 @@
 #!/bin/sh -eux
 
 export PYTHON=/usr/bin/python3
-
+export AUTOMAKE='automake --foreign'
+touch NEWS README AUTHORS Changelog
+autoreconf -vif
+export CFLAGS+=" $(python3-config --includes)"
 ub_compile \
 	--enable-scan-build \
 	--enable-gui-build \
