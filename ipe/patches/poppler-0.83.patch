@@ -1,0 +1,67 @@
+diff -Nur orig/pdftoipe/Makefile mod/pdftoipe/Makefile
+--- orig/pdftoipe/Makefile	2019-01-08 23:31:55.000000000 +0100
++++ mod/pdftoipe/Makefile	2020-01-23 20:35:17.507259273 +0100
+@@ -10,9 +10,9 @@
+   TARGET = pdftoipe.exe	
+ else ifdef IPECROSS
+   # cross-compiling for Windows?
+-  CXX=x86_64-w64-mingw32-g++
+-  CPPFLAGS += -I/sw/mingwlibs/include/poppler
+-  LIBS += -L/sw/mingwlibs/lib -lpoppler
++  CXX=$(IPECROSS)-w64-mingw32-g++
++  CPPFLAGS += -I/sw/mingwlibs-$(IPECROSS)/include/poppler
++  LIBS += -L/sw/mingwlibs-$(IPECROSS)/lib -lpoppler
+   LDFLAGS += -static
+   TARGET = pdftoipe.exe	
+ else
+@@ -23,7 +23,7 @@
+   TARGET   = pdftoipe
+ endif
+ 
+-CXXFLAGS += -Wno-write-strings -std=c++11
++CXXFLAGS += -Wno-write-strings -std=c++14
+ 
+ all: $(TARGET)
+ 
+diff -Nur orig/pdftoipe/pdftoipe.cpp mod/pdftoipe/pdftoipe.cpp
+--- orig/pdftoipe/pdftoipe.cpp	2019-01-08 23:31:55.000000000 +0100
++++ mod/pdftoipe/pdftoipe.cpp	2020-01-23 20:34:41.879305716 +0100
+@@ -2,6 +2,7 @@
+ // Pdftoipe: convert PDF file to editable Ipe XML file
+ // --------------------------------------------------------------------
+ 
++#include <memory>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stddef.h>
+@@ -79,7 +80,7 @@
+ 
+   GooString *fileName = new GooString(argv[1]);
+ 
+-  globalParams = new GlobalParams();
++  globalParams = std::make_unique<GlobalParams>();
+   if (quiet)
+     globalParams->setErrQuiet(quiet);
+ 
+@@ -153,7 +154,6 @@
+   // clean up
+   delete xmlOut;
+   delete doc;
+-  delete globalParams;
+ 
+   return exitCode;
+ }
+diff -Nur orig/pdftoipe/xmloutputdev.cpp mod/pdftoipe/xmloutputdev.cpp
+--- orig/pdftoipe/xmloutputdev.cpp	2019-01-08 23:31:55.000000000 +0100
++++ mod/pdftoipe/xmloutputdev.cpp	2020-01-23 20:36:03.775198925 +0100
+@@ -198,8 +198,8 @@
+ 
+ void XmlOutputDev::doPath(GfxState *state)
+ {
+-  GfxPath *path = state->getPath();
+-  GfxSubpath *subpath;
++  const GfxPath *path = state->getPath();
++  const GfxSubpath *subpath;
+   int n, m, i, j;
+ 
+   n = path->getNumSubpaths();
