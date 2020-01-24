@@ -1,7 +1,33 @@
 diff -Nur orig/configure.ac mod/configure.ac
---- orig/configure.ac	2018-12-19 22:24:58.000000000 +0100
-+++ mod/configure.ac	2019-10-30 21:45:02.795080221 +0100
-@@ -1602,7 +1602,7 @@
+--- orig/configure.ac	2019-12-23 22:29:30.000000000 +0100
++++ mod/configure.ac	2020-01-24 16:14:23.656011397 +0100
+@@ -14,8 +14,8 @@
+ 
+ dnl Set VICE's compiler flags (can be overridden by the user)
+ VICE_CPPFLAGS=""
+-VICE_CFLAGS="-g -O3"
+-VICE_CXXFLAGS="-g -O3"
++VICE_CFLAGS="-g -O2"
++VICE_CXXFLAGS="-g -O2"
+ VICE_LDFLAGS=""
+ 
+ 
+@@ -114,12 +114,12 @@
+ 
+ dnl Set default CFLAGS
+ dnl if test x"$CFLAGS" = "x"; then
+-dnl   CFLAGS="-g -O3"
++dnl   CFLAGS="-g -O2"
+ dnl fi
+ 
+ dnl Set default CXXFLAGS
+ dnl if test x"$CXXFLAGS" = "x"; then
+-dnl  CXXFLAGS="-g -O3"
++dnl  CXXFLAGS="-g -O2"
+ dnl fi
+ 
+ dnl Try global compiler warnings
+@@ -955,7 +955,7 @@
      if test x"$GCC" = "xyes" ; then
        warnings_cxx="-Wall -Winline"
        warnings_c="-Wstrict-prototypes $warnings_cxx"
@@ -9,13 +35,4 @@ diff -Nur orig/configure.ac mod/configure.ac
 +      optimization_c="-O2 -mmacosx-version-min=10.9 $march"
        optimization_cxx="-fno-exceptions $optimization_c"
        if test x"$ac_cv_prog_cc_g" = "xyes" ; then
-         CFLAGS="$CFLAGS -g $optimization_c $warnings_c"
-@@ -1727,7 +1727,7 @@
-       dnl if using GCC.
-       dnl If the user has specified her own `CFLAGS', we do not override them.
- 
--      optimization_c="-O3 $march"
-+      optimization_c="-O2 $march"
-       optimization_cxx="-fno-exceptions $optimization_c"
-       dnl Use -g if available.
-       if test x"$ac_cv_prog_cc_g" = "xyes" ; then
+         VICE_CFLAGS="$VICE_CFLAGS -g $optimization_c $warnings_c"
