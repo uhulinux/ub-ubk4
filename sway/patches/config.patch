@@ -1,0 +1,21 @@
+diff -Nur orig/config.in mod/config.in
+--- orig/config.in	2020-01-22 19:33:29.000000000 +0100
++++ mod/config.in	2020-01-25 20:54:22.799803254 +0100
+@@ -14,7 +14,7 @@
+ set $up k
+ set $right l
+ # Your preferred terminal emulator
+-set $term alacritty
++set $term xterm
+ # Your preferred application launcher
+ # Note: pass the final command to swaymsg so that the resulting window can be opened
+ # on the original workspace that the command was run on.
+@@ -59,6 +59,8 @@
+ # You can get the names of your inputs by running: swaymsg -t get_inputs
+ # Read `man 5 sway-input` for more information about this section.
+ 
++input * xkb_layout "hu"
++
+ ### Key bindings
+ #
+ # Basics:
