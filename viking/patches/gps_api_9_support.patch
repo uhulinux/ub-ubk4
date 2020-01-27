@@ -1,0 +1,30 @@
+Index: viking/src/vikgpslayer.c
+===================================================================
+--- viking.orig/src/vikgpslayer.c
++++ viking/src/vikgpslayer.c
+@@ -1714,8 +1714,13 @@ static VikTrackpoint* create_realtime_tr
+ 
+     /* Note that fix.time is a double, but it should not affect the precision
+        for most GPS */
++#if GPSD_API_MAJOR_VERSION >= 9
++    time_t cur_timestamp = vgl->realtime_fix.fix.time.tv_sec;
++    time_t last_timestamp = vgl->last_fix.fix.time.tv_sec;
++#else
+     time_t cur_timestamp = vgl->realtime_fix.fix.time;
+     time_t last_timestamp = vgl->last_fix.fix.time;
++#endif
+ 
+     if (cur_timestamp < last_timestamp) {
+       return NULL;
+@@ -1745,7 +1750,11 @@ static VikTrackpoint* create_realtime_tr
+         VikTrackpoint *tp = vik_trackpoint_new();
+         tp->newsegment = FALSE;
+         tp->has_timestamp = TRUE;
++#if GPSD_API_MAJOR_VERSION >= 9
++        tp->timestamp = vgl->realtime_fix.fix.time.tv_sec;
++#else
+         tp->timestamp = vgl->realtime_fix.fix.time;
++#endif
+         tp->altitude = alt;
+         /* speed only available for 3D fix. Check for NAN when use this speed */
+         tp->speed = vgl->realtime_fix.fix.speed;  
