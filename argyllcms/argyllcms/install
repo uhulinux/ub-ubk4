@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-jam -dx -fJambase install
-refdir=${UB_INSTALLDIR}/usr/share/argyllcms
-rulesdir=${UB_INSTALLDIR}/usr/lib/udev/rules.d
-mkdir -p $refdir $rulesdir
-cp bin/* ${UB_INSTALLDIR}/usr/bin/
-cp -r ref $refdir/
-cp usb/55-Argyll.rules $rulesdir/
