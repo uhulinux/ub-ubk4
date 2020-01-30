@@ -1,0 +1,23 @@
+From ed5edc25d947dacce044cae3def33b0b0f88172e Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Thu, 30 Jan 2020 01:27:11 +0100
+Subject: =?UTF-8?q?u2d:=20kde=20apps=20url=20jav=C3=ADt=C3=A1s?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/src/uhubuild-u2d.sh b/src/uhubuild-u2d.sh
+index 18b8644..912223d 100644
+--- a/src/uhubuild-u2d.sh
++++ b/src/uhubuild-u2d.sh
+@@ -108,7 +108,8 @@ function u2dsrc {
+ 
+ # kdeapps project
+ function kdeapp {
+-    u2dsrc https://download.kde.org/stable/applications/ $1
++    # u2dsrc https://download.kde.org/stable/applications/ $1
++    u2dsrc https://download.kde.org/stable/release-service/ $1
+ }
+ 
+ # list sourceforge project files
