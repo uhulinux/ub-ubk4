@@ -1,11 +1,11 @@
 #!/usr/bin/env dl
 
-linux-firmware-${UB_VERSION}.tar.gz linux-firmware-a8b75ca/ :linux-firmware
-      git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git@a8b75ca
+linux-firmware-${UB_VERSION}.tar.gz linux-firmware-${UB_VERSION}/ :linux-firmware
+      https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/
 
 # dvb
 0.0.51.tar.gz dvb-firmware-0.0.51/firmware :dvb-firmware
-	https://github.com/OpenELEC/dvb-firmware/archive/0.0.51.tar.gz
+	https://github.com/OpenELEC/dvb-firmware/archive/
 
 nouveau-firmware-20091212.tar.gz nouveau/ :nouveau
 	http://people.freedesktop.org/~pq/nouveau-drm/

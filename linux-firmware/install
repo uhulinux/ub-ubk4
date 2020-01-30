@@ -14,13 +14,16 @@ rm -Rf ${UB_INSTALLDIR}/lib/firmware/.git
 
 docdir=${UB_INSTALLDIR}/usr/share/doc/Packages/linux-firmware
 mkdir -p ${docdir}
-mv ${UB_INSTALLDIR}/lib/firmware/GPL-* ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/LICENCE* ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/LICENSE* ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/README* ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/WHENCE ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/license-*.txt ${docdir}/
+mv linux-firmware/GPL-* ${docdir}/
+mv linux-firmware/LICENCE* ${docdir}/
+mv linux-firmware/LICENSE* ${docdir}/
+mv linux-firmware/README* ${docdir}/
+mv linux-firmware/WHENCE ${docdir}/
+mv dvb-firmware/LICENCE* ${docdir}/
+mv dvb-firmware/license-*.txt ${docdir}/
 mv ${UB_INSTALLDIR}/lib/firmware/dvb-*.fw.license.txt ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/LICENCE* ${docdir}/
+mv ${UB_INSTALLDIR}/lib/firmware/license*.txt ${docdir}/
 
 rm -Rf ${UB_INSTALLDIR}/lib/firmware/{Makefile,configure,README*,*.txt,*.py}
 
