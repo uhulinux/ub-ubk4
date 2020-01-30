@@ -1,6 +1,6 @@
-diff -Nur orig/src/modules/users/users.conf mod/src/modules/users/users.conf
---- orig/src/modules/users/users.conf	2018-05-17 17:13:54.000000000 +0200
-+++ mod/src/modules/users/users.conf	2018-06-12 13:44:18.429602844 +0200
+diff -Naur orig/src/modules/users/users.conf patched/src/modules/users/users.conf
+--- orig/src/modules/users/users.conf	2020-01-28 17:42:21.000000000 +0100
++++ patched/src/modules/users/users.conf	2020-01-30 22:24:35.874503671 +0100
 @@ -15,11 +15,6 @@
  # Adjust to your Distribution defaults.
  defaultGroups:
@@ -13,9 +13,9 @@ diff -Nur orig/src/modules/users/users.conf mod/src/modules/users/users.conf
      - audio
  
  # Some Distributions require a 'autologin' group for the user.
-@@ -39,7 +34,7 @@
+@@ -43,7 +38,7 @@
  # remove this setting (delete or comment out the line below). Otherwise,
- # the setting will be duplicated in the /etc/sudoers.d/10-installer file,
+ # the setting will be duplicated in the `/etc/sudoers.d/10-installer` file,
  # potentially confusing users.
 -sudoersGroup:    wheel
 +# sudoersGroup:    wheel

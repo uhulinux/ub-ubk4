@@ -1,7 +1,7 @@
-diff -Nur orig/src/modules/displaymanager/displaymanager.conf mod/src/modules/displaymanager/displaymanager.conf
---- orig/src/modules/displaymanager/displaymanager.conf	2019-08-07 12:58:22.000000000 +0200
-+++ mod/src/modules/displaymanager/displaymanager.conf	2019-08-26 08:48:29.000000000 +0200
-@@ -9,9 +9,7 @@
+diff -Naur orig/src/modules/displaymanager/displaymanager.conf patched/src/modules/displaymanager/displaymanager.conf
+--- orig/src/modules/displaymanager/displaymanager.conf	2020-01-28 17:42:21.000000000 +0100
++++ patched/src/modules/displaymanager/displaymanager.conf	2020-01-30 22:13:54.363497048 +0100
+@@ -17,9 +17,7 @@
    - sddm
    - lightdm
    - gdm
@@ -9,12 +9,12 @@ diff -Nur orig/src/modules/displaymanager/displaymanager.conf mod/src/modules/di
    - lxdm
 -  - kdm
  
- #Enable the following settings to force a desktop environment in your displaymanager configuration file:
- #defaultDesktopEnvironment:
-diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager/main.py
---- orig/src/modules/displaymanager/main.py	2019-08-07 12:58:22.000000000 +0200
-+++ mod/src/modules/displaymanager/main.py	2019-09-08 21:18:00.000000000 +0200
-@@ -80,9 +80,9 @@
+ # Enable the following settings to force a desktop environment
+ # in your displaymanager configuration file. This will attempt
+diff -Naur orig/src/modules/displaymanager/main.py patched/src/modules/displaymanager/main.py
+--- orig/src/modules/displaymanager/main.py	2020-01-28 17:42:21.000000000 +0100
++++ patched/src/modules/displaymanager/main.py	2020-01-30 22:13:54.367497090 +0100
+@@ -192,9 +192,9 @@
      DesktopEnvironment('/usr/bin/startlxde', 'LXDE'),
      DesktopEnvironment('/usr/bin/lxqt-session', 'lxqt'),
      DesktopEnvironment('/usr/bin/pekwm', 'pekwm'),
@@ -26,7 +26,7 @@ diff -Nur orig/src/modules/displaymanager/main.py mod/src/modules/displaymanager
      DesktopEnvironment('/usr/bin/openbox-session', 'openbox')
  ]
  
-@@ -774,6 +774,8 @@
+@@ -916,6 +916,8 @@
  
          if dm_instance is None:
              libcalamares.utils.debug("{!s} selected but not installed".format(dm))
