@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+echo "STDLIBS += -ldl -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss -ltiff -ljpeg ;" >> Jamtop
+export CFLAGS="-DUNIX -D_THREAD_SAFE -m64"
+
+sed -e 's:CCFLAGS:CFLAGS:g' -i Jambase
+jam -dx -fJambase -j2

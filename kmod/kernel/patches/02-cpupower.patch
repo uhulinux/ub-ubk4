@@ -1,0 +1,83 @@
+diff -Naur orig/tools/power/cpupower/cpupower.default patched/tools/power/cpupower/cpupower.default
+--- orig/tools/power/cpupower/cpupower.default	1970-01-01 01:00:00.000000000 +0100
++++ patched/tools/power/cpupower/cpupower.default	2015-02-24 15:38:45.767465914 +0100
+@@ -0,0 +1,29 @@
++# Define CPUs governor
++# valid governors: ondemand, performance, powersave, conservative, userspace.
++#governor='ondemand'
++
++# Limit frequency range
++# Valid suffixes: Hz, kHz (default), MHz, GHz, THz
++#min_freq="2.25GHz"
++#max_freq="3GHz"
++
++# Specific frequency to be set.
++# Requires userspace governor to be available.
++# Do not set governor field if you use this one.
++#freq=
++
++# Utilizes cores in one processor package/socket first before processes are 
++# scheduled to other processor packages/sockets.
++# See man (1) CPUPOWER-SET for additional details.
++#mc_scheduler=
++
++# Utilizes thread siblings of one processor core first before processes are
++# scheduled to other cores. See man (1) CPUPOWER-SET for additional details.
++#smp_scheduler=
++
++#  Sets a register on supported Intel processore which allows software to convey
++# its policy for the relative importance of performance versus energy savings to
++# the  processor. See man (1) CPUPOWER-SET for additional details.
++#perf_bias=
++
++# vim:set ts=2 sw=2 ft=sh et:
+diff -Naur orig/tools/power/cpupower/cpupower.service patched/tools/power/cpupower/cpupower.service
+--- orig/tools/power/cpupower/cpupower.service	1970-01-01 01:00:00.000000000 +0100
++++ patched/tools/power/cpupower/cpupower.service	2015-02-24 15:39:20.627638776 +0100
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Apply cpupower configuration
++
++[Service]
++Type=oneshot
++ExecStart=/usr/lib/systemd/scripts/cpupower
++RemainAfterExit=yes
++
++[Install]
++WantedBy=multi-user.target
+diff -Naur orig/tools/power/cpupower/cpupower.systemd patched/tools/power/cpupower/cpupower.systemd
+--- orig/tools/power/cpupower/cpupower.systemd	1970-01-01 01:00:00.000000000 +0100
++++ patched/tools/power/cpupower/cpupower.systemd	2015-02-24 15:39:57.503821635 +0100
+@@ -0,0 +1,32 @@
++#!/bin/bash
++
++. /etc/default/cpupower
++
++declare -i fail=0
++
++# parse frequency options
++declare -a params=()
++params+=(${governor:+-g $governor})
++params+=(${min_freq:+-d $min_freq})
++params+=(${max_freq:+-u $max_freq})
++params+=(${freq:+-f $freq})
++
++# apply frequency options
++if ((${#params[@]} > 0)); then
++  cpupower frequency-set "${params[@]}" >/dev/null || fail=1
++fi
++
++# parse cpu options
++declare -a params=()
++params+=(${mc_scheduler:+-m $mc_scheduler})
++params+=(${smp_scheduler:+-s $smp_scheduler})
++params+=(${perf_bias:+-b $perf_bias})
++
++# apply cpu options
++if ((${#params[@]} > 0)); then
++  cpupower set "${params[@]}" >/dev/null || fail=1
++fi
++
++exit $fail
++
++# vim:set ts=2 sw=2 ft=sh et:

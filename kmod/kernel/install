@@ -1,0 +1,59 @@
+#!/bin/bash -eux
+
+case "$UB_VERSION" in
+	*.*.*)
+		VERSION_BASE="${UB_VERSION/\~/-}-${UB_RELEASE}"
+		;;
+	*.*~*)
+		VERSION_BASE="${UB_VERSION/\~/.0-}-${UB_RELEASE}"
+		;;
+	*.*)
+		VERSION_BASE="${UB_VERSION}.0-${UB_RELEASE}"
+		;;
+	*)
+		exit 1
+		;;
+esac
+
+VERSION="$VERSION_BASE"
+
+export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C LANG=C date)"
+
+# mkinitrd
+
+cat >"$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel <<END
+#!/bin/sh
+
+dracut -f -H /boot/initrd-$VERSION.x86_64.img $UB_VERSION-$UB_RELEASE.x86_64
+
+rm -f /boot/initrd.x86_64
+ln -s initrd-$VERSION.x86_64.img /boot/initrd.x86_64
+
+rm -f /boot/initrd
+ln -s initrd.x86_64 /boot/initrd
+
+# update grub config
+if [ -f /boot/grub/grub.cfg ]; then
+	mv /boot/grub/grub.cfg /boot/grub/grub.cfg.`date '+%F'`
+fi
+exec grub-mkconfig -o /boot/grub/grub.cfg
+
+END
+
+chmod 755 "$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel
+
+cp -al "$UB_OBJECTDIR"/. "$UB_INSTALLDIR"/
+
+chmod -R a+rX,u+w,go-w "$UB_INSTALLDIR"
+
+# cpupower
+cd tools/power/cpupower
+ub_install libdir=/usr/lib mandir=/usr/share/man
+
+# install startup scripts
+install -Dm 644 cpupower.default "$UB_INSTALLDIR/etc/default/cpupower"
+install -Dm 644 cpupower.service "$UB_INSTALLDIR/usr/lib/systemd/system/cpupower.service"
+install -Dm 755 cpupower.systemd "$UB_INSTALLDIR/usr/lib/systemd/scripts/cpupower"
+
+install -Dm 644 lib/cpupower.h "$UB_INSTALLDIR/usr/include/"
+rm -rf ${UB_INSTALLDIR}/usr/share/doc/packages

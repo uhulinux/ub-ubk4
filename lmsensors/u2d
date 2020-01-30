@@ -1,1 +1,2 @@
-u2d http://ftp.osuosl.org/pub/blfs/conglomeration/lmsensors/
+urllist https://github.com/lm-sensors/lm-sensors/releases/ | grep tar.gz | sort -V | tail -n1 | sed s/V// | sed s/\.tar.*// | sed s/-/\./g
+ 
