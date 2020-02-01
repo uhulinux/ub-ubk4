@@ -1,4 +1,8 @@
 #!/bin/sh -eux
 
-ub_configure
-ub_make
+ub_compile \
+	-Dptp-helper-permissions=capabilities \
+	-Ddbghelp=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled
