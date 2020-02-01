@@ -1,8 +1,9 @@
 #!/bin/sh -eux
 
-export CDPARANOIA_CFLAGS='-I/usr/include'
-export CDPARANOIA_LIBS='-L/usr/lib'
-ub_configure \
-	--disable-gtk-doc-html \
-	--disable-examples
-ub_make
+ub_compile \
+	-Dgtk_doc=disabled \
+	-Dexamples=disabled \
+	-Dtremor=disabled \
+	-Dgobject-cast-checks=disabled \
+	-Dglib-asserts=disabled \
+	-Dglib-checks=disabled
