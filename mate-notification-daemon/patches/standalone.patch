@@ -1,7 +1,67 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2020-02-05 11:17:26.720221637 +0100
++++ patched/configure	2020-02-05 22:31:02.416098666 +0100
+@@ -640,7 +640,6 @@
+ ICON_UPDATE_FALSE
+ ICON_UPDATE_TRUE
+ UPDATE_ICON_CACHE
+-DBUS_SERVICES_DIR
+ DBUS_SYS_DIR
+ LIBEXECDIR
+ DATADIR
+@@ -1511,7 +1510,6 @@
+   --with-libintl-prefix[=DIR]  search for libintl in DIR/include and DIR/lib
+   --without-libintl-prefix     don't search for libintl in includedir and libdir
+   --with-dbus-sys=<dir>   where D-BUS system.d directory is
+-  --with-dbus-services=<dir>   where D-BUS services directory is
+ 
+ Some influential environment variables:
+   CC          C compiler command
+@@ -15925,12 +15923,6 @@
+ 	DBUS_SYS_DIR="$SYSCONFDIR/dbus-1/system.d"
+ fi
+ 
+-if ! test -z "$with_dbus_services" ; then
+-	DBUS_SERVICES_DIR="$with_dbus_services"
+-else
+-	DBUS_SERVICES_DIR="$DATADIR/dbus-1/services"
+-fi
+-
+ 
+ 
+ 
+@@ -15939,11 +15931,6 @@
+ _ACEOF
+ 
+ 
+-cat >>confdefs.h <<_ACEOF
+-#define DBUS_SERVICES_DIR "$DBUS_SERVICES_DIR"
+-_ACEOF
+-
+-
+ # Check whether --enable-icon-update was given.
+ if test "${enable_icon_update+set}" = set; then :
+   enableval=$enable_icon_update;
+@@ -16000,7 +15987,7 @@
+ fi
+ 
+ 
+-ac_config_files="$ac_config_files Makefile data/Makefile data/org.freedesktop.mate.Notifications.service data/org.mate.NotificationDaemon.gschema.xml po/Makefile.in src/Makefile src/daemon/Makefile src/capplet/Makefile src/themes/Makefile src/themes/coco/Makefile src/themes/nodoka/Makefile src/themes/slider/Makefile src/themes/standard/Makefile"
++ac_config_files="$ac_config_files Makefile data/Makefile data/mate-notification-daemon-autostart.desktop data/mate-notification-daemon.desktop data/org.mate.NotificationDaemon.gschema.xml po/Makefile.in src/Makefile src/daemon/Makefile src/capplet/Makefile src/themes/Makefile src/themes/coco/Makefile src/themes/nodoka/Makefile src/themes/slider/Makefile src/themes/standard/Makefile"
+ 
+ 
+ cat >confcache <<\_ACEOF
+@@ -18442,6 +18429,5 @@
+ 	warning flags:            ${WARN_CFLAGS}
+ 
+ 	dbus-1 system.d           $DBUS_SYS_DIR
+-	dbus-1 services           $DBUS_SERVICES_DIR
+ 
+ "
 diff -Naur orig/configure.ac patched/configure.ac
---- orig/configure.ac	2019-02-23 16:59:32.000000000 +0100
-+++ patched/configure.ac	2019-03-04 12:17:29.364771336 +0100
-@@ -156,7 +156,6 @@
+--- orig/configure.ac	2020-02-05 11:17:26.720221637 +0100
++++ patched/configure.ac	2020-02-05 22:21:38.777682901 +0100
+@@ -183,7 +183,6 @@
  AS_AC_EXPAND(LIBEXECDIR, $libexecdir)
  
  AC_ARG_WITH(dbus-sys, [  --with-dbus-sys=<dir>   where D-BUS system.d directory is])
@@ -9,7 +69,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  
  if ! test -z "$with_dbus_sys" ; then
  	DBUS_SYS_DIR="$with_dbus_sys"
-@@ -164,16 +163,8 @@
+@@ -191,16 +190,8 @@
  	DBUS_SYS_DIR="$SYSCONFDIR/dbus-1/system.d"
  fi
  
@@ -25,48 +85,45 @@ diff -Naur orig/configure.ac patched/configure.ac
 -AC_DEFINE_UNQUOTED(DBUS_SERVICES_DIR, "$DBUS_SERVICES_DIR", [Where services dir for DBUS is])
  
  dnl ---------------------------------------------------------------------------
- dnl Turn on the additional warnings last
-@@ -238,7 +229,8 @@
+ dnl Enabel/disable icon cache generation
+@@ -215,7 +206,8 @@
  AC_CONFIG_FILES([
  Makefile
  data/Makefile
 -data/org.freedesktop.mate.Notifications.service
-+data/mate-notification-daemon-autostart.desktop.in
-+data/mate-notification-daemon.desktop.in
++data/mate-notification-daemon-autostart.desktop
++data/mate-notification-daemon.desktop
  data/org.mate.NotificationDaemon.gschema.xml
  po/Makefile.in
  src/Makefile
-@@ -265,6 +257,5 @@
- 	cflags:		              ${AM_CFLAGS}
+@@ -244,6 +236,5 @@
+ 	warning flags:            ${WARN_CFLAGS}
  
  	dbus-1 system.d           $DBUS_SYS_DIR
 -	dbus-1 services           $DBUS_SERVICES_DIR
  
  "
 diff -Naur orig/data/Makefile.am patched/data/Makefile.am
---- orig/data/Makefile.am	2018-01-30 09:03:19.000000000 +0100
-+++ patched/data/Makefile.am	2019-03-04 12:17:29.364771336 +0100
-@@ -12,9 +12,16 @@
+--- orig/data/Makefile.am	2020-02-05 11:17:26.724221676 +0100
++++ patched/data/Makefile.am	2020-02-05 22:21:29.573563561 +0100
+@@ -12,9 +12,13 @@
  icon48_DATA = icons/48x48/mate-notification-properties.png
  iconscalable_DATA = icons/scalable/mate-notification-properties.svg
  
 -
 -servicedir   = $(DBUS_SERVICES_DIR)
 -service_DATA = org.freedesktop.mate.Notifications.service
-+@INTLTOOL_DESKTOP_RULE@
 +autostartdir= $(sysconfdir)/xdg/autostart
-+autostart_in_in_files = mate-notification-daemon-autostart.desktop.in.in
 +autostart_in_files = mate-notification-daemon-autostart.desktop.in
 +autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
 +
-+desktopdir          = $(datadir)/applications
-+desktop_in_in_files    = mate-notification-daemon.desktop.in.in
-+desktop_in_files    = mate-notification-daemon.desktop.in
-+desktop_DATA        = $(desktop_in_files:.desktop.in=.desktop)
++desktopdir = $(datadir)/applications
++desktop_in_files = mate-notification-daemon.desktop.in
++desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
  
  gsettingsschema_in_files = org.mate.NotificationDaemon.gschema.xml.in
  gsettings_SCHEMAS = $(gsettingsschema_in_files:.xml.in=.xml)
-@@ -23,7 +30,8 @@
+@@ -22,7 +26,8 @@
  
  EXTRA_DIST = \
  	$(gsettingsschema_in_files) \
@@ -76,7 +133,7 @@ diff -Naur orig/data/Makefile.am patched/data/Makefile.am
  	$(icon16_DATA) \
  	$(icon22_DATA) \
  	$(icon24_DATA) \
-@@ -31,7 +39,9 @@
+@@ -30,7 +35,9 @@
  	$(icon48_DATA) \
  	$(iconscalable_DATA)
  
@@ -87,55 +144,296 @@ diff -Naur orig/data/Makefile.am patched/data/Makefile.am
  
  gtk_update_icon_cache = $(UPDATE_ICON_CACHE) -f -t $(datadir)/icons/hicolor
  
-diff -Naur orig/data/mate-notification-daemon-autostart.desktop.in.in patched/data/mate-notification-daemon-autostart.desktop.in.in
---- orig/data/mate-notification-daemon-autostart.desktop.in.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/mate-notification-daemon-autostart.desktop.in.in	2019-03-04 12:17:29.364771336 +0100
+diff -Naur orig/data/Makefile.in patched/data/Makefile.in
+--- orig/data/Makefile.in	2020-02-05 11:17:26.724221676 +0100
++++ patched/data/Makefile.in	2020-02-05 22:47:05.279283999 +0100
+@@ -104,7 +104,8 @@
+ DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
+ mkinstalldirs = $(install_sh) -d
+ CONFIG_HEADER = $(top_builddir)/config.h
+-CONFIG_CLEAN_FILES = org.freedesktop.mate.Notifications.service \
++CONFIG_CLEAN_FILES = mate-notification-daemon-autostart.desktop \
++	mate-notification-daemon.desktop \
+ 	org.mate.NotificationDaemon.gschema.xml
+ CONFIG_CLEAN_VPATH_FILES =
+ AM_V_P = $(am__v_P_@AM_V@)
+@@ -153,15 +154,18 @@
+     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+          $(am__cd) "$$dir" && rm -f $$files; }; \
+   }
+-am__installdirs = "$(DESTDIR)$(icon16dir)" "$(DESTDIR)$(icon22dir)" \
+-	"$(DESTDIR)$(icon24dir)" "$(DESTDIR)$(icon32dir)" \
+-	"$(DESTDIR)$(icon48dir)" "$(DESTDIR)$(iconscalabledir)" \
+-	"$(DESTDIR)$(servicedir)"
+-DATA = $(icon16_DATA) $(icon22_DATA) $(icon24_DATA) $(icon32_DATA) \
+-	$(icon48_DATA) $(iconscalable_DATA) $(service_DATA)
++am__installdirs = "$(DESTDIR)$(autostartdir)" \
++	"$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(icon16dir)" \
++	"$(DESTDIR)$(icon22dir)" "$(DESTDIR)$(icon24dir)" \
++	"$(DESTDIR)$(icon32dir)" "$(DESTDIR)$(icon48dir)" \
++	"$(DESTDIR)$(iconscalabledir)"
++DATA = $(autostart_DATA) $(desktop_DATA) $(icon16_DATA) $(icon22_DATA) \
++	$(icon24_DATA) $(icon32_DATA) $(icon48_DATA) \
++	$(iconscalable_DATA)
+ am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
+ am__DIST_COMMON = $(srcdir)/Makefile.in \
+-	$(srcdir)/org.freedesktop.mate.Notifications.service.in \
++	$(srcdir)/mate-notification-daemon-autostart.desktop.in \
++	$(srcdir)/mate-notification-daemon.desktop.in \
+ 	$(srcdir)/org.mate.NotificationDaemon.gschema.xml.in
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ ACLOCAL = @ACLOCAL@
+@@ -179,7 +183,6 @@
+ CPPFLAGS = @CPPFLAGS@
+ CYGPATH_W = @CYGPATH_W@
+ DATADIR = @DATADIR@
+-DBUS_SERVICES_DIR = @DBUS_SERVICES_DIR@
+ DBUS_SYS_DIR = @DBUS_SYS_DIR@
+ DEFS = @DEFS@
+ DEPDIR = @DEPDIR@
+@@ -337,13 +340,18 @@
+ icon32_DATA = icons/32x32/mate-notification-properties.png
+ icon48_DATA = icons/48x48/mate-notification-properties.png
+ iconscalable_DATA = icons/scalable/mate-notification-properties.svg
+-servicedir = $(DBUS_SERVICES_DIR)
+-service_DATA = org.freedesktop.mate.Notifications.service
++autostartdir = $(sysconfdir)/xdg/autostart
++autostart_in_files = mate-notification-daemon-autostart.desktop.in
++autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
++desktopdir = $(datadir)/applications
++desktop_in_files = mate-notification-daemon.desktop.in
++desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+ gsettingsschema_in_files = org.mate.NotificationDaemon.gschema.xml.in
+ gsettings_SCHEMAS = $(gsettingsschema_in_files:.xml.in=.xml)
+ EXTRA_DIST = \
+ 	$(gsettingsschema_in_files) \
+-	$(service_DATA) \
++	$(autostart_in_files) \
++	$(desktop_in_files) \
+ 	$(icon16_DATA) \
+ 	$(icon22_DATA) \
+ 	$(icon24_DATA) \
+@@ -351,7 +359,10 @@
+ 	$(icon48_DATA) \
+ 	$(iconscalable_DATA)
+ 
+-CLEANFILES = $(gsettings_SCHEMAS)
++CLEANFILES = $(gsettings_SCHEMAS) \
++	$(autostart_DATA) \
++	$(desktop_DATA)
++
+ gtk_update_icon_cache = $(UPDATE_ICON_CACHE) -f -t $(datadir)/icons/hicolor
+ all: all-am
+ 
+@@ -385,7 +396,9 @@
+ $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
+ 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+ $(am__aclocal_m4_deps):
+-org.freedesktop.mate.Notifications.service: $(top_builddir)/config.status $(srcdir)/org.freedesktop.mate.Notifications.service.in
++mate-notification-daemon-autostart.desktop: $(top_builddir)/config.status $(srcdir)/mate-notification-daemon-autostart.desktop.in
++	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
++mate-notification-daemon.desktop: $(top_builddir)/config.status $(srcdir)/mate-notification-daemon.desktop.in
+ 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+ org.mate.NotificationDaemon.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.mate.NotificationDaemon.gschema.xml.in
+ 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+@@ -395,6 +408,48 @@
+ 
+ clean-libtool:
+ 	-rm -rf .libs _libs
++install-autostartDATA: $(autostart_DATA)
++	@$(NORMAL_INSTALL)
++	@list='$(autostart_DATA)'; test -n "$(autostartdir)" || list=; \
++	if test -n "$$list"; then \
++	  echo " $(MKDIR_P) '$(DESTDIR)$(autostartdir)'"; \
++	  $(MKDIR_P) "$(DESTDIR)$(autostartdir)" || exit 1; \
++	fi; \
++	for p in $$list; do \
++	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
++	  echo "$$d$$p"; \
++	done | $(am__base_list) | \
++	while read files; do \
++	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(autostartdir)'"; \
++	  $(INSTALL_DATA) $$files "$(DESTDIR)$(autostartdir)" || exit $$?; \
++	done
++
++uninstall-autostartDATA:
++	@$(NORMAL_UNINSTALL)
++	@list='$(autostart_DATA)'; test -n "$(autostartdir)" || list=; \
++	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
++	dir='$(DESTDIR)$(autostartdir)'; $(am__uninstall_files_from_dir)
++install-desktopDATA: $(desktop_DATA)
++	@$(NORMAL_INSTALL)
++	@list='$(desktop_DATA)'; test -n "$(desktopdir)" || list=; \
++	if test -n "$$list"; then \
++	  echo " $(MKDIR_P) '$(DESTDIR)$(desktopdir)'"; \
++	  $(MKDIR_P) "$(DESTDIR)$(desktopdir)" || exit 1; \
++	fi; \
++	for p in $$list; do \
++	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
++	  echo "$$d$$p"; \
++	done | $(am__base_list) | \
++	while read files; do \
++	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(desktopdir)'"; \
++	  $(INSTALL_DATA) $$files "$(DESTDIR)$(desktopdir)" || exit $$?; \
++	done
++
++uninstall-desktopDATA:
++	@$(NORMAL_UNINSTALL)
++	@list='$(desktop_DATA)'; test -n "$(desktopdir)" || list=; \
++	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
++	dir='$(DESTDIR)$(desktopdir)'; $(am__uninstall_files_from_dir)
+ install-icon16DATA: $(icon16_DATA)
+ 	@$(NORMAL_INSTALL)
+ 	@list='$(icon16_DATA)'; test -n "$(icon16dir)" || list=; \
+@@ -521,27 +576,6 @@
+ 	@list='$(iconscalable_DATA)'; test -n "$(iconscalabledir)" || list=; \
+ 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+ 	dir='$(DESTDIR)$(iconscalabledir)'; $(am__uninstall_files_from_dir)
+-install-serviceDATA: $(service_DATA)
+-	@$(NORMAL_INSTALL)
+-	@list='$(service_DATA)'; test -n "$(servicedir)" || list=; \
+-	if test -n "$$list"; then \
+-	  echo " $(MKDIR_P) '$(DESTDIR)$(servicedir)'"; \
+-	  $(MKDIR_P) "$(DESTDIR)$(servicedir)" || exit 1; \
+-	fi; \
+-	for p in $$list; do \
+-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+-	  echo "$$d$$p"; \
+-	done | $(am__base_list) | \
+-	while read files; do \
+-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(servicedir)'"; \
+-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(servicedir)" || exit $$?; \
+-	done
+-
+-uninstall-serviceDATA:
+-	@$(NORMAL_UNINSTALL)
+-	@list='$(service_DATA)'; test -n "$(servicedir)" || list=; \
+-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+-	dir='$(DESTDIR)$(servicedir)'; $(am__uninstall_files_from_dir)
+ tags TAGS:
+ 
+ ctags CTAGS:
+@@ -586,7 +620,7 @@
+ check: check-am
+ all-am: Makefile $(DATA)
+ installdirs:
+-	for dir in "$(DESTDIR)$(icon16dir)" "$(DESTDIR)$(icon22dir)" "$(DESTDIR)$(icon24dir)" "$(DESTDIR)$(icon32dir)" "$(DESTDIR)$(icon48dir)" "$(DESTDIR)$(iconscalabledir)" "$(DESTDIR)$(servicedir)"; do \
++	for dir in "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(icon16dir)" "$(DESTDIR)$(icon22dir)" "$(DESTDIR)$(icon24dir)" "$(DESTDIR)$(icon32dir)" "$(DESTDIR)$(icon48dir)" "$(DESTDIR)$(iconscalabledir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+ install: install-am
+@@ -640,9 +674,9 @@
+ 
+ info-am:
+ 
+-install-data-am: install-icon16DATA install-icon22DATA \
+-	install-icon24DATA install-icon32DATA install-icon48DATA \
+-	install-iconscalableDATA install-serviceDATA
++install-data-am: install-autostartDATA install-desktopDATA \
++	install-icon16DATA install-icon22DATA install-icon24DATA \
++	install-icon32DATA install-icon48DATA install-iconscalableDATA
+ 	@$(NORMAL_INSTALL)
+ 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+ install-dvi: install-dvi-am
+@@ -687,9 +721,10 @@
+ 
+ ps-am:
+ 
+-uninstall-am: uninstall-icon16DATA uninstall-icon22DATA \
+-	uninstall-icon24DATA uninstall-icon32DATA uninstall-icon48DATA \
+-	uninstall-iconscalableDATA uninstall-serviceDATA
++uninstall-am: uninstall-autostartDATA uninstall-desktopDATA \
++	uninstall-icon16DATA uninstall-icon22DATA uninstall-icon24DATA \
++	uninstall-icon32DATA uninstall-icon48DATA \
++	uninstall-iconscalableDATA
+ 	@$(NORMAL_INSTALL)
+ 	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+ .MAKE: install-am install-data-am install-strip uninstall-am
+@@ -697,20 +732,21 @@
+ .PHONY: all all-am check check-am clean clean-generic clean-libtool \
+ 	cscopelist-am ctags-am distclean distclean-generic \
+ 	distclean-libtool distdir dvi dvi-am html html-am info info-am \
+-	install install-am install-data install-data-am \
+-	install-data-hook install-dvi install-dvi-am install-exec \
+-	install-exec-am install-html install-html-am \
+-	install-icon16DATA install-icon22DATA install-icon24DATA \
+-	install-icon32DATA install-icon48DATA install-iconscalableDATA \
+-	install-info install-info-am install-man install-pdf \
+-	install-pdf-am install-ps install-ps-am install-serviceDATA \
+-	install-strip installcheck installcheck-am installdirs \
+-	maintainer-clean maintainer-clean-generic mostlyclean \
+-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+-	tags-am uninstall uninstall-am uninstall-hook \
+-	uninstall-icon16DATA uninstall-icon22DATA uninstall-icon24DATA \
+-	uninstall-icon32DATA uninstall-icon48DATA \
+-	uninstall-iconscalableDATA uninstall-serviceDATA
++	install install-am install-autostartDATA install-data \
++	install-data-am install-data-hook install-desktopDATA \
++	install-dvi install-dvi-am install-exec install-exec-am \
++	install-html install-html-am install-icon16DATA \
++	install-icon22DATA install-icon24DATA install-icon32DATA \
++	install-icon48DATA install-iconscalableDATA install-info \
++	install-info-am install-man install-pdf install-pdf-am \
++	install-ps install-ps-am install-strip installcheck \
++	installcheck-am installdirs maintainer-clean \
++	maintainer-clean-generic mostlyclean mostlyclean-generic \
++	mostlyclean-libtool pdf pdf-am ps ps-am tags-am uninstall \
++	uninstall-am uninstall-autostartDATA uninstall-desktopDATA \
++	uninstall-hook uninstall-icon16DATA uninstall-icon22DATA \
++	uninstall-icon24DATA uninstall-icon32DATA uninstall-icon48DATA \
++	uninstall-iconscalableDATA
+ 
+ .PRECIOUS: Makefile
+ 
+diff -Naur orig/data/mate-notification-daemon-autostart.desktop.in patched/data/mate-notification-daemon-autostart.desktop.in
+--- orig/data/mate-notification-daemon-autostart.desktop.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/mate-notification-daemon-autostart.desktop.in	2020-02-05 11:17:26.756221992 +0100
 @@ -0,0 +1,8 @@
 +[Desktop Entry]
-+_Name=MATE Notification Daemon
-+_Comment=Display notifications
++Name=MATE Notification Daemon
++Comment=Display notifications
 +Exec=@LIBEXECDIR@/mate-notification-daemon
 +Terminal=false
 +Type=Application
 +OnlyShowIn=MATE;
 +NoDisplay=true
-diff -Naur orig/data/mate-notification-daemon.desktop.in.in patched/data/mate-notification-daemon.desktop.in.in
---- orig/data/mate-notification-daemon.desktop.in.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/mate-notification-daemon.desktop.in.in	2019-03-04 12:17:29.364771336 +0100
+diff -Naur orig/data/mate-notification-daemon.desktop.in patched/data/mate-notification-daemon.desktop.in
+--- orig/data/mate-notification-daemon.desktop.in	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/mate-notification-daemon.desktop.in	2020-02-05 11:17:26.756221992 +0100
 @@ -0,0 +1,8 @@
 +[Desktop Entry]
-+_Name=MATE Notification Daemon
-+_Comment=Display notifications
++Name=MATE Notification Daemon
++Comment=Display notifications
 +Exec=@LIBEXECDIR@/mate-notification-daemon
 +Terminal=false
 +Type=Application
 +OnlyShowIn=MATE;
 +NoDisplay=true
 diff -Naur orig/data/org.freedesktop.mate.Notifications.service.in patched/data/org.freedesktop.mate.Notifications.service.in
---- orig/data/org.freedesktop.mate.Notifications.service.in	2018-01-30 09:03:19.000000000 +0100
+--- orig/data/org.freedesktop.mate.Notifications.service.in	2020-02-05 11:17:26.724221676 +0100
 +++ patched/data/org.freedesktop.mate.Notifications.service.in	1970-01-01 01:00:00.000000000 +0100
 @@ -1,3 +0,0 @@
 -[D-BUS Service]
 -Name=org.freedesktop.Notifications
 -Exec=@LIBEXECDIR@/mate-notification-daemon
 diff -Naur orig/po/POTFILES.in patched/po/POTFILES.in
---- orig/po/POTFILES.in	2018-01-30 09:03:19.000000000 +0100
-+++ patched/po/POTFILES.in	2019-03-04 12:17:29.364771336 +0100
+--- orig/po/POTFILES.in	2020-02-05 11:17:26.736221795 +0100
++++ patched/po/POTFILES.in	2020-02-05 11:17:26.756221992 +0100
 @@ -1,3 +1,5 @@
 +data/mate-notification-daemon-autostart.desktop.in.in
 +data/mate-notification-daemon.desktop.in.in
- [type: gettext/gsettings]data/org.mate.NotificationDaemon.gschema.xml.in
+ data/org.mate.NotificationDaemon.gschema.xml.in
  src/capplet/mate-notification-properties.c
  src/capplet/mate-notification-properties.desktop.in
 diff -Naur orig/po/POTFILES.skip patched/po/POTFILES.skip
 --- orig/po/POTFILES.skip	1970-01-01 01:00:00.000000000 +0100
-+++ patched/po/POTFILES.skip	2019-03-04 12:17:29.364771336 +0100
++++ patched/po/POTFILES.skip	2020-02-05 11:17:26.756221992 +0100
 @@ -0,0 +1,2 @@
 +data/mate-notification-daemon-autostart.desktop.in
 +data/mate-notification-daemon.desktop.in
 diff -Naur orig/src/daemon/daemon.c patched/src/daemon/daemon.c
---- orig/src/daemon/daemon.c	2019-01-26 14:43:28.000000000 +0100
-+++ patched/src/daemon/daemon.c	2019-03-04 12:22:34.592364495 +0100
+--- orig/src/daemon/daemon.c	2020-02-05 11:17:26.740221834 +0100
++++ patched/src/daemon/daemon.c	2020-02-05 11:17:26.760222031 +0100
 @@ -105,7 +105,6 @@
  	GSettings* gsettings;
  	guint next_id;
@@ -219,7 +517,7 @@ diff -Naur orig/src/daemon/daemon.c patched/src/daemon/daemon.c
  	}
  
  	return has_more_timeouts;
-@@ -905,7 +864,6 @@
+@@ -912,7 +871,6 @@
  	_calculate_timeout(daemon, nt, timeout);
  
  	g_hash_table_insert(daemon->notification_hash, g_memdup(&id, sizeof(guint)), nt);
