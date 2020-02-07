@@ -1,13 +1,54 @@
+From 7ebfe918b2474d3b782faffbb5d99466560b9e6d Mon Sep 17 00:00:00 2001
+From: Gianfranco Costamagna <costamagnagianfranco@yahoo.it>
+Date: Sat, 21 Dec 2019 12:16:27 +0100
+Subject: Update cmake FindGTK3 module to cope with new pango-1.0 harfbuff
+ requirement, fixing this kind of build failures: See:
+ https://gitlab.gnome.org/GNOME/pango/issues/387 and
+ https://github.com/eiskaltdcpp/eiskaltdcpp/commit/8b22479aef21fb2b764051f0499ae5fba397d31f
+ For background information
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+/<<PKGBUILDDIR>>/src/interfaces/text/ec_text.c: In function ‘text_redirects’:
+/<<PKGBUILDDIR>>/src/interfaces/text/ec_text.c:715:4: warning: ignoring return value of ‘fgets’, declared with attribute warn_unused_result [-Wunused-result]
+  715 |    fgets(input, 20, stdin);
+      |    ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/pango-1.0/pango/pango-font.h:25,
+                 from /usr/include/pango-1.0/pango/pango-attributes.h:25,
+                 from /usr/include/pango-1.0/pango/pango.h:25,
+                 from /usr/include/gtk-3.0/gdk/gdktypes.h:35,
+                 from /usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h:30,
+                 from /usr/include/gtk-3.0/gdk/gdk.h:32,
+                 from /usr/include/gtk-3.0/gtk/gtk.h:30,
+                 from /<<PKGBUILDDIR>>/src/interfaces/gtk3/ec_gtk3.h:4,
+                 from /<<PKGBUILDDIR>>/src/ec_interfaces.c:31:
+/usr/include/pango-1.0/pango/pango-coverage.h:28:10: fatal error: hb.h: No such file or directory
+   28 | #include <hb.h>
+      |          ^~~~~~
+compilation terminated.
+make[4]: *** [src/interfaces/CMakeFiles/ec_interfaces.dir/build.make:66: src/interfaces/CMakeFiles/ec_interfaces.dir/__/ec_interfaces.c.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+[  2%] Creating PDF for /<<PKGBUILDDIR>>/obj-graphical/man/ettercap_plugins.8
+
 diff --git a/cmake/Modules/FindGTK3.cmake b/cmake/Modules/FindGTK3.cmake
-index ebbf0400..245fde13 100644
+index f44b22f4..e07a4e90 100644
 --- a/cmake/Modules/FindGTK3.cmake
 +++ b/cmake/Modules/FindGTK3.cmake
-@@ -388,7 +388,7 @@ endif()
- #
+@@ -140,6 +140,7 @@ function(_GTK3_FIND_INCLUDE_DIR _var _hdr)
+     gtkmm-2.4
+     libglade-2.0
+     libglademm-2.4
++    harfbuzz
+     pango-1.0
+     pangomm-1.4
+     sigc++-2.2
+@@ -462,6 +463,8 @@ foreach(_GTK3_component ${GTK3_FIND_COMPONENTS})
+     _gtk3_find_include_dir(GTK3_PANGO_INCLUDE_DIR pango/pango.h)
+     _gtk3_find_library(GTK3_PANGO_LIBRARY pango false true)
  
- find_package(Freetype)
--list(APPEND GTK3_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
-+list(APPEND GTK3_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS} /usr/include/harfbuzz)
- list(APPEND GTK3_LIBRARIES ${FREETYPE_LIBRARIES})
++    _gtk3_find_include_dir(GTK3_HARFBUZZ_INCLUDE_DIR hb.h)
++
+     _gtk3_find_include_dir(GTK3_ATK_INCLUDE_DIR atk/atk.h)
+     _gtk3_find_library(GTK3_ATK_LIBRARY atk false true)
  
- foreach(_GTK3_component ${GTK3_FIND_COMPONENTS})
