@@ -1,6 +1,6 @@
 diff -Naur orig/tools/gn/tools/gn/ninja_action_target_writer_unittest.cc patched/tools/gn/tools/gn/ninja_action_target_writer_unittest.cc
---- orig/tools/gn/tools/gn/ninja_action_target_writer_unittest.cc	2019-08-09 16:52:20.000000000 +0200
-+++ patched/tools/gn/tools/gn/ninja_action_target_writer_unittest.cc	2019-10-08 23:03:24.438062527 +0200
+--- orig/tools/gn/tools/gn/ninja_action_target_writer_unittest.cc	2020-02-04 03:04:02.000000000 +0100
++++ patched/tools/gn/tools/gn/ninja_action_target_writer_unittest.cc	2020-02-08 00:11:29.123876427 +0100
 @@ -54,7 +54,7 @@
    ASSERT_TRUE(target.OnResolved(&err));
  
@@ -74,9 +74,9 @@ diff -Naur orig/tools/gn/tools/gn/ninja_action_target_writer_unittest.cc patched
    Target dep(setup.settings(), Label(SourceDir("//foo/"), "dep"));
    dep.set_output_type(Target::ACTION);
 diff -Naur orig/tools/gn/tools/gn/setup.cc patched/tools/gn/tools/gn/setup.cc
---- orig/tools/gn/tools/gn/setup.cc	2019-08-09 16:52:20.000000000 +0200
-+++ patched/tools/gn/tools/gn/setup.cc	2019-10-08 23:06:59.800662657 +0200
-@@ -702,7 +702,7 @@
+--- orig/tools/gn/tools/gn/setup.cc	2020-02-04 03:04:02.000000000 +0100
++++ patched/tools/gn/tools/gn/setup.cc	2020-02-08 00:11:29.123876427 +0100
+@@ -701,7 +701,7 @@
      }
      build_settings_.set_python_path(python_path.NormalizePathSeparatorsTo('/'));
  #else

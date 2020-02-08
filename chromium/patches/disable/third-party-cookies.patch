@@ -1,12 +1,12 @@
 diff -Naur orig/components/content_settings/core/browser/cookie_settings.cc patched/components/content_settings/core/browser/cookie_settings.cc
---- orig/components/content_settings/core/browser/cookie_settings.cc	2019-07-29 22:35:59.000000000 +0200
-+++ patched/components/content_settings/core/browser/cookie_settings.cc	2019-07-30 23:04:23.375774130 +0200
-@@ -50,7 +50,7 @@
+--- orig/components/content_settings/core/browser/cookie_settings.cc	2020-02-04 02:56:11.000000000 +0100
++++ patched/components/content_settings/core/browser/cookie_settings.cc	2020-02-07 23:59:06.740932127 +0100
+@@ -58,7 +58,7 @@
  void CookieSettings::RegisterProfilePrefs(
      user_prefs::PrefRegistrySyncable* registry) {
    registry->RegisterBooleanPref(
 -      prefs::kBlockThirdPartyCookies, false,
 +      prefs::kBlockThirdPartyCookies, true,
        user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
- }
- 
+   registry->RegisterIntegerPref(
+       prefs::kCookieControlsMode,
