@@ -1,0 +1,13 @@
+--- a/Makefile.in	2003-10-31 22:50:04.000000000 +0200
++++ b/Makefile.in	2003-11-30 00:36:20.000000000 +0200
+@@ -393,8 +393,8 @@
+ download_dlx: $(DLXLINUX_TAR)
+ 
+ $(DLXLINUX_TAR):
+-	$(RM) -f $(DLXLINUX_TAR)
+-	$(WGET) $(DLXLINUX_TAR_URL)
++#	$(RM) -f $(DLXLINUX_TAR)
++#	$(WGET) $(DLXLINUX_TAR_URL)
+ 	test -f $(DLXLINUX_TAR)
+ 
+ unpack_dlx: $(DLXLINUX_TAR)

@@ -1,28 +1,25 @@
 #!/bin/sh -eux
 
+export CXXFLAGS="-DPARANOID"
 ub_compile \
-	--disable-docbook \
-	--enable-plugins \
-	--enable-cpu-level=6 \
-	--enable-ne2000 \
-	--enable-pci \
-	--enable-usb \
-	--enable-repeat-speedups \
-	--enable-fast-function-calls \
-	--enable-disasm \
-	--enable-readline \
-	--enable-fpu \
-	--enable-3dnow \
-	--enable-x86-64 \
-	--enable-debugger \
-	--enable-cdrom \
-	--enable-sb16=linux \
-	--enable-gameport \
-	--enable-smp \
-	--enable-avx \
-	--enable-xpm \
-	--enable-clgd54xx \
-	--with-x11 \
-	--with-x \
-	--with-term \
-	--with-sdl
+    --enable-x86-debugger \
+    --enable-ne2000 \
+    --enable-pci \
+    --enable-clgd54xx \
+    --enable-sb16=linux \
+    --enable-3dnow \
+    --with-x11 \
+    --with-nogui \
+    --with-term \
+    --with-rfb \
+    --with-sdl2 \
+    --without-wx \
+    --enable-cpu-level=6 \
+    --enable-disasm \
+    --enable-e1000 \
+    --enable-x86-64 \
+    --enable-smp
+
+#cd bios
+#make bios
+#cp BIOS-bochs-latest BIOS-bochs-kvm
