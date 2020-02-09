@@ -70,7 +70,7 @@ for dist in UBK1 UBK2; do
 		"$UB_INSTALLDIR"/usr/bin/build-"$dist"
 done
 
-for dist in UBK3; do
+for dist in UBK3 UBK4; do
 	for arch in amd64; do
 		for a in 1 2 3 ; do
 			mkdir -p "$UB_INSTALLDIR"/var/uhubuild/"$dist"/"$arch"/chroot${a}
@@ -104,5 +104,7 @@ ln -s "$UB_INSTALLDIR"/usr/bin/build \
 	"$UB_INSTALLDIR"/usr/bin/build-ubk2
 ln -s "$UB_INSTALLDIR"/usr/bin/build \
 	"$UB_INSTALLDIR"/usr/bin/build-ubk3
+ln -s "$UB_INSTALLDIR"/usr/bin/build \
+	"$UB_INSTALLDIR"/usr/bin/build-ubk4
 # mkdir -p "$UB_INSTALLDIR"/usr/share/doc/Packages
 # cp "$UB_SRCDIR"/changelog "$UB_INSTALLDIR"/usr/share/doc/Packages
