@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
-verzio=$(echo $UB_VERSION | sed s/~/-/g)
-sed "s/ubversion/$verzio/" -i $UB_SRCDIR/packages/0ad-data/postinst
+install -d $UB_INSTALLDIR/usr/share/0ad/data
+
+cp -r binaries/data $UB_INSTALLDIR/usr/share/0ad/
