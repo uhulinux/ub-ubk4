@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+ub_install
+rm -f ${UB_INSTALLDIR}/usr/bin/*.bat
+mv ${UB_INSTALLDIR}/usr/bin/scons ${UB_INSTALLDIR}/usr/bin/scons2
+mv ${UB_INSTALLDIR}/usr/bin/scons-configure-cache ${UB_INSTALLDIR}/usr/bin/scons2-configure-cache
+mv ${UB_INSTALLDIR}/usr/bin/scons-time ${UB_INSTALLDIR}/usr/bin/scons2-time
+mv ${UB_INSTALLDIR}/usr/bin/sconsign ${UB_INSTALLDIR}/usr/bin/scons2ign
+
+mv ${UB_INSTALLDIR}/usr/share/man/man1/scons-time.1 ${UB_INSTALLDIR}/usr/share/man/man1/scons2-time.1
+mv ${UB_INSTALLDIR}/usr/share/man/man1/scons.1 ${UB_INSTALLDIR}/usr/share/man/man1/scons2.1
+mv ${UB_INSTALLDIR}/usr/share/man/man1/sconsign.1 ${UB_INSTALLDIR}/usr/share/man/man1/scons2ign.1
