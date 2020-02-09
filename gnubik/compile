@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
 autoreconf -vif
-export GUILE_CFLAGS='-I/usr/include/guile/2.2'
-export GUILE_LIBS='-L/usr/lib -lguile-2.2 -lgc'
+export GUILE_CFLAGS=$(pkg-config --cflags guile-3.0)
+export GUILE_LIBS=$(pkg-config --libs guile-3.0)
 ub_compile
