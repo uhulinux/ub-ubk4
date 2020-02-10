@@ -29,10 +29,10 @@ google_api_key=\"${_google_api_key}\"
 google_default_client_id=\"${_google_default_client_id}\"
 google_default_client_secret=\"${_google_default_client_secret}\"
 use_allocator=\"none\"
-use_jumbo_build=true
 use_gold=false
 use_lld=true
 use_sysroot=false
+symbol_level=0
 enable_linux_installer=false
 enable_nacl=false
 enable_nacl_nonsfi=false
@@ -52,6 +52,7 @@ use_system_lcms2=true
 use_system_libjpeg=true
 use_system_libpng=true
 use_system_zlib=true
+icu_use_data_file=false
 ")
 
 # rendszerből használadó libek
@@ -68,7 +69,7 @@ _syslibs=(
     libpng
 #   libvpx # 1.7.0 + git
     libwebp
-    libxml
+#   libxml
     libxslt
     opus
 	flac
