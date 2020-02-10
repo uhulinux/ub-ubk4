@@ -1,0 +1,27 @@
+diff -Naur orig/Source/WebCore/dom/Document.cpp patched/Source/WebCore/dom/Document.cpp
+--- orig/Source/WebCore/dom/Document.cpp	2019-06-26 18:25:02.000000000 +0200
++++ patched/Source/WebCore/dom/Document.cpp	2020-02-09 18:56:34.529577873 +0100
+@@ -4407,12 +4407,12 @@
+     unsigned i = 0;
+ 
+     UChar32 c;
+-    U16_NEXT(characters, i, length, c)
++    U16_NEXT(characters, i, length, c);
+     if (!isValidNameStart(c))
+         return false;
+ 
+     while (i < length) {
+-        U16_NEXT(characters, i, length, c)
++        U16_NEXT(characters, i, length, c);
+         if (!isValidNamePart(c))
+             return false;
+     }
+@@ -4474,7 +4474,7 @@
+ 
+     for (unsigned i = 0; i < length;) {
+         UChar32 c;
+-        U16_NEXT(qualifiedName, i, length, c)
++        U16_NEXT(qualifiedName, i, length, c);
+         if (c == ':') {
+             if (sawColon) {
+                 ec = NAMESPACE_ERR;
