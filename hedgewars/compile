@@ -1,9 +1,17 @@
 #!/bin/sh -eux
 
 export QTDIR=/usr/lib/qt5
-ub_compile \
+
+mkdir -p build
+cd build
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX="/usr" \
 	-DNOSERVER=1 \
 	-DMINIMAL_FLAGS=1 \
 	-DNOVIDEOREC=0 \
 	-DGHFLAGS=-dynamic \
-	-DFONTS_DIRS="/usr/share/fonts/truetype"
+	-DFONTS_DIRS="/usr/share/fonts/truetype" \
+	..
+
+ub_make

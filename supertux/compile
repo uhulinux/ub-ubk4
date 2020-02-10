@@ -1,4 +1,11 @@
 #!/bin/sh -eux
 
-ub_compile \
-	-DINSTALL_SUBDIR_BIN="bin"
+mkdir -p build
+cd build
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX="/usr" \
+	-DINSTALL_SUBDIR_BIN="bin" \
+	..
+
+ub_make
