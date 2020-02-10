@@ -6,6 +6,6 @@ mv $UB_INSTALLDIR/usr/share/games/data $UB_INSTALLDIR/usr/share/games/dangerdeep
 ikonhely=$UB_INSTALLDIR/usr/share/pixmaps
 mandir=$UB_INSTALLDIR/usr/share/man/man6
 mkdir -p $ikonhely $mandir
-python2 /usr/bin/scons2 installbindir=$UB_INSTALLDIR/usr/bin datadir='/usr/share/games/dangerdeep' install
+scons2 installbindir=$UB_INSTALLDIR/usr/bin datadir='/usr/share/games/dangerdeep' install
 cp dftd_icon.xpm $ikonhely/
 cp doc/man/dangerdeep.6 $mandir/
