@@ -1,0 +1,12 @@
+diff -Nur orig/src/viklayer.c mod/src/viklayer.c
+--- orig/src/viklayer.c	2020-01-30 09:34:43.000000000 +0100
++++ mod/src/viklayer.c	2020-02-11 20:21:26.694948477 +0100
+@@ -36,7 +36,7 @@
+ #ifdef HAVE_LIBMAPNIK
+ extern VikLayerInterface vik_mapnik_layer_interface;
+ #endif
+-#ifdef HAVE_LIBMAPNIK
++#ifdef HAVE_LIBGEOCLUE_2
+ extern VikLayerInterface vik_geoclue_layer_interface;
+ #endif
+ 
