@@ -1,0 +1,14 @@
+diff -Naur orig/mozilla/tools/profiler/core/platform.h patched/mozilla/tools/profiler/core/platform.h
+--- orig/mozilla/tools/profiler/core/platform.h	2019-05-06 19:31:11.000000000 +0200
++++ patched/mozilla/tools/profiler/core/platform.h	2020-02-13 19:03:15.590035264 +0100
+@@ -65,10 +65,6 @@
+ #include <unistd.h>
+ #if !defined(__BIONIC__)
+ #include <sys/syscall.h>
+-static inline pid_t gettid()
+-{
+-  return (pid_t) syscall(SYS_gettid);
+-}
+ #endif
+ #endif
+ 
