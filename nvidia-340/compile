@@ -11,7 +11,8 @@ chmod +x $forras.run
 mv $forras/* ./
 rm *.run
 patch -i "$UB_SRCDIR"/patches/menu.patch.skip
-patch -Np0 < "$UB_SRCDIR"/patches/kernel-4.11.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/kernel-4.11.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.5.patch.skip
 cd kernel
 make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
 export UB_MAKE_PROCS=1

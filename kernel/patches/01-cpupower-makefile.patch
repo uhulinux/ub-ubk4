@@ -1,7 +1,7 @@
 diff -Naur orig/tools/power/cpupower/Makefile patched/tools/power/cpupower/Makefile
---- orig/tools/power/cpupower/Makefile	2019-08-25 10:48:06.000000000 +0200
-+++ patched/tools/power/cpupower/Makefile	2019-09-07 10:03:35.445050442 +0200
-@@ -36,7 +36,7 @@
+--- orig/tools/power/cpupower/Makefile	2020-02-05 22:22:53.000000000 +0100
++++ patched/tools/power/cpupower/Makefile	2020-02-06 15:35:31.438182342 +0100
+@@ -23,7 +23,7 @@
  
  # Set the following to `true' to make a unstripped, unoptimized
  # binary. Leave this set to `false' for production use.
@@ -10,21 +10,12 @@ diff -Naur orig/tools/power/cpupower/Makefile patched/tools/power/cpupower/Makef
  
  # make the build silent. Set this to something else to make it noisy again.
  V ?=		false
-@@ -82,7 +82,7 @@
- mandir ?=	/usr/man
- includedir ?=	/usr/include
+@@ -98,7 +98,7 @@
+ include ../../scripts/Makefile.arch
+ 
  ifeq ($(IS_64_BIT), 1)
 -libdir ?=	/usr/lib64
 +libdir ?=	/usr/lib
  else
  libdir ?=	/usr/lib
  endif
-@@ -189,7 +189,7 @@
- # if DEBUG is enabled, then we do not strip or optimize
- ifeq ($(strip $(DEBUG)),true)
- 	CFLAGS += -O1 -g -DDEBUG
--	STRIPCMD = /bin/true -Since_we_are_debugging
-+	STRIPCMD = /usr/bin/true -Since_we_are_debugging
- else
- 	CFLAGS += $(OPTIMIZATION) -fomit-frame-pointer
- 	STRIPCMD = $(STRIP) -s --remove-section=.note --remove-section=.comment
