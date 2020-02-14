@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_install INSTALL_ROOT="$UB_INSTALLDIR"
+
+# Fix conflicts with python-pyqt5
+mv "$UB_INSTALLDIR"/usr/bin/{,python2-}pyuic5
+mv "$UB_INSTALLDIR"/usr/bin/{,python2-}pylupdate5
+mv "$UB_INSTALLDIR"/usr/bin/{,python2-}pyrcc5
+
+rm -Rf "$UB_INSTALLDIR"/usr/lib/qt5

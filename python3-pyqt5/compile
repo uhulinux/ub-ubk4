@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+export QTDIR=/usr/lib/qt5
+
+# Remove check for sip from py2, it doesn't work since sip doesn't install __init__.py
+sed -e 's|from PyQt5 import sip|pass|g' -i configure.py
+python3 configure.py --confirm-license \
+	--verbose \
+	--qmake $QTDIR/bin/qmake \
+	--bindir /usr/bin \
+	--destdir /usr/lib/python3.8/site-packages \
+	--designer-plugindir /usr/lib/qt5/plugins/designer \
+	--qml-plugindir /usr/lib/qt5/plugins/PyQt5 \
+	--no-dist-info
+
+ub_make
