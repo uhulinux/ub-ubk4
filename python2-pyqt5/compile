@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
 export QTDIR=/usr/lib/qt5
-
 # Remove check for sip from py2, it doesn't work since sip doesn't install __init__.py
 sed -e 's|from PyQt5 import sip|pass|g' -i configure.py
 
