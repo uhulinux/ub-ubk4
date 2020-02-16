@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
-sed "s/ubversion/$UB_VERSION/" -i $UB_SRCDIR/packages/openttd-opengfx/postinst
+mkdir -p ${UB_INSTALLDIR}/usr/share/games/openttd/data
+cp opengfx-${UB_VERSION}/{*.obg,*.grf} ${UB_INSTALLDIR}/usr/share/games/openttd/data/
