@@ -1,1 +1,1 @@
-urllist http://bundles.openttdcoop.org/opensfx/releases/ | grep -E '^[0-9]+' | sort -V | tail -n 1
+urllist https://cdn.openttd.org/opensfx-releases/ | splitver '^([0-9.]+)$' | sort -V | tail -n 1
