@@ -2,15 +2,14 @@
 
 ub_install
 
-# Fix pc include path
-sed -e 's|=include|=${prefix}/include|g' -e 's|=lib|=${prefix}/lib|g' \
-    -i "$UB_INSTALLDIR"/usr/lib/pkgconfig/OpenEXR.pc -i "$UB_INSTALLDIR"/usr/lib/pkgconfig/IlmBase.pc
-
 # Install python modules
 cd build
 _pythonpath=`python -c "from sysconfig import get_path; print(get_path('platlib'))"`
 install -Dm755 python3*/*.so -t "$UB_INSTALLDIR"/$_pythonpath
 chrpath -d "$UB_INSTALLDIR"/$_pythonpath/*.so # Remove insecure RPATH
+
+# FHS tiltott mappa eltávilítás
+rm -rf "$UB_INSTALLDIR"/usr/sr
 
 # nem kell pdf doksitömeg.
 rm -rf ${UB_INSTALLDIR}/usr/share/doc/OpenEXR-${UB_VERSION}
