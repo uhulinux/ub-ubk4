@@ -27,5 +27,5 @@ mkdir -p "$UB_INSTALLDIR"/usr/lib/tmpfiles.d/
 install -m 644 "$UB_COMPILEDIR"/nscd/nscd.tmpfiles "$UB_INSTALLDIR"/usr/lib/tmpfiles.d/nscd.conf
 install -m 644 "$UB_COMPILEDIR"/nscd/nscd.service "$UB_INSTALLDIR"/usr/lib/systemd/system
 
-# compat symlinks
-ln -sT lib "$UB_INSTALLDIR"/lib64
+# compat symlink
+ln -s usr/lib "$UB_INSTALLDIR"/lib64
