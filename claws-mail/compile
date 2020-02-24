@@ -4,8 +4,6 @@ if [ ! -f version ]; then
 	echo "echo $UB_VERSION" > version
 fi
 
-NOCONFIGURE=1 ./autogen.sh
-
 ub_compile \
     --enable-crash-dialog \
     --disable-alternate-addressbook \
