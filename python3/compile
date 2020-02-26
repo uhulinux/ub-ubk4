@@ -1,13 +1,28 @@
 #!/bin/sh -eux
 
+# Remove all exe files to ensure we are not shipping prebuilt binaries
+# note that those are only used to create Microsoft Windows installers
+# and that functionality is broken on Linux anyway
+find -name '*.exe' -print -delete
+
+# Remove bundled libraries to ensure that we're using the system copy.
+rm -r Modules/expat
+
 # A -O3 veszélyes
-ub_replace -O3 -O2 configure
+# ub_replace -O3 -O2 configure
+
+# PGO should be done with -O3
+# Also included the -fno-semantic-interposition optimization:
+# https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+export CFLAGS="-fno-semantic-interposition"
+export LDFLAGS="-fno-semantic-interposition"
 
 # a tk függ a tcl-től
 TCLTKLIBS=$(pkg-config --libs tk)
 ub_configure \
 	--with-system-expat \
 	--with-system-ffi \
+	--enable-optimizations \
 	--without-ensurepip \
 	--with-tcltk-includes='-I/usr/include' \
 	--with-tcltk-libs="-L/usr/lib $TCLTKLIBS"
