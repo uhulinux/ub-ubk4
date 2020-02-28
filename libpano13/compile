@@ -1,4 +1,11 @@
 #!/bin/sh -eux
 
-ub_compile \
-    -DCMAKE_INSTALL_LIBDIR=/usr/lib
+rm -rf build
+mkdir build
+cd build
+	cmake \
+		-DCMAKE_INSTALL_LIBDIR=/usr/lib \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+	..
+ub_make
