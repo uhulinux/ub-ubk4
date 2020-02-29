@@ -1,4 +1,18 @@
 #!/bin/sh -eux
 
-ub_compile \
-	-DWITH_WEBKIT3:BOOL=ON
+#ha már van networkmanager
+export BOOTSTRAP=0
+NM=OFF
+if [ "$BOOTSTRAP" == "0" ];then
+	NM=ON
+fi
+
+mkdir build
+cd build
+cmake \
+	-DWITH_WEBKIT3:BOOL=ON \
+	-DWITH_NM:BOOL=$NM \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_BUILD_TYPE=Release \
+..
+ub_make
