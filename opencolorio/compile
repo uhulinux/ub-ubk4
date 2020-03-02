@@ -1,7 +1,13 @@
 #!/bin/sh -eux
 
-ub_compile \
-    -DUSE_EXTERNAL_YAML=ON \
+mkdir build
+cd build
+cmake \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+    -DUSE_EXTERNAL_YAML=OFF \
     -DUSE_EXTERNAL_LCMS=ON \
     -DUSE_EXTERNAL_TINYXML=ON \
-    -DUSE_EXTERNAL_LCMS=ON
+    -DUSE_EXTERNAL_LCMS=ON \
+    ..
+ub_make
