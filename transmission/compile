@@ -19,4 +19,10 @@ export CPPFLAGS+=" -I/usr/include/openssl-1.0"
 export LDFLAGS+=" -L/usr/lib/openssl-1.0"
 export CXXFLAGS+=" -I/usr/include/openssl-1.0"
 
-ub_compile
+cd build
+cmake \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+	-DCMAKE_TYPEE=Release \
+..
+
+ub_make
