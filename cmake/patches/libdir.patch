@@ -1,7 +1,7 @@
 diff -Naur orig/Modules/GNUInstallDirs.cmake patched/Modules/GNUInstallDirs.cmake
---- orig/Modules/GNUInstallDirs.cmake	2017-12-13 14:25:23.134739579 +0100
-+++ patched/Modules/GNUInstallDirs.cmake	2017-12-21 12:26:19.765333602 +0100
-@@ -240,9 +240,9 @@
+--- orig/Modules/GNUInstallDirs.cmake	2020-02-05 15:19:24.000000000 +0100
++++ patched/Modules/GNUInstallDirs.cmake	2020-03-01 22:32:24.872292305 +0100
+@@ -241,9 +241,9 @@
            "Please enable at least one language before including GNUInstallDirs.")
        else()
          if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
@@ -13,3 +13,41 @@ diff -Naur orig/Modules/GNUInstallDirs.cmake patched/Modules/GNUInstallDirs.cmak
            endif()
          endif()
        endif()
+diff -Naur orig/Modules/Platform/UnixPaths.cmake patched/Modules/Platform/UnixPaths.cmake
+--- orig/Modules/Platform/UnixPaths.cmake	2020-02-05 15:19:24.000000000 +0100
++++ patched/Modules/Platform/UnixPaths.cmake	2020-03-01 22:39:36.290214625 +0100
+@@ -60,7 +60,7 @@
+   )
+ 
+ list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+-  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
++  /lib /usr/lib
+   )
+ 
+ if(CMAKE_SYSROOT_COMPILE)
+@@ -87,6 +87,6 @@
+ unset(_cmake_sysroot_compile)
+ 
+ # Enable use of lib32 and lib64 search path variants by default.
+-set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS TRUE)
+-set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)
+-set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS TRUE)
++set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
++set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
++set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS FALSE)
+diff -Naur orig/Source/cmExportInstallFileGenerator.cxx patched/Source/cmExportInstallFileGenerator.cxx
+--- orig/Source/cmExportInstallFileGenerator.cxx	2020-02-05 15:19:24.000000000 +0100
++++ patched/Source/cmExportInstallFileGenerator.cxx	2020-03-02 04:47:44.235309509 +0100
+@@ -200,11 +200,7 @@
+        << "get_filename_component(_IMPORT_PREFIX"
+        << " \"${CMAKE_CURRENT_LIST_FILE}\" PATH)\n";
+     if (cmHasLiteralPrefix(absDestS, "/lib/") ||
+-        cmHasLiteralPrefix(absDestS, "/lib64/") ||
+-        cmHasLiteralPrefix(absDestS, "/libx32/") ||
+-        cmHasLiteralPrefix(absDestS, "/usr/lib/") ||
+-        cmHasLiteralPrefix(absDestS, "/usr/lib64/") ||
+-        cmHasLiteralPrefix(absDestS, "/usr/libx32/")) {
++        cmHasLiteralPrefix(absDestS, "/usr/lib/")) {
+       // Handle "/usr move" symlinks created by some Linux distros.
+       /* clang-format off */
+       os <<
