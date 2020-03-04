@@ -1,0 +1,34 @@
+From 31ddf75c9f3a21d2b7c15248e1f9e32c613ac14d Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Thu, 5 Mar 2020 00:21:59 +0100
+Subject: Fix commit d5148e8: bfd_get_section_vma also undefined in binutils
+ 2.34
+
+
+diff --git a/software/crash_handling/BfdWrapper.cpp b/software/crash_handling/BfdWrapper.cpp
+index a41e5967c..6c0ea860b 100644
+--- a/software/crash_handling/BfdWrapper.cpp
++++ b/software/crash_handling/BfdWrapper.cpp
+@@ -39,6 +39,13 @@
+ #define BFD_SECTION_FLAGS(bfd, section) bfd_section_flags(section)
+ #endif
+ 
++#ifdef bfd_get_section_vma
++// binutils < 2.34
++#define BFD_SECTION_VMA(bfd, section) bfd_get_section_vma(bfd, section)
++#else
++#define BFD_SECTION_VMA(bfd, section) bfd_section_vma(section)
++#endif
++
+ #ifdef bfd_section_size
+ // binutils < 2.34
+ #define BFD_SECTION_SIZE(bfd, section) bfd_section_size(bfd, section)
+@@ -296,7 +303,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
+         const char *fileName = nullptr;
+         unsigned int lineno = 0;
+ 
+-        bfd_vma textSection_vma = bfd_get_section_vma(abfd, textSection);
++        bfd_vma textSection_vma = BFD_SECTION_VMA(abfd, textSection);
+         bfd_size_type textSection_size = BFD_SECTION_SIZE(abfd, textSection);
+ 
+         if (!INRANGE(static_cast<int64_t>(textSection_vma) <=, unrelocatedAddr,
