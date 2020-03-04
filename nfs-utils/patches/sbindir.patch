@@ -1,6 +1,6 @@
-diff -Nur orig/utils/mount/Makefile.am mod/utils/mount/Makefile.am
---- orig/utils/mount/Makefile.am	2019-06-10 16:34:37.000000000 +0200
-+++ mod/utils/mount/Makefile.am	2019-10-04 22:23:19.402913658 +0200
+diff -Naur nfs-utils-2.4.3-orig/utils/mount/Makefile.am nfs-utils-2.4.3/utils/mount/Makefile.am
+--- nfs-utils-2.4.3-orig/utils/mount/Makefile.am	2020-02-09 20:41:19.000000000 +0100
++++ nfs-utils-2.4.3/utils/mount/Makefile.am	2020-03-04 17:17:20.626104909 +0100
 @@ -2,7 +2,7 @@
  
  # These binaries go in /sbin (not /usr/sbin), and that cannot be
@@ -10,21 +10,21 @@ diff -Nur orig/utils/mount/Makefile.am mod/utils/mount/Makefile.am
  
  man8_MANS	= mount.nfs.man umount.nfs.man
  man5_MANS	= nfs.man
-diff -Nur orig/utils/nfsdcld/Makefile.am mod/utils/nfsdcld/Makefile.am
---- orig/utils/nfsdcld/Makefile.am	2019-06-10 16:34:37.000000000 +0200
-+++ mod/utils/nfsdcld/Makefile.am	2019-10-04 22:23:19.406913652 +0200
-@@ -2,7 +2,7 @@
+diff -Naur nfs-utils-2.4.3-orig/utils/mount/Makefile.in nfs-utils-2.4.3/utils/mount/Makefile.in
+--- nfs-utils-2.4.3-orig/utils/mount/Makefile.in	2020-02-09 20:47:31.000000000 +0100
++++ nfs-utils-2.4.3/utils/mount/Makefile.in	2020-03-04 17:24:07.816559231 +0100
+@@ -426,7 +426,7 @@
  
  # These binaries go in /sbin (not /usr/sbin), and that cannot be
- # overridden at config time. The kernel "knows" the /sbin name.
+ # overridden at config time.
 -sbindir = /sbin
 +sbindir = /usr/sbin
- 
- man8_MANS	= nfsdcld.man
- EXTRA_DIST	= $(man8_MANS)
-diff -Nur orig/utils/nfsdcltrack/Makefile.am mod/utils/nfsdcltrack/Makefile.am
---- orig/utils/nfsdcltrack/Makefile.am	2019-06-10 16:34:37.000000000 +0200
-+++ mod/utils/nfsdcltrack/Makefile.am	2019-10-04 22:23:19.406913652 +0200
+ sharedstatedir = @sharedstatedir@
+ srcdir = @srcdir@
+ startstatd = @startstatd@
+diff -Naur nfs-utils-2.4.3-orig/utils/nfsdcltrack/Makefile.am nfs-utils-2.4.3/utils/nfsdcltrack/Makefile.am
+--- nfs-utils-2.4.3-orig/utils/nfsdcltrack/Makefile.am	2020-02-09 20:41:19.000000000 +0100
++++ nfs-utils-2.4.3/utils/nfsdcltrack/Makefile.am	2020-03-04 17:19:48.536444931 +0100
 @@ -2,7 +2,7 @@
  
  # These binaries go in /sbin (not /usr/sbin), and that cannot be
