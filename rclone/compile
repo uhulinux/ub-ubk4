@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-sed -i "1s/python$/&2/" bin/make_manual.py bin/make_backend_docs.py
-
-mkdir -p .gopath/src/github.com/rclone
-ln -sf "$PWD" .gopath/src/github.com/rclone/rclone
-export GOPATH="$PWD/.gopath"
-
-go get github.com/rclone/rclone
