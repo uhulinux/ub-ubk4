@@ -5,4 +5,5 @@ export GUILE_CONFIG=/usr/bin/guile-config1.8
 export LDFLAGS=" -lpthread "
 export LDFLAGS+=$(pkg-config --libs gio-2.0)
 ub_compile \
+	--with-texgyre-dir=$UB_COMPILEDIR/tex-gyre/opentype \
 	--disable-documentation
