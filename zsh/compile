@@ -3,13 +3,6 @@
 # note: --with-tcsetpgrp is required when building without a controlling
 # terminal (e.g. running a full rebuild in our build system)
 
-# Remove unneeded and conflicting completion scripts
-for _fpath in AIX BSD Cygwin Darwin Debian Mandriva openSUSE Redhat Solaris; do
-	rm -rf Completion/$_fpath
-	sed "s#\s*Completion/$_fpath/\*/\*##g" -i Src/Zle/complete.mdd
-done
-rm Completion/Linux/Command/_{pkgtool,rpmbuild}
-
 ub_compile \
 	--with-tcsetpgrp \
 	--bindir=/usr/bin \
