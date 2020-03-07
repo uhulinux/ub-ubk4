@@ -1,0 +1,26 @@
+diff -Nur orig/util/dvbdate/dvbdate.c mod/util/dvbdate/dvbdate.c
+--- orig/util/dvbdate/dvbdate.c	2014-03-21 20:26:36.000000000 +0100
++++ mod/util/dvbdate/dvbdate.c	2020-03-07 14:33:19.244455703 +0100
+@@ -309,14 +309,15 @@
+  */
+ int set_time(time_t * new_time)
+ {
+-	if (stime(new_time)) {
+-		perror("Unable to set time");
+-		return -1;
+-	}
+-	return 0;
++      struct timespec ts;
++      ts.tv_sec = &new_time;
++      ts.tv_nsec = 0;
++      if (clock_settime(CLOCK_REALTIME, &ts)) {
++               perror("Unable to set time");
++               return -1;
++      }
++      return 0;
+ }
+-
+-
+ int main(int argc, char **argv)
+ {
+ 	time_t rx_time;
