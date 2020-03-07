@@ -1,45 +1,45 @@
 diff -Nur orig/src/modules/partition/core/DeviceList.cpp mod/src/modules/partition/core/DeviceList.cpp
---- orig/src/modules/partition/core/DeviceList.cpp	2019-08-07 12:58:22.000000000 +0200
-+++ mod/src/modules/partition/core/DeviceList.cpp	2019-08-22 09:55:13.210182945 +0200
-@@ -57,7 +57,7 @@
+--- orig/src/modules/partition/core/DeviceList.cpp	2020-02-27 23:26:29.000000000 +0100
++++ mod/src/modules/partition/core/DeviceList.cpp	2020-03-07 18:02:34.469344360 +0100
+@@ -60,7 +60,7 @@
  blkIdCheckIso9660( const QString& path )
  {
      QProcess blkid;
 -    blkid.start( "blkid", { path } );
-+    blkid.start( "/sbin/blkid", { path } );
++    blkid.start( "/usr/sbin/blkid", { path } );
      blkid.waitForFinished();
      QString output = QString::fromLocal8Bit( blkid.readAllStandardOutput() );
      return output.contains( "iso9660" );
 diff -Nur orig/src/modules/partition/core/PartUtils.cpp mod/src/modules/partition/core/PartUtils.cpp
---- orig/src/modules/partition/core/PartUtils.cpp	2019-08-07 12:58:22.000000000 +0200
-+++ mod/src/modules/partition/core/PartUtils.cpp	2019-08-22 11:14:46.700070089 +0200
-@@ -226,7 +226,7 @@
+--- orig/src/modules/partition/core/PartUtils.cpp	2020-02-27 23:26:29.000000000 +0100
++++ mod/src/modules/partition/core/PartUtils.cpp	2020-03-07 18:03:23.133271544 +0100
+@@ -237,7 +237,7 @@
+     QStringList mountOptions { "ro" };
  
-     auto r = CalamaresUtils::System::runCommand(
-         CalamaresUtils::System::RunLocation::RunInHost,
--        { "blkid", "-s", "TYPE", "-o", "value", partitionPath }
-+        { "/sbin/blkid", "-s", "TYPE", "-o", "value", partitionPath }
-     );
+     auto r = CalamaresUtils::System::runCommand( CalamaresUtils::System::RunLocation::RunInHost,
+-                                                 { "blkid", "-s", "TYPE", "-o", "value", partitionPath } );
++                                                 { "/usr/sbin/blkid", "-s", "TYPE", "-o", "value", partitionPath } );
      if ( r.getExitCode() )
+     {
          cWarning() << "blkid on" << partitionPath << "failed.";
 diff -Nur orig/src/modules/partition/jobs/ClearMountsJob.cpp mod/src/modules/partition/jobs/ClearMountsJob.cpp
---- orig/src/modules/partition/jobs/ClearMountsJob.cpp	2019-08-22 09:28:04.000000000 +0200
-+++ mod/src/modules/partition/jobs/ClearMountsJob.cpp	2019-08-22 09:47:52.450800911 +0200
-@@ -81,7 +81,7 @@
+--- orig/src/modules/partition/jobs/ClearMountsJob.cpp	2020-02-27 23:26:29.000000000 +0100
++++ mod/src/modules/partition/jobs/ClearMountsJob.cpp	2020-03-07 18:06:11.237020009 +0100
+@@ -106,7 +106,7 @@
      // We then need to clear them just in case they contain something resumable from a
      // previous suspend-to-disk.
      QStringList swapPartitions;
 -    process.start( "sfdisk", { "-d", m_device->deviceNode() } );
-+    process.start( "/sbin/sfdisk", { "-d", m_device->deviceNode() } );
++    process.start( "/usr/sbin/sfdisk", { "-d", m_device->deviceNode() } );
      process.waitForFinished();
      // Sample output:
      //    % sudo sfdisk -d /dev/sda
-@@ -221,14 +221,14 @@
+@@ -246,14 +246,14 @@
  ClearMountsJob::tryClearSwap( const QString& partPath )
  {
      QProcess process;
 -    process.start( "blkid", { "-s", "UUID", "-o", "value", partPath } );
-+    process.start( "/sbin/blkid", { "-s", "UUID", "-o", "value", partPath } );
++    process.start( "/usr/sbin/blkid", { "-s", "UUID", "-o", "value", partPath } );
      process.waitForFinished();
      QString swapPartUuid = QString::fromLocal8Bit( process.readAllStandardOutput() ).simplified();
      if ( process.exitCode() != 0 ||
@@ -47,7 +47,7 @@ diff -Nur orig/src/modules/partition/jobs/ClearMountsJob.cpp mod/src/modules/par
          return QString();
  
 -    process.start( "mkswap", { "-U", swapPartUuid, partPath } );
-+    process.start( "/sbin/mkswap", { "-U", swapPartUuid, partPath } );
++    process.start( "/usr/sbin/mkswap", { "-U", swapPartUuid, partPath } );
      process.waitForFinished();
      if ( process.exitCode() != 0 )
          return QString();
