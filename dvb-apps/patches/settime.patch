@@ -1,0 +1,15 @@
+diff -Nur orig/util/dvbdate/dvbdate.c mod/util/dvbdate/dvbdate.c
+--- orig/util/dvbdate/dvbdate.c	2014-03-21 20:26:36.000000000 +0100
++++ mod/util/dvbdate/dvbdate.c	2020-03-07 11:10:18.200796005 +0100
+@@ -309,11 +309,8 @@
+  */
+ int set_time(time_t * new_time)
+ {
+-	if (stime(new_time)) {
+ 		perror("Unable to set time");
+ 		return -1;
+-	}
+-	return 0;
+ }
+ 
+ 
