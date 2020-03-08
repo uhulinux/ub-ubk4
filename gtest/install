@@ -2,15 +2,14 @@
 
 cd googletest
 ub_install
+cp build/lib/*so ${UB_INSTALLDIR}/usr/lib/
 cd ../googlemock
 ub_install
 cd ..
 
-mkdir -p ${UB_INSTALLDIR}/usr/share/aclocal
 mkdir -p ${UB_INSTALLDIR}/usr/src/{gtest/src,gmock/src}
 mkdir -p ${UB_INSTALLDIR}/usr/src/gtest/cmake
 
-cp googletest/m4/gtest.m4 ${UB_INSTALLDIR}/usr/share/aclocal/
 cp googletest/cmake/* ${UB_INSTALLDIR}/usr/src/gtest/cmake
 cp googletest/src/* ${UB_INSTALLDIR}/usr/src/gtest/src/
 cp CMakeLists.txt ${UB_INSTALLDIR}/usr/src/gtest/src/

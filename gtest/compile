@@ -3,14 +3,10 @@
 cd googletest
 sed -r "s|(Version:) .+|\1 ${UB_VERSION}|" -i gtest.pc.in
 ub_compile \
-    -DBUILD_GMOCK=ON \
-    -DBUILD_GTEST=ON \
 	-DBUILD_SHARED_LIBS=ON \
 	-DCMAKE_SKIP_BUILD_RPATH=TRUE \
 	-DPYTHON_EXECUTABLE=/usr/bin/python2 \
-	-Dgmock_build_tests=ON \
 	-Dgtest_build_tests=ON \
-	-Dgtest_build_sampless=OFF \
 	-Dgtest_disable_pthreads=OFF
 
 cd ../googlemock
