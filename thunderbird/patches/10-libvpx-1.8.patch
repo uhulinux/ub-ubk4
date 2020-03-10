@@ -1,0 +1,174 @@
+diff -Naur orig/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc patched/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc
+--- orig/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc	2020-02-10 09:43:23.000000000 +0100
++++ patched/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc	2020-03-09 23:16:57.622694747 +0100
+@@ -83,8 +83,9 @@
+       // Use two spatial when screensharing with flexible mode.
+       spatial_layer_(new ScreenshareLayersVP9(2)) {
+   memset(&codec_, 0, sizeof(codec_));
++#ifdef LIBVPX_SVC
+   memset(&svc_params_, 0, sizeof(vpx_svc_extra_cfg_t));
+-
++#endif
+   Random random(rtc::TimeMicros());
+   picture_id_ = random.Rand<uint16_t>() & 0x7FFF;
+   tl0_pic_idx_ = random.Rand<uint8_t>();
+@@ -121,14 +122,19 @@
+ bool VP9EncoderImpl::ExplicitlyConfiguredSpatialLayers() const {
+   // We check target_bitrate_bps of the 0th layer to see if the spatial layers
+   // (i.e. bitrates) were explicitly configured.
++#ifdef LIBVPX_SVC
+   return num_spatial_layers_ > 1 &&
+          codec_.spatialLayers[0].target_bitrate_bps > 0;
++#else
++  return false;
++#endif
+ }
+ 
+ bool VP9EncoderImpl::SetSvcRates() {
+   uint8_t i = 0;
+ 
+   if (ExplicitlyConfiguredSpatialLayers()) {
++#ifdef LIBVPX_SVC
+     if (num_temporal_layers_ > 1) {
+       RTC_LOG(LS_ERROR) << "Multiple temporal layers when manually specifying "
+                            "spatial layers not implemented yet!";
+@@ -145,10 +151,12 @@
+                            codec_.spatialLayers[i].target_bitrate_bps /
+                            total_bitrate_bps);
+     }
++#endif
+   } else {
+     float rate_ratio[VPX_MAX_LAYERS] = {0};
+     float total = 0;
+ 
++#ifdef LIBVPX_SVC
+     for (i = 0; i < num_spatial_layers_; ++i) {
+       if (svc_params_.scaling_factor_num[i] <= 0 ||
+           svc_params_.scaling_factor_den[i] <= 0) {
+@@ -160,6 +168,10 @@
+           svc_params_.scaling_factor_den[i];
+       total += rate_ratio[i];
+     }
++#else
++    rate_ratio[0] = 1;
++    total = 1;
++#endif
+ 
+     for (i = 0; i < num_spatial_layers_; ++i) {
+       config_->ss_target_bitrate[i] = static_cast<unsigned int>(
+@@ -393,6 +405,7 @@
+ }
+ 
+ int VP9EncoderImpl::InitAndSetControlSettings(const VideoCodec* inst) {
++#ifdef LIBVPX_SVC
+   // Set QP-min/max per spatial and temporal layer.
+   int tot_num_layers = num_spatial_layers_ * num_temporal_layers_;
+   for (int i = 0; i < tot_num_layers; ++i) {
+@@ -416,6 +429,7 @@
+         scaling_factor_num /= 2;
+     }
+   }
++#endif
+ 
+   if (!SetSvcRates()) {
+     return WEBRTC_VIDEO_CODEC_ERR_PARAMETER;
+@@ -431,6 +445,7 @@
+                     inst->VP9().adaptiveQpMode ? 3 : 0);
+ 
+   vpx_codec_control(encoder_, VP9E_SET_FRAME_PARALLEL_DECODING, 0);
++#ifdef LIBVPX_SVC
+   vpx_codec_control(
+       encoder_, VP9E_SET_SVC,
+       (num_temporal_layers_ > 1 || num_spatial_layers_ > 1) ? 1 : 0);
+@@ -438,6 +453,8 @@
+     vpx_codec_control(encoder_, VP9E_SET_SVC_PARAMETERS,
+                       &svc_params_);
+   }
++#endif
++
+   // Register callback for getting each spatial layer.
+   vpx_codec_priv_output_cx_pkt_cb_pair_t cbp = {
+       VP9EncoderImpl::EncoderOutputCodedPacketCallback,
+@@ -537,6 +554,7 @@
+     flags = VPX_EFLAG_FORCE_KF;
+   }
+ 
++#ifdef LIBVPX_SVC
+   if (is_flexible_mode_) {
+     SuperFrameRefSettings settings;
+ 
+@@ -558,6 +576,7 @@
+     vpx_codec_control(encoder_, VP9E_SET_SVC_LAYER_ID, &layer_id);
+     vpx_codec_control(encoder_, VP9E_SET_SVC_REF_FRAME_CONFIG, &enc_layer_conf);
+   }
++#endif
+ 
+   RTC_CHECK_GT(codec_.maxFramerate, 0);
+   uint32_t duration = 90000 / codec_.maxFramerate;
+@@ -697,6 +716,7 @@
+     vp9_info->temporal_up_switch = gof_.temporal_up_switch[vp9_info->gof_idx];
+   }
+ 
++#ifdef LIBVPX_SVC
+   if (vp9_info->ss_data_available) {
+     vp9_info->spatial_layer_resolution_present = true;
+     for (size_t i = 0; i < vp9_info->num_spatial_layers; ++i) {
+@@ -707,9 +727,10 @@
+                             svc_params_.scaling_factor_num[i] /
+                             svc_params_.scaling_factor_den[i];
+     }
+-    if (!vp9_info->flexible_mode) {
+-      vp9_info->gof.CopyGofInfoVP9(gof_);
+-    }
++  }
++#endif
++  if (!vp9_info->flexible_mode) {
++    vp9_info->gof.CopyGofInfoVP9(gof_);
+   }
+ }
+ 
+@@ -772,6 +793,7 @@
+   return WEBRTC_VIDEO_CODEC_OK;
+ }
+ 
++#ifdef LIBVPX_SVC
+ vpx_svc_ref_frame_config VP9EncoderImpl::GenerateRefsAndFlags(
+     const SuperFrameRefSettings& settings) {
+   static const vpx_enc_frame_flags_t kAllFlags =
+@@ -873,6 +895,7 @@
+   ++frames_encoded_;
+   return sf_conf;
+ }
++#endif
+ 
+ int VP9EncoderImpl::SetChannelParameters(uint32_t packet_loss, int64_t rtt) {
+   return WEBRTC_VIDEO_CODEC_OK;
+diff -Naur orig/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h patched/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h
+--- orig/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h	2020-02-10 09:43:23.000000000 +0100
++++ patched/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h	2020-03-09 23:18:34.159827201 +0100
+@@ -82,6 +82,7 @@
+   bool ExplicitlyConfiguredSpatialLayers() const;
+   bool SetSvcRates();
+ 
++#ifdef LIBVPX_SVC
+   // Used for flexible mode to set the flags and buffer references used
+   // by the encoder. Also calculates the references used by the RTP
+   // packetizer.
+@@ -90,6 +91,7 @@
+   // state used to calculate references.
+   vpx_svc_ref_frame_config GenerateRefsAndFlags(
+       const SuperFrameRefSettings& settings);
++#endif
+ 
+   virtual int GetEncodedLayerFrame(const vpx_codec_cx_pkt* pkt);
+ 
+@@ -115,7 +117,9 @@
+   vpx_codec_ctx_t* encoder_;
+   vpx_codec_enc_cfg_t* config_;
+   vpx_image_t* raw_;
++#ifdef LIBVPX_SVC
+   vpx_svc_extra_cfg_t svc_params_;
++#endif
+   const VideoFrame* input_image_;
+   GofInfoVP9 gof_;       // Contains each frame's temporal information for
+                          // non-flexible mode.
