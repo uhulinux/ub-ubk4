@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
-export PYTHON=/usr/bin/python2
-ub_compile
+export PYTHON=/usr/bin/python3
+ub_compile \
+    --disable-scrollkeeper \
+    --enable-build-utils
