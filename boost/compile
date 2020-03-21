@@ -3,10 +3,10 @@
 jobs="-j${UB_MAKE_PROCS:-$(_procs)}"
 
 ./bootstrap.sh \
-	--prefix="$UB_INSTALLDIR"/usr \
 	--with-toolset=gcc \
 	--with-icu \
-	--with-python=/usr/bin/python2
+	--with-python=/usr/bin/python3 \
+	--with-python-version=3.8
 
 ./b2 \
 	variant=release \
@@ -15,7 +15,7 @@ jobs="-j${UB_MAKE_PROCS:-$(_procs)}"
 	runtime-link=shared \
 	link=shared \
 	toolset=gcc \
-	python=2.7 \
+	python=3.8 \
 	cflags="-fPIC" \
 	cxxflags="-std=c++14 -fPIC" \
 	$jobs \

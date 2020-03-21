@@ -2,29 +2,6 @@
 
 jobs="-j${UB_MAKE_PROCS:-$(_procs)}"
 
-./bootstrap.sh \
-	--with-toolset=gcc \
-	--with-icu \
-	--with-python=/usr/bin/python3 \
-	--with-libraries=python \
-	--with-python-version=3.8
-
-./b2 clean
-./b2 \
-	variant=release \
-	debug-symbols=off \
-	threading=multi \
-	runtime-link=shared \
-	link=shared \
-	toolset=gcc \
-	cflags="-fPIC" \
-	cxxflags="-std=c++14 -fPIC" \
-	$jobs \
-	--layout=system \
-	--prefix="$UB_INSTALLDIR"/usr \
-	--with-python \
-	install
-
 # Drop UB_INSTALLDIR because reference the chroot
 find "$UB_INSTALLDIR/usr/lib/cmake" -type f -name '*.cmake' \
 	-exec sed -i -e "s,$UB_INSTALLDIR,,g" {} \;

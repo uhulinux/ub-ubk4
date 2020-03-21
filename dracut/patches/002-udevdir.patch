@@ -1,0 +1,12 @@
+diff -Naur orig/dracut.sh patched/dracut.sh
+--- orig/dracut.sh	2020-03-04 11:43:22.000000000 +0100
++++ patched/dracut.sh	2020-03-16 21:42:42.905434228 +0100
+@@ -1393,6 +1393,8 @@
+     [[ -e $dracutsysrootdir/usr/lib/udev/ata_id ]] && udevdir=/usr/lib/udev
+ fi
+ 
++udevdir=/usr/lib/udev
++
+ [[ -d $dracutsysrootdir$systemdsystemunitdir ]] \
+     || systemdsystemunitdir=$(pkg-config systemd --variable=systemdsystemunitdir 2>/dev/null)
+ 

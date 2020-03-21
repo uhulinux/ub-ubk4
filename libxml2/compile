@@ -1,17 +1,5 @@
 #!/bin/sh -eux
 
-cp -a py2 py3
-cd py2
-ub_configure \
-	--with-threads \
-	--with-history \
-	--with-icu \
-	--with-python=/usr/bin/python2
-sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0 /g' libtool
-ub_make \
-    PYTHONHASHSEED=0 \
-	HTML_DIR=/usr/share/doc
-cd ../py3
 ub_configure \
 	--with-threads \
 	--with-history \
