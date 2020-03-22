@@ -1,0 +1,12 @@
+diff -uNr terminator-1.91.orig/terminatorlib/plugins/custom_commands.py terminator-1.91/terminatorlib/plugins/custom_commands.py
+--- terminator-1.91.orig/terminatorlib/plugins/custom_commands.py	2019-12-20 22:12:24.475810054 -0500
++++ terminator-1.91/terminatorlib/plugins/custom_commands.py	2019-12-20 22:18:07.372918068 -0500
+@@ -127,7 +127,7 @@
+       if command[-1] != '\n':
+         command = command + '\n'
+       for terminal in data['terminals']:
+-        terminal.vte.feed_child(command,  len(command))
++        terminal.vte.feed_child_binary(command.encode(terminal.vte.get_encoding()))
+ 
+     def configure(self, widget, data = None):
+       ui = {}
