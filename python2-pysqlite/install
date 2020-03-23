@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-python2 setup.py install --root="$UB_INSTALLDIR"
-rm -r "$UB_INSTALLDIR"/usr/pysqlite2-doc
-
-mkdir -p "$UB_INSTALLDIR"/usr/share/doc/python2-pysqlite
-cp -a doc/includes "$UB_INSTALLDIR"/usr/share/doc/python2-pysqlite/
