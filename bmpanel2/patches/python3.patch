@@ -1,0 +1,182 @@
+diff -Nur orig/extra/py/bmpanel2cfg mod/extra/py/bmpanel2cfg
+--- orig/extra/py/bmpanel2cfg	2020-03-24 21:09:20.000000000 +0100
++++ mod/extra/py/bmpanel2cfg	2020-03-24 21:24:30.902865171 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ import bmpanel2
+ import gtk, gobject
+@@ -37,7 +37,7 @@
+ 		current_theme = g_config.get_theme()
+ 		current_theme_num = 0
+ 
+-		for i in xrange(len(model)):
++		for i in range(len(model)):
+ 			if model[i][1].dirname == current_theme:
+ 				current_theme_num = i
+ 				break
+@@ -61,7 +61,7 @@
+ #----------------------------------------------------------------------
+ # ThemesListbox
+ #----------------------------------------------------------------------
+-class ThemesListbox:
++class ThemesListbox(object):
+ 	def __init__(self):
+ 		scroll = gtk.ScrolledWindow()
+ 		scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+@@ -174,7 +174,7 @@
+ 	w.connect('value-changed', changed)
+ 	return w
+ 
+-class ParametersTable:
++class ParametersTable(object):
+ 	def __init__(self):
+ 		table = gtk.Table(1,2)
+ 		table.set_row_spacings(5)
+@@ -252,7 +252,7 @@
+ #----------------------------------------------------------------------
+ # IconList
+ #----------------------------------------------------------------------
+-class Icon:
++class Icon(object):
+ 	def __init__(self, prog=None, icon=None, pixbuf=None):
+ 		self.prog = prog
+ 		self.icon = icon
+@@ -308,12 +308,12 @@
+ 
+ 	def _expose_event(self, widget, event):
+ 		gc = self.style.fg_gc[gtk.STATE_NORMAL]
+-		for i in xrange(len(self.icons)):
++		for i in range(len(self.icons)):
+ 			icon = self.icons[i]
+ 			self._draw_icon_centered(icon.pixbuf, self.icon_size * i, i == self.active)
+ 
+ 	def _button_press_event(self, widget, event):
+-		i = event.x / self.icon_size
++		i = old_div(event.x, self.icon_size)
+ 		if len(self.icons) > i and i >= 0:
+ 			self.active = int(i)
+ 			self._update_gui()
+@@ -325,14 +325,14 @@
+ 		if active:
+ 			self.window.draw_rectangle(gc, True, xoff, 0, self.icon_size, self.icon_size)
+ 		if not icon:
+-			hs = self.icon_size / 2
+-			s = (self.icon_size - hs) / 2
++			hs = old_div(self.icon_size, 2)
++			s = old_div((self.icon_size - hs), 2)
+ 			self.window.draw_rectangle(gc, True, xoff+s, s, hs, hs)
+ 		else:
+ 			w = icon.get_width()
+ 			h = icon.get_height()
+-			x = (self.icon_size - w) / 2
+-			y = (self.icon_size - h) / 2
++			x = old_div((self.icon_size - w), 2)
++			y = old_div((self.icon_size - h), 2)
+ 			self.window.draw_pixbuf(gc, icon, 0, 0, xoff+x, y, -1, -1)
+ 
+ 	def _update_gui(self):
+@@ -428,12 +428,12 @@
+ 
+ #----------------------------------------------------------------------
+ 
+-class LaunchbarItem:
++class LaunchbarItem(object):
+ 	def __init__(self, prog, icon):
+ 		self.prog = prog
+ 		self.icon = icon
+ 
+-class LaunchbarEditor:
++class LaunchbarEditor(object):
+ 	def __init__(self):
+ 		self.items = []
+ 		self.parse_items()
+diff -Nur orig/extra/py/bmpanel2.py mod/extra/py/bmpanel2.py
+--- orig/extra/py/bmpanel2.py	2020-03-24 21:09:20.000000000 +0100
++++ mod/extra/py/bmpanel2.py	2020-03-24 21:17:37.000000000 +0100
+@@ -12,6 +12,8 @@
+ to your project and use it in any imaginable way.
+ """
+ 
++from future.utils import raise_
++from builtins import object
+ import sys, os
+ 
+ #----------------------------------------------------------------------
+@@ -43,7 +45,7 @@
+ CONFIG_NODE_COMMENT	= 2
+ CONFIG_NODE_EMPTY	= 3
+ 
+-class ConfigNode:
++class ConfigNode(object):
+ 	def __init__(self, **kw):
+ 		"""
+ 		Init a node with initial values. Possible are:
+@@ -141,7 +143,7 @@
+ 		for c in self.children:
+ 			if c.name == item:
+ 				return c
+-		raise KeyError, item
++		raise_(KeyError, item)
+ 
+ #----------------------------------------------------------------------
+ # ConfigFormat
+@@ -302,7 +304,7 @@
+ #----------------------------------------------------------------------
+ # Bmpanel2Config
+ #----------------------------------------------------------------------
+-class Bmpanel2Config:
++class Bmpanel2Config(object):
+ 	def _get_int_value(self, name, default):
+ 		try:
+ 			ret = int(self.tree[name].value)
+@@ -440,7 +442,7 @@
+ #----------------------------------------------------------------------
+ # Bmpanel2Remote
+ #----------------------------------------------------------------------
+-class Bmpanel2Remote:
++class Bmpanel2Remote(object):
+ 	def __init__(self, configfile=None):
+ 		self.configfile = configfile
+ 		self.started_with_theme = False
+@@ -508,14 +510,14 @@
+ #----------------------------------------------------------------------
+ # Bmpanel2Themes
+ #----------------------------------------------------------------------
+-class Theme:
++class Theme(object):
+ 	def __init__(self, dirname, name=None, author=None, path=None):
+ 		self.dirname = dirname
+ 		self.name = name
+ 		self.author = author
+ 		self.path = path
+ 
+-class Bmpanel2Themes:
++class Bmpanel2Themes(object):
+ 	def _try_load_theme(self, dirname, themefile):
+ 		c = ConfigFormat(themefile)
+ 		path = os.path.dirname(themefile)
+@@ -555,19 +557,19 @@
+ 				return theme.name
+ 			else:
+ 				return theme.dirname
+-		tmp = self.themes.values()
++		tmp = list(self.themes.values())
+ 		tmp.sort(key=get_dirname)
+ 		self.themes = tmp
+ #----------------------------------------------------------------------
+ # Bmpanel2Launchbar
+ #----------------------------------------------------------------------
+ 
+-class LaunchbarItem:
++class LaunchbarItem(object):
+ 	def __init__(self, prog=None, icon=None):
+ 		self.prog = prog
+ 		self.icon = icon
+ 
+-class Bmpanel2Launchbar:
++class Bmpanel2Launchbar(object):
+ 	def __init__(self, config):
+ 		try:
+ 			launchbar = config.tree['launchbar']
