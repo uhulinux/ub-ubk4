@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 """
 This script generates FreeDesktop application menu for IceWM window manager.
 
@@ -27,7 +27,7 @@ import xdg.Config
 version = "0.3"
 
 def print_usage(exit_code = 1):
-  print """Usage: %s [options]
+  print ("""Usage: %s [options]
 Options:
   --locale=locale               set output languege and encoding
   --root-folder folder          folder to generate (for example: /Games)
@@ -41,12 +41,12 @@ Options:
   --theme theme                 set icon theme
   --help                        print this help and exit
   --version                     print version and exit
-""" % sys.argv[0]
+""" % sys.argv[0])
   sys.exit(exit_code)
   
 def print_version():
-  print "%s version %s" % (
-    os.path.basename(sys.argv[0]), version)
+  print ("%s version %s" % (
+    os.path.basename(sys.argv[0]), version))
   sys.exit(0)
 
 root_folder = ""
@@ -75,28 +75,28 @@ def process_menu(menu):
       icon = find_icon(entry) or default_folder_icon
 
       if entire_menu:
-        print ("menu \"%s\" \"%s\" {" % (name, icon)).encode(encoding)
+        print (("menu \"%s\" \"%s\" {" % (name, icon)).encode(encoding))
         process_menu(entry)
-        print "}".encode(encoding)
+        print ("}".encode(encoding))
       else:
-        print (("menuprog \"%s\" \"%s\" %s" % (name, icon, sys.argv[0])) +
+        print ((("menuprog \"%s\" \"%s\" %s" % (name, icon, sys.argv[0])) +
             (" --root-folder \"%s\"" % entry.getPath(org=True)) +
             (" --terminal \"%s\"" % terminal) +
             (" --default-folder-icon \"%s\"" % default_folder_icon) +
             (" --default-entry-icon \"%s\"" % default_entry_icon) +
             (" --theme \"%s\"" % xdg.Config.icon_theme) +
             (" --icon-size \"%d\"" % icon_size) +
-            (with_theme_paths and " --with-theme-paths" or "")).encode(encoding),
+            (with_theme_paths and " --with-theme-paths" or "")).encode(encoding), end=' ')
         if locale_str:
-          print (" --locale \"%s\"" % locale_str).encode(encoding),
-        print
+          print ((" --locale \"%s\"" % locale_str).encode(encoding), end=' ')
+        print ()
     elif isinstance(entry, xdg.Menu.MenuEntry):
       de = entry.DesktopEntry
       name = de.getName() or entry.DesktopFileID
       icon = find_icon(de) or default_entry_icon
       execute = exec_clean2_re.sub('%', exec_clean1_re.sub('', de.getExec()))
       if de.getTerminal(): execute = terminal % execute      
-      print ("prog \"%s\" \"%s\" %s" % (name, icon, execute)).encode(encoding)
+      print (("prog \"%s\" \"%s\" %s" % (name, icon, execute)).encode(encoding))
 
 try: opts, args = getopt.getopt(sys.argv[1:], "", 
   ("help", "version", "locale=",
