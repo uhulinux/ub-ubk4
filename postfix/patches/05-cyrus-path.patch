@@ -1,12 +1,20 @@
-diff -urN postfix-2.7.0.orig/conf/master.cf postfix-2.7.0/conf/master.cf
---- postfix-2.7.0.orig/conf/master.cf	2010-02-03 22:01:27.000000000 +0100
-+++ postfix-2.7.0/conf/master.cf	2010-02-25 13:14:22.927713999 +0100
-@@ -80,7 +80,7 @@
+diff -Naur orig/conf/master.cf patched/conf/master.cf
+--- orig/conf/master.cf	2019-12-30 18:02:10.000000000 +0100
++++ patched/conf/master.cf	2020-03-24 22:48:57.403031399 +0100
+@@ -98,14 +98,14 @@
  # Also specify in main.cf: cyrus_destination_recipient_limit=1
  #
  #cyrus     unix  -       n       n       -       -       pipe
--#  user=cyrus argv=/cyrus/bin/deliver -e -r ${sender} -m ${extension} ${user}
-+#  user=cyrus argv=/usr/libexec/cyrus-imapd/deliver -e -r ${sender} -m ${extension} ${user}
+-#  flags=DRX user=cyrus argv=/cyrus/bin/deliver -e -r ${sender} -m ${extension} ${user}
++#  flags=DRX user=cyrus argv=/usr/libexec/cyrus-imapd/deliver -e -r ${sender} -m ${extension} ${user}
+ #
+ # ====================================================================
+ #
+ # Old example of delivery via Cyrus.
+ #
+ #old-cyrus unix  -       n       n       -       -       pipe
+-#  flags=R user=cyrus argv=/cyrus/bin/deliver -e -m ${extension} ${user}
++#  flags=R user=cyrus rgv=/usr/libexec/cyrus-imapd/deliver -e -m ${extension} ${user}
  #
  # ====================================================================
  #

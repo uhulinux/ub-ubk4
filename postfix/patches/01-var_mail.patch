@@ -23,7 +23,7 @@ diff -Naur postfix-3.1.0-orig/conf/main.cf postfix-3.1.0/conf/main.cf
 diff -Naur postfix-3.1.0-orig/html/local.8.html postfix-3.1.0/html/local.8.html
 --- postfix-3.1.0-orig/html/local.8.html	2016-02-14 02:32:49.000000000 +0100
 +++ postfix-3.1.0/html/local.8.html	2016-02-25 18:12:43.449281847 +0100
-@@ -567,7 +567,7 @@
+@@ -585,7 +585,7 @@
         The following are examples; details differ between systems.
         $HOME/.forward, per-user aliasing
         /etc/aliases, system-wide alias database
@@ -44,7 +44,7 @@ diff -Naur postfix-3.1.0-orig/man/man8/local.8 postfix-3.1.0/man/man8/local.8
  the location can be specified with the \fBmail_spool_directory\fR
  configuration parameter. Specify a name ending in \fB/\fR for
  \fBqmail\fR\-compatible \fBmaildir\fR delivery.
-@@ -598,7 +598,7 @@
+@@ -615,7 +615,7 @@
  The following are examples; details differ between systems.
  $HOME/.forward, per\-user aliasing
  /etc/aliases, system\-wide alias database
@@ -65,7 +65,7 @@ diff -Naur postfix-3.1.0-orig/src/local/local.c postfix-3.1.0/src/local/local.c
  /*	the location can be specified with the \fBmail_spool_directory\fR
  /*	configuration parameter. Specify a name ending in \fB/\fR for
  /*	\fBqmail\fR-compatible \fBmaildir\fR delivery.
-@@ -552,7 +552,7 @@
+@@ -569,7 +569,7 @@
  /*	The following are examples; details differ between systems.
  /*	$HOME/.forward, per-user aliasing
  /*	/etc/aliases, system-wide alias database
