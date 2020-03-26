@@ -1,0 +1,22 @@
+diff -Nur orig/zbar-gtk.pc.in mod/zbar-gtk.pc.in
+--- orig/zbar-gtk.pc.in	2019-05-14 17:40:59.000000000 +0200
++++ mod/zbar-gtk.pc.in	2020-03-26 14:32:13.285117921 +0100
+@@ -7,6 +7,6 @@
+ Description: bar code scanning and decoding GTK widget
+ URL: http://zbar.sourceforge.net
+ Version: @VERSION@
+-Requires: zbar, gtk+-2.0, gthread-2.0
++Requires: zbar, gtk+-3.0, gthread-2.0
+ Libs: -L${libdir} -lzbargtk
+ Cflags: -I${includedir}
+diff -Nur orig/zbar-qt.pc.in mod/zbar-qt.pc.in
+--- orig/zbar-qt.pc.in	2019-05-14 17:40:59.000000000 +0200
++++ mod/zbar-qt.pc.in	2020-03-26 14:17:17.274320580 +0100
+@@ -7,6 +7,6 @@
+ Description: bar code scanning and decoding Qt4 widget
+ URL: http://zbar.sourceforge.net
+ Version: @VERSION@
+-Requires: zbar, QtCore >= 4, QtGui >= 4
++Requires: zbar, Qt5Gui, Qt5Widgets, Qt5X11Extras
+ Libs: -L${libdir} -lzbarqt
+ Cflags: -I${includedir}

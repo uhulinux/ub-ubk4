@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-export PYTHON=python2
-export CFLAGS="-DNDEBUG -fPIC"
 autoreconf -vif
-ub_compile
+ub_compile \
+	--with-python=python3 \
+	--with-gtk=gtk3
