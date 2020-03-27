@@ -1,0 +1,141 @@
+diff -Nur orig/imediff2 mod/imediff2
+--- orig/imediff2	2018-10-20 19:36:19.000000000 +0200
++++ mod/imediff2	2020-03-27 17:54:30.077046108 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ # IMEDIFF2 - an interactive fullscreen 2-way merge tool
+ #
+@@ -20,6 +20,10 @@
+ # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+ # Forked from 1.1.2 by Osamu Aoki <osamu@debian.org>
++from __future__ import print_function
++from builtins import str
++from builtins import chr
++from builtins import range
+ VERSION = '1.1.2.1'
+ PACKAGE = 'imediff2'
+ 
+@@ -71,12 +75,12 @@
+ def translate_key(c):
+   # Command key in action translation to Command key in manpage
+   if c >= ord('a') and c <= ord('z'):
+-    if chr(c) in kc.keys():
++    if chr(c) in list(kc.keys()):
+       c = ord(kc[chr(c)])
+     else:
+       c = 0 # ignore
+   if c >= ord('A') and c <= ord('Z'):
+-    if chr(c + 32) in kc.keys():
++    if chr(c + 32) in list(kc.keys()):
+       c = ord(kc[chr(c + 32)]) - 32
+     else:
+       c = 0 # ignore
+@@ -171,7 +175,8 @@
+     l = fp.readlines()
+     fp.close()
+     return l
+-  except IOError, (error, message):
++  except IOError as xxx_todo_changeme1:
++    (error, message) = xxx_todo_changeme1.args
+     if error == errno.ENOENT and assume_empty:
+       return ""
+     else:
+@@ -332,9 +337,9 @@
+   def sel_next( dir ):
+     global sel, active_chunks
+     if dir == 'up':
+-      rng = range(sel-1, -1, -1)
++      rng = list(range(sel-1, -1, -1))
+     else:
+-      rng = range(sel+1, len(active_chunks))
++      rng = list(range(sel+1, len(active_chunks)))
+     for j in rng:
+       if active_chunks[j][1] > y and active_chunks[j][0] < y+winh:
+         sel = j
+@@ -571,33 +576,33 @@
+ try:
+   opts, args = getopt.getopt(sys.argv[1:], "hmuo:abcNtV",
+     ["help","mono","unresolved","output=", "template", "version", "new-file"])
+-except getopt.GetoptError, e:
+-  print _("Error: ") + str(e)
+-  print usagetext()
++except getopt.GetoptError as e:
++  print(_("Error: ") + str(e))
++  print(usagetext())
+   sys.exit(2)
+ 
+ for o, a in opts:
+   if o in ("-h", "--help"):
+-    print usagetext()
++    print(usagetext())
+     sys.exit()
+   elif o in ("-t", "--template"):
+     try:
+       with open(config_file, 'w') as f:
+-        print >>f, "# Configuration for imediff2: (Erase this file to reset)"
+-        print >>f, "# <command_key_in_action> <command_key_in_manpage>"
+-        print >>f, "# edit only first character of each line to 'a'...'z'"
+-        print >>f, "#"
++        print("# Configuration for imediff2: (Erase this file to reset)", file=f)
++        print("# <command_key_in_action> <command_key_in_manpage>", file=f)
++        print("# edit only first character of each line to 'a'...'z'", file=f)
++        print("#", file=f)
+         for k in kcvalues:
+-          print >>f, "%s %s" % (k , k)
++          print("%s %s" % (k , k), file=f)
+     except:
+-      print "%s not writable, aborting" % config_file
++      print("%s not writable, aborting" % config_file)
+     sys.exit()
+   elif o in ("-V", "--version"):
+-    print "%s %s" % (PACKAGE, VERSION)
++    print("%s %s" % (PACKAGE, VERSION))
+     sys.exit()
+ 
+ if len(args)<2:
+-  print usagetext()
++  print(usagetext())
+   sys.exit(2)
+ 
+ for o, a in opts:
+@@ -628,7 +633,7 @@
+         ord(sa[0][0]) >= ord('a') and ord(sa[0][0]) <= ord('z') and \
+         (sa[1][0] in kcvalues):
+       # update key code table
+-      if sa[0][0] in kc.keys():
++      if sa[0][0] in list(kc.keys()):
+         sys.stderr.write( _("Illegal syntax in ~/.imediff2 (duplicate): '%s'") % s + "\n" )
+         sys.exit(1)
+       else:
+@@ -644,7 +649,7 @@
+     kc[k] = k
+ 
+ rkc = {}
+-for k, c in kc.items():
++for k, c in list(kc.items()):
+   rkc[c] = k
+ 
+ lines_a = read_lines(args[0])
+@@ -707,7 +712,8 @@
+         else:
+           chunks = 'old'
+       os.unlink(of_name)
+-    except IOError, (error, message):
++    except IOError as xxx_todo_changeme:
++      (error, message) = xxx_todo_changeme.args
+       sys.stderr.write(_("Could not write to '%s': %s\n") % (of_name, message));
+ 
+   if not launch_editor:
+@@ -723,7 +729,8 @@
+       of.write( output )
+       of.close()
+     sys.exit(0)
+-  except IOError, (error, message):
++  except IOError as xxx_todo_changeme2:
++    (error, message) = xxx_todo_changeme2.args
+     sys.stderr.write(_("Could not write to '%s': %s\n") % (ofile, message));
+ 
+ sys.exit(3)
