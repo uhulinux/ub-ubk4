@@ -1,1 +1,1 @@
-u2d https://github.com/exaile/exaile/releases/
+urllist https://github.com/exaile/exaile/releases/ | grep tar.gz | grep exaile | sort -V | tail -n 1 | sed s/exaile-// | sed s/\.tar.*// | sed s/-/~/
