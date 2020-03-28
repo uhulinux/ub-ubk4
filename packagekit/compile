@@ -1,8 +1,8 @@
 #!/bin/sh -eux
 
+NOCONFIGURE=1 ./autogen.sh
 ub_compile \
 	--disable-local \
-	--disable-tests \
 	--enable-aptcc \
 	--disable-cron \
 	--enable-introspection \
