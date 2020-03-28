@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
-export PYTHON=/usr/bin/python2
-ub_compile
+./bootstrap
+export CFLAGS=`pkg-config --cflags python3`
+ub_compile \
+	--with-python
