@@ -1,6 +1,12 @@
 #!/bin/sh -eux
 
-git submodule update --init --recursive
+if [ -d .git ]; then
+    git submodule update --init --recursive
+else
+    git clone https://gitlab.gnome.org/GNOME/libglnx.git libglnx
+    git clone https://github.com/projectatomic/bubblewrap.git bubblewrap
+    git clone https://github.com/flatpak/xdg-dbus-proxy.git dbus-proxy
+fi
 
 # https://github.com/flatpak/flatpak/issues/267
 sed -i '/locale\/C\./d' tests/make-test-runtime.sh
