@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
-cp -a src/. "$UB_INSTALLDIR"/
+sed -i 's|success_results)))|success_results).decode\("utf-8", errors="ignore")))|g' \
+    src/usr/bin/diffuse
+python3 install.py --destdir=${UB_INSTALLDIR} --prefix=/usr

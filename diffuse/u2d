@@ -1,1 +1,1 @@
-sflist diffuse diffuse | grep -E '^([0-9.]+)$' | sort -V | tail -n 1
+urllist https://github.com/MightyCreak/diffuse/releases | grep tar.gz | sort -V | tail -n 1 | sed s/v// | sed s/\.tar.*// | sed s/-/~/
