@@ -1,0 +1,13 @@
+#!/bin/sh -eux
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/polkit-1/actions
+mkdir -p "$UB_INSTALLDIR"/usr/share/icons/hicolor
+mkdir -p "$UB_INSTALLDIR"/usr/share/doc/anydesk
+cp README "$UB_INSTALLDIR"/usr/share/doc/anydesk/
+cp copyright "$UB_INSTALLDIR"/usr/share/doc/anydesk/
+cp -r icons/hicolor/* "$UB_INSTALLDIR"/usr/share/icons/hicolor/
+cp anydesk "$UB_INSTALLDIR"/usr/bin
+cp polkit-1/* "$UB_INSTALLDIR"/usr/share/polkit-1/actions/
+cp systemd/anydesk.service "$UB_INSTALLDIR"/usr/lib/systemd/system/
+cp anydesk.desktop "$UB_INSTALLDIR"/usr/share/applications/
+gtk-update-icon-cache /usr/share/icons/hicolor > /dev/null 2>&1 || true
