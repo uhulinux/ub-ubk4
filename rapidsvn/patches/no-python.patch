@@ -1,0 +1,13 @@
+diff -Nur orig/src/locale/Makefile.am mod/src/locale/Makefile.am
+--- orig/src/locale/Makefile.am	2012-06-28 08:39:29.000000000 +0200
++++ mod/src/locale/Makefile.am	2020-03-30 14:56:43.878809332 +0200
+@@ -25,8 +25,7 @@
+ #On OS/X we dont seem to have msgfmt installed by default
+ #so we are going to use the python version instead
+ #(TODO check for msgfmt, then python)
+-#MSGFMT=msgfmt
+-MSGFMT=python $(top_srcdir)/tools/msgfmt.py
++MSGFMT=msgfmt
+ 
+ all-mo:
+ 	for i in $(RAPIDSVN_LANGUAGES) ; do \
