@@ -1,9 +1,7 @@
 #!/bin/sh -eux
 
-export PYTHON=python2
-python2 ./waf configure \
+export CFLAGS="-DHAVE_G_FILE_QUERY_FILE_TYPE"
+waf configure \
 	--prefix=/usr \
-	--with-optionals=python,launcher,xmmsclient++,xmmsclient++-glib,perl,nycli \
 	--with-default-output-plugin=pulse
-
-python2 ./waf build
+waf build

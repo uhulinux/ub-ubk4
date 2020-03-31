@@ -1,0 +1,10 @@
+diff -up xmms2-0.8DrO_o/waftools/tool.py.plugins-use-libdir xmms2-0.8DrO_o/waftools/tool.py
+--- xmms2-0.8DrO_o/waftools/tool.py	2011-10-20 15:26:08.000000000 -0400
++++ xmms2-0.8DrO_o/waftools/tool.py	2011-12-05 14:56:47.867995794 -0500
+@@ -6,5 +6,5 @@ def add_install_flag(bld, obj):
+ 
+     if env['explicit_install_name']:
+         libname = obj.env["cshlib_PATTERN"] % obj.target
+-        insname = os.path.join(obj.env["PREFIX"], 'lib', libname)
++        insname = os.path.join(obj.env["LIBDIR"], libname)
+         obj.env.append_unique("LINKFLAGS", ["-install_name", insname])
