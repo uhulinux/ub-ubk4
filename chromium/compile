@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
-if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 7 ]; then
-	echo "At least 7 GB free space is required!"
+if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 15 ]; then
+	echo "At least 15 GB free space is required!"
 	exit 1
 fi
 
@@ -15,6 +15,7 @@ _google_default_client_secret=0ZChLK6AxeA3Isu96MkwqDR4
 
 _flags=("
 is_debug=false
+cc_wrapper=\"ccache\"
 is_clang=true
 clang_base_path=\"/usr\"
 clang_use_chrome_plugins=false
@@ -67,9 +68,9 @@ _syslibs=(
     libevent
     libjpeg
     libpng
-#   libvpx # 1.7.0 + git
+    libvpx # 1.7.0 + git
     libwebp
-#   libxml
+    libxml
     libxslt
     opus
 	flac
