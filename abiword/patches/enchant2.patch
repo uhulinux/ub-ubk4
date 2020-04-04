@@ -1,6 +1,30 @@
+diff -Naur orig/configure patched/configure
+--- orig/configure	2019-11-27 02:22:30.000000000 +0100
++++ patched/configure	2020-04-03 22:00:38.272374270 +0200
+@@ -4200,7 +4200,7 @@
+ "
+ 
+ # optional deps
+-enchant_req='enchant >= 1.2.0'
++enchant_req='enchant-2 >= 2.0.0'
+ gio_req='gio-2.0'
+ goffice_req='libgoffice-0.10 >= 0.10.0'
+ 
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2019-11-27 02:22:10.000000000 +0100
++++ patched/configure.ac	2020-04-03 22:01:35.572997126 +0200
+@@ -94,7 +94,7 @@
+ "
+ 
+ # optional deps
+-enchant_req='enchant >= 1.2.0'
++enchant_req='enchant-2 >= 2.0.0'
+ gio_req='gio-2.0'
+ goffice_req='libgoffice-0.10 >= 0.10.0'
+ 
 diff -Naur orig/src/af/xap/xp/enchant_checker.cpp patched/src/af/xap/xp/enchant_checker.cpp
---- orig/src/af/xap/xp/enchant_checker.cpp	2013-04-07 15:53:03.000000000 +0200
-+++ patched/src/af/xap/xp/enchant_checker.cpp	2018-02-15 03:06:03.186404237 +0100
+--- orig/src/af/xap/xp/enchant_checker.cpp	2019-11-27 02:22:10.000000000 +0100
++++ patched/src/af/xap/xp/enchant_checker.cpp	2020-04-03 21:59:43.303775624 +0200
 @@ -127,7 +127,7 @@
  				pvSugg->addItem (ucszSugg);
  		}
