@@ -1,0 +1,1858 @@
+diff -Nur orig/data/tools/about_cfg_to_wiki mod/data/tools/about_cfg_to_wiki
+--- orig/data/tools/about_cfg_to_wiki	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/about_cfg_to_wiki	2020-04-04 13:10:36.238744942 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ #
+ 
+diff -Nur orig/data/tools/addon_manager/html.py mod/data/tools/addon_manager/html.py
+--- orig/data/tools/addon_manager/html.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/addon_manager/html.py	2020-04-04 13:18:33.486093934 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ import html
+diff -Nur orig/data/tools/campaign2wiki.py mod/data/tools/campaign2wiki.py
+--- orig/data/tools/campaign2wiki.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/campaign2wiki.py	2020-04-04 13:10:48.478728244 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ """
+diff -Nur orig/data/tools/expand-terrain-macros.py mod/data/tools/expand-terrain-macros.py
+--- orig/data/tools/expand-terrain-macros.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/expand-terrain-macros.py	2020-04-04 13:11:59.070631951 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ 
+ #  expand-terrain-macros.py - Expand "meta-macros" for terrain WML
+ #
+@@ -34,13 +34,15 @@
+ #
+ #  !!! ONLY USE THIS IF YOU KNOW WHAT YOU ARE DOING !!!
+ 
++from __future__ import print_function
++from builtins import range
+ import sys
+ import getopt
+ 
+ def printUsage():
+-    print "Usage: expand-terrain-macros.py [OPTIONS] filename1\
+- [filename2 [...]]\n"
+-    print """Options:
++    print("Usage: expand-terrain-macros.py [OPTIONS] filename1\
++ [filename2 [...]]\n")
++    print("""Options:
+   -i  Insert the expanded sections into the input file(s) immediately after
+       their macro definitions.
+   -a  Append the expanded sections to the input file(s)
+@@ -48,7 +50,7 @@
+       expansions will be removed. Implies -i if nothing else is specified.
+ 
+ If no options are specified, only the expanded sections will be printed to
+-stdout"""
++stdout""")
+ 
+ insert = False
+ append = False
+@@ -56,8 +58,8 @@
+ 
+ try:
+     (opts, args) = getopt.getopt(sys.argv[1:], 'iar')
+-except getopt.GetoptError, e:
+-    print 'Error parsing command-line arguments: %s' % e
++except getopt.GetoptError as e:
++    print('Error parsing command-line arguments: %s' % e)
+     printUsage()
+     sys.exit(1)
+ for (option, parameter) in opts:
+@@ -72,7 +74,7 @@
+     insert = True
+ 
+ if insert and append:
+-    print "Error: cannot use -i and -a at the same time"
++    print("Error: cannot use -i and -a at the same time")
+     printUsage()
+     sys.exit(1)
+ 
+@@ -113,7 +115,7 @@
+                 if len(split_param) == 3:
+                     optional_params.append(split_param[0])
+                 elif len(split_param) != 1:
+-                    print "Error in line:\n" + line
++                    print("Error in line:\n" + line)
+                     sys.exit(1)
+ 
+                 params.append(split_param)
+@@ -127,7 +129,7 @@
+                 result.append("#generated from: " + line.strip())
+             result.append("#Please do not modify")
+ 
+-            for i in xrange(2**len(optional_params) - 2, -1, -1):
++            for i in range(2**len(optional_params) - 2, -1, -1):
+                 enabled_map = dict([(param, i & (1<<index) != 0) for index, param in enumerate(optional_params)])
+ 
+                 suffix = ""
+@@ -164,14 +166,14 @@
+                 appended += result
+             else:
+                 for r in result:
+-                    print r
++                    print(r)
+ 
+     if (insert or append) and not replace:
+         for line in output:
+-            print line
++            print(line)
+         if append:
+             for line in appended:
+-                print line
++                print(line)
+ 
+     elif replace and changed:
+         f = open(filename, 'w')
+diff -Nur orig/data/tools/extractbindings mod/data/tools/extractbindings
+--- orig/data/tools/extractbindings	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/extractbindings	2020-04-04 13:12:15.166609995 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ #
+ # Extract and format a list of bindings from a theme file.
+ # Presently this generates a table suitable for wiki inclusion.
+diff -Nur orig/data/tools/GUI.pyw mod/data/tools/GUI.pyw
+--- orig/data/tools/GUI.pyw	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/GUI.pyw	2020-04-04 13:12:28.286592098 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ # By Elvish_Hunter, April 2014
+diff -Nur orig/data/tools/hexometer.py mod/data/tools/hexometer.py
+--- orig/data/tools/hexometer.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/hexometer.py	2020-04-04 13:12:41.878573557 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python3
++#! /usr/bin/python3
+ 
+ import os, sys, argparse, re, base64
+ from io import BytesIO
+diff -Nur orig/data/tools/imgcheck mod/data/tools/imgcheck
+--- orig/data/tools/imgcheck	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/imgcheck	2020-04-04 13:12:53.406557832 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ """
+ imgcheck - check a sequence of images for exiguous colors
+diff -Nur orig/data/tools/journeylifter mod/data/tools/journeylifter
+--- orig/data/tools/journeylifter	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/journeylifter	2020-04-04 13:13:26.946512081 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ 
+ """
+ journeylifter -- turn in-line track markers into a journey file.
+@@ -14,6 +14,7 @@
+ Assumes the scenario's filenames sort in the order they present.
+ Assumes there is only one continuous span of journey markers per file.
+ """
++from __future__ import print_function
+ 
+ import os, sys, re, getopt, shutil
+ 
+@@ -30,7 +31,7 @@
+         if opt in ('-d', '--directory'):
+             top = val
+         elif opt in ('-?', '-h', '-"# trackplacer: tracks begin\n'):
+-            print __doc__
++            print(__doc__)
+             sys.exit(0)
+         elif opt in ('-r', '--revert'):
+             revert = True
+@@ -42,7 +43,7 @@
+         os.remove("journey.cfg")
+     except OSError:
+         pass
+-    files = filter(lambda x: x.endswith(".cfg"), os.listdir("."))
++    files = [x for x in os.listdir(".") if x.endswith(".cfg")]
+     files.sort()
+     if revert:
+         for name in files:
+@@ -100,7 +101,7 @@
+                         if m:
+                             scenario_id = m.group(1).upper()
+         # Now edit out background lines in relevant [parts]s
+-        for (line, name, lineno) in mapfile.values():
++        for (line, name, lineno) in list(mapfile.values()):
+             i = lineno
+             while True:
+                 if '[part]' in out[name][i]:
+diff -Nur orig/data/tools/pywmlx/nodemanip.py mod/data/tools/pywmlx/nodemanip.py
+--- orig/data/tools/pywmlx/nodemanip.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/pywmlx/nodemanip.py	2020-04-04 13:23:46.469666997 +0200
+@@ -1,3 +1,4 @@
++from builtins import str
+ import re
+ 
+ import pywmlx.postring as pos
+diff -Nur orig/data/tools/pywmlx/state/lua_states.py mod/data/tools/pywmlx/state/lua_states.py
+--- orig/data/tools/pywmlx/state/lua_states.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/pywmlx/state/lua_states.py	2020-04-04 13:19:26.526021583 +0200
+@@ -1,3 +1,5 @@
++from builtins import str
++from builtins import object
+ import re
+ import pywmlx.state.machine
+ from pywmlx.state.state import State
+@@ -6,7 +8,7 @@
+ 
+ 
+ 
+-class LuaIdleState:
++class LuaIdleState(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -24,7 +26,7 @@
+ 
+ 
+ 
+-class LuaCheckdomState:
++class LuaCheckdomState(object):
+     def __init__(self):
+         rx = (   r'\s*(local\s+)?_\s*=\s*wesnoth\s*\.\s*textdomain\s*'
+                r'''(?:\(\s*)?(["'])(.*?)\2''')
+@@ -41,7 +43,7 @@
+ 
+ 
+ 
+-class LuaCheckpoState:
++class LuaCheckpoState(object):
+     def __init__(self):
+         self.regex = re.compile(r'\s*--\s*(?:#)?\s*(po-override|po):\s+(.+)',
+                                 re.I)
+@@ -64,7 +66,7 @@
+ 
+ 
+ 
+-class LuaCommentState:
++class LuaCommentState(object):
+     def __init__(self):
+         self.regex = re.compile(r'\s*--.+')
+         self.iffail = 'lua_str00'
+@@ -75,7 +77,7 @@
+ 
+ 
+ 
+-class LuaStr00:
++class LuaStr00(object):
+     def __init__(self):
+         self.regex = re.compile(r'((?:_)|(?:.*?\(_)|(?:.*?\s+_))\s*\(')
+         self.iffail = 'lua_str01'
+@@ -93,7 +95,7 @@
+ 
+ 
+ 
+-class LuaStr01:
++class LuaStr01(object):
+     def __init__(self):
+         rx = r'''(?:[^["']*?)(_?)\s*"((?:\\"|[^"])*)("?)'''
+         self.regex = re.compile(rx)
+@@ -121,7 +123,7 @@
+ 
+ 
+ 
+-class LuaStr02:
++class LuaStr02(object):
+     def __init__(self):
+         rx = r'''(?:[^["']*?)(_?)\s*'((?:\\'|[^'])*)('?)'''
+         self.regex = re.compile(rx)
+@@ -149,7 +151,7 @@
+ 
+ 
+ 
+-class LuaStr03:
++class LuaStr03(object):
+     def __init__(self):
+         rx = r'''(?:[^["']*?)(_?)\s*\[(=*)\[(.*?)]\2]'''
+         self.regex = re.compile(rx)
+@@ -171,7 +173,7 @@
+ 
+ 
+ 
+-class LuaStr03o:
++class LuaStr03o(object):
+     def __init__(self):
+         rx = r'''(?:[^["']*?)(_?)\s*\[(=*)\[(.*)'''
+         self.regex = re.compile(rx)
+@@ -195,7 +197,7 @@
+ 
+ # well... the regex will always be true on this state, so iffail will never
+ # be executed
+-class LuaStr10:
++class LuaStr10(object):
+     def __init__(self):
+         self.regex = re.compile(r'((?:\\"|[^"])*)("?)')
+         self.iffail = 'lua_str10'
+@@ -215,7 +217,7 @@
+ 
+ # well... the regex will always be true on this state, so iffail will never
+ # be executed
+-class LuaStr20:
++class LuaStr20(object):
+     def __init__(self):
+         self.regex = re.compile(r"((?:\\'|[^'])*)('?)")
+         self.iffail = 'lua_str20'
+@@ -233,7 +235,7 @@
+ 
+ 
+ 
+-class LuaStr30:
++class LuaStr30(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -276,7 +278,7 @@
+ # Plural Idle 1:
+ #  When argument 1 or 2 is expected
+ #  Here we expect " ' or a [ wich will say us what kind of string we will add.
+-class LuaPlIdle1:
++class LuaPlIdle1(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -326,7 +328,7 @@
+ 
+ # Plural Idle 2:
+ #  Between argument 1 and 2, when a comma is expected
+-class LuaPlIdle2:
++class LuaPlIdle2(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -344,7 +346,7 @@
+ 
+ # Plural Idle 3:
+ #  Argument 1 and 2 still stored in memory. We wait only for final parenthesis
+-class LuaPlIdle3:
++class LuaPlIdle3(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -367,7 +369,7 @@
+ 
+ 
+ 
+-class LuaPl01:
++class LuaPl01(object):
+     def __init__(self):
+         rx = r'"((?:\\"|[^"])*)("?)'
+         self.regex = re.compile(rx)
+@@ -418,7 +420,7 @@
+ 
+ 
+ 
+-class LuaPl02:
++class LuaPl02(object):
+     def __init__(self):
+         rx = r"'((?:\\'|[^'])*)('?)"
+         self.regex = re.compile(rx)
+@@ -469,7 +471,7 @@
+ 
+ 
+ 
+-class LuaPl03:
++class LuaPl03(object):
+     def __init__(self):
+         rx = r'\[(=*)\[(.*?)]\1]'
+         self.regex = re.compile(rx)
+@@ -506,7 +508,7 @@
+ 
+ 
+ 
+-class LuaPl03o:
++class LuaPl03o(object):
+     def __init__(self):
+         rx = r'\[(=*)\[(.*)'
+         self.regex = re.compile(rx)
+@@ -539,7 +541,7 @@
+ 
+ # well... the regex will always be true on this state, so iffail will never
+ # be executed
+-class LuaPl10:
++class LuaPl10(object):
+     def __init__(self):
+         self.regex = re.compile(r'((?:\\"|[^"])*)("?)')
+         self.iffail = 'lua_pl10'
+@@ -573,7 +575,7 @@
+ 
+ # well... the regex will always be true on this state, so iffail will never
+ # be executed
+-class LuaPl20:
++class LuaPl20(object):
+     def __init__(self):
+         self.regex = re.compile(r"((?:\\'|[^'])*)('?)")
+         self.iffail = 'lua_pl20'
+@@ -605,7 +607,7 @@
+ 
+ 
+ 
+-class LuaPl30:
++class LuaPl30(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -658,7 +660,7 @@
+ #-----------------------------------------------------------------------------
+ 
+ 
+-class LuaGowmlState:
++class LuaGowmlState(object):
+     def __init__(self):
+         self.regex = re.compile(r'.*?>>\s*')
+         self.iffail = 'lua_final'
+@@ -674,7 +676,7 @@
+ 
+ 
+ 
+-class LuaFinalState:
++class LuaFinalState(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+diff -Nur orig/data/tools/pywmlx/state/state.py mod/data/tools/pywmlx/state/state.py
+--- orig/data/tools/pywmlx/state/state.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/pywmlx/state/state.py	2020-04-04 13:22:00.693811284 +0200
+@@ -1,4 +1,5 @@
+-class State:
++from builtins import object
++class State(object):
+     def __init__(self, regex, run, iffail):
+         self.regex = regex
+         self.run = run
+diff -Nur orig/data/tools/pywmlx/state/wml_states.py mod/data/tools/pywmlx/state/wml_states.py
+--- orig/data/tools/pywmlx/state/wml_states.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/pywmlx/state/wml_states.py	2020-04-04 13:22:28.197773766 +0200
+@@ -1,3 +1,5 @@
++from builtins import str
++from builtins import object
+ import re
+ import pywmlx.state.machine
+ from pywmlx.state.state import State
+@@ -6,7 +8,7 @@
+ 
+ 
+ 
+-class WmlIdleState:
++class WmlIdleState(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -60,7 +62,7 @@
+ 
+ 
+ 
+-class WmlCheckdomState:
++class WmlCheckdomState(object):
+     def __init__(self):
+         self.regex = re.compile(r'\s*#textdomain\s+(\S+)', re.I)
+         self.iffail = 'wml_checkpo'
+@@ -72,7 +74,7 @@
+ 
+ 
+ 
+-class WmlCheckpoState:
++class WmlCheckpoState(object):
+     def __init__(self):
+         rx = r'\s*#\s*(wmlxgettext|po-override|po):\s+(.+)'
+         self.regex = re.compile(rx, re.I)
+@@ -99,7 +101,7 @@
+ 
+ 
+ 
+-class WmlCommentState:
++class WmlCommentState(object):
+     def __init__(self):
+         self.regex = re.compile(r'\s*#.+')
+         self.iffail = 'wml_str02'
+@@ -128,7 +130,7 @@
+ #          This solution is necessary, since extending the workaround
+ #          done for _ "standard translatable strings" to _ << wmlstr02 >>
+ #          can introduce serious bugs
+-class WmlStr02:
++class WmlStr02(object):
+     def __init__(self):
+         rx = r'[^"]*_\s*<<(?:(.*?)>>|(.*))'
+         self.regex = re.compile(rx)
+@@ -176,7 +178,7 @@
+ 
+ 
+ 
+-class WmlTagState:
++class WmlTagState(object):
+     def __init__(self):
+         # this regexp is discussed in depth in Source Documentation, chapter 6
+         rx = r'\s*(?:[^"]+\(\s*)?\[\s*([\/+-]?)\s*([A-Za-z0-9_]+)\s*\]'
+@@ -210,7 +212,7 @@
+ 
+ 
+ 
+-class WmlGetinfState:
++class WmlGetinfState(object):
+     def __init__(self):
+         rx = ( r'\s*(speaker|id|role|description|condition|type|race)' +
+                r'\s*=\s*(.*)' )
+@@ -229,7 +231,7 @@
+ 
+ 
+ 
+-class WmlStr01:
++class WmlStr01(object):
+     def __init__(self):
+         rx = r'(?:[^"]*?)\s*(_?)\s*"((?:""|[^"])*)("?)'
+         self.regex = re.compile(rx)
+@@ -258,7 +260,7 @@
+ 
+ # well... the regex will always be true on this state, so iffail will never
+ # be executed
+-class WmlStr10:
++class WmlStr10(object):
+     def __init__(self):
+         self.regex = re.compile(r'((?:""|[^"])*)("?)')
+         self.iffail = 'wml_str10'
+@@ -276,7 +278,7 @@
+ 
+ 
+ 
+-class WmlStr20:
++class WmlStr20(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+@@ -321,7 +323,7 @@
+ # This is why we use a global var _on_luatag in state.py wich is usually False.
+ # it will be set to True only when opening a lua tag (see WmlTagState)
+ # it will be set to False again when the lua tag is closed (see WmlTagState)
+-class WmlGoluaState:
++class WmlGoluaState(object):
+     def __init__(self):
+         self.regex = re.compile(r'.*?<<\s*')
+         self.iffail = 'wml_final'
+@@ -335,7 +337,7 @@
+ 
+ 
+ 
+-class WmlFinalState:
++class WmlFinalState(object):
+     def __init__(self):
+         self.regex = None
+         self.iffail = None
+diff -Nur orig/data/tools/rmtrans/rmtrans.py mod/data/tools/rmtrans/rmtrans.py
+--- orig/data/tools/rmtrans/rmtrans.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/rmtrans/rmtrans.py	2020-04-04 13:26:44.069424456 +0200
+@@ -1,5 +1,7 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ 
++from __future__ import print_function
++from builtins import range
+ from gimpfu import *
+ 
+ def rmtrans(img,tdrawable):
+@@ -15,7 +17,7 @@
+     alpha = pdb.gimp_image_get_active_layer(img) # move alpha layer into image (copy-paste)
+     pdb.gimp_context_set_antialias(False)
+     pdb.gimp_context_set_sample_threshold(0.0) # configuration for color selection
+-    for i in xrange(10):
++    for i in range(10):
+         pdb.gimp_image_select_color(img,CHANNEL_OP_REPLACE,alpha,(i,i,i)) # select alpha values <= 10
+         pdb.gimp_image_select_item(img,CHANNEL_OP_INTERSECT,selection) # bound it to the previously selected area (before plugin execution)
+         if not(pdb.gimp_selection_is_empty(img)):
+diff -Nur orig/data/tools/scoutDefault.py mod/data/tools/scoutDefault.py
+--- orig/data/tools/scoutDefault.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/scoutDefault.py	2020-04-04 13:14:04.902460306 +0200
+@@ -1,7 +1,10 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ #
+ # Automagically set the village_per_scout parameters in MP scenarios.
+ 
++from __future__ import print_function
++from builtins import str
++from builtins import object
+ import sys
+ import os
+ import getopt
+@@ -57,7 +60,7 @@
+         return (len(subitem) - len(item)) * ' '
+     return '\t'
+ 
+-class wikiAi:
++class wikiAi(object):
+     def __init__(self):
+         self.start = ""
+         self.scouts = ""
+@@ -79,7 +82,7 @@
+             output = output + item.full_description + " ; "
+         return output
+ 
+-class wikiSide:
++class wikiSide(object):
+     def __init__(self):
+         self.full_description = ''
+         self.updated_description = ''
+@@ -136,7 +139,7 @@
+             output = output + item.full_description + " ; "
+         return output
+ 
+-class wikiScenario:
++class wikiScenario(object):
+     def __init__(self):
+         self.side = wikiSideList()
+         self.full_description = ''
+@@ -219,7 +222,7 @@
+             f.close()
+ 
+ def printUsage():
+-    print """scoutDefault.py [-hRO] [-d directory] [-f file] [-x extension]
++    print("""scoutDefault.py [-hRO] [-d directory] [-f file] [-x extension]
+ -h : print this message
+ -R : recursively parse directories
+ -O : overwrite village_per_scout value in scenario
+@@ -236,7 +239,7 @@
+   ./scoutDefault.py -R -d /usr/local/share/wesnoth
+     Run the script on all directories under that directory
+   ./scoutDefault.py -f 2p_Blitz.cfg -O
+-    Run the script on 2p_Blitz.cfg and delete previous value"""
++    Run the script on 2p_Blitz.cfg and delete previous value""")
+ 
+ recursive = False
+ entryPoint = os.getcwd()
+@@ -244,8 +247,8 @@
+ resourcesFile = {}
+ try:
+     (opts, argsProper) = getopt.getopt(sys.argv[1:], 'ROhf:d:x:v:"')
+-except getopt.GetoptError, e:
+-    print 'Error parsing command-line arguments: %s' % e
++except getopt.GetoptError as e:
++    print('Error parsing command-line arguments: %s' % e)
+     printUsage()
+     sys.exit(1)
+ for (option, parameter) in opts:
+@@ -258,10 +261,10 @@
+         overwrite = False
+     elif option == '-d':
+         if not os.path.exists(parameter):
+-            print 'Error: %s directory does not exist' % parameter
++            print('Error: %s directory does not exist' % parameter)
+             sys.exit(1)
+         elif not os.path.isdir(parameter):
+-            print 'Error: %s is not a directory' % parameter
++            print('Error: %s is not a directory' % parameter)
+             sys.exit(1)
+         entryPoint = parameter
+         entryFile = os.listdir(entryPoint)
+diff -Nur orig/data/tools/steam-changelog mod/data/tools/steam-changelog
+--- orig/data/tools/steam-changelog	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/steam-changelog	2020-04-04 13:14:23.806434518 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ '''
+ Extracts a section of the changelog and converts it from Markdown to Steam's
+ BBCode implementation.
+diff -Nur orig/data/tools/terrain2wiki.py mod/data/tools/terrain2wiki.py
+--- orig/data/tools/terrain2wiki.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/terrain2wiki.py	2020-04-04 13:14:37.290416126 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ """
+diff -Nur orig/data/tools/trackplacer mod/data/tools/trackplacer
+--- orig/data/tools/trackplacer	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/trackplacer	2020-04-04 13:15:16.258362970 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ '''
+ trackplacer -- map journey track editor.
+ 
+@@ -50,7 +50,14 @@
+ For details on the editing controls, click the Help button in the trackplacer
+ GUI.
+ '''
++from __future__ import division
++from __future__ import print_function
+ 
++from past.builtins import cmp
++from builtins import zip
++from builtins import range
++from past.utils import old_div
++from builtins import object
+ gui_help = '''\
+ You are editing or creating a set of named tracks; at any given time there will one track that is selected for editing.  For campaigns with a linear narrative there will be only one track, always selected, and you will not have to concern yourself about its name.  If your campaign has a non-linear structure, you will want to create one track for each segment.
+ 
+@@ -119,8 +126,9 @@
+     "Euclidean distance."
+     return math.sqrt((x1 - x2)**2 + abs(y1 - y2)**2)
+ 
+-def within(x, y, (l, t, r, d)):
++def within(x, y, xxx_todo_changeme5):
+     "Is point within specified rectangle?"
++    (l, t, r, d) = xxx_todo_changeme5
+     if x >= l and x <= l + r - 1 and y >= t and y <= t + d - 1:
+         return True
+     return False
+@@ -138,7 +146,7 @@
+            within(x2,     y2+y2d, p1) or \
+            within(x2+x2d, y2+y2d, p1)
+ 
+-class JourneyTracks:
++class JourneyTracks(object):
+     "Represent a set of named journey tracks on a map."
+     def __init__(self):
+         self.mapfile = None		# Map background of the journey
+@@ -164,16 +172,15 @@
+             fp.write("#\n")
+             if not self.before and not self.after:
+                 fp.write("#\n# wmllint: no translatables\n\n")
+-            for (key, val) in self.properties.items():
++            for (key, val) in list(self.properties.items()):
+                 fp.write("# trackplacer: %s=%s\n" % (key, val))
+             fp.write("#\n")
+             definitions = []
+             for name in self.track_order:
+                 track = self.tracks[name]
+-                index_tuples = zip(xrange(len(track)), track)
+-                index_tuples = filter(lambda (i, (a, x, y)): a in segmenters,
+-                                      index_tuples)
+-                endpoints = map(lambda (i, t): i, index_tuples)
++                index_tuples = list(zip(range(len(track)), track))
++                index_tuples = [i_a_x_y for i_a_x_y in index_tuples if i_a_x_y[1][0] in segmenters]
++                endpoints = [i_t[0] for i_t in index_tuples]
+                 if track[-1][0] not in segmenters:
+                     endpoints.append(len(track)-1)
+                 outname = name.replace(" ", "_").upper()
+@@ -181,7 +188,7 @@
+                     stagename = "%s_STAGE%d" % (outname, i+1,)
+                     definitions.append(stagename)
+                     fp.write("#define %s\n" % stagename)
+-                    for j in xrange(0, e+1):
++                    for j in range(0, e+1):
+                         age="OLD"
+                         if i == 0 or j > endpoints[i-1]:
+                             age = "NEW"
+@@ -192,7 +199,7 @@
+                     endname = "%s_END" % stagename
+                     fp.write("#define %s\n" % endname)
+                     definitions.append(endname)
+-                    for j in xrange(0, e+1):
++                    for j in range(0, e+1):
+                         age="OLD"
+                         if j == endpoints[i]:
+                             age = "NEW"
+@@ -203,7 +210,7 @@
+                 completename = "%s_COMPLETE" % name
+                 fp.write("#define %s\n" % completename)
+                 definitions.append(completename)
+-                for j in xrange(len(track)):
++                for j in range(len(track)):
+                     waypoint = track[j]
+                     fp.write("    {OLD_%s %d %d}\n" % tuple(waypoint))
+                 fp.write("#enddef\n\n")
+@@ -317,7 +324,7 @@
+     def neighbors(self, x, y):
+         "Return list of neighbors on selected track, enumerated and sorted by distance."
+         neighbors = []
+-        candidates = zip(xrange(len(self.selected_track())), self.selected_track())
++        candidates = list(zip(range(len(self.selected_track())), self.selected_track()))
+         candidates.sort(lambda (i1, (a1, x1, y1)), (i2, (a2, x2, y2)): cmp(distance(x, y, x1, y1), distance(x, y, x2, y2)))
+         return candidates
+     def find(self, x, y):
+@@ -327,8 +334,9 @@
+             if x == xt and y == yt:
+                 candidates.append(i)
+         return candidates
+-    def insert(self, (action, x, y)):
++    def insert(self, xxx_todo_changeme):
+         "Insert a feature in the selected track."
++        (action, x, y) = xxx_todo_changeme
+         neighbors = self.neighbors(x, y)
+         # There are two or more markers and we're not nearest the end one
+         if len(neighbors) >= 2 and neighbors[0][0] != len(neighbors)-1:
+@@ -357,7 +365,7 @@
+             rep += name + ": " + repr(track) + ":\n"
+         return rep
+ 
+-class ContextPopup:
++class ContextPopup(object):
+     def __init__(self, editor):
+         self.editor = editor
+         self.window = gtk.Window(gtk.WINDOW_POPUP)
+@@ -384,7 +392,7 @@
+             for (possible, item) in self.editor.journey.neighbors(x, y):
+                 if within(x, y, self.editor.box(item)):
+                     stagecount = 0
+-                    for i in xrange(possible):
++                    for i in range(possible):
+                         (action, xn, yn) = self.editor.journey[i]
+                         if action in segmenters:
+                             stagecount += 1
+@@ -405,7 +413,7 @@
+     def destroy(self):
+         self.window.destroy()
+ 
+-class TrackEditorIcon:
++class TrackEditorIcon(object):
+     def __init__(self, action, path):
+         self.action = action
+         # We need an image for the toolbar...
+@@ -418,10 +426,10 @@
+     def bounding_box(self, x, y):
+         "Return a bounding box for this icon when centered at (x, y)."
+         # The +1 is a slop factor allowing for even-sized icons
+-        return (x-self.icon_width/2, y-self.icon_height/2,
++        return (x-old_div(self.icon_width,2), y-old_div(self.icon_height,2),
+                     self.icon_width+1, self.icon_height+1)
+ 
+-class TrackController:
++class TrackController(object):
+     "Object for controlling an individual track in the Tracks dialog."
+     def __init__(self, editor, track_id, trackbox, basebutton):
+         self.editor = editor
+@@ -482,7 +490,7 @@
+         self.editor.controller[w.get_text()] = self.editor.controller[track_id]
+         del self.editor.controller[track_id]
+ 
+-class TracksEditor:
++class TracksEditor(object):
+     def __init__(self, path=None, verbose=False, force_save=False):
+         self.verbose = verbose
+         self.force_save = force_save
+@@ -512,13 +520,13 @@
+         # Now get the icons we'll need for scribbling on the map with.
+         try:
+             self.selected_dictionary = {}
+-            for (action, path) in selected_icon_dictionary.items():
++            for (action, path) in list(selected_icon_dictionary.items()):
+                 icon = TrackEditorIcon(action, path)
+                 self.log("selected %s icon has size %d, %d" % \
+                          (action, icon.icon_width, icon.icon_height))
+                 self.selected_dictionary[action] = icon
+             self.unselected_dictionary = {}
+-            for (action, path) in unselected_icon_dictionary.items():
++            for (action, path) in list(unselected_icon_dictionary.items()):
+                 icon = TrackEditorIcon(action, path)
+                 self.log("unselected %s icon has size %d, %d" % \
+                          (action, icon.icon_width, icon.icon_height))
+@@ -716,9 +724,9 @@
+         self.log("Refreshing map in (%d, %d, %d, %d, %d, %d}" % (x,y,x,y,xs,ys))
+         self.pixmap.draw_drawable(self.default_gc, self.map, x, y, x, y, xs, ys)
+ 
+-    def box(self, (action, x, y)):
++    def box(self, xxx_todo_changeme1):
+         "Compute the bounding box for an icon of type ACTION at X, Y."
+-        # Assumes selected and unselected icons are the same size
++        (action, x, y) = xxx_todo_changeme1
+         return self.selected_dictionary[action].bounding_box(x, y)
+ 
+     def snap_to(self, x, y):
+@@ -730,17 +738,17 @@
+         else:
+             return None
+ 
+-    def neighbors(self, (action, x, y)):
++    def neighbors(self, xxx_todo_changeme2):
+         "Return all track items with bounding boxes overlapping this one:"
++        (action, x, y) = xxx_todo_changeme2
+         rect = self.selected_dictionary[action].bounding_box(x, y)
+-        return filter(lambda item: overlaps(rect, self.box(item)),
+-                      self.journey.selected_track())
++        return [item for item in self.journey.selected_track() if overlaps(rect, self.box(item))]
+ 
+-    def erase_feature(self, widget, (action, x, y)):
++    def erase_feature(self, widget, xxx_todo_changeme3):
+         "Erase specified (active) icon from the map."
+-        # Erase all nearby features that might have been damaged.
++        (action, x, y) = xxx_todo_changeme3
+         save_select = self.journey.selected_id
+-        for (id, track) in self.journey.tracks.items():
++        for (id, track) in list(self.journey.tracks.items()):
+             if id not in self.visible_set:
+                 continue
+             self.journey.set_selected_track(id)
+@@ -759,8 +767,9 @@
+                                       save_select == self.journey.selected_id)
+         self.journey.set_selected_track(save_select)
+ 
+-    def draw_feature(self, widget, (action, x, y), selected):
++    def draw_feature(self, widget, xxx_todo_changeme4, selected):
+         "Draw specified icon on the map."
++        (action, x, y) = xxx_todo_changeme4
+         rect = self.box((action, x, y))
+         self.log("Drawing action=%s (%s), dest=%s" % (action, selected, rect))
+         if selected:
+@@ -836,7 +845,7 @@
+                         self.journey.set_selected_track(name)
+                         possible = self.snap_to(x, y)
+                         if possible is not None:
+-                            print "Found possible on", name
++                            print("Found possible on", name)
+                             most_recent = (name, possible, self.journey[possible])
+                 self.journey.set_selected_track(save_selected)
+                 if most_recent:
+@@ -1126,7 +1135,7 @@
+         table = gtk.Table(len(self.journey.properties)+1, 2)
+         table.show()
+         w.vbox.pack_start(table)
+-        keys = self.journey.properties.keys()
++        keys = list(self.journey.properties.keys())
+         keys.sort()
+         labels = []
+         entries = []
+@@ -1164,7 +1173,7 @@
+     def log(self, msg):
+         "Debugging report."
+         if self.verbose:
+-            print >>sys.stderr, "trackplacer:", msg
++            print("trackplacer:", msg, file=sys.stderr)
+ 
+     def fatal_error(self, msg):
+         "Notify user of error and die."
+@@ -1184,7 +1193,7 @@
+         elif opt in ('-f', '--force'):
+             force_save = True
+         elif opt in ('-?', '-h', '--help'):
+-            print __doc__
++            print(__doc__)
+             sys.exit(0)
+         elif opt in ('-v', '--verbose'):
+             verbose = True
+@@ -1201,7 +1210,7 @@
+             if filename.startswith(os.getcwd() + os.sep):
+                 filename = filename[len(os.getcwd())+1:]
+             TracksEditor(path=filename, verbose=verbose, force_save=force_save)
+-        except IOException, e:
++        except IOException as e:
+             if e.lineno:
+                 sys.stderr.write(('"%s", line %d: ' % (e.path, e.lineno)) + e.message + "\n")
+             else:
+@@ -1260,7 +1269,7 @@
+                     filename = filename[len(os.getcwd())+1:]
+ 
+                 TracksEditor(filename, verbose=verbose, force_save=force_save)
+-            except IOException, e:
++            except IOException as e:
+                 w = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
+                                       flags=gtk.DIALOG_DESTROY_WITH_PARENT,
+                                       buttons=gtk.BUTTONS_OK)
+diff -Nur orig/data/tools/unit_tree/animations.py mod/data/tools/unit_tree/animations.py
+--- orig/data/tools/unit_tree/animations.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/unit_tree/animations.py	2020-04-04 13:27:38.249348045 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ def write_animation(out, aa, name):
+     c = [0, 0]
+diff -Nur orig/data/tools/unit_tree/helpers.py mod/data/tools/unit_tree/helpers.py
+--- orig/data/tools/unit_tree/helpers.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/unit_tree/helpers.py	2020-04-04 13:27:50.089331348 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ """
+ Various helpers for use by the wmlunits tool.
+diff -Nur orig/data/tools/unit_tree/html_output.py mod/data/tools/unit_tree/html_output.py
+--- orig/data/tools/unit_tree/html_output.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/unit_tree/html_output.py	2020-04-04 13:28:01.289315551 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ import copy
+diff -Nur orig/data/tools/unit_tree/__init__.py mod/data/tools/unit_tree/__init__.py
+--- orig/data/tools/unit_tree/__init__.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/unit_tree/__init__.py	2020-04-04 13:27:26.117365155 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ # When Python looks for a package, it considers all directories with
+ # a file named __init__.py inside them. Therefore we need this file.
+diff -Nur orig/data/tools/unit_tree/overview.py mod/data/tools/unit_tree/overview.py
+--- orig/data/tools/unit_tree/overview.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/unit_tree/overview.py	2020-04-04 13:28:11.701300867 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ import glob
+ import os
+ import re
+diff -Nur orig/data/tools/unit_tree/TeamColorizer mod/data/tools/unit_tree/TeamColorizer
+--- orig/data/tools/unit_tree/TeamColorizer	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/unit_tree/TeamColorizer	2020-04-04 13:28:23.985283544 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ import sys, argparse, subprocess
+ 
+diff -Nur orig/data/tools/unit_tree/wiki_output.py mod/data/tools/unit_tree/wiki_output.py
+--- orig/data/tools/unit_tree/wiki_output.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/unit_tree/wiki_output.py	2020-04-04 13:28:36.457265954 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ import sys
+ from . import helpers
+diff -Nur orig/data/tools/wesnoth/campaignserver_client.py mod/data/tools/wesnoth/campaignserver_client.py
+--- orig/data/tools/wesnoth/campaignserver_client.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/campaignserver_client.py	2020-04-04 13:28:56.513237669 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ import gzip, zlib, io
+ import socket, struct, glob, sys, shutil, threading, os, fnmatch
+diff -Nur orig/data/tools/wesnoth/libgithub.py mod/data/tools/wesnoth/libgithub.py
+--- orig/data/tools/wesnoth/libgithub.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/libgithub.py	2020-04-04 13:29:06.329223826 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # vim: tabstop=4: shiftwidth=4: expandtab: softtabstop=4: autoindent:
+ 
+ """
+diff -Nur orig/data/tools/wesnoth/wescamp.py mod/data/tools/wesnoth/wescamp.py
+--- orig/data/tools/wesnoth/wescamp.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wescamp.py	2020-04-04 13:29:16.969208822 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # vim: tabstop=4: shiftwidth=4: expandtab: softtabstop=4: autoindent:
+ #
+ """
+diff -Nur orig/data/tools/wesnoth/wmldata.py mod/data/tools/wesnoth/wmldata.py
+--- orig/data/tools/wesnoth/wmldata.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmldata.py	2020-04-04 13:29:52.681158457 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ """
+@@ -16,11 +16,15 @@
+ """
+ 
+ from __future__ import print_function
++from __future__ import absolute_import
++from builtins import str
++from builtins import range
++from builtins import object
+ import re, sys
+-import wmlparser
++from . import wmlparser
+ import codecs
+ 
+-class Data:
++class Data(object):
+     """Common subclass."""
+     def __init__(self, name):
+         self.name = name
+@@ -277,7 +281,7 @@
+         for r in result:
+             if r != None:
+                 # For networking, we need actual bytestream here, not unicode.
+-                if type(r) is unicode: r = r.encode("utf8")
++                if type(r) is str: r = r.encode("utf8")
+                 bytes += str(r)
+ 
+         return bytes
+@@ -369,7 +373,7 @@
+ 
+     def compare(self, other):
+         if len(self.data) != len(other.data): return False
+-        for i in xrange(self.data):
++        for i in range(self.data):
+             if not self.data[i].compare(other.data[i]): return False
+         return True
+ 
+@@ -592,7 +596,7 @@
+         value = str(value)
+         # read existing values
+         q = []
+-        for d in xrange(3):
++        for d in range(3):
+             q += [self.get_quantity(name, d, value)]
+         q[difficulty] = value
+ 
+@@ -605,7 +609,7 @@
+         if q[0] == q[1] == q[2]:
+             self.set_text_val(name, value)
+         else:
+-            for d in xrange(3):
++            for d in range(3):
+                 ifdef = self.get_or_create_ifdef(["EASY", "NORMAL", "HARD"][d])
+                 ifdef.set_text_val(name, q[d])
+ 
+diff -Nur orig/data/tools/wesnoth/wmlgrammar.py mod/data/tools/wesnoth/wmlgrammar.py
+--- orig/data/tools/wesnoth/wmlgrammar.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmlgrammar.py	2020-04-04 13:30:32.881101764 +0200
+@@ -1,9 +1,11 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ 
+ """
+ wmlgrammar -- parses a given schema into a more usable form
+ """
+ from __future__ import print_function
++from past.builtins import cmp
++from builtins import object
+ import collections
+ import re
+ 
+@@ -25,10 +27,10 @@
+         for element in schema.get_all_subs():
+             node = Node(element, self.datatypes)
+             self.elements.update({node.name: node})
+-        for element in [el for el in self.elements.values() if el.parent]:
++        for element in [el for el in list(self.elements.values()) if el.parent]:
+             element.inherit(self.elements[element.parent])
+         # categories
+-        for element in [el for el in self.elements.values() if el.category]:
++        for element in [el for el in list(self.elements.values()) if el.category]:
+             self.categories[element.category].append(element)
+ 
+     def get_element(self, name):
+diff -Nur orig/data/tools/wesnoth/wmliterator3.py mod/data/tools/wesnoth/wmliterator3.py
+--- orig/data/tools/wesnoth/wmliterator3.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmliterator3.py	2020-04-04 13:31:37.281010940 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ """
+ wmliterator.py -- Python routines for navigating a Battle For Wesnoth WML tree
+diff -Nur orig/data/tools/wesnoth/wmliterator.py mod/data/tools/wesnoth/wmliterator.py
+--- orig/data/tools/wesnoth/wmliterator.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmliterator.py	2020-04-04 13:31:06.385054514 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ 
+ """
+ wmliterator.py -- Python routines for navigating a Battle For Wesnoth WML tree
+@@ -23,6 +23,10 @@
+ """
+ 
+ from __future__ import print_function, unicode_literals, division
++from builtins import str
++from builtins import map
++from builtins import input
++from builtins import object
+ from future_builtins import filter, map, zip
+ input = raw_input
+ range = xrange
+@@ -375,7 +379,7 @@
+                 # moving backwards past all scopes forces a reset
+                 self.reset()
+         while self.lineno + self.span - 1 < lineno:
+-            self.next()
++            next(self)
+         return self
+ 
+     def ancestors(self):
+@@ -409,7 +413,7 @@
+         """Return a very basic string representation"""
+         return 'WmlIterator<' + repr(self.element) +', line %d>'%(self.lineno+1)
+ 
+-    def next(self):
++    def __next__(self):
+         """Move the iterator to the next line number
+         note: May raise StopIteration"""
+         if not self.hasNext():
+@@ -482,7 +486,7 @@
+     flist = sys.argv[1:]
+     if not flist:
+         print('Current directory is', os.getcwd())
+-        flist = glob.glob(os.path.join(os.getcwd(), input('Which file(s) would you like to test?\n')))
++        flist = glob.glob(os.path.join(os.getcwd(), eval(input('Which file(s) would you like to test?\n'))))
+     while flist:
+         fname = flist.pop()
+         if os.path.isdir(fname):
+diff -Nur orig/data/tools/wesnoth/wmlparser2.py mod/data/tools/wesnoth/wmlparser2.py
+--- orig/data/tools/wesnoth/wmlparser2.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmlparser2.py	2020-04-04 13:32:57.508897796 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ """
+@@ -8,7 +8,12 @@
+ If you are using this you shold instead use wmlparser3.py and upgrade
+ your code to Python 3.
+ """
++from __future__ import print_function
+ 
++from builtins import chr
++from builtins import str
++from builtins import range
++from builtins import object
+ import os, glob, sys, re, subprocess, argparse, tempfile, shutil
+ import atexit
+ 
+@@ -38,7 +43,7 @@
+     %s
+ """ % (str(self.line), self.preprocessed, self.wml_line, self.message)
+ 
+-class StringNode:
++class StringNode(object):
+     """
+     One part of an attribute's value. Because a single WML string
+     can be made from multiple translatable strings we need to model
+@@ -54,7 +59,7 @@
+         else:
+             return repr(self.data)
+ 
+-class AttributeNode:
++class AttributeNode(object):
+     """
+     A WML attribute. For example the "id=Elfish Archer" in:
+         [unit]
+@@ -80,7 +85,7 @@
+                 r += ustr
+         return r
+ 
+-class TagNode:
++class TagNode(object):
+     """
+     A WML tag. For example the "unit" in this example:
+         [unit]
+@@ -141,7 +146,7 @@
+         r = []
+         for sub in self.data:
+             ok = True
+-            for k, v in kw.items():
++            for k, v in list(kw.items()):
+                 if k == "tag":
+                     if not isinstance(sub, TagNode): ok = False
+                     elif v != "" and sub.name != v: ok = False
+@@ -191,7 +196,7 @@
+                 s += subline + "\n"
+         return s
+ 
+-class Parser:
++class Parser(object):
+     def __init__(self, wesnoth_exe, config_dir, data_dir,
+         no_preprocess):
+         """
+@@ -503,21 +508,21 @@
+ 
+ If verbose, insert a linebreak after every brace and comma (put every item on its own line), otherwise, condense everything into a single line.
+ """
+-    print "{",
++    print("{", end=' ')
+     first = True
+     sdepth1 = "\n" + " " * depth
+     sdepth2 = sdepth1 + " "
+-    for pair in tree.speedy_tags.iteritems():
++    for pair in tree.speedy_tags.items():
+         if first:
+             first = False
+         else:
+             sys.stdout.write(",")
+         if verbose:
+             sys.stdout.write(sdepth2)
+-        print '"%s":' % pair[0],
++        print('"%s":' % pair[0], end=' ')
+         if verbose:
+             sys.stdout.write(sdepth1)
+-        print '[',
++        print('[', end=' ')
+         first_tag = True
+         for tag in pair[1]:
+             if first_tag:
+@@ -539,8 +544,8 @@
+             sys.stdout.write(",")
+         if verbose:
+             sys.stdout.write(sdepth2)
+-        print '"%s":' % child.name,
+-        print json.dumps(child.get_text()),
++        print('"%s":' % child.name, end=' ')
++        print(json.dumps(child.get_text()), end=' ')
+     if verbose:
+         sys.stdout.write(sdepth1)
+     sys.stdout.write("}")
+@@ -552,16 +557,16 @@
+         sdepth = "  " * depth
+     for child in tree.data:
+         if isinstance(child, TagNode):
+-            print '%s<%s>' % (sdepth, child.name)
++            print('%s<%s>' % (sdepth, child.name))
+             xmlify(child, verbose, depth + 1)
+-            print '%s</%s>' % (sdepth, child.name)
++            print('%s</%s>' % (sdepth, child.name))
+         else:
+             if "\n" in child.get_text() or "\r" in child.get_text():
+-                print sdepth + '<' + child.name + '>' + \
+-            '<![CDATA[' + child.get_text() + ']]>' + '</' + child.name + '>'
++                print(sdepth + '<' + child.name + '>' + \
++            '<![CDATA[' + child.get_text() + ']]>' + '</' + child.name + '>')
+             else:
+-                print sdepth + '<' + child.name + '>' + \
+-            escape(child.get_text()) + '</' + child.name + '>'
++                print(sdepth + '<' + child.name + '>' + \
++            escape(child.get_text()) + '</' + child.name + '>')
+ 
+ if __name__ == "__main__":
+     # Hack to make us not crash when we encounter characters that aren't ASCII
+@@ -805,11 +810,11 @@
+     elif args.text: p.parse_text(args.text, args.defines)
+     if args.to_json:
+         jsonify(p.root, True)
+-        print
++        print()
+     elif args.to_xml:
+-        print '<?xml version="1.0" encoding="UTF-8" ?>'
+-        print '<root>'
++        print('<?xml version="1.0" encoding="UTF-8" ?>')
++        print('<root>')
+         xmlify(p.root, True, 1)
+-        print '</root>'
++        print('</root>')
+     else:
+         print(p.root.debug())
+diff -Nur orig/data/tools/wesnoth/wmlparser3.py mod/data/tools/wesnoth/wmlparser3.py
+--- orig/data/tools/wesnoth/wmlparser3.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmlparser3.py	2020-04-04 13:33:20.044866014 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ 
+ """
+diff -Nur orig/data/tools/wesnoth/wmlparser.py mod/data/tools/wesnoth/wmlparser.py
+--- orig/data/tools/wesnoth/wmlparser.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmlparser.py	2020-04-04 13:32:11.344962901 +0200
+@@ -1,5 +1,9 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ # encoding: utf-8
++from __future__ import print_function
++from builtins import str
++from builtins import range
++from builtins import object
+ import wmldata, os, glob, sys
+ import re
+ 
+@@ -19,25 +23,25 @@
+ 
+     def __init__(self, parser, text):
+         self.text = "%s:%d: %s" % (parser.filename, parser.line, text)
+-        for i in xrange(len(parser.texts)):
++        for i in range(len(parser.texts)):
+             parent = parser.texts[-1 - i]
+             self.text += "\n " + " " * i + "from %s:%d" % (parent.filename, parent.line)
+ 
+     def __str__(self):
+         return self.text
+ 
+-class Parser:
++class Parser(object):
+     """
+     The main parser class. An instance of this is needed for parsing.
+     """
+ 
+-    class Macro:
++    class Macro(object):
+         """Class to hold one single macro."""
+         def __init__(self, name, params, text, textdomain):
+             self.name, self.params, self.text, self.textdomain =\
+                 name, params, text, textdomain
+ 
+-    class TextState:
++    class TextState(object):
+         def __init__(self, filename, text, textpos, line, current_path,
+             textdomain):
+             self.filename, self.text, self.textpos, self.line =\
+@@ -644,7 +648,7 @@
+         values += [value]
+ 
+         data = []
+-        for i in xrange(len(variables)):
++        for i in range(len(variables)):
+             try:
+                 key = wmldata.DataText(variables[i], values[i], translatable)
+                 key.set_meta(filename, line)
+@@ -822,7 +826,7 @@
+ 
+ If verbose, insert a linebreak after every brace and comma (put every item on its own line), otherwise, condense everything into a single line.
+ """
+-    print "{",
++    print("{", end=' ')
+     first = True
+     sdepth1 = "\n" + " " * depth
+     sdepth2 = sdepth1 + " "
+@@ -833,11 +837,11 @@
+             sys.stdout.write(",")
+         if verbose:
+             sys.stdout.write(sdepth2)
+-        print'"%s":' % child.name,
++        print('"%s":' % child.name, end=' ')
+         if child.get_type() == "DataSub":
+             jsonify(child, verbose, depth + 1)
+         else:
+-            print json.dumps(child.get_value()),
++            print(json.dumps(child.get_value()), end=' ')
+     if verbose:
+         sys.stdout.write(sdepth1)
+     sys.stdout.write("}")
+@@ -849,16 +853,16 @@
+         sdepth = "  " * depth
+     for child in tree.children():
+         if child.get_type() == "DataSub":
+-            print '%s<%s>' % (sdepth, child.name)
++            print('%s<%s>' % (sdepth, child.name))
+             xmlify(child, verbose, depth + 1)
+-            print '%s</%s>' % (sdepth, child.name)
++            print('%s</%s>' % (sdepth, child.name))
+         else:
+             if "\n" in child.get_value() or "\r" in child.get_value():
+-                print sdepth + '<' + child.name + '>' + \
+-            '<![CDATA[' + child.get_value() + ']]>' + '</' + child.name + '>'
++                print(sdepth + '<' + child.name + '>' + \
++            '<![CDATA[' + child.get_value() + ']]>' + '</' + child.name + '>')
+             else:
+-                print sdepth + '<' + child.name + '>' + \
+-            escape(child.get_value())  + '</' + child.name + '>'
++                print(sdepth + '<' + child.name + '>' + \
++            escape(child.get_value())  + '</' + child.name + '>')
+ 
+ if __name__ == "__main__":
+     import argparse, subprocess
+@@ -907,7 +911,7 @@
+     if args.verbose:
+         wmlparser.verbose = True
+         def gt(domain, x):
+-            print "gettext: '%s' '%s'" % (domain, x)
++            print("gettext: '%s' '%s'" % (domain, x))
+             return x
+         wmlparser.gettext = gt
+ 
+diff -Nur orig/data/tools/wesnoth/wmltools3.py mod/data/tools/wesnoth/wmltools3.py
+--- orig/data/tools/wesnoth/wmltools3.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmltools3.py	2020-04-04 13:34:09.472796307 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ """
+ wmltools.py -- Python routines for working with a Battle For Wesnoth WML tree
+diff -Nur orig/data/tools/wesnoth/wmltools.py mod/data/tools/wesnoth/wmltools.py
+--- orig/data/tools/wesnoth/wmltools.py	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth/wmltools.py	2020-04-04 13:33:54.788817015 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ 
+ """
+ wmltools.py -- Python routines for working with a Battle For Wesnoth WML tree
+@@ -6,6 +6,12 @@
+ """
+ 
+ from __future__ import print_function, unicode_literals, division
++from builtins import map
++from builtins import zip
++from builtins import str
++from builtins import range
++from past.builtins import basestring
++from builtins import object
+ from future_builtins import filter, map, zip
+ input = raw_input
+ range = xrange
+@@ -99,7 +105,7 @@
+     # value, trailing whitespace and comment.
+     return (leader.strip(), leader+"=", string_strip(value), comment)
+ 
+-class Forest:
++class Forest(object):
+     "Return an iterable directory forest object."
+     def __init__(self, dirpath, exclude=None):
+         "Get the names of all files under dirpath, ignoring version-control directories."
+@@ -391,7 +397,7 @@
+ # methods, and Python generates the remaining methods
+ # it comes with a speed penalty, but the alternative is defining six methods by hand...
+ @total_ordering
+-class Reference:
++class Reference(object):
+     "Describes a location by file and line."
+     def __init__(self, namespace, filename, lineno=None, docstring=None, args=None):
+         self.namespace = namespace
+@@ -407,7 +413,7 @@
+ 
+     def dump_references(self):
+         "Dump all known references to this definition."
+-        for (file, refs) in self.references.items():
++        for (file, refs) in list(self.references.items()):
+             print("    %s: %s" % (file, repr([x[0] for x in refs])[1:-1]))
+ 
+     def __eq__(self, other):
+@@ -437,7 +443,7 @@
+             return self.filename
+     __repr__ = __str__
+ 
+-class CrossRef:
++class CrossRef(object):
+     macro_reference = re.compile(r"\{([A-Z_][A-Za-z0-9_:]*)(?!\.)\b")
+     file_reference =  re.compile(r"[A-Za-z0-9{}.][A-Za-z0-9_/+{}.@-]*\.(" + "|".join(resource_extensions) + ")(?=(~.*)?)")
+     tag_parse = re.compile("\s*([a-z_]+)\s*=(.*)")
+@@ -784,7 +790,7 @@
+         "Transplant file references in files from filelist to a new CrossRef."
+         smallref = CrossRef()
+         for filename in self.fileref:
+-            for (referrer, referlines) in self.fileref[filename].references.items():
++            for (referrer, referlines) in list(self.fileref[filename].references.items()):
+                 if referrer in filelist:
+                     if filename not in smallref.fileref:
+                         smallref.fileref[filename] = Reference(None, filename)
+@@ -867,7 +873,7 @@
+         else:
+             return key in self.gettext
+ 
+-class Translations:
++class Translations(object):
+     "Wraps around Translation to support multiple languages and domains."
+     def __init__(self, topdir = ""):
+         self.translations = {}
+diff -Nur orig/data/tools/wesnoth_addon_manager mod/data/tools/wesnoth_addon_manager
+--- orig/data/tools/wesnoth_addon_manager	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth_addon_manager	2020-04-04 14:04:23.390273378 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """
+ add-on_manager.py -- a command-line client for the Wesnoth add-on server
+@@ -15,12 +15,12 @@
+ from wesnoth.campaignserver_client import CampaignClient
+ 
+ # This is the validation code for the -u arguments. It checks if the input path is valid
+-def valid_file_path(path):
+-    if os.path.isdir(path) or os.path.isfile(path):
+-        return path
++def valid_file_path(path):
++    if os.path.isdir(path) or os.path.isfile(path):
++        return path
+     else:
+         sys.stderr.write("No such file or directory: %s\n" % path)
+-        sys.exit(1)
++        sys.exit(1)
+     return None
+ 
+ if __name__ == "__main__":
+diff -Nur orig/data/tools/wmlflip mod/data/tools/wmlflip
+--- orig/data/tools/wmlflip	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlflip	2020-04-04 13:16:06.118294957 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ """
+ wmlflip -- coordinate transformation for .cfg macro calls.
+ 
+@@ -33,11 +33,17 @@
+ 
+ More transformations would be easy to write.
+ """
++from __future__ import print_function
+ 
+-import sys, os, time, getopt, cStringIO, re
++from past.builtins import cmp
++from future import standard_library
++standard_library.install_aliases()
++from builtins import zip
++from builtins import object
++import sys, os, time, getopt, io, re
+ from wesnoth.wmltools import *
+ 
+-class ParseArgs:
++class ParseArgs(object):
+     "Mine macro argument locations out of a .cfg file."
+     def __init__(self, fp, verbose=False):
+         self.fp = fp
+@@ -56,20 +62,20 @@
+             return self.fp.read(1)
+     def ungetchar(self, c):
+         if verbose:
+-            print "pushing back", c
++            print("pushing back", c)
+         self.pushback = c
+     def parse_until(self, enders):
+         "Parse until we reach specified terminator."
+         if self.verbose:
+             self.lead += "*"
+-            print self.lead + " parse_until(%s) starts" % enders
++            print(self.lead + " parse_until(%s) starts" % enders)
+         while True:
+             c = self.getchar()
+             if self.verbose:
+-                print self.lead + "I see", c
++                print(self.lead + "I see", c)
+             if c in enders:
+                 if self.verbose:
+-                    print self.lead + "parse_until(%s) ends" % enders
++                    print(self.lead + "parse_until(%s) ends" % enders)
+                     self.lead = self.lead[:-1]
+                 return c
+             elif c == '{':
+@@ -78,7 +84,7 @@
+         "We see a start of call."
+         if self.verbose:
+             self.lead += "*"
+-            print self.lead + "parse_call()"
++            print(self.lead + "parse_call()")
+         self.namestack.append(["", []])
+         # Fill in the name of the called macro
+         while True:
+@@ -88,12 +94,12 @@
+             else:
+                 break
+         if self.verbose:
+-            print self.lead + "name", self.namestack[-1]
++            print(self.lead + "name", self.namestack[-1])
+         # Discard if no arguments
+         if c == '}':
+             self.namestack.pop()
+             if self.verbose:
+-                print self.lead + "parse_call() ends"
++                print(self.lead + "parse_call() ends")
+                 self.lead = self.lead[:-1]
+             return
+         # If non-space, this is something like a filename include;
+@@ -103,7 +109,7 @@
+                 c =  self.getchar()
+                 if c == '}':
+                     if self.verbose:
+-                        print self.lead + "parse_call() ends"
++                        print(self.lead + "parse_call() ends")
+                         self.lead = self.lead[:-1]
+                     return
+         # It's a macro call with arguments;
+@@ -115,21 +121,21 @@
+         # Record the scope we just parsed
+         self.parsed.append(self.namestack.pop())
+         if self.verbose:
+-            print self.lead + "parse_call() ends"
++            print(self.lead + "parse_call() ends")
+             self.lead = self.lead[:-1]
+     def parse_actual(self):
+         "Parse an actual argument."
+         # Skip leading whitespace
+         if self.verbose:
+             self.lead += "*"
+-            print self.lead + "parse_actual() begins"
++            print(self.lead + "parse_actual() begins")
+         while True:
+             c = self.getchar()
+             if not c.isspace():
+                 break
+         if c == '}':
+             if self.verbose:
+-                print "** parse_actual() returns False"
++                print("** parse_actual() returns False")
+                 self.lead = self.lead[:-1]
+             return False
+         # Looks like we have a real argument
+@@ -146,7 +152,7 @@
+             argend = self.fp.tell()
+         elif c == '"':
+             if verbose:
+-                print self.lead + "starting string argument"
++                print(self.lead + "starting string argument")
+             self.parse_until(['"'])
+             argend = self.fp.tell()
+         else:
+@@ -155,7 +161,7 @@
+             self.ungetchar(ender)
+         self.namestack[-1][1].append((argstart, argend))
+         if self.verbose:
+-            print self.lead + "parse_actual() returns True"
++            print(self.lead + "parse_actual() returns True")
+             self.lead = self.lead[:-1]
+         return True
+ 
+@@ -191,10 +197,10 @@
+     fp.close()
+ 
+     # Get argument offsets from it.
+-    calls = ParseArgs(cStringIO.StringIO(content), verbose)
++    calls = ParseArgs(io.StringIO(content), verbose)
+ 
+     # Filter out irrelevant calls.
+-    parsed = filter(lambda x: x[0] in relevant, calls.parsed)
++    parsed = [x for x in calls.parsed if x[0] in relevant]
+ 
+     # Extract coordinate pair locations from macro arguments.
+     pairs = []
+@@ -250,23 +256,23 @@
+         elif switch in ('-x'):
+             flip_x = True
+         elif switch in ('-y'):
+-            print >>sys.stderr, "Vertical flip is not yet supported."
++            print("Vertical flip is not yet supported.", file=sys.stderr)
+             sys.exit(0)
+         elif switch == '-v':
+             verbose += 1
+     if verbose:
+-        print "Debugging output enabled."
++        print("Debugging output enabled.")
+ 
+     if mapfile:
+         (mx, my) = mapsize(mapfile)
+-        print >>sys.stderr, "%s is %d wide by %d high" % (mapfile, mx, my)
++        print("%s is %d wide by %d high" % (mapfile, mx, my), file=sys.stderr)
+ 
+     if arguments and not flip_x and not translate:
+-        print >>sys.stderr, "No coordinate transform is specified."
++        print("No coordinate transform is specified.", file=sys.stderr)
+         sys.exit(0)
+ 
+     if flip_x and not mapfile:
+-        print >>sys.stderr, "X flip transformation needs to know the map size.."
++        print("X flip transformation needs to know the map size..", file=sys.stderr)
+         sys.exit(0)
+ 
+     if translate:
+@@ -279,7 +285,7 @@
+         # For each file named on the command line...
+         for filename in arguments:
+             if verbose:
+-                print >>sys.stderr, "Processing file", filename
++                print("Processing file", filename, file=sys.stderr)
+ 
+             (content, pairs) = transformables(filename, relevant, verbose > 1)
+ 
+@@ -310,7 +316,7 @@
+                 # This is generic again
+                 target.append((xn, yn))
+                 if verbose:
+-                    print "(%d, %d) -> (%d, %d)" % (x, y, xn, yn)
++                    print("(%d, %d) -> (%d, %d)" % (x, y, xn, yn))
+ 
+             # Perform the actual transformation
+             for (((xs, xe), (ys, ye)), (xn, yn)) in zip(pairs, target):
+diff -Nur orig/data/tools/wmlindent mod/data/tools/wmlindent
+--- orig/data/tools/wmlindent	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlindent	2020-04-04 13:16:25.630268341 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """\
+ wmlindent - re-indent WML in a uniform way.
+diff -Nur orig/data/tools/wmllint mod/data/tools/wmllint
+--- orig/data/tools/wmllint	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmllint	2020-04-04 13:16:37.034252785 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ #
+ # wmllint -- check WML for conformance to the most recent dialect
+diff -Nur orig/data/tools/wmllint-1.4 mod/data/tools/wmllint-1.4
+--- orig/data/tools/wmllint-1.4	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmllint-1.4	2020-04-04 13:16:50.254234752 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ #
+ # wmllint -- check WML for conformance to the most recent dialect
+ #
+diff -Nur orig/data/tools/wmlscope mod/data/tools/wmlscope
+--- orig/data/tools/wmlscope	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlscope	2020-04-04 13:17:02.310218306 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ #
+ # wmlscope -- generate reports on WML macro and resource usage
+diff -Nur orig/data/tools/wmlunits mod/data/tools/wmlunits
+--- orig/data/tools/wmlunits	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlunits	2020-04-04 13:17:13.706202761 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """
+ wmlunits -- tool to output information on all units in HTML
+diff -Nur orig/data/tools/wmlvalidator mod/data/tools/wmlvalidator
+--- orig/data/tools/wmlvalidator	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlvalidator	2020-04-04 13:17:54.290147401 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ """
+ wmltest -- tool to validate the syntax and semantics of WML.
+ 
+@@ -8,6 +8,7 @@
+ #-define verbosity levels better
+ 
+ from __future__ import print_function
++from builtins import object
+ import wesnoth.wmldata as wmldata
+ import wesnoth.wmlparser as wmlparser
+ import wesnoth.wmlgrammar as wmlgrammar
+@@ -16,7 +17,7 @@
+ def print_indent(string, depth, char=' '):
+     print("%s%s" % (depth * char, string))
+ 
+-class Validator:
++class Validator(object):
+     """
+     The class that takes a wmlgrammar object to validate wml trees with
+     """
+@@ -35,7 +36,7 @@
+         normal = '\033[0m'
+         bold = '\033[1m'
+         underline = '\033[4m'
+-        for k, v in self.validate_result.iteritems():
++        for k, v in self.validate_result.items():
+             print("%s%s%s" % (bold, k, normal))
+             for i in v:
+                 print("%s#%d: %s%s %s" % (underline, i['line'], i['origin'], normal, i['message']))
+diff -Nur orig/data/tools/wmlxgettext mod/data/tools/wmlxgettext
+--- orig/data/tools/wmlxgettext	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlxgettext	2020-04-04 13:18:10.150125766 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ 
+ # encoding: utf-8
+diff -Nur orig/run_wml_tests mod/run_wml_tests
+--- orig/run_wml_tests	2020-02-02 02:45:55.000000000 +0100
++++ mod/run_wml_tests	2020-04-04 13:09:53.582803128 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """
+ This script runs a sequence of wml unit test scenarios.
