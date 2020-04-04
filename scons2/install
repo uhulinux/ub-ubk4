@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-python2 setup.py install --prefix=/usr \
-    --skip-build \
-    --optimize=1 \
-    --standard-lib \
-    --root="$UB_INSTALLDIR"
-
-rm -f ${UB_INSTALLDIR}/usr/bin/*.bat
