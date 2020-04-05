@@ -4,8 +4,5 @@
 iconv -f iso8859-1 -t utf-8 WHATSNEW > WHATSNEW.conv && mv -f WHATSNEW.conv WHATSNEW
 iconv -f iso8859-1 -t utf-8 README.txt > README.txt.conv && mv -f README.txt.conv README.txt
 
-# for python2
-python2 setup.py install --skip-build --root="$UB_INSTALLDIR"
-
 # for python3
 python3 setup.py install --skip-build --root="$UB_INSTALLDIR"
