@@ -1,8 +1,4 @@
 #!/bin/sh -eux
 
-ub_compile \
-	--with-gsl \
-	--with-aa-driver \
-	--with-gtk-driver \
-	--with-x11-driver \
-	--with-x
+qmake DESTDIR=${UB_INSTALLDIR}/bin XaoS.pro
+ub_compile
