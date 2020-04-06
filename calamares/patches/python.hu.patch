@@ -1,6 +1,6 @@
 diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_MESSAGES/python.po
---- orig/lang/python/hu/LC_MESSAGES/python.po	2020-01-28 17:42:21.000000000 +0100
-+++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-01-30 22:10:05.869089161 +0100
+--- orig/lang/python/hu/LC_MESSAGES/python.po	2020-03-27 23:43:50.000000000 +0100
++++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-04-06 23:04:08.091521160 +0200
 @@ -53,12 +53,12 @@
  
  #: src/modules/services-systemd/main.py:35
@@ -18,17 +18,17 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  msgid ""
 @@ -98,11 +98,11 @@
  
- #: src/modules/unpackfs/main.py:41
+ #: src/modules/unpackfs/main.py:44
  msgid "Filling up filesystems."
 -msgstr "Fájlrendszerek betöltése."
 +msgstr "Fájlrendszer átmásolás."
  
- #: src/modules/unpackfs/main.py:184
+ #: src/modules/unpackfs/main.py:188
  msgid "rsync failed with error code {}."
 -msgstr "az rsync elhalt a(z) {} hibakóddal"
 +msgstr "Az rsync elhalt a(z) {} hibakóddal"
  
- #: src/modules/unpackfs/main.py:245 src/modules/unpackfs/main.py:268
+ #: src/modules/unpackfs/main.py:249 src/modules/unpackfs/main.py:272
  msgid "Failed to unpack image \"{}\""
 @@ -113,7 +113,7 @@
  "Failed to find unsquashfs, make sure you have the squashfs-tools package "
@@ -38,15 +38,15 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
 +"Az unsquashfs nem található,a squashfs-tools csomag telepítve van?"
  " van."
  
- #: src/modules/unpackfs/main.py:370
+ #: src/modules/unpackfs/main.py:369
 @@ -127,7 +127,7 @@
  
- #: src/modules/unpackfs/main.py:376
+ #: src/modules/unpackfs/main.py:375
  msgid "Bad mount point for root partition"
 -msgstr "Rossz betöltési pont a root partíciónál"
 +msgstr "Rossz root partíció csatolási pont"
  
- #: src/modules/unpackfs/main.py:377
+ #: src/modules/unpackfs/main.py:376
  msgid "rootMountPoint is \"{}\", which does not exist, doing nothing"
 @@ -156,7 +156,7 @@
  
@@ -103,14 +103,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/initcpiocfg/main.py:37
  msgid "Configuring mkinitcpio."
-@@ -290,20 +290,20 @@
- 
- #: src/modules/packages/main.py:64 src/modules/packages/main.py:74
- msgid "Install packages."
--msgstr "Csomagok telepítése."
-+msgstr "Csomag telepítések."
- 
- #: src/modules/packages/main.py:67
+@@ -293,14 +293,14 @@
  #, python-format
  msgid "Installing one package."
  msgid_plural "Installing %(num)d packages."
@@ -118,7 +111,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
 +msgstr[0] "Csomag telepítése."
  msgstr[1] "%(num)d csomag telepítése."
  
- #: src/modules/packages/main.py:70
+ #: src/modules/packages/main.py:74
  #, python-format
  msgid "Removing one package."
  msgid_plural "Removing %(num)d packages."
@@ -127,16 +120,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  msgstr[1] "%(num)d csomag eltávolítása."
  
  #: src/modules/bootloader/main.py:51
-@@ -312,7 +312,7 @@
- 
- #: src/modules/removeuser/main.py:34
- msgid "Remove live user from target system"
--msgstr "Éles felhasználó eltávolítása a cél rendszerből"
-+msgstr "UHU felhasználó eltávolítása a cél rendszerből"
- 
- #: src/modules/hwclock/main.py:35
- msgid "Setting hardware clock."
-@@ -320,11 +320,11 @@
+@@ -313,11 +313,11 @@
  
  #: src/modules/dracut/main.py:36
  msgid "Creating initramfs with dracut."
@@ -150,7 +134,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/dracut/main.py:59
  msgid "The exit code was {}"
-@@ -332,7 +332,7 @@
+@@ -325,7 +325,7 @@
  
  #: src/modules/initramfscfg/main.py:41
  msgid "Configuring initramfs."
@@ -159,17 +143,12 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/openrcdmcryptcfg/main.py:34
  msgid "Configuring OpenRC dmcrypt service."
-@@ -344,15 +344,15 @@
- 
- #: src/modules/dummypython/main.py:44
- msgid "Dummy python job."
--msgstr "Hamis Python feladat."
-+msgstr "Próba Python feladat."
- 
- #: src/modules/dummypython/main.py:97
+@@ -342,11 +342,11 @@
+ #: src/modules/dummypython/main.py:46 src/modules/dummypython/main.py:102
+ #: src/modules/dummypython/main.py:103
  msgid "Dummy python step {}"
 -msgstr "Hamis {}. Python lépés"
-+msgstr "Próba {}. Python lépés"
++msgstr "Hamis Python lépés: {}"
  
  #: src/modules/localecfg/main.py:39
  msgid "Configuring locales."

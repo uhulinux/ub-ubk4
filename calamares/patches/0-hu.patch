@@ -1,7 +1,7 @@
-diff -Nur orig/lang/calamares_hu.ts mod/lang/calamares_hu.ts
---- orig/lang/calamares_hu.ts	2020-02-27 23:26:29.000000000 +0100
-+++ mod/lang/calamares_hu.ts	2020-03-07 17:28:05.508174951 +0100
-@@ -732,7 +732,7 @@
+diff -Naur orig/lang/calamares_hu.ts patched/lang/calamares_hu.ts
+--- orig/lang/calamares_hu.ts	2020-03-27 23:43:50.000000000 +0100
++++ patched/lang/calamares_hu.ts	2020-04-06 22:42:44.410552914 +0200
+@@ -755,7 +755,7 @@
      <message>
        <location filename="../src/modules/partition/gui/CreatePartitionDialog.ui" line="188"/>
        <source>Flags:</source>
@@ -10,7 +10,7 @@ diff -Nur orig/lang/calamares_hu.ts mod/lang/calamares_hu.ts
      </message>
      <message>
        <location filename="../src/modules/partition/gui/CreatePartitionDialog.ui" line="161"/>
-@@ -1079,7 +1079,7 @@
+@@ -1102,7 +1102,7 @@
      <message>
        <location filename="../src/modules/partition/gui/EditExistingPartitionDialog.ui" line="149"/>
        <source>Flags:</source>
@@ -19,69 +19,75 @@ diff -Nur orig/lang/calamares_hu.ts mod/lang/calamares_hu.ts
      </message>
      <message>
        <location filename="../src/modules/partition/gui/EditExistingPartitionDialog.cpp" line="278"/>
-@@ -2992,12 +2992,12 @@
+@@ -3038,12 +3038,12 @@
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="53"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="52"/>
        <source>Set flags on partition %1.</source>
 -      <translation>Zászlók beállítása a partíción %1.</translation>
-+      <translation>Jelzők beállítása a partíción %1.</translation>
++      <translation>Jelzők beállítása a partíción: %1.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="57"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="56"/>
        <source>Set flags on %1MiB %2 partition.</source>
 -      <translation>flags beállítása a %1MiB %2 partíción.</translation>
 +      <translation>Jelzők beállítása a %1MiB %2 partíción.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="61"/>
-@@ -3007,7 +3007,7 @@
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="60"/>
+@@ -3053,12 +3053,12 @@
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="72"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="71"/>
        <source>Clear flags on partition &lt;strong&gt;%1&lt;/strong&gt;.</source>
 -      <translation>Zászlók törlése a partíción: &lt;strong&gt;%1&lt;/strong&gt;.</translation>
 +      <translation>Jelzők törlése a partíción: &lt;strong&gt;%1&lt;/strong&gt;.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="77"/>
-@@ -3022,12 +3022,12 @@
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="76"/>
+       <source>Clear flags on %1MiB &lt;strong&gt;%2&lt;/strong&gt; partition.</source>
+-      <translation>flags eltávolítása a %1MiB &lt;strong&gt;%2&lt;/strong&gt; partíción.</translation>
++      <translation>Jelzők eltávolítása a %1MiB &lt;strong&gt;%2&lt;/strong&gt; partíción.</translation>
+     </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="115"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="91"/>
+@@ -3068,12 +3068,12 @@
+     <message>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="114"/>
        <source>Clearing flags on %1MiB &lt;strong&gt;%2&lt;/strong&gt; partition.</source>
 -      <translation>Flag-ek eltávolítása a %1MiB &lt;strong&gt;%2&lt;/strong&gt; partíción.</translation>
 +      <translation>Jelzők eltávolítása a %1MiB &lt;strong&gt;%2&lt;/strong&gt; partíción.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="130"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="129"/>
        <source>Setting flags &lt;strong&gt;%3&lt;/strong&gt; on %1MiB &lt;strong&gt;%2&lt;/strong&gt; partition.</source>
 -      <translation>Flag-ek beállítása &lt;strong&gt;%3&lt;/strong&gt; a %1MiB &lt;strong&gt;%2&lt;/strong&gt; partíción.</translation>
 +      <translation>Jelzők beállítása &lt;strong&gt;%3&lt;/strong&gt; a %1MiB &lt;strong&gt;%2&lt;/strong&gt; partíción.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="81"/>
-@@ -3037,7 +3037,7 @@
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="80"/>
+@@ -3083,7 +3083,7 @@
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="85"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="84"/>
        <source>Flag partition &lt;strong&gt;%1&lt;/strong&gt; as &lt;strong&gt;%2&lt;/strong&gt;.</source>
 -      <translation>Zászlók beállítása &lt;strong&gt;%1&lt;/strong&gt; ,mint &lt;strong&gt;%2&lt;/strong&gt;.</translation>
 +      <translation>Jelzők beállítása &lt;strong&gt;%1&lt;/strong&gt; ,mint &lt;strong&gt;%2&lt;/strong&gt;.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="98"/>
-@@ -3047,7 +3047,7 @@
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="97"/>
+@@ -3093,7 +3093,7 @@
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="110"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="109"/>
        <source>Clearing flags on partition &lt;strong&gt;%1&lt;/strong&gt;.</source>
 -      <translation>Zászlók törlése a partíción: &lt;strong&gt;%1&lt;/strong&gt;.</translation>
 +      <translation>Jelzők törlése a partíción: &lt;strong&gt;%1&lt;/strong&gt;.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="119"/>
-@@ -3057,7 +3057,7 @@
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="118"/>
+@@ -3103,7 +3103,7 @@
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="123"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="122"/>
        <source>Setting flags &lt;strong&gt;%2&lt;/strong&gt; on partition &lt;strong&gt;%1&lt;/strong&gt;.</source>
 -      <translation>Zászlók beállítása &lt;strong&gt;%2&lt;/strong&gt; a &lt;strong&gt;%1&lt;/strong&gt; partíción.</translation>
 +      <translation>Jelzők beállítása &lt;strong&gt;%2&lt;/strong&gt; a &lt;strong&gt;%1&lt;/strong&gt; partíción.</translation>
      </message>
      <message>
-       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="136"/>
+       <location filename="../src/modules/partition/jobs/SetPartitionFlagsJob.cpp" line="135"/>

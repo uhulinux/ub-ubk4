@@ -1,7 +1,7 @@
 diff -Naur orig/src/modules/packages/main.py patched/src/modules/packages/main.py
---- orig/src/modules/packages/main.py	2019-07-06 00:52:35.000000000 +0200
-+++ patched/src/modules/packages/main.py	2019-07-31 13:12:16.815526554 +0200
-@@ -256,6 +256,7 @@
+--- orig/src/modules/packages/main.py	2020-03-27 23:43:50.000000000 +0100
++++ patched/src/modules/packages/main.py	2020-04-06 22:55:09.144336019 +0200
+@@ -260,6 +260,7 @@
  
      def install(self, pkgs, from_local=False):
          check_target_env_call(["apt-get", "-q", "-y", "install"] + pkgs)
@@ -9,7 +9,7 @@ diff -Naur orig/src/modules/packages/main.py patched/src/modules/packages/main.p
  
      def remove(self, pkgs):
          check_target_env_call(["apt-get", "--purge", "-q", "-y",
-@@ -439,16 +440,19 @@
+@@ -465,16 +466,19 @@
          group_packages = len(package_list)
          if key == "install":
              _change_mode(INSTALL)
