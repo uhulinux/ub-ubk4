@@ -1,6 +1,6 @@
 diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_MESSAGES/python.po
 --- orig/lang/python/hu/LC_MESSAGES/python.po	2020-03-27 23:43:50.000000000 +0100
-+++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-04-06 23:04:08.091521160 +0200
++++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-04-06 23:41:50.781577250 +0200
 @@ -53,12 +53,12 @@
  
  #: src/modules/services-systemd/main.py:35
@@ -30,16 +30,17 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/unpackfs/main.py:249 src/modules/unpackfs/main.py:272
  msgid "Failed to unpack image \"{}\""
-@@ -113,7 +113,7 @@
+@@ -113,8 +113,7 @@
  "Failed to find unsquashfs, make sure you have the squashfs-tools package "
  "installed"
  msgstr ""
 -"unsquashfs nem található, győződj meg róla a squashfs-tools csomag telepítve"
-+"Az unsquashfs nem található,a squashfs-tools csomag telepítve van?"
- " van."
+-" van."
++"Az unsquashfs nem található, a squashfs-tools csomag telepítve van?"
  
  #: src/modules/unpackfs/main.py:369
-@@ -127,7 +127,7 @@
+ msgid "No mount point for root partition"
+@@ -127,7 +126,7 @@
  
  #: src/modules/unpackfs/main.py:375
  msgid "Bad mount point for root partition"
@@ -48,7 +49,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/unpackfs/main.py:376
  msgid "rootMountPoint is \"{}\", which does not exist, doing nothing"
-@@ -156,7 +156,7 @@
+@@ -156,7 +155,7 @@
  
  #: src/modules/displaymanager/main.py:516
  msgid "KDM config file {!s} does not exist"
@@ -57,7 +58,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/displaymanager/main.py:577
  msgid "Cannot write LXDM configuration file"
-@@ -164,7 +164,7 @@
+@@ -164,7 +163,7 @@
  
  #: src/modules/displaymanager/main.py:578
  msgid "LXDM config file {!s} does not exist"
@@ -66,7 +67,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/displaymanager/main.py:661
  msgid "Cannot write LightDM configuration file"
-@@ -172,7 +172,7 @@
+@@ -172,7 +171,7 @@
  
  #: src/modules/displaymanager/main.py:662
  msgid "LightDM config file {!s} does not exist"
@@ -75,7 +76,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/displaymanager/main.py:736
  msgid "Cannot configure LightDM"
-@@ -188,23 +188,23 @@
+@@ -188,23 +187,23 @@
  
  #: src/modules/displaymanager/main.py:769
  msgid "SLIM config file {!s} does not exist"
@@ -103,7 +104,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/initcpiocfg/main.py:37
  msgid "Configuring mkinitcpio."
-@@ -293,14 +293,14 @@
+@@ -293,14 +292,14 @@
  #, python-format
  msgid "Installing one package."
  msgid_plural "Installing %(num)d packages."
@@ -120,7 +121,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  msgstr[1] "%(num)d csomag eltávolítása."
  
  #: src/modules/bootloader/main.py:51
-@@ -313,11 +313,11 @@
+@@ -313,11 +312,11 @@
  
  #: src/modules/dracut/main.py:36
  msgid "Creating initramfs with dracut."
@@ -134,7 +135,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/dracut/main.py:59
  msgid "The exit code was {}"
-@@ -325,7 +325,7 @@
+@@ -325,7 +324,7 @@
  
  #: src/modules/initramfscfg/main.py:41
  msgid "Configuring initramfs."
@@ -143,7 +144,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/openrcdmcryptcfg/main.py:34
  msgid "Configuring OpenRC dmcrypt service."
-@@ -342,11 +342,11 @@
+@@ -342,11 +341,11 @@
  #: src/modules/dummypython/main.py:46 src/modules/dummypython/main.py:102
  #: src/modules/dummypython/main.py:103
  msgid "Dummy python step {}"

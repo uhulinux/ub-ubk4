@@ -1,6 +1,6 @@
 diff -Naur orig/src/modules/users/users.conf patched/src/modules/users/users.conf
---- orig/src/modules/users/users.conf	2020-01-28 17:42:21.000000000 +0100
-+++ patched/src/modules/users/users.conf	2020-01-30 22:24:35.874503671 +0100
+--- orig/src/modules/users/users.conf	2020-03-27 23:43:50.000000000 +0100
++++ patched/src/modules/users/users.conf	2020-04-06 23:39:41.527904325 +0200
 @@ -15,11 +15,6 @@
  # Adjust to your Distribution defaults.
  defaultGroups:
@@ -20,5 +20,5 @@ diff -Naur orig/src/modules/users/users.conf patched/src/modules/users/users.con
 -sudoersGroup:    wheel
 +# sudoersGroup:    wheel
  
- # Setting this to false , causes the root account to be disabled.
- setRootPassword: true
+ # Setting this to false, causes the root account to be disabled.
+ # When disabled, hides the "Use the same password for administrator"
