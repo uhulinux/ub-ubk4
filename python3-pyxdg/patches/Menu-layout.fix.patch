@@ -1,0 +1,191 @@
+diff -Nur orig/test/resources.py mod/test/resources.py
+--- orig/test/resources.py	2017-03-23 16:15:28.000000000 +0100
++++ mod/test/resources.py	2020-04-05 20:48:24.000000000 +0200
+@@ -448,6 +448,46 @@
+ </Menu>
+ """
+ 
++layout_menu = """<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
++ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
++<Menu>
++
++  <Name>Layout</Name>
++  <DefaultLayout show_empty="true">
++    <Merge type="menus"/>
++    <Merge type="files"/>
++    <Separator/>
++    <Menuname>More</Menuname>
++  </DefaultLayout>
++
++  <Menu>
++    <Name>More</Name>
++  </Menu>
++
++  <Menu>
++    <Name>Games</Name>
++    <Layout>
++      <Menuname>Steam</Menuname>
++      <Separator/>
++      <Merge type="menus"/>
++    </Layout>
++    <Menu>
++      <Name>Action</Name>
++    </Menu>
++    <Menu>
++      <Name>Steam</Name>
++    </Menu>
++    <Menu>
++      <Name>Arcade</Name>
++    </Menu>
++  </Menu>
++
++  <Menu>
++    <Name>Accessories</Name>
++  </Menu>
++</Menu>
++"""
++
+ mime_globs2_a = """#globs2 MIME data file
+ 55:text/x-diff:*.patch
+ 50:text/x-c++src:*.C:cs
+diff -Nur orig/test/test-menu.py mod/test/test-menu.py
+--- orig/test/test-menu.py	2017-03-23 16:15:28.000000000 +0100
++++ mod/test/test-menu.py	2020-04-05 20:50:37.000000000 +0200
+@@ -27,35 +27,62 @@
+             print(depth*"-" + "\x1b[01m" + entry.Name + "\x1b[0m")
+     depth -= 1
+ 
++def entry_names(entries):
++    names = []
++    for entry in entries:
++        if isinstance(entry, xdg.Menu.Menu):
++            names.append(entry.getName())
++        elif isinstance(entry, xdg.Menu.MenuEntry):
++            names.append(entry.DesktopEntry.getName())
++        elif isinstance(entry, xdg.Menu.Separator):
++            names.append("---")
++        elif isinstance(entry, xdg.Menu.Header):
++            names.append(entry.Name)
++    return names
++
+ class MenuTest(unittest.TestCase):
+     def setUp(self):
+         self.tmpdir = tempfile.mkdtemp()
+         self.test_file = os.path.join(self.tmpdir, "applications.menu")
+         with open(self.test_file, "w") as f:
+             f.write(resources.applications_menu)
+-    
++
+     def tearDown(self):
+         shutil.rmtree(self.tmpdir)
+-    
++
+     def test_parse_menu(self):
+         menu = xdg.Menu.parse(self.test_file)
+         show_menu(menu)
+-        
++
+         # Check these don't throw an error
+         menu.getName()
+         menu.getGenericName()
+         menu.getComment()
+         menu.getIcon()
+-    
++
++    def test_parse_layout(self):
++        test_file = os.path.join(self.tmpdir, "layout.menu")
++        with io.open(test_file, "w") as f:
++            f.write(resources.layout_menu)
++        menu = xdg.Menu.parse(test_file)
++        show_menu(menu)
++
++        assert len(menu.Entries) == 4
++        assert entry_names(menu.Entries) == ["Accessories", "Games", "---", "More"]
++
++        games_menu = menu.getMenu("Games")
++        assert len(games_menu.Entries) == 4
++        assert entry_names(games_menu.Entries) == ["Steam", "---", "Action", "Arcade"]
++
+     def test_unicode_menuentry(self):
+         test_file = os.path.join(self.tmpdir, "unicode.desktop")
+         with io.open(test_file, 'w', encoding='utf-8') as f:
+             f.write(resources.unicode_desktop)
+-        
++
+         entry = xdg.Menu.MenuEntry(test_file)
+         assert entry == entry
+         assert not entry < entry
+-    
++
+     def test_empty_legacy_dirs(self):
+         legacy_dir = os.path.join(self.tmpdir, "applnk")
+         os.mkdir(legacy_dir)
+@@ -64,22 +91,26 @@
+         test_file = os.path.join(self.tmpdir, "legacy.menu")
+         with open(test_file, "w") as f:
+             f.write(resources.legacy_menu.replace("legacy_dir", legacy_dir))
+-        
++
+         menu = xdg.Menu.parse(test_file)
+-        
++
+         # The menu should be empty besides the root named "Legacy"
+         show_menu(menu)
+-        
++
+         assert len(menu.Entries) == 0
+-    
++
+     def test_kde_legacy_dirs(self):
+         """This was failing on systems which didn't have kde-config installed.
+         We just check that parsing doesn't throw an error.
+-        
++
+         See fd.o bug #56426.
+         """
+         test_file = os.path.join(self.tmpdir, "kde_legacy.menu")
+         with open(test_file, "w") as f:
+             f.write(resources.kde_legacy_menu)
+-        
++
+         menu = xdg.Menu.parse(test_file)
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff -Nur orig/xdg/Menu.py mod/xdg/Menu.py
+--- orig/xdg/Menu.py	2017-03-23 16:15:28.000000000 +0100
++++ mod/xdg/Menu.py	2020-04-05 20:51:39.000000000 +0200
+@@ -710,11 +710,12 @@
+             inline_header=_to_bool(node.attrib.get("inline_header", True)),
+             inline_alias=_to_bool(node.attrib.get("inline_alias", False))
+         )
++        order = []
+         for child in node:
+             tag, text = child.tag, child.text
+             text = text.strip() if text else None
+             if tag == "Menuname" and text:
+-                layout.order.append([
++                order.append([
+                     "Menuname",
+                     text,
+                     _to_bool(child.attrib.get("show_empty", False)),
+@@ -724,14 +725,15 @@
+                     _to_bool(child.attrib.get("inline_alias", False))
+                 ])
+             elif tag == "Separator":
+-                layout.order.append(['Separator'])
++                order.append(['Separator'])
+             elif tag == "Filename" and text:
+-                layout.order.append(["Filename", text])
++                order.append(["Filename", text])
+             elif tag == "Merge":
+-                layout.order.append([
++                order.append([
+                     "Merge",
+                     child.attrib.get("type", "all")
+                 ])
++        layout.order = order
+         return layout
+ 
+     def parse_move(self, node):
