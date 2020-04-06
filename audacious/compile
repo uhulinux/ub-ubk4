@@ -1,11 +1,16 @@
 #!/bin/sh -eux
 
-ub_compile \
-	--with-buildstamp='UHU-Linux'
+ub_compile
 
 ub_install
 
 cd plugins
+#export PKG_CONFIG_PATH=$UB_INSTALLDIR/usr/lib/pkgconfig:/usr/lib/pkgconfig
+#export CFLAGS=-I$UB_INSTALLDIR/usr/include
+#export CPPFLAGS=-I$UB_INSTALLDIR/usr/include
+#export LDFLAGS='-L$UB_INSTALLDIR/usr/lib -laudcore'
+
+rm -f meson.build
 export AUDACIOUS_CFLAGS=-I$UB_INSTALLDIR/usr/include
 export AUDACIOUS_LIBS="-L$UB_INSTALLDIR/usr/lib -laudcore"
 sed -i -e "s#^plugindir=.*#plugindir=/usr/lib/audacious#" configure{,.ac}
