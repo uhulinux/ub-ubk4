@@ -1,10 +1,9 @@
 #!/bin/sh -eux
 
-autoconf
+autoreconf -vif
 ub_compile \
 	--libexecdir=/usr/lib/genius \
 	--localstatedir=/var \
-	--enable-gtksourceview \
 	--disable-update-mimedb \
 	--disable-scrollkeeper \
 	--disable-extra-gcc-optimization \
