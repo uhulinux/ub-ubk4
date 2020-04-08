@@ -1,21 +1,21 @@
 diff -Naur orig/Modules/GNUInstallDirs.cmake patched/Modules/GNUInstallDirs.cmake
---- orig/Modules/GNUInstallDirs.cmake	2020-02-05 15:19:24.000000000 +0100
-+++ patched/Modules/GNUInstallDirs.cmake	2020-03-01 22:32:24.872292305 +0100
+--- orig/Modules/GNUInstallDirs.cmake	2020-03-20 11:26:14.000000000 +0100
++++ patched/Modules/GNUInstallDirs.cmake	2020-04-08 19:27:06.437984987 +0200
 @@ -241,9 +241,9 @@
-           "Please enable at least one language before including GNUInstallDirs.")
-       else()
-         if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
--          set(_LIBDIR_DEFAULT "lib64")
-+          set(_LIBDIR_DEFAULT "lib")
-           if(DEFINED _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX)
--            set(__LAST_LIBDIR_DEFAULT "lib64")
-+            set(__LAST_LIBDIR_DEFAULT "lib")
-           endif()
+       endif()
+     else() # not debian, rely on CMAKE_SIZEOF_VOID_P:
+       if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+-        set(_LIBDIR_DEFAULT "lib64")
++        set(_LIBDIR_DEFAULT "lib")
+         if(DEFINED _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX)
+-          set(__LAST_LIBDIR_DEFAULT "lib64")
++          set(__LAST_LIBDIR_DEFAULT "lib")
          endif()
        endif()
+     endif()
 diff -Naur orig/Modules/Platform/UnixPaths.cmake patched/Modules/Platform/UnixPaths.cmake
---- orig/Modules/Platform/UnixPaths.cmake	2020-02-05 15:19:24.000000000 +0100
-+++ patched/Modules/Platform/UnixPaths.cmake	2020-03-01 22:39:36.290214625 +0100
+--- orig/Modules/Platform/UnixPaths.cmake	2020-03-20 11:26:14.000000000 +0100
++++ patched/Modules/Platform/UnixPaths.cmake	2020-04-08 19:25:30.581703881 +0200
 @@ -60,7 +60,7 @@
    )
  
@@ -36,8 +36,8 @@ diff -Naur orig/Modules/Platform/UnixPaths.cmake patched/Modules/Platform/UnixPa
 +set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
 +set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS FALSE)
 diff -Naur orig/Source/cmExportInstallFileGenerator.cxx patched/Source/cmExportInstallFileGenerator.cxx
---- orig/Source/cmExportInstallFileGenerator.cxx	2020-02-05 15:19:24.000000000 +0100
-+++ patched/Source/cmExportInstallFileGenerator.cxx	2020-03-02 04:47:44.235309509 +0100
+--- orig/Source/cmExportInstallFileGenerator.cxx	2020-03-20 11:26:14.000000000 +0100
++++ patched/Source/cmExportInstallFileGenerator.cxx	2020-04-08 19:25:30.581703881 +0200
 @@ -200,11 +200,7 @@
         << "get_filename_component(_IMPORT_PREFIX"
         << " \"${CMAKE_CURRENT_LIST_FILE}\" PATH)\n";

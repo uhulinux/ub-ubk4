@@ -1,6 +1,6 @@
 diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2019-10-16 23:19:58.000000000 +0200
-+++ patched/browser/app/profile/firefox.js	2019-10-23 21:03:21.838894677 +0200
+--- orig/browser/app/profile/firefox.js	2020-04-07 22:02:18.517354672 +0200
++++ patched/browser/app/profile/firefox.js	2020-04-07 21:52:38.524239364 +0200
 @@ -19,6 +19,15 @@
    #endif
  #endif
@@ -17,7 +17,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.hiddenWindowChromeURL", "chrome://browser/content/hiddenWindowMac.xhtml");
  
  // Enables some extra Extension System Logging (can reduce performance)
-@@ -60,7 +69,8 @@
+@@ -56,7 +65,8 @@
  
  // Disable add-ons that are not installed by the user in all scopes by default.
  // See the SCOPE constants in AddonManager.jsm for values to use here.
@@ -27,8 +27,8 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -78,8 +88,8 @@
- pref("extensions.legacy.exceptions", "testpilot@cliqz.com,@testpilot-containers,jid1-NeEaf3sAHdKHPA@jetpack,@activity-streams,pulse@mozilla.com,@testpilot-addon,@min-vid,tabcentertest1@mozilla.com,snoozetabs@mozilla.com,speaktome@mozilla.com,hoverpad@mozilla.com");
+@@ -71,8 +81,8 @@
+ pref("extensions.webextensions.background-delayed-startup", true);
  
  // Require signed add-ons by default
 -pref("extensions.langpacks.signatures.required", true);
@@ -38,7 +38,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
  
  // Enable extensionStorage storage actor by default
-@@ -142,7 +152,7 @@
+@@ -135,7 +145,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
  #ifndef XP_WIN
@@ -47,7 +47,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -275,7 +285,7 @@
+@@ -258,7 +268,7 @@
  pref("browser.urlbar.ctrlCanonizesURLs", true);
  
  // Control autoFill behavior
@@ -56,7 +56,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.urlbar.speculativeConnect.enabled", true);
  
  // Whether bookmarklets should be filtered out of Address Bar matches.
-@@ -310,7 +320,7 @@
+@@ -288,7 +298,7 @@
  pref("browser.urlbar.maxCharsForSearchSuggestions", 20);
  
  pref("browser.urlbar.formatting.enabled", true);
@@ -65,7 +65,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  pref("browser.urlbar.oneOffSearches", true);
  
-@@ -773,7 +783,7 @@
+@@ -752,7 +762,7 @@
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
  #ifdef UNIX_BUT_NOT_MAC
