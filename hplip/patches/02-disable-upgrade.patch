@@ -1,0 +1,15 @@
+diff -Nur orig/upgrade.py mod/upgrade.py
+--- orig/upgrade.py	2019-01-24 12:05:12.000000000 +0100
++++ mod/upgrade.py	2019-02-25 16:41:07.103786044 +0100
+@@ -207,6 +207,11 @@
+ if os.getenv("HPLIP_DEBUG"):
+     log.set_level('debug')
+ 
++log.error("HPLIP upgrade is disabled by UHU-Linux for security reasons, if you like to upgrade HPLIP, use the apt, or synaptic package manager.")
++clean_exit(1)
++
++
++
+ for o, a in opts:
+     if o in ('-h', '--help'):
+         usage()
