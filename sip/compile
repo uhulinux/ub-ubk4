@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-mkdir -p build{,-py2,-pyqt5,-pyqt5-py2}
+mkdir -p build{,-pyqt5}
 
 cd build
 python3 ../configure.py
@@ -8,12 +8,4 @@ ub_make
 
 cd ../build-pyqt5
 python3 ../configure.py --sip-module PyQt5.sip --no-tools
-ub_make
-
-cd ../build-py2
-python2 ../configure.py
-ub_make
-
-cd ../build-pyqt5-py2
-python2 ../configure.py --sip-module PyQt5.sip --no-tools
 ub_make
