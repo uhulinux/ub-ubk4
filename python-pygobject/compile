@@ -1,8 +1,0 @@
-#!/bin/sh -eux
-
-# First copy the source to elsewhere
-cp -a . "$UB_OBJECTDIR"
-
-# Second build and install the python2 part
-python2 setup.py build
-python2 setup.py install --root="$UB_INSTALLDIR"
