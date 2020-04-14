@@ -1,1 +1,1 @@
-urllist https://inkscape.org/en/release/ | grep -E '^([0-9.]+)$' | grep '^[0-9]\.' | sort -V | tail -n 1
+urllist https://inkscape.org/en/release/ | grep -E 'inkscape-([0-9.]+)' | sort -V | tail -n 1 | sed s/inkscape-//
