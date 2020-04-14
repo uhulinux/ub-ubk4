@@ -1,8 +1,8 @@
 #!/bin/sh -eux
 
-sed s%/usr/local/bin/python%/usr/bin/python%g -i INSTALLDIR/lib/mozilla/python/komodo/Crypto/Util/RFC1751.py
-sed s%/usr/local/bin/python%/usr/bin/python%g -i INSTALLDIR/lib/mozilla/python/komodo/pathtools/patterns.py
-sed s%/usr/local/bin/python%/usr/bin/python%g -i INSTALLDIR/lib/python/lib/python2.7/cgi.py
+sed /usr\\/local/d -i INSTALLDIR/lib/mozilla/python/komodo/Crypto/Util/RFC1751.py
+sed /usr\\/local/d -i INSTALLDIR/lib/mozilla/python/komodo/pathtools/patterns.py
+sed /usr\\/local/d -i INSTALLDIR/lib/python/lib/python2.7/cgi.py
 
 ./install.sh -s -I "$UB_INSTALLDIR"/usr/share/Komodo-Edit-"$UB_VERSION_MAJOR"
 ln -sf ../share/Komodo-Edit-"$UB_VERSION_MAJOR"/bin/komodo "$UB_INSTALLDIR"/usr/bin/komodo
