@@ -1,7 +1,15 @@
 #!/bin/sh -eux
 
-export PYTHON=python2
+autoreconf -vif
+
+sed 's:-DGIMP_protect_DISABLE_DEPRECATED:-DGIMP_DISABLE_DEPRECATED:g' -i configure #615144
+	fgrep -q GIMP_DISABLE_DEPRECATED configure
+
+export XDG_DATA_DIRS=/usr/share
+
 ub_compile \
-	--enable-python \
+    --disable-check-update \
+	--disable-python \
 	--disable-gtk-doc \
-	--without-webkit
+	--without-webkit \
+	--without-xvfb-run

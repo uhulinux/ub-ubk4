@@ -1,0 +1,39 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2020-02-23 17:52:12.000000000 +0100
++++ mod/configure.ac	2020-04-13 18:55:59.063618060 +0200
+@@ -1096,7 +1096,7 @@
+ GIMP_DETECT_CFLAGS(SSE_MATH_CFLAG, '-mfpmath=sse')
+ GIMP_DETECT_CFLAGS(SSE2_CFLAG, '-msse2')
+ SSE2_EXTRA_CFLAGS="$SSE_MATH_CFLAG $SSE2_CFLAG"
+-CFLAGS="$intrinsics_save_CFLAGS $SSE2_EXTRA_CFLAGS"
++CFLAGS="$SSE2_EXTRA_CFLAGS $intrinsics_save_CFLAGS"
+ 
+ AC_MSG_CHECKING(whether we can compile SSE2 intrinsics)
+ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <emmintrin.h>]],[[__m128i one = _mm_set1_epi32 (1);]])],
+@@ -1111,7 +1111,7 @@
+ 
+ GIMP_DETECT_CFLAGS(SSE4_1_CFLAG, '-msse4.1')
+ SSE4_1_EXTRA_CFLAGS="$SSE_MATH_CFLAG $SSE4_1_CFLAG"
+-CFLAGS="$intrinsics_save_CFLAGS $SSE4_1_EXTRA_CFLAGS"
++CFLAGS="$SSE4_1_EXTRA_CFLAGS $intrinsics_save_CFLAGS"
+ 
+ AC_MSG_CHECKING(whether we can compile SSE4.1 intrinsics)
+ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <smmintrin.h>]],[[__v4sf a, b, c; c = _mm_blend_ps(a, b, 0x08);]])],
+@@ -2367,7 +2367,7 @@
+ 
+ gtk_mac_integration_ok=no
+ if test "x$platform_osx" != xno &&
+-   test "x`$PKG_CONFIG --variable=target gtk+-2.0`" == "xquartz"; then
++   test "x`$PKG_CONFIG --variable=target gtk+-2.0`" = "xquartz"; then
+ 
+   PKG_CHECK_MODULES(GTK_MAC_INTEGRATION, gtk-mac-integration-gtk2 >= gtk_mac_integration_required_version,
+     gtk_mac_integration_ok=yes,
+@@ -2740,7 +2740,7 @@
+ # Disable deprecated APIs
+ #########################
+ 
+-CPPFLAGS="${CPPFLAGS} -DGIMP_DISABLE_DEPRECATED -DBABL_DISABLE_DEPRECATED -DGSEAL_ENABLE"
++CPPFLAGS="${CPPFLAGS} -DGIMP_protect_DISABLE_DEPRECATED -DBABL_DISABLE_DEPRECATED -DGSEAL_ENABLE"
+ 
+ # Make sure not to disable deprecated APIs for unreleased versions.
+ # We must build without problems with future releases of libraries
