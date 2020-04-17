@@ -1,12 +1,15 @@
 diff -Naur orig/third_party/closure_compiler/compiler.py patched/third_party/closure_compiler/compiler.py
---- orig/third_party/closure_compiler/compiler.py	2019-03-11 23:01:15.000000000 +0100
-+++ patched/third_party/closure_compiler/compiler.py	2019-03-12 23:25:38.690123603 +0100
-@@ -24,7 +24,7 @@
-   and produce minified output."""
+--- orig/third_party/closure_compiler/compiler.py	2020-04-03 06:11:02.000000000 +0200
++++ patched/third_party/closure_compiler/compiler.py	2020-04-14 17:03:47.559958970 +0200
+@@ -16,9 +16,9 @@
+ import processor
  
-   _JAR_COMMAND = [
--    "java",
-+    "/usr/lib/java/jre/bin/java",
-     "-jar",
-     "-Xms1024m",
-     "-client",
+ 
+-_CURRENT_DIR = os.path.join(os.path.dirname(__file__))
++_CURRENT_DIR = "/usr"
+ _JAVA_BIN = "java"
+-_JDK_PATH = os.path.join(_CURRENT_DIR, "..", "jdk", "current", "bin", _JAVA_BIN)
++_JDK_PATH = os.path.join(_CURRENT_DIR, "lib", "java", "jre", "bin", _JAVA_BIN)
+ _JAVA_PATH = _JDK_PATH if os.path.isfile(_JDK_PATH) else _JAVA_BIN
+ 
+ 

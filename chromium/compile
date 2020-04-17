@@ -101,7 +101,7 @@ export LDFLAGS+="-Wl,-rpath,/usr/lib/chromium/ -Wl,--no-keep-memory"
 out/Release/gn gen out/Release -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python2
 
 # gn args list - kihagyható, de segít a lehetséges opciók megadásához
-# out/Release/gn args --list $UB_COMPILEDIR/out/Release
+out/Release/gn args --list $UB_COMPILEDIR/out/Release > $UB_COMPILEDIR/out/Release/gn-args-full.list
 
 # ninja
 LC_ALL=C ninja -j 2 -C out/Release -v pdf chrome chrome_sandbox chromedriver
