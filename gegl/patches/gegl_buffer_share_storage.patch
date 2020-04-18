@@ -1,0 +1,59 @@
+From 337eab200514d0837a8c5d5471477839367b2ffd Mon Sep 17 00:00:00 2001
+From: Ell <ell_se@yahoo.com>
+Date: Thu, 20 Feb 2020 12:35:34 +0200
+Subject: [PATCH] buffer: add gegl_buffer_share_storage()
+
+... which checks if a pair of buffers share the same underlying
+tile storage.  This can be used, e.g., for certain optimizations,
+as will be done in GIMP.
+---
+ gegl/buffer/gegl-buffer.c | 10 ++++++++++
+ gegl/buffer/gegl-buffer.h | 12 ++++++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/gegl/buffer/gegl-buffer.c b/gegl/buffer/gegl-buffer.c
+index 8a482af7f..826b00b41 100644
+--- a/gegl/buffer/gegl-buffer.c
++++ b/gegl/buffer/gegl-buffer.c
+@@ -1182,6 +1182,16 @@ gegl_buffer_unlock (GeglBuffer *buffer)
+ }
+ #endif
+ 
++gboolean
++gegl_buffer_share_storage (GeglBuffer *buffer1,
++                           GeglBuffer *buffer2)
++{
++  g_return_val_if_fail (GEGL_IS_BUFFER (buffer1), FALSE);
++  g_return_val_if_fail (GEGL_IS_BUFFER (buffer2), FALSE);
++
++  return buffer1->tile_storage == buffer2->tile_storage;
++}
++
+ void
+ gegl_buffer_emit_changed_signal (GeglBuffer          *buffer,
+                                  const GeglRectangle *rect)
+diff --git a/gegl/buffer/gegl-buffer.h b/gegl/buffer/gegl-buffer.h
+index 308fc892a..51d5512ad 100644
+--- a/gegl/buffer/gegl-buffer.h
++++ b/gegl/buffer/gegl-buffer.h
+@@ -697,6 +697,18 @@ void            gegl_buffer_linear_close      (GeglBuffer    *buffer,
+ const GeglRectangle * gegl_buffer_get_abyss   (GeglBuffer           *buffer);
+ 
+ 
++/**
++ * gegl_buffer_share_storage:
++ * @buffer1: a #GeglBuffer.
++ * @buffer2: a #GeglBuffer.
++ *
++ * Checks if a pair of buffers share the same underlying tile storage.
++ *
++ * Returns TRUE if @buffer1 and @buffer2 share the same storage.
++ */
++gboolean gegl_buffer_share_storage (GeglBuffer *buffer1,
++                                    GeglBuffer *buffer2);
++
+ 
+ /**
+  * gegl_buffer_signal_connect:
+-- 
+2.24.1
