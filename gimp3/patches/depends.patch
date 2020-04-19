@@ -1,6 +1,18 @@
+diff -Naur orig/app/sanity.c patched/app/sanity.c
+--- orig/app/sanity.c	2020-04-19 20:29:53.000000000 +0200
++++ patched/app/sanity.c	2020-04-19 20:59:39.345126572 +0200
+@@ -518,7 +518,7 @@
+ 
+ #define GEGL_REQUIRED_MAJOR 0
+ #define GEGL_REQUIRED_MINOR 4
+-#define GEGL_REQUIRED_MICRO 23
++#define GEGL_REQUIRED_MICRO 22
+ 
+   gegl_get_version (&gegl_major_version,
+                     &gegl_minor_version,
 diff -Naur orig/meson.build patched/meson.build
---- orig/meson.build	2020-04-14 01:10:54.000000000 +0200
-+++ patched/meson.build	2020-04-14 16:17:37.697734299 +0200
+--- orig/meson.build	2020-04-19 20:29:54.000000000 +0200
++++ patched/meson.build	2020-04-19 20:56:23.505005790 +0200
 @@ -352,7 +352,7 @@
  freetype2         = dependency('freetype2',          version: '>='+freetype2_minver)
  gdk_pixbuf_minver = '2.30.8'
