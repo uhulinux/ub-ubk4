@@ -1,0 +1,12 @@
+diff -Nur orig/src/fcxml.c mod/src/fcxml.c
+--- orig/src/fcxml.c	2019-07-29 07:17:34.000000000 +0200
++++ mod/src/fcxml.c	2020-04-20 15:03:02.236280313 +0200
+@@ -3621,7 +3621,7 @@
+ 	    FcConfigMessage (0, FcSevereError, "Cannot %s default config file", load ? "load" : "scan");
+ 	return FcFalse;
+     }
+-    return ret;
++    return FcTrue;
+ }
+ 
+ FcBool
