@@ -1,0 +1,32 @@
+From 5dd4e22efd05d55833c4634b56e473812b5acbf2 Mon Sep 17 00:00:00 2001
+From: Michael Biebl <biebl@debian.org>
+Date: Tue, 27 Nov 2018 18:36:27 +0100
+Subject: [PATCH] Move D-Bus policy file to /usr/share/dbus-1/system.d/
+
+To better support stateless systems with an empty /etc, the old location
+in /etc/dbus-1/system.d/ should only be used for local admin changes.
+Package provided D-Bus policy files are supposed to be installed in
+/usr/share/dbus-1/system.d/.
+
+This is supported since dbus 1.9.18.
+
+https://lists.freedesktop.org/archives/dbus/2015-July/016746.html
+---
+ data/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/Makefile.am b/data/Makefile.am
+index 7c53902..335a04d 100644
+--- a/data/Makefile.am
++++ b/data/Makefile.am
+@@ -15,7 +15,7 @@ $(service_DATA): $(service_in_files) Makefile
+ 
+ # ----------------------------------------------------------------------------------------------------
+ 
+-dbusconfdir = $(sysconfdir)/dbus-1/system.d
++dbusconfdir = $(datadir)/dbus-1/system.d
+ dbusconf_in_files = org.freedesktop.PolicyKit1.conf.in
+ dbusconf_DATA = $(dbusconf_in_files:.conf.in=.conf)
+ 
+-- 
+2.24.1
