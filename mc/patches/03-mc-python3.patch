@@ -1,6 +1,6 @@
 diff -Nur orig/src/vfs/extfs/helpers/s3+.in mod/src/vfs/extfs/helpers/s3+.in
---- orig/src/vfs/extfs/helpers/s3+.in	2019-06-16 19:49:31.000000000 +0200
-+++ mod/src/vfs/extfs/helpers/s3+.in	2020-04-21 18:12:36.820195242 +0200
+--- orig/src/vfs/extfs/helpers/s3+.in	2020-01-01 16:52:34.000000000 +0100
++++ mod/src/vfs/extfs/helpers/s3+.in	2020-04-21 16:19:51.924624965 +0200
 @@ -1,4 +1,4 @@
 -#! @PYTHON@
 +#!/usr/bin/python3
@@ -62,15 +62,15 @@ diff -Nur orig/src/vfs/extfs/helpers/s3+.in mod/src/vfs/extfs/helpers/s3+.in
  	def convDate(awsdatetime):
  		m = expr.match(awsdatetime)
 -		ye,mo,da,ho,mi,se = map(int,m.groups())
-+		ye,mo,da,ho,mi,se = list(map(int,m.groups())
++		ye,mo,da,ho,mi,se = list(map(int,m.groups()))
  
  		dt = datetime.datetime(ye,mo,da,ho,mi,se, tzinfo=pytz.utc)
  		return dt.astimezone(tz).strftime('%m-%d-%Y %H:%M')
-diff -Nur orig/src/vfs/extfs/helpers/uc1541.in mod/src/vfs/extfs/helpers/uc1541.in
---- orig/src/vfs/extfs/helpers/uc1541.in	2019-06-16 19:49:31.000000000 +0200
-+++ mod/src/vfs/extfs/helpers/uc1541.in	2020-04-21 18:06:31.544674820 +0200
+diff -Nur orig/src/vfs/extfs/helpers/uc1541 mod/src/vfs/extfs/helpers/uc1541
+--- orig/src/vfs/extfs/helpers/uc1541	2020-01-01 16:52:34.000000000 +0100
++++ mod/src/vfs/extfs/helpers/uc1541	2020-04-21 16:15:32.956897078 +0200
 @@ -1,4 +1,4 @@
--#! @PYTHON@
+-#!/usr/bin/env python
 +#!/usr/bin/python3
  """
  UC1541 Virtual filesystem
