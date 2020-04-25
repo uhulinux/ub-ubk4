@@ -1,12 +1,14 @@
-diff -Nur orig/sudo.cpp mod/sudo.cpp
---- orig/sudo.cpp	2016-09-24 00:47:03.000000000 +0200
-+++ mod/sudo.cpp	2016-12-14 12:56:04.346842224 +0100
-@@ -97,7 +97,7 @@
-     if (app_lxsu == cmd)
-         mBackend = BACK_SU;
-     else if (app_lxsudo == cmd || app_master == cmd)
--        mBackend = BACK_SUDO;
-+        mBackend = BACK_SU;
- }
+diff -Naur orig/sudo.cpp patched/sudo.cpp
+--- orig/sudo.cpp	2020-04-23 20:44:01.000000000 +0200
++++ patched/sudo.cpp	2020-04-25 20:33:37.135999280 +0200
+@@ -198,9 +198,7 @@
  
- Sudo::~Sudo()
+     if (BACK_NONE == mBackend)
+     {
+-        //we were invoked through unknown link (or renamed binary)
+-        usage(tr("%1: no backend chosen!").arg(app_master));
+-        return 1;
++        mBackend = BACK_SU;
+     }
+ 
+     mChildPid = forkpty(&mPwdFd, nullptr, nullptr, nullptr);
