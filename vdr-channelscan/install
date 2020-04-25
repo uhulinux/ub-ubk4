@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_install
+mkdir -p ${UB_INSTALLDIR}/var/lib/vdr/plugins/channelscan
+cp -r transponders/. ${UB_INSTALLDIR}/var/lib/vdr/plugins/channelscan
