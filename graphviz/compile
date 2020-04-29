@@ -1,13 +1,12 @@
 #!/bin/sh -eux
 
-autoreconf -vif
+rm -f CMakeLists.txt
+NOCONFIGURE=1 ./autogen.sh
+
 export LIBPOSTFIX=/
-export LUA=lua5.1
 export PERL=perl5
 ./configure \
     --prefix=/usr \
 	--enable-ocaml=no \
-	--with-tclsh=/usr/bin/tclsh \
-	--enable-tcl=yes \
 	--enable-perl=yes
 ub_make

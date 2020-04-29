@@ -1,6 +1,9 @@
 #!/bin/sh -eux
 
-autoreconf -vif
+rm -f CMakeLists.txt
+NOCONFIGURE=1 ./autogen.sh
+
+export CFLAGS=`pkg-config pango --cflags`
 export LIBPOSTFIX=/
 ub_compile \
     --prefix=/usr \
