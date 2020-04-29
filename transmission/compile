@@ -1,19 +1,8 @@
 #!/bin/sh -eux
 
-mkdir -p build/third-party/dht-cc379e406d/src
-mkdir -p build/third-party/utp-7c4f19abdf/src
-mkdir -p build/third-party/b64-c1e3323498/src
-mkdir -p build/third-party/natpmp-cf7f452d66/src
-mkdir -p build/third-party/event-c51b159cff/src
-mkdir -p build/third-party/miniupnpc-5de2bcb561/src
+git submodule update --init
 
-cp dht*.tar.gz build/third-party/dht-cc379e406d/src/cc379e406d.tar.gz
-cp libutp* build/third-party/utp-7c4f19abdf/src/7c4f19abdf.tar.gz
-cp libb64* build/third-party/b64-c1e3323498/src/c1e3323498.tar.gz
-cp cf7f452d66.tar.gz build/third-party/natpmp-cf7f452d66/src/cf7f452d66.tar.gz
-cp c51b159cff.tar.gz build/third-party/event-c51b159cff/src/c51b159cff.tar.gz
-cp 5de2bcb561.tar.gz build/third-party/miniupnpc-5de2bcb561/src/5de2bcb561.tar.gz
-
+mkdir -p build
 export CFLAGS+=" -I/usr/include/openssl-1.0"
 export CPPFLAGS+=" -I/usr/include/openssl-1.0"
 export LDFLAGS+=" -L/usr/lib/openssl-1.0"
@@ -22,7 +11,7 @@ export CXXFLAGS+=" -I/usr/include/openssl-1.0"
 cd build
 cmake \
 	-DCMAKE_INSTALL_PREFIX=/usr \
-	-DCMAKE_TYPEE=Release \
+	-DCMAKE_TYPE=Release \
 ..
 
 ub_make
