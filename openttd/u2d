@@ -1,1 +1,1 @@
-geturl http://binaries.openttd.org/releases/ | grep lynx | sed -r 's/\/index\.html//g' | sed -r 's/.*\///g' | grep -E '\.[0-9]$' | sort -V | tail -n 1
+urllist https://cdn.openttd.org/openttd-releases/ | grep -E '\.[0-9]$' | sort -V | tail -n 1
