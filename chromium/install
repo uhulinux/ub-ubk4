@@ -14,9 +14,6 @@ if [ -f out/Release/icudtl.dat ]; then
 mv out/Release/icudtl.dat "$UB_INSTALLDIR"/usr/lib/chromium/
 fi
 
-mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/swiftshader
-mv out/Release/swiftshader/*.so "$UB_INSTALLDIR"/usr/lib/chromium/swiftshader/
-
 mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/locales
 mv out/Release/locales/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/locales/
 
