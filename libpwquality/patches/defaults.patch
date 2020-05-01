@@ -1,0 +1,57 @@
+diff -Naur orig/src/pwqprivate.h patched/src/pwqprivate.h
+--- orig/src/pwqprivate.h	2019-10-31 13:10:37.000000000 +0100
++++ patched/src/pwqprivate.h	2020-04-21 01:11:59.501123941 +0200
+@@ -40,14 +40,14 @@
+         int type;
+ };
+ 
+-#define PWQ_DEFAULT_DIFF_OK      1
+-#define PWQ_DEFAULT_MIN_LENGTH   8
++#define PWQ_DEFAULT_DIFF_OK      0
++#define PWQ_DEFAULT_MIN_LENGTH   0
+ #define PWQ_DEFAULT_DIG_CREDIT   0
+ #define PWQ_DEFAULT_UP_CREDIT    0
+ #define PWQ_DEFAULT_LOW_CREDIT   0
+ #define PWQ_DEFAULT_OTH_CREDIT   0
+ #define PWQ_DEFAULT_DICT_CHECK   1
+-#define PWQ_DEFAULT_USER_CHECK   1
++#define PWQ_DEFAULT_USER_CHECK   0
+ #define PWQ_DEFAULT_ENFORCING    1
+ #define PWQ_DEFAULT_RETRY_TIMES  1
+ #define PWQ_DEFAULT_ENFORCE_ROOT 0
+@@ -57,7 +57,7 @@
+ #define PWQ_TYPE_STR             2
+ #define PWQ_TYPE_SET             3
+ 
+-#define PWQ_BASE_MIN_LENGTH      6 /* used when lower than this value of min len is set */
++#define PWQ_BASE_MIN_LENGTH      0 /* used when lower than this value of min len is set */
+ #define PWQ_NUM_CLASSES          4
+ #define PWQ_NUM_GENERATION_TRIES 3 /* how many times to try to generate the random password if it fails the check */
+ #define PWQ_MIN_WORD_LENGTH      4
+diff -Naur orig/src/pwquality.conf patched/src/pwquality.conf
+--- orig/src/pwquality.conf	2019-10-31 13:10:37.000000000 +0100
++++ patched/src/pwquality.conf	2020-04-21 01:12:42.965154821 +0200
+@@ -3,12 +3,12 @@
+ #
+ # Number of characters in the new password that must not be present in the
+ # old password.
+-# difok = 1
++# difok = 0
+ #
+ # Minimum acceptable size for the new password (plus one if
+ # credits are not disabled which is the default). (See pam_cracklib manual.)
+ # Cannot be set to lower value than 6.
+-# minlen = 8
++# minlen = 0
+ #
+ # The maximum credit for having digits in the new password. If less than 0
+ # it is the minimum number of digits in the new password.
+@@ -52,7 +52,7 @@
+ #
+ # Whether to check if it contains the user name in some form.
+ # The check is enabled if the value is not 0.
+-# usercheck = 1
++# usercheck = 0
+ #
+ # Whether the check is enforced by the PAM module and possibly other
+ # applications.
