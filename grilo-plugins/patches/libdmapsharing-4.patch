@@ -1,0 +1,2805 @@
+diff -Naur orig/meson.build patched/meson.build
+--- orig/meson.build	2020-02-14 15:24:00.000000000 +0100
++++ patched/meson.build	2020-05-03 00:59:52.184346875 +0200
+@@ -62,7 +62,12 @@
+ gthread_dep = dependency('gthread-2.0', required: false)
+ json_glib_dep = dependency('json-glib-1.0', required: false)
+ libarchive_dep = dependency('libarchive', required: false)
+-libdmapsharing_dep = dependency('libdmapsharing-3.0', version: '>= 2.9.12', required: false)
++libdmapsharing4_dep = dependency('libdmapsharing-4.0', version: '>= 3.9.4', required: false)
++if libdmapsharing4_dep.found()
++    libdmapsharing_dep = libdmapsharing4_dep
++else
++    libdmapsharing_dep = dependency('libdmapsharing-3.0', version: '>= 2.9.12', required: false)
++endif
+ libgdata_dep = dependency('libgdata', version: '>= 0.9.1', required: false)
+ libmediaart_dep = dependency('libmediaart-2.0', required: false)
+ libsoup_dep = dependency('libsoup-2.4', required: false)
+diff -Naur orig/src/dmap/grl-common.c patched/src/dmap/grl-common.c
+--- orig/src/dmap/grl-common.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-common.c	2020-05-03 00:56:27.336158878 +0200
+@@ -33,13 +33,27 @@
+ #include <stdlib.h>
+ #include <libdmapsharing/dmap.h>
+ 
++#include "grl-dmap-compat.h"
+ #include "grl-common.h"
+ 
+ gchar *
+-grl_dmap_build_url (DMAPMdnsBrowserService *service)
++grl_dmap_build_url (DmapMdnsService *service)
+ {
+-  return g_strdup_printf ("%s://%s:%u",
+-                          service->service_name,
+-                          service->host,
+-                          service->port);
++  gchar *url = NULL;
++  gchar *service_name, *host;
++  guint port;
++
++  service_name = grl_dmap_service_get_service_name (service);
++  host         = grl_dmap_service_get_host (service);
++  port         = grl_dmap_service_get_port (service);
++
++  url = g_strdup_printf ("%s://%s:%u",
++                          service_name,
++                          host,
++                          port);
++
++  g_free (service_name);
++  g_free (host);
++
++  return url;
+ }
+diff -Naur orig/src/dmap/grl-common.h patched/src/dmap/grl-common.h
+--- orig/src/dmap/grl-common.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-common.h	2020-05-03 00:56:27.336158878 +0200
+@@ -24,9 +24,6 @@
+ #ifndef _GRL_COMMON_H_
+ #define _GRL_COMMON_H_
+ 
+-#include <grilo.h>
+-#include <libdmapsharing/dmap.h>
+-
+ typedef struct {
+   GrlSourceResultCb callback;
+   GrlSource *source;
+@@ -41,9 +38,9 @@
+ 
+ typedef struct {
+   ResultCbAndArgs cb;
+-  DMAPDb *db;
++  DmapDb *db;
+ } ResultCbAndArgsAndDb;
+ 
+-gchar *grl_dmap_build_url (DMAPMdnsBrowserService *service);
++gchar *grl_dmap_build_url (DmapMdnsService *service);
+ 
+ #endif /* _GRL_COMMON_H_ */
+diff -Naur orig/src/dmap/grl-daap.c patched/src/dmap/grl-daap.c
+--- orig/src/dmap/grl-daap.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap.c	2020-05-03 00:56:27.336158878 +0200
+@@ -33,6 +33,7 @@
+ #include <stdlib.h>
+ #include <libdmapsharing/dmap.h>
+ 
++#include "grl-daap-compat.h"
+ #include "grl-common.h"
+ #include "grl-daap.h"
+ #include "grl-daap-db.h"
+@@ -42,7 +43,7 @@
+ /* --------- Logging  -------- */
+ 
+ #define GRL_LOG_DOMAIN_DEFAULT daap_log_domain
+-GRL_LOG_DOMAIN_STATIC(daap_log_domain);
++GRL_LOG_DOMAIN_STATIC (daap_log_domain);
+ 
+ /* --- Plugin information --- */
+ 
+@@ -52,12 +53,12 @@
+ /* --- Grilo DAAP Private --- */
+ 
+ struct _GrlDaapSourcePrivate {
+-  DMAPMdnsBrowserService *service;
++  DmapMdnsService *service;
+ };
+ 
+ /* --- Data types --- */
+ 
+-static GrlDaapSource *grl_daap_source_new (DMAPMdnsBrowserService *service);
++static GrlDaapSource *grl_daap_source_new (DmapMdnsService *service);
+ 
+ static void grl_daap_source_finalize (GObject *object);
+ 
+@@ -74,16 +75,16 @@
+                                     GrlSourceSearchSpec *ss);
+ 
+ 
+-static void grl_daap_service_added_cb (DMAPMdnsBrowser *browser,
+-                                       DMAPMdnsBrowserService *service,
++static void grl_daap_service_added_cb (DmapMdnsBrowser *browser,
++                                       DmapMdnsService *service,
+                                        GrlPlugin *plugin);
+ 
+-static void grl_daap_service_removed_cb (DMAPMdnsBrowser *browser,
++static void grl_daap_service_removed_cb (DmapMdnsBrowser *browser,
+                                          const gchar *service_name,
+                                          GrlPlugin *plugin);
+ 
+ /* ===================== Globals  ======================= */
+-static DMAPMdnsBrowser *browser;
++static DmapMdnsBrowser *browser;
+ /* Maps URIs to DBs */
+ static GHashTable *connections;
+ /* Map DAAP services to Grilo media sources */
+@@ -106,24 +107,24 @@
+   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+ 
+-  browser     = dmap_mdns_browser_new (DMAP_MDNS_BROWSER_SERVICE_TYPE_DAAP);
++  browser     = dmap_mdns_browser_new (DMAP_MDNS_SERVICE_TYPE_DAAP);
+   connections = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+   sources     = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+ 
+   g_signal_connect (G_OBJECT (browser),
+-                    "service-added",
++                   "service-added",
+                     G_CALLBACK (grl_daap_service_added_cb),
+                     (gpointer) plugin);
+ 
+   g_signal_connect (G_OBJECT (browser),
+-                    "service-removed",
++                   "service-removed",
+                     G_CALLBACK (grl_daap_service_removed_cb),
+                     (gpointer) plugin);
+ 
+   if (!dmap_mdns_browser_start (browser, &error)) {
+     GRL_DEBUG ("error starting browser. code: %d message: %s",
+-               error->code,
+-               error->message);
++                error->code,
++                error->message);
+     g_error_free (error);
+ 
+     g_hash_table_unref (connections);
+@@ -138,12 +139,12 @@
+ GRL_PLUGIN_DEFINE (GRL_MAJOR,
+                    GRL_MINOR,
+                    DAAP_PLUGIN_ID,
+-                   "DAAP",
+-                   "A plugin for browsing DAAP servers",
+-                   "W. Michael Petullo",
++                  "DAAP",
++                  "A plugin for browsing DAAP servers",
++                  "W. Michael Petullo",
+                    VERSION,
+-                   "LGPL",
+-                   "http://www.flyn.org",
++                  "LGPL",
++                  "http://www.flyn.org",
+                    grl_daap_plugin_init,
+                    NULL,
+                    NULL);
+@@ -153,8 +154,10 @@
+ G_DEFINE_TYPE_WITH_PRIVATE (GrlDaapSource, grl_daap_source, GRL_TYPE_SOURCE)
+ 
+ static GrlDaapSource *
+-grl_daap_source_new (DMAPMdnsBrowserService *service)
++grl_daap_source_new (DmapMdnsService *service)
+ {
++  gchar *name;
++  gchar *service_name;
+   gchar *source_desc;
+   gchar *source_id;
+ 
+@@ -162,20 +165,25 @@
+ 
+   GRL_DEBUG ("grl_daap_source_new");
+ 
+-  source_desc = g_strdup_printf (SOURCE_DESC_TEMPLATE, service->name);
+-  source_id = g_strdup_printf (SOURCE_ID_TEMPLATE, service->name);
++  name = grl_dmap_service_get_name (service);
++  service_name = grl_dmap_service_get_service_name (service);
++
++  source_desc = g_strdup_printf (SOURCE_DESC_TEMPLATE, name);
++  source_id = g_strdup_printf (SOURCE_ID_TEMPLATE, name);
+ 
+   source = g_object_new (GRL_DAAP_SOURCE_TYPE,
+-                         "source-id",   source_id,
+-                         "source-name", service->name,
+-                         "source-desc", source_desc,
+-                         "supported-media", GRL_SUPPORTED_MEDIA_AUDIO,
++                        "source-id",   source_id,
++                        "source-name", service_name,
++                        "source-desc", source_desc,
++                        "supported-media", GRL_SUPPORTED_MEDIA_AUDIO,
+                          NULL);
+ 
+   source->priv->service = service;
+ 
+   g_free (source_desc);
+   g_free (source_id);
++  g_free (service_name);
++  g_free (name);
+ 
+   return source;
+ }
+@@ -209,14 +217,14 @@
+ static void
+ grl_daap_do_browse (ResultCbAndArgsAndDb *cb_and_db)
+ {
+-  grl_daap_db_browse(GRL_DAAP_DB(cb_and_db->db),
+-                     cb_and_db->cb.container,
+-                     cb_and_db->cb.source,
+-                     cb_and_db->cb.op_id,
+-                     cb_and_db->cb.skip,
+-                     cb_and_db->cb.count,
+-                     cb_and_db->cb.callback,
+-                     cb_and_db->cb.user_data);
++  grl_daap_db_browse (GRL_DAAP_DB (cb_and_db->db),
++                      cb_and_db->cb.container,
++                      cb_and_db->cb.source,
++                      cb_and_db->cb.op_id,
++                      cb_and_db->cb.skip,
++                      cb_and_db->cb.count,
++                      cb_and_db->cb.callback,
++                      cb_and_db->cb.user_data);
+ 
+   g_free (cb_and_db);
+ }
+@@ -224,19 +232,19 @@
+ static void
+ grl_daap_do_search (ResultCbAndArgsAndDb *cb_and_db)
+ {
+-  grl_daap_db_search(GRL_DAAP_DB(cb_and_db->db),
+-                     cb_and_db->cb.source,
+-                     cb_and_db->cb.op_id,
+-                     (GHRFunc) cb_and_db->cb.predicate,
+-                     cb_and_db->cb.predicate_data,
+-                     cb_and_db->cb.callback,
+-                     cb_and_db->cb.user_data);
++  grl_daap_db_search (GRL_DAAP_DB (cb_and_db->db),
++                      cb_and_db->cb.source,
++                      cb_and_db->cb.op_id,
++                      (GHRFunc) cb_and_db->cb.predicate,
++                      cb_and_db->cb.predicate_data,
++                      cb_and_db->cb.callback,
++                      cb_and_db->cb.user_data);
+ 
+   g_free (cb_and_db);
+ }
+ 
+ static void
+-browse_connected_cb (DMAPConnection       *connection,
++browse_connected_cb (DmapConnection       *connection,
+                      gboolean              result,
+                      const char           *reason,
+                      ResultCbAndArgsAndDb *cb_and_db)
+@@ -261,7 +269,7 @@
+ }
+ 
+ static void
+-search_connected_cb (DMAPConnection       *connection,
++search_connected_cb (DmapConnection       *connection,
+                      gboolean              result,
+                      const char           *reason,
+                      ResultCbAndArgsAndDb *cb_and_db)
+@@ -286,8 +294,8 @@
+ }
+ 
+ static void
+-grl_daap_service_added_cb (DMAPMdnsBrowser *browser,
+-                           DMAPMdnsBrowserService *service,
++grl_daap_service_added_cb (DmapMdnsBrowser *browser,
++                           DmapMdnsService *service,
+                            GrlPlugin *plugin)
+ {
+   GrlRegistry   *registry = grl_registry_get_default ();
+@@ -301,13 +309,16 @@
+                                 GRL_SOURCE (source),
+                                 NULL);
+   if (source != NULL) {
+-    g_hash_table_insert (sources, g_strdup (service->name), g_object_ref (source));
++    gchar *name;
++    name = grl_dmap_service_get_name (service);
++    g_hash_table_insert (sources, g_strdup (name), g_object_ref (source));
+     g_object_remove_weak_pointer (G_OBJECT (source), (gpointer *) &source);
++    g_free (name);
+   }
+ }
+ 
+ static void
+-grl_daap_service_removed_cb (DMAPMdnsBrowser *browser,
++grl_daap_service_removed_cb (DmapMdnsBrowser *browser,
+                              const gchar *service_name,
+                              GrlPlugin *plugin)
+ {
+@@ -323,14 +334,14 @@
+ }
+ 
+ static void
+-grl_daap_connect (gchar *name, gchar *host, guint port, ResultCbAndArgsAndDb *cb_and_db, DMAPConnectionCallback callback)
++grl_daap_connect (gchar *name, gchar *host, guint port, ResultCbAndArgsAndDb *cb_and_db, DmapConnectionFunc callback)
+ {
+-  DMAPRecordFactory *factory;
+-  DMAPConnection *connection;
++  DmapRecordFactory *factory;
++  DmapConnection *connection;
+ 
+   factory = DMAP_RECORD_FACTORY (grl_daap_record_factory_new ());
+-  connection = DMAP_CONNECTION (daap_connection_new (name, host, port, DMAP_DB (cb_and_db->db), factory));
+-  dmap_connection_connect (connection, (DMAPConnectionCallback) callback, cb_and_db);
++  connection = DMAP_CONNECTION (dmap_av_connection_new (name, host, port, DMAP_DB (cb_and_db->db), factory));
++  dmap_connection_start (connection, (DmapConnectionFunc) callback, cb_and_db);
+ }
+ 
+ static gboolean
+@@ -397,15 +408,25 @@
+     browse_connected_cb (NULL, TRUE, NULL, cb_and_db);
+   } else {
+     /* Connect */
++    gchar *name, *host;
++    guint port;
++
+     cb_and_db->db = DMAP_DB (grl_daap_db_new ());
+ 
+-    grl_daap_connect (dmap_source->priv->service->name,
+-                      dmap_source->priv->service->host,
+-                      dmap_source->priv->service->port,
++    name = grl_dmap_service_get_name (dmap_source->priv->service);
++    host = grl_dmap_service_get_host (dmap_source->priv->service);
++    port = grl_dmap_service_get_port (dmap_source->priv->service);
++
++    grl_daap_connect (name,
++                      host,
++                      port,
+                       cb_and_db,
+-                      (DMAPConnectionCallback) browse_connected_cb);
++                      (DmapConnectionFunc) browse_connected_cb);
+ 
+     g_hash_table_insert (connections, g_strdup (url), cb_and_db->db);
++
++    g_free (name);
++    g_free (host);
+   }
+ 
+   g_free (url);
+@@ -417,7 +438,7 @@
+   GrlDaapSource *dmap_source = GRL_DAAP_SOURCE (source);
+ 
+   ResultCbAndArgsAndDb *cb_and_db;
+-  DMAPMdnsBrowserService *service = dmap_source->priv->service;
++  DmapMdnsService *service = dmap_source->priv->service;
+   gchar *url = grl_dmap_build_url (service);
+ 
+   cb_and_db = g_new (ResultCbAndArgsAndDb, 1);
+@@ -435,9 +456,25 @@
+     search_connected_cb (NULL, TRUE, NULL, cb_and_db);
+   } else {
+     /* Connect */
++    gchar *name, *host;
++    guint port;
++
+     cb_and_db->db = DMAP_DB (grl_daap_db_new ());
+-    grl_daap_connect (service->name, service->host, service->port, cb_and_db, (DMAPConnectionCallback) search_connected_cb);
++
++    name = grl_dmap_service_get_name (dmap_source->priv->service);
++    host = grl_dmap_service_get_host (dmap_source->priv->service);
++    port = grl_dmap_service_get_port (dmap_source->priv->service);
++
++    grl_daap_connect (name,
++                      host,
++                      port,
++                      cb_and_db,
++                      (DmapConnectionFunc) search_connected_cb);
++
+     g_hash_table_insert (connections, g_strdup (url), cb_and_db->db);
++
++    g_free (name);
++    g_free (host);
+   }
+ 
+   g_free (url);
+diff -Naur orig/src/dmap/grl-daap-compat.h patched/src/dmap/grl-daap-compat.h
+--- orig/src/dmap/grl-daap-compat.h	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/dmap/grl-daap-compat.h	2020-05-03 00:56:27.336158878 +0200
+@@ -0,0 +1,76 @@
++/*
++ * Copyright (C) 2019 W. Michael Petullo
++ * Copyright (C) 2019 Igalia S.L.
++ *
++ * Contact: W. Michael Petullo <mike@flyn.org>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++ * 02110-1301 USA
++ *
++ */
++
++#ifndef _GRL_DAAP_COMPAT_H_
++#define _GRL_DAAP_COMPAT_H_
++
++#include "grl-dmap-compat.h"
++
++#ifdef LIBDMAPSHARING_COMPAT
++
++DMAPRecord *grl_daap_record_factory_create (DMAPRecordFactory *factory, gpointer user_data, GError **error);
++guint grl_daap_db_add (DMAPDb *_db, DMAPRecord *_record, GError **error);
++
++/* Building against libdmapsharing 3 API. */
++
++#define dmap_av_connection_new daap_connection_new
++#define DmapAvRecord DAAPRecord
++#define DmapAvRecordInterface DAAPRecordIface
++#define DMAP_AV_RECORD DAAP_RECORD
++#define DMAP_TYPE_AV_RECORD DAAP_TYPE_RECORD
++#define IS_DMAP_AV_RECORD IS_DAAP_RECORD
++
++static inline DmapRecord *
++grl_daap_record_factory_create_compat (DmapRecordFactory *factory, gpointer user_data)
++{
++  return grl_daap_record_factory_create (factory, user_data, NULL);
++}
++
++static inline guint
++grl_daap_db_add_compat (DmapDb *_db, DmapRecord *_record)
++{
++  return grl_daap_db_add (_db, _record, NULL);
++}
++
++#else
++
++/* Building against libdmapsharing 4 API. */
++
++DmapRecord *grl_daap_record_factory_create (DmapRecordFactory *factory, gpointer user_data, GError **error);
++guint grl_daap_db_add (DmapDb *_db, DmapRecord *_record, GError **error);
++
++static inline DmapRecord *
++grl_daap_record_factory_create_compat (DmapRecordFactory *factory, gpointer user_data, GError **error)
++{
++  return grl_daap_record_factory_create (factory, user_data, error);
++}
++
++static inline guint
++grl_daap_db_add_compat (DmapDb *_db, DmapRecord *_record, GError **error)
++{
++  return grl_daap_db_add (_db, _record, error);
++}
++
++#endif
++
++#endif /* _GRL_DAAP_COMPAT_H_ */
+diff -Naur orig/src/dmap/grl-daap-db.c patched/src/dmap/grl-daap-db.c
+--- orig/src/dmap/grl-daap-db.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap-db.c	2020-05-03 00:56:27.336158878 +0200
+@@ -54,8 +54,12 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <glib.h>
++#include <grilo.h>
+ #include <string.h>
++#include <libdmapsharing/dmap.h>
+ 
++#include "grl-daap-compat.h"
++#include "grl-common.h"
+ #include "grl-daap-db.h"
+ 
+ #define ALBUMS_ID    "albums"
+@@ -66,7 +70,7 @@
+ /* Media ID's start at max and go down. Container ID's start at 1 and go up. */
+ static guint nextid = G_MAXINT; /* NOTE: this should be G_MAXUINT, but iPhoto can't handle it. */
+ 
+-struct GrlDAAPDbPrivate {
++struct GrlDaapDbPrivate {
+   /* Contains each album container (tracked with albums hash table) */
+   GrlMedia *albums_container;
+ 
+@@ -95,31 +99,31 @@
+   return g_str_equal (grl_media_get_id (GRL_MEDIA (a)), grl_media_get_id (GRL_MEDIA (b)));
+ }
+ 
+-GrlDAAPDb *
++GrlDaapDb *
+ grl_daap_db_new (void)
+ {
+-  GrlDAAPDb *db = g_object_new (TYPE_GRL_DAAP_DB, NULL);
++  GrlDaapDb *db = g_object_new (TYPE_GRL_DAAP_DB, NULL);
+ 
+   return db;
+ }
+ 
+-static DMAPRecord *
+-grl_daap_db_lookup_by_id (const DMAPDb *db, guint id)
++static DmapRecord *
++grl_daap_db_lookup_by_id (const DmapDb *db, guint id)
+ {
+   g_error ("Not implemented");
+   return NULL;
+ }
+ 
+ static void
+-grl_daap_db_foreach (const DMAPDb *db,
+-                        GHFunc func,
+-                        gpointer data)
++grl_daap_db_foreach (const DmapDb *db,
++                     DmapIdRecordFunc func,
++                     gpointer data)
+ {
+   g_error ("Not implemented");
+ }
+ 
+ static gint64
+-grl_daap_db_count (const DMAPDb *db)
++grl_daap_db_count (const DmapDb *db)
+ {
+   g_error ("Not implemented");
+   return 0;
+@@ -135,7 +139,7 @@
+   id = g_strdup_printf ("%s-%s", category_name, set_name);
+ 
+   container = grl_media_container_new ();
+-  grl_media_set_id    (container, id);
++  grl_media_set_id (container, id);
+   grl_media_set_title (container, set_name);
+ 
+   set = g_hash_table_lookup (category, container);
+@@ -150,14 +154,14 @@
+   g_object_unref (container);
+ }
+ 
+-static guint
+-grl_daap_db_add (DMAPDb *_db, DMAPRecord *_record)
++guint
++grl_daap_db_add (DmapDb *_db, DmapRecord *_record, GError **error)
+ {
+   g_assert (IS_GRL_DAAP_DB (_db));
+-  g_assert (IS_DAAP_RECORD (_record));
++  g_assert (IS_DMAP_AV_RECORD (_record));
+ 
+-  GrlDAAPDb *db = GRL_DAAP_DB (_db);
+-  DAAPRecord *record = DAAP_RECORD (_record);
++  GrlDaapDb *db = GRL_DAAP_DB (_db);
++  DmapAvRecord *record = DMAP_AV_RECORD (_record);
+ 
+   gint   duration = 0;
+   gint32  bitrate = 0,
+@@ -173,26 +177,16 @@
+   GrlMedia *media;
+ 
+   g_object_get (record,
+-               "songalbum",
+-               &album,
+-               "songartist",
+-               &artist,
+-               "bitrate",
+-               &bitrate,
+-               "duration",
+-               &duration,
+-               "songgenre",
+-               &genre,
+-               "title",
+-               &title,
+-               "track",
+-               &track,
+-               "disc",
+-               &disc,
+-               "location",
+-               &url,
+-               "has-video",
+-               &has_video,
++               "songalbum", &album,
++               "songartist", &artist,
++               "bitrate", &bitrate,
++               "duration", &duration,
++               "songgenre", &genre,
++               "title", &title,
++               "track", &track,
++               "disc", &disc,
++               "location", &url,
++               "has-video", &has_video,
+                 NULL);
+ 
+   id_s = g_strdup_printf ("%u", nextid);
+@@ -203,8 +197,8 @@
+     media = grl_media_audio_new ();
+   }
+ 
+-  grl_media_set_id           (media, id_s);
+-  grl_media_set_duration     (media, duration);
++  grl_media_set_id (media, id_s);
++  grl_media_set_duration (media, duration);
+ 
+   if (title) {
+     grl_media_set_title (media, title);
+@@ -217,7 +211,7 @@
+   }
+ 
+   if (has_video == FALSE) {
+-    grl_media_set_bitrate      (media, bitrate);
++    grl_media_set_bitrate (media, bitrate);
+     grl_media_set_track_number (media, track);
+ 
+     if (disc != 0) {
+@@ -242,6 +236,11 @@
+ 
+   g_free (id_s);
+   g_object_unref (media);
++  g_free (album);
++  g_free (artist);
++  g_free (genre);
++  g_free (title);
++  g_free (url);
+ 
+   return --nextid;
+ }
+@@ -249,11 +248,11 @@
+ static gboolean
+ same_media (GrlMedia *a, GrlMedia *b)
+ {
+-  return (strcmp (grl_media_get_id (a), grl_media_get_id (b)) == 0);
++  return strcmp (grl_media_get_id (a), grl_media_get_id (b)) == 0;
+ }
+ 
+ void
+-grl_daap_db_browse (GrlDAAPDb *db,
++grl_daap_db_browse (GrlDaapDb *db,
+                     GrlMedia *container,
+                     GrlSource *source,
+                     guint op_id,
+@@ -312,7 +311,7 @@
+ }
+ 
+ void
+-grl_daap_db_search (GrlDAAPDb *db,
++grl_daap_db_search (GrlDaapDb *db,
+                     GrlSource *source,
+                     guint op_id,
+                     GHRFunc predicate,
+@@ -334,7 +333,7 @@
+   results = g_hash_table_new (g_str_hash, g_str_equal);
+ 
+   /* For albums and artists... */
+-  for (i = 0; i < G_N_ELEMENTS(hash_tables); i++) {
++  for (i = 0; i < G_N_ELEMENTS (hash_tables); i++) {
+     g_hash_table_iter_init (&iter1, hash_tables[i]);
+     /* For each album or artist in above... */
+     for (j = 0; g_hash_table_iter_next (&iter1, &key1, &val1); j++) {
+@@ -364,18 +363,18 @@
+ static void
+ dmap_db_interface_init (gpointer iface, gpointer data)
+ {
+-  DMAPDbIface *daap_db = iface;
++  DmapDbInterface *daap_db = iface;
+ 
+   g_assert (G_TYPE_FROM_INTERFACE (daap_db) == DMAP_TYPE_DB);
+ 
+-  daap_db->add = grl_daap_db_add;
++  daap_db->add = grl_daap_db_add_compat;
+   daap_db->lookup_by_id = grl_daap_db_lookup_by_id;
+   daap_db->foreach = grl_daap_db_foreach;
+   daap_db->count = grl_daap_db_count;
+ }
+ 
+-G_DEFINE_TYPE_WITH_CODE (GrlDAAPDb, grl_daap_db, G_TYPE_OBJECT,
+-                         G_ADD_PRIVATE (GrlDAAPDb)
++G_DEFINE_TYPE_WITH_CODE (GrlDaapDb, grl_daap_db, G_TYPE_OBJECT,
++                         G_ADD_PRIVATE (GrlDaapDb)
+                          G_IMPLEMENT_INTERFACE (DMAP_TYPE_DB, dmap_db_interface_init))
+ 
+ static GObject*
+@@ -389,17 +388,17 @@
+ }
+ 
+ static void
+-grl_daap_db_init (GrlDAAPDb *db)
++grl_daap_db_init (GrlDaapDb *db)
+ {
+   db->priv = grl_daap_db_get_instance_private (db);
+ 
+   db->priv->albums_container  = grl_media_container_new ();
+   db->priv->artists_container = grl_media_container_new ();
+ 
+-  grl_media_set_id    (GRL_MEDIA (db->priv->albums_container), ALBUMS_ID);
++  grl_media_set_id (GRL_MEDIA (db->priv->albums_container), ALBUMS_ID);
+   grl_media_set_title (GRL_MEDIA (db->priv->albums_container), ALBUMS_NAME);
+ 
+-  grl_media_set_id    (GRL_MEDIA (db->priv->artists_container), ARTISTS_ID);
++  grl_media_set_id (GRL_MEDIA (db->priv->artists_container), ARTISTS_ID);
+   grl_media_set_title (GRL_MEDIA (db->priv->artists_container), ARTISTS_NAME);
+ 
+   db->priv->root    = g_hash_table_new_full (container_hash, container_equal, g_object_unref, (GDestroyNotify) g_hash_table_destroy);
+@@ -413,9 +412,9 @@
+ static void
+ grl_daap_db_finalize (GObject *object)
+ {
+-  GrlDAAPDb *db = GRL_DAAP_DB (object);
++  GrlDaapDb *db = GRL_DAAP_DB (object);
+ 
+-  GRL_DEBUG ("Finalizing GrlDAAPDb");
++  GRL_DEBUG ("Finalizing GrlDaapDb");
+ 
+   g_object_unref (db->priv->albums_container);
+   g_object_unref (db->priv->artists_container);
+@@ -426,9 +425,9 @@
+ 
+ static void
+ grl_daap_db_set_property (GObject *object,
+-                             guint prop_id,
+-                             const GValue *value,
+-                             GParamSpec *pspec)
++                          guint prop_id,
++                          const GValue *value,
++                          GParamSpec *pspec)
+ {
+   switch (prop_id) {
+   default:
+@@ -439,9 +438,9 @@
+ 
+ static void
+ grl_daap_db_get_property (GObject *object,
+-                             guint prop_id,
+-                             GValue *value,
+-                             GParamSpec *pspec)
++                          guint prop_id,
++                          GValue *value,
++                          GParamSpec *pspec)
+ {
+   switch (prop_id) {
+   default:
+@@ -452,7 +451,7 @@
+ 
+ 
+ static void
+-grl_daap_db_class_init (GrlDAAPDbClass *klass)
++grl_daap_db_class_init (GrlDaapDbClass *klass)
+ {
+   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+ 
+diff -Naur orig/src/dmap/grl-daap-db.h patched/src/dmap/grl-daap-db.h
+--- orig/src/dmap/grl-daap-db.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap-db.h	2020-05-03 00:56:27.336158878 +0200
+@@ -24,49 +24,51 @@
+ #include <libdmapsharing/dmap.h>
+ #include <grilo.h>
+ 
++#include "grl-daap-compat.h"
++
+ G_BEGIN_DECLS
+ 
+-#define TYPE_GRL_DAAP_DB                     \
+-  (grl_daap_db_get_type ())
++#define TYPE_GRL_DAAP_DB (grl_daap_db_get_type ())
+ 
+-#define GRL_DAAP_DB(o)                             \
+-  (G_TYPE_CHECK_INSTANCE_CAST ((o),                   \
+-                               TYPE_GRL_DAAP_DB,   \
+-                               GrlDAAPDb))
+-
+-#define GRL_DAAP_DB_CLASS(k)                 \
+-  (G_TYPE_CHECK_CLASS_CAST((k),                 \
+-                           TYPE_GRL_DAAP_DB, \
+-                           GrlDAAPDbClass))
+-#define IS_GRL_DAAP_DB(o)                          \
+-  (G_TYPE_CHECK_INSTANCE_TYPE((o),                    \
+-                              TYPE_GRL_DAAP_DB))
+-#define IS_GRL_DAAP_DB_CLASS(k)                       \
+-  (G_TYPE_CHECK_CLASS_TYPE((k),                          \
+-                           TYPE_GRL_DAAP_DB_CLASS))
+-
+-#define GRL_DAAP_DB_GET_CLASS(o)                \
+-  (G_TYPE_INSTANCE_GET_CLASS((o),                  \
+-                             TYPE_GRL_DAAP_DB,  \
+-                             GrlDAAPDbClass))
+-
+-#define GRL_DAAP_DB_GET_PRIVATE(o)                 \
+-  (G_TYPE_INSTANCE_GET_PRIVATE((o),                   \
+-                               TYPE_GRL_DAAP_DB,   \
+-                               GrlDAAPDbPrivate))
++#define GRL_DAAP_DB(o)                                                         \
++  (G_TYPE_CHECK_INSTANCE_CAST ((o),                                            \
++                                TYPE_GRL_DAAP_DB,                              \
++                                GrlDaapDb))
++
++#define GRL_DAAP_DB_CLASS(k)                                                   \
++  (G_TYPE_CHECK_CLASS_CAST ((k),                                               \
++                             TYPE_GRL_DAAP_DB,                                 \
++                             GrlDaapDbClass))
++#define IS_GRL_DAAP_DB(o)                                                      \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((o),                                            \
++                                TYPE_GRL_DAAP_DB))
++
++#define IS_GRL_DAAP_DB_CLASS(k)                                                \
++  (G_TYPE_CHECK_CLASS_TYPE ((k),                                               \
++                             TYPE_GRL_DAAP_DB_CLASS))
++
++#define GRL_DAAP_DB_GET_CLASS(o)                                               \
++  (G_TYPE_INSTANCE_GET_CLASS ((o),                                             \
++                               TYPE_GRL_DAAP_DB,                               \
++                               GrlDaapDbClass))
++
++#define GRL_DAAP_DB_GET_PRIVATE(o)                                             \
++  (G_TYPE_INSTANCE_GET_PRIVATE ((o),                                           \
++                                 TYPE_GRL_DAAP_DB,                             \
++                                 GrlDaapDbPrivate))
+ 
+-typedef struct GrlDAAPDbPrivate GrlDAAPDbPrivate;
++typedef struct GrlDaapDbPrivate GrlDaapDbPrivate;
+ 
+ typedef struct {
+   GObject parent;
+-  GrlDAAPDbPrivate *priv;
+-} GrlDAAPDb;
++  GrlDaapDbPrivate *priv;
++} GrlDaapDb;
+ 
+ typedef struct {
+   GObjectClass parent;
+-} GrlDAAPDbClass;
++} GrlDaapDbClass;
+ 
+-void grl_daap_db_browse (GrlDAAPDb *db,
++void grl_daap_db_browse (GrlDaapDb *db,
+                          GrlMedia *container,
+                          GrlSource *source,
+                          guint op_id,
+@@ -75,7 +77,7 @@
+                          GrlSourceResultCb func,
+                          gpointer user_data);
+ 
+-void grl_daap_db_search (GrlDAAPDb *db,
++void grl_daap_db_search (GrlDaapDb *db,
+                          GrlSource *source,
+                          guint op_id,
+                          GHRFunc predicate,
+@@ -83,7 +85,7 @@
+                          GrlSourceResultCb func,
+                          gpointer user_data);
+ 
+-GrlDAAPDb *grl_daap_db_new (void);
++GrlDaapDb *grl_daap_db_new (void);
+ 
+ GType grl_daap_db_get_type (void);
+ 
+diff -Naur orig/src/dmap/grl-daap.h patched/src/dmap/grl-daap.h
+--- orig/src/dmap/grl-daap.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap.h	2020-05-03 00:56:27.336158878 +0200
+@@ -26,31 +26,32 @@
+ 
+ #include <grilo.h>
+ 
+-#define GRL_DAAP_SOURCE_TYPE                    \
+-  (grl_daap_source_get_type ())
++#include "grl-daap-compat.h"
+ 
+-#define GRL_DAAP_SOURCE(obj)                          \
+-  (G_TYPE_CHECK_INSTANCE_CAST ((obj),                 \
+-                               GRL_DAAP_SOURCE_TYPE,  \
+-                               GrlDaapSource))
+-
+-#define GRL_IS_DAAP_SOURCE(obj)                       \
+-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj),                 \
+-                               GRL_DAAP_SOURCE_TYPE))
+-
+-#define GRL_DAAP_SOURCE_CLASS(klass)               \
+-  (G_TYPE_CHECK_CLASS_CAST((klass),                \
+-                           GRL_DAAP_SOURCE_TYPE,   \
+-                           GrlDaapSourceClass))
+-
+-#define GRL_IS_DAAP_SOURCE_CLASS(klass)            \
+-  (G_TYPE_CHECK_CLASS_TYPE((klass),                \
+-                           GRL_DAAP_SOURCE_TYPE))
+-
+-#define GRL_DAAP_SOURCE_GET_CLASS(obj)                \
+-  (G_TYPE_INSTANCE_GET_CLASS ((obj),                  \
+-                              GRL_DAAP_SOURCE_TYPE,   \
+-                              GrlDaapSourceClass))
++#define GRL_DAAP_SOURCE_TYPE (grl_daap_source_get_type ())
++
++#define GRL_DAAP_SOURCE(obj)                                                   \
++  (G_TYPE_CHECK_INSTANCE_CAST ((obj),                                          \
++                                GRL_DAAP_SOURCE_TYPE,                          \
++                                GrlDaapSource))
++
++#define GRL_IS_DAAP_SOURCE(obj)                                                \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((obj),                                          \
++                                GRL_DAAP_SOURCE_TYPE))
++
++#define GRL_DAAP_SOURCE_CLASS(klass)                                           \
++  (G_TYPE_CHECK_CLASS_CAST ((klass),                                           \
++                             GRL_DAAP_SOURCE_TYPE,                             \
++                             GrlDaapSourceClass))
++
++#define GRL_IS_DAAP_SOURCE_CLASS(klass)                                        \
++  (G_TYPE_CHECK_CLASS_TYPE ((klass),                                           \
++                             GRL_DAAP_SOURCE_TYPE))
++
++#define GRL_DAAP_SOURCE_GET_CLASS(obj)                                         \
++  (G_TYPE_INSTANCE_GET_CLASS ((obj),                                           \
++                               GRL_DAAP_SOURCE_TYPE,                           \
++                               GrlDaapSourceClass))
+ 
+ typedef struct _GrlDaapSourcePrivate GrlDaapSourcePrivate;
+ typedef struct _GrlDaapSource  GrlDaapSource;
+diff -Naur orig/src/dmap/grl-daap-record.c patched/src/dmap/grl-daap-record.c
+--- orig/src/dmap/grl-daap-record.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap-record.c	2020-05-03 00:56:27.336158878 +0200
+@@ -20,9 +20,14 @@
+  *
+  */
+ 
++#include <grilo.h>
++#include <libdmapsharing/dmap.h>
++
++#include "grl-daap-compat.h"
++#include "grl-common.h"
+ #include "grl-daap-record.h"
+ 
+-struct GrlDAAPRecordPrivate {
++struct GrlDaapRecordPrivate {
+   guint64 filesize;
+   char *location;
+   char *format;
+@@ -69,11 +74,11 @@
+ 
+ static void
+ grl_daap_record_set_property (GObject *object,
+-                                 guint prop_id,
+-                                 const GValue *value,
+-                                 GParamSpec *pspec)
++                              guint prop_id,
++                              const GValue *value,
++                              GParamSpec *pspec)
+ {
+-  GrlDAAPRecord *record = SIMPLE_DAAP_RECORD (object);
++  GrlDaapRecord *record = SIMPLE_DAAP_RECORD (object);
+ 
+   switch (prop_id) {
+   case PROP_LOCATION:
+@@ -86,27 +91,27 @@
+     break;
+   case PROP_ALBUM:
+     g_free (record->priv->album);
+-    record->priv->album = g_value_dup_string(value);
++    record->priv->album = g_value_dup_string (value);
+     break;
+   case PROP_SORT_ALBUM:
+     g_free (record->priv->sort_album);
+-    record->priv->sort_album = g_value_dup_string(value);
++    record->priv->sort_album = g_value_dup_string (value);
+     break;
+   case PROP_ARTIST:
+     g_free (record->priv->artist);
+-    record->priv->artist = g_value_dup_string(value);
++    record->priv->artist = g_value_dup_string (value);
+     break;
+   case PROP_SORT_ARTIST:
+     g_free (record->priv->sort_artist);
+-    record->priv->sort_artist = g_value_dup_string(value);
++    record->priv->sort_artist = g_value_dup_string (value);
+     break;
+   case PROP_GENRE:
+     g_free (record->priv->genre);
+-    record->priv->genre = g_value_dup_string(value);
++    record->priv->genre = g_value_dup_string (value);
+     break;
+   case PROP_FORMAT:
+     g_free (record->priv->format);
+-    record->priv->format = g_value_dup_string(value);
++    record->priv->format = g_value_dup_string (value);
+     break;
+   case PROP_MEDIAKIND:
+     record->priv->mediakind = g_value_get_enum (value);
+@@ -142,20 +147,18 @@
+     record->priv->has_video = g_value_get_boolean (value);
+     break;
+   default:
+-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object,
+-                                       prop_id,
+-                                       pspec);
++    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+     break;
+   }
+ }
+ 
+ static void
+ grl_daap_record_get_property (GObject *object,
+-                                 guint prop_id,
+-                                 GValue *value,
+-                                 GParamSpec *pspec)
++                              guint prop_id,
++                              GValue *value,
++                              GParamSpec *pspec)
+ {
+-  GrlDAAPRecord *record = SIMPLE_DAAP_RECORD (object);
++  GrlDaapRecord *record = SIMPLE_DAAP_RECORD (object);
+ 
+   switch (prop_id) {
+   case PROP_LOCATION:
+@@ -216,21 +219,19 @@
+     g_value_set_boolean (value, record->priv->has_video);
+     break;
+   default:
+-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object,
+-                                       prop_id,
+-                                       pspec);
++    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+     break;
+   }
+ }
+ 
+-GrlDAAPRecord *
++GrlDaapRecord *
+ grl_daap_record_new (void)
+ {
+   return SIMPLE_DAAP_RECORD (g_object_new (TYPE_SIMPLE_DAAP_RECORD, NULL));
+ }
+ 
+ GInputStream *
+-grl_daap_record_read (DAAPRecord *record, GError **error)
++grl_daap_record_read (DmapAvRecord *record, GError **error)
+ {
+   GFile *file;
+   GInputStream *stream;
+@@ -244,7 +245,7 @@
+ }
+ 
+ static void
+-grl_daap_record_init (GrlDAAPRecord *record)
++grl_daap_record_init (GrlDaapRecord *record)
+ {
+   record->priv = SIMPLE_DAAP_RECORD_GET_PRIVATE (record);
+ }
+@@ -252,7 +253,7 @@
+ static void grl_daap_record_finalize (GObject *object);
+ 
+ static void
+-grl_daap_record_class_init (GrlDAAPRecordClass *klass)
++grl_daap_record_class_init (GrlDaapRecordClass *klass)
+ {
+   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+ 
+@@ -284,9 +285,9 @@
+ static void
+ grl_daap_record_daap_iface_init (gpointer iface, gpointer data)
+ {
+-  DAAPRecordIface *daap_record = iface;
++  DmapAvRecordInterface *daap_record = iface;
+ 
+-  g_assert (G_TYPE_FROM_INTERFACE (daap_record) == DAAP_TYPE_RECORD);
++  g_assert (G_TYPE_FROM_INTERFACE (daap_record) == DMAP_TYPE_AV_RECORD);
+ 
+   daap_record->read = grl_daap_record_read;
+ }
+@@ -294,21 +295,21 @@
+ static void
+ grl_daap_record_dmap_iface_init (gpointer iface, gpointer data)
+ {
+-  DMAPRecordIface *dmap_record = iface;
++  DmapRecordInterface *dmap_record = iface;
+ 
+   g_assert (G_TYPE_FROM_INTERFACE (dmap_record) == DMAP_TYPE_RECORD);
+ }
+ 
+ 
+-G_DEFINE_TYPE_WITH_CODE (GrlDAAPRecord, grl_daap_record, G_TYPE_OBJECT,
+-                         G_ADD_PRIVATE (GrlDAAPRecord)
+-                         G_IMPLEMENT_INTERFACE (DAAP_TYPE_RECORD, grl_daap_record_daap_iface_init)
++G_DEFINE_TYPE_WITH_CODE (GrlDaapRecord, grl_daap_record, G_TYPE_OBJECT,
++                         G_ADD_PRIVATE (GrlDaapRecord)
++                         G_IMPLEMENT_INTERFACE (DMAP_TYPE_AV_RECORD, grl_daap_record_daap_iface_init)
+                          G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD, grl_daap_record_dmap_iface_init))
+ 
+ static void
+ grl_daap_record_finalize (GObject *object)
+ {
+-  GrlDAAPRecord *record = SIMPLE_DAAP_RECORD (object);
++  GrlDaapRecord *record = SIMPLE_DAAP_RECORD (object);
+ 
+   g_free (record->priv->location);
+   g_free (record->priv->title);
+diff -Naur orig/src/dmap/grl-daap-record-factory.c patched/src/dmap/grl-daap-record-factory.c
+--- orig/src/dmap/grl-daap-record-factory.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap-record-factory.c	2020-05-03 00:56:27.336158878 +0200
+@@ -1,5 +1,5 @@
+ /*
+- * DAAPRecord factory class
++ * DmapAvRecord factory class
+  *
+  * Copyright (C) 2008 W. Michael Petullo <mike@flyn.org>
+  *
+@@ -18,41 +18,46 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  */
+ 
++#include <grilo.h>
++#include <libdmapsharing/dmap.h>
++
++#include "grl-daap-compat.h"
++#include "grl-common.h"
+ #include "grl-daap-record-factory.h"
+ #include "grl-daap-record.h"
+ 
+-DMAPRecord *
+-grl_daap_record_factory_create  (DMAPRecordFactory *factory, gpointer user_data)
++DmapRecord *
++grl_daap_record_factory_create (DmapRecordFactory *factory, gpointer user_data, GError **error)
+ {
+-	return DMAP_RECORD (grl_daap_record_new ());
++  return DMAP_RECORD (grl_daap_record_new ());
+ }
+ 
+ static void
+-grl_daap_record_factory_init (GrlDAAPRecordFactory *factory)
++grl_daap_record_factory_init (GrlDaapRecordFactory *factory)
+ {
+ }
+ 
+ static void
+-grl_daap_record_factory_class_init (GrlDAAPRecordFactoryClass *klass)
++grl_daap_record_factory_class_init (GrlDaapRecordFactoryClass *klass)
+ {
+ }
+ 
+ static void
+ grl_daap_record_factory_interface_init (gpointer iface, gpointer data)
+ {
+-	DMAPRecordFactoryIface *factory = iface;
++  DmapRecordFactoryInterface *factory = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (factory) == DMAP_TYPE_RECORD_FACTORY);
++  g_assert (G_TYPE_FROM_INTERFACE (factory) == DMAP_TYPE_RECORD_FACTORY);
+ 
+-	factory->create = grl_daap_record_factory_create;
++  factory->create = grl_daap_record_factory_create_compat;
+ }
+ 
+-G_DEFINE_TYPE_WITH_CODE (GrlDAAPRecordFactory, grl_daap_record_factory, G_TYPE_OBJECT,
+-			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD_FACTORY,
+-					        grl_daap_record_factory_interface_init))
++G_DEFINE_TYPE_WITH_CODE (GrlDaapRecordFactory, grl_daap_record_factory, G_TYPE_OBJECT,
++                         G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD_FACTORY,
++                                               grl_daap_record_factory_interface_init))
+ 
+-GrlDAAPRecordFactory *
++GrlDaapRecordFactory *
+ grl_daap_record_factory_new (void)
+ {
+-	return SIMPLE_DAAP_RECORD_FACTORY (g_object_new (TYPE_SIMPLE_DAAP_RECORD_FACTORY, NULL));
++  return SIMPLE_DAAP_RECORD_FACTORY (g_object_new (TYPE_SIMPLE_DAAP_RECORD_FACTORY, NULL));
+ }
+diff -Naur orig/src/dmap/grl-daap-record-factory.h patched/src/dmap/grl-daap-record-factory.h
+--- orig/src/dmap/grl-daap-record-factory.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap-record-factory.h	2020-05-03 00:56:27.336158878 +0200
+@@ -1,5 +1,5 @@
+ /*
+- * GrlDAAPRecord factory class
++ * GrlDaapRecord factory class
+  *
+  * Copyright (C) 2008 W. Michael Petullo <mike@flyn.org>
+  *
+@@ -23,49 +23,48 @@
+ 
+ #include <libdmapsharing/dmap.h>
+ 
++#include "grl-daap-compat.h"
++
+ G_BEGIN_DECLS
+ 
+-#define TYPE_SIMPLE_DAAP_RECORD_FACTORY         \
+-  (grl_daap_record_factory_get_type ())
++#define TYPE_SIMPLE_DAAP_RECORD_FACTORY (grl_daap_record_factory_get_type ())
+ 
+-#define SIMPLE_DAAP_RECORD_FACTORY(o)                          \
+-  (G_TYPE_CHECK_INSTANCE_CAST((o),                             \
+-                              TYPE_SIMPLE_DAAP_RECORD_FACTORY, \
+-                              GrlDAAPRecordFactory))
+-
+-#define SIMPLE_DAAP_RECORD_FACTORY_CLASS(k)                 \
+-  (G_TYPE_CHECK_CLASS_CAST((k),                             \
+-                           TYPE_SIMPLE_DAAP_RECORD_FACTORY, \
+-                           GrlDAAPRecordFactoryClass))
+-
+-#define IS_SIMPLE_DAAP_RECORD_FACTORY(o)                          \
+-  (G_TYPE_CHECK_INSTANCE_TYPE((o),                                \
+-                              TYPE_SIMPLE_DAAP_RECORD_FACTORY))
+-
+-#define IS_SIMPLE_DAAP_RECORD_FACTORY_CLASS(k)                       \
+-  (G_TYPE_CHECK_CLASS_TYPE((k),                                      \
+-                           TYPE_SIMPLE_DAAP_RECORD_FACTORY_CLASS))
+-
+-#define SIMPLE_DAAP_RECORD_FACTORY_GET_CLASS(o)                \
+-  (G_TYPE_INSTANCE_GET_CLASS((o),                              \
+-                             TYPE_SIMPLE_DAAP_RECORD_FACTORY,  \
+-                             GrlDAAPRecordFactoryClass))
++#define SIMPLE_DAAP_RECORD_FACTORY(o)                                          \
++  (G_TYPE_CHECK_INSTANCE_CAST ((o),                                            \
++                                TYPE_SIMPLE_DAAP_RECORD_FACTORY,               \
++                                GrlDaapRecordFactory))
++
++#define SIMPLE_DAAP_RECORD_FACTORY_CLASS(k)                                    \
++  (G_TYPE_CHECK_CLASS_CAST ((k),                                               \
++                             TYPE_SIMPLE_DAAP_RECORD_FACTORY,                  \
++                             GrlDaapRecordFactoryClass))
++
++#define IS_SIMPLE_DAAP_RECORD_FACTORY(o)                                       \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((o),                                            \
++                                TYPE_SIMPLE_DAAP_RECORD_FACTORY))
++
++#define IS_SIMPLE_DAAP_RECORD_FACTORY_CLASS(k)                                 \
++  (G_TYPE_CHECK_CLASS_TYPE ((k),                                               \
++                             TYPE_SIMPLE_DAAP_RECORD_FACTORY_CLASS))
++
++#define SIMPLE_DAAP_RECORD_FACTORY_GET_CLASS(o)                                \
++  (G_TYPE_INSTANCE_GET_CLASS ((o),                                             \
++                               TYPE_SIMPLE_DAAP_RECORD_FACTORY,                \
++                               GrlDaapRecordFactoryClass))
+ 
+-typedef struct GrlDAAPRecordFactoryPrivate GrlDAAPRecordFactoryPrivate;
++typedef struct GrlDaapRecordFactoryPrivate GrlDaapRecordFactoryPrivate;
+ 
+ typedef struct {
+   GObject parent;
+-} GrlDAAPRecordFactory;
++} GrlDaapRecordFactory;
+ 
+ typedef struct {
+   GObjectClass parent;
+-} GrlDAAPRecordFactoryClass;
+-
+-GType                    grl_daap_record_factory_get_type (void);
++} GrlDaapRecordFactoryClass;
+ 
+-GrlDAAPRecordFactory *grl_daap_record_factory_new      (void);
++GType grl_daap_record_factory_get_type (void);
+ 
+-DMAPRecord              *grl_daap_record_factory_create   (DMAPRecordFactory *factory, gpointer user_data);
++GrlDaapRecordFactory *grl_daap_record_factory_new (void);
+ 
+ #endif /* __SIMPLE_DAAP_RECORD_FACTORY */
+ 
+diff -Naur orig/src/dmap/grl-daap-record.h patched/src/dmap/grl-daap-record.h
+--- orig/src/dmap/grl-daap-record.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-daap-record.h	2020-05-03 00:56:27.336158878 +0200
+@@ -23,55 +23,56 @@
+ 
+ #include <libdmapsharing/dmap.h>
+ 
++#include "grl-daap-compat.h"
++
+ G_BEGIN_DECLS
+ 
+-#define TYPE_SIMPLE_DAAP_RECORD                 \
+-  (grl_daap_record_get_type ())
++#define TYPE_SIMPLE_DAAP_RECORD (grl_daap_record_get_type ())
+ 
+-#define SIMPLE_DAAP_RECORD(o)                            \
+-  (G_TYPE_CHECK_INSTANCE_CAST((o),                       \
+-                              TYPE_SIMPLE_DAAP_RECORD,   \
+-                              GrlDAAPRecord))
+-
+-#define SIMPLE_DAAP_RECORD_CLASS(k)                   \
+-  (G_TYPE_CHECK_CLASS_CAST((k),                       \
+-                           TYPE_SIMPLE_DAAP_RECORD,   \
+-                           GrlDAAPRecordClass))
+-
+-#define IS_SIMPLE_DAAP_RECORD(o)                         \
+-  (G_TYPE_CHECK_INSTANCE_TYPE((o),                       \
+-                              TYPE_SIMPLE_DAAP_RECORD))
+-
+-#define IS_SIMPLE_DAAP_RECORD_CLASS(k)                      \
+-  (G_TYPE_CHECK_CLASS_TYPE((k),                             \
+-                           TYPE_SIMPLE_DAAP_RECORD_CLASS))
+-
+-#define SIMPLE_DAAP_RECORD_GET_CLASS(o)               \
+-  (G_TYPE_INSTANCE_GET_CLASS((o),                     \
+-                             TYPE_SIMPLE_DAAP_RECORD, \
+-                             GrlDAAPRecordClass))
+-
+-#define SIMPLE_DAAP_RECORD_GET_PRIVATE(o)                \
+-  (G_TYPE_INSTANCE_GET_PRIVATE((o),                      \
+-                               TYPE_SIMPLE_DAAP_RECORD,  \
+-                               GrlDAAPRecordPrivate))
++#define SIMPLE_DAAP_RECORD(o)                                                  \
++  (G_TYPE_CHECK_INSTANCE_CAST ((o),                                            \
++                                TYPE_SIMPLE_DAAP_RECORD,                       \
++                                GrlDaapRecord))
++
++#define SIMPLE_DAAP_RECORD_CLASS(k)                                            \
++  (G_TYPE_CHECK_CLASS_CAST ((k),                                               \
++                             TYPE_SIMPLE_DAAP_RECORD,                          \
++                             GrlDaapRecordClass))
++
++#define IS_SIMPLE_DAAP_RECORD(o)                                               \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((o),                                            \
++                                TYPE_SIMPLE_DAAP_RECORD))
++
++#define IS_SIMPLE_DAAP_RECORD_CLASS(k)                                         \
++  (G_TYPE_CHECK_CLASS_TYPE ((k),                                               \
++                             TYPE_SIMPLE_DAAP_RECORD_CLASS))
++
++#define SIMPLE_DAAP_RECORD_GET_CLASS(o)                                        \
++  (G_TYPE_INSTANCE_GET_CLASS ((o),                                             \
++                               TYPE_SIMPLE_DAAP_RECORD,                        \
++                               GrlDaapRecordClass))
++
++#define SIMPLE_DAAP_RECORD_GET_PRIVATE(o)                                      \
++  (G_TYPE_INSTANCE_GET_PRIVATE ((o),                                           \
++                                 TYPE_SIMPLE_DAAP_RECORD,                      \
++                                 GrlDaapRecordPrivate))
+ 
+-typedef struct GrlDAAPRecordPrivate GrlDAAPRecordPrivate;
++typedef struct GrlDaapRecordPrivate GrlDaapRecordPrivate;
+ 
+ typedef struct {
+   GObject parent;
+-  GrlDAAPRecordPrivate *priv;
+-} GrlDAAPRecord;
++  GrlDaapRecordPrivate *priv;
++} GrlDaapRecord;
+ 
+ typedef struct {
+   GObjectClass parent;
+-} GrlDAAPRecordClass;
++} GrlDaapRecordClass;
+ 
+ GType grl_daap_record_get_type (void);
+ 
+-GrlDAAPRecord *grl_daap_record_new    (void);
+-GInputStream     *grl_daap_record_read   (DAAPRecord *record, GError **error);
+-gint              grl_daap_record_get_id (DAAPRecord *record);
++GrlDaapRecord *grl_daap_record_new (void);
++GInputStream *grl_daap_record_read (DmapAvRecord *record, GError **error);
++gint grl_daap_record_get_id (DmapAvRecord *record);
+ 
+ #endif /* __SIMPLE_DAAP_RECORD */
+ 
+diff -Naur orig/src/dmap/grl-dmap-compat.h patched/src/dmap/grl-dmap-compat.h
+--- orig/src/dmap/grl-dmap-compat.h	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/dmap/grl-dmap-compat.h	2020-05-03 00:56:27.336158878 +0200
+@@ -0,0 +1,108 @@
++/*
++ * Copyright (C) 2019 W. Michael Petullo
++ * Copyright (C) 2019 Igalia S.L.
++ *
++ * Contact: W. Michael Petullo <mike@flyn.org>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++ * 02110-1301 USA
++ *
++ */
++
++#ifndef _GRL_DMAP_COMPAT_H_
++#define _GRL_DMAP_COMPAT_H_
++
++#ifdef LIBDMAPSHARING_COMPAT
++
++/* Building against libdmapsharing 3 API. */
++
++#define DmapConnection DMAPConnection
++#define DmapConnectionFunc DMAPConnectionCallback
++#define dmap_connection_start dmap_connection_connect
++#define DmapDb DMAPDb
++#define DmapDbInterface DMAPDbIface
++#define DmapIdRecordFunc GHFunc
++#define DmapMdnsBrowser DMAPMdnsBrowser
++#define DmapMdnsService DMAPMdnsBrowserService
++#define DMAP_MDNS_SERVICE_TYPE_DAAP DMAP_MDNS_BROWSER_SERVICE_TYPE_DAAP
++#define DMAP_MDNS_SERVICE_TYPE_DPAP DMAP_MDNS_BROWSER_SERVICE_TYPE_DPAP
++#define DmapRecord DMAPRecord
++#define DmapRecordFactory DMAPRecordFactory
++#define DmapRecordFactoryInterface DMAPRecordFactoryIface
++#define DmapRecordInterface DMAPRecordIface
++
++static inline gchar *
++grl_dmap_service_get_name (DmapMdnsService *service)
++{
++  return g_strdup (service->name);
++}
++
++static inline gchar *
++grl_dmap_service_get_service_name (DmapMdnsService *service)
++{
++  return g_strdup (service->service_name);
++}
++
++static inline gchar *
++grl_dmap_service_get_host (DmapMdnsService *service)
++{
++  return g_strdup (service->host);
++}
++
++static inline guint
++grl_dmap_service_get_port (DmapMdnsService *service)
++{
++  return service->port;
++}
++
++#else
++
++/* Building against libdmapsharing 4 API. */
++
++static inline gchar *
++grl_dmap_service_get_name (DmapMdnsService *service)
++{
++  gchar *name;
++  g_object_get (service, "name", &name, NULL);
++  return name;
++}
++
++static inline gchar *
++grl_dmap_service_get_service_name (DmapMdnsService *service)
++{
++  gchar *service_name;
++  g_object_get (service, "service-name", &service_name, NULL);
++  return service_name;
++}
++
++static inline gchar *
++grl_dmap_service_get_host (DmapMdnsService *service)
++{
++  gchar *host;
++  g_object_get (service, "host", &host, NULL);
++  return host;
++}
++
++static inline guint
++grl_dmap_service_get_port (DmapMdnsService *service)
++{
++  guint port;
++  g_object_get (service, "port", &port, NULL);
++  return port;
++}
++
++#endif
++
++#endif /* _GRL_DMAP_COMPAT_H_ */
+diff -Naur orig/src/dmap/grl-dpap.c patched/src/dmap/grl-dpap.c
+--- orig/src/dmap/grl-dpap.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap.c	2020-05-03 00:56:27.336158878 +0200
+@@ -33,6 +33,7 @@
+ #include <stdlib.h>
+ #include <libdmapsharing/dmap.h>
+ 
++#include "grl-dpap-compat.h"
+ #include "grl-common.h"
+ #include "grl-dpap.h"
+ #include "grl-dpap-db.h"
+@@ -42,7 +43,7 @@
+ /* --------- Logging  -------- */
+ 
+ #define GRL_LOG_DOMAIN_DEFAULT dmap_log_domain
+-GRL_LOG_DOMAIN_STATIC(dmap_log_domain);
++GRL_LOG_DOMAIN_STATIC (dmap_log_domain);
+ 
+ /* --- Plugin information --- */
+ 
+@@ -51,18 +52,18 @@
+ 
+ /* --- Grilo DPAP Private --- */
+ 
+-#define GRL_DPAP_SOURCE_GET_PRIVATE(object)           \
+-  (G_TYPE_INSTANCE_GET_PRIVATE((object),              \
+-                               GRL_DPAP_SOURCE_TYPE,  \
+-                               GrlDpapSourcePrivate))
++#define GRL_DPAP_SOURCE_GET_PRIVATE(object)            \
++  (G_TYPE_INSTANCE_GET_PRIVATE ((object),              \
++                                 GRL_DPAP_SOURCE_TYPE, \
++                                 GrlDpapSourcePrivate))
+ 
+ struct _GrlDpapSourcePrivate {
+-  DMAPMdnsBrowserService *service;
++  DmapMdnsService *service;
+ };
+ 
+ /* --- Data types --- */
+ 
+-static GrlDpapSource *grl_dpap_source_new (DMAPMdnsBrowserService *service);
++static GrlDpapSource *grl_dpap_source_new (DmapMdnsService *service);
+ 
+ static void grl_dpap_source_finalize (GObject *object);
+ 
+@@ -79,16 +80,16 @@
+                                     GrlSourceSearchSpec *ss);
+ 
+ 
+-static void grl_dpap_service_added_cb (DMAPMdnsBrowser *browser,
+-                                       DMAPMdnsBrowserService *service,
++static void grl_dpap_service_added_cb (DmapMdnsBrowser *browser,
++                                       DmapMdnsService *service,
+                                        GrlPlugin *plugin);
+ 
+-static void grl_dpap_service_removed_cb (DMAPMdnsBrowser *browser,
++static void grl_dpap_service_removed_cb (DmapMdnsBrowser *browser,
+                                          const gchar *service_name,
+                                          GrlPlugin *plugin);
+ 
+ /* ===================== Globals  ======================= */
+-static DMAPMdnsBrowser *browser;
++static DmapMdnsBrowser *browser;
+ /* Maps URIs to DBs */
+ static GHashTable *connections;
+ /* Map DPAP services to Grilo media sources */
+@@ -111,24 +112,24 @@
+   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+ 
+-  browser     = dmap_mdns_browser_new (DMAP_MDNS_BROWSER_SERVICE_TYPE_DPAP);
++  browser     = dmap_mdns_browser_new (DMAP_MDNS_SERVICE_TYPE_DPAP);
+   connections = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+   sources     = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+ 
+   g_signal_connect (G_OBJECT (browser),
+-                    "service-added",
++                   "service-added",
+                     G_CALLBACK (grl_dpap_service_added_cb),
+                     (gpointer) plugin);
+ 
+   g_signal_connect (G_OBJECT (browser),
+-                    "service-removed",
++                   "service-removed",
+                     G_CALLBACK (grl_dpap_service_removed_cb),
+                     (gpointer) plugin);
+ 
+   if (!dmap_mdns_browser_start (browser, &error)) {
+     GRL_DEBUG ("error starting browser. code: %d message: %s",
+-               error->code,
+-               error->message);
++                error->code,
++                error->message);
+     g_error_free (error);
+ 
+     g_hash_table_unref (connections);
+@@ -143,12 +144,12 @@
+ GRL_PLUGIN_DEFINE (GRL_MAJOR,
+                    GRL_MINOR,
+                    DPAP_PLUGIN_ID,
+-                   "DPAP",
+-                   "A plugin for browsing DPAP servers",
+-                   "W. Michael Petullo",
++                  "DPAP",
++                  "A plugin for browsing DPAP servers",
++                  "W. Michael Petullo",
+                    VERSION,
+-                   "LGPL",
+-                   "http://www.flyn.org",
++                  "LGPL",
++                  "http://www.flyn.org",
+                    grl_dpap_plugin_init,
+                    NULL,
+                    NULL);
+@@ -158,8 +159,10 @@
+ G_DEFINE_TYPE_WITH_PRIVATE (GrlDpapSource, grl_dpap_source, GRL_TYPE_SOURCE)
+ 
+ static GrlDpapSource *
+-grl_dpap_source_new (DMAPMdnsBrowserService *service)
++grl_dpap_source_new (DmapMdnsService *service)
+ {
++  gchar *name;
++  gchar *service_name;
+   gchar *source_desc;
+   gchar *source_id;
+ 
+@@ -167,20 +170,24 @@
+ 
+   GRL_DEBUG ("grl_dpap_source_new");
+ 
+-  source_desc = g_strdup_printf (SOURCE_DESC_TEMPLATE, service->name);
+-  source_id = g_strdup_printf (SOURCE_ID_TEMPLATE, service->name);
++  name = grl_dmap_service_get_name (service);
++  service_name = grl_dmap_service_get_service_name (service);
++  source_desc = g_strdup_printf (SOURCE_DESC_TEMPLATE, name);
++  source_id = g_strdup_printf (SOURCE_ID_TEMPLATE, name);
+ 
+   source = g_object_new (GRL_DPAP_SOURCE_TYPE,
+-                         "source-id",   source_id,
+-                         "source-name", service->name,
+-                         "source-desc", source_desc,
+-                         "supported-media", GRL_SUPPORTED_MEDIA_IMAGE,
++                        "source-id",   source_id,
++                        "source-name", service_name,
++                        "source-desc", source_desc,
++                        "supported-media", GRL_SUPPORTED_MEDIA_IMAGE,
+                          NULL);
+ 
+   source->priv->service = service;
+ 
+   g_free (source_desc);
+   g_free (source_id);
++  g_free (service_name);
++  g_free (name);
+ 
+   return source;
+ }
+@@ -214,14 +221,14 @@
+ static void
+ grl_dpap_do_browse (ResultCbAndArgsAndDb *cb_and_db)
+ {
+-  grl_dpap_db_browse(GRL_DPAP_DB(cb_and_db->db),
+-                     cb_and_db->cb.container,
+-                     cb_and_db->cb.source,
+-                     cb_and_db->cb.op_id,
+-                     cb_and_db->cb.skip,
+-                     cb_and_db->cb.count,
+-                     cb_and_db->cb.callback,
+-                     cb_and_db->cb.user_data);
++  grl_dpap_db_browse (GRL_DPAP_DB (cb_and_db->db),
++                      cb_and_db->cb.container,
++                      cb_and_db->cb.source,
++                      cb_and_db->cb.op_id,
++                      cb_and_db->cb.skip,
++                      cb_and_db->cb.count,
++                      cb_and_db->cb.callback,
++                      cb_and_db->cb.user_data);
+ 
+   g_free (cb_and_db);
+ }
+@@ -229,19 +236,19 @@
+ static void
+ grl_dpap_do_search (ResultCbAndArgsAndDb *cb_and_db)
+ {
+-  grl_dpap_db_search(GRL_DPAP_DB(cb_and_db->db),
+-                     cb_and_db->cb.source,
+-                     cb_and_db->cb.op_id,
+-                     (GHRFunc) cb_and_db->cb.predicate,
+-                     cb_and_db->cb.predicate_data,
+-                     cb_and_db->cb.callback,
+-                     cb_and_db->cb.user_data);
++  grl_dpap_db_search (GRL_DPAP_DB (cb_and_db->db),
++                      cb_and_db->cb.source,
++                      cb_and_db->cb.op_id,
++                      (GHRFunc) cb_and_db->cb.predicate,
++                      cb_and_db->cb.predicate_data,
++                      cb_and_db->cb.callback,
++                      cb_and_db->cb.user_data);
+ 
+   g_free (cb_and_db);
+ }
+ 
+ static void
+-browse_connected_cb (DMAPConnection       *connection,
++browse_connected_cb (DmapConnection       *connection,
+                      gboolean              result,
+                      const char           *reason,
+                      ResultCbAndArgsAndDb *cb_and_db)
+@@ -266,7 +273,7 @@
+ }
+ 
+ static void
+-search_connected_cb (DMAPConnection       *connection,
++search_connected_cb (DmapConnection       *connection,
+                      gboolean              result,
+                      const char           *reason,
+                      ResultCbAndArgsAndDb *cb_and_db)
+@@ -291,8 +298,8 @@
+ }
+ 
+ static void
+-grl_dpap_service_added_cb (DMAPMdnsBrowser *browser,
+-                           DMAPMdnsBrowserService *service,
++grl_dpap_service_added_cb (DmapMdnsBrowser *browser,
++                           DmapMdnsService *service,
+                            GrlPlugin *plugin)
+ {
+   GrlRegistry   *registry = grl_registry_get_default ();
+@@ -306,13 +313,16 @@
+                                 GRL_SOURCE (source),
+                                 NULL);
+   if (source != NULL) {
+-    g_hash_table_insert (sources, g_strdup (service->name), g_object_ref (source));
++    gchar *name;
++    name = grl_dmap_service_get_name (service);
++    g_hash_table_insert (sources, g_strdup (name), g_object_ref (source));
+     g_object_remove_weak_pointer (G_OBJECT (source), (gpointer *) &source);
++    g_free (name);
+   }
+ }
+ 
+ static void
+-grl_dpap_service_removed_cb (DMAPMdnsBrowser *browser,
++grl_dpap_service_removed_cb (DmapMdnsBrowser *browser,
+                              const gchar *service_name,
+                              GrlPlugin *plugin)
+ {
+@@ -328,14 +338,14 @@
+ }
+ 
+ static void
+-grl_dpap_connect (gchar *name, gchar *host, guint port, ResultCbAndArgsAndDb *cb_and_db, DMAPConnectionCallback callback)
++grl_dpap_connect (gchar *name, gchar *host, guint port, ResultCbAndArgsAndDb *cb_and_db, DmapConnectionFunc callback)
+ {
+-  DMAPRecordFactory *factory;
+-  DMAPConnection *connection;
++  DmapRecordFactory *factory;
++  DmapConnection *connection;
+ 
+   factory = DMAP_RECORD_FACTORY (grl_dpap_record_factory_new ());
+-  connection = DMAP_CONNECTION (dpap_connection_new (name, host, port, DMAP_DB (cb_and_db->db), factory));
+-  dmap_connection_connect (connection, (DMAPConnectionCallback) callback, cb_and_db);
++  connection = DMAP_CONNECTION (dmap_image_connection_new (name, host, port, DMAP_DB (cb_and_db->db), factory));
++  dmap_connection_start (connection, (DmapConnectionFunc) callback, cb_and_db);
+ }
+ 
+ static gboolean
+@@ -396,15 +406,25 @@
+     browse_connected_cb (NULL, TRUE, NULL, cb_and_db);
+   } else {
+     /* Connect */
++    gchar *name, *host;
++    guint port;
++
+     cb_and_db->db = DMAP_DB (grl_dpap_db_new ());
+ 
+-    grl_dpap_connect (dmap_source->priv->service->name,
+-                      dmap_source->priv->service->host,
+-                      dmap_source->priv->service->port,
++    name = grl_dmap_service_get_name (dmap_source->priv->service);
++    host = grl_dmap_service_get_host (dmap_source->priv->service);
++    port = grl_dmap_service_get_port (dmap_source->priv->service);
++
++    grl_dpap_connect (name,
++                      host,
++                      port,
+                       cb_and_db,
+-                      (DMAPConnectionCallback) browse_connected_cb);
++                      (DmapConnectionFunc) browse_connected_cb);
+ 
+     g_hash_table_insert (connections, g_strdup (url), cb_and_db->db);
++
++    g_free (name);
++    g_free (host);
+   }
+ 
+   g_free (url);
+@@ -416,7 +436,7 @@
+   GrlDpapSource *dmap_source = GRL_DPAP_SOURCE (source);
+ 
+   ResultCbAndArgsAndDb *cb_and_db;
+-  DMAPMdnsBrowserService *service = dmap_source->priv->service;
++  DmapMdnsService *service = dmap_source->priv->service;
+   gchar *url = grl_dmap_build_url (service);
+ 
+   cb_and_db = g_new (ResultCbAndArgsAndDb, 1);
+@@ -434,9 +454,25 @@
+     search_connected_cb (NULL, TRUE, NULL, cb_and_db);
+   } else {
+     /* Connect */
++    gchar *name, *host;
++    guint port;
++
+     cb_and_db->db = DMAP_DB (grl_dpap_db_new ());
+-    grl_dpap_connect (service->name, service->host, service->port, cb_and_db, (DMAPConnectionCallback) search_connected_cb);
++
++    name = grl_dmap_service_get_name (dmap_source->priv->service);
++    host = grl_dmap_service_get_host (dmap_source->priv->service);
++    port = grl_dmap_service_get_port (dmap_source->priv->service);
++
++    grl_dpap_connect (name, 
++                      host,
++                      port,
++                      cb_and_db,
++                      (DmapConnectionFunc) search_connected_cb);
++
+     g_hash_table_insert (connections, g_strdup (url), cb_and_db->db);
++
++    g_free (name);
++    g_free (host);
+   }
+ 
+   g_free (url);
+diff -Naur orig/src/dmap/grl-dpap-compat.h patched/src/dmap/grl-dpap-compat.h
+--- orig/src/dmap/grl-dpap-compat.h	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/dmap/grl-dpap-compat.h	2020-05-03 00:56:27.336158878 +0200
+@@ -0,0 +1,116 @@
++/*
++ * Copyright (C) 2019 W. Michael Petullo
++ * Copyright (C) 2019 Igalia S.L.
++ *
++ * Contact: W. Michael Petullo <mike@flyn.org>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
++ * 02110-1301 USA
++ *
++ */
++
++#ifndef _GRL_DPAP_COMPAT_H_
++#define _GRL_DPAP_COMPAT_H_
++
++#include "grl-dmap-compat.h"
++
++#ifdef LIBDMAPSHARING_COMPAT
++
++DMAPRecord *grl_dpap_record_factory_create (DMAPRecordFactory *factory, gpointer user_data, GError **error);
++guint grl_dpap_db_add (DMAPDb *_db, DMAPRecord *_record, GError **error);
++
++/* Building against libdmapsharing 3 API. */
++
++#define dmap_image_connection_new dpap_connection_new
++#define DmapImageRecord DPAPRecord
++#define DmapImageRecordInterface DPAPRecordIface
++#define DMAP_IMAGE_RECORD DPAP_RECORD
++#define DMAP_TYPE_IMAGE_RECORD DPAP_TYPE_RECORD
++#define IS_DMAP_IMAGE_RECORD IS_DPAP_RECORD
++
++static inline DmapRecord *
++grl_dpap_record_factory_create_compat (DmapRecordFactory *factory, gpointer user_data)
++{
++  return grl_dpap_record_factory_create (factory, user_data, NULL);
++}
++
++static inline void
++set_thumbnail (GValue *value, GByteArray *thumbnail)
++{
++  g_value_set_pointer (value, thumbnail);
++}
++
++static inline GByteArray *
++get_thumbnail (GByteArray *thumbnail, const GValue *value)
++{
++  if (thumbnail)
++    g_byte_array_unref (thumbnail);
++  return g_byte_array_ref (g_value_get_pointer (value));
++}
++
++static inline void
++unref_thumbnail (GByteArray *thumbnail)
++{
++  g_byte_array_unref (thumbnail);
++}
++
++static inline guint
++grl_dpap_db_add_compat (DMAPDb *_db, DmapRecord *_record)
++{
++  return grl_dpap_db_add (_db, _record, NULL);
++}
++
++#else
++
++/* Building against libdmapsharing 4 API. */
++
++DmapRecord *grl_dpap_record_factory_create (DmapRecordFactory *factory, gpointer user_data, GError **error);
++guint grl_dpap_db_add (DmapDb *_db, DmapRecord *_record, GError **error);
++
++static inline void
++set_thumbnail (GValue *value, GArray *thumbnail)
++{
++  g_value_set_boxed (value, thumbnail);
++}
++
++static inline GArray *
++get_thumbnail (GArray *thumbnail, const GValue *value)
++{
++  if (thumbnail)
++    g_array_unref (thumbnail);
++  return g_value_get_boxed (value);
++}
++
++static inline void
++unref_thumbnail (GArray *thumbnail)
++{
++  g_array_unref (thumbnail);
++}
++
++static inline DmapRecord *
++grl_dpap_record_factory_create_compat (DmapRecordFactory *factory, gpointer user_data, GError **error)
++{
++  return grl_dpap_record_factory_create (factory, user_data, error);
++}
++
++static inline guint
++grl_dpap_db_add_compat (DmapDb *_db, DmapRecord *_record, GError **error)
++{
++  return grl_dpap_db_add (_db, _record, error);
++}
++
++#endif
++
++#endif /* _GRL_DPAP_COMPAT_H_ */
+diff -Naur orig/src/dmap/grl-dpap-db.c patched/src/dmap/grl-dpap-db.c
+--- orig/src/dmap/grl-dpap-db.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap-db.c	2020-05-03 00:56:27.336158878 +0200
+@@ -24,12 +24,16 @@
+ #include "config.h"
+ #endif
+ 
++#include <grilo.h>
+ #include <glib/gi18n-lib.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <glib.h>
+ #include <string.h>
++#include <libdmapsharing/dmap.h>
+ 
++#include "grl-dpap-compat.h"
++#include "grl-common.h"
+ #include "grl-dpap-db.h"
+ 
+ #define PHOTOS_ID     "photos"
+@@ -38,7 +42,7 @@
+ /* Media IDs start at max and go down. Container IDs start at 1 and go up. */
+ static guint nextid = G_MAXINT; /* NOTE: this should be G_MAXUINT, but iPhoto can't handle it. */
+ 
+-struct GrlDPAPDbPrivate {
++struct GrlDpapDbPrivate {
+   /* Contains each picture container (tracked with photos hash table) */
+   GrlMedia *photos_container;
+ 
+@@ -63,31 +67,31 @@
+   return g_str_equal (grl_media_get_id (GRL_MEDIA (a)), grl_media_get_id (GRL_MEDIA (b)));
+ }
+ 
+-GrlDPAPDb *
++GrlDpapDb *
+ grl_dpap_db_new (void)
+ {
+-  GrlDPAPDb *db = g_object_new (TYPE_GRL_DPAP_DB, NULL);
++  GrlDpapDb *db = g_object_new (TYPE_GRL_DPAP_DB, NULL);
+ 
+   return db;
+ }
+ 
+-static DMAPRecord *
+-grl_dpap_db_lookup_by_id (const DMAPDb *db, guint id)
++static DmapRecord *
++grl_dpap_db_lookup_by_id (const DmapDb *db, guint id)
+ {
+   g_warning ("Not implemented");
+   return NULL;
+ }
+ 
+ static void
+-grl_dpap_db_foreach (const DMAPDb *db,
+-                        GHFunc func,
+-                        gpointer data)
++grl_dpap_db_foreach (const DmapDb *db,
++                     DmapIdRecordFunc func,
++                     gpointer data)
+ {
+   g_warning ("Not implemented");
+ }
+ 
+ static gint64
+-grl_dpap_db_count (const DMAPDb *db)
++grl_dpap_db_count (const DmapDb *db)
+ {
+   g_warning ("Not implemented");
+   return 0;
+@@ -103,7 +107,7 @@
+   id = g_strdup_printf ("%s-%s", category_name, set_name);
+ 
+   container = grl_media_container_new ();
+-  grl_media_set_id    (container, id);
++  grl_media_set_id (container, id);
+   grl_media_set_title (container, set_name);
+ 
+   set = g_hash_table_lookup (category, container);
+@@ -118,21 +122,21 @@
+   g_object_unref (container);
+ }
+ 
+-static guint
+-grl_dpap_db_add (DMAPDb *_db, DMAPRecord *_record)
++guint
++grl_dpap_db_add (DmapDb *_db, DmapRecord *_record, GError **error)
+ {
+   g_assert (IS_GRL_DPAP_DB (_db));
+-  g_assert (IS_DPAP_RECORD (_record));
++  g_assert (IS_DMAP_IMAGE_RECORD (_record));
+ 
+-  GrlDPAPDb *db = GRL_DPAP_DB (_db);
+-  DPAPRecord *record = DPAP_RECORD (_record);
++  GrlDpapDb *db = GRL_DPAP_DB (_db);
++  DmapImageRecord *record = DMAP_IMAGE_RECORD (_record);
+ 
+   gint        height        = 0,
+               width         = 0,
+               largefilesize = 0,
+               creationdate  = 0,
+               rating        = 0;
+-  GByteArray *thumbnail     = NULL;
++  GArray     *thumbnail     = NULL;
+   gchar      *id_s          = NULL,
+              *filename      = NULL,
+              *aspectratio   = NULL,
+@@ -142,35 +146,24 @@
+   GrlMedia   *media;
+ 
+   g_object_get (record,
+-               "large-filesize",
+-               &largefilesize,
+-               "creation-date",
+-               &creationdate,
+-               "rating",
+-               &rating,
+-               "filename",
+-               &filename,
+-               "aspect-ratio",
+-               &aspectratio,
+-               "pixel-height",
+-               &height,
+-               "pixel-width",
+-               &width,
+-               "format",
+-               &format,
+-               "comments",
+-               &comments,
+-               "thumbnail",
+-               &thumbnail,
+-               "location",
+-               &url,
++               "large-filesize", &largefilesize,
++               "creation-date", &creationdate,
++               "rating", &rating,
++               "filename", &filename,
++               "aspect-ratio", &aspectratio,
++               "pixel-height", &height,
++               "pixel-width", &width,
++               "format", &format,
++               "comments", &comments,
++               "thumbnail", &thumbnail,
++               "location", &url,
+                 NULL);
+ 
+   id_s = g_strdup_printf ("%u", nextid);
+ 
+   media = grl_media_image_new ();
+ 
+-  grl_media_set_id           (media, id_s);
++  grl_media_set_id (media, id_s);
+ 
+   if (filename)
+     grl_media_set_title (media, filename);
+@@ -181,13 +174,19 @@
+     grl_media_set_url (media, url);
+   }
+ 
+-  grl_media_set_width  (media, width);
++  grl_media_set_width (media, width);
+   grl_media_set_height (media, height);
+ 
+   set_insert (db->priv->photos,  PHOTOS_ID, "Unknown",  media);
+ 
+   g_free (id_s);
+   g_object_unref (media);
++  g_free (filename);
++  g_free (aspectratio);
++  g_free (format);
++  g_free (comments);
++  g_free (url);
++  g_array_unref (thumbnail);
+ 
+   return --nextid;
+ }
+@@ -195,11 +194,11 @@
+ static gboolean
+ same_media (GrlMedia *a, GrlMedia *b)
+ {
+-  return (strcmp (grl_media_get_id (a), grl_media_get_id (b)) == 0);
++  return strcmp (grl_media_get_id (a), grl_media_get_id (b)) == 0;
+ }
+ 
+ void
+-grl_dpap_db_browse (GrlDPAPDb *db,
++grl_dpap_db_browse (GrlDpapDb *db,
+                     GrlMedia *container,
+                     GrlSource *source,
+                     guint op_id,
+@@ -230,7 +229,7 @@
+   if (hash_table == NULL) {
+     GError *error = g_error_new (GRL_CORE_ERROR,
+                                  GRL_CORE_ERROR_BROWSE_FAILED,
+-                                 "Invalid container identifier %s",
++                                "Invalid container identifier %s",
+                                  container_id);
+     func (source, op_id, NULL, 0, user_data, error);
+     goto done;
+@@ -251,7 +250,7 @@
+ }
+ 
+ void
+-grl_dpap_db_search (GrlDPAPDb *db,
++grl_dpap_db_search (GrlDpapDb *db,
+                     GrlSource *source,
+                     guint op_id,
+                     GHRFunc predicate,
+@@ -303,18 +302,18 @@
+ static void
+ dmap_db_interface_init (gpointer iface, gpointer data)
+ {
+-  DMAPDbIface *dpap_db = iface;
++  DmapDbInterface *dpap_db = iface;
+ 
+   g_assert (G_TYPE_FROM_INTERFACE (dpap_db) == DMAP_TYPE_DB);
+ 
+-  dpap_db->add = grl_dpap_db_add;
++  dpap_db->add = grl_dpap_db_add_compat;
+   dpap_db->lookup_by_id = grl_dpap_db_lookup_by_id;
+   dpap_db->foreach = grl_dpap_db_foreach;
+   dpap_db->count = grl_dpap_db_count;
+ }
+ 
+-G_DEFINE_TYPE_WITH_CODE (GrlDPAPDb, grl_dpap_db, G_TYPE_OBJECT,
+-                         G_ADD_PRIVATE (GrlDPAPDb)
++G_DEFINE_TYPE_WITH_CODE (GrlDpapDb, grl_dpap_db, G_TYPE_OBJECT,
++                         G_ADD_PRIVATE (GrlDpapDb)
+                          G_IMPLEMENT_INTERFACE (DMAP_TYPE_DB, dmap_db_interface_init))
+ 
+ static GObject*
+@@ -328,13 +327,13 @@
+ }
+ 
+ static void
+-grl_dpap_db_init (GrlDPAPDb *db)
++grl_dpap_db_init (GrlDpapDb *db)
+ {
+   db->priv = grl_dpap_db_get_instance_private (db);
+ 
+   db->priv->photos_container  = grl_media_container_new ();
+ 
+-  grl_media_set_id    (GRL_MEDIA (db->priv->photos_container), PHOTOS_ID);
++  grl_media_set_id (GRL_MEDIA (db->priv->photos_container), PHOTOS_ID);
+   grl_media_set_title (GRL_MEDIA (db->priv->photos_container), PHOTOS_NAME);
+ 
+   db->priv->root   = g_hash_table_new_full (container_hash, container_equal, g_object_unref, (GDestroyNotify) g_hash_table_destroy);
+@@ -346,9 +345,9 @@
+ static void
+ grl_dpap_db_finalize (GObject *object)
+ {
+-  GrlDPAPDb *db = GRL_DPAP_DB (object);
++  GrlDpapDb *db = GRL_DPAP_DB (object);
+ 
+-  GRL_DEBUG ("Finalizing GrlDPAPDb");
++  GRL_DEBUG ("Finalizing GrlDpapDb");
+ 
+   g_object_unref (db->priv->photos_container);
+ 
+@@ -356,7 +355,7 @@
+ }
+ 
+ static void
+-grl_dpap_db_class_init (GrlDPAPDbClass *klass)
++grl_dpap_db_class_init (GrlDpapDbClass *klass)
+ {
+   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+ 
+diff -Naur orig/src/dmap/grl-dpap-db.h patched/src/dmap/grl-dpap-db.h
+--- orig/src/dmap/grl-dpap-db.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap-db.h	2020-05-03 00:56:27.336158878 +0200
+@@ -24,50 +24,51 @@
+ #include <libdmapsharing/dmap.h>
+ #include <grilo.h>
+ 
++#include "grl-dpap-compat.h"
++
+ G_BEGIN_DECLS
+ 
+-#define TYPE_GRL_DPAP_DB                     \
+-  (grl_dpap_db_get_type ())
++#define TYPE_GRL_DPAP_DB (grl_dpap_db_get_type ())
+ 
+-#define GRL_DPAP_DB(o)                             \
+-  (G_TYPE_CHECK_INSTANCE_CAST ((o),                   \
+-                               TYPE_GRL_DPAP_DB,   \
+-                               GrlDPAPDb))
+-
+-#define GRL_DPAP_DB_CLASS(k)                 \
+-  (G_TYPE_CHECK_CLASS_CAST((k),                 \
+-                           TYPE_GRL_DPAP_DB, \
+-                           GrlDPAPDbClass))
+-#define IS_GRL_DPAP_DB(o)                          \
+-  (G_TYPE_CHECK_INSTANCE_TYPE((o),                    \
+-                              TYPE_GRL_DPAP_DB))
+-#define IS_GRL_DPAP_DB_CLASS(k)                       \
+-  (G_TYPE_CHECK_CLASS_TYPE((k),                          \
+-                           TYPE_GRL_DPAP_DB_CLASS))
+-
+-#define GRL_DPAP_DB_GET_CLASS(o)                \
+-  (G_TYPE_INSTANCE_GET_CLASS((o),                  \
+-                             TYPE_GRL_DPAP_DB,  \
+-                             GrlDPAPDbClass))
+-
+-#define GRL_DPAP_DB_GET_PRIVATE(o)                 \
+-  (G_TYPE_INSTANCE_GET_PRIVATE((o),                   \
+-                               TYPE_GRL_DPAP_DB,   \
+-                               GrlDPAPDbPrivate))
++#define GRL_DPAP_DB(o)                                                         \
++  (G_TYPE_CHECK_INSTANCE_CAST ((o),                                            \
++                                TYPE_GRL_DPAP_DB,                              \
++                                GrlDpapDb))
++
++#define GRL_DPAP_DB_CLASS(k)                                                   \
++  (G_TYPE_CHECK_CLASS_CAST ((k),                                               \
++                             TYPE_GRL_DPAP_DB,                                 \
++                             GrlDpapDbClass))
++#define IS_GRL_DPAP_DB(o)                                                      \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((o),                                            \
++                                TYPE_GRL_DPAP_DB))
++#define IS_GRL_DPAP_DB_CLASS(k)                                                \
++  (G_TYPE_CHECK_CLASS_TYPE ((k),                                               \
++                             TYPE_GRL_DPAP_DB_CLASS))
++
++#define GRL_DPAP_DB_GET_CLASS(o)                                               \
++  (G_TYPE_INSTANCE_GET_CLASS ((o),                                             \
++                               TYPE_GRL_DPAP_DB,                               \
++                               GrlDpapDbClass))
++
++#define GRL_DPAP_DB_GET_PRIVATE(o)                                             \
++  (G_TYPE_INSTANCE_GET_PRIVATE ((o),                                           \
++                                 TYPE_GRL_DPAP_DB,                             \
++                                 GrlDpapDbPrivate))
+ 
+-typedef struct GrlDPAPDbPrivate GrlDPAPDbPrivate;
++typedef struct GrlDpapDbPrivate GrlDpapDbPrivate;
+ 
+ typedef struct {
+   GObject parent;
+-  GrlDPAPDbPrivate *priv;
+-} GrlDPAPDb;
++  GrlDpapDbPrivate *priv;
++} GrlDpapDb;
+ 
+ typedef struct {
+   GObjectClass parent;
+-} GrlDPAPDbClass;
++} GrlDpapDbClass;
+ 
+-GrlDPAPDb *grl_dpap_db_new (void);
+-void grl_dpap_db_browse (GrlDPAPDb *_db,
++GrlDpapDb *grl_dpap_db_new (void);
++void grl_dpap_db_browse (GrlDpapDb *_db,
+                          GrlMedia *container,
+                          GrlSource *source,
+                          guint op_id,
+@@ -75,7 +76,7 @@
+                          guint count,
+                          GrlSourceResultCb func,
+                          gpointer user_data);
+-void grl_dpap_db_search (GrlDPAPDb *_db,
++void grl_dpap_db_search (GrlDpapDb *_db,
+                          GrlSource *source,
+                          guint op_id,
+                          GHRFunc predicate,
+diff -Naur orig/src/dmap/grl-dpap.h patched/src/dmap/grl-dpap.h
+--- orig/src/dmap/grl-dpap.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap.h	2020-05-03 00:56:27.336158878 +0200
+@@ -26,31 +26,32 @@
+ 
+ #include <grilo.h>
+ 
+-#define GRL_DPAP_SOURCE_TYPE                    \
+-  (grl_dpap_source_get_type ())
++#include "grl-dpap-compat.h"
+ 
+-#define GRL_DPAP_SOURCE(obj)                          \
+-  (G_TYPE_CHECK_INSTANCE_CAST ((obj),                 \
+-                               GRL_DPAP_SOURCE_TYPE,  \
+-                               GrlDpapSource))
+-
+-#define GRL_IS_DPAP_SOURCE(obj)                       \
+-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj),                 \
+-                               GRL_DPAP_SOURCE_TYPE))
+-
+-#define GRL_DPAP_SOURCE_CLASS(klass)               \
+-  (G_TYPE_CHECK_CLASS_CAST((klass),                \
+-                           GRL_DPAP_SOURCE_TYPE,   \
+-                           GrlDpapSourceClass))
+-
+-#define GRL_IS_DPAP_SOURCE_CLASS(klass)            \
+-  (G_TYPE_CHECK_CLASS_TYPE((klass),                \
+-                           GRL_DPAP_SOURCE_TYPE))
+-
+-#define GRL_DPAP_SOURCE_GET_CLASS(obj)                \
+-  (G_TYPE_INSTANCE_GET_CLASS ((obj),                  \
+-                              GRL_DPAP_SOURCE_TYPE,   \
+-                              GrlDpapSourceClass))
++#define GRL_DPAP_SOURCE_TYPE (grl_dpap_source_get_type ())
++
++#define GRL_DPAP_SOURCE(obj)                                                   \
++  (G_TYPE_CHECK_INSTANCE_CAST ((obj),                                          \
++                                GRL_DPAP_SOURCE_TYPE,                          \
++                                GrlDpapSource))
++
++#define GRL_IS_DPAP_SOURCE(obj)                                                \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((obj),                                          \
++                                GRL_DPAP_SOURCE_TYPE))
++
++#define GRL_DPAP_SOURCE_CLASS(klass)                                           \
++  (G_TYPE_CHECK_CLASS_CAST ((klass),                                           \
++                             GRL_DPAP_SOURCE_TYPE,                             \
++                             GrlDpapSourceClass))
++
++#define GRL_IS_DPAP_SOURCE_CLASS(klass)                                        \
++  (G_TYPE_CHECK_CLASS_TYPE ((klass),                                           \
++                             GRL_DPAP_SOURCE_TYPE))
++
++#define GRL_DPAP_SOURCE_GET_CLASS(obj)                                         \
++  (G_TYPE_INSTANCE_GET_CLASS ((obj),                                           \
++                               GRL_DPAP_SOURCE_TYPE,                           \
++                               GrlDpapSourceClass))
+ 
+ typedef struct _GrlDpapSourcePrivate GrlDpapSourcePrivate;
+ typedef struct _GrlDpapSource  GrlDpapSource;
+diff -Naur orig/src/dmap/grl-dpap-record.c patched/src/dmap/grl-dpap-record.c
+--- orig/src/dmap/grl-dpap-record.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap-record.c	2020-05-03 00:56:27.336158878 +0200
+@@ -20,15 +20,20 @@
+  *
+  */
+ 
++#include <grilo.h>
++#include <libdmapsharing/dmap.h>
++
++#include "grl-dpap-compat.h"
++#include "grl-common.h"
+ #include "grl-dpap-record.h"
+ 
+-struct GrlDPAPRecordPrivate {
++struct GrlDpapRecordPrivate {
+   char *location;
+   gint largefilesize;
+   gint creationdate;
+   gint rating;
+   char *filename;
+-  GByteArray *thumbnail;
++  void *thumbnail; /* GByteArray or GArray, depending on libdmapsharing ver. */
+   char *aspectratio;
+   gint height;
+   gint width;
+@@ -54,18 +59,18 @@
+ static void grl_dpap_record_dmap_iface_init (gpointer iface, gpointer data);
+ static void grl_dpap_record_dpap_iface_init (gpointer iface, gpointer data);
+ 
+-G_DEFINE_TYPE_WITH_CODE (GrlDPAPRecord, grl_dpap_record, G_TYPE_OBJECT,
+-                         G_ADD_PRIVATE (GrlDPAPRecord)
+-                         G_IMPLEMENT_INTERFACE (DPAP_TYPE_RECORD, grl_dpap_record_dpap_iface_init)
++G_DEFINE_TYPE_WITH_CODE (GrlDpapRecord, grl_dpap_record, G_TYPE_OBJECT,
++                         G_ADD_PRIVATE (GrlDpapRecord)
++                         G_IMPLEMENT_INTERFACE (DMAP_TYPE_IMAGE_RECORD, grl_dpap_record_dpap_iface_init)
+                          G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD, grl_dpap_record_dmap_iface_init))
+ 
+ static void
+ grl_dpap_record_set_property (GObject *object,
+-                                guint prop_id,
+-                                const GValue *value,
+-                                GParamSpec *pspec)
++                              guint prop_id,
++                              const GValue *value,
++                              GParamSpec *pspec)
+ {
+-  GrlDPAPRecord *record = SIMPLE_DPAP_RECORD (object);
++  GrlDpapRecord *record = SIMPLE_DPAP_RECORD (object);
+ 
+   switch (prop_id) {
+   case PROP_LOCATION:
+@@ -104,9 +109,7 @@
+     record->priv->comments = g_value_dup_string (value);
+     break;
+   case PROP_THUMBNAIL:
+-    if (record->priv->thumbnail)
+-      g_byte_array_unref (record->priv->thumbnail);
+-    record->priv->thumbnail = g_byte_array_ref (g_value_get_pointer (value));
++    record->priv->thumbnail = get_thumbnail (record->priv->thumbnail, value);
+     break;
+   default:
+     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+@@ -116,11 +119,11 @@
+ 
+ static void
+ grl_dpap_record_get_property (GObject *object,
+-                                 guint prop_id,
+-                                 GValue *value,
+-                                 GParamSpec *pspec)
++                              guint prop_id,
++                              GValue *value,
++                              GParamSpec *pspec)
+ {
+-  GrlDPAPRecord *record = SIMPLE_DPAP_RECORD (object);
++  GrlDpapRecord *record = SIMPLE_DPAP_RECORD (object);
+ 
+   switch (prop_id) {
+   case PROP_LOCATION:
+@@ -154,7 +157,7 @@
+     g_value_set_static_string (value, record->priv->comments);
+     break;
+   case PROP_THUMBNAIL:
+-    g_value_set_pointer (value, record->priv->thumbnail);
++    set_thumbnail (value, record->priv->thumbnail);
+     break;
+   default:
+     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+@@ -162,14 +165,14 @@
+   }
+ }
+ 
+-GrlDPAPRecord *
++GrlDpapRecord *
+ grl_dpap_record_new (void)
+ {
+   return SIMPLE_DPAP_RECORD (g_object_new (TYPE_SIMPLE_DPAP_RECORD, NULL));
+ }
+ 
+ GInputStream *
+-grl_dpap_record_read (DPAPRecord *record, GError **error)
++grl_dpap_record_read (DmapImageRecord *record, GError **error)
+ {
+   GFile *file;
+   GInputStream *stream;
+@@ -183,7 +186,7 @@
+ }
+ 
+ static void
+-grl_dpap_record_init (GrlDPAPRecord *record)
++grl_dpap_record_init (GrlDpapRecord *record)
+ {
+   record->priv = grl_dpap_record_get_instance_private (record);
+ }
+@@ -191,7 +194,7 @@
+ static void grl_dpap_record_finalize (GObject *object);
+ 
+ static void
+-grl_dpap_record_class_init (GrlDPAPRecordClass *klass)
++grl_dpap_record_class_init (GrlDpapRecordClass *klass)
+ {
+   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+ 
+@@ -215,9 +218,9 @@
+ static void
+ grl_dpap_record_dpap_iface_init (gpointer iface, gpointer data)
+ {
+-  DPAPRecordIface *dpap_record = iface;
++  DmapImageRecordInterface *dpap_record = iface;
+ 
+-  g_assert (G_TYPE_FROM_INTERFACE (dpap_record) == DPAP_TYPE_RECORD);
++  g_assert (G_TYPE_FROM_INTERFACE (dpap_record) == DMAP_TYPE_IMAGE_RECORD);
+ 
+   dpap_record->read = grl_dpap_record_read;
+ }
+@@ -225,7 +228,7 @@
+ static void
+ grl_dpap_record_dmap_iface_init (gpointer iface, gpointer data)
+ {
+-  DMAPRecordIface *dmap_record = iface;
++  DmapRecordInterface *dmap_record = iface;
+ 
+   g_assert (G_TYPE_FROM_INTERFACE (dmap_record) == DMAP_TYPE_RECORD);
+ }
+@@ -233,7 +236,7 @@
+ static void
+ grl_dpap_record_finalize (GObject *object)
+ {
+-  GrlDPAPRecord *record = SIMPLE_DPAP_RECORD (object);
++  GrlDpapRecord *record = SIMPLE_DPAP_RECORD (object);
+ 
+   g_free (record->priv->location);
+   g_free (record->priv->filename);
+@@ -242,7 +245,7 @@
+   g_free (record->priv->comments);
+ 
+   if (record->priv->thumbnail)
+-    g_byte_array_unref (record->priv->thumbnail);
++    unref_thumbnail (record->priv->thumbnail);
+ 
+   G_OBJECT_CLASS (grl_dpap_record_parent_class)->finalize (object);
+ }
+diff -Naur orig/src/dmap/grl-dpap-record-factory.c patched/src/dmap/grl-dpap-record-factory.c
+--- orig/src/dmap/grl-dpap-record-factory.c	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap-record-factory.c	2020-05-03 00:56:27.336158878 +0200
+@@ -18,41 +18,48 @@
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  */
+ 
++#include <grilo.h>
++#include <libdmapsharing/dmap.h>
++
++#include "grl-dpap-compat.h"
++#include "grl-common.h"
+ #include "grl-dpap-record-factory.h"
+ #include "grl-dpap-record.h"
+ 
+-DMAPRecord *
+-grl_dpap_record_factory_create  (DMAPRecordFactory *factory, gpointer user_data)
++DmapRecord *
++grl_dpap_record_factory_create (DmapRecordFactory *factory,
++                                gpointer user_data,
++                                GError **error)
+ {
+-	return DMAP_RECORD (grl_dpap_record_new ());
++  return DMAP_RECORD (grl_dpap_record_new ());
+ }
+ 
+ static void
+-grl_dpap_record_factory_init (GrlDPAPRecordFactory *factory)
++grl_dpap_record_factory_init (GrlDpapRecordFactory *factory)
+ {
+ }
+ 
+ static void
+-grl_dpap_record_factory_class_init (GrlDPAPRecordFactoryClass *klass)
++grl_dpap_record_factory_class_init (GrlDpapRecordFactoryClass *klass)
+ {
+ }
+ 
+ static void
+ grl_dpap_record_factory_interface_init (gpointer iface, gpointer data)
+ {
+-	DMAPRecordFactoryIface *factory = iface;
++  DmapRecordFactoryInterface *factory = iface;
+ 
+-	g_assert (G_TYPE_FROM_INTERFACE (factory) == DMAP_TYPE_RECORD_FACTORY);
++  g_assert (G_TYPE_FROM_INTERFACE (factory) == DMAP_TYPE_RECORD_FACTORY);
+ 
+-	factory->create = grl_dpap_record_factory_create;
++  factory->create = grl_dpap_record_factory_create_compat;
+ }
+ 
+-G_DEFINE_TYPE_WITH_CODE (GrlDPAPRecordFactory, grl_dpap_record_factory, G_TYPE_OBJECT,
+-			 G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD_FACTORY,
+-					        grl_dpap_record_factory_interface_init))
++G_DEFINE_TYPE_WITH_CODE (GrlDpapRecordFactory, grl_dpap_record_factory, G_TYPE_OBJECT,
++                         G_IMPLEMENT_INTERFACE (DMAP_TYPE_RECORD_FACTORY,
++                                                grl_dpap_record_factory_interface_init))
+ 
+-GrlDPAPRecordFactory *
++GrlDpapRecordFactory *
+ grl_dpap_record_factory_new (void)
+ {
+-	return SIMPLE_DPAP_RECORD_FACTORY (g_object_new (TYPE_SIMPLE_DPAP_RECORD_FACTORY, NULL));
++  return SIMPLE_DPAP_RECORD_FACTORY (g_object_new (TYPE_SIMPLE_DPAP_RECORD_FACTORY, NULL));
+ }
+diff -Naur orig/src/dmap/grl-dpap-record-factory.h patched/src/dmap/grl-dpap-record-factory.h
+--- orig/src/dmap/grl-dpap-record-factory.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap-record-factory.h	2020-05-03 00:56:27.336158878 +0200
+@@ -1,5 +1,5 @@
+ /*
+- * GrlDPAPRecord factory class
++ * GrlDpapRecord factory class
+  *
+  * Copyright (C) 2008 W. Michael Petullo <mike@flyn.org>
+  *
+@@ -23,49 +23,50 @@
+ 
+ #include <libdmapsharing/dmap.h>
+ 
++#include "grl-dpap-compat.h"
++
+ G_BEGIN_DECLS
+ 
+-#define TYPE_SIMPLE_DPAP_RECORD_FACTORY         \
+-  (grl_dpap_record_factory_get_type ())
++#define TYPE_SIMPLE_DPAP_RECORD_FACTORY (grl_dpap_record_factory_get_type ())
+ 
+-#define SIMPLE_DPAP_RECORD_FACTORY(o)                          \
+-  (G_TYPE_CHECK_INSTANCE_CAST((o),                             \
+-                              TYPE_SIMPLE_DPAP_RECORD_FACTORY, \
+-                              GrlDPAPRecordFactory))
+-
+-#define SIMPLE_DPAP_RECORD_FACTORY_CLASS(k)                 \
+-  (G_TYPE_CHECK_CLASS_CAST((k),                             \
+-                           TYPE_SIMPLE_DPAP_RECORD_FACTORY, \
+-                           GrlDPAPRecordFactoryClass))
++#define SIMPLE_DPAP_RECORD_FACTORY(o)                                          \
++  (G_TYPE_CHECK_INSTANCE_CAST ((o),                                            \
++                                TYPE_SIMPLE_DPAP_RECORD_FACTORY,               \
++                                GrlDpapRecordFactory))
++
++#define SIMPLE_DPAP_RECORD_FACTORY_CLASS(k)                                    \
++  (G_TYPE_CHECK_CLASS_CAST ((k),                                               \
++                             TYPE_SIMPLE_DPAP_RECORD_FACTORY,                  \
++                             GrlDpapRecordFactoryClass))
+ 
+-#define IS_SIMPLE_DPAP_RECORD_FACTORY(o)                          \
+-  (G_TYPE_CHECK_INSTANCE_TYPE((o),                                \
++#define IS_SIMPLE_DPAP_RECORD_FACTORY(o)                                       \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((o),                                            \
+                               TYPE_SIMPLE_DPAP_RECORD_FACTORY))
+ 
+-#define IS_SIMPLE_DPAP_RECORD_FACTORY_CLASS(k)                       \
+-  (G_TYPE_CHECK_CLASS_TYPE((k),                                      \
+-                           TYPE_SIMPLE_DPAP_RECORD_FACTORY_CLASS))
+-
+-#define SIMPLE_DPAP_RECORD_FACTORY_GET_CLASS(o)                \
+-  (G_TYPE_INSTANCE_GET_CLASS((o),                              \
+-                             TYPE_SIMPLE_DPAP_RECORD_FACTORY,  \
+-                             GrlDPAPRecordFactoryClass))
++#define IS_SIMPLE_DPAP_RECORD_FACTORY_CLASS(k)                                 \
++  (G_TYPE_CHECK_CLASS_TYPE ((k),                                               \
++                             TYPE_SIMPLE_DPAP_RECORD_FACTORY_CLASS))
++
++#define SIMPLE_DPAP_RECORD_FACTORY_GET_CLASS(o)                                \
++  (G_TYPE_INSTANCE_GET_CLASS ((o),                                             \
++                             TYPE_SIMPLE_DPAP_RECORD_FACTORY,                  \
++                             GrlDpapRecordFactoryClass))
+ 
+-typedef struct GrlDPAPRecordFactoryPrivate GrlDPAPRecordFactoryPrivate;
++typedef struct GrlDpapRecordFactoryPrivate GrlDpapRecordFactoryPrivate;
+ 
+ typedef struct {
+   GObject parent;
+-} GrlDPAPRecordFactory;
++} GrlDpapRecordFactory;
+ 
+ typedef struct {
+   GObjectClass parent;
+-} GrlDPAPRecordFactoryClass;
++} GrlDpapRecordFactoryClass;
+ 
+-GType                    grl_dpap_record_factory_get_type (void);
++GType grl_dpap_record_factory_get_type (void);
+ 
+-GrlDPAPRecordFactory *grl_dpap_record_factory_new      (void);
++GrlDpapRecordFactory *grl_dpap_record_factory_new (void);
+ 
+-DMAPRecord              *grl_dpap_record_factory_create   (DMAPRecordFactory *factory, gpointer user_data);
++DmapRecord *grl_dpap_record_factory_create (DmapRecordFactory *factory, gpointer user_data, GError **error);
+ 
+ #endif /* __SIMPLE_DPAP_RECORD_FACTORY */
+ 
+diff -Naur orig/src/dmap/grl-dpap-record.h patched/src/dmap/grl-dpap-record.h
+--- orig/src/dmap/grl-dpap-record.h	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/grl-dpap-record.h	2020-05-03 00:56:27.336158878 +0200
+@@ -23,55 +23,56 @@
+ 
+ #include <libdmapsharing/dmap.h>
+ 
++#include "grl-dpap-compat.h"
++
+ G_BEGIN_DECLS
+ 
+-#define TYPE_SIMPLE_DPAP_RECORD                 \
+-  (grl_dpap_record_get_type ())
++#define TYPE_SIMPLE_DPAP_RECORD (grl_dpap_record_get_type ())
+ 
+-#define SIMPLE_DPAP_RECORD(o)                            \
+-  (G_TYPE_CHECK_INSTANCE_CAST((o),                       \
+-                              TYPE_SIMPLE_DPAP_RECORD,   \
+-                              GrlDPAPRecord))
+-
+-#define SIMPLE_DPAP_RECORD_CLASS(k)                   \
+-  (G_TYPE_CHECK_CLASS_CAST((k),                       \
+-                           TYPE_SIMPLE_DPAP_RECORD,   \
+-                           GrlDPAPRecordClass))
+-
+-#define IS_SIMPLE_DPAP_RECORD(o)                         \
+-  (G_TYPE_CHECK_INSTANCE_TYPE((o),                       \
+-                              TYPE_SIMPLE_DPAP_RECORD))
+-
+-#define IS_SIMPLE_DPAP_RECORD_CLASS(k)                      \
+-  (G_TYPE_CHECK_CLASS_TYPE((k),                             \
+-                           TYPE_SIMPLE_DPAP_RECORD_CLASS))
+-
+-#define SIMPLE_DPAP_RECORD_GET_CLASS(o)               \
+-  (G_TYPE_INSTANCE_GET_CLASS((o),                     \
+-                             TYPE_SIMPLE_DPAP_RECORD, \
+-                             GrlDPAPRecordClass))
+-
+-#define SIMPLE_DPAP_RECORD_GET_PRIVATE(o)                \
+-  (G_TYPE_INSTANCE_GET_PRIVATE((o),                      \
+-                               TYPE_SIMPLE_DPAP_RECORD,  \
+-                               GrlDPAPRecordPrivate))
++#define SIMPLE_DPAP_RECORD(o)                                                  \
++  (G_TYPE_CHECK_INSTANCE_CAST ((o),                                            \
++                                TYPE_SIMPLE_DPAP_RECORD,                       \
++                                GrlDpapRecord))
++
++#define SIMPLE_DPAP_RECORD_CLASS(k)                                            \
++  (G_TYPE_CHECK_CLASS_CAST ((k),                                               \
++                             TYPE_SIMPLE_DPAP_RECORD,                          \
++                             GrlDpapRecordClass))
++
++#define IS_SIMPLE_DPAP_RECORD(o)                                               \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((o),                                            \
++                                TYPE_SIMPLE_DPAP_RECORD))
++
++#define IS_SIMPLE_DPAP_RECORD_CLASS(k)                                         \
++  (G_TYPE_CHECK_CLASS_TYPE ((k),                                               \
++                            TYPE_SIMPLE_DPAP_RECORD_CLASS))
++
++#define SIMPLE_DPAP_RECORD_GET_CLASS(o)                                        \
++  (G_TYPE_INSTANCE_GET_CLASS ((o),                                             \
++                              TYPE_SIMPLE_DPAP_RECORD,                         \
++                              GrlDpapRecordClass))
++
++#define SIMPLE_DPAP_RECORD_GET_PRIVATE(o)                                      \
++  (G_TYPE_INSTANCE_GET_PRIVATE ((o),                                           \
++                                TYPE_SIMPLE_DPAP_RECORD,                       \
++                                GrlDpapRecordPrivate))
+ 
+-typedef struct GrlDPAPRecordPrivate GrlDPAPRecordPrivate;
++typedef struct GrlDpapRecordPrivate GrlDpapRecordPrivate;
+ 
+ typedef struct {
+   GObject parent;
+-  GrlDPAPRecordPrivate *priv;
+-} GrlDPAPRecord;
++  GrlDpapRecordPrivate *priv;
++} GrlDpapRecord;
+ 
+ typedef struct {
+   GObjectClass parent;
+-} GrlDPAPRecordClass;
++} GrlDpapRecordClass;
+ 
+ GType grl_dpap_record_get_type (void);
+ 
+-GrlDPAPRecord    *grl_dpap_record_new    (void);
+-GInputStream     *grl_dpap_record_read   (DPAPRecord *record, GError **error);
+-gint              grl_dpap_record_get_id (DPAPRecord *record);
++GrlDpapRecord *grl_dpap_record_new (void);
++GInputStream *grl_dpap_record_read (DmapImageRecord *record, GError **error);
++gint grl_dpap_record_get_id (DmapImageRecord *record);
+ 
+ #endif /* __SIMPLE_DPAP_RECORD */
+ 
+diff -Naur orig/src/dmap/meson.build patched/src/dmap/meson.build
+--- orig/src/dmap/meson.build	2020-02-14 15:24:00.000000000 +0100
++++ patched/src/dmap/meson.build	2020-05-03 00:56:27.336158878 +0200
+@@ -31,6 +31,15 @@
+     'grl-dpap.h',
+ ]
+ 
++args = [
++    '-DG_LOG_DOMAIN="GrlDmap"',
++    '-DHAVE_CONFIG_H',
++]
++
++if not libdmapsharing4_dep.found()
++    args += '-DLIBDMAPSHARING_COMPAT'
++endif
++
+ configure_file(output: 'config.h',
+     configuration: cdata)
+ 
+@@ -39,17 +48,11 @@
+     install: true,
+     install_dir: pluginsdir,
+     dependencies: must_deps + plugins[dmap_idx][REQ_DEPS] + plugins[dmap_idx][OPT_DEPS],
+-    c_args: [
+-        '-DG_LOG_DOMAIN="GrlDmap"',
+-        '-DHAVE_CONFIG_H',
+-    ])
++    c_args: args)
+ 
+ shared_library('grldpap',
+     sources: dpap_sources,
+     install: true,
+     install_dir: pluginsdir,
+     dependencies: must_deps + plugins[dmap_idx][REQ_DEPS] + plugins[dmap_idx][OPT_DEPS],
+-    c_args: [
+-        '-DG_LOG_DOMAIN="GrlDmap"',
+-        '-DHAVE_CONFIG_H',
+-    ])
++    c_args: args)
