@@ -1,4 +1,7 @@
 #!/bin/sh -eux
 
+git clone https://github.com/KhronosGroup/SPIRV-Headers.git
+mv SPIRV-Headers External/external/
+
 ub_compile \
-	-DBUILD_SHARED_LIBS=ON
+	-DBUILD_SHARED_LIBS=OFF
