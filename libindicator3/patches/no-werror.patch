@@ -1,6 +1,6 @@
-diff -Naur orig/gtk2/libindicator/Makefile.am patched/gtk2/libindicator/Makefile.am
---- orig/gtk2/libindicator/Makefile.am	2012-09-19 17:38:05.000000000 +0200
-+++ patched/gtk2/libindicator/Makefile.am	2019-09-17 11:11:03.791745851 +0200
+diff -Naur orig/libindicator/Makefile.am patched/libindicator/Makefile.am
+--- orig/libindicator/Makefile.am	2012-09-19 17:38:05.000000000 +0200
++++ patched/libindicator/Makefile.am	2019-09-17 11:11:03.791745851 +0200
 @@ -57,7 +57,7 @@
  	$(LIBINDICATOR_CFLAGS) \
  	$(COVERAGE_CFLAGS) \
@@ -10,9 +10,9 @@ diff -Naur orig/gtk2/libindicator/Makefile.am patched/gtk2/libindicator/Makefile
  
  libindicator_la_LIBADD = \
  	$(LIBINDICATOR_LIBS)
-diff -Naur orig/gtk2/libindicator/Makefile.in patched/gtk2/libindicator/Makefile.in
---- orig/gtk2/libindicator/Makefile.in	2012-09-19 17:40:09.000000000 +0200
-+++ patched/gtk2/libindicator/Makefile.in	2019-09-17 11:11:18.535900554 +0200
+diff -Naur orig/libindicator/Makefile.in patched/libindicator/Makefile.in
+--- orig/libindicator/Makefile.in	2012-09-19 17:40:09.000000000 +0200
++++ patched/libindicator/Makefile.in	2019-09-17 11:11:18.535900554 +0200
 @@ -380,7 +380,7 @@
  	$(LIBINDICATOR_CFLAGS) \
  	$(COVERAGE_CFLAGS) \
@@ -22,9 +22,9 @@ diff -Naur orig/gtk2/libindicator/Makefile.in patched/gtk2/libindicator/Makefile
  
  libindicator_la_LIBADD = \
  	$(LIBINDICATOR_LIBS)
-diff -Naur orig/gtk2/tests/Makefile.am patched/gtk2/tests/Makefile.am
---- orig/gtk2/tests/Makefile.am	2012-09-19 17:38:05.000000000 +0200
-+++ patched/gtk2/tests/Makefile.am	2019-09-17 11:11:42.796155325 +0200
+diff -Naur orig/tests/Makefile.am patched/tests/Makefile.am
+--- orig/tests/Makefile.am	2012-09-19 17:38:05.000000000 +0200
++++ patched/tests/Makefile.am	2019-09-17 11:11:42.796155325 +0200
 @@ -38,7 +38,7 @@
  	test-loader.c
  
@@ -196,9 +196,9 @@ diff -Naur orig/gtk2/tests/Makefile.am patched/gtk2/tests/Makefile.am
  	$(LIBINDICATOR_CFLAGS) -I$(top_srcdir)
  
  service_manager_nostart_connect_LDADD = \
-diff -Naur orig/gtk2/tests/Makefile.in patched/gtk2/tests/Makefile.in
---- orig/gtk2/tests/Makefile.in	2012-09-19 17:40:09.000000000 +0200
-+++ patched/gtk2/tests/Makefile.in	2019-09-17 11:11:57.300307770 +0200
+diff -Naur orig/tests/Makefile.in patched/tests/Makefile.in
+--- orig/tests/Makefile.in	2012-09-19 17:40:09.000000000 +0200
++++ patched/tests/Makefile.in	2019-09-17 11:11:57.300307770 +0200
 @@ -529,7 +529,7 @@
  	test-loader.c
  
@@ -370,9 +370,9 @@ diff -Naur orig/gtk2/tests/Makefile.in patched/gtk2/tests/Makefile.in
  	$(LIBINDICATOR_CFLAGS) -I$(top_srcdir)
  
  service_manager_nostart_connect_LDADD = \
-diff -Naur orig/gtk2/tools/Makefile.am patched/gtk2/tools/Makefile.am
---- orig/gtk2/tools/Makefile.am	2012-09-19 17:38:04.000000000 +0200
-+++ patched/gtk2/tools/Makefile.am	2019-09-17 11:12:11.068452570 +0200
+diff -Naur orig/tools/Makefile.am patched/tools/Makefile.am
+--- orig/tools/Makefile.am	2012-09-19 17:38:04.000000000 +0200
++++ patched/tools/Makefile.am	2019-09-17 11:12:11.068452570 +0200
 @@ -17,7 +17,7 @@
  	indicator-loader.c
  
@@ -382,9 +382,9 @@ diff -Naur orig/gtk2/tools/Makefile.am patched/gtk2/tools/Makefile.am
  	$(LIBINDICATOR_CFLAGS) -I$(top_srcdir) \
  	-DBUILD_DIR="\"$(builddir)\""
  
-diff -Naur orig/gtk2/tools/Makefile.in patched/gtk2/tools/Makefile.in
---- orig/gtk2/tools/Makefile.in	2012-09-19 17:40:09.000000000 +0200
-+++ patched/gtk2/tools/Makefile.in	2019-09-17 11:12:17.776523150 +0200
+diff -Naur orig/tools/Makefile.in patched/tools/Makefile.in
+--- orig/tools/Makefile.in	2012-09-19 17:40:09.000000000 +0200
++++ patched/tools/Makefile.in	2019-09-17 11:12:17.776523150 +0200
 @@ -303,7 +303,7 @@
  	indicator-loader.c
  

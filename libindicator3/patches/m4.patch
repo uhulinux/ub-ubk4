@@ -1,0 +1,12 @@
+diff -Naur orig/m4/libtool.m4 mod/m4/libtool.m4
+--- orig/m4/libtool.m4	2012-09-19 17:40:04.000000000 +0200
++++ mod/m4/libtool.m4	2016-03-13 13:07:38.151192841 +0100
+@@ -3581,7 +3581,7 @@
+   AC_CHECK_LIB(m, cos, LIBM="$LIBM -lm")
+   ;;
+ *)
+-  AC_CHECK_LIB(m, cos, LIBM="-lm")
++  AC_CHECK_LIB(m, cos, LIBM=" -lm")
+   ;;
+ esac
+ AC_SUBST([LIBM])
