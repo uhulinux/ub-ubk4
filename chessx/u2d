@@ -1,2 +1,6 @@
-sflist chessx chessx | sort -V | tail -n 1
-
+for dir in $(sflist chessx chessx | sort -r);do
+    if [ $(sflist chessx chessx/$dir | grep tgz) ];then
+        echo $dir
+        exit 0
+    fi
+done
