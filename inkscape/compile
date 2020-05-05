@@ -1,4 +1,4 @@
 #!/bin/sh -eux
 
-sed -i 's/\r$//' share/extensions/*.py # CRLF sucks
-ub_compile
+ub_compile \
+    -DBUILD_TESTING=OFF

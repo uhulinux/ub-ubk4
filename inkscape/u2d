@@ -1,1 +1,1 @@
-urllist https://inkscape.org/en/release/ | grep -E 'inkscape-([0-9.]+)' | sort -V | tail -n 1 | sed s/inkscape-//
+urllist https://gitlab.com/inkscape/inkscape/-/tags | grep -E 'INKSCAPE_([0-9.]+)' | sort -V | tail -n 1 | sed s/releases#INKSCAPE_// | tr "_" "."
