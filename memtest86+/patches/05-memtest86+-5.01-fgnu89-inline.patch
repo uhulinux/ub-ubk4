@@ -1,13 +1,12 @@
-diff --git a/Makefile b/Makefile
-index 7906d50..03eb50b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -13,7 +13,7 @@ AS=as -32
+diff -Naur memtest86+-5.31b-orig/Makefile memtest86+-5.31b/Makefile
+--- memtest86+-5.31b-orig/Makefile	2020-04-12 17:14:51.000000000 +0200
++++ memtest86+-5.31b/Makefile	2020-05-09 16:06:29.088501608 +0200
+@@ -13,7 +13,7 @@
  CC=gcc
  
- CFLAGS= -Wall -march=i486 -m32 -O0 -fomit-frame-pointer -fno-builtin \
--	-ffreestanding -fPIC $(SMP_FL) -fno-stack-protector 
-+	-ffreestanding -fPIC $(SMP_FL) -fno-stack-protector -fgnu89-inline
- 	
- OBJS= head.o reloc.o main.o test.o init.o lib.o patn.o screen_buffer.o \
-       config.o cpuid.o linuxbios.o pci.o memsize.o spd.o error.o dmi.o controller.o \
+ CFLAGS= -Wall -Werror -march=i486 -m32 -O1 -fomit-frame-pointer -fno-builtin \
+- -ffreestanding -fPIC $(SMP_FL) -fno-stack-protector
++ -ffreestanding -fPIC $(SMP_FL) -fno-stack-protector -fgnu89-inline
+ 
+ SELF_TEST_CFLAGS = -Wall -Werror -march=i486 -m32 -O1 -g
+ 
