@@ -1,3 +1,1 @@
-fover=$(urllist http://www.openprinting.org/download/foomatic/ | splitver '^foomatic-db-engine-([0-9.]+)-current.tar.gz$' | sort -V | tail -n 1)
-bzrver=$(geturl http://bzr.linuxfoundation.org/loggerhead/openprinting/foomatic/ | grep foomatic-db-engine/revision | sed s%.*/%%)
-echo $fover.$bzrver
+u2d http://www.openprinting.org/download/foomatic/ foomatic-db-engine- | tr "-" "."
