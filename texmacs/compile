@@ -1,20 +1,3 @@
 #!/bin/sh -eux
 
-export QMAKE=qmake-qt5
-export MOC=moc-qt5
-export UIC=uic-qt5
-export RCC=/usr/lib/qt5/bin/rcc
-export LDFLAGS="-lz"
-sed -i '/^LDPATH/d' src/makefile.in
-export GUILE_CONFIG='/usr/bin/guile-config1.8'
-export CXXFLAGS="-fPIC -I/usr/lib/qt5/include/QtPrintSupport"
-export LDFLAGS=`pkg-config --libs Qt5PrintSupport`
-./configure \
-	--prefix=/usr \
-	--enable-pdf-renderer \
-	--enable-optimize \
-	--enable-guile2=no \
-	--with-freetypeDIR=/usr/bin/freetype-config \
-	--with-imlib2 \
-	--with-qt
-ub_make
+ub_compile
