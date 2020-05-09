@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+tar -xf openbox-themes_1.0.2.tar.gz
+
+cd openbox-themes-1.0.2/
+
+for i in Aubergine Generic Green Industrial Orange Red Slate
+do
+sed -i -e 's|=Mist|='Simple-$i'|' -e 's|IconTheme=.*|IconTheme=Industrial|' Simple-$i/index.theme
+done
