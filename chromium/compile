@@ -18,42 +18,29 @@ _flags=("
 is_debug=false
 cc_wrapper=\"ccache\"
 is_clang=true
+is_official_build=true
 clang_base_path=\"/usr\"
 clang_use_chrome_plugins=false
 linux_use_bundled_binutils=false
 fatal_linker_warnings=false
 treat_warnings_as_errors=false
-fieldtrial_testing_like_official_build=false
+fieldtrial_testing_like_official_build=true
 ffmpeg_branding=\"Chrome\"
 proprietary_codecs=true
-blink_symbol_level=0
 google_api_key=\"${_google_api_key}\"
 google_default_client_id=\"${_google_default_client_id}\"
 google_default_client_secret=\"${_google_default_client_secret}\"
-use_allocator=\"none\"
 use_gold=false
-use_lld=true
 use_sysroot=false
 symbol_level=0
 enable_linux_installer=false
 enable_nacl=false
-enable_nacl_nonsfi=false
 enable_swiftshader=false
-enable_widevine=false
+enable_widevine=true
 enable_hangout_services_extension=false
-use_cups=true
 use_custom_libcxx=false
-use_gio=false
 use_gnome_keyring=false
 use_kerberos=false
-use_pulseaudio=true
-link_pulseaudio=true
-use_system_freetype=true
-use_system_harfbuzz=true
-use_system_lcms2=true
-use_system_libjpeg=true
-use_system_libpng=true
-use_system_zlib=true
 icu_use_data_file=false
 ")
 
@@ -68,7 +55,7 @@ _syslibs=(
     libdrm
     libevent
     libjpeg
-    libpng
+#   libpng
     libvpx
     libwebp
     libxml
@@ -77,6 +64,9 @@ _syslibs=(
 	flac
 	yasm
 )
+
+# Allow building against system libraries in official builds
+sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
 # external usb.ids (hwdata)
 sed "s|//third_party/usb_ids/usb.ids|/usr/share/hwdata/usb.ids|g" -i services/device/public/cpp/usb/BUILD.gn
@@ -87,8 +77,6 @@ python2 build/linux/unbundle/replace_gn_files.py --system-libraries "${_syslibs[
 mkdir -p third_party/node/linux/node-linux-x64/bin
 ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/node
 
-# others
-third_party/libaddressinput/chromium/tools/update-strings.py
 # Force script incompatible with Python 3 to use /usr/bin/python2
 sed -i '1s|python$|&2|' third_party/dom_distiller_js/protoc_plugins/*.py
 
