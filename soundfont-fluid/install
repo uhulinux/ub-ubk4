@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
-sed "s/ubversion/$UB_VERSION/" -i $UB_SRCDIR/packages/soundfont-fluid/postinst
+mkdir -p ${UB_INSTALLDIR}/usr/share/sounds/sf2
+mv *.sf2 ${UB_INSTALLDIR}/usr/share/sounds/sf2/
