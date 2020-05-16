@@ -1,10 +1,14 @@
 diff -Naur orig/gio/gdesktopappinfo.c patched/gio/gdesktopappinfo.c
 --- orig/gio/gdesktopappinfo.c	2020-03-11 13:21:39.000000000 +0100
-+++ patched/gio/gdesktopappinfo.c	2020-05-16 02:23:41.512847922 +0200
-@@ -2552,6 +2552,18 @@
++++ patched/gio/gdesktopappinfo.c	2020-05-16 21:51:07.563094737 +0200
+@@ -2552,10 +2552,18 @@
      }
    else
      {
+-      if (check == NULL)
+-        check = g_find_program_in_path ("mate-terminal");
+-      if (check == NULL)
+-        check = g_find_program_in_path ("xfce4-terminal");
 +	  if (check == NULL)
 +		check = g_find_program_in_path ("mate-terminal");
 +	  if (check == NULL)
@@ -17,6 +21,6 @@ diff -Naur orig/gio/gdesktopappinfo.c patched/gio/gdesktopappinfo.c
 +		check = g_find_program_in_path ("roxterm");
 +	  if (check == NULL)
 +		check = g_find_program_in_path ("sakura");
-       if (check == NULL)
-         check = g_find_program_in_path ("mate-terminal");
-       if (check == NULL)
+       if (check != NULL)
+         {
+           term_argv[0] = check;
