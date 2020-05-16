@@ -1,7 +1,7 @@
 diff -Naur orig/gio/gdesktopappinfo.c patched/gio/gdesktopappinfo.c
---- orig/gio/gdesktopappinfo.c	2017-09-04 14:42:30.134739579 +0200
-+++ patched/gio/gdesktopappinfo.c	2017-09-12 02:15:39.457473990 +0200
-@@ -2523,6 +2523,18 @@
+--- orig/gio/gdesktopappinfo.c	2020-03-11 13:21:39.000000000 +0100
++++ patched/gio/gdesktopappinfo.c	2020-05-16 02:23:41.512847922 +0200
+@@ -2552,6 +2552,18 @@
      }
    else
      {
@@ -18,5 +18,5 @@ diff -Naur orig/gio/gdesktopappinfo.c patched/gio/gdesktopappinfo.c
 +	  if (check == NULL)
 +		check = g_find_program_in_path ("sakura");
        if (check == NULL)
-         check = g_find_program_in_path ("nxterm");
+         check = g_find_program_in_path ("mate-terminal");
        if (check == NULL)
