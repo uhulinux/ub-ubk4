@@ -1,0 +1,42 @@
+diff -Nur orig/autogen.sh mod/autogen.sh
+--- orig/autogen.sh	2019-05-17 06:54:08.000000000 +0200
++++ mod/autogen.sh	2020-05-17 17:39:20.000000000 +0200
+@@ -3,7 +3,6 @@
+ 
+ libtoolize --force --copy
+ intltoolize --force --copy
+-gtkdocize --copy
+ aclocal
+ autoconf
+ autoheader
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2019-05-17 06:54:08.000000000 +0200
++++ mod/configure.ac	2020-05-17 17:42:17.000000000 +0200
+@@ -221,7 +221,6 @@
+ dnl Documentation
+ dnl ###########################################################################
+ 
+-GTK_DOC_CHECK
+ YELP_HELP_INIT
+ 
+ dnl ###########################################################################
+@@ -240,7 +239,6 @@
+ Makefile
+ common/Makefile
+ data/Makefile
+-doc/Makefile
+ help/Makefile
+ liblightdm-gobject/liblightdm-gobject-1.pc
+ liblightdm-gobject/Makefile
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2019-05-17 06:54:08.000000000 +0200
++++ mod/Makefile.am	2020-05-17 17:48:42.038955053 +0200
+@@ -3,7 +3,7 @@
+ if COMPILE_TESTS
+ SUBDIRS += tests
+ endif
+-SUBDIRS += data po src doc help
++SUBDIRS += data po src help
+ 
+ DISTCHECK_CONFIGURE_FLAGS = --enable-introspection --enable-gtk-doc
+ 
