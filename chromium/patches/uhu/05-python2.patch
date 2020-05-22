@@ -1,7 +1,7 @@
 diff -Naur orig/tools/gn/src/gn/json_project_writer_unittest.cc patched/tools/gn/src/gn/json_project_writer_unittest.cc
---- orig/tools/gn/src/gn/json_project_writer_unittest.cc	2020-04-03 06:19:15.000000000 +0200
-+++ patched/tools/gn/src/gn/json_project_writer_unittest.cc	2020-04-14 17:10:34.344935483 +0200
-@@ -34,7 +34,7 @@
+--- orig/tools/gn/src/gn/json_project_writer_unittest.cc	2020-05-18 20:48:23.000000000 +0200
++++ patched/tools/gn/src/gn/json_project_writer_unittest.cc	2020-05-21 22:25:37.077571665 +0200
+@@ -37,7 +37,7 @@
        SubstitutionList::MakeForTest("//out/Debug/output1.out");
  
    setup.build_settings()->set_python_path(
@@ -9,8 +9,8 @@ diff -Naur orig/tools/gn/src/gn/json_project_writer_unittest.cc patched/tools/gn
 +      base::FilePath(FILE_PATH_LITERAL("/usr/bin/python2")));
    std::vector<const Target*> targets;
    targets.push_back(&target);
-   std::string out =
-@@ -95,7 +95,7 @@
+ #if defined(OS_WIN)
+@@ -172,7 +172,7 @@
        SubstitutionList::MakeForTest("//out/Debug/{{source_name_part}}.out");
  
    setup.build_settings()->set_python_path(
@@ -18,10 +18,10 @@ diff -Naur orig/tools/gn/src/gn/json_project_writer_unittest.cc patched/tools/gn
 +      base::FilePath(FILE_PATH_LITERAL("/usr/bin/python2")));
    std::vector<const Target*> targets;
    targets.push_back(&target);
-   std::string out =
+ #if defined(OS_WIN)
 diff -Naur orig/tools/gn/src/gn/ninja_action_target_writer_unittest.cc patched/tools/gn/src/gn/ninja_action_target_writer_unittest.cc
---- orig/tools/gn/src/gn/ninja_action_target_writer_unittest.cc	2020-04-03 06:19:15.000000000 +0200
-+++ patched/tools/gn/src/gn/ninja_action_target_writer_unittest.cc	2020-04-14 17:12:07.321165028 +0200
+--- orig/tools/gn/src/gn/ninja_action_target_writer_unittest.cc	2020-05-18 20:48:23.000000000 +0200
++++ patched/tools/gn/src/gn/ninja_action_target_writer_unittest.cc	2020-05-21 22:25:37.077571665 +0200
 @@ -54,14 +54,14 @@
    ASSERT_TRUE(target.OnResolved(&err));
  
@@ -175,9 +175,9 @@ diff -Naur orig/tools/gn/src/gn/ninja_action_target_writer_unittest.cc patched/t
          "  restat = 1\n"
          "\n"
 diff -Naur orig/tools/gn/src/gn/setup.cc patched/tools/gn/src/gn/setup.cc
---- orig/tools/gn/src/gn/setup.cc	2020-04-03 06:19:15.000000000 +0200
-+++ patched/tools/gn/src/gn/setup.cc	2020-04-14 17:13:30.445347271 +0200
-@@ -713,7 +713,7 @@
+--- orig/tools/gn/src/gn/setup.cc	2020-05-18 20:48:23.000000000 +0200
++++ patched/tools/gn/src/gn/setup.cc	2020-05-21 22:25:37.081571671 +0200
+@@ -717,7 +717,7 @@
      }
      build_settings_.set_python_path(python_path.NormalizePathSeparatorsTo('/'));
  #else
