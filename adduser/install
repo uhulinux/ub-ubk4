@@ -1,11 +1,13 @@
 #!/bin/sh -eux
 
+install -o root -g root -m644 adduser.conf "$UB_INSTALLDIR"/etc
 install -o root -g root -m644 deluser.conf "$UB_INSTALLDIR"/etc
 install -o root -g root -m755 adduser "$UB_INSTALLDIR"/usr/sbin/adduser
 install -o root -g root -m755 deluser "$UB_INSTALLDIR"/usr/sbin/deluser
 
-mkdir -p "$UB_INSTALLDIR"/usr/lib/perl5/vendor_perl/5.18.2/Debian
-install -o root -g root -m644 AdduserCommon.pm "$UB_INSTALLDIR"/usr/lib/perl5/vendor_perl/5.18.2/Debian/AdduserCommon.pm
+vendorlibdir=`perl -V:installvendorlib | sed -e "s/installvendorlib='//" | sed -e "s/';//"`
+mkdir -p "$UB_INSTALLDIR$vendorlibdir"/Debian
+install -o root -g root -m644 AdduserCommon.pm "$UB_INSTALLDIR$vendorlibdir"/Debian/AdduserCommon.pm
 
 install -o root -g root -m644 doc/adduser.conf.5 "$UB_INSTALLDIR"/usr/share/man/man5/
 install -o root -g root -m644 doc/deluser.conf.5 "$UB_INSTALLDIR"/usr/share/man/man5/
