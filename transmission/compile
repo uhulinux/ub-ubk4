@@ -1,17 +1,10 @@
 #!/bin/sh -eux
 
-git submodule update --init
-
-mkdir -p build
+rm -f m4/glib-gettext.m4
+rm -rf CMakeLists.txt
+autoreconf -vif
 export CFLAGS+=" -I/usr/include/openssl-1.0"
 export CPPFLAGS+=" -I/usr/include/openssl-1.0"
 export LDFLAGS+=" -L/usr/lib/openssl-1.0"
 export CXXFLAGS+=" -I/usr/include/openssl-1.0"
-
-cd build
-cmake \
-	-DCMAKE_INSTALL_PREFIX=/usr \
-	-DCMAKE_TYPE=Release \
-..
-
-ub_make
+ub_compile
