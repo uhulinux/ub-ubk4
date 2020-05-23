@@ -1,0 +1,46 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2020-05-09 10:56:02.000000000 +0200
++++ mod/configure.ac	2020-05-23 20:04:23.876525553 +0200
+@@ -31,13 +31,6 @@
+ 
+ LT_INIT
+ 
+-# check for gtk-doc
+-m4_ifdef([GTK_DOC_CHECK], [
+-GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+-],[
+-AM_CONDITIONAL([ENABLE_GTK_DOC], false)
+-])
+-
+ GOBJECT_INTROSPECTION_CHECK([1.30.0])
+ 
+ PKG_CHECK_MODULES(LIBGFBGRAPH, [glib-2.0 gio-2.0 gobject-2.0 rest-0.7 json-glib-1.0])
+@@ -53,9 +46,5 @@
+ AC_OUTPUT([
+ Makefile
+ libgfbgraph.pc
+-docs/Makefile
+-docs/reference/Makefile
+-docs/reference/apiversion.xml
+-docs/reference/version.xml
+ gfbgraph/Makefile
+ tests/Makefile])
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2020-05-09 10:56:02.000000000 +0200
++++ mod/Makefile.am	2020-05-23 21:12:28.198650325 +0200
+@@ -1,13 +1,12 @@
+-SUBDIRS = gfbgraph docs tests
++SUBDIRS = gfbgraph tests
+ ACLOCAL_AMFLAGS = -I m4
+ 
+-libgfbgraphdocdir = ${prefix}/doc/libgfbgraph
++libgfbgraphdocdir = ${prefix}/share/doc/Packages/libgfbgraph
+ libgfbgraphdoc_DATA = \
+ 	README\
+ 	COPYING\
+ 	AUTHORS\
+ 	ChangeLog\
+-	INSTALL\
+ 	NEWS
+ 
+ %-$(API_VERSION).pc: %.pc
