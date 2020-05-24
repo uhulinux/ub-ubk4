@@ -1,12 +1,12 @@
 #!/bin/sh -eux
 
-NOCONFIGURE=1 ./autogen.sh
 ub_compile \
-	--disable-local \
-	--enable-aptcc \
-	--disable-cron \
-	--enable-introspection \
-	--enable-gtk-module \
-	--enable-gstreamer-plugin \
-	--disable-gtk-doc \
-	--enable-systemd
+    -Dpackaging_backend=aptcc \
+    -Dsystemd=true \
+	-Doffline_update=false \
+	-Dgobject_introspection=true \
+	-Dman_pages=true \
+	-Dgtk_doc=false \
+	-Dgstreamer_plugin=true \
+	-Dgtk_module=true \
+	-Dcron=false

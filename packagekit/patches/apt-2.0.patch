@@ -1,0 +1,49 @@
+diff -Naur orig/backends/aptcc/meson.build patched/backends/aptcc/meson.build
+--- orig/backends/aptcc/meson.build	1970-01-01 01:00:00.000000000 +0100
++++ patched/backends/aptcc/meson.build	2020-05-24 23:21:42.901731136 +0200
+@@ -8,7 +8,6 @@
+ appstream_dep = dependency('appstream', version: '>=0.11')
+ 
+ apt_pkg_dep = cpp_compiler.find_library('apt-pkg')
+-apt_inst_dep = cpp_compiler.find_library('apt-inst')
+ 
+ if not cpp_compiler.compiles(
+   '''
+@@ -19,8 +18,7 @@
+     }
+   ''',
+   dependencies: [
+-    apt_pkg_dep,
+-    apt_inst_dep
++    apt_pkg_dep
+   ]
+ )
+   error ('libapt-pkg 1.1 or later is required')
+@@ -35,8 +33,7 @@
+     }
+   ''',
+   dependencies: [
+-    apt_pkg_dep,
+-    apt_inst_dep
++    apt_pkg_dep
+   ]
+ )
+   error ('libapt-pkg 1.7 or later is required - or backported frontend locking')
+@@ -53,8 +50,7 @@
+     }
+   ''',
+   dependencies: [
+-    apt_pkg_dep,
+-    apt_inst_dep
++    apt_pkg_dep
+   ]
+ )
+   ddtp_flag = ['-DHAVE_DDTP']
+@@ -86,7 +82,6 @@
+     packagekit_glib2_dep,
+     gmodule_dep,
+     apt_pkg_dep,
+-    apt_inst_dep,
+     gstreamer_dep,
+     gstreamer_base_dep,
+     gstreamer_plugins_base_dep,
