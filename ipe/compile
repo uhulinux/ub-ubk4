@@ -2,6 +2,13 @@
 
 export QTDIR="/usr/lib/qt5"
 
+# ocsmány windows sorvégek vannak a lua szkriptekben
+for f in `find -iname \*.lua`; do
+    echo $f
+    tr -d '\15\32' < $f > $f.tr
+    mv $f.tr $f
+done
+
 cd src
 ub_make IPEPREFIX=/usr LUA_PACKAGE=lua5.3
 
