@@ -3,13 +3,13 @@
 auth		required	pam_nologin.so
 auth		required	pam_unix.so shadow nullok
 auth		required	pam_group.so
-auth		optional		pam_gnome_keyring.so
+# auth		optional	pam_gnome_keyring.so
 
 account		required	pam_unix.so
 
 password	required	pam_cracklib.so retry=3
 password	required	pam_unix.so nullok use_authtok md5 shadow
-password	optional	pam_gnome_keyring.so
+# password	optional	pam_gnome_keyring.so
 
 session		required	pam_env.so
 session		required	pam_envfeed.so
@@ -20,4 +20,4 @@ session		[success=1 default=ignore] pam_succeed_if.so service in crond quiet use
 session		optional	pam_lastlog.so never
 session		optional	pam_motd.so
 session		optional	pam_mail.so quiet
-session		optional	pam_gnome_keyring.so auto_start
+# session		optional	pam_gnome_keyring.so auto_start
