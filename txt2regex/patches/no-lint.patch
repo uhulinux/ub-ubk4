@@ -1,0 +1,19 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2020-05-21 01:02:41.000000000 +0200
++++ mod/Makefile	2020-05-28 17:14:03.961659945 +0200
+@@ -13,13 +13,13 @@
+ MANDIR = $(DESTDIR)/usr/share/man/man1
+ 
+ .PHONY: check check-po clean doc fmt install install-bin \
+-        install-mo lint mo po pot test test-bash test-regex \
++        install-mo mo po pot test test-bash test-regex \
+         test-regex-build test-regex-shell
+ 
+ #-----------------------------------------------------------------------
+ # Dev
+ 
+-check: lint test
++check: test
+ 
+ fmt:
+ 	shfmt -w -i 4 -ci -sr $(SCRIPT) tests/regex-tester.sh
