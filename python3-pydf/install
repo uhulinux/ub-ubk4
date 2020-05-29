@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+sed -i 's|#! /usr/bin/python|#!/usr/bin/python3|' pydf
+python3 setup.py install --root=${UB_INSTALLDIR}
+cp pydfrc ${UB_INSTALLDIR}/etc
+cp pydf.1 ${UB_INSTALLDIR}/usr/share/man/man1/
