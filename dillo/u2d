@@ -1,1 +1,1 @@
-u2d http://www.dillo.org/download/
+urllist https://github.com/rodarima/dillo/releases | grep ^release- | grep tar | sort -V | tail -n 1 | sed s/_/\./g | splitver 'release-([0-9.]+).tar.gz$' 
