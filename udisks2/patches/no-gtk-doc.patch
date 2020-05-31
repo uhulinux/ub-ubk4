@@ -1,6 +1,6 @@
 diff -Naur orig/autogen.sh patched/autogen.sh
---- orig/autogen.sh	2019-07-22 18:24:44.000000000 +0200
-+++ patched/autogen.sh	2019-09-29 23:14:08.123008452 +0200
+--- orig/autogen.sh	2020-05-26 17:07:07.000000000 +0200
++++ patched/autogen.sh	2020-05-31 11:57:22.146906318 +0200
 @@ -15,13 +15,12 @@
  
  PKG_NAME=$(autoconf --trace 'AC_INIT:$1' configure.ac)
@@ -17,9 +17,9 @@ diff -Naur orig/autogen.sh patched/autogen.sh
          if [ "$1" = "--help" ]; then
                  exit 0
 diff -Naur orig/configure.ac patched/configure.ac
---- orig/configure.ac	2019-07-22 18:24:44.000000000 +0200
-+++ patched/configure.ac	2019-09-29 23:25:13.120494728 +0200
-@@ -95,8 +95,6 @@
+--- orig/configure.ac	2020-05-26 17:07:07.000000000 +0200
++++ patched/configure.ac	2020-05-31 12:16:19.923413083 +0200
+@@ -99,8 +99,6 @@
    enable_available_modules=no
  fi
  
@@ -28,22 +28,24 @@ diff -Naur orig/configure.ac patched/configure.ac
  AC_ARG_ENABLE(man,
                [AS_HELP_STRING([--enable-man],
                                [generate man pages [default=auto]])],,
-@@ -709,48 +707,6 @@
- modules/bcache/data/Makefile
- modules/vdo/Makefile
+@@ -745,9 +743,6 @@
  modules/vdo/data/Makefile
--doc/Makefile
+ modules/vdo/data/udisks2-vdo.pc
+ doc/Makefile
 -doc/udisks2-docs.xml.in
 -doc/udisks2-sections.txt.in
 -doc/udisks2.types.in
--doc/version.xml
--doc/man/Makefile
--doc/man/udisks.xml
--doc/man/udisksd.xml
--doc/man/udisksctl.xml
--doc/man/umount.udisks2.xml
--doc/man/udisks2.conf.5.xml.in
--doc/man/udisks2_lsm.conf.5.xml.in
+ doc/version.xml
+ doc/man/Makefile
+ doc/man/udisks.xml
+@@ -756,40 +751,6 @@
+ doc/man/umount.udisks2.xml
+ doc/man/udisks2.conf.5.xml.in
+ doc/man/udisks2_lsm.conf.5.xml.in
+-doc/udisks2-docs.xml.daemon.man
+-doc/udisks2-docs.xml.daemon.part
+-doc/udisks2-sections.txt.daemon.sections
+-doc/udisks2.types.daemon
 -doc/udisks2-docs.xml.iscsi.dbus
 -doc/udisks2-docs.xml.iscsi.generated
 -doc/udisks2-sections.txt.iscsi.sections
@@ -78,9 +80,24 @@ diff -Naur orig/configure.ac patched/configure.ac
  ])
  
 diff -Naur orig/doc/Makefile.am patched/doc/Makefile.am
---- orig/doc/Makefile.am	2019-07-22 18:24:44.000000000 +0200
-+++ patched/doc/Makefile.am	2019-09-29 23:19:55.235970036 +0200
-@@ -207,8 +207,6 @@
+--- orig/doc/Makefile.am	2020-05-26 17:07:07.000000000 +0200
++++ patched/doc/Makefile.am	2020-05-31 12:06:57.251196896 +0200
+@@ -95,9 +95,7 @@
+ 
+ # ------------------------------------------------------------------------------
+ 
+-if ENABLE_GTK_DOC
+-all-local: generate-main-sgml-file
+-endif
++all-local:
+ 
+ # New gtk-doc 2.16 for some reason automatically creates a no-op
+ # "$(DOC_MAIN_SGML_FILE)" make target that overrides our target
+@@ -242,11 +240,10 @@
+ 
+ endif # ENABLE_DAEMON
+ 
++EXTRA_DIST =
  
  # ------------------------------------------------------------------------------
  
@@ -89,15 +106,12 @@ diff -Naur orig/doc/Makefile.am patched/doc/Makefile.am
  EXTRA_DIST +=                                                                  \
  	$(DOC_MAIN_SGML_FILE).in.in                                            \
  	$(DOC_MAIN_SGML_FILE).in                                               \
-diff -Naur orig/Makefile.am patched/Makefile.am
---- orig/Makefile.am	2019-07-22 18:24:44.000000000 +0200
-+++ patched/Makefile.am	2019-09-29 23:14:30.907334869 +0200
-@@ -7,7 +7,7 @@
+@@ -315,6 +312,8 @@
+ 	version.xml.in                                                         \
+ 	TODO-ISCSI
  
- NULL =
- 
--SUBDIRS = data udisks src tools modules po doc
-+SUBDIRS = data udisks src tools modules po
- 
- ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
- 
++CLEANFILES =
++
+ CLEANFILES +=                                                                  \
+ 	$(DOC_MAIN_SGML_FILE)                                                  \
+ 	$(UDISKS_SECTIONS)                                                     \
