@@ -1,0 +1,2 @@
+dir=$(sflist hydrogen Hydrogen | grep Sources | sort -V | tail -n 1 |sed 's/ /%20/')
+geturl https://sourceforge.net/projects/hydrogen/files/Hydrogen/$dir/ | grep download | grep tar | sed s/.*hydrogen-//g | sed s/\.tar.*//g | sort -V | tail -n 1 | sed s/-/~/
