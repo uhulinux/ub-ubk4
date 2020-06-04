@@ -28,7 +28,6 @@ $UB_COMPILEDIR/configure \
 	\
 	-nomake examples    \
 	-nomake tests		\
-	-skip qtwebengine	\
 	\
 	-accessibility      \
 	\
@@ -43,7 +42,6 @@ $UB_COMPILEDIR/configure \
 	-system-pcre		\
 	-system-sqlite		\
 	-system-zlib        \
-	-system-xcb         \
 	\
 	-dbus-linked        \
 	-openssl-linked     \
@@ -63,8 +61,9 @@ $UB_COMPILEDIR/configure \
 	-evdev				\
 	-mtdev				\
 	-libinput			\
-	-tslib				\
-	-xkb                \
-	-xcb-xlib			\
+	-tslib              \
+	\
+	-system-webengine-icu \
+	-system-ffmpeg
 
 ub_make

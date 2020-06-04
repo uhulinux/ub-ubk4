@@ -1,3 +1,0 @@
-release=$(urllist http://download.qt-project.org/official_releases/qt/ | splitver '^(5.[0-9])' | sort -V | tail -n 1)
-urllist http://download.qt-project.org/official_releases/qt/$release/ | splitver '^([0-9.]+)' | sort -V | tail -n 1
-urllist http://download.qt.io/official_releases/$dir/$release/ | splitver '^qtwebengine-everywhere-src-([0-9.].+).tar.xz$' | sort -V | tail -n 1

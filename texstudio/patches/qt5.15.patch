@@ -1,0 +1,33 @@
+diff -Naur orig/manhattanstyle.cpp patched/manhattanstyle.cpp
+--- orig/manhattanstyle.cpp	2017-08-12 14:00:03.000000000 +0200
++++ patched/manhattanstyle.cpp	2020-06-03 20:24:58.925856093 +0200
+@@ -44,6 +44,7 @@
+ #include <QMainWindow>
+ #include <QMenuBar>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QPixmap>
+ #include <QPixmapCache>
+ #include <QPushButton>
+diff -Naur orig/pdfviewer/PDFDocument.h patched/pdfviewer/PDFDocument.h
+--- orig/pdfviewer/PDFDocument.h	2017-08-12 14:00:03.000000000 +0200
++++ patched/pdfviewer/PDFDocument.h	2020-06-03 20:18:03.757543493 +0200
+@@ -31,6 +31,7 @@
+ #include <QPinchGesture>
+ #include <QTapGesture>
+ #include <QProgressDialog>
++#include <QPainterPath>
+ 
+ //#include "FindDialog.h"
+ #if QT_VERSION < 0x050000
+diff -Naur orig/qcodeedit/lib/widgets/qfoldpanel.cpp patched/qcodeedit/lib/widgets/qfoldpanel.cpp
+--- orig/qcodeedit/lib/widgets/qfoldpanel.cpp	2017-08-12 14:00:03.000000000 +0200
++++ patched/qcodeedit/lib/widgets/qfoldpanel.cpp	2020-06-03 20:32:23.934212449 +0200
+@@ -14,6 +14,7 @@
+ ****************************************************************************/
+ 
+ #include "qfoldpanel.h"
++#include <QPainterPath>
+ 
+ /*!
+ 	\file qfoldpanel.cpp

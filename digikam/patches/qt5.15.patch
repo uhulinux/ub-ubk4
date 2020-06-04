@@ -1,0 +1,34 @@
+diff -Naur orig/core/dplugins/generic/view/presentation/opengl/presentationgl.cpp patched/core/dplugins/generic/view/presentation/opengl/presentationgl.cpp
+--- orig/core/dplugins/generic/view/presentation/opengl/presentationgl.cpp	2019-11-03 10:03:59.000000000 +0100
++++ patched/core/dplugins/generic/view/presentation/opengl/presentationgl.cpp	2020-06-03 00:17:06.055380263 +0200
+@@ -44,6 +44,8 @@
+ #include <QMatrix>
+ #include <QMouseEvent>
+ #include <QPainter>
++#include <QPainterPath>
++#include <QPainterPathStroker>
+ #include <QPixmap>
+ #include <QTimer>
+ #include <QWheelEvent>
+diff -Naur orig/core/libs/dimg/filters/curves/curveswidget.cpp patched/core/libs/dimg/filters/curves/curveswidget.cpp
+--- orig/core/libs/dimg/filters/curves/curveswidget.cpp	2019-11-03 10:03:59.000000000 +0100
++++ patched/core/libs/dimg/filters/curves/curveswidget.cpp	2020-06-03 00:20:34.727705145 +0200
+@@ -42,6 +42,7 @@
+ #include <QFontMetrics>
+ #include <QPaintEvent>
+ #include <QMouseEvent>
++#include <QPainterPath>
+ 
+ // KDE includes
+ 
+diff -Naur orig/core/libs/dimg/filters/levels/histogrampainter.cpp patched/core/libs/dimg/filters/levels/histogrampainter.cpp
+--- orig/core/libs/dimg/filters/levels/histogrampainter.cpp	2019-11-03 10:03:59.000000000 +0100
++++ patched/core/libs/dimg/filters/levels/histogrampainter.cpp	2020-06-03 00:21:36.303800959 +0200
+@@ -30,6 +30,7 @@
+ // Qt includes
+ 
+ #include <QPainter>
++#include <QPainterPath>
+ 
+ // KDE includes
+ 

@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-cd build
-
-ub_install INSTALL_ROOT=$UB_INSTALLDIR
-
-# designerplugin nem kell
-rm -Rf $UB_INSTALLDIR/usr/lib/qt5/lib/cmake/Qt5Designer
-rm -Rf $UB_INSTALLDIR/usr/lib/qt5/plugins

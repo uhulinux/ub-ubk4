@@ -1,0 +1,33 @@
+diff -Naur orig/modules/gui/qt/components/playlist/views.cpp patched/modules/gui/qt/components/playlist/views.cpp
+--- orig/modules/gui/qt/components/playlist/views.cpp	2017-11-24 16:29:17.000000000 +0100
++++ patched/modules/gui/qt/components/playlist/views.cpp	2020-06-01 01:38:45.982730401 +0200
+@@ -35,6 +35,7 @@
+ #include <QMetaType>
+ #include <QHeaderView>
+ #include <QSvgRenderer>
++#include <QPainterPath>
+ 
+ #include <assert.h>
+ 
+diff -Naur orig/modules/gui/qt/dialogs/plugins.cpp patched/modules/gui/qt/dialogs/plugins.cpp
+--- orig/modules/gui/qt/dialogs/plugins.cpp	2017-11-24 16:29:17.000000000 +0100
++++ patched/modules/gui/qt/dialogs/plugins.cpp	2020-06-01 01:32:38.618192296 +0200
+@@ -66,6 +66,7 @@
+ #include <QSplitter>
+ #include <QToolButton>
+ #include <QStackedWidget>
++#include <QPainterPath>
+ 
+ //match the image source (width/height)
+ #define SCORE_ICON_WIDTH_SCALE 4
+diff -Naur orig/modules/gui/qt/util/timetooltip.hpp patched/modules/gui/qt/util/timetooltip.hpp
+--- orig/modules/gui/qt/util/timetooltip.hpp	2018-05-03 14:03:21.000000000 +0200
++++ patched/modules/gui/qt/util/timetooltip.hpp	2020-06-01 01:25:26.469563459 +0200
+@@ -25,6 +25,7 @@
+ #include "qt.hpp"
+ 
+ #include <QWidget>
++#include <QPainterPath>
+ 
+ class TimeTooltip : public QWidget
+ {

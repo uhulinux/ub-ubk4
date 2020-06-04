@@ -1,0 +1,14 @@
+diff -Naur orig/src/modules/partition/gui/PartitionSplitterWidget.cpp patched/src/modules/partition/gui/PartitionSplitterWidget.cpp
+--- orig/src/modules/partition/gui/PartitionSplitterWidget.cpp	2020-05-11 20:53:23.000000000 +0200
++++ patched/src/modules/partition/gui/PartitionSplitterWidget.cpp	2020-06-04 01:12:34.279702174 +0200
+@@ -31,8 +31,9 @@
+ #include <kpmcore/core/partition.h>
+ 
+ #include <QApplication>
+-#include <QPainter>
+ #include <QMouseEvent>
++#include <QPainter>
++#include <QPainterPath>
+ #include <QStyleOption>
+ 
+ using CalamaresUtils::Partition::PartitionIterator;
