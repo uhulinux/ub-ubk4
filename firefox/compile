@@ -5,7 +5,7 @@ CXX="ccache clang++ -march=k8 -m64"
 
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/firefox/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
-export PYTHON=python2
+export PYTHON=/usr/bin/python2
 
 : > .mozconfig
 cat > .mozconfig << _EOF_
