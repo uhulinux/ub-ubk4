@@ -1,11 +1,10 @@
 #!/bin/sh -eux
 
 # A -O3 veszélyes
-ub_replace -O3 -O2 c/runConfigure
+ub_replace -O3 -O2 runConfigure
 
 export UB_MAKE_PROCS=1
-export XALANCROOT="$UB_COMPILEDIR"/c
-cd c
+export XALANCROOT="$UB_COMPILEDIR"
 ./runConfigure \
 	-plinux \
 	-P/usr
