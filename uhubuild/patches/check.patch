@@ -1,0 +1,89 @@
+From 1e01686d7e9b78a2bdb0e2893704adc77a5ecf3b Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Sat, 13 Jun 2020 23:37:21 +0200
+Subject: =?UTF-8?q?uhubuild-check=20aktualiz=C3=A1l=C3=A1s?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/src/uhubuild-check b/src/uhubuild-check
+index d388c52..e1f9e16 100755
+--- a/src/uhubuild-check
++++ b/src/uhubuild-check
+@@ -295,7 +295,6 @@ fi
+ for file in acquire compile install; do
+ 	if [ -f $file ]; then
+ 		pp < $file > $UHUBUILD_SRC2DIR/$file
+-#		sed -i '/^#!.*$/G' $file
+ 		reformat 1 < $file > $UHUBUILD_SRC2DIR/$file
+ 	fi
+ done
+@@ -348,7 +347,7 @@ if [ -f "homepage" ]; then
+ 		error "A homepage nem egysoros!"
+ 	fi
+ 	case "$(cat homepage)" in
+-		ftp://*|http://*|https://*)
++		http://*|https://*)
+ 			;;
+ 		*)
+ 			error "Ismeretlen URL formátum a homepage fájlban."
+@@ -487,16 +486,8 @@ for pkg in packages/*; do
+ 	fi > $UHUBUILD_SRC2DIR/$pkg/words/hu
+ 
+ 	if [ "$(type -p hunspell)" != "" ]; then
+-		case "$(<distribution)" in
+-			*1.[012])
+-				to_utf8_filter="iconv -f Latin2 -t UTF-8"
+-				from_utf8_filter="iconv -f UTF-8 -t Latin2"
+-				;;
+-			*)
+-				to_utf8_filter="cat"
+-				from_utf8_filter="cat"
+-				;;
+-		esac
++		to_utf8_filter="cat"
++		from_utf8_filter="cat"
+ 		tmpfile tmpfile tmpfile2
+ 		cat "$UHUBUILD_SRC2DIR/$pkg"/{description,summary}/hu | \
+ 		tr -s '[:space:]' '\n' | grep -a -v '^&' | \
+@@ -703,7 +694,6 @@ for pkg in packages/*; do
+ 	for file in postinst postrm prerm; do
+ 		if [ -f $pkg/$file ]; then
+ 			pp < $pkg/$file > $UHUBUILD_SRC2DIR/$pkg/$file
+-#			sed -i '/^#!.*$/G' $pkg/$file
+ 			reformat 1 < $pkg/$file > $UHUBUILD_SRC2DIR/$pkg/$file
+ 		fi
+ 	done
+@@ -816,7 +806,6 @@ for pkg in packages/*; do
+ 				Applications/WindowManagers | \
+ 				Artwork | \
+ 				Data | \
+-				Development | \
+ 				Development/Compilers | \
+ 				Development/Headers | \
+ 				Development/Sources | \
+@@ -825,6 +814,7 @@ for pkg in packages/*; do
+ 				Firmware | \
+ 				Interpreters | \
+ 				Libraries | \
++				Libraries/Static | \
+ 				Meta | \
+ 				Servers | \
+ 				System/Base | \
+@@ -838,7 +828,6 @@ for pkg in packages/*; do
+ 				System/Tools | \
+ 				System/X | \
+ 				UHU | \
+-				Web | \
+ 				CINNAMON | \
+ 				GNOME | \
+ 				KDE | \
+@@ -983,7 +972,6 @@ else
+ 	done
+ 
+ 	# Esetleges fölösleges könyvtárak törlése
+-	# TODO: ha csak .svn van benne, akkor is törölni kéne!!!
+ 	for d in addons packages/*/{description,words} patches; do
+ 		if [ -d "$d" ]; then
+ 			rmdir --ignore-fail-on-non-empty "$d"

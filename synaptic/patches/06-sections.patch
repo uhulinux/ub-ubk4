@@ -1,6 +1,6 @@
 diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
---- orig/common/sections_trans.cc	2018-11-08 08:50:31.000000000 +0100
-+++ patched/common/sections_trans.cc	2018-11-09 19:27:02.892516065 +0100
+--- orig/common/sections_trans.cc	2020-01-25 14:16:51.000000000 +0100
++++ patched/common/sections_trans.cc	2020-06-14 11:28:04.963486920 +0200
 @@ -8,130 +8,105 @@
  #include "sections_trans.h"
  
@@ -200,6 +200,8 @@ diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
 +
 +   {"Sources", _("Sources")},
 +
++   {"Static", _("Static")},
++
 +   {"System", _("System")},
 +
 +   {"Tools", _("Utilities")},
@@ -208,8 +210,6 @@ diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
 +
 +   {"UHU", _("UHU")},
 +
-+   {"Web", _("World Wide Web")},
-+   
 +   {"WindowManagers", _("Window Managers")},
 +   
 +   {"X", _("X Server")},
@@ -232,8 +232,8 @@ diff -Naur orig/common/sections_trans.cc patched/common/sections_trans.cc
     // TRANSLATORS: Alias for the Debian package section "non free"
     {"non-free", _("non free")},
 diff -Naur orig/po/hu.po patched/po/hu.po
---- orig/po/hu.po	2018-11-08 08:50:31.000000000 +0100
-+++ patched/po/hu.po	2018-11-09 19:40:03.455264508 +0100
+--- orig/po/hu.po	2020-01-25 14:16:51.000000000 +0100
++++ patched/po/hu.po	2020-06-14 11:30:10.127646600 +0200
 @@ -7,9 +7,9 @@
  msgstr ""
  "Project-Id-Version: synaptic\n"
@@ -241,13 +241,13 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 -"POT-Creation-Date: 2016-01-11 10:17+0100\n"
 -"PO-Revision-Date: 2013-03-09 23:58+0000\n"
 -"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
-+"POT-Creation-Date: 2017-01-09 11:27+0100\n"
++"POT-Creation-Date: 2020-06-14 00:57+0200\n"
 +"PO-Revision-Date: 2018-11-09 19:40+0100\n"
 +"Last-Translator: rezso <rezso@rezso.net>\n"
  "Language-Team: Hungarian <hu@li.org>\n"
  "Language: hu\n"
  "MIME-Version: 1.0\n"
-@@ -17,320 +17,213 @@
+@@ -17,357 +17,216 @@
  "Content-Transfer-Encoding: 8bit\n"
  "Plural-Forms: nplurals=2; plural=n != 1;\n"
  "X-Launchpad-Export-Date: 2013-04-19 04:32+0000\n"
@@ -503,36 +503,36 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  #: ../common/sections_trans.cc:82
 -msgid "Cross Platform"
 -msgstr "Keresztplatform"
-+msgid "System"
-+msgstr "Rendszer"
++msgid "Static"
++msgstr "Statikus"
  
 -#. TRANSLATORS: Alias for the Debian package section "perl"
  #: ../common/sections_trans.cc:84
 -msgid "Perl Programming Language"
 -msgstr "Perl programozási nyelv"
-+msgid "Utilities"
-+msgstr "Eszközök"
++msgid "System"
++msgstr "Rendszer"
  
 -#. TRANSLATORS: Alias for the Debian package section "php"
  #: ../common/sections_trans.cc:86
 -msgid "PHP Programming Language"
 -msgstr "PHP programozási nyelv"
-+msgid "Typesetting"
-+msgstr "Betűszedés"
++msgid "Utilities"
++msgstr "Eszközök"
  
 -#. TRANSLATORS: Alias for the Debian package section "python"
  #: ../common/sections_trans.cc:88
 -msgid "Python Programming Language"
 -msgstr "Python programozási nyelv"
-+msgid "UHU"
-+msgstr "UHU"
++msgid "Typesetting"
++msgstr "Betűszedés"
  
 -#. TRANSLATORS: Alias for the Debian package section "ruby"
  #: ../common/sections_trans.cc:90
 -msgid "Ruby Programming Language"
 -msgstr "Ruby programozási nyelv"
-+msgid "World Wide Web"
-+msgstr "World Wide Web"
++msgid "UHU"
++msgstr "UHU"
  
 -#. TRANSLATORS: Alias for the Debian package section "science"
  #: ../common/sections_trans.cc:92
@@ -550,14 +550,14 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 -#: ../common/sections_trans.cc:96
 -msgid "Multimedia"
 -msgstr "Multimédia"
-+msgid "X Server"
-+msgstr "X szerver"
- 
+-
 -#. TRANSLATORS: Alias for the Debian package section "task"
 -#: ../common/sections_trans.cc:98 ../common/rpackageview.cc:507
 -msgid "Tasks"
 -msgstr "Feladatok"
--
++msgid "X Server"
++msgstr "X szerver"
+ 
 -#. TRANSLATORS: Alias for the Debian package section "tex"
 -#: ../common/sections_trans.cc:100
 -msgid "TeX Authoring"
@@ -567,15 +567,18 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 -#: ../common/sections_trans.cc:102
 -msgid "Word Processing"
 -msgstr "Szövegszerkesztés"
--
--#. TRANSLATORS: Alias for the Debian package section "utils"
--#: ../common/sections_trans.cc:104
--msgid "Utilities"
--msgstr "Eszközök"
 +#. desktops
 +#: ../common/sections_trans.cc:97
 +msgid "Cinnamon Desktop Environment"
 +msgstr "Cinnamon asztali környezet"
+ 
+-#. TRANSLATORS: Alias for the Debian package section "utils"
+-#: ../common/sections_trans.cc:104
+-msgid "Utilities"
+-msgstr "Eszközök"
++#: ../common/sections_trans.cc:99
++msgid "GNOME Desktop Environment"
++msgstr "GNOME asztali környezet"
  
 -#. TRANSLATORS: Alias for the Debian package section "vcs"
 -#: ../common/sections_trans.cc:106
@@ -586,10 +589,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 -#: ../common/sections_trans.cc:108
 -msgid "Video software"
 -msgstr "Videoszoftverek"
-+#: ../common/sections_trans.cc:99
-+msgid "GNOME Desktop Environment"
-+msgstr "GNOME asztali környezet"
- 
+-
 -#. TRANSLATORS: Alias for the Debian package section "web"
 -#: ../common/sections_trans.cc:110
 -msgid "World Wide Web"
@@ -666,73 +666,120 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 -
  #. TRANSLATORS: Alias for the Debian package section "non free"
 -#: ../common/sections_trans.cc:135 ../common/sections_trans.cc:152
-+#: ../common/sections_trans.cc:116 ../common/sections_trans.cc:132
++#: ../common/sections_trans.cc:112
  msgid "non free"
  msgstr "nem szabad szoftver"
  
  #. TRANSLATORS: Alias for the Debian package section "contrib"
  #. Free software that depends on non-free software
 -#: ../common/sections_trans.cc:138 ../common/sections_trans.cc:156
-+#: ../common/sections_trans.cc:119 ../common/sections_trans.cc:136
++#: ../common/sections_trans.cc:115
  msgid "contrib"
  msgstr "contrib"
  
-@@ -475,36 +368,36 @@
- msgid "Unable to read %s"
- msgstr "A(z) %s nem olvasható"
- 
--#: ../common/rconfiguration.cc:119 ../common/rconfiguration.cc:286
-+#: ../common/rconfiguration.cc:116 ../common/rconfiguration.cc:283
+-#: ../common/indexcopy.cc:51 ../common/rpmindexcopy.cc:75
+-#, c-format
+-msgid "Stat failed for %s"
+-msgstr "A(z) %s elérése sikertelen"
+-
+-#: ../common/indexcopy.cc:78 ../common/rpmindexcopy.cc:107
+-msgid "Unable to create a tmp file"
+-msgstr "Az átmeneti fájl létrehozása meghiúsult"
+-
+-#: ../common/indexcopy.cc:107
+-msgid "gzip failed, perhaps the disk is full."
+-msgstr "gzip meghiúsult, talán megtelt a lemez."
+-
+-#: ../common/indexcopy.cc:128
+-msgid "Failed to reopen fd"
+-msgstr "Az fd újbóli megnyitása meghiúsult"
+-
+-#: ../common/indexcopy.cc:218 ../common/indexcopy.cc:242
+-#: ../common/rpmindexcopy.cc:169 ../common/rpmindexcopy.cc:205
+-msgid "Failed to rename"
+-msgstr "Nem sikerült átnevezni"
+-
+-#: ../common/indexcopy.cc:266
+-msgid "No valid records were found."
+-msgstr "Nem találtam egy érvényes rekordot sem."
+-
+-#: ../common/indexcopy.cc:441
+-msgid "Cannot find filename or size tag"
+-msgstr "A fájlnév vagy méret címke nem található"
+-
+-#: ../common/indexcopy.cc:485
+-msgid "Error parsing file record"
+-msgstr "Hiba a fájl rekord feldolgozása közben"
+-
+ #: ../common/rcdscanner.cc:112 ../common/rcdscanner.cc:162
  #, c-format
- msgid "ERROR: couldn't open %s for writing"
- msgstr "HIBA: %s megnyitása írásra sikertelen"
- 
--#: ../common/rconfiguration.cc:145
-+#: ../common/rconfiguration.cc:142
- msgid "ERROR: Could not get password entry for superuser"
- msgstr "HIBA: A root felhasználó jelszóbejegyzése nem található"
- 
--#: ../common/rconfiguration.cc:154
-+#: ../common/rconfiguration.cc:151
- #, c-format
- msgid "ERROR: could not create configuration directory %s"
- msgstr "HIBA: Nem tudom létrehozni a beállítások %s könyvtárát"
- 
--#: ../common/rconfiguration.cc:178
-+#: ../common/rconfiguration.cc:175
- #, c-format
- msgid "ERROR: could not create state directory %s"
- msgstr "HIBA: Nem lehet létrehozni a(z) %s állapotkönyvtárat"
- 
--#: ../common/rconfiguration.cc:195
-+#: ../common/rconfiguration.cc:192
- #, c-format
- msgid "ERROR: could not create tmp directory %s"
- msgstr "HIBA: Nem tudom létrehozni a(z) %s átmeneti könyvtárat"
- 
--#: ../common/rconfiguration.cc:213
-+#: ../common/rconfiguration.cc:210
- #, c-format
- msgid "ERROR: could not create log directory %s"
- msgstr "HIBA: Nem tudom létrehozni a(z) %s naplókönyvtárat"
- 
--#: ../common/rconfiguration.cc:311
-+#: ../common/rconfiguration.cc:308
- #, c-format
- msgid "couldn't open %s for writing"
- msgstr "Nem tudom megnyitni %s-t írásra"
-@@ -537,6 +430,10 @@
+ msgid "Failed to open %s.new"
+@@ -537,16 +396,20 @@
  "Minden csomag sikeresen telepítve a jelenlegi adathordozóról. A telepítés "
  "folytatásához a következő adathordozóval, zárja be ezt az ablakot."
  
-+#: ../common/rpackage.cc:115 ../common/rpackageview.cc:610
+-#: ../common/rpackage.cc:243
++#: ../common/rpackage.cc:117 ../common/rpackageview.cc:610
 +msgid "Unknown"
 +msgstr "Ismeretlen"
 +
- #: ../common/rpackage.cc:243
++#: ../common/rpackage.cc:254
  msgid "The list of installed files is only available for installed packages"
  msgstr ""
-@@ -1026,6 +923,10 @@
+ "A telepített fájlok listája csak a telepített csomagokhoz áll rendelkezésre"
+ 
+-#: ../common/rpackage.cc:517
++#: ../common/rpackage.cc:528
+ msgid "or dependency"
+ msgstr "vagy függőség"
+ 
+-#: ../common/rpackage.cc:634
++#: ../common/rpackage.cc:645
+ #, c-format
+ msgid ""
+ "\n"
+@@ -943,24 +806,37 @@
+ msgid "Unable to lock the download directory"
+ msgstr "Nem tudom zárolni a letöltési könyvtárat"
+ 
+-#: ../common/rpackagelister.cc:1806
++#: ../common/rpackagelister.cc:1816
+ #, c-format
+ msgid "Line %u too long in markings file."
+ msgstr "A(z) %u sor túl hosszú a kiválasztás-fájlban."
+ 
+-#: ../common/rpackagelister.cc:1819 ../common/rpackagelister.cc:1823
++#: ../common/rpackagelister.cc:1829 ../common/rpackagelister.cc:1833
+ #, c-format
+ msgid "Malformed line %u in markings file"
+ msgstr "A(z) %u.  sor rosszul formázott a kiválasztás-fájlban"
+ 
+-#: ../common/rpackagelister.cc:1840
++#: ../common/rpackagelister.cc:1850
+ msgid "Setting markings..."
+ msgstr "Kijelölések beállítása..."
+ 
++#: ../common/rpmindexcopy.cc:75
++#, c-format
++msgid "Stat failed for %s"
++msgstr "A(z) %s elérése sikertelen"
++
++#: ../common/rpmindexcopy.cc:107
++msgid "Unable to create a tmp file"
++msgstr "Az átmeneti fájl létrehozása meghiúsult"
++
+ #: ../common/rpmindexcopy.cc:135
+ msgid "bzip2 failed, perhaps the disk is full."
+ msgstr "bzip2 sikertelen, lehet hogy megtelt a lemez."
+ 
++#: ../common/rpmindexcopy.cc:169 ../common/rpmindexcopy.cc:205
++msgid "Failed to rename"
++msgstr "Nem sikerült átnevezni"
++
+ #: ../common/rpackageview.h:106
+ msgid "Sections"
+ msgstr "Csoportok"
+@@ -1026,11 +902,15 @@
  msgid "Search Filter"
  msgstr "Keresési szűrő"
  
@@ -743,39 +790,42 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  #: ../common/rpackageview.cc:513
  msgid "Reduced View"
  msgstr "Csökkentett nézet"
-@@ -1351,7 +1252,7 @@
- "The marked changes are now being applied. This can take some time. Please "
- "wait."
- msgstr ""
--"A kijelölt változtatások alkalmazása folyamatban.\r\n"
-+"A kijelölt változtatások alkalmazása folyamatban.\n"
- "Ez eltarthat egy ideig, kis türelmet..."
  
- #: ../gtk/rgdebinstallprogress.cc:833
-@@ -1435,7 +1336,7 @@
- msgstr "Intelligens frissítés"
+-#: ../common/rpackageview.cc:530 ../gtk/gsynaptic.cc:586
++#: ../common/rpackageview.cc:530 ../gtk/gsynaptic.cc:593
+ #: ../gtk/rgsummarywindow.cc:359
+ msgid "Marked Changes"
+ msgstr "Kijelölt változtatások"
+@@ -1176,11 +1056,26 @@
+ "Ez általában azt jelenti, hogy egy másik csomagkezelő alkalmazás is fut "
+ "(mint az apt-get vagy aptitude). Előbb kérem zárja be az adott alkalmazást."
  
- #: ../gtk/rgpreferenceswindow.cc:404 ../gtk/rgmainwindow.cc:1733
--#: ../gtk/rgterminstallprogress.cc:159
-+#: ../gtk/rgterminstallprogress.cc:163
- msgid "An error occurred while saving configurations."
- msgstr "Hiba a beállítások mentése közben."
+-#: ../gtk/gsynaptic.cc:430
++#: ../gtk/gsynaptic.cc:414
++#, fuzzy
++msgid "Failed to initialize GTK.\n"
++msgstr "Nem sikerült átnevezni"
++
++#: ../gtk/gsynaptic.cc:416
++msgid "Probably you're running Synaptic on Wayland with root permission.\n"
++msgstr ""
++
++#: ../gtk/gsynaptic.cc:417
++msgid ""
++"Please restart your session without Wayland, or run Synaptic without root "
++"permission\n"
++msgstr ""
++
++#: ../gtk/gsynaptic.cc:437
+ msgid "Starting \"Synaptic Package Manager\" without administrative privileges"
+ msgstr "A „Synaptic csomagkezelő” indítása rendszergazdai jog nélkül"
  
-@@ -1586,11 +1487,11 @@
- "Az APT rendszer a következőt jelenti:\n"
- "%s"
- 
--#: ../gtk/rglogview.cc:281
-+#: ../gtk/rglogview.cc:282
- msgid "Not found"
- msgstr "Nem található"
- 
--#: ../gtk/rglogview.cc:283
-+#: ../gtk/rglogview.cc:284
+-#: ../gtk/gsynaptic.cc:432
++#: ../gtk/gsynaptic.cc:439
  msgid ""
- "Expression was found, please see the list on the left for matching entries."
- msgstr ""
-@@ -1635,6 +1536,11 @@
+ "You will not be able to apply any changes, but you can still export the "
+ "marked changes or create a download script for them."
+@@ -1635,6 +1530,11 @@
  msgid "Visit Homepage"
  msgstr "Honlap meglátogatása"
  
@@ -787,37 +837,19 @@ diff -Naur orig/po/hu.po patched/po/hu.po
  #. TRANSLATORS: this the format of the available versions in
  #. the "Properties/Available versions" window
  #. e.g. "0.56 (unstable)"
-@@ -3743,14 +3649,14 @@
- msgid "Package is supported"
- msgstr "A csomag támogatott"
- 
--#: ../gtk/rgterminstallprogress.cc:142
-+#: ../gtk/rgterminstallprogress.cc:146
- msgid "<i>Running...</i>"
- msgstr "<i>Futtatás...</i>"
- 
--#: ../gtk/rgterminstallprogress.cc:172
-+#: ../gtk/rgterminstallprogress.cc:176
- msgid "<i>Finished</i>"
- msgstr "<i>Befejezve</i>"
- 
--#: ../gtk/rgterminstallprogress.cc:183
-+#: ../gtk/rgterminstallprogress.cc:187
- msgid "<i>Can't close while running</i>"
- msgstr "<i>Futás közben nem zárhatja be</i>"
 diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
---- orig/po/synaptic.pot	2018-11-08 08:50:31.000000000 +0100
-+++ patched/po/synaptic.pot	2018-11-09 19:39:46.039024845 +0100
+--- orig/po/synaptic.pot	2020-01-25 14:16:51.000000000 +0100
++++ patched/po/synaptic.pot	2020-06-14 11:31:23.047739758 +0200
 @@ -8,7 +8,7 @@
  msgstr ""
  "Project-Id-Version: PACKAGE VERSION\n"
  "Report-Msgid-Bugs-To: \n"
 -"POT-Creation-Date: 2016-01-11 10:17+0100\n"
-+"POT-Creation-Date: 2017-01-09 11:27+0100\n"
++"POT-Creation-Date: 2020-06-14 00:57+0200\n"
  "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
  "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
  "Language-Team: LANGUAGE <LL@li.org>\n"
-@@ -18,318 +18,211 @@
+@@ -18,355 +18,214 @@
  "Content-Transfer-Encoding: 8bit\n"
  "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
  
@@ -1034,31 +1066,31 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
 -#. TRANSLATORS: Alias for the Debian package section "otherosfs"
  #: ../common/sections_trans.cc:82
 -msgid "Cross Platform"
-+msgid "System"
++msgid "Static"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "perl"
  #: ../common/sections_trans.cc:84
 -msgid "Perl Programming Language"
-+msgid "Utilities"
++msgid "System"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "php"
  #: ../common/sections_trans.cc:86
 -msgid "PHP Programming Language"
-+msgid "Typesetting"
++msgid "Utilities"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "python"
  #: ../common/sections_trans.cc:88
 -msgid "Python Programming Language"
-+msgid "UHU"
++msgid "Typesetting"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "ruby"
  #: ../common/sections_trans.cc:90
 -msgid "Ruby Programming Language"
-+msgid "World Wide Web"
++msgid "UHU"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "science"
@@ -1070,22 +1102,22 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
 -#. TRANSLATORS: Alias for the Debian package section "shells"
  #: ../common/sections_trans.cc:94
 -msgid "Shells"
-+msgid "X Server"
- msgstr ""
- 
+-msgstr ""
+-
 -#. TRANSLATORS: Alias for the Debian package section "sound"
 -#: ../common/sections_trans.cc:96
 -msgid "Multimedia"
-+#. desktops
-+#: ../common/sections_trans.cc:97
-+msgid "Cinnamon Desktop Environment"
++msgid "X Server"
  msgstr ""
  
 -#. TRANSLATORS: Alias for the Debian package section "task"
 -#: ../common/sections_trans.cc:98 ../common/rpackageview.cc:507
 -msgid "Tasks"
--msgstr ""
--
++#. desktops
++#: ../common/sections_trans.cc:97
++msgid "Cinnamon Desktop Environment"
+ msgstr ""
+ 
 -#. TRANSLATORS: Alias for the Debian package section "tex"
 -#: ../common/sections_trans.cc:100
 -msgid "TeX Authoring"
@@ -1183,18 +1215,55 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
 -
  #. TRANSLATORS: Alias for the Debian package section "non free"
 -#: ../common/sections_trans.cc:135 ../common/sections_trans.cc:152
-+#: ../common/sections_trans.cc:116 ../common/sections_trans.cc:132
++#: ../common/sections_trans.cc:112
  msgid "non free"
  msgstr ""
  
  #. TRANSLATORS: Alias for the Debian package section "contrib"
  #. Free software that depends on non-free software
 -#: ../common/sections_trans.cc:138 ../common/sections_trans.cc:156
-+#: ../common/sections_trans.cc:119 ../common/sections_trans.cc:136
++#: ../common/sections_trans.cc:115
  msgid "contrib"
  msgstr ""
  
-@@ -472,36 +365,36 @@
+-#: ../common/indexcopy.cc:51 ../common/rpmindexcopy.cc:75
+-#, c-format
+-msgid "Stat failed for %s"
+-msgstr ""
+-
+-#: ../common/indexcopy.cc:78 ../common/rpmindexcopy.cc:107
+-msgid "Unable to create a tmp file"
+-msgstr ""
+-
+-#: ../common/indexcopy.cc:107
+-msgid "gzip failed, perhaps the disk is full."
+-msgstr ""
+-
+-#: ../common/indexcopy.cc:128
+-msgid "Failed to reopen fd"
+-msgstr ""
+-
+-#: ../common/indexcopy.cc:218 ../common/indexcopy.cc:242
+-#: ../common/rpmindexcopy.cc:169 ../common/rpmindexcopy.cc:205
+-msgid "Failed to rename"
+-msgstr ""
+-
+-#: ../common/indexcopy.cc:266
+-msgid "No valid records were found."
+-msgstr ""
+-
+-#: ../common/indexcopy.cc:441
+-msgid "Cannot find filename or size tag"
+-msgstr ""
+-
+-#: ../common/indexcopy.cc:485
+-msgid "Error parsing file record"
+-msgstr ""
+-
+ #: ../common/rcdscanner.cc:112 ../common/rcdscanner.cc:162
+ #, c-format
+ msgid "Failed to open %s.new"
+@@ -472,69 +331,73 @@
  msgid "Unable to read %s"
  msgstr ""
  
@@ -1238,18 +1307,50 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  #, c-format
  msgid "couldn't open %s for writing"
  msgstr ""
-@@ -526,6 +419,10 @@
+ 
+-#: ../common/rinstallprogress.cc:41
++#: ../common/rinstallprogress.cc:42
+ msgid ""
+ "\n"
+ "Successfully applied all changes. You can close the window now."
+ msgstr ""
+ 
+-#: ../common/rinstallprogress.cc:42
++#: ../common/rinstallprogress.cc:43
+ msgid ""
+ "\n"
+ "Not all changes and updates succeeded. For further details of the failure, "
+ "please expand the 'Details' panel below."
+ msgstr ""
+ 
+-#: ../common/rinstallprogress.cc:44
++#: ../common/rinstallprogress.cc:45
+ msgid ""
+ "\n"
+ "Successfully installed all packages of the current medium. To continue the "
  "installation with the next medium close this window."
  msgstr ""
  
-+#: ../common/rpackage.cc:115 ../common/rpackageview.cc:610
+-#: ../common/rpackage.cc:243
++#: ../common/rpackage.cc:117 ../common/rpackageview.cc:610
 +msgid "Unknown"
 +msgstr ""
 +
- #: ../common/rpackage.cc:243
++#: ../common/rpackage.cc:254
  msgid "The list of installed files is only available for installed packages"
  msgstr ""
-@@ -984,6 +881,10 @@
+ 
+-#: ../common/rpackage.cc:517
++#: ../common/rpackage.cc:528
+ msgid "or dependency"
+ msgstr ""
+ 
+-#: ../common/rpackage.cc:634
++#: ../common/rpackage.cc:645
+ #, c-format
+ msgid ""
+ "\n"
+@@ -984,11 +847,15 @@
  msgid "Search Filter"
  msgstr ""
  
@@ -1260,30 +1361,48 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  #: ../common/rpackageview.cc:513
  msgid "Reduced View"
  msgstr ""
-@@ -1369,7 +1270,7 @@
+ 
+-#: ../common/rpackageview.cc:530 ../gtk/gsynaptic.cc:586
++#: ../common/rpackageview.cc:530 ../gtk/gsynaptic.cc:593
+ #: ../gtk/rgsummarywindow.cc:359
+ msgid "Marked Changes"
+ msgstr ""
+@@ -1125,17 +992,31 @@
+ "or aptitude) is already running. Please close that application first."
  msgstr ""
  
- #: ../gtk/rgpreferenceswindow.cc:404 ../gtk/rgmainwindow.cc:1733
--#: ../gtk/rgterminstallprogress.cc:159
-+#: ../gtk/rgterminstallprogress.cc:163
- msgid "An error occurred while saving configurations."
+-#: ../gtk/gsynaptic.cc:430
++#: ../gtk/gsynaptic.cc:414
++msgid "Failed to initialize GTK.\n"
++msgstr ""
++
++#: ../gtk/gsynaptic.cc:416
++msgid "Probably you're running Synaptic on Wayland with root permission.\n"
++msgstr ""
++
++#: ../gtk/gsynaptic.cc:417
++msgid ""
++"Please restart your session without Wayland, or run Synaptic without root "
++"permission\n"
++msgstr ""
++
++#: ../gtk/gsynaptic.cc:437
+ msgid "Starting \"Synaptic Package Manager\" without administrative privileges"
  msgstr ""
  
-@@ -1500,11 +1401,11 @@
- "%s"
- msgstr ""
- 
--#: ../gtk/rglogview.cc:281
-+#: ../gtk/rglogview.cc:282
- msgid "Not found"
- msgstr ""
- 
--#: ../gtk/rglogview.cc:283
-+#: ../gtk/rglogview.cc:284
+-#: ../gtk/gsynaptic.cc:432
++#: ../gtk/gsynaptic.cc:439
  msgid ""
- "Expression was found, please see the list on the left for matching entries."
+ "You will not be able to apply any changes, but you can still export the "
+ "marked changes or create a download script for them."
  msgstr ""
-@@ -1547,6 +1448,11 @@
+ 
+-#: ../gtk/gsynaptic.cc:487
++#: ../gtk/gsynaptic.cc:494
+ msgid "Synaptic Package Manager "
+ msgstr ""
+ 
+@@ -1547,6 +1428,11 @@
  msgid "Visit Homepage"
  msgstr ""
  
@@ -1295,21 +1414,3 @@ diff -Naur orig/po/synaptic.pot patched/po/synaptic.pot
  #. TRANSLATORS: this the format of the available versions in
  #. the "Properties/Available versions" window
  #. e.g. "0.56 (unstable)"
-@@ -3497,14 +3403,14 @@
- msgid "Package is supported"
- msgstr ""
- 
--#: ../gtk/rgterminstallprogress.cc:142
-+#: ../gtk/rgterminstallprogress.cc:146
- msgid "<i>Running...</i>"
- msgstr ""
- 
--#: ../gtk/rgterminstallprogress.cc:172
-+#: ../gtk/rgterminstallprogress.cc:176
- msgid "<i>Finished</i>"
- msgstr ""
- 
--#: ../gtk/rgterminstallprogress.cc:183
-+#: ../gtk/rgterminstallprogress.cc:187
- msgid "<i>Can't close while running</i>"
- msgstr ""
