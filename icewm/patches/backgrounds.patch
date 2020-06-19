@@ -1,91 +1,66 @@
 diff -Nur orig/data/SilverXP/default.theme mod/data/SilverXP/default.theme
 --- orig/data/SilverXP/default.theme	2019-09-10 08:34:17.000000000 +0200
-+++ mod/data/SilverXP/default.theme	2020-06-19 13:52:44.808466384 +0200
-@@ -469,19 +469,20 @@
++++ mod/data/SilverXP/default.theme	2020-06-19 19:50:16.564391393 +0200
+@@ -468,20 +468,16 @@
+ #            to set the background!
  #
  
- #  Display desktop background centered and not tiled
+-#  Display desktop background centered and not tiled
 -# DesktopBackgroundCenter=0 # 0/1
- 
+-
  #  Support for semitransparent terminals like Eterm or gnome-terminal
  # SupportSemitransparency=1 # 0/1
  
- #  Desktop background scaled to full screen
+-#  Desktop background scaled to full screen
 -# DesktopBackgroundScaled=0 # 0/1
-+# DesktopBackgroundScaled=1 # 0/1
- 
+-
  #  Desktop background color
  # DesktopBackgroundColor="rgb:00/20/40"
  
  #  Desktop background image
 -# DesktopBackgroundImage=""
-+DesktopBackgroundImage=../../backgrounds/winxp.jpg
-+DesktopBackgroundCenter=1 # 0/1
++DesktopBackgroundImage=winxp.jpg
 +DesktopBackgroundScaled=1 # 0/1
++DesktopBackgroundCenter=0 # 0/1
  
  #  Color to announce for semi-transparent windows
  # DesktopTransparencyColor=""
 diff -Nur orig/data/xp/default.theme mod/data/xp/default.theme
 --- orig/data/xp/default.theme	2019-09-10 08:34:17.000000000 +0200
-+++ mod/data/xp/default.theme	2020-06-19 13:54:02.228412178 +0200
-@@ -17,6 +17,10 @@
- DlgBorderSizeX=2
- DlgBorderSizeY=2
++++ mod/data/xp/default.theme	2020-06-19 19:51:15.344642466 +0200
+@@ -12,6 +12,10 @@
+ BorderSizeX=4
+ BorderSizeY=4
  
-+DesktopBackgroundImage=../../backgrounds/winxp.jpg
-+DesktopBackgroundCenter=1 # 0/1
++DesktopBackgroundImage=winxp.jpg
++DesktopBackgroundCenter=0 # 0/1
 +DesktopBackgroundScaled=1 # 0/1
 +
- ColorNormalTitleBarText=#b5cbe0
- ColorNormalBorder=#467cc1
- 
+ CornerSizeX=24
+ CornerSizeY=24
+ DlgBorderSizeX=2
 diff -Nur orig/data/xp-new/default.theme mod/data/xp-new/default.theme
 --- orig/data/xp-new/default.theme	2019-09-10 08:34:17.000000000 +0200
-+++ mod/data/xp-new/default.theme	2020-06-19 13:56:07.940327294 +0200
++++ mod/data/xp-new/default.theme	2020-06-19 19:50:50.240535426 +0200
 @@ -17,6 +17,10 @@
  DlgBorderSizeX=3
  DlgBorderSizeY=3
  
-+DesktopBackgroundImage=../../backgrounds/winxp.jpg
-+DesktopBackgroundCenter=1 # 0/1
++DesktopBackgroundImage=winxp.jpg
++DesktopBackgroundCenter=0 # 0/1
 +DesktopBackgroundScaled=1 # 0/1
 +
  ColorNormalTitleBarText="#b5cbe0"
  ColorNormalTitleBarShadow="#526570"
  ColorNormalBorder="#467cc1"
-diff -Nur orig/lib/themes/default/default.theme mod/lib/themes/default/default.theme
---- orig/lib/themes/default/default.theme	2020-06-03 05:28:09.000000000 +0200
-+++ mod/lib/themes/default/default.theme	2020-06-19 12:30:25.947935189 +0200
-@@ -49,4 +49,4 @@
- DesktopBackgroundCenter=1
- DesktopBackgroundScaled=1
- #DesktopBackgroundColor="#3a6ea5"
--DesktopBackgroundImage="default.png"
-+DesktopBackgroundImage="../../backgrounds/default.png"
-diff -Nur orig/lib/themes/NanoBlue/default.theme mod/lib/themes/NanoBlue/default.theme
---- orig/lib/themes/NanoBlue/default.theme	2020-06-03 05:28:09.000000000 +0200
-+++ mod/lib/themes/NanoBlue/default.theme	2020-06-19 13:26:34.197893353 +0200
-@@ -400,7 +400,7 @@
- DesktopBackgroundColor="rgb:31/aa/ff"
- 
- # Desktop wallpaper image
--DesktopBackgroundImage="eos.jpg"
-+DesktopBackgroundImage="../../backgrounds/eos.jpg"
- 
- # Color to use for transparent applications
- DesktopTransparencyColor="rgb:FF/FF/FF"
 diff -Nur orig/lib/themes/win95/default.theme mod/lib/themes/win95/default.theme
 --- orig/lib/themes/win95/default.theme	2020-06-03 05:28:09.000000000 +0200
-+++ mod/lib/themes/win95/default.theme	2020-06-19 12:31:01.755957332 +0200
-@@ -5,6 +5,11 @@
- TitleButtonsRight="x mi"
- TitleButtonsSupported="xmis"
- 
-+# Desktop wallpaper
-+DesktopBackgroundImage=../../backgrounds/win95.jpg
-+DesktopBackgroundCenter=1
-+DesktopBackgroundScaled=1
++++ mod/lib/themes/win95/default.theme	2020-06-19 19:49:19.404145714 +0200
+@@ -28,3 +28,7 @@
+ ColorScrollBarSlider="rgb:C0/C0/C0"
+ ColorScrollBarButton="rgb:C0/C0/C0"
+ ColorScrollBarButtonArrow="rgb:00/00/00"
 +
- ColorNormalBorder="rgb:C0/C0/C0"
- ColorActiveBorder="rgb:C0/C0/C0"
- ColorNormalButton="rgb:C0/C0/C0"
++DesktopBackgroundImage=win95.jpg
++DesktopBackgroundCenter=0
++DesktopBackgroundScaled=1

@@ -3,21 +3,17 @@
 ub_install
 #mv ${UB_INSTALLDIR}/usr/share/doc/icewm/preferences ${UB_INSTALLDIR}/usr/share/icewm/
 cp src/genpref ${UB_INSTALLDIR}/usr/bin/
-
+icewmmappa=${UB_INSTALLDIR}/usr/share/icewm
 # wallpapers
-icewmmappa=${UB_INSTALLDIR}/usr/share/icewm/
-mkdir -p $icewmmappa/backgrounds
-#default
-mv $icewmmappa/themes/default/default.png $icewmmappa/backgrounds/
+# Win témák
+cp -r data/{SilverXP,xp,xp-new,WinClassic2} $icewmmappa/themes/
 # win95
-cp Original-Windows-951.jpg $icewmmappa/backgrounds/win95.jpg
-# eos wallpaper
-mv $icewmmappa/themes/NanoBlue/eos.jpg $icewmmappa/backgrounds/
+mkdir -p ${UB_INSTALLDIR}/usr/share/themes/win95
+cp Original-Windows-951.jpg $icewmmappa/themes/win95/win95.jpg
 # xp wallpaper
-mv windows-xp-bliss-4k-lu.jpg $icewmmappa/backgrounds/winxp.jpg
-
-# XP témák
-cp -r data/{SilverXP,xp,xp-new} $icewmmappa/themes/
+cp windows-xp-bliss-4k-lu.jpg $icewmmappa/themes/xp/winxp.jpg
+cp windows-xp-bliss-4k-lu.jpg $icewmmappa/themes/xp-new/winxp.jpg
+cp windows-xp-bliss-4k-lu.jpg $icewmmappa/themes/SilverXP/winxp.jpg
 
 # hiányzó xpm
 rm -f $icewmmappa/themes/xp/icons/folder* $icewmmappa/themes/xp-new/icons/folder*
