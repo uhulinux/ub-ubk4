@@ -3,3 +3,34 @@
 ub_install
 #mv ${UB_INSTALLDIR}/usr/share/doc/icewm/preferences ${UB_INSTALLDIR}/usr/share/icewm/
 cp src/genpref ${UB_INSTALLDIR}/usr/bin/
+
+# wallpapers
+icewmmappa=${UB_INSTALLDIR}/usr/share/icewm/
+mkdir -p $icewmmappa/backgrounds
+#default
+mv $icewmmappa/themes/default/default.png $icewmmappa/backgrounds/
+# win95
+cp Original-Windows-951.jpg $icewmmappa/backgrounds/win95.jpg
+# eos wallpaper
+mv $icewmmappa/themes/NanoBlue/eos.jpg $icewmmappa/backgrounds/
+# xp wallpaper
+mv windows-xp-bliss-4k-lu.jpg $icewmmappa/backgrounds/winxp.jpg
+
+# XP témák
+cp -r data/{SilverXP,xp,xp-new} $icewmmappa/themes/
+
+# hiányzó xpm
+rm -f $icewmmappa/themes/xp/icons/folder* $icewmmappa/themes/xp-new/icons/folder*
+cp -r data/CoolSteel/icons/folder_32x32.xpm $icewmmappa/themes/xp/icons/
+cp -r data/CoolSteel/icons/folder_32x32.xpm $icewmmappa/themes/xp-new/icons/
+cp -r data/blueHeart/icons/folder_16x16.xpm $icewmmappa/themes/xp/icons/
+cp -r data/blueHeart/icons/folder_16x16.xpm $icewmmappa/themes/xp-new/icons/
+
+# win95 taskbarbutton
+cp -r data/fake95/taskbar $icewmmappa/themes/win95/
+
+# nem kell html
+rm -rf ${UB_INSTALLDIR}/usr/share/doc/icewm
+
+# nem kell FreeBSD
+rm -rf $icewmmappa/themes/SilverXP/FreeBSD
