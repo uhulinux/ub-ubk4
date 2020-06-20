@@ -1,0 +1,24 @@
+diff -Naur orig/Core/Core.pro patched/Core/Core.pro
+--- orig/Core/Core.pro	2019-05-07 12:04:01.000000000 +0200
++++ patched/Core/Core.pro	2020-06-20 15:54:08.792911053 +0200
+@@ -17,7 +17,7 @@
+ INCLUDEPATH += $$PWD/../3rdparty/include
+ 
+ DEFINES += QT_DEPRECATED_WARNINGS
+-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
++DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050000    # disables all the APIs deprecated before Qt 5.0.0
+ 
+ SOURCES += Core/stash.cpp \
+     Core/encfs.cpp \
+diff -Naur orig/MolchEncfsManager/MolchEncfsManager.pro patched/MolchEncfsManager/MolchEncfsManager.pro
+--- orig/MolchEncfsManager/MolchEncfsManager.pro	2018-05-01 21:44:37.000000000 +0200
++++ patched/MolchEncfsManager/MolchEncfsManager.pro	2020-06-20 15:54:02.796878472 +0200
+@@ -12,7 +12,7 @@
+ 
+ DEFINES += VERSION=$$system(cat "$$PWD/../VERSION")
+ DEFINES += QT_DEPRECATED_WARNINGS
+-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
++DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050000    # disables all the APIs deprecated before Qt 5.0.0
+ 
+ # Core
+ unix: LIBS += -L$$OUT_PWD/../Core/ -lCore
