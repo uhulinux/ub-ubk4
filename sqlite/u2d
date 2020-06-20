@@ -1,4 +1,4 @@
-ver=$(_geturl http://www.sqlite.org/download.html | splitver 'sqlite-autoconf-([0-9.]+).tar.gz$' | sort -V | tail -n 1)
+ver=$(_geturl https://www.sqlite.org/download.html | splitver 'sqlite-autoconf-([0-9.]+).tar.gz$' | sort -V | tail -n 1)
 ver=${ver: -7}
 ver1=${ver:0:1}
 ver2=${ver:1:2}
