@@ -1,7 +1,7 @@
-diff -Naur orig/Makefile patched/Makefile
---- orig/Makefile	2014-08-19 09:28:33.000000000 +0200
-+++ patched/Makefile	2018-06-14 02:31:58.008444136 +0200
-@@ -92,10 +92,13 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2020-06-26 10:46:33.000000000 +0200
++++ mod/Makefile	2020-06-26 10:50:16.418323888 +0200
+@@ -115,10 +115,13 @@
  FRIBIDI_LIB:=$(shell $(PKG_CONFIG) --libs fribidi)
  FRIBIDI_CFLAGS:=$(shell $(PKG_CONFIG) --cflags fribidi)
  
@@ -9,7 +9,7 @@ diff -Naur orig/Makefile patched/Makefile
 +PANGO_CFLAGS:=$(shell $(PKG_CONFIG) --cflags pangoft2)
 +
  windows_ARCH_LINKS:=-lintl $(PNG) -lzdll -lwinspool -lshlwapi $(FRIBIDI_LIB) -liconv
- osx_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB)
+ osx_ARCH_LINKS:=$(FRIBIDI_LIB)
  beos_ARCH_LINKS:=-lintl $(PNG) -lz -lbe -lnetwork -liconv $(FRIBIDI_LIB) $(PAPER_LIB) $(STDC_LIB)
 -linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB)
 +linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB) $(PANGO_LIB)
