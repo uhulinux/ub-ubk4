@@ -1,0 +1,14 @@
+diff -Nur orig/lib/CMakeLists.txt mod/lib/CMakeLists.txt
+--- orig/lib/CMakeLists.txt	2020-06-03 05:28:09.000000000 +0200
++++ mod/lib/CMakeLists.txt	2020-06-28 10:11:53.825661804 +0200
+@@ -4,8 +4,8 @@
+ #
+ # Which themes to install in alphabetical order
+ #
+-set(themesList CrystalBlue Helix Infadel2 NanoBlue
+-    default icedesert metal2 motif win95)
++set(themesList CrystalBlue NanoBlue
++    default yellowmotif win95)
+ 
+ foreach(_src keys menu programs toolbar winoptions IceWM.jpg)
+     set(_pre "${CMAKE_CURRENT_SOURCE_DIR}/${_src}.in")

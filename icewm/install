@@ -1,20 +1,23 @@
 #!/bin/sh -eux
 
 ub_install
-#mv ${UB_INSTALLDIR}/usr/share/doc/icewm/preferences ${UB_INSTALLDIR}/usr/share/icewm/
-cp src/genpref ${UB_INSTALLDIR}/usr/bin/
 icewmmappa=${UB_INSTALLDIR}/usr/share/icewm
 
 # Win témák
 cp -r data/{SilverXP,xp,xp-new,Windows7ice1} $icewmmappa/themes/
+# A $icewmmappa/themes/xp taskbar és icons mappában nem lehet link
+rm -rf $icewmmappa/themes/xp/taskbar $icewmmappa/themes/xp/icons
+mkdir -p $icewmmappa/themes/xp/{taskbar,icons}
+cp data/xp-new/taskbar/* $icewmmappa/themes/xp/taskbar/
+cp data/xp-new/icons/* $icewmmappa/themes/xp/icons/
 
 # win95 háttér
 cp Original-Windows-951.jpg $icewmmappa/themes/win95/win95.jpg
 
 # xp hátterek
 cp windows-xp-bliss-4k-lu.jpg $icewmmappa/themes/xp/winxp.jpg
-ln -s $icewmmappa/themes/xp/winxp.jpg $icewmmappa/themes/xp-new/winxp.jpg
-ln -s $icewmmappa/themes/xp/winxp.jpg $icewmmappa/themes/SilverXP/winxp.jpg
+cp windows-xp-bliss-4k-lu.jpg $icewmmappa/themes/xp-new/winxp.jpg
+cp windows-xp-bliss-4k-lu.jpg $icewmmappa/themes/SilverXP/winxp.jpg
 
 # hiányzó xpm
 rm -f $icewmmappa/themes/xp/icons/folder* $icewmmappa/themes/xp-new/icons/folder*
