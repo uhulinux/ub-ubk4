@@ -1,18 +1,18 @@
 diff -Naur orig/src/lightdm-gtk-greeter.c patched/src/lightdm-gtk-greeter.c
---- orig/src/lightdm-gtk-greeter.c	2015-02-16 01:34:19.000000000 +0100
-+++ patched/src/lightdm-gtk-greeter.c	2015-03-02 19:56:01.993365146 +0100
-@@ -1840,7 +1840,7 @@
+--- orig/src/lightdm-gtk-greeter.c	2020-06-23 01:04:09.000000000 +0200
++++ patched/src/lightdm-gtk-greeter.c	2020-06-28 21:57:29.456611189 +0200
+@@ -2030,7 +2030,7 @@
  void
- restart_cb (GtkWidget *widget, LightDMGreeter *greeter)
+ restart_cb (GtkWidget *widget, LightDMGreeter *ldm)
  {
 -    if (show_power_prompt ("restart", "view-refresh-symbolic",
 +    if (show_power_prompt ("restart", "view-refresh",
                             _("Restart"),
                             _("Are you sure you want to close all programs and restart the computer?")))
          lightdm_restart (NULL);
-@@ -1849,7 +1849,7 @@
+@@ -2039,7 +2039,7 @@
  void
- shutdown_cb (GtkWidget *widget, LightDMGreeter *greeter)
+ shutdown_cb (GtkWidget *widget, LightDMGreeter *ldm)
  {
 -    if (show_power_prompt ("shutdown", "system-shutdown-symbolic",
 +    if (show_power_prompt ("shutdown", "system-shutdown",
