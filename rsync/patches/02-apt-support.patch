@@ -1,7 +1,7 @@
-diff -Naur rsync-3.1.0-orig/options.c rsync-3.1.0/options.c
---- rsync-3.1.0-orig/options.c	2013-06-11 22:28:45.000000000 +0200
-+++ rsync-3.1.0/options.c	2013-11-22 16:32:38.652934704 +0100
-@@ -313,6 +313,9 @@
+diff -Naur orig/options.c patched/options.c
+--- orig/options.c	2020-06-22 23:16:21.000000000 +0200
++++ patched/options.c	2020-06-30 11:13:07.017467618 +0200
+@@ -326,6 +326,9 @@
   * address, or a hostname. **/
  char *bind_address;
  
@@ -11,7 +11,7 @@ diff -Naur rsync-3.1.0-orig/options.c rsync-3.1.0/options.c
  static void output_item_help(struct output_struct *words);
  
  /* This constructs a string that represents all the options set for either
-@@ -1045,6 +1048,7 @@
+@@ -1020,6 +1023,7 @@
    {"dparam",           0,  POPT_ARG_STRING, 0, OPT_DAEMON, 0, 0 },
    {"detach",           0,  POPT_ARG_NONE,   0, OPT_DAEMON, 0, 0 },
    {"no-detach",        0,  POPT_ARG_NONE,   0, OPT_DAEMON, 0, 0 },
@@ -19,10 +19,10 @@ diff -Naur rsync-3.1.0-orig/options.c rsync-3.1.0/options.c
    {0,0,0,0, 0, 0, 0}
  };
  
-diff -Naur rsync-3.1.0-orig/proto.h rsync-3.1.0/proto.h
---- rsync-3.1.0-orig/proto.h	2013-09-29 05:01:28.000000000 +0200
-+++ rsync-3.1.0/proto.h	2013-11-22 16:33:37.221095340 +0100
-@@ -374,6 +374,7 @@
+diff -Naur orig/proto.h patched/proto.h
+--- orig/proto.h	2020-06-21 08:24:10.000000000 +0200
++++ patched/proto.h	2020-06-30 11:13:07.017467618 +0200
+@@ -389,6 +389,7 @@
  int change_dir(const char *dir, int set_path_only);
  char *normalize_path(char *path, BOOL force_newbuf, unsigned int *len_ptr);
  char *full_fname(const char *fn);
@@ -30,9 +30,9 @@ diff -Naur rsync-3.1.0-orig/proto.h rsync-3.1.0/proto.h
  char *partial_dir_fname(const char *fname);
  int handle_partial_dir(const char *fname, int create);
  int unsafe_symlink(const char *dest, const char *src);
-diff -Naur rsync-3.1.0-orig/receiver.c rsync-3.1.0/receiver.c
---- rsync-3.1.0-orig/receiver.c	2013-09-28 19:40:27.000000000 +0200
-+++ rsync-3.1.0/receiver.c	2013-11-22 16:39:16.600887483 +0100
+diff -Naur orig/receiver.c patched/receiver.c
+--- orig/receiver.c	2020-06-14 04:15:02.000000000 +0200
++++ patched/receiver.c	2020-06-30 11:13:07.017467618 +0200
 @@ -22,6 +22,7 @@
  #include "rsync.h"
  #include "inums.h"
@@ -41,7 +41,7 @@ diff -Naur rsync-3.1.0-orig/receiver.c rsync-3.1.0/receiver.c
  extern int dry_run;
  extern int do_xfers;
  extern int am_root;
-@@ -827,6 +828,12 @@
+@@ -838,6 +839,12 @@
  				cleanup_set(fnametmp, partialptr, file, fd1, fd2);
  		}
  
@@ -52,9 +52,9 @@ diff -Naur rsync-3.1.0-orig/receiver.c rsync-3.1.0/receiver.c
 +		}
 +		
  		if (fd2 == -1) {
- 			discard_receive_data(f_in, F_LENGTH(file));
+ 			discard_receive_data(f_in, file);
  			if (fd1 != -1)
-@@ -839,6 +846,8 @@
+@@ -850,6 +857,8 @@
  		/* log the transfer */
  		if (log_before_transfer)
  			log_item(FCLIENT, file, iflags, NULL);
@@ -63,10 +63,10 @@ diff -Naur rsync-3.1.0-orig/receiver.c rsync-3.1.0/receiver.c
  		else if (!am_server && INFO_GTE(NAME, 1) && INFO_EQ(PROGRESS, 1))
  			rprintf(FINFO, "%s\n", fname);
  
-diff -Naur rsync-3.1.0-orig/util.c rsync-3.1.0/util.c
---- rsync-3.1.0-orig/util.c	2013-06-11 22:36:44.000000000 +0200
-+++ rsync-3.1.0/util.c	2013-11-22 16:40:55.569791620 +0100
-@@ -1021,6 +1021,24 @@
+diff -Naur orig/util.c patched/util.c
+--- orig/util.c	2020-06-14 04:15:02.000000000 +0200
++++ patched/util.c	2020-06-30 11:13:07.017467618 +0200
+@@ -1079,6 +1079,24 @@
  	return dest;
  }
  
