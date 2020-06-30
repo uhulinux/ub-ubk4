@@ -1,22 +1,4 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
 export WX_CONFIG=/usr/bin/wx-config
-ub_compile \
-    --prefix=/usr \
-	--disable-dynamic-loading \
-    --with-libsndfile="system" \
-    --with-ffmpeg="system" \
-    --with-expat="system" \
-    --with-lame="system" \
-    --with-libsoxr="system" \
-    --with-portaudio \
-    --with-portmidi \
-    --with-libflac \
-    --with-libid3tag \
-    --with-libsamplerate \
-    --with-sbsms \
-    --with-soundtouch \
-    --with-libtwolame \
-    --with-libvorbis \
-    --with-lv2
+ub_compile
