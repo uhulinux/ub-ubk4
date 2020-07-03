@@ -1,7 +1,72 @@
 diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_MESSAGES/python.po
---- orig/lang/python/hu/LC_MESSAGES/python.po	2020-05-11 20:53:23.000000000 +0200
-+++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-05-18 01:33:59.864844819 +0200
-@@ -38,14 +38,14 @@
+--- orig/lang/python/hu/LC_MESSAGES/python.po	2020-06-23 17:17:45.000000000 +0200
++++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-07-03 11:01:14.723083350 +0200
+@@ -58,7 +58,7 @@
+ #: src/modules/services-systemd/main.py:68
+ #: src/modules/services-openrc/main.py:102
+ msgid "Cannot modify service"
+-msgstr "a szolgáltatást nem lehet módosítani"
++msgstr "A szolgáltatást nem lehet módosítani"
+ 
+ #: src/modules/services-systemd/main.py:69
+ msgid ""
+@@ -98,11 +98,11 @@
+ 
+ #: src/modules/unpackfs/main.py:44
+ msgid "Filling up filesystems."
+-msgstr "Fájlrendszerek betöltése."
++msgstr "Fájlrendszerek átmásolása."
+ 
+ #: src/modules/unpackfs/main.py:257
+ msgid "rsync failed with error code {}."
+-msgstr "az rsync elhalt a(z) {} hibakóddal"
++msgstr "Az rsync elhalt a(z) {} hibakóddal"
+ 
+ #: src/modules/unpackfs/main.py:302
+ msgid "Unpacking image {}/{}, file {}/{}"
+@@ -127,7 +127,7 @@
+ 
+ #: src/modules/unpackfs/main.py:421
+ msgid "Bad mount point for root partition"
+-msgstr "Rossz betöltési pont a root partíciónál"
++msgstr "Rossz csatolási pont a root partíciónak"
+ 
+ #: src/modules/unpackfs/main.py:422
+ msgid "rootMountPoint is \"{}\", which does not exist, doing nothing"
+@@ -151,8 +151,7 @@
+ "Failed to find unsquashfs, make sure you have the squashfs-tools package "
+ "installed"
+ msgstr ""
+-"unsquashfs nem található, győződj meg róla a squashfs-tools csomag telepítve"
+-" van."
++"Az unsquashfs nem található, a squashfs-tools csomag telepítve van?"
+ 
+ #: src/modules/unpackfs/main.py:463
+ msgid "The destination \"{}\" in the target system is not a directory"
+@@ -200,19 +199,19 @@
+ 
+ #: src/modules/displaymanager/main.py:903
+ msgid "No display managers selected for the displaymanager module."
+-msgstr "Nincs kijelzőkezelő kiválasztva a kijelzőkezelő modulhoz."
++msgstr "Nincs kiválasztott grafikus beléptetö a megfelelő modulhoz."
+ 
+ #: src/modules/displaymanager/main.py:904
+ msgid ""
+ "The displaymanagers list is empty or undefined in bothglobalstorage and "
+ "displaymanager.conf."
+ msgstr ""
+-"A kijelzőkezelők listája üres vagy nincs megadva a bothglobalstorage-ben  és"
++"A beléptetők listája üres, vagy nincs megadva a bothglobalstorage-ben és"
+ " a displaymanager.conf fájlban."
+ 
+ #: src/modules/displaymanager/main.py:986
+ msgid "Display manager configuration was incomplete"
+-msgstr "A kijelzőkezelő konfigurációja hiányos volt"
++msgstr "A grafikus beléptető konfigurációja hiányos volt"
+ 
+ #: src/modules/initcpiocfg/main.py:37
+ msgid "Configuring mkinitcpio."
+@@ -301,14 +300,14 @@
  #, python-format
  msgid "Installing one package."
  msgid_plural "Installing %(num)d packages."
@@ -17,76 +82,8 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
 +msgstr[0] "Csomag eltávolítása."
  msgstr[1] "%(num)d csomag eltávolítása."
  
- #: src/modules/networkcfg/main.py:37
-@@ -90,11 +90,11 @@
- 
- #: src/modules/unpackfs/main.py:44
- msgid "Filling up filesystems."
--msgstr "Fájlrendszerek betöltése."
-+msgstr "Fájlrendszerek átmásolása."
- 
- #: src/modules/unpackfs/main.py:257
- msgid "rsync failed with error code {}."
--msgstr "az rsync elhalt a(z) {} hibakóddal"
-+msgstr "Az rsync elhalt a(z) {} hibakóddal"
- 
- #: src/modules/unpackfs/main.py:302
- msgid "Unpacking image {}/{}, file {}/{}"
-@@ -119,7 +119,7 @@
- 
- #: src/modules/unpackfs/main.py:405
- msgid "Bad mount point for root partition"
--msgstr "Rossz betöltési pont a root partíciónál"
-+msgstr "Rossz csatolási pont a root partíciónak"
- 
- #: src/modules/unpackfs/main.py:406
- msgid "rootMountPoint is \"{}\", which does not exist, doing nothing"
-@@ -142,9 +142,8 @@
- msgid ""
- "Failed to find unsquashfs, make sure you have the squashfs-tools package "
- "installed"
--msgstr ""
--"unsquashfs nem található, győződj meg róla a squashfs-tools csomag telepítve"
--" van."
-+msgstr "" 
-+"Az unsquashfs nem található, a squashfs-tools csomag telepítve van?"
- 
- #: src/modules/unpackfs/main.py:447
- msgid "The destination \"{}\" in the target system is not a directory"
-@@ -152,12 +151,12 @@
- 
- #: src/modules/services-systemd/main.py:35
- msgid "Configure systemd services"
--msgstr "systemd szolgáltatások beállítása"
-+msgstr "A systemd szolgáltatások beállítása"
- 
- #: src/modules/services-systemd/main.py:68
- #: src/modules/services-openrc/main.py:102
- msgid "Cannot modify service"
--msgstr "a szolgáltatást nem lehet módosítani"
-+msgstr "A szolgáltatást nem lehet módosítani"
- 
- #: src/modules/services-systemd/main.py:69
- msgid ""
-@@ -198,7 +197,7 @@
- #: src/modules/dummypython/main.py:46 src/modules/dummypython/main.py:102
- #: src/modules/dummypython/main.py:103
- msgid "Dummy python step {}"
--msgstr "Hamis {}. Python lépés"
-+msgstr "Hamis Python lépés: {}"
- 
  #: src/modules/bootloader/main.py:51
- msgid "Install bootloader."
-@@ -206,7 +205,7 @@
- 
- #: src/modules/localecfg/main.py:39
- msgid "Configuring locales."
--msgstr "nyelvi értékek konfigurálása."
-+msgstr "Nyelvi beállítások."
- 
- #: src/modules/mount/main.py:38
- msgid "Mounting partitions."
-@@ -275,11 +274,11 @@
+@@ -321,11 +320,11 @@
  
  #: src/modules/dracut/main.py:36
  msgid "Creating initramfs with dracut."
@@ -100,63 +97,26 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/dracut/main.py:59
  msgid "The exit code was {}"
-@@ -295,7 +294,7 @@
- 
- #: src/modules/displaymanager/main.py:516
- msgid "KDM config file {!s} does not exist"
--msgstr "A(z) {!s} KDM konfigurációs fájl nem létezik"
-+msgstr "NIncs {!s} KDM konfigurációs fájl"
- 
- #: src/modules/displaymanager/main.py:577
- msgid "Cannot write LXDM configuration file"
-@@ -303,7 +302,7 @@
- 
- #: src/modules/displaymanager/main.py:578
- msgid "LXDM config file {!s} does not exist"
--msgstr "A(z) {!s} LXDM konfigurációs fájl nem létezik"
-+msgstr "Nincs {!s} LXDM konfigurációs fájl"
- 
- #: src/modules/displaymanager/main.py:661
- msgid "Cannot write LightDM configuration file"
-@@ -311,7 +310,7 @@
- 
- #: src/modules/displaymanager/main.py:662
- msgid "LightDM config file {!s} does not exist"
--msgstr "A(z) {!s} LightDM konfigurációs fájl nem létezik"
-+msgstr "Nincs {!s} LightDM konfigurációs fájl"
- 
- #: src/modules/displaymanager/main.py:736
- msgid "Cannot configure LightDM"
-@@ -327,27 +326,27 @@
- 
- #: src/modules/displaymanager/main.py:769
- msgid "SLIM config file {!s} does not exist"
--msgstr "A(z) {!s} SLIM konfigurációs fájl nem létezik"
-+msgstr "Nincs {!s} SLIM konfigurációs fájl"
- 
- #: src/modules/displaymanager/main.py:895
- msgid "No display managers selected for the displaymanager module."
--msgstr "Nincs kijelzőkezelő kiválasztva a kijelzőkezelő modulhoz."
-+msgstr "Nincs kiválasztott grafikus beléptetö a megfelelő modulhoz."
- 
- #: src/modules/displaymanager/main.py:896
- msgid ""
- "The displaymanagers list is empty or undefined in bothglobalstorage and "
- "displaymanager.conf."
- msgstr ""
--"A kijelzőkezelők listája üres vagy nincs megadva a bothglobalstorage-ben  és"
-+"A beléptetők listája üres vagy nincs megadva a bothglobalstorage-ben  és"
- " a displaymanager.conf fájlban."
- 
- #: src/modules/displaymanager/main.py:978
- msgid "Display manager configuration was incomplete"
--msgstr "A kijelzőkezelő konfigurációja hiányos volt"
-+msgstr "A grafikus beléptető konfigurációja hiányos volt"
+@@ -333,7 +332,7 @@
  
  #: src/modules/initramfscfg/main.py:41
  msgid "Configuring initramfs."
 -msgstr "initramfs konfigurálása."
 +msgstr "Az initramfs beállítása."
  
- #: src/modules/hwclock/main.py:35
- msgid "Setting hardware clock."
+ #: src/modules/openrcdmcryptcfg/main.py:34
+ msgid "Configuring OpenRC dmcrypt service."
+@@ -350,11 +349,11 @@
+ #: src/modules/dummypython/main.py:46 src/modules/dummypython/main.py:102
+ #: src/modules/dummypython/main.py:103
+ msgid "Dummy python step {}"
+-msgstr "Hamis {}. Python lépés"
++msgstr "Hamis Python lépés: {}"
+ 
+ #: src/modules/localecfg/main.py:39
+ msgid "Configuring locales."
+-msgstr "nyelvi értékek konfigurálása."
++msgstr "Nyelvi beállítások."
+ 
+ #: src/modules/networkcfg/main.py:37
+ msgid "Saving network configuration."
