@@ -1,0 +1,22 @@
+# https://bugs.freepascal.org/view.php?id=37286
+diff -Nur orig/hedgewars/uWorld.pas mod/hedgewars/uWorld.pas
+--- orig/hedgewars/uWorld.pas	2019-10-07 14:29:22.000000000 +0200
++++ mod/hedgewars/uWorld.pas	2020-07-10 13:02:09.178794176 +0200
+@@ -1127,12 +1127,14 @@
+ var preShiftWorldDx: LongInt;
+ 
+ procedure ShiftWorld(Dir: LongInt); inline;
++var
++  tmp: LongInt;
+ begin
+     preShiftWorldDx:= WorldDx;
+-    WorldDx:= WorldDx + LongInt(Dir * LongInt(playWidth));
+-
++    tmp := LongInt(Dir * LongInt(playWidth));
++    WorldDx := WorldDx + tmp;
++    //WorldDx:= WorldDx + LongInt(Dir * LongInt(playWidth))};
+ end;
+-
+ procedure UnshiftWorld(); inline;
+ begin
+     WorldDx:= preShiftWorldDx;

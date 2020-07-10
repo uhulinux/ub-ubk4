@@ -1,7 +1,7 @@
 diff -Nur orig/install.sh mod/install.sh
---- orig/install.sh	2017-02-06 04:58:27.000000000 +0100
-+++ mod/install.sh	2017-10-08 22:57:39.009896548 +0200
-@@ -207,72 +207,7 @@
+--- orig/install.sh	2020-07-10 11:57:32.000000000 +0200
++++ mod/install.sh	2020-07-10 12:04:29.664400718 +0200
+@@ -300,74 +300,6 @@
  HERE=`pwd`
  
  OSNAME=`uname -s | tr "[:upper:]" "[:lower:]"`
@@ -37,12 +37,14 @@ diff -Nur orig/install.sh mod/install.sh
 -       echo "upgrading binutils package to at least version 2.21"
 -     fi
 -     PREFIX=/usr/local
--     # Use GNU tar if present
--     if [ "`which gtar`" != "" ]; then
--       CMDTAR=`which gtar`
--       TAR="$CMDTAR --no-same-owner"
+-  ;;
+-  aix)
+-     # Install in /usr/local or /usr ?
+-     if checkpath /usr/local/bin; then
+-         PREFIX=/usr/local
+-     else
+-         PREFIX=/usr
 -     fi
--     echo "Using TAR binary=$CMDTAR"
 -  ;;
 -  *)
 -     # Install in /usr/local or /usr ?
@@ -67,19 +69,19 @@ diff -Nur orig/install.sh mod/install.sh
 -     ask "Install prefix (/usr or /usr/local) " PREFIX
 -  ;;
 -esac
- 
+-
 -# Support ~ expansion
 -PREFIX=`eval echo $PREFIX`
 -export PREFIX
  makedirhierarch "$PREFIX"
  
  # Set some defaults.
-@@ -349,7 +284,7 @@
+@@ -485,7 +417,7 @@
  
  # Install /etc/fpc.cfg, this is done using the samplecfg script
  if [ "$cross" = "" ]; then
--  "$LIBDIR/samplecfg" "$LIBDIR"
-+  "$LIBDIR/samplecfg" "$LIBDIR" "$UB_INSTALLDIR/etc"
- else
-   echo "No fpc.cfg created because a cross installation has been done."
- fi
+-  "$LIBDIR/samplecfg" "$LIBDIR" | tee samplecfg.log
++  "$LIBDIR/samplecfg" "$LIBDIR"  "$UB_INSTALLDIR/etc" | tee samplecfg.log
+   file_list=`sed -n 's:.*Writing sample configuration file to ::p' samplecfg.log`
+   if [ ! -z "$file_list" ] ; then
+     for file in $file_list ; do
