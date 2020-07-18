@@ -1,12 +1,12 @@
 diff -Naur orig/chrome/common/chrome_features.cc patched/chrome/common/chrome_features.cc
---- orig/chrome/common/chrome_features.cc	2020-05-18 20:40:22.000000000 +0200
-+++ patched/chrome/common/chrome_features.cc	2020-05-30 22:17:49.986802114 +0200
-@@ -677,7 +677,7 @@
+--- orig/chrome/common/chrome_features.cc	2020-07-17 20:29:32.262295380 +0200
++++ patched/chrome/common/chrome_features.cc	2020-07-17 20:13:57.740681155 +0200
+@@ -690,7 +690,7 @@
  // Enables or disables the intervention that unloads ad iframes with intensive
  // resource usage.
  const base::Feature kHeavyAdIntervention{"HeavyAdIntervention",
 -                                         base::FEATURE_DISABLED_BY_DEFAULT};
 +                                         base::FEATURE_ENABLED_BY_DEFAULT};
  
- // Enables or disables the privacy mitigations for the heavy ad intervention.
- // This throttles the amount of interventions that can occur on a given host in
+ // Enables or disables reporting on the intervention that unloads ad iframes
+ // with intensive resource usage.
