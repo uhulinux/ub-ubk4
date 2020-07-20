@@ -1,6 +1,6 @@
 diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/profile/all-thunderbird.js
---- orig/comm/mail/app/profile/all-thunderbird.js	2019-09-24 16:38:00.000000000 +0200
-+++ patched/comm/mail/app/profile/all-thunderbird.js	2019-09-27 02:49:25.336755240 +0200
+--- orig/comm/mail/app/profile/all-thunderbird.js	2020-07-13 20:10:03.000000000 +0200
++++ patched/comm/mail/app/profile/all-thunderbird.js	2020-07-18 23:17:46.500656846 +0200
 @@ -11,6 +11,10 @@
  #endif
  #endif
@@ -12,7 +12,7 @@ diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/p
  pref("general.skins.selectedSkin", "classic/1.0");
  
  #ifdef XP_MACOSX
-@@ -55,7 +59,7 @@
+@@ -52,7 +56,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
  #ifndef XP_WIN
@@ -20,8 +20,8 @@ diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/p
 + pref("app.update.auto", false);
  #endif
  
- // If set to true, the Update Service will present no UI for any event.
-@@ -131,7 +135,8 @@
+ // If set to true, the Update Service will apply updates in the background
+@@ -129,7 +133,8 @@
  // Disable add-ons installed into the shared user and shared system areas by
  // default. This does not include the application directory. See the SCOPE
  // constants in AddonManager.jsm for values to use here
@@ -31,9 +31,9 @@ diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/p
  
  // Enable add-ons installed and owned by the application, like the default theme.
  pref("extensions.startupScanScopes", 4);
-diff -Naur orig/comm/suite/browser/browser-prefs.js patched/comm/suite/browser/browser-prefs.js
---- orig/comm/suite/browser/browser-prefs.js	2019-09-24 16:38:00.000000000 +0200
-+++ patched/comm/suite/browser/browser-prefs.js	2019-09-27 02:47:03.314841305 +0200
+diff -Naur orig/comm/suite/app/profile/suite-prefs.js patched/comm/suite/app/profile/suite-prefs.js
+--- orig/comm/suite/app/profile/suite-prefs.js	2020-07-13 20:10:04.000000000 +0200
++++ patched/comm/suite/app/profile/suite-prefs.js	2020-07-18 23:17:46.500656846 +0200
 @@ -16,6 +16,9 @@
   *  - Computed values (e.g. 50 * 1024) don't work.
   */
@@ -44,7 +44,7 @@ diff -Naur orig/comm/suite/browser/browser-prefs.js patched/comm/suite/browser/b
  pref("startup.homepage_override_url","chrome://navigator-region/locale/region.properties");
  pref("general.skins.selectedSkin", "classic/1.0");
  
-@@ -489,10 +492,10 @@
+@@ -486,10 +489,10 @@
  // App-specific update preferences
  
  // Whether or not app updates are enabled
@@ -57,7 +57,7 @@ diff -Naur orig/comm/suite/browser/browser-prefs.js patched/comm/suite/browser/b
  
  // If set to true, the Update Service will present no UI for any event.
  pref("app.update.silent", false);
-@@ -578,7 +581,8 @@
+@@ -575,7 +578,8 @@
  // Disable add-ons installed into the shared user and shared system areas by
  // default. This does not include the application directory. See the SCOPE
  // constants in AddonManager.jsm for values to use here
