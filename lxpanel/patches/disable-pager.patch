@@ -1,6 +1,6 @@
 diff -Nur orig/configure.ac mod/configure.ac
---- orig/configure.ac	2017-02-09 15:26:43.000000000 +0100
-+++ mod/configure.ac	2017-02-09 15:30:09.569547078 +0100
+--- orig/configure.ac	2020-07-23 09:30:22.000000000 +0200
++++ mod/configure.ac	2020-07-23 09:44:19.367753541 +0200
 @@ -35,7 +35,7 @@
  
  if test "x$enable_gtk3" = "xyes" ; then
@@ -11,20 +11,20 @@ diff -Nur orig/configure.ac mod/configure.ac
  else
    gtk_module="gtk+-2.0 >= 2.18.0"
 diff -Nur orig/plugins/Makefile.am mod/plugins/Makefile.am
---- orig/plugins/Makefile.am	2017-02-09 15:26:43.000000000 +0100
-+++ mod/plugins/Makefile.am	2017-02-09 15:30:41.913621891 +0100
-@@ -36,7 +36,6 @@
- 	dirmenu.c \
+--- orig/plugins/Makefile.am	2020-07-23 09:30:22.000000000 +0200
++++ mod/plugins/Makefile.am	2020-07-23 09:51:39.662648524 +0200
+@@ -37,7 +37,6 @@
  	launchtaskbar.c \
  	task-button.c \
+ 	launch-button.c \
 -	pager.c \
  	separator.c \
  	tray.c \
  	wincmd.c \
 diff -Nur orig/src/private.h mod/src/private.h
---- orig/src/private.h	2017-02-09 15:26:43.000000000 +0100
-+++ mod/src/private.h	2017-02-09 15:31:07.613621149 +0100
-@@ -202,7 +202,6 @@
+--- orig/src/private.h	2020-07-23 09:30:22.000000000 +0200
++++ mod/src/private.h	2020-07-23 09:45:52.303497366 +0200
+@@ -226,7 +226,6 @@
  #define STATIC_WINCMD
  #define STATIC_DIRMENU
  #define STATIC_TASKBAR

@@ -1,0 +1,115 @@
+diff -Nur orig/plugins/task-button.c mod/plugins/task-button.c
+--- orig/plugins/task-button.c	2020-07-23 12:08:25.826338912 +0200
++++ mod/plugins/task-button.c	2020-07-23 12:18:25.485939751 +0200
+@@ -45,7 +45,6 @@
+ #include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ #include <gdk/gdk.h>
+ #include <glib/gi18n.h>
+-#include <cairo-xlib.h>
+ 
+ #include "plugin.h"
+ #include "misc.h"
+@@ -653,7 +652,7 @@
+ /* Get a pixbuf from a pixmap.
+  * Originally from libwnck, Copyright (C) 2001 Havoc Pennington. */
+ #if !GTK_CHECK_VERSION(3, 0, 0)
+-static GdkPixbuf * _wnck_gdk_pixbuf_get_from_pixmap(GdkScreen *screen, Pixmap xpixmap, Window win, int width, int height)
++static GdkPixbuf * _wnck_gdk_pixbuf_get_from_pixmap(GdkScreen *screen, Pixmap xpixmap, int width, int height)
+ {
+     /* Get the drawable. */
+ #if GTK_CHECK_VERSION(2, 24, 0)
+@@ -703,19 +702,21 @@
+     return retval;
+ }
+ #else
+-static GdkPixbuf * _wnck_gdk_pixbuf_get_from_pixmap(GdkScreen *screen, Pixmap xpixmap, Window win, int width, int height)
++static GdkPixbuf * _wnck_gdk_pixbuf_get_from_pixmap(GdkScreen *screen, Pixmap xpixmap, int width, int height)
+ {
+   cairo_surface_t *surface;
+-  GdkPixbuf *pixbuf = NULL;
++  GdkPixbuf *pixbuf;
+   Display *xdisplay;
++  Window root_return;
+   XWindowAttributes attrs;
+ 
+   surface = NULL;
+   xdisplay = GDK_DISPLAY_XDISPLAY(gdk_display_get_default());
+ 
++
+   gdk_error_trap_push();
+ 
+-  if (!XGetWindowAttributes (xdisplay, win, &attrs))
++  if (!XGetWindowAttributes (xdisplay, root_return, &attrs))
+     goto TRAP_POP;
+ 
+   if (attrs.depth == 1)
+@@ -739,8 +740,7 @@
+ 
+ TRAP_POP:
+   gdk_flush();
+-  if (gdk_error_trap_pop())
+-    g_warning("task button : X error");
++  gdk_error_trap_pop();
+ 
+   return pixbuf;
+ }
+@@ -915,7 +915,6 @@
+         result = (hints != NULL) ? Success : -1;
+         Pixmap xpixmap = None;
+         Pixmap xmask = None;
+-        Window win = None;
+ 
+         if (result == Success)
+         {
+@@ -978,17 +977,18 @@
+         unsigned int w, h;
+         if (result == Success)
+         {
++            Window unused_win;
+             int unused;
+             unsigned int unused_2;
+             result = XGetGeometry(
+                 xdisplay, xpixmap,
+-                &win, &unused, &unused, &w, &h, &unused_2, &unused_2) ? Success : -1;
++                &unused_win, &unused, &unused, &w, &h, &unused_2, &unused_2) ? Success : -1;
+         }
+ 
+         /* If we have an X pixmap and its geometry, convert it to a GDK pixmap. */
+         if (result == Success)
+         {
+-            pixmap = _wnck_gdk_pixbuf_get_from_pixmap(screen, xpixmap, win, w, h);
++            pixmap = _wnck_gdk_pixbuf_get_from_pixmap(screen, xpixmap, w, h);
+             result = ((pixmap != NULL) ? Success : -1);
+         }
+ 
+@@ -996,15 +996,15 @@
+          * Failures here are implemented as nonfatal. */
+         if ((result == Success) && (xmask != None))
+         {
+-            Window win;
++            Window unused_win;
+             int unused;
+             unsigned int unused_2;
+             if (XGetGeometry(
+                 xdisplay, xmask,
+-                &win, &unused, &unused, &w, &h, &unused_2, &unused_2))
++                &unused_win, &unused, &unused, &w, &h, &unused_2, &unused_2))
+             {
+                 /* Convert the X mask to a GDK pixmap. */
+-                GdkPixbuf * mask = _wnck_gdk_pixbuf_get_from_pixmap(screen, xmask, win, w, h);
++                GdkPixbuf * mask = _wnck_gdk_pixbuf_get_from_pixmap(screen, xmask, w, h);
+                 if (mask != NULL)
+                 {
+                     /* Apply the mask. */
+diff -Nur orig/src/space.c mod/src/space.c
+--- orig/src/space.c	2020-07-23 12:10:08.994268042 +0200
++++ mod/src/space.c	2020-07-23 12:19:21.137904147 +0200
+@@ -279,7 +279,7 @@
+     PanelSpace *p = PANEL_SPACE(widget);
+ 
+     if (minimal_width)
+-        *minimal_width = 2;
++        *minimal_width = p->size;
+     if (natural_width)
+         *natural_width = p->size;
+ }
