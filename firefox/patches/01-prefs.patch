@@ -1,6 +1,6 @@
 diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2020-06-25 20:13:44.000000000 +0200
-+++ patched/browser/app/profile/firefox.js	2020-07-01 00:11:11.630173989 +0200
+--- orig/browser/app/profile/firefox.js	2020-07-21 00:49:36.000000000 +0200
++++ patched/browser/app/profile/firefox.js	2020-07-30 13:42:40.763895305 +0200
 @@ -19,6 +19,15 @@
    #endif
  #endif
@@ -38,7 +38,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
  
  // Enable extensionStorage storage actor by default
-@@ -134,7 +144,7 @@
+@@ -138,7 +148,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
  #ifndef XP_WIN
@@ -47,7 +47,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -267,7 +277,7 @@
+@@ -275,7 +285,7 @@
  pref("browser.urlbar.ctrlCanonizesURLs", true);
  
  // Control autoFill behavior
@@ -56,16 +56,16 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // Whether to warm up network connections for autofill or search results.
  pref("browser.urlbar.speculativeConnect.enabled", true);
-@@ -305,7 +315,7 @@
+@@ -303,7 +313,7 @@
+ // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
- pref("browser.urlbar.formatting.enabled", true);
 -pref("browser.urlbar.trimURLs", true);
 +pref("browser.urlbar.trimURLs", false);
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -768,7 +778,7 @@
+@@ -765,7 +775,7 @@
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
  #ifdef UNIX_BUT_NOT_MAC
