@@ -1,21 +1,28 @@
-diff -Naur orig/src/welcomescreen.cpp patched/src/welcomescreen.cpp
---- orig/src/welcomescreen.cpp	2020-07-27 08:59:02.000000000 +0200
-+++ patched/src/welcomescreen.cpp	2020-07-30 17:20:08.637730218 +0200
-@@ -27,13 +27,16 @@
+From b551f7d572ccaed8a870ba8ad7bc779275770b43 Mon Sep 17 00:00:00 2001
+From: Omar Polo <op@omarpolo.com>
+Date: Thu, 30 Jul 2020 19:34:19 +0200
+Subject: [PATCH] Really fix !HAVE_HTTP_CLIENT compilation
+
+29ff4b4e was insufficient and merely caused a different compilation
+error.
+
+Fixes #653.
+---
+ src/crowdin_gui.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/crowdin_gui.h b/src/crowdin_gui.h
+index f8cef75261..efc6b31e9c 100644
+--- a/src/crowdin_gui.h
++++ b/src/crowdin_gui.h
+@@ -26,9 +26,10 @@
+ #ifndef Poedit_crowdin_gui_h
+ #define Poedit_crowdin_gui_h
  
- #include "colorscheme.h"
- #include "customcontrols.h"
--#include "crowdin_gui.h"
- #include "edapp.h"
- #include "edframe.h"
- #include "hidpi.h"
- #include "str_helpers.h"
- #include "utility.h"
- 
-+#ifdef HAVE_HTTP_CLIENT
-+    #include "crowdin_gui.h"
-+#endif
++#include "catalog.h"
 +
- #include <wx/dcbuffer.h>
- #include <wx/statbmp.h>
- #include <wx/stattext.h>
+ #ifdef HAVE_HTTP_CLIENT
+ 
+-#include "catalog.h"
+ #include "cloud_sync.h"
+ #include "customcontrols.h"
