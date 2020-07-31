@@ -12,8 +12,10 @@ if [ ! -f "$UB_INSTALLDIR"/usr/lib/firefox/run-mozilla.sh ]; then
 	cp "$UB_COMPILEDIR"/build/unix/run-mozilla.sh "$UB_INSTALLDIR"/usr/lib/firefox/run-mozilla.sh
 fi
 
-mkdir -p "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org
-cp -aR "$UB_COMPILEDIR"/langpack-hu/. "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org/
+# mkdir -p "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org
+# cp -aR "$UB_COMPILEDIR"/langpack-hu/. "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org/
+mkdir -p "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions
+cp -a "$UB_COMPILEDIR"/hu.xpi "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org.xpi
 
 # install icons
 for i in 16 22 24 32 48 64 128 256; do
