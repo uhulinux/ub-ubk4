@@ -1,6 +1,6 @@
-diff -Nur orig/grub/util/grub.d/10_linux.in mod/grub/util/grub.d/10_linux.in
---- orig/grub/util/grub.d/10_linux.in	2017-04-24 11:15:50.000000000 +0200
-+++ mod/grub/util/grub.d/10_linux.in	2019-04-28 12:42:01.445142818 +0200
+diff -Naur orig/grub/util/grub.d/10_linux.in patched/grub/util/grub.d/10_linux.in
+--- orig/grub/util/grub.d/10_linux.in	2018-11-24 18:13:02.000000000 +0100
++++ patched/grub/util/grub.d/10_linux.in	2020-08-01 12:42:29.995629641 +0200
 @@ -31,7 +31,7 @@
  if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
    OS=GNU/Linux
@@ -10,7 +10,7 @@ diff -Nur orig/grub/util/grub.d/10_linux.in mod/grub/util/grub.d/10_linux.in
    CLASS="--class $(echo ${GRUB_DISTRIBUTOR} | tr 'A-Z' 'a-z' | cut -d' ' -f1|LC_ALL=C sed 's,[^[:alnum:]_],_,g') ${CLASS}"
  fi
  
-@@ -82,9 +82,13 @@
+@@ -92,9 +92,13 @@
    if [ x$type != xsimple ] ; then
        case $type in
  	  recovery)
@@ -26,7 +26,7 @@ diff -Nur orig/grub/util/grub.d/10_linux.in mod/grub/util/grub.d/10_linux.in
        esac
        if [ x"$title" = x"$GRUB_ACTUAL_DEFAULT" ] || [ x"Previous Linux versions>$title" = x"$GRUB_ACTUAL_DEFAULT" ]; then
  	  replacement_title="$(echo "Advanced options for ${OS}" | sed 's,>,>>,g')>$(echo "$title" | sed 's,>,>>,g')"
-@@ -131,7 +135,7 @@
+@@ -141,7 +145,7 @@
    message="$(gettext_printf "Loading Linux %s ..." ${version})"
    sed "s/^/$submenu_indentation/" << EOF
  	echo	'$(echo "$message" | grub_quote)'
@@ -35,7 +35,7 @@ diff -Nur orig/grub/util/grub.d/10_linux.in mod/grub/util/grub.d/10_linux.in
  EOF
    if test -n "${initrd}" ; then
      # TRANSLATORS: ramdisk isn't identifier. Should be translated.
-@@ -150,12 +154,12 @@
+@@ -164,12 +168,12 @@
  case "x$machine" in
      xi?86 | xx86_64)
  	list=
@@ -50,7 +50,7 @@ diff -Nur orig/grub/util/grub.d/10_linux.in mod/grub/util/grub.d/10_linux.in
                    if grub_file_is_not_garbage "$i" ; then list="$list $i" ; fi
  	done ;;
  esac
-@@ -196,7 +200,9 @@
+@@ -218,7 +222,9 @@
  	   "initramfs-genkernel-${version}" \
  	   "initramfs-genkernel-${alt_version}" \
  	   "initramfs-genkernel-${GENKERNEL_ARCH}-${version}" \
@@ -59,9 +59,9 @@ diff -Nur orig/grub/util/grub.d/10_linux.in mod/grub/util/grub.d/10_linux.in
 +	   "initramfs-${version}.cpio.gz" \
 +	   "initramfs-${version}.${GENKERNEL_ARCH}.cpio.gz"; do
      if test -e "${dirname}/${i}" ; then
-       initrd="$i"
+       initrd_real="${i}"
        break
-@@ -240,6 +246,12 @@
+@@ -277,6 +283,12 @@
  
    linux_entry "${OS}" "${version}" advanced \
                "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
