@@ -18,3 +18,7 @@ make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MOD
 export UB_MAKE_PROCS=1
 cd uvm
 make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir/uvm module
+
+cd ../../libxnvctrl
+make clean
+make

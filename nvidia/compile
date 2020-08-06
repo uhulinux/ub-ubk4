@@ -14,3 +14,7 @@ bsdtar -xf nvidia-persistenced-init.tar.bz2
 patch -i "$UB_SRCDIR"/patches/menu.patch.skip
 cd kernel
 make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
+
+cd ../libxnvctrl
+make clean
+make

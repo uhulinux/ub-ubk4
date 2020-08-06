@@ -1,7 +1,6 @@
 #!/bin/bash -eux
 
 # Kézzel-lábbal installálunk
-
 KVER="$(ls -1 /lib/modules | grep x86_64)"
 
 #célkönyvtár változók
@@ -97,6 +96,28 @@ mv nvidia-drm-outputclass.conf $xconfdir/10-nvidia-drm-outputclass.conf
 # két videókártyás rendszereknek persistenced.service
 mv nvidia-persistenced-init/systemd/nvidia-persistenced.service.template \
     $UB_INSTALLDIR/usr/lib/systemd/system/nvidia-persistenced.service
+
+#libxnvctrl
+
+cd libxnvctrl
+mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
+cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
+cp _out/Linux_x86_64/libXNVCtrl.a "${UB_INSTALLDIR}"/usr/lib/libXNVCtrl.a
+
+#pc
+cat <<'EOF' > "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
+prefix=/usr
+libdir=${prefix}/lib
+includedir=${prefix}/include/NVCtrl
+
+Name: libXNVCtrl
+Description: Library for accessing NV-CONTROL extension in NVIDIA's latest drivers.
+Version: %version%
+Libs: -L${libdir} -lXNVCtrl
+Cflags: -I${includedir}
+EOF
+
+sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
 #linkgyártások
 cd "$cellibdir"
