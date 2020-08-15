@@ -1,12 +1,11 @@
 #!/bin/sh -eux
 
-export USE_64=1
-
 export NSPR_INCLUDE_DIR=`/usr/bin/pkg-config --cflags-only-I nspr | sed 's/-I//'`
 
 # Respect LDFLAGS
 sed -i -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' coreconf/rules.mk
 
+export USE_64=1
 # required for linking with system sqlite
 export NSS_USE_SYSTEM_SQLITE=1
 

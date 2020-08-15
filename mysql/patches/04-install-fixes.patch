@@ -1,20 +1,18 @@
 diff -Naur orig/man/CMakeLists.txt patched/man/CMakeLists.txt
---- orig/man/CMakeLists.txt	2019-07-30 13:32:14.000000000 +0200
-+++ patched/man/CMakeLists.txt	2019-08-22 11:54:38.105210371 +0200
-@@ -15,7 +15,7 @@
- 
+--- orig/man/CMakeLists.txt	2020-08-07 14:57:35.000000000 +0200
++++ patched/man/CMakeLists.txt	2020-08-14 21:47:50.097369686 +0200
+@@ -16,7 +16,7 @@
  SET(MAN1_SERVER innochecksum.1 my_print_defaults.1 myisam_ftdump.1 myisamchk.1
                  aria_chk.1 aria_dump_log.1 aria_ftdump.1 aria_pack.1 aria_read_log.1
--		myisamlog.1 myisampack.1 mysql.server.1
-+		myisamlog.1 myisampack.1
+                 aria_s3_copy.1
+-		myisamlog.1 myisampack.1 mysql.server.1 mariadb-conv.1
++		myisamlog.1 myisampack.1 mariadb-conv.1
  		mysql_convert_table_format.1 mysql_fix_extensions.1
  		mysql_install_db.1
  		mysql_secure_installation.1 mysql_setpermission.1
-diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
---- orig/support-files/CMakeLists.txt	2019-12-10 14:47:15.000000000 +0100
-+++ mod/support-files/CMakeLists.txdiff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
---- orig/support-files/CMakeLists.txt	2019-12-10 14:47:15.000000000 +0100
-+++ mod/support-files/CMakeLists.txt	2019-12-29 20:35:16.821585760 +0100
+diff -Naur orig/support-files/CMakeLists.txt patched/support-files/CMakeLists.txt
+--- orig/support-files/CMakeLists.txt	2020-08-07 14:57:39.000000000 +0200
++++ patched/support-files/CMakeLists.txt	2020-08-14 21:50:50.089339590 +0200
 @@ -50,8 +50,8 @@
  
  IF(UNIX)
@@ -26,7 +24,7 @@ diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
                     ${CMAKE_CURRENT_BINARY_DIR}/${script} @ONLY )
      INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script}
        DESTINATION ${inst_location} COMPONENT Server_Scripts)
-@@ -59,39 +59,10 @@
+@@ -59,35 +59,6 @@
  
    IF(INSTALL_SUPPORTFILESDIR)
      INSTALL(FILES magic DESTINATION ${inst_location} COMPONENT SupportFiles)
@@ -62,11 +60,6 @@ diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
    ENDIF()
  
    CONFIGURE_FILE(mariadb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc @ONLY)
--  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc DESTINATION ${INSTALL_SHAREDIR}/pkgconfig COMPONENT Development)
-+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc DESTINATION ${INSTALL_LIBDIR}/pkgconfig COMPONENT Development)
- 
-   INSTALL(FILES mysql.m4 DESTINATION ${INSTALL_SHAREDIR}/aclocal COMPONENT Development)
-   
 @@ -112,10 +83,12 @@
    ELSE()
      SET(sysconf2dir "${sysconfdir}/mysql")
@@ -81,86 +74,7 @@ diff -Nur orig/support-files/CMakeLists.txt mod/support-files/CMakeLists.txt
  
    IF(HAVE_SYSTEMD)
      CONFIGURE_FILE(mariadb.service.in
-@@ -188,11 +161,5 @@
-               COMPONENT IniFiles)
-     ENDIF()
- 
--    # This is for SuSE:
--    INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink
--                   ${INSTALL_SYSCONFDIR}/init.d/mysql
--                   ${INSTALL_SBINDIR}/rcmysql
--                   WORKING_DIRECTORY \$ENV{DESTDIR}${prefix})"
--                   COMPONENT SupportFiles)
-   ENDIF(INSTALL_SYSCONFDIR)
- ENDIF()
-t	2019-12-29 20:35:16.821585760 +0100
-@@ -50,8 +50,8 @@
- 
- IF(UNIX)
-   SET(prefix ${CMAKE_INSTALL_PREFIX})
--  FOREACH(script mysqld_multi.server mysql-log-rotate binary-configure wsrep_notify)
--    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${script}.sh 
-+  FOREACH(script mysql-log-rotate binary-configure wsrep_notify)
-+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${script}.sh
-                    ${CMAKE_CURRENT_BINARY_DIR}/${script} @ONLY )
-     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script}
-       DESTINATION ${inst_location} COMPONENT Server_Scripts)
-@@ -59,39 +59,10 @@
- 
-   IF(INSTALL_SUPPORTFILESDIR)
-     INSTALL(FILES magic DESTINATION ${inst_location} COMPONENT SupportFiles)
--    INSTALL(DIRECTORY policy DESTINATION ${inst_location} COMPONENT SupportFiles)
--    FIND_PROGRAM(CHECKMODULE checkmodule)
--    FIND_PROGRAM(SEMODULE_PACKAGE semodule_package)
--    MARK_AS_ADVANCED(CHECKMODULE SEMODULE_PACKAGE)
--
--    # Build pp files in policy/selinux
--    IF(CHECKMODULE AND SEMODULE_PACKAGE)
--      FOREACH(pol mariadb)
--        SET(src ${CMAKE_CURRENT_SOURCE_DIR}/policy/selinux/${pol}.te)
--        SET(tmp ${CMAKE_CURRENT_BINARY_DIR}/${pol}.mod)
--        SET(out ${CMAKE_CURRENT_BINARY_DIR}/${pol}.pp)
--        ADD_CUSTOM_COMMAND(OUTPUT ${out}
--          COMMAND ${CHECKMODULE} -M -m ${src} -o ${tmp}
--          COMMAND ${SEMODULE_PACKAGE} -m ${tmp} -o ${out}
--          COMMAND ${CMAKE_COMMAND} -E remove ${tmp}
--        DEPENDS ${src})
--        ADD_CUSTOM_TARGET(${pol}-pp ALL DEPENDS ${out})
--        INSTALL(FILES ${out} DESTINATION ${inst_location}/policy/selinux COMPONENT SupportFiles)
--      ENDFOREACH()
--      IF(RPM)
--        EXECUTE_PROCESS(COMMAND rpm -q --qf "%{VERSION}-%{RELEASE}" libsepol
--                        OUTPUT_VARIABLE LIBSEPOL_VERSION RESULT_VARIABLE err)
--        IF (NOT err)
--          SET(CPACK_RPM_server_PACKAGE_REQUIRES
--            "${CPACK_RPM_server_PACKAGE_REQUIRES} libsepol >= ${LIBSEPOL_VERSION}"
--            PARENT_SCOPE)
--        ENDIF()
--      ENDIF()
--    ENDIF()
-   ENDIF()
- 
-   CONFIGURE_FILE(mariadb.pc.in ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc @ONLY)
--  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc DESTINATION ${INSTALL_SHAREDIR}/pkgconfig COMPONENT Development)
-+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mariadb.pc DESTINATION ${INSTALL_LIBDIR}/pkgconfig COMPONENT Development)
- 
-   INSTALL(FILES mysql.m4 DESTINATION ${INSTALL_SHAREDIR}/aclocal COMPONENT Development)
-   
-@@ -112,10 +83,12 @@
-   ELSE()
-     SET(sysconf2dir "${sysconfdir}/mysql")
-   ENDIF()
--  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/mysql.server.sh 
-+  IF(NOT HAVE_SYSTEMD)
-+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/mysql.server.sh
-                  ${CMAKE_CURRENT_BINARY_DIR}/mysql.server @ONLY)
-   INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/mysql.server
-     DESTINATION ${inst_location} COMPONENT SupportFiles)
-+  ENDIF()
- 
-   IF(HAVE_SYSTEMD)
-     CONFIGURE_FILE(mariadb.service.in
-@@ -188,11 +161,5 @@
+@@ -203,11 +176,5 @@
                COMPONENT IniFiles)
      ENDIF()
  

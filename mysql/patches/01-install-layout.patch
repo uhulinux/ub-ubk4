@@ -1,7 +1,7 @@
 diff -Naur orig/cmake/install_layout.cmake patched/cmake/install_layout.cmake
---- orig/cmake/install_layout.cmake	2018-07-02 09:34:08.000000000 +0200
-+++ patched/cmake/install_layout.cmake	2018-07-06 23:51:39.554887771 +0200
-@@ -179,21 +179,21 @@
+--- orig/cmake/install_layout.cmake	2020-08-07 14:57:35.000000000 +0200
++++ patched/cmake/install_layout.cmake	2020-08-14 21:42:48.924246237 +0200
+@@ -182,21 +182,21 @@
  #
  SET(INSTALL_INCLUDEDIR_DEB              "include/mariadb")
  #
@@ -14,26 +14,25 @@ diff -Naur orig/cmake/install_layout.cmake patched/cmake/install_layout.cmake
  #
  SET(INSTALL_SHAREDIR_DEB                "share")
  SET(INSTALL_MYSQLSHAREDIR_DEB           "share/mysql")
--SET(INSTALL_MYSQLTESTDIR_DEB            "mysql-test")
+ SET(INSTALL_MYSQLTESTDIR_DEB            "share/mysql/mysql-test")
 -SET(INSTALL_SQLBENCHDIR_DEB             ".")
-+SET(INSTALL_MYSQLTESTDIR_DEB            "share/mysql-test")
 +SET(INSTALL_SQLBENCHDIR_DEB             "")
  SET(INSTALL_SUPPORTFILESDIR_DEB         "share/mysql")
  #
  SET(INSTALL_MYSQLDATADIR_DEB            "/var/lib/mysql")
  
- SET(INSTALL_UNIX_ADDRDIR_DEB            "/var/run/mysqld/mysqld.sock")
+ SET(INSTALL_UNIX_ADDRDIR_DEB            "/run/mysqld/mysqld.sock")
 -SET(INSTALL_SYSTEMD_UNITDIR_DEB         "/lib/systemd/system")
 +SET(INSTALL_SYSTEMD_UNITDIR_DEB         "/usr/lib/systemd/system")
  SET(INSTALL_SYSTEMD_SYSUSERSDIR_DEB     "/usr/lib/sysusers.d")
  SET(INSTALL_SYSTEMD_TMPFILESDIR_DEB     "/usr/lib/tmpfiles.d")
- 
+ SET(INSTALL_PAMDIR_DEB                  "/lib/${CMAKE_CXX_LIBRARY_ARCHITECTURE}/security")
 diff -Naur orig/support-files/rpm/my.cnf patched/support-files/rpm/my.cnf
---- orig/support-files/rpm/my.cnf	2018-07-02 09:34:14.000000000 +0200
-+++ patched/support-files/rpm/my.cnf	2018-07-06 23:53:25.812328946 +0200
+--- orig/support-files/rpm/my.cnf	2020-08-07 14:57:39.000000000 +0200
++++ patched/support-files/rpm/my.cnf	2020-08-14 21:39:22.941887166 +0200
 @@ -7,5 +7,5 @@
  #
- # include all files from the config directory
+ # include *.cnf from the config directory
  #
 -!includedir /etc/my.cnf.d
 +!includedir /etc/mysql/conf.d

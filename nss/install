@@ -24,7 +24,7 @@ NSPR_VERSION=`pkg-config --modversion nspr`
 
 # create nss.pc
 mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
-cat nss.pc.in | sed -e "s,%libdir%,/usr/lib,g" \
+cat pkg/pkg-config/nss.pc.in | sed -e "s,%libdir%,/usr/lib,g" \
 					-e "s,%prefix%,/usr,g" \
 					-e "s,%exec_prefix%,/usr,g" \
 					-e "s,%includedir%,/usr/include/nss,g" \
