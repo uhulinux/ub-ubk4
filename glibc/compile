@@ -2,15 +2,15 @@
 
 cd "$UB_OBJECTDIR"
 
-# The glibc 2.26 supports kernel versions 3.2.0 and above only.
+# The glibc 2.32 supports kernel versions 3.2.0 and above only.
+# Sun RPC is removed, use libtirpc + rpcsvc-proto
+# nsl removed, use libnsl
 
 UB_CONFIGURE_DIR="$UB_COMPILEDIR" ub_configure \
 	--with-headers=/usr/include \
 	--with-tls \
 	--enable-add-ons \
 	--enable-kernel=5.4.40 \
-	--enable-obsolete-rpc \
-	--enable-obsolete-nsl \
 	--disable-werror \
 	--disable-timezone-tools \
 	--enable-bind-now \
@@ -21,9 +21,6 @@ UB_CONFIGURE_DIR="$UB_COMPILEDIR" ub_configure \
 	libc_cv_slibdir=/usr/lib \
 	libc_cv_rtlddir=/usr/lib
 
-# glibc doesn't like -Os!
-# build failures with -O1 maybe gcc bug:
-# https://sourceware.org/bugzilla/show_bug.cgi?id=19444
 ub_make \
 	CFLAGS="-O2 -mtune=generic" \
 	user-defined-trusted-dirs=/usr/local/lib
