@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
 #nss -el nem fordítható, a glibc-2.30 miatt a gnulib foltozandó
+export CFLAGS="-I/usr/include/tirpc"
 ub_compile \
 	--without-hal \
 	--without-macvtap \

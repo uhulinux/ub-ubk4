@@ -1,8 +1,5 @@
 #!/bin/sh -eux
 
-printf '%s\n' >>libs.doxy_template \
-    HAVE_DOT=yes DOT_IMAGE_FORMAT=svg INTERACTIVE_SVG=yes
-export CXXFLAGS='-fPIC'
-export CFLAGS='-fPIC'
 ub_compile \
+	-DBUILD_SHARED_LIBS=1 \
     -DENABLE_TESTS=0

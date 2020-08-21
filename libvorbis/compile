@@ -1,6 +1,4 @@
 #!/bin/sh -eux
 
-# A -O3 veszélyes
-ub_replace -O3 -O2 configure
-
-ub_compile
+ub_compile \
+	-DBUILD_SHARED_LIBS=ON

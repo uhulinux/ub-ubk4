@@ -1,0 +1,12 @@
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2020-05-17 13:16:28.000000000 +0200
++++ patched/configure.ac	2020-08-19 22:24:22.400947814 +0200
+@@ -5,7 +5,7 @@
+ dnl  When preparing a release, modify the numeric version components
+ dnl  and remove the git suffix.
+ dnl ******************************************************************
+-AC_INIT([sane-backends],m4_esyscmd_s([git describe --dirty]),
++AC_INIT([sane-backends],[1.0.30],
+         [sane-devel@alioth-lists.debian.net])
+ AC_PREREQ([2.69])               dnl minimum autoconf version required
+ AC_CONFIG_MACRO_DIR([m4])

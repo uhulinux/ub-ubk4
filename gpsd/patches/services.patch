@@ -1,6 +1,6 @@
-diff -Nur orig/systemd/gpsdctl@.service mod/systemd/gpsdctl@.service
---- orig/systemd/gpsdctl@.service	2019-06-05 03:28:35.000000000 +0200
-+++ mod/systemd/gpsdctl@.service	2019-12-03 20:10:37.255344582 +0100
+diff -Naur orig/systemd/gpsdctl@.service.in patched/systemd/gpsdctl@.service.in
+--- orig/systemd/gpsdctl@.service.in	2020-06-11 23:03:14.000000000 +0200
++++ patched/systemd/gpsdctl@.service.in	2020-08-19 22:04:33.617668179 +0200
 @@ -10,5 +10,5 @@
  EnvironmentFile=-/etc/default/gpsd
  EnvironmentFile=-/etc/sysconfig/gpsd
@@ -9,9 +9,9 @@ diff -Nur orig/systemd/gpsdctl@.service mod/systemd/gpsdctl@.service
 -ExecStop=/bin/sh -c "[ \"$USBAUTO\" = true ] && /usr/local/sbin/gpsdctl remove /dev/%I || :"
 +ExecStart=/bin/sh -c "[ \"$USBAUTO\" = true ] && /usr/sbin/gpsdctl add /dev/%I || :"
 +ExecStop=/bin/sh -c "[ \"$USBAUTO\" = true ] && /usr/sbin/gpsdctl remove /dev/%I || :"
-diff -Nur orig/systemd/gpsd.service mod/systemd/gpsd.service
---- orig/systemd/gpsd.service	2019-06-05 03:28:35.000000000 +0200
-+++ mod/systemd/gpsd.service	2019-12-03 20:09:39.231426529 +0100
+diff -Naur orig/systemd/gpsd.service patched/systemd/gpsd.service
+--- orig/systemd/gpsd.service	2020-06-05 05:01:16.000000000 +0200
++++ patched/systemd/gpsd.service	2020-08-19 22:03:47.921541524 +0200
 @@ -8,7 +8,7 @@
  Type=forking
  EnvironmentFile=-/etc/default/gpsd

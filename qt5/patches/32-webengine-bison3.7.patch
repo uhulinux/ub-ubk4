@@ -1,0 +1,38 @@
+From af5439c1eb971fe789392dd1ec93917991102f1e Mon Sep 17 00:00:00 2001
+From: Jimi Huotari <chiitoo@gentoo.org>
+Date: Sat, 1 Aug 2020 05:44:15 +0300
+Subject: [PATCH] Fix building with Bison 3.7
+
+Bison 3.7 changes how header files are included [1][2], in that instead
+of copying and inserting the contents of a file, the file itself is
+included (by default as '"basename.h"').
+
+The generated 'xpath_grammar.hh' is deleted during the build without
+its contents being added to 'xpath_grammar.cc', which then leads to the
+compilation being terminated.
+
+This change simply removes the removal of the generated file as a
+workaround.
+
+1. https://lists.gnu.org/archive/html/info-gnu/2020-07/msg00006.html
+2. https://www.gnu.org/software/bison/manual/html_node/_0025define-Summary.html
+
+Change-Id: Ia0bb0b05b526f78eecd4b57df1b81536d5fb744d
+---
+ chromium/third_party/blink/renderer/build/scripts/rule_bison.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/qtwebengine/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py b/qtwebengine/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
+index f75e25fd23f..578acafc138 100755
+--- a/qtwebengine/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
++++ b/qtwebengine/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
+@@ -101,7 +101,6 @@ assert outputHTmp != None
+ outputHFile = open(outputHTmp)
+ outputHContents = outputHFile.read()
+ outputHFile.close()
+-os.unlink(outputHTmp)
+ 
+ # Rewrite the generated header with #include guards.
+ outputH = os.path.join(outputDir, inputRoot + '.h')
+-- 
+2.28.0
