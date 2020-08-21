@@ -1,9 +1,11 @@
 #!/bin/sh -eux
 
+# sys_nerr, sys_errlist removed in glibc 2.32, disable v4l
+
 autoreconf
 
 UB_UPDATELIBTOOL=yes ub_compile \
-	--enable-v4l \
+	--disable-v4l \
 	--enable-oss \
 	--enable-libpostproc \
 	--enable-freetype2 \
@@ -21,8 +23,8 @@ UB_UPDATELIBTOOL=yes ub_compile \
 	--enable-xvid \
 	--enable-libmpeg2 \
 	--enable-libmpeg2convert \
-	--enable-libv4l2 \
-	--enable-libv4lconvert \
+	--disable-libv4l2 \
+	--disable-libv4lconvert \
 	--enable-alsa \
 	--enable-faac \
 	--enable-imagemagick

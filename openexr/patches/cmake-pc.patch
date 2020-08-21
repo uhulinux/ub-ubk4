@@ -1,0 +1,30 @@
+diff -Naur orig/OpenEXR/config/OpenEXRConfig.cmake.in patched/OpenEXR/config/OpenEXRConfig.cmake.in
+--- orig/OpenEXR/config/OpenEXRConfig.cmake.in	2020-08-13 01:12:07.000000000 +0200
++++ patched/OpenEXR/config/OpenEXRConfig.cmake.in	2020-08-17 18:49:21.746018512 +0200
+@@ -1,8 +1,6 @@
+ @PACKAGE_INIT@
+ 
+ include(CMakeFindDependencyMacro)
+-find_dependency(Threads REQUIRED)
+-find_dependency(ZLIB REQUIRED)
+ find_dependency(IlmBase @OPENEXR_VERSION@ EXACT REQUIRED)
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+diff -Naur orig/PyIlmBase/PyIlmBase.pc.in patched/PyIlmBase/PyIlmBase.pc.in
+--- orig/PyIlmBase/PyIlmBase.pc.in	2020-08-13 01:12:07.000000000 +0200
++++ patched/PyIlmBase/PyIlmBase.pc.in	2020-08-17 18:53:09.890815131 +0200
+@@ -4,10 +4,10 @@
+ ##
+ 
+ prefix=@prefix@
+-exec_prefix=@exec_prefix@
+-libdir=@libdir@
+-includedir=@includedir@
+-PyIlmBase_includedir=@includedir@/OpenEXR
++exec_prefix=@prefix@
++libdir=@prefix@/@libdir@
++includedir=@prefix@/@includedir@
++PyIlmBase_includedir=@prefix@/@includedir@/OpenEXR
+ 
+ Name: PyIlmBase
+ Description: Python bindings for the IlmBase libraries

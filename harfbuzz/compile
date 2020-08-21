@@ -2,5 +2,7 @@
 
 rm -f CMakeLists.txt
 ub_compile \
-	--with-gobject \
-	--with-graphite2
+	-Dgobject=enabled \
+	-Dgraphite=enabled \
+	-Dintrospection=enabled \
+	-Dgtk_doc=disabled
