@@ -1,8 +1,1 @@
-dirs=$(urllist https://download.gnome.org/sources/tracker/ | grep -E '^[0-9]\.[0-9]$' | sort -r)
-for dir in $dirs;do
-ver=$(u2d https://download.gnome.org/sources/tracker/$dir)
-if [ "$ver" ];then
-echo $ver
-exit 0
-fi
-done
+u2dgnome tracker

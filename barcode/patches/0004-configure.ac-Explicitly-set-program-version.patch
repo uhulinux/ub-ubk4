@@ -1,0 +1,21 @@
+From: Boyuan Yang <byang@debian.org>
+Date: Tue, 23 Oct 2018 17:10:48 -0400
+Subject: configure.ac: Explicitly set program version
+
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index b5b6e7f..991ba7c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,7 +1,7 @@
+ dnl Process this file with autoconf to produce a configure script.
+ 
+ AC_INIT(barcode,
+-        m4_esyscmd([build-aux/git-version-gen .tarball-version]),
++        [0.99],
+         bug-barcode@gnu.org)
+ AC_PREREQ([2.65])
+ 

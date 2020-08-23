@@ -1,0 +1,19 @@
+From: Jim Evins <evins@snaught.com>
+Subject: Added missing function prototype to header.
+Origin: upstream, https://github.com/jimevins/glabels/commit/01c80fc941cf5c8bf0d2b64a6a58cc3b5138f932
+Bug-Debian: http://bugs.debian.org/855604
+
+---
+ src/prefs-model.h |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/src/prefs-model.h
++++ b/src/prefs-model.h
+@@ -54,6 +54,7 @@ struct _glPrefsModelClass {
+                          gpointer      user_data);
+ };
+ 
++glPrefsModel  *gl_prefs_model_new_null                      (void);
+ 
+ GType          gl_prefs_model_get_type                      (void) G_GNUC_CONST;
+ 

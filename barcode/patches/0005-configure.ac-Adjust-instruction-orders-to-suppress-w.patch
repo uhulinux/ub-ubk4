@@ -1,0 +1,32 @@
+From: Boyuan Yang <byang@debian.org>
+Date: Tue, 23 Oct 2018 17:12:53 -0400
+Subject: configure.ac: Adjust instruction orders to suppress warnings
+
+---
+ configure.ac | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 991ba7c..2f91353 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5,16 +5,15 @@ AC_INIT(barcode,
+         bug-barcode@gnu.org)
+ AC_PREREQ([2.65])
+ 
++AC_CONFIG_MACRO_DIR([m4])
+ AC_CONFIG_AUX_DIR([build-aux])
+-AM_INIT_AUTOMAKE([gnu])
++AC_CONFIG_HEADERS([config.h])
+ 
+ AC_CANONICAL_HOST
+ AC_CANONICAL_TARGET
+ AC_CANONICAL_BUILD
+ 
+-AC_CONFIG_MACRO_DIR([m4])
+-
+-AC_CONFIG_HEADERS([config.h])
++AM_INIT_AUTOMAKE([gnu])
+ 
+ AC_USE_SYSTEM_EXTENSIONS
+ 

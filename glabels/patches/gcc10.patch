@@ -1,0 +1,48 @@
+diff -Naur orig/src/font-history.c patched/src/font-history.c
+--- orig/src/font-history.c	2016-03-04 05:01:15.000000000 +0100
++++ patched/src/font-history.c	2020-08-23 00:37:28.880066025 +0200
+@@ -30,7 +30,7 @@
+ /* Public globals.                                        */
+ /*========================================================*/
+ 
+-glFontHistoryModel *gl_font_history = NULL;
++extern glFontHistoryModel *gl_font_history = NULL;
+ 
+ 
+ /*========================================================*/
+diff -Naur orig/src/font-history.h patched/src/font-history.h
+--- orig/src/font-history.h	2016-03-04 05:01:15.000000000 +0100
++++ patched/src/font-history.h	2020-08-23 00:37:17.760040774 +0200
+@@ -28,7 +28,7 @@
+ G_BEGIN_DECLS
+ 
+ 
+-glFontHistoryModel *gl_font_history;
++extern glFontHistoryModel *gl_font_history;
+ 
+ 
+ void            gl_font_history_init (void);
+diff -Naur orig/src/template-history.c patched/src/template-history.c
+--- orig/src/template-history.c	2016-03-04 05:01:15.000000000 +0100
++++ patched/src/template-history.c	2020-08-23 00:34:06.743606264 +0200
+@@ -30,7 +30,7 @@
+ /* Public globals.                                        */
+ /*========================================================*/
+ 
+-glTemplateHistoryModel *gl_template_history = NULL;
++extern glTemplateHistoryModel *gl_template_history = NULL;
+ 
+ 
+ /*========================================================*/
+diff -Naur orig/src/template-history.h patched/src/template-history.h
+--- orig/src/template-history.h	2016-03-04 05:01:15.000000000 +0100
++++ patched/src/template-history.h	2020-08-23 00:33:50.527569228 +0200
+@@ -28,7 +28,7 @@
+ G_BEGIN_DECLS
+ 
+ 
+-glTemplateHistoryModel *gl_template_history;
++extern glTemplateHistoryModel *gl_template_history;
+ 
+ 
+ void            gl_template_history_init (void);

@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
 autoreconf -vif
+export CFLAGS=-fcommon
 export LDFLAGS="-lm"
 ub_compile

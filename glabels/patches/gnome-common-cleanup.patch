@@ -1,0 +1,19 @@
+Description: Replace deprecated gnome-common macro
+ GNOME_COMPILER_WARNINGS has been deprecated. Replace it by call to
+ AX_COMPILER_FLAGS.
+Author: Jakob Haufe <sur5r@sur5r.net>
+Bug-Debian: https://bugs.debian.org/830033
+Forwarded: https://github.com/jimevins/glabels/pull/18
+Last-Update: 2016-12-15
+
+--- glabels-3.4.0.orig/configure.ac
++++ glabels-3.4.0/configure.ac
+@@ -43,7 +43,7 @@ AC_SEARCH_LIBS([strerror],[cposix])
+ AC_PROG_CC
+ AC_PROG_INSTALL
+ 
+-GNOME_COMPILE_WARNINGS
++AX_COMPILER_FLAGS
+ 
+ AC_PATH_PROG(GLIB_GENMARSHAL,         glib-genmarshal)
+ AC_PATH_PROG(GDK_PIXBUF_CSOURCE,      gdk-pixbuf-csource)
