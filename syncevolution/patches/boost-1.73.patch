@@ -1,0 +1,573 @@
+diff -up syncevolution-1.5.3/src/backends/activesync/ActiveSyncSource.h.7 syncevolution-1.5.3/src/backends/activesync/ActiveSyncSource.h
+--- syncevolution-1.5.3/src/backends/activesync/ActiveSyncSource.h.7	2020-07-07 13:58:12.779492076 +0200
++++ syncevolution-1.5.3/src/backends/activesync/ActiveSyncSource.h	2020-07-07 13:58:30.314408226 +0200
+@@ -31,7 +31,7 @@
+ #include <syncevo/SmartPtr.h>
+ #include <syncevo/GLibSupport.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <string>
+ #include <map>
+@@ -41,6 +41,9 @@
+ #include <eas-folder.h>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ 
+diff -up syncevolution-1.5.3/src/backends/akonadi/akonadisyncsource.cpp.7 syncevolution-1.5.3/src/backends/akonadi/akonadisyncsource.cpp
+--- syncevolution-1.5.3/src/backends/akonadi/akonadisyncsource.cpp.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/backends/akonadi/akonadisyncsource.cpp	2020-07-07 13:41:01.828429631 +0200
+@@ -41,12 +41,13 @@
+ 
+ #include <boost/lambda/lambda.hpp>
+ #include <boost/lambda/bind.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <QtCore/QDebug>
+ 
+ SE_BEGIN_CXX
+ using namespace Akonadi;
++using namespace boost::placeholders;
+ 
+ /**
+  * We take over ownership of jobs by storing them in smart pointers
+diff -up syncevolution-1.5.3/src/backends/pbap/PbapSyncSource.cpp.7 syncevolution-1.5.3/src/backends/pbap/PbapSyncSource.cpp
+--- syncevolution-1.5.3/src/backends/pbap/PbapSyncSource.cpp.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/backends/pbap/PbapSyncSource.cpp	2020-07-07 13:41:01.829429626 +0200
+@@ -45,11 +45,14 @@
+ #include "gdbus-cxx-bridge.h"
+ 
+ #include <boost/algorithm/string/predicate.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <synthesis/SDK_util.h>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ #define OBC_SERVICE "org.openobex.client" // obexd < 0.47
+diff -up syncevolution-1.5.3/src/backends/sqlite/SQLiteContactSource.h.7 syncevolution-1.5.3/src/backends/sqlite/SQLiteContactSource.h
+--- syncevolution-1.5.3/src/backends/sqlite/SQLiteContactSource.h.7	2014-04-25 09:55:47.000000000 +0200
++++ syncevolution-1.5.3/src/backends/sqlite/SQLiteContactSource.h	2020-07-07 13:41:01.829429626 +0200
+@@ -25,9 +25,12 @@
+ #include <syncevo/SafeConfigNode.h>
+ #include <SQLiteUtil.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ #ifdef ENABLE_SQLITE
+diff -up syncevolution-1.5.3/src/backends/webdav/CalDAVSource.cpp.7 syncevolution-1.5.3/src/backends/webdav/CalDAVSource.cpp
+--- syncevolution-1.5.3/src/backends/webdav/CalDAVSource.cpp.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/backends/webdav/CalDAVSource.cpp	2020-07-07 13:41:01.829429626 +0200
+@@ -11,10 +11,13 @@
+ 
+ #include "CalDAVSource.h"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/algorithm/string/replace.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ /**
+diff -up syncevolution-1.5.3/src/backends/webdav/CardDAVSource.cpp.7 syncevolution-1.5.3/src/backends/webdav/CardDAVSource.cpp
+--- syncevolution-1.5.3/src/backends/webdav/CardDAVSource.cpp.7	2014-07-23 10:38:16.000000000 +0200
++++ syncevolution-1.5.3/src/backends/webdav/CardDAVSource.cpp	2020-07-07 13:41:01.830429622 +0200
+@@ -7,6 +7,8 @@
+ #ifdef ENABLE_DAV
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
+ SE_BEGIN_CXX
+ 
+ // TODO: use EDS backend icalstrdup.c
+diff -up syncevolution-1.5.3/src/backends/webdav/NeonCXX.cpp.7 syncevolution-1.5.3/src/backends/webdav/NeonCXX.cpp
+--- syncevolution-1.5.3/src/backends/webdav/NeonCXX.cpp.7	2015-04-17 11:19:46.000000000 +0200
++++ syncevolution-1.5.3/src/backends/webdav/NeonCXX.cpp	2020-07-07 13:51:27.319430971 +0200
+@@ -15,7 +15,7 @@
+ #include <list>
+ #include <boost/algorithm/string/join.hpp>
+ #include <boost/algorithm/string/split.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/lambda/lambda.hpp>
+ 
+ #include <syncevo/util.h>
+@@ -30,6 +30,9 @@
+ #include <dlfcn.h>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ namespace Neon {
+diff -up syncevolution-1.5.3/src/backends/webdav/WebDAVSource.cpp.7 syncevolution-1.5.3/src/backends/webdav/WebDAVSource.cpp
+--- syncevolution-1.5.3/src/backends/webdav/WebDAVSource.cpp.7	2015-04-01 17:14:39.000000000 +0200
++++ syncevolution-1.5.3/src/backends/webdav/WebDAVSource.cpp	2020-07-07 13:41:01.831429617 +0200
+@@ -4,7 +4,7 @@
+ 
+ #include "WebDAVSource.h"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/algorithm/string/replace.hpp>
+ #include <boost/algorithm/string/predicate.hpp>
+ #include <boost/algorithm/string/classification.hpp>
+@@ -20,6 +20,8 @@
+ #include <stdio.h>
+ #include <errno.h>
+ 
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ BoolConfigProperty &WebDAVCredentialsOkay()
+diff -up syncevolution-1.5.3/src/backends/webdav/WebDAVSourceRegister.cpp.7 syncevolution-1.5.3/src/backends/webdav/WebDAVSourceRegister.cpp
+--- syncevolution-1.5.3/src/backends/webdav/WebDAVSourceRegister.cpp.7	2016-09-26 13:20:05.000000000 +0200
++++ syncevolution-1.5.3/src/backends/webdav/WebDAVSourceRegister.cpp	2020-07-07 13:41:01.831429617 +0200
+@@ -16,11 +16,14 @@
+ #include <dlfcn.h>
+ #endif
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/tokenizer.hpp>
+ #include <boost/assign.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ static SyncSource *createSource(const SyncSourceParams &params)
+diff -up syncevolution-1.5.3/src/client-test-app.cpp.7 syncevolution-1.5.3/src/client-test-app.cpp
+--- syncevolution-1.5.3/src/client-test-app.cpp.7	2020-07-07 13:57:41.623641061 +0200
++++ syncevolution-1.5.3/src/client-test-app.cpp	2020-07-07 13:57:57.447565391 +0200
+@@ -33,10 +33,12 @@
+ #include <syncevo/util.h>
+ #include <syncevo/VolatileConfigNode.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
+ 
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ /*
+diff -up syncevolution-1.5.3/src/dbus/server/dbus-callbacks.h.7 syncevolution-1.5.3/src/dbus/server/dbus-callbacks.h
+--- syncevolution-1.5.3/src/dbus/server/dbus-callbacks.h.7	2014-04-25 09:55:47.000000000 +0200
++++ syncevolution-1.5.3/src/dbus/server/dbus-callbacks.h	2020-07-07 13:41:01.832429612 +0200
+@@ -22,7 +22,7 @@
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/function.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
+ 
+diff -up syncevolution-1.5.3/src/dbus/server/pim/folks.cpp.7 syncevolution-1.5.3/src/dbus/server/pim/folks.cpp
+--- syncevolution-1.5.3/src/dbus/server/pim/folks.cpp.7	2020-07-07 13:56:48.672894268 +0200
++++ syncevolution-1.5.3/src/dbus/server/pim/folks.cpp	2020-07-07 13:57:09.469794816 +0200
+@@ -23,7 +23,7 @@
+ #include "filtered-view.h"
+ #include "individual-traits.h"
+ #include "persona-details.h"
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include "test.h"
+ #include <syncevo/BoostHelper.h>
+ #include <syncevo/LogRedirect.h>
+@@ -31,6 +31,9 @@
+ #include <boost/ptr_container/ptr_vector.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ /**
+diff -up syncevolution-1.5.3/src/dbus/server/server.cpp.7 syncevolution-1.5.3/src/dbus/server/server.cpp
+--- syncevolution-1.5.3/src/dbus/server/server.cpp.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/dbus/server/server.cpp	2020-07-07 13:41:01.832429612 +0200
+@@ -20,7 +20,7 @@
+ 
+ #include <fstream>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/GLibSupport.h>
+ #include <syncevo/timeout.h>
+@@ -39,6 +39,7 @@
+ 
+ #include <boost/pointer_cast.hpp>
+ 
++using namespace boost::placeholders;
+ using namespace GDBusCXX;
+ 
+ SE_BEGIN_CXX
+diff -up syncevolution-1.5.3/src/gdbus/gdbus-cxx-bridge.h.7 syncevolution-1.5.3/src/gdbus/gdbus-cxx-bridge.h
+--- syncevolution-1.5.3/src/gdbus/gdbus-cxx-bridge.h.7	2020-07-07 13:56:02.836113458 +0200
++++ syncevolution-1.5.3/src/gdbus/gdbus-cxx-bridge.h	2020-07-07 13:56:36.432952799 +0200
+@@ -84,7 +84,7 @@ void intrusive_ptr_release(DBusPendingCa
+ static inline void intrusive_ptr_add_ref(DBusServer *server) { dbus_server_ref(server); }
+ static inline void intrusive_ptr_release(DBusServer *server) { dbus_server_unref(server); }
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/intrusive_ptr.hpp>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/variant.hpp>
+@@ -96,6 +96,8 @@ static inline void intrusive_ptr_release
+ # include <glib.h>
+ #endif
+ 
++using namespace boost::placeholders;
++
+ /* The connection is the only client-exposed type from the C API. To
+  * keep changes to a minimum while supporting both dbus
+  * implementations, this is made to be a define. The intention is to
+diff -up syncevolution-1.5.3/src/gdbusxx/gdbus-cxx-bridge.h.7 syncevolution-1.5.3/src/gdbusxx/gdbus-cxx-bridge.h
+--- syncevolution-1.5.3/src/gdbusxx/gdbus-cxx-bridge.h.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/gdbusxx/gdbus-cxx-bridge.h	2020-07-07 13:41:01.833429607 +0200
+@@ -68,7 +68,7 @@
+ #include <deque>
+ #include <utility>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/intrusive_ptr.hpp>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/variant.hpp>
+@@ -79,6 +79,8 @@
+ #include <boost/utility.hpp>
+ #include <boost/type_traits/is_signed.hpp>
+ 
++using namespace boost::placeholders;
++
+ /* The SyncEvolution exception handler must integrate into the D-Bus
+  * C++ wrapper. In contrast to the rest of the code, that handler uses
+  * some of the internal classes.
+diff -up syncevolution-1.5.3/src/syncevo/BoostHelper.h.7 syncevolution-1.5.3/src/syncevo/BoostHelper.h
+--- syncevolution-1.5.3/src/syncevo/BoostHelper.h.7	2014-04-25 09:55:47.000000000 +0200
++++ syncevolution-1.5.3/src/syncevo/BoostHelper.h	2020-07-07 13:41:01.834429602 +0200
+@@ -44,10 +44,13 @@
+ #ifndef INCL_SYNCEVOLUTION_BOOST_HELPER
+ # define INCL_SYNCEVOLUTION_BOOST_HELPER
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/smart_ptr.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ template <typename P, typename M>
+diff -up syncevolution-1.5.3/src/syncevo/Cmdline.cpp.7 syncevolution-1.5.3/src/syncevo/Cmdline.cpp
+--- syncevolution-1.5.3/src/syncevo/Cmdline.cpp.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/syncevo/Cmdline.cpp	2020-07-07 13:41:01.835429598 +0200
+@@ -48,6 +48,7 @@ using namespace std;
+ #include <boost/algorithm/string/join.hpp>
+ #include <boost/algorithm/string/split.hpp>
+ #include <boost/algorithm/string.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/tokenizer.hpp>
+ #include <boost/foreach.hpp>
+ #include <boost/range.hpp>
+@@ -56,6 +57,7 @@ using namespace std;
+ 
+ #include <syncevo/declarations.h>
+ using namespace std;
++using namespace boost::placeholders;
+ SE_BEGIN_CXX
+ 
+ // synopsis and options char strings
+diff -up syncevolution-1.5.3/src/syncevo/EDSClient.h.7 syncevolution-1.5.3/src/syncevo/EDSClient.h
+--- syncevolution-1.5.3/src/syncevo/EDSClient.h.7	2014-05-02 16:46:58.000000000 +0200
++++ syncevolution-1.5.3/src/syncevo/EDSClient.h	2020-07-07 13:41:01.836429593 +0200
+@@ -31,7 +31,7 @@
+ #include <libedataserver/libedataserver.h>
+ #include <boost/function.hpp>
+ #include <boost/utility.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/lambda/core.hpp>
+ #include <list>
+ 
+@@ -40,6 +40,8 @@ SE_GOBJECT_TYPE(ESourceRegistry)
+ SE_GOBJECT_TYPE(ESource)
+ SE_GOBJECT_TYPE(EClient)
+ 
++using namespace boost::placeholders;
++
+ #endif // HAVE_EDS && USE_EDS_CLIENT
+ 
+ #include <syncevo/declarations.h>
+diff -up syncevolution-1.5.3/src/syncevo/GLibSupport.cpp.7 syncevolution-1.5.3/src/syncevo/GLibSupport.cpp
+--- syncevolution-1.5.3/src/syncevo/GLibSupport.cpp.7	2020-07-07 13:55:27.506282406 +0200
++++ syncevolution-1.5.3/src/syncevo/GLibSupport.cpp	2020-07-07 13:55:45.172197928 +0200
+@@ -24,7 +24,7 @@
+ #include "test.h"
+ #endif
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/lambda/bind.hpp>
+ #include <set>
+ 
+@@ -36,6 +36,7 @@
+ #endif
+ 
+ using namespace std;
++using namespace boost::placeholders;
+ 
+ SE_BEGIN_CXX
+ 
+diff -up syncevolution-1.5.3/src/syncevo/GLibSupport.h.7 syncevolution-1.5.3/src/syncevo/GLibSupport.h
+--- syncevolution-1.5.3/src/syncevo/GLibSupport.h.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/syncevo/GLibSupport.h	2020-07-07 13:41:01.836429593 +0200
+@@ -38,7 +38,7 @@ typedef void *GMainLoop;
+ #include <boost/utility.hpp>
+ #include <boost/foreach.hpp>
+ #include <boost/function.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/type_traits/remove_pointer.hpp>
+ #include <boost/type_traits/function_traits.hpp>
+ #include <boost/utility/value_init.hpp>
+@@ -49,6 +49,9 @@ typedef void *GMainLoop;
+ #include <memory>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ enum {
+diff -up syncevolution-1.5.3/src/syncevo/LogStdout.cpp.7 syncevolution-1.5.3/src/syncevo/LogStdout.cpp
+--- syncevolution-1.5.3/src/syncevo/LogStdout.cpp.7	2020-07-07 13:54:53.562444724 +0200
++++ syncevolution-1.5.3/src/syncevo/LogStdout.cpp	2020-07-07 13:55:14.398345087 +0200
+@@ -22,10 +22,11 @@
+ #include <string.h>
+ #include <errno.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
+ using namespace std;
++using namespace boost::placeholders;
+ SE_BEGIN_CXX
+ 
+ 
+diff -up syncevolution-1.5.3/src/syncevo/LogSyslog.cpp.7 syncevolution-1.5.3/src/syncevo/LogSyslog.cpp
+--- syncevolution-1.5.3/src/syncevo/LogSyslog.cpp.7	2020-07-07 13:54:11.454646080 +0200
++++ syncevolution-1.5.3/src/syncevo/LogSyslog.cpp	2020-07-07 13:54:41.181503928 +0200
+@@ -22,10 +22,11 @@
+ #include <errno.h>
+ #include <syslog.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
+ using namespace std;
++using namespace boost::placeholders;
+ SE_BEGIN_CXX
+ 
+ LoggerSyslog::LoggerSyslog(const std::string &processName) :
+diff -up syncevolution-1.5.3/src/syncevo/SyncContext.cpp.7 syncevolution-1.5.3/src/syncevo/SyncContext.cpp
+--- syncevolution-1.5.3/src/syncevo/SyncContext.cpp.7	2020-07-07 13:53:27.631855639 +0200
++++ syncevolution-1.5.3/src/syncevo/SyncContext.cpp	2020-07-07 13:53:56.981715286 +0200
+@@ -56,7 +56,7 @@ using namespace std;
+ #include <boost/algorithm/string/join.hpp>
+ #include <boost/foreach.hpp>
+ #include <boost/algorithm/string/split.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/utility.hpp>
+ #include <boost/lambda/bind.hpp>
+ #include <boost/typeof/typeof.hpp>
+@@ -82,6 +82,9 @@ using namespace std;
+ #include "test.h"
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ SyncContext *SyncContext::m_activeContext;
+diff -up syncevolution-1.5.3/src/syncevo/SyncSource.cpp.7 syncevolution-1.5.3/src/syncevo/SyncSource.cpp
+--- syncevolution-1.5.3/src/syncevo/SyncSource.cpp.7	2020-07-07 13:52:39.939083705 +0200
++++ syncevolution-1.5.3/src/syncevo/SyncSource.cpp	2020-07-07 13:53:07.389952434 +0200
+@@ -32,7 +32,7 @@
+ #include <synthesis/SDK_util.h>
+ #include <synthesis/sync_dbapidef.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/algorithm/string/join.hpp>
+ #include <boost/algorithm/string/split.hpp>
+ #include <boost/algorithm/string/classification.hpp>
+@@ -51,6 +51,9 @@
+ #endif
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ void SyncSourceBase::throwError(const SourceLocation &where, const string &action, int error)
+diff -up syncevolution-1.5.3/src/syncevo/timeout.h.7 syncevolution-1.5.3/src/syncevo/timeout.h
+--- syncevolution-1.5.3/src/syncevo/timeout.h.7	2018-01-05 16:10:27.000000000 +0100
++++ syncevolution-1.5.3/src/syncevo/timeout.h	2020-07-07 13:41:01.837429588 +0200
+@@ -24,9 +24,12 @@
+ #include <syncevo/util.h>
+ 
+ #include <boost/utility.hpp>
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ /**
+diff -up syncevolution-1.5.3/src/syncevo/TrackingSyncSource.cpp.7 syncevolution-1.5.3/src/syncevo/TrackingSyncSource.cpp
+--- syncevolution-1.5.3/src/syncevo/TrackingSyncSource.cpp.7	2014-09-15 14:23:19.000000000 +0200
++++ syncevolution-1.5.3/src/syncevo/TrackingSyncSource.cpp	2020-07-07 13:41:01.837429588 +0200
+@@ -22,9 +22,12 @@
+ #include <syncevo/SafeConfigNode.h>
+ #include <syncevo/PrefixConfigNode.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ TrackingSyncSource::TrackingSyncSource(const SyncSourceParams &params,
+diff -up syncevolution-1.5.3/src/syncevo/UserInterface.cpp.7 syncevolution-1.5.3/src/syncevo/UserInterface.cpp
+--- syncevolution-1.5.3/src/syncevo/UserInterface.cpp.7	2014-04-25 09:55:47.000000000 +0200
++++ syncevolution-1.5.3/src/syncevo/UserInterface.cpp	2020-07-07 13:41:01.837429588 +0200
+@@ -20,9 +20,12 @@
+ #include <syncevo/UserInterface.h>
+ #include <boost/algorithm/string/join.hpp>
+ 
+-#include <boost/algorithm/string/join.hpp>
++#include <boost/bind/bind.hpp>
+ 
+ #include <syncevo/declarations.h>
++
++using namespace boost::placeholders;
++
+ SE_BEGIN_CXX
+ 
+ std::string ConfigPasswordKey::toString() const
+diff -up syncevolution-1.5.3/test/ClientTest.cpp.7 syncevolution-1.5.3/test/ClientTest.cpp
+--- syncevolution-1.5.3/test/ClientTest.cpp.7	2020-07-07 13:51:50.720319069 +0200
++++ syncevolution-1.5.3/test/ClientTest.cpp	2020-07-07 13:52:17.543190803 +0200
+@@ -61,7 +61,7 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/tokenizer.hpp>
+ #include <boost/assign.hpp>
+ #include <boost/lambda/lambda.hpp>
+@@ -75,6 +75,8 @@
+ 
+ #include <syncevo/declarations.h>
+ 
++using namespace boost::placeholders;
++
+ namespace CppUnit {
+ 
+ /**
+diff -up syncevolution-1.5.3/test/dbus-client-server.cpp.7 syncevolution-1.5.3/test/dbus-client-server.cpp
+--- syncevolution-1.5.3/test/dbus-client-server.cpp.7	2014-07-23 10:38:16.000000000 +0200
++++ syncevolution-1.5.3/test/dbus-client-server.cpp	2020-07-07 13:41:01.838429583 +0200
+@@ -6,10 +6,12 @@
+ #include <iostream>
+ #include <signal.h>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/scoped_ptr.hpp>
+ #include <boost/tuple/tuple_io.hpp>
+ 
++using namespace boost::placeholders;
++
+ SyncEvo::GMainLoopCXX loop;
+ 
+ // closes child connection
+
+diff -up syncevolution-1.5.3/src/syncevo/SyncContext.cpp.catch-value syncevolution-1.5.3/src/syncevo/SyncContext.cpp
+--- syncevolution-1.5.3/src/syncevo/SyncContext.cpp.catch-value	2020-07-07 14:19:37.120399014 +0200
++++ syncevolution-1.5.3/src/syncevo/SyncContext.cpp	2020-07-07 14:20:20.212194695 +0200
+@@ -3813,7 +3813,7 @@ SyncMLStatus SyncContext::doSync()
+         bool status = true;
+         try {
+             status = sendSAN (version);
+-        } catch (TransportException e) {
++        } catch (TransportException &e) {
+             if (!sanFormat.empty()){
+                 throw;
+             }
+@@ -4644,11 +4644,11 @@ bool SyncContext::checkForScriptAbort(Sh
+         SharedKey contextKey = m_engine.OpenKeyByPath(sessionKey, "/sessionvars");
+         bool abort = m_engine.GetInt32Value(contextKey, "delayedabort");
+         return abort;
+-    } catch (NoSuchKey) {
++    } catch (NoSuchKey &) {
+         // this is necessary because the session might already have
+         // been closed, which removes the variable
+         return false;
+-    } catch (BadSynthesisResult) {
++    } catch (BadSynthesisResult &) {
+         return false;
+     }
+ }

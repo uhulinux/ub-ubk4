@@ -1,0 +1,167 @@
+From: Paolo <oopla@users.sf.net>
+Date: Sat, 14 Apr 2007 17:15:00 +0200
+Subject: Fixing oversized images (Closes: #320908).
+
+---
+ codabar.c |  1 +
+ code128.c |  4 ++++
+ code39.c  |  1 +
+ code93.c  |  1 +
+ i25.c     |  1 +
+ msi.c     |  1 +
+ plessey.c |  1 +
+ ps.c      | 29 ++++++++++++++++++++++++++++-
+ 8 files changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/codabar.c b/codabar.c
+index 9546342..4aa8e85 100644
+--- a/codabar.c
++++ b/codabar.c
+@@ -166,6 +166,7 @@ int Barcode_cbr_encode(struct Barcode_Item *bc)
+ 	    ptr += strlen(ptr);
+ 	}
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     if (!startpresent) {
+ 	if (usesum) {
+ 	    /* if no start character specified, T is used as a stop char */
+diff --git a/code128.c b/code128.c
+index 14f9b27..ff942a4 100644
+--- a/code128.c
++++ b/code128.c
+@@ -142,6 +142,7 @@ int Barcode_128b_encode(struct Barcode_Item *bc)
+         textptr += strlen(textptr);
+         textpos += SYMBOL_WID; /* width of each code */
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     /* Add the checksum, independent of BARCODE_NO_CHECKSUM */
+     checksum %= 103;
+     strcat(partial, codeset[checksum]);
+@@ -232,6 +233,7 @@ int Barcode_128c_encode(struct Barcode_Item *bc)
+         textptr += strlen(textptr);
+         textpos += SYMBOL_WID; /* width of each code */
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     /* Add the checksum, independent of BARCODE_NO_CHECKSUM */
+     checksum %= 103;
+     strcat(partial, codeset[checksum]);
+@@ -492,6 +494,7 @@ int Barcode_128_encode(struct Barcode_Item *bc)
+         textptr += strlen(textptr);
+         textpos += step;
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+ 
+     bc->partial = partial;
+     bc->textinfo = textinfo;
+@@ -593,6 +596,7 @@ int Barcode_128raw_encode(struct Barcode_Item *bc)
+         textpos += SYMBOL_WID; /* width of each code */
+ 	i += n;
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     /* Add the checksum, independent of BARCODE_NO_CHECKSUM */
+     checksum %= 103;
+     strcat(partial, codeset[checksum]);
+diff --git a/code39.c b/code39.c
+index 18ba76f..c53e0ec 100644
+--- a/code39.c
++++ b/code39.c
+@@ -194,6 +194,7 @@ int Barcode_39_encode(struct Barcode_Item *bc)
+         textptr += strlen(textptr);
+         ptr += strlen(ptr); 
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     /* Add the checksum */
+     if ( (bc->flags & BARCODE_NO_CHECKSUM)==0 ) {
+ 	code = (strchr(alphabet, checkbet[checksum % 43]) - alphabet);
+diff --git a/code93.c b/code93.c
+index 12436b6..1660b3b 100644
+--- a/code93.c
++++ b/code93.c
+@@ -183,6 +183,7 @@ int Barcode_93_encode(struct Barcode_Item *bc)
+ 	 */
+         textpos += 9;
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     c_checksum=0;
+     k_checksum=0;
+ 
+diff --git a/i25.c b/i25.c
+index ecd3e12..e71e1d4 100644
+--- a/i25.c
++++ b/i25.c
+@@ -153,6 +153,7 @@ int Barcode_i25_encode(struct Barcode_Item *bc)
+         textpos += 18; /* width of two codes */
+         textptr += strlen(textptr);
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     strcat(partial, guard[1]);
+ 
+     bc->partial = partial;
+diff --git a/msi.c b/msi.c
+index cc5bddb..11c1ee9 100644
+--- a/msi.c
++++ b/msi.c
+@@ -131,6 +131,7 @@ int Barcode_msi_encode(struct Barcode_Item *bc)
+ 	    }
+ 	}
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     /* Some implementations use a double checksum. Currently the only way
+      * to print a barcode with double checksum is to put the checksum
+      * digit printed below at the end of a code in the command line
+diff --git a/plessey.c b/plessey.c
+index 2f59e39..7c79c66 100644
+--- a/plessey.c
++++ b/plessey.c
+@@ -141,6 +141,7 @@ int Barcode_pls_encode(struct Barcode_Item *bc)
+ 	checkptr[4*i+2] = (code >> 2) & 1;
+ 	checkptr[4*i+3] = (code >> 3) & 1;
+     }
++    textptr[-1] = '\0'; /* overwrite last space */
+     /* The CRC checksum is required */
+     for (i=0; i < 4*strlen(text); i++) {
+         int j;
+diff --git a/ps.c b/ps.c
+index cb689bf..5612617 100644
+--- a/ps.c
++++ b/ps.c
+@@ -146,11 +146,38 @@ int Barcode_ps_print(struct Barcode_Item *bc, FILE *f)
+ 	    fprintf(f, "%%!PS-Adobe-2.0\n");
+ 	fprintf(f, "%%%%Creator: libbarcode\n");
+ 	if (bc->flags & BARCODE_OUT_EPS)  {
++	    int bboxw;
++	    bboxw=bc->xoff + bc->width + 2* bc->margin;
++            if (!(bc->flags & BARCODE_NO_ASCII)) {
++                ptr = strrchr(bc->textinfo,' ');
++	        /*fprintf(stderr, "bc->textinfo=%s\n",bc->textinfo);*/
++	        if (ptr == NULL) {
++	            fprintf(stderr,
++	                "barcode: last char: impossible data: NULL\n");
++	        } else {
++	            /*fprintf(stderr, "ptr=%s\n",ptr);*/
++                   if (sscanf(ptr, "%lf:%lf:%c", &f1, &f2, &c) != 3) {
++	                fprintf(stderr,
++	                   "barcode: last char: impossible data: %s\n", ptr);
++                   } else {
++	                /* Both the backslash and the two parens are special */
++	                if (c!='\\' && c!=')' && c!='(') {
++	                    f1=bc->xoff + (f1+f2) * scalef + bc->margin;
++                           if (f1 > bboxw) bboxw=f1;
++	                }
++	            }
++	        }
++	    }
+ 	    fprintf(f, "%%%%BoundingBox: %i %i %i %i\n",
+ 		    bc->xoff,
+ 		    bc->yoff,
+-		    bc->xoff + bc->width + 2* bc->margin,
++		    bboxw,
+ 		    bc->yoff + bc->height + 2* bc->margin);
++	/*    fprintf(f, "%%DEBUG: bc->width=%i bc->height=%i bc->margin=%i "
++                    "scalef=%6.2f barlen=%6.2f bc->partial=%c\n",
++		    bc->width, bc->height, bc->margin,
++		    scalef, (double)barlen, (char)bc->partial[0]);
++         */
+ 	}
+ 	fprintf(f, "%%%%EndComments\n");
+ 	if (bc->flags & BARCODE_OUT_PS)  {

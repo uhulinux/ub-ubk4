@@ -1,12 +1,5 @@
 #!/bin/sh -eux
 
-# install texmf
-rm -Rf texmf-dist/doc
-rm -Rf texmf-dist/source
-rm -Rf texmf-dist/fonts/source
-rm -Rf texmf-dist/scripts/context/stubs/{mswin,source,win64}
-cp -a texmf-dist "$UB_INSTALLDIR"/usr/share/
-
 cd build
 ub_install
 
@@ -16,9 +9,12 @@ make DESTDIR="$UB_INSTALLDIR" LD_LIBRARY_PATH="$UB_INSTALLDIR/usr/lib" texlinks
 
 # install perl module
 cd ..
-mkdir -p "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive
-install -m644 texk/tests/TeXLive/*.pm "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive/
-# install -m644 tlpkg/TeXLive/*.pm "$UB_INSTALLDIR"/usr/share/tlpkg/TeXLive/
+mkdir -p "$UB_INSTALLDIR"/usr/share/texlive/tlpkg/TeXLive
+install -m644 texk/tests/TeXLive/*.pm "$UB_INSTALLDIR"/usr/share/texlive/tlpkg/TeXLive/
 
 rm "$UB_INSTALLDIR"/usr/bin/latexmk
 rm "$UB_INSTALLDIR"/usr/bin/otfinfo
+rm -f "$UB_INSTALLDIR"/usr/bin/man
+
+mv "$UB_INSTALLDIR"/usr/share/texlive/applications/xdvi.desktop "$UB_INSTALLDIR"/usr/share/applications/xdvi.desktop
+rm -Rf "$UB_INSTALLDIR"/usr/share/texlive/applications
