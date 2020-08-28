@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+# patchset: https://github.com/stha09/chromium-patches
+
 if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 15 ]; then
 	echo "At least 15 GB free space is required!"
 	exit 1
