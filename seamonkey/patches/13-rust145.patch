@@ -1,0 +1,12 @@
+diff -Naur orig/mozilla/config/rules.mk patched/mozilla/config/rules.mk
+--- orig/mozilla/config/rules.mk	2020-06-06 21:59:53.000000000 +0200
++++ patched/mozilla/config/rules.mk	2020-08-30 02:43:10.004473227 +0200
+@@ -874,7 +874,7 @@
+ ifndef DEVELOPER_OPTIONS
+ ifndef MOZ_DEBUG_RUST
+ # Enable link-time optimization for release builds.
+-cargo_rustc_flags += -C lto
++cargo_rustc_flags += -C lto -Cembed-bitcode=yes
+ endif
+ endif
+ 

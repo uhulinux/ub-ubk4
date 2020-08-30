@@ -1,0 +1,11 @@
+diff -Naur orig/random.c patched/random.c
+--- orig/random.c	2015-09-10 17:51:08.000000000 +0200
++++ patched/random.c	2020-08-28 23:29:41.563609270 +0200
+@@ -15,6 +15,7 @@
+ #include <fcntl.h>
+ #include <signal.h>
+ #include <errno.h>
++#include <sys/random.h>
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"
+ #endif

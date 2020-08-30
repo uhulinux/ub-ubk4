@@ -1,0 +1,24 @@
+diff -Naur orig/get-edid/classic.c patched/get-edid/classic.c
+--- orig/get-edid/classic.c	2015-04-29 03:08:34.000000000 +0200
++++ patched/get-edid/classic.c	2020-08-29 00:10:06.276897125 +0200
+@@ -26,7 +26,7 @@
+ #define dosmemput(buffer,length,offset) memcpy(offset,buffer,length)
+ 
+ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
+-int quiet;
++extern int quiet;
+ 
+ real_ptr far_ptr_to_real_ptr( uint32 farptr )
+ {
+diff -Naur orig/get-edid/i2c.c patched/get-edid/i2c.c
+--- orig/get-edid/i2c.c	2014-11-21 12:52:13.000000000 +0100
++++ patched/get-edid/i2c.c	2020-08-29 00:10:17.176917885 +0200
+@@ -15,7 +15,7 @@
+ 
+ //Ideas (but not too much actual code) taken from i2c-tools. Thanks guys.
+ 
+-int quiet;
++extern int quiet;
+ 
+ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
+ 
