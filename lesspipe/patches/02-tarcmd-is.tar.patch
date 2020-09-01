@@ -1,6 +1,6 @@
-diff -Naur lesspipe-1.71-orig/lesspipe.sh.in lesspipe-1.71/lesspipe.sh.in
---- lesspipe-1.71-orig/lesspipe.sh.in	2010-05-17 15:27:01.000000000 +0200
-+++ lesspipe-1.71/lesspipe.sh.in	2010-05-17 15:28:26.000000000 +0200
+diff -Naur orig/lesspipe.sh.in patched/lesspipe.sh.in
+--- orig/lesspipe.sh.in	2020-09-01 14:10:54.864351324 +0200
++++ patched/lesspipe.sh.in	2020-09-01 14:11:48.208547783 +0200
 @@ -31,9 +31,7 @@
  exec 2>/dev/null
  setopt KSH_ARRAYS SH_WORD_SPLIT
@@ -9,5 +9,5 @@ diff -Naur lesspipe-1.71-orig/lesspipe.sh.in lesspipe-1.71/lesspipe.sh.in
  tarcmd='tar'
 -#endif
  
- cmd_exist () {
-   command -v "$1" > /dev/null 2>&1 && return 0 || return 1
+ dir=${LESSOPEN#\|}
+ dir=${dir%%lesspipe.sh*\%s}

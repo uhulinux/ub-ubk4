@@ -1,47 +1,26 @@
-diff -Naur lesspipe-1.84-orig/lesspipe.sh lesspipe-1.84/lesspipe.sh
---- lesspipe-1.84-orig/lesspipe.sh	2019-07-07 22:22:30.000000000 +0200
-+++ lesspipe-1.84/lesspipe.sh	2019-10-03 18:33:37.534872841 +0200
-@@ -922,7 +922,7 @@
-       mp3info2 "$2"
+diff -Naur orig/lesspipe.sh patched/lesspipe.sh
+--- orig/lesspipe.sh	2020-08-25 09:24:11.000000000 +0200
++++ patched/lesspipe.sh	2020-09-01 14:14:54.157120349 +0200
+@@ -964,6 +964,9 @@
      elif cmd_exist mp3info; then
        msg "append $sep to filename to view the raw data"
--      mp3info "$2"
-+      id3info "$2"
-     fi
-   elif [[ "$1" = "text" ]]; then
-     cat "$2"
-diff -Naur lesspipe-1.84-orig/lesspipe.sh.in lesspipe-1.84/lesspipe.sh.in
---- lesspipe-1.84-orig/lesspipe.sh.in	2019-07-07 22:22:30.000000000 +0200
-+++ lesspipe-1.84/lesspipe.sh.in	2019-10-03 18:39:47.444892356 +0200
-@@ -1162,21 +1162,21 @@
-     if cmd_exist id3v2; then
-       msg "append $sep to filename to view the raw data"
-       istemp "id3v2 --list" "$2"
--    elif cmd_exist mp3info2; then
-+    elif cmd_exist id3info2; then
-       msg "append $sep to filename to view the raw data"
--      mp3info2 "$2"
--    elif cmd_exist mp3info; then
-+      id3info2 "$2"
+       mp3info "$2"
 +    elif cmd_exist id3info; then
-       msg "append $sep to filename to view the raw data"
--      mp3info "$2"
++      msg "append $sep to filename to view the raw data"
 +      id3info "$2"
      fi
--#elif mp3info2
--  elif [[ "$1" = "audio" ]] && cmd_exist mp3info2; then
-+#elif id3info2
-+  elif [[ "$1" = "audio" ]] && cmd_exist id3info2; then
+   elif [[ "$1" = "image" || "$1" = "mp3" || "$1" = "audio" || "$1" = "video" ]] && cmd_exist mediainfo; then
      msg "append $sep to filename to view the raw data"
--    mp3info2 "$2"
--#elif mp3info
--  elif [[ "$1" = "audio" ]] && cmd_exist mp3info; then
-+    id3info2 "$2"
-+#elif id3info
-+  elif [[ "$1" = "audio" ]] && cmd_exist id3info; then
-     msg "append $sep to filename to view the raw data"
--    mp3info "$2"
-+    id3info "$2"
- #endif
-   elif [[ "$1" = "text" ]]; then
-     cat "$2"
+diff -Naur orig/lesspipe.sh.in patched/lesspipe.sh.in
+--- orig/lesspipe.sh.in	2020-09-01 14:11:48.208547783 +0200
++++ patched/lesspipe.sh.in	2020-09-01 14:17:08.817467231 +0200
+@@ -1207,6 +1207,9 @@
+     elif cmd_exist mp3info; then
+       msg "append $sep to filename to view the raw data"
+       mp3info "$2"
++    elif cmd_exist id3info; then
++      msg "append $sep to filename to view the raw data"
++      id3info "$2"
+     fi
+ #elif mp3info2
+     elif [[ "$1" = "mp3" ]] && cmd_exist mp3info2; then
