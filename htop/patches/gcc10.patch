@@ -1,0 +1,15 @@
+diff -Naur orig/CRT.h patched/CRT.h
+--- orig/CRT.h	2012-10-19 20:59:28.000000000 +0200
++++ patched/CRT.h	2020-09-01 20:07:57.914497514 +0200
+@@ -109,9 +109,9 @@
+ 
+ extern int CRT_cursorX;
+ 
+-char* CRT_termType;
++extern char* CRT_termType;
+ 
+-void *backtraceArray[128];
++extern void *backtraceArray[128];
+ 
+ // TODO: pass an instance of Settings instead.
+ 

@@ -1,0 +1,25 @@
+From 9ae09922961034efc7b6ca385070b1c39e11e9e8 Mon Sep 17 00:00:00 2001
+From: Jean-Francois Dockes <jf@dockes.org>
+Date: Tue, 1 Sep 2020 18:48:07 +0200
+Subject: [PATCH] fix quasi-typo in for loop range expression now detected by
+ gcc10
+
+---
+ src/qtgui/reslist.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/qtgui/reslist.cpp b/qtgui/reslist.cpp
+index 9f307769..e4dd0363 100644
+--- a/qtgui/reslist.cpp
++++ b/qtgui/reslist.cpp
+@@ -571,7 +571,7 @@ pair<int,int> ResList::parnumfromdocnum(int docnum)
+         return {-1, -1};
+     }
+     docnum -= winfirst;
+-    for (const auto& entry : m_pageParaToReldocnums.begin()) {
++    for (const auto& entry : m_pageParaToReldocnums) {
+         if (docnum == entry.second) {
+             int first = entry.first;
+             int last = first+1;
+-- 
+GitLab

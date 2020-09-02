@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
+export CFLAGS=' -I/usr/include/tirpc'
+export LDFLAGS+=' -ltirpc'
+
 ub_compile \
 	--with-loadavg
-
-ub_replace /usr/etc /usr/sbin xinetd/sample.conf

@@ -1,0 +1,59 @@
+From a9c2db70b8274fa0a0cf6a3ecff0e2b196cd7722 Mon Sep 17 00:00:00 2001
+From: Dan Fandrich <dan@coneharvesters.com>
+Date: Thu, 21 May 2020 00:31:05 +0200
+Subject: [PATCH] Fix multiple definitions error on gcc 10
+
+---
+ aoe.c |  2 ++
+ dat.h | 22 +++++++++++++---------
+ 2 files changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/aoe.c b/aoe.c
+index 4e6a75b..08e6943 100644
+--- a/aoe.c
++++ b/aoe.c
+@@ -9,6 +9,8 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <netinet/in.h>
++
++#define EXTERN
+ #include "dat.h"
+ #include "fns.h"
+ 
+diff --git a/dat.h b/dat.h
+index bb12db2..225057a 100644
+--- a/dat.h
++++ b/dat.h
+@@ -1,5 +1,9 @@
+ /* dat.h: include file for vblade AoE target */
+ 
++#ifndef EXTERN
++#define EXTERN extern
++#endif
++
+ #define	nil	((void *)0)
+ /*
+  *	tunable variables
+@@ -163,12 +167,12 @@ enum {
+ 	Nserial= 20,
+ };
+ 
+-int	shelf, slot;
+-ulong	aoetag;
+-uchar	mac[6];
+-int	bfd;		// block file descriptor
+-int	sfd;		// socket file descriptor
+-vlong	size;		// size of vblade
+-vlong	offset;
+-char	*progname;
+-char	serial[Nserial+1];
++EXTERN int	shelf, slot;
++EXTERN ulong	aoetag;
++EXTERN uchar	mac[6];
++EXTERN int	bfd;		// block file descriptor
++EXTERN int	sfd;		// socket file descriptor
++EXTERN vlong	size;		// size of vblade
++EXTERN vlong	offset;
++EXTERN char	*progname;
++EXTERN char	serial[Nserial+1];
