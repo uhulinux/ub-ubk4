@@ -1,0 +1,28 @@
+From c62fb4b255052d33b35e33a436c7f943da4c5b4f Mon Sep 17 00:00:00 2001
+From: Alberto Garcia <berto@igalia.com>
+Date: Fri, 17 Apr 2020 13:41:38 +0200
+Subject: [PATCH] Remove duplicate definition of widget_options_settings
+
+This is already defined in ui/widget/options.c, and having multiple
+definitions breaks the build with GCC 10.
+---
+ ui/widget/widget.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/fuse/ui/widget/widget.c b/fuse/ui/widget/widget.c
+index fa40db2f..3f69c2b4 100644
+--- a/fuse/ui/widget/widget.c
++++ b/fuse/ui/widget/widget.c
+@@ -90,9 +90,6 @@ typedef struct widget_recurse_t {
+ 
+ static widget_recurse_t widget_return[10]; /* The stack to recurse on */
+ 
+-/* The settings used whilst playing with an options dialog box */
+-settings_info widget_options_settings;
+-
+ static int widget_read_font( const char *filename )
+ {
+   utils_file file;
+-- 
+2.20.1
+

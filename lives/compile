@@ -1,8 +1,7 @@
 #!/bin/sh -eux
 
-export CPPFLAGS=" -I/usr/include/tirpc/"
+export CPPFLAGS=" -I/usr/include/tirpc/ -fcommon"
 export LDFLAGS+=" -ltirpc"
-autoreconf -vif
 ub_compile \
 	--enable-turbo \
 	--disable-doxygen \

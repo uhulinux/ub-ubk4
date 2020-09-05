@@ -1,9 +1,11 @@
 #!/bin/sh -eux
 
+export CFLAGS="-fcommon"
+
 ub_make \
 	PREFIX=/usr \
-	GTK3=0 \
-	GTK2=1 \
+	GTK3=1 \
+	GTK2=0 \
 	I18N=1 \
 	WITH_ACL=1 \
 	WITH_POLKIT=1 \
@@ -12,4 +14,5 @@ ub_make \
 	WITH_THUMBS=1 \
 	EDITOR_SPELLCHECK=1 \
 	WITH_TRANSPARENCY=1 \
-	WITH_CUSTOMMOUSE=1
+	WITH_CUSTOMMOUSE=1 \
+	WITH_SYSTEM_ICONS=1

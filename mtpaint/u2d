@@ -1,1 +1,2 @@
-sflist mtpaint mtpaint | sort -V | tail -n 1
+curl -s -k https://raw.githubusercontent.com/wjaguar/mtPaint/master/configure | grep MT_V= | sed 's/MT_V=//g' | sed 's/"//g'
+# sflist mtpaint mtpaint | sort -V | tail -n 1

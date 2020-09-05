@@ -10,18 +10,6 @@ diff -Naur orig/libOSC/sendOSC/Makefile.am patched/libOSC/sendOSC/Makefile.am
  
  sendOSC_CFLAGS = -I.. $(mingw_CFLAGS) $(musl_CFLAGS)
  
-diff -Naur orig/libOSC/sendOSC/Makefile.in patched/libOSC/sendOSC/Makefile.in
---- orig/libOSC/sendOSC/Makefile.in	2019-08-13 15:49:00.000000000 +0200
-+++ patched/libOSC/sendOSC/Makefile.in	2019-08-16 21:29:51.222616391 +0200
-@@ -469,7 +469,7 @@
- @ENABLE_OSC_TRUE@sendOSC = sendOSC
- @ENABLE_OSC_TRUE@LIBOSCDIR = ../client
- @ENABLE_OSC_TRUE@sendOSCdir = $(bindir)
--@ENABLE_OSC_TRUE@sendOSC_LDFLAGS = $(mingw_LIBFLAGS) $(musl_LIBFLAGS) $(top_builddir)/libOSC/client/.libs/libOSC_client.a
-+@ENABLE_OSC_TRUE@sendOSC_LDFLAGS = $(mingw_LIBFLAGS) $(musl_LIBFLAGS) $(top_builddir)/libOSC/client/.libs/libOSC_client.so
- @ENABLE_OSC_TRUE@sendOSC_CFLAGS = -I.. $(mingw_CFLAGS) $(musl_CFLAGS)
- @ENABLE_OSC_TRUE@sendOSC_SOURCES = htmsocket.c htmsocket.h sendOSC.c
- all: all-am
 diff -Naur orig/src/Makefile.am patched/src/Makefile.am
 --- orig/src/Makefile.am	2019-07-18 19:05:46.000000000 +0200
 +++ patched/src/Makefile.am	2019-08-16 21:38:30.955948829 +0200
@@ -34,26 +22,3 @@ diff -Naur orig/src/Makefile.am patched/src/Makefile.am
  osc_CFLAGS = -DENABLE_OSC=1
  endif
  
-diff -Naur orig/src/Makefile.in patched/src/Makefile.in
---- orig/src/Makefile.in	2019-08-13 15:49:01.000000000 +0200
-+++ patched/src/Makefile.in	2019-08-16 21:38:53.508178350 +0200
-@@ -273,8 +273,8 @@
- lives_exe_OBJECTS = $(am_lives_exe_OBJECTS)
- am__DEPENDENCIES_1 =
- @ENABLE_OSC_TRUE@am__DEPENDENCIES_2 =  \
--@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/.libs/libOSC.a \
--@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/client/.libs/libOSC_client.a
-+@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/.libs/libOSC.so \
-+@ENABLE_OSC_TRUE@	$(top_builddir)/libOSC/client/.libs/libOSC_client.so
- @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed_slice.la \
- @DISABLE_GLSLICE_FALSE@@HAVE_SYSTEM_WEED_FALSE@	$(abs_top_srcdir)/libweed/libweed-utils.la
- @DISABLE_GLSLICE_TRUE@@HAVE_SYSTEM_WEED_FALSE@am__DEPENDENCIES_3 = $(abs_top_srcdir)/libweed/libweed.la \
-@@ -665,7 +665,7 @@
- @HAVE_UNICAP_TRUE@unicap_SOURCES = videodev.c videodev.h
- @HAVE_UNICAP_TRUE@unicap_CFLAGS = -DHAVE_UNICAP=1
- @ENABLE_OSC_TRUE@osc_SOURCES = osc.c osc.h omc-learn.c omc-learn.h osc_notify.h
--@ENABLE_OSC_TRUE@osc_LDADD = $(top_builddir)/libOSC/.libs/libOSC.a $(top_builddir)/libOSC/client/.libs/libOSC_client.a -lm
-+@ENABLE_OSC_TRUE@osc_LDADD = $(top_builddir)/libOSC/.libs/libOSC.so $(top_builddir)/libOSC/client/.libs/libOSC_client.so -lm
- @ENABLE_OSC_TRUE@osc_CFLAGS = -DENABLE_OSC=1
- @ENABLE_LDVGRAB_TRUE@ldvgrab_SOURCES = ldvgrab.c ldvgrab.h ldvcallbacks.c ldvcallbacks.h ldvinterface.c ldvinterface.h
- @ENABLE_LDVGRAB_TRUE@ldvgrab_CFLAGS = -DHAVE_LDVGRAB=1 -I libavc1394/avc1394.h -I libraw1394/raw1394.h -I libraw1394/rom1394.h
