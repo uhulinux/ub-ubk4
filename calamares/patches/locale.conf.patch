@@ -1,14 +1,14 @@
-diff -Nur orig/src/modules/locale/locale.conf mod/src/modules/locale/locale.conf
---- orig/src/modules/locale/locale.conf	2018-05-17 17:13:54.000000000 +0200
-+++ mod/src/modules/locale/locale.conf	2018-06-12 12:56:55.473466262 +0200
-@@ -11,8 +11,8 @@
- # the locale page can be set through keys *region* and *zone*.
- # If either is not set, defaults to America/New_York.
+diff -Naur orig/src/modules/locale/locale.conf patched/src/modules/locale/locale.conf
+--- orig/src/modules/locale/locale.conf	2020-09-03 20:45:04.000000000 +0200
++++ patched/src/modules/locale/locale.conf	2020-09-07 01:24:32.842750318 +0200
+@@ -17,8 +17,8 @@
+ # Note that useSystemTimezone and GeoIP settings can change the
+ # starting time zone.
  #
 -region:                     "America"
 -zone:                       "New_York"
 +region:                     "Europe"
 +zone:                       "Budapest"
  
- 
- # System locales are detected in the following order:
+ # Instead of using *region* and *zone* specified above,
+ # you can use the system's notion of the timezone, instead.

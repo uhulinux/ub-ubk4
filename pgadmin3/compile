@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+export CXXFLAGS=" -Wno-narrowing"
+
 ub_compile \
 	--enable-databasedesigner \
 	--with-wx-version=3.0 \
