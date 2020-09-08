@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
-autoreconf -vif
+# autoreconf -vif
+export CFLAGS=-fcommon
 ub_compile --with-gtk

@@ -1,0 +1,12 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2002-12-24 17:58:26.000000000 +0100
++++ patched/Makefile	2020-09-08 23:35:11.081482487 +0200
+@@ -71,7 +71,7 @@
+ all:
+ 	@echo "ROOTDIR=$(ROOTDIR)" > Makefile.global
+ 	@echo "XOBJ=$(XOBJ)" >> Makefile.global
+-	@echo "CFLAGS=-g -ansi -pedantic -Wall -W -O2 -I $(ROOTDIR)/include $(shell sdl-config --cflags)" >> Makefile.global
++	@echo "CFLAGS=-g -ansi -pedantic -Wall -W -O2 -fcommon -I $(ROOTDIR)/include $(shell sdl-config --cflags)" >> Makefile.global
+ 	@echo "LDFLAGS=-lz $(shell sdl-config --libs)" >> Makefile.global
+ 	@echo "CC=gcc" >> Makefile.global
+ 	@echo "CPP=gcc -E" >> Makefile.global
