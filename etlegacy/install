@@ -27,18 +27,3 @@ $UB_INSTALLDIR/usr/lib/etlegacy/etmain/
 # server
 mkdir -p $UB_INSTALLDIR/var/lib/etlegacy-server
 ln -s /etc/xdg/etlegacy/etmain $UB_INSTALLDIR/var/lib/etlegacy-server/
-
-# mod
-
-# kibontás
-tar -x -f 121
-rm -f 121
-
-# etlegacy fájlok eljhelyezése
-cd etlegacy*
-mkdir -p $UB_INSTALLDIR/usr/lib/etlegacy/legacy
-cp legacy/{etl_bin,pak3}_v$UB_VERSION.pk3 $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
-cp legacy/qagame.mp.*.so $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
-
-# Geiop helyadatok
-ln -s /usr/share/GeoIP/GeoIP.dat $UB_INSTALLDIR/usr/lib/etlegacy/legacy
