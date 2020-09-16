@@ -1,49 +1,40 @@
 #!/bin/sh -eux
 
-install -m 755 dist/*.OBJ/lib/*.so "$UB_INSTALLDIR"/usr/lib
-
-install -m 644 dist/*.OBJ/lib/*.chk "$UB_INSTALLDIR"/usr/lib
-
-for file in libcrmf.a libnssb.a libnssckfw.a; do
-	install -m 644 dist/*.OBJ/lib/"$file" "$UB_INSTALLDIR"/usr/lib
-done
-
-for file in certutil cmsutil crlutil derdump modutil pk12util pp \
-	shlibsign signtool signver ssltap symkeyutil vfychain vfyserv; do
-	install -m 755 dist/*.OBJ/bin/"$file" "$UB_INSTALLDIR"/usr/bin
-done
-
-mkdir -p "$UB_INSTALLDIR"/usr/include/nss
-for file in dist/public/nss/*.h; do
-	install -m 644 "$file" "$UB_INSTALLDIR"/usr/include/nss
-done
-
-# ln -s libnssckbi.so "$UB_INSTALLDIR"/usr/lib/libnssckbi-p11-kit.so
-
-NSPR_VERSION=`pkg-config --modversion nspr`
+libdir=/usr/lib
+install -Dt "$UB_INSTALLDIR$libdir" dist/Release/lib/*.so
+install -Dt "$UB_INSTALLDIR$libdir" -m644 dist/Release/lib/*.chk
+install -Dt "$UB_INSTALLDIR/usr/bin" dist/Release/bin/{*util,shlibsign,signtool,signver,ssltap}
+install -Dt "$UB_INSTALLDIR/usr/include/nss" -m644 dist/public/nss/*.h
+install -Dt "$UB_INSTALLDIR/usr/share/man/man1" -m644 doc/nroff/{*util,signtool,signver,ssltap}.1
 
 # create nss.pc
-mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
-cat pkg/pkg-config/nss.pc.in | sed -e "s,%libdir%,/usr/lib,g" \
-					-e "s,%prefix%,/usr,g" \
-					-e "s,%exec_prefix%,/usr,g" \
-					-e "s,%includedir%,/usr/include/nss,g" \
-					-e "s,%NSPR_VERSION%,$NSPR_VERSION,g" \
-					-e "s,%NSS_VERSION%,$UB_VERSION,g" > \
-					"$UB_INSTALLDIR"/usr/lib/pkgconfig/nss.pc
+nsprver="$(pkg-config --modversion nspr)"
+sed pkg/pkg-config/nss.pc.in \
+    -e "s,%libdir%,$libdir,g" \
+    -e "s,%prefix%,/usr,g" \
+    -e "s,%exec_prefix%,/usr/bin,g" \
+    -e "s,%includedir%,/usr/include/nss,g" \
+    -e "s,%NSPR_VERSION%,$nsprver,g" \
+    -e "s,%NSS_VERSION%,$UB_VERSION,g" |
+install -Dm644 /dev/stdin "$UB_INSTALLDIR$libdir/pkgconfig/nss.pc"
 
+ln -s nss.pc "$UB_INSTALLDIR$libdir/pkgconfig/mozilla-nss.pc"
+
+# create nss-config
 NSS_VMAJOR=`cat lib/nss/nss.h | grep "#define.*NSS_VMAJOR" | awk '{print $3}'`
 NSS_VMINOR=`cat lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
 NSS_VPATCH=`cat lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
 
-#create nss-config
-mkdir -p "$UB_INSTALLDIR"/usr/bin
-cat nss-config.in | sed -e "s,@libdir@,/usr/lib,g" \
-                        -e "s,@prefix@,/usr,g" \
-						-e "s,@exec_prefix@,/usr,g" \
-						-e "s,@includedir@,/usr/include/nss,g" \
-						-e "s,@MOD_MAJOR_VERSION@,$NSS_VMAJOR,g" \
-						-e "s,@MOD_MINOR_VERSION@,$NSS_VMINOR,g" \
-						-e "s,@MOD_PATCH_VERSION@,$NSS_VPATCH,g" \
-						> "$UB_INSTALLDIR"/usr/bin/nss-config
-chmod 755 "$UB_INSTALLDIR"/usr/bin/nss-config
+sed pkg/pkg-config/nss-config.in \
+    -e "s,@libdir@,$libdir,g" \
+    -e "s,@prefix@,/usr/bin,g" \
+    -e "s,@exec_prefix@,/usr/bin,g" \
+    -e "s,@includedir@,/usr/include/nss,g" \
+    -e "s,@MOD_MAJOR_VERSION@,$NSS_VMAJOR,g" \
+    -e "s,@MOD_MINOR_VERSION@,$NSS_VMINOR,g" \
+    -e "s,@MOD_PATCH_VERSION@,$NSS_VPATCH,g" |
+install -D /dev/stdin "$UB_INSTALLDIR/usr/bin/nss-config"
+
+# Replace built-in trust with p11-kit connection
+ln -s pkcs11/p11-kit-trust.so "$UB_INSTALLDIR$libdir/p11-kit-trust.so"
+ln -sf p11-kit-trust.so "$UB_INSTALLDIR$libdir/libnssckbi.so"

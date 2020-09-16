@@ -1,0 +1,12 @@
+diff -Naur orig/build.sh patched/build.sh
+--- orig/build.sh	2020-08-21 17:10:57.000000000 +0200
++++ patched/build.sh	2020-09-16 18:21:28.647942139 +0200
+@@ -13,7 +13,7 @@
+ set -e
+ 
+ cwd=$(cd $(dirname $0); pwd -P)
+-dist_dir="$cwd/../dist"
++dist_dir="$cwd/dist"
+ argsfile="$dist_dir/build_args"
+ source "$cwd/coreconf/nspr.sh"
+ source "$cwd/coreconf/sanitizers.sh"

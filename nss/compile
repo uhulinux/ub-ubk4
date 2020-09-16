@@ -1,12 +1,9 @@
 #!/bin/sh -eux
 
-export NSPR_INCLUDE_DIR=`/usr/bin/pkg-config --cflags-only-I nspr | sed 's/-I//'`
-
-# Respect LDFLAGS
-sed -i -e 's/\$(MKSHLIB) -o/\$(MKSHLIB) \$(LDFLAGS) -o/g' coreconf/rules.mk
-
-export USE_64=1
-# required for linking with system sqlite
-export NSS_USE_SYSTEM_SQLITE=1
-
-make nss_build_all
+./build.sh \
+    --target x64 \
+    --opt \
+    --system-sqlite \
+    --system-nspr \
+    --enable-libpkix \
+    --disable-tests
