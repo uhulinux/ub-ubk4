@@ -13,10 +13,25 @@ mkdir -p "${UB_INSTALLDIR}/usr/share/uhubuild"
 cp -a config words "${UB_INSTALLDIR}/usr/share/uhubuild/"
 
 # build
-mkdir -p "${UB_INSTALLDIR}/etc/apt"
-cp -a apt/. "${UB_INSTALLDIR}/etc/apt/"
 mkdir -p "${UB_INSTALLDIR}/usr/share/bash-completion"
 cp -a bash-completion/completions "${UB_INSTALLDIR}/usr/share/bash-completion/"
+
+# sources.list
+mkdir -p "${UB_INSTALLDIR}/etc/apt"
+
+for dist in UBK1 UBK2 UBK3 UBK4; do
+
+cat > "$UB_INSTALLDIR"/etc/apt/sources.list-build-$dist <<END
+# /etc/apt/sources.list
+
+deb file:/usr/src/UHUBUILD/packages-$dist/amd64 ./
+
+deb http://download.ubk.hu/pkg/${dist,,}/main/amd64 ./
+deb http://quantum-mirror.hu/mirrors/pub/ubk/pkg/${dist,,}/main/amd64 ./
+
+END
+
+done
 
 # symlinks
 cd "${UB_INSTALLDIR}/usr/bin"
@@ -59,7 +74,7 @@ for dist in UBK1 UBK2; do
 		cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
 		uhu-scanpkgs
 		echo "Label: UHU-Linux" > Release
-		echo "Origin: UHU Linux Baráti Kör" >> Release
+		echo "Origin: ubk.hu" >> Release
 		echo "Version: $dist" >> Release
 	done # arch
 
@@ -87,7 +102,7 @@ for dist in UBK3 UBK4; do
 		cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
 		uhu-scanpkgs
 		echo "Label: UHU-Linux" > Release
-		echo "Origin: UHU Linux Baráti Kör" >> Release
+		echo "Origin: ubk.hu" >> Release
 		echo "Version: $dist" >> Release
 	done # arch
 
