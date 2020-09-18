@@ -1,9 +1,10 @@
 #!/bin/sh -eux
 
-export GUILE=/usr/bin/guile1.8
-export GUILE_CONFIG=/usr/bin/guile-config1.8
+export GUILE=/usr/bin/guile20.0
+export GUILE_CONFIG=/usr/bin/guile-config2.0
 export LDFLAGS=" -lpthread "
 export LDFLAGS+=$(pkg-config --libs gio-2.0)
 ub_compile \
 	--with-texgyre-dir=$UB_COMPILEDIR/tex-gyre/opentype \
+	--enable-guile2 \
 	--disable-documentation
