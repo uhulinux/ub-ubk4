@@ -4,8 +4,6 @@ cd $UB_OBJECTDIR
 
 make INSTALL_ROOT="$UB_INSTALLDIR" install
 
-rm -Rf "$UB_INSTALLDIR"/usr/lib/qt5/plugins/designer
-
 # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
 find "$UB_INSTALLDIR/usr/lib" -type f -name '*.prl' \
 	-exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
