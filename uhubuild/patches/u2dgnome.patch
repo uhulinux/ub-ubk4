@@ -1,0 +1,23 @@
+From 7999cb11ecb43a6a7cae21051b802888c2e8faba Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Sat, 19 Sep 2020 18:53:31 +0200
+Subject: uhubuild-u2d: u2dgnome url csere
+
+
+diff --git a/src/uhubuild-u2d.sh b/src/uhubuild-u2d.sh
+index c15bd9d..2c42ea6 100644
+--- a/src/uhubuild-u2d.sh
++++ b/src/uhubuild-u2d.sh
+@@ -141,8 +141,10 @@ function u2dgnome {
+ 	if [ -n "${unstable:-}" ]; then
+ 		reg="0-9"
+ 	fi
+-	ver="$(urllist "https://download.gnome.org/sources/$project/" | grep -E '^[0-9]+\.[0-9]*['$reg'](\.[0-9.])?$' | sort -V | tail -n 1)"
+-	u2d "https://download.gnome.org/sources/$project/$ver"
++	ver="$(urllist "https://mirrors.gethosted.online/gnome/sources/$project/" | grep -E '^[0-9]+\.[0-9]*['$reg'](\.[0-9.])?$' | sort -V | tail -n 1)"
++	u2d "https://mirrors.gethosted.online/gnome/sources/$project/$ver"
++#	ver="$(urllist "https://download.gnome.org/sources/$project/" | grep -E '^[0-9]+\.[0-9]*['$reg'](\.[0-9.])?$' | sort -V | tail -n 1)"
++#	u2d "https://download.gnome.org/sources/$project/$ver"
+ }
+ 
+ # script for mate projects
