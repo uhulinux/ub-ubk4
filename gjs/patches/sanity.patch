@@ -1,0 +1,31 @@
+diff -Naur orig/meson.build patched/meson.build
+--- orig/meson.build	1970-01-01 01:00:00.000000000 +0100
++++ patched/meson.build	2020-09-20 14:06:59.106535888 +0200
+@@ -233,27 +233,6 @@
+ --disable-debug.''')
+ endif
+ 
+-# Check if a minimal SpiderMonkey program compiles, links, and runs. If not,
+-# it's most likely the case that SpiderMonkey was configured incorrectly, for
+-# example by building mozglue as a shared library.
+-minimal_program = cxx.run('''
+-#include <js/Initialization.h>
+-int main(void) {
+-    if (!JS_Init()) return 1;
+-    JS_ShutDown();
+-    return 0;
+-}
+-''',
+-    args: debug_arg, dependencies: spidermonkey,
+-    name: 'SpiderMonkey sanity check')
+-
+-if not minimal_program.compiled() or minimal_program.returncode() != 0
+-    error('''A minimal SpiderMonkey program
+-could not be compiled, linked, or run. Most likely you should build it with a
+-different configuration. Check the recommended configuration:
+-https://github.com/spidermonkey-embedders/spidermonkey-embedding-examples/blob/esr78/docs/Building%20SpiderMonkey.md''')
+-endif
+-
+ have_printf_alternative_int = cc.compiles('''
+ #include <stdio.h>
+ int main(void) {

@@ -1,0 +1,36 @@
+diff -Naur a/src/plugins/pgpcore/tests/Makefile.am b/src/plugins/pgpcore/tests/Makefile.am
+--- a/src/plugins/pgpcore/tests/Makefile.am	2019-10-23 13:16:49.209193831 +0200
++++ b/src/plugins/pgpcore/tests/Makefile.am	2020-09-14 12:27:57.472424406 +0200
+@@ -12,7 +12,7 @@
+ 
+ TEST_PROGS += pgp_utils_test
+ pgp_utils_test_SOURCES = pgp_utils_test.c
+-pgp_utils_test_LDADD = $(common_ldadd) ../pgpcore_la-pgp_utils.o
++pgp_utils_test_LDADD = $(common_ldadd) ../.libs/pgpcore_la-pgp_utils.o
+ 
+ noinst_PROGRAMS = $(TEST_PROGS)
+ 
+diff -Naur a/src/plugins/rssyl/libfeed/tests/Makefile.am b/src/plugins/rssyl/libfeed/tests/Makefile.am
+--- a/src/plugins/rssyl/libfeed/tests/Makefile.am	2018-09-12 01:46:37.174655130 +0200
++++ b/src/plugins/rssyl/libfeed/tests/Makefile.am	2020-09-14 12:35:40.725328060 +0200
+@@ -11,7 +11,7 @@
+ 
+ TEST_PROGS += date_test
+ date_test_SOURCES = date_test.c
+-date_test_LDADD = $(common_ldadd) ../libfeed_la-date.o
++date_test_LDADD = $(common_ldadd) ../.libs/libfeed_la-date.o
+ 
+ TEST_PROGS += feed_test
+ feed_test_SOURCES = feed_test.c
+diff -Naur a/src/plugins/rssyl/tests/Makefile.am b/src/plugins/rssyl/tests/Makefile.am
+--- a/src/plugins/rssyl/tests/Makefile.am	2018-09-12 01:46:37.174655130 +0200
++++ b/src/plugins/rssyl/tests/Makefile.am	2020-09-14 12:31:21.328806358 +0200
+@@ -10,7 +10,7 @@
+ 
+ TEST_PROGS += strutils_test
+ strutils_test_SOURCES = strutils_test.c
+-strutils_test_LDADD = $(common_ldadd) ../rssyl_la-strutils.o
++strutils_test_LDADD = $(common_ldadd) ../.libs/rssyl_la-strutils.o
+ 
+ noinst_PROGRAMS = $(TEST_PROGS)
+ 

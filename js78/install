@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+cd "$UB_OBJECTDIR"/js/src
+ub_install
+
+rm -f "$UB_INSTALLDIR"/usr/lib/*.ajs
+
+# remove execution bit from headers and pkgconfig file
+find "$UB_INSTALLDIR"/usr/include -type f -exec chmod a-x {} \;
+chmod a-x  "$UB_INSTALLDIR"/usr/lib/pkgconfig/*.pc
+
+ln -s libmozjs-78.so "$UB_INSTALLDIR"/usr/lib/libmozjs-78.so.0

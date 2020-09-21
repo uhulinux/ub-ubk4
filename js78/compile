@@ -1,0 +1,17 @@
+#!/bin/sh -eux
+
+export CC=gcc CXX=g++ PYTHON=/usr/bin/python2
+
+cd js/src
+export MOZ_OBJDIR=$UB_OBJECTDIR
+export RUSTFLAGS="-C embed-bitcode"
+
+cd "$UB_OBJECTDIR"
+"$UB_COMPILEDIR"/js/src/configure \
+	--prefix=/usr \
+    --without-system-icu \
+    --with-system-zlib \
+    --with-intl-api \
+    --enable-optimize \
+    --disable-jemalloc
+ub_make

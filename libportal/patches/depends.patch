@@ -1,0 +1,30 @@
+From 4bb0233819041be8a8db57e48ead4947ee7891db Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Fri, 20 Mar 2020 00:07:24 +0100
+Subject: [PATCH] pkg-config: Correct dependencies
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We depend on gio-unix-2.0 only for linking so it is sufficient to have it in Requires.private.
+gio-2.0 is required by headers, though, so it needs to be mentioned in Requires.
+We probably previously omitted it because it is a required dependency of gio-unix-2.0
+but now that we moved that to private dependencies, we need to mention it explicitly.
+Also when we switch to Meson’s pkg-config file generator, it will do that implicitly.
+---
+ libportal.pc.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libportal.pc.in b/libportal.pc.in
+index 3fe4967..afddeec 100644
+--- a/libportal.pc.in
++++ b/libportal.pc.in
+@@ -5,6 +5,7 @@ includedir=@includedir@
+ Name: libportal
+ Description: Portal API wrappers
+ Version: @VERSION@
+-Requires: gio-unix-2.0
++Requires: gio-2.0
++Requires.private: gio-unix-2.0
+ Libs: -L${libdir} -lportal
+ Cflags: -I${includedir}

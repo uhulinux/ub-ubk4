@@ -1,15 +1,14 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--enable-console-helper=no \
-	--enable-authentication-scheme=pam \
-	--enable-profiling \
-	--with-initial-vt=7 \
-	--with-user=gdm \
-	--with-dmconfdir=/usr/share/xsessions \
-	--with-group=gdm \
-	--without-tcp-wrappers \
-	--without-plymouth \
-	--without-selinux \
-	--enable-gdm-xsession \
-	--enable-ipv6
+	-Ddmconfdir=/usr/share/xsessions \
+	-Dgdm-xsession=true \
+	-Dgroup=gdm \
+	-Dinitial-vt=7 \
+	-Dipv6=true \
+	-Dplymouth=disabled \
+	-Dprofiling=true \
+	-Dselinux=disabled \
+	-Dtcp-wrappers=false \
+	-Duser=gdm \
+	-Dwayland-support=true
