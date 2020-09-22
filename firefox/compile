@@ -5,11 +5,13 @@ CXX="ccache clang++ -march=k8 -m64"
 
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/firefox/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
-export PYTHON=/usr/bin/python2
+export PYTHON=/usr/bin/python3
+export MACH_USE_SYSTEM_PYTHON=1
 
 : > .mozconfig
 cat > .mozconfig << _EOF_
 mk_add_options MOZ_OBJDIR=$UB_OBJECTDIR
+mk_add_options MOZ_SERVICES_SYNC=0
 ac_add_options --prefix=/usr
 ac_add_options --enable-application=browser
 ac_add_options --enable-release
