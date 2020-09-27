@@ -1,0 +1,36 @@
+diff -Naur orig/datahub/desktop-launch-listener.vala patched/datahub/desktop-launch-listener.vala
+--- orig/datahub/desktop-launch-listener.vala	2014-07-03 09:46:46.000000000 +0200
++++ patched/datahub/desktop-launch-listener.vala	2020-09-25 14:16:08.107716406 +0200
+@@ -78,7 +78,7 @@
+   }
+ 
+   private void signal_received (GLib.DBusConnection connection,
+-                                string sender,
++                                string? sender,
+                                 string object_path,
+                                 string interface_name,
+                                 string signal_name,
+diff -Naur orig/extensions/ds-registry.vala patched/extensions/ds-registry.vala
+--- orig/extensions/ds-registry.vala	2016-09-04 22:33:24.000000000 +0200
++++ patched/extensions/ds-registry.vala	2020-09-25 14:16:08.107716406 +0200
+@@ -282,7 +282,7 @@
+          * Cleanup disconnected clients and mark data-sources as not running
+          * when no client remains.
+          **/
+-        private void name_owner_changed (DBusConnection conn, string sender,
++        private void name_owner_changed (DBusConnection conn, string? sender,
+             string path, string interface_name, string signal_name,
+             Variant parameters)
+         {
+diff -Naur orig/src/ext-data-source-registry.vala patched/src/ext-data-source-registry.vala
+--- orig/src/ext-data-source-registry.vala	2016-09-04 22:33:24.000000000 +0200
++++ patched/src/ext-data-source-registry.vala	2020-09-25 14:17:05.152060807 +0200
+@@ -282,7 +282,7 @@
+          * Cleanup disconnected clients and mark data-sources as not running
+          * when no client remains.
+          **/
+-        private void name_owner_changed (DBusConnection conn, string sender,
++        private void name_owner_changed (DBusConnection conn, string? sender,
+             string path, string interface_name, string signal_name,
+             Variant parameters)
+         {

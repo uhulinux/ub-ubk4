@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
-rm -r  cups/libs expat libpng openjpeg tiff zlib
-rm -rf gpdl
+rm -r  cups/libs jpeg libpng tiff zlib
 ub_configure \
 	--enable-dynamic \
 	--with-ijs \
@@ -11,8 +10,8 @@ ub_configure \
 	--enable-freetype \
 	--enable-openjpeg \
 	--without-luratech \
+	--with-system-libjpeg \
 	--with-system-libtiff \
-	--with-system-libpaper \
 	--disable-compile-inits
 
 ub_make so
