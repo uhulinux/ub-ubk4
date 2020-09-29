@@ -69,15 +69,15 @@ diff --git a/core/Makefile b/core/Makefile
 index 46cb037c..f0cfcbe9 100644
 --- a/core/Makefile
 +++ b/core/Makefile
-@@ -156,7 +156,7 @@ LDSCRIPT = $(SRC)/$(ARCH)/syslinux.ld
+@@ -140,7 +140,7 @@
  NASM_ELF = elf
  
- %.elf: %.o $(LIBDEP) $(LDSCRIPT) $(AUXLIBS)
+ %.elf: %.o %-c.o lib%.a $(LIBDEP) $(LDSCRIPT)
 -	$(LD) $(LDFLAGS) -pie -Bsymbolic \
 +	$(LD) $(LDFLAGS) -z muldefs -pie -Bsymbolic \
  		-T $(LDSCRIPT) \
  		--unresolved-symbols=report-all \
- 		-E --hash-style=gnu -M -o $@ $< \
+ 		-E --hash-style=gnu -M -o $@ $< $*-c.o \
 diff --git a/dos/Makefile b/dos/Makefile
 index 4c930d19..5d1c72ca 100644
 --- a/dos/Makefile
@@ -95,7 +95,7 @@ diff --git a/efi/Makefile b/efi/Makefile
 index bbf23f24..3dd922d5 100644
 --- a/efi/Makefile
 +++ b/efi/Makefile
-@@ -69,7 +69,7 @@ $(OBJS): | $(OBJ)/$(ARCH)
+@@ -58,7 +58,7 @@
  BTARGET  = syslinux.efi
  
  syslinux.so: $(OBJS) $(CORE_OBJS) $(LIB_OBJS)
