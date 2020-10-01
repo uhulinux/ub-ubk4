@@ -1,12 +1,11 @@
 diff -Nur orig/src/yprefs.h mod/src/yprefs.h
 --- orig/src/yprefs.h	2019-06-07 00:39:15.000000000 +0200
 +++ mod/src/yprefs.h	2019-06-09 16:16:51.077762154 +0200
-@@ -37,7 +37,7 @@
-                                                 "/usr/share/icons/hicolor:"
+@@ -36,6 +36,7 @@
+                                                 "/usr/local/share/pixmaps:"
                                                  "/usr/share/icons:"
                                                  "/usr/share/pixmaps:"
--                                                "/usr/local/share/icons/hicolor:"
 +                                                "/usr/share/icons/gnome:"
                                                  )
- #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__)
- XSV(const char *, iconPath,
+ XSV(const char *, iconThemes,                   "*:-HighContrast")
+ XSV(const char *, themeName,                    CONFIG_DEFAULT_THEME)
