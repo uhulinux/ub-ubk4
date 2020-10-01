@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+NOCONFIGURE=1 ./autogen.sh
 export ENABLE_GTK_DOC="0"
 ub_compile \
   --disable-schemas-compile \

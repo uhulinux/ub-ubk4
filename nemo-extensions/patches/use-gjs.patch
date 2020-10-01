@@ -1,0 +1,33 @@
+diff -Naur orig/nemo-preview/configure.ac patched/nemo-preview/configure.ac
+--- orig/nemo-preview/configure.ac	2020-05-13 15:20:10.000000000 +0200
++++ patched/nemo-preview/configure.ac	2020-10-02 00:45:53.573333113 +0200
+@@ -43,7 +43,7 @@
+ 
+ GLIB_GSETTINGS
+ 
+-GJS_JS_DIR=`$PKG_CONFIG --variable=datadir cjs-1.0`/cjs-1.0
++GJS_JS_DIR=`$PKG_CONFIG --variable=datadir gjs-1.0`/gjs-1.0
+ AC_SUBST(GJS_JS_DIR)
+ 
+ CLUTTER_MIN_VERSION=1.11.4
+@@ -58,7 +58,7 @@
+                   freetype2
+                   glib-2.0 >= $GLIB_MIN_VERSION
+                   gobject-introspection-1.0 >= $GOBJECT_INTROSPECTION_MIN_VERSION
+-                  cjs-1.0 >= $CJS_MIN_VERSION
++                  gjs-1.0 >= $CJS_MIN_VERSION
+                   gobject-2.0 >= $GLIB_MIN_VERSION
+                   clutter-1.0 >= $CLUTTER_MIN_VERSION
+                   clutter-x11-1.0 >= $CLUTTER_MIN_VERSION
+diff -Naur orig/nemo-preview/src/main.c patched/nemo-preview/src/main.c
+--- orig/nemo-preview/src/main.c	2020-05-13 15:20:10.000000000 +0200
++++ patched/nemo-preview/src/main.c	2020-10-02 00:46:05.033365502 +0200
+@@ -34,7 +34,7 @@
+ 
+ #include <girepository.h>
+ 
+-#include <cjs/gjs.h>
++#include <gjs/gjs.h>
+ 
+ #include <gtk/gtk.h>
+ 

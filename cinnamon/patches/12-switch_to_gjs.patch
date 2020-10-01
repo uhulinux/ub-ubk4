@@ -1,0 +1,1362 @@
+From 134e990aa77b0c576fbcb3330f863503b0d15347 Mon Sep 17 00:00:00 2001
+From: itzexor <itzexor@gmail.com>
+Date: Tue, 13 Mar 2018 14:14:58 -0700
+Subject: [PATCH 1/7] use gjs instead of cjs and enable profiler
+
+build with gjs 1.54.0+
+---
+ configure.ac                  | 8 ++++----
+ src/cinnamon-global-private.h | 2 +-
+ src/cinnamon-global.c         | 1 +
+ src/cinnamon-plugin.c         | 2 +-
+ src/run-js-test.c             | 2 +-
+ 5 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 2db5c6a9..5f6bb6a1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -66,7 +66,7 @@ fi
+ 
+ CLUTTER_MIN_VERSION=0
+ GOBJECT_INTROSPECTION_MIN_VERSION=0.9.2
+-GJS_MIN_VERSION=3.2.0
++GJS_MIN_VERSION=1.54.0
+ MUFFIN_MIN_VERSION=4.0.3
+ GTK_MIN_VERSION=3.12.0
+ GIO_MIN_VERSION=2.35.0
+@@ -78,7 +78,7 @@ PKG_CHECK_MODULES(CINNAMON, gio-2.0 >= $GIO_MIN_VERSION
+                                gio-unix-2.0 dbus-glib-1 libxml-2.0
+                                gtk+-3.0 >= $GTK_MIN_VERSION
+                                libmuffin >= $MUFFIN_MIN_VERSION
+-                               cjs-1.0 >= $GJS_MIN_VERSION
++                               gjs-1.0 >= $GJS_MIN_VERSION
+                                libcinnamon-menu-3.0 $recorder_modules
+                                gdk-x11-3.0 libsoup-2.4 gl
+                                muffin-cogl-pango-0
+@@ -107,7 +107,7 @@ PKG_CHECK_MODULES(CINNAMON_PERF_HELPER, gtk+-3.0 gio-2.0)
+ 
+ PKG_CHECK_MODULES(CINNAMON_HOTPLUG_SNIFFER, gio-2.0 gdk-pixbuf-2.0)
+ 
+-GJS_VERSION=`$PKG_CONFIG --modversion cjs-1.0`
++GJS_VERSION=`$PKG_CONFIG --modversion gjs-1.0`
+ AC_DEFINE_UNQUOTED([GJS_VERSION], ["$GJS_VERSION"], [The version of GJS we're linking to])
+ dnl '
+ AC_SUBST([GJS_VERSION], ["$GJS_VERSION"])
+@@ -132,7 +132,7 @@ MUFFIN_TYPELIB_DIR=`$PKG_CONFIG --variable=typelibdir libmuffin`
+ AC_SUBST(MUFFIN_GIR_DIR)
+ AC_SUBST(MUFFIN_TYPELIB_DIR)
+ 
+-GJS_CONSOLE=`$PKG_CONFIG --variable=cjs_console cjs-1.0`
++GJS_CONSOLE=`$PKG_CONFIG --variable=gjs_console gjs-1.0`
+ AC_SUBST(GJS_CONSOLE)
+ 
+ AC_CHECK_FUNCS(fdwalk)
+diff --git a/src/cinnamon-global-private.h b/src/cinnamon-global-private.h
+index a9fdebe8..0b6af76a 100644
+--- a/src/cinnamon-global-private.h
++++ b/src/cinnamon-global-private.h
+@@ -27,7 +27,7 @@
+ #include "cinnamon-wm.h"
+ #include "st.h"
+ 
+-#include <cjs/gjs.h>
++#include <gjs/gjs.h>
+ 
+ struct _CinnamonGlobal {
+   GObject parent;
+diff --git a/src/cinnamon-global.c b/src/cinnamon-global.c
+index 0dc41f91..3635b258 100644
+--- a/src/cinnamon-global.c
++++ b/src/cinnamon-global.c
+@@ -199,6 +199,7 @@ cinnamon_global_init (CinnamonGlobal *global)
+     cinnamon_js = JSDIR;
+   search_path = g_strsplit (cinnamon_js, ":", -1);
+   global->js_context = g_object_new (GJS_TYPE_CONTEXT,
++                                     "profiler-sigusr2", true,
+                                      "search-path", search_path,
+                                      NULL);
+ 
+diff --git a/src/cinnamon-plugin.c b/src/cinnamon-plugin.c
+index e28bb7ee..18fa3495 100644
+--- a/src/cinnamon-plugin.c
++++ b/src/cinnamon-plugin.c
+@@ -35,7 +35,7 @@
+ #include <GL/glx.h>
+ #include <GL/glxext.h>
+ #endif
+-#include <cjs/gjs.h>
++#include <gjs/gjs.h>
+ #include <meta/display.h>
+ #include <meta/meta-plugin.h>
+ 
+diff --git a/src/run-js-test.c b/src/run-js-test.c
+index c57704a8..e89e467c 100644
+--- a/src/run-js-test.c
++++ b/src/run-js-test.c
+@@ -33,7 +33,7 @@
+ #include <clutter/x11/clutter-x11.h>
+ #include <gdk/gdkx.h>
+ #include <girepository.h>
+-#include <cjs/gjs.h>
++#include <gjs/gjs.h>
+ #include <gtk/gtk.h>
+ 
+ #include "cinnamon-global.h"
+-- 
+2.28.0
+
+
+From 509558ea88cc9d61bc0a72851e948afa242f3d5e Mon Sep 17 00:00:00 2001
+From: James Ross <itzexor@gmail.com>
+Date: Tue, 24 Mar 2020 16:34:52 -0700
+Subject: [PATCH 2/7] debian: update build to match configure changes
+
+removes gjs symbols from cinnamon-dbg because they don't seem to
+be available.
+---
+ debian/control | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/debian/control b/debian/control
+index 83fc1e5c..f596d240 100644
+--- a/debian/control
++++ b/debian/control
+@@ -16,7 +16,7 @@ Build-Depends:
+  intltool,
+  libcinnamon-desktop-dev (>= 3.8),
+  libcinnamon-menu-3-dev,
+- libcjs-dev (>= 3.8),
++ libgjs-dev (>= 1.54.0),
+  libcroco3-dev (>= 0.6.2),
+  libdbus-glib-1-dev,
+  libgirepository1.0-dev (>= 1.29.15),
+@@ -50,7 +50,7 @@ Depends:
+  cinnamon-screensaver,
+  cinnamon-session,
+  cinnamon-settings-daemon,
+- cjs (>= 3.8),
++ gjs (>= 1.54.0),
+  cups-pk-helper,
+  gir1.2-accountsservice-1.0,
+  gir1.2-caribou-1.0,
+@@ -75,7 +75,7 @@ Depends:
+  libcanberra-pulse,
+  libcinnamon-desktop4,
+  libcinnamon-menu-3-0,
+- libcjs0f (>= 3.8),
++ libgjs0g (>= 1.54.0),
+  libglib2.0-bin,
+  libmuffin0,
+  mate-panel | gnome-panel | tint2,
+@@ -142,7 +142,6 @@ Depends:
+  cinnamon-control-center-dbg,
+  libcinnamon-desktop-dbg,
+  libcinnamon-menu-3-0-dbg,
+- libcjs-dbg,
+  libcvc-dbg,
+  muffin-dbg,
+  nemo-dbg,
+-- 
+2.28.0
+
+
+From e69c653ff3519e09daa38b0ed3ea675ad405aba6 Mon Sep 17 00:00:00 2001
+From: James Ross <itzexor@gmail.com>
+Date: Thu, 20 Jun 2019 01:11:51 -0700
+Subject: [PATCH 3/7] fix build
+
+https://gitlab.gnome.org/GNOME/gjs/issues/218#note_364391
+---
+ src/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 0f7e60b5..670c33b0 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -246,6 +246,6 @@ St_1_0_gir_INCLUDES = Clutter-0 ClutterX11-0 Meta-Muffin.0 Gtk-3.0
+ St_1_0_gir_CFLAGS = $(st_cflags) -DST_COMPILATION
+ St_1_0_gir_LIBS = libst-1.0.la
+ St_1_0_gir_FILES = $(filter-out %-private.h $(st_non_gir_sources), $(addprefix $(srcdir)/,$(st_source_h))) \
+-	$(addprefix $(srcdir)/,$(st_source_c))
++	$(addprefix $(srcdir)/,$(st_source_c)) $(addprefix $(srcdir)/,$(st_built_sources))
+ INTROSPECTION_GIRS += St-1.0.gir
+ CLEANFILES += St-1.0.gir
+-- 
+2.28.0
+
+
+From cb9d2b2b25d18032b6b6db098d8576f162e99c2a Mon Sep 17 00:00:00 2001
+From: James Ross <itzexor@gmail.com>
+Date: Thu, 20 Jun 2019 01:06:35 -0700
+Subject: [PATCH 4/7] remove js-based automated perf testing code
+
+`system.gc()` hasn't worked for a while, and newer versions of
+mozjs remove support for `StopIterator`. As is, this code errors
+on the past few versions, and will break more in the future.
+Rather than figure out how to rework the code to work as intended,
+it's being removed as it seems it isn't used enough for anyone to
+maintain.
+---
+ js/Makefile.am     |   1 -
+ js/perf/core.js    | 215 --------------------------
+ js/ui/main.js      |   8 -
+ js/ui/scripting.js | 370 ---------------------------------------------
+ 4 files changed, 594 deletions(-)
+ delete mode 100644 js/ui/scripting.js
+
+diff --git a/js/Makefile.am b/js/Makefile.am
+index ce1adc0d..027cfcaf 100644
+--- a/js/Makefile.am
++++ b/js/Makefile.am
+@@ -65,7 +65,6 @@ nobase_dist_js_DATA = \
+ 	ui/placesManager.js  \
+ 	ui/popupMenu.js		\
+ 	ui/runDialog.js		\
+-	ui/scripting.js		\
+ 	ui/separator.js 	\
+ 	ui/slider.js 		\
+ 	ui/soundManager.js  \
+diff --git a/js/perf/core.js b/js/perf/core.js
+index 19af39fc..675a92ca 100644
+--- a/js/perf/core.js
++++ b/js/perf/core.js
+@@ -1,221 +1,6 @@
+ // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
+ 
+ const {get_monotonic_time} = imports.gi.GLib;
+-const Main = imports.ui.main;
+-const Scripting = imports.ui.scripting;
+-
+-// This performance script measure the most important (core) performance
+-// metrics for Cinnamon. By looking at the output metrics of this script
+-// someone should be able to get an idea of how well Cinnamon is performing
+-// on a particular system.
+-
+-let METRICS = {
+-    overviewLatencyFirst:
+-    { description: "Time to first frame after triggering overview, first time",
+-      units: "us" },
+-    overviewFpsFirst:
+-    { description: "Frame rate when going to the overview, first time",
+-      units: "frames / s" },
+-    overviewLatencySubsequent:
+-    { description: "Time to first frame after triggering overview, second time",
+-      units: "us"},
+-    overviewFpsSubsequent:
+-    { description: "Frames rate when going to the overview, second time",
+-      units: "frames / s" },
+-    overviewFps5Windows:
+-    { description: "Frames rate when going to the overview, 5 windows open",
+-      units: "frames / s" },
+-    overviewFps10Windows:
+-    { description: "Frames rate when going to the overview, 10 windows open",
+-      units: "frames / s" },
+-    overviewFps5Maximized:
+-    { description: "Frames rate when going to the overview, 5 maximized windows open",
+-      units: "frames / s" },
+-    overviewFps10Maximized:
+-    { description: "Frames rate when going to the overview, 10 maximized windows open",
+-      units: "frames / s" },
+-    overviewFps5Alpha:
+-    { description: "Frames rate when going to the overview, 5 alpha-transparent windows open",
+-      units: "frames / s" },
+-    overviewFps10Alpha:
+-    { description: "Frames rate when going to the overview, 10 alpha-transparent windows open",
+-      units: "frames / s" },
+-    usedAfterOverview:
+-    { description: "Malloc'ed bytes after the overview is shown once",
+-      units: "B" },
+-    leakedAfterOverview:
+-    { description: "Additional malloc'ed bytes the second time the overview is shown",
+-      units: "B" },
+-    applicationsShowTimeFirst:
+-    { description: "Time to switch to applications view, first time",
+-      units: "us" },
+-    applicationsShowTimeSubsequent:
+-    { description: "Time to switch to applications view, second time",
+-      units: "us"}
+-};
+-
+-let WINDOW_CONFIGS = [
+-    { width: 640, height: 480, alpha: false, maximized: false, count: 1,  metric: 'overviewFpsSubsequent' },
+-    { width: 640, height: 480, alpha: false, maximized: false, count: 5,  metric: 'overviewFps5Windows'  },
+-    { width: 640, height: 480, alpha: false, maximized: false, count: 10, metric: 'overviewFps10Windows'  },
+-    { width: 640, height: 480, alpha: false, maximized: true,  count: 5,  metric: 'overviewFps5Maximized' },
+-    { width: 640, height: 480, alpha: false, maximized: true,  count: 10, metric: 'overviewFps10Maximized' },
+-    { width: 640, height: 480, alpha: true,  maximized: false, count: 5,  metric: 'overviewFps5Alpha' },
+-    { width: 640, height: 480, alpha: true,  maximized: false, count: 10, metric: 'overviewFps10Alpha' }
+-];
+-
+-function run() {
+-    Scripting.defineScriptEvent("overviewShowStart", "Starting to show the overview");
+-    Scripting.defineScriptEvent("overviewShowDone", "Overview finished showing");
+-    Scripting.defineScriptEvent("afterShowHide", "After a show/hide cycle for the overview");
+-    Scripting.defineScriptEvent("applicationsShowStart", "Starting to switch to applications view");
+-    Scripting.defineScriptEvent("applicationsShowDone", "Done switching to applications view");
+-
+-    Main.overview.connect('shown', function() {
+-                              Scripting.scriptEvent('overviewShowDone');
+-                          });
+-
+-    yield Scripting.sleep(1000);
+-
+-    for (let i = 0; i < 2 * WINDOW_CONFIGS.length; i++) {
+-        // We go to the overview twice for each configuration; the first time
+-        // to calculate the mipmaps for the windows, the second time to get
+-        // a clean set of numbers.
+-        if ((i % 2) == 0) {
+-            let config = WINDOW_CONFIGS[i / 2];
+-            yield Scripting.destroyTestWindows();
+-
+-            for (let k = 0; k < config.count; k++)
+-                yield Scripting.createTestWindow(config.width, config.height, config.alpha, config.maximized);
+-
+-            yield Scripting.waitTestWindows();
+-            yield Scripting.sleep(1000);
+-            yield Scripting.waitLeisure();
+-        }
+-
+-        Scripting.scriptEvent('overviewShowStart');
+-        Main.overview.show();
+-
+-        yield Scripting.waitLeisure();
+-        Main.overview.hide();
+-        yield Scripting.waitLeisure();
+-
+-        global.gc();
+-        yield Scripting.sleep(1000);
+-        Scripting.collectStatistics();
+-        Scripting.scriptEvent('afterShowHide');
+-    }
+-
+-    yield Scripting.destroyTestWindows();
+-    yield Scripting.sleep(1000);
+-
+-    Main.overview.show();
+-    yield Scripting.waitLeisure();
+-}
+-
+-let showingOverview = false;
+-let finishedShowingOverview = false;
+-let overviewShowStart;
+-let overviewFrames;
+-let overviewLatency;
+-let mallocUsedSize = 0;
+-let overviewShowCount = 0;
+-let firstOverviewUsedSize;
+-let haveSwapComplete = false;
+-let applicationsShowStart;
+-let applicationsShowCount = 0;
+-
+-function script_overviewShowStart(time) {
+-    showingOverview = true;
+-    finishedShowingOverview = false;
+-    overviewShowStart = time;
+-    overviewFrames = 0;
+-}
+-
+-function script_overviewShowDone(time) {
+-    // We've set up the state at the end of the zoom out, but we
+-    // need to wait for one more frame to paint before we count
+-    // ourselves as done.
+-    finishedShowingOverview = true;
+-}
+-
+-function script_applicationsShowStart(time) {
+-    applicationsShowStart = time;
+-}
+-
+-function script_applicationsShowDone(time) {
+-    applicationsShowCount++;
+-    if (applicationsShowCount == 1)
+-        METRICS.applicationsShowTimeFirst.value = time - applicationsShowStart;
+-    else
+-        METRICS.applicationsShowTimeSubsequent.value = time - applicationsShowStart;
+-}
+-
+-function script_afterShowHide(time) {
+-    if (overviewShowCount == 1) {
+-        METRICS.usedAfterOverview.value = mallocUsedSize;
+-    } else {
+-        METRICS.leakedAfterOverview.value = mallocUsedSize - METRICS.usedAfterOverview.value;
+-    }
+-}
+-
+-function malloc_usedSize(time, bytes) {
+-    mallocUsedSize = bytes;
+-}
+-
+-function _frameDone(time) {
+-    if (showingOverview) {
+-        if (overviewFrames == 0)
+-            overviewLatency = time - overviewShowStart;
+-
+-        overviewFrames++;
+-    }
+-
+-    if (finishedShowingOverview) {
+-        showingOverview = false;
+-        finishedShowingOverview = false;
+-        overviewShowCount++;
+-
+-        let dt = (time - (overviewShowStart + overviewLatency)) / 1000000;
+-
+-        // If we see a start frame and an end frame, that would
+-        // be 1 frame for a FPS computation, hence the '- 1'
+-        let fps = (overviewFrames - 1) / dt;
+-
+-        if (overviewShowCount == 1) {
+-            METRICS.overviewLatencyFirst.value = overviewLatency;
+-            METRICS.overviewFpsFirst.value = fps;
+-        } else if (overviewShowCount == 2) {
+-            METRICS.overviewLatencySubsequent.value = overviewLatency;
+-        }
+-
+-        // Other than overviewFpsFirst, we collect FPS metrics the second
+-        // we show each window configuration. overviewShowCount is 1,2,3...
+-        if (overviewShowCount % 2 == 0) {
+-            let config = WINDOW_CONFIGS[(overviewShowCount / 2) - 1];
+-            METRICS[config.metric].value = fps;
+-        }
+-    }
+-}
+-
+-function glx_swapComplete(time, swapTime) {
+-    haveSwapComplete = true;
+-
+-    _frameDone(swapTime);
+-}
+-
+-function clutter_stagePaintDone(time) {
+-    // If we aren't receiving GLXBufferSwapComplete events, then we approximate
+-    // the time the user sees a frame with the time we finished doing drawing
+-    // commands for the frame. This doesn't take into account the time for
+-    // the GPU to finish painting, and the time for waiting for the buffer
+-    // swap, but if this are uniform - every frame takes the same time to draw -
+-    // then it won't upset our FPS calculation, though the latency value
+-    // will be slightly too low.
+-
+-    if (!haveSwapComplete)
+-        _frameDone(time);
+-}
+ 
+ /**
+  * benchmarkPrototype:
+diff --git a/js/ui/main.js b/js/ui/main.js
+index 69b7e549..87d685f3 100644
+--- a/js/ui/main.js
++++ b/js/ui/main.js
+@@ -102,7 +102,6 @@ const Layout = imports.ui.layout;
+ const LookingGlass = imports.ui.lookingGlass;
+ const NotificationDaemon = imports.ui.notificationDaemon;
+ const WindowAttentionHandler = imports.ui.windowAttentionHandler;
+-const Scripting = imports.ui.scripting;
+ const CinnamonDBus = imports.ui.cinnamonDBus;
+ const ThemeManager = imports.ui.themeManager;
+ const Magnifier = imports.ui.magnifier;
+@@ -447,13 +446,6 @@ function start() {
+     global.log('loaded at ' + _startDate);
+     log('Cinnamon started at ' + _startDate);
+ 
+-    let perfModuleName = GLib.getenv("CINNAMON_PERF_MODULE");
+-    if (perfModuleName) {
+-        let perfOutput = GLib.getenv("CINNAMON_PERF_OUTPUT");
+-        let module = eval('imports.perf.' + perfModuleName + ';');
+-        Scripting.runPerfScript(module, perfOutput);
+-    }
+-
+     wmSettings = new Gio.Settings({schema_id: "org.cinnamon.desktop.wm.preferences"})
+     workspace_names = wmSettings.get_strv("workspace-names");
+ 
+diff --git a/js/ui/scripting.js b/js/ui/scripting.js
+deleted file mode 100644
+index c5833a05..00000000
+--- a/js/ui/scripting.js
++++ /dev/null
+@@ -1,370 +0,0 @@
+-// -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
+-
+-const Gio = imports.gi.Gio;
+-const Mainloop = imports.mainloop;
+-const Meta = imports.gi.Meta;
+-const Cinnamon = imports.gi.Cinnamon;
+-
+-const Main = imports.ui.main;
+-
+-/**
+- * FILE:scripting.js
+- * @short_description: Scripts for driving cinnamon in an automated fasion
+- *
+- * This module provides functionality for driving Cinnamon user interface
+- * in an automated fashion. The primary current use case for this is
+- * automated performance testing (see runPerfScript()), but it could
+- * be applied to other forms of automation, such as testing for
+- * correctness as well.
+- *
+- * When scripting an automated test we want to make a series of calls
+- * in a linear fashion, but we also want to be able to let the main
+- * loop run so actions can finish. For this reason we write the script
+- * as a generator function that yields when it want to let the main
+- * loop run.
+- *
+- *    yield Scripting.sleep(1000);
+- *    main.overview.show();
+- *    yield Scripting.waitLeisure();
+- *
+- * While it isn't important to the person writing the script, the actual
+- * yielded result is a function that the caller uses to provide the
+- * callback for resuming the script.
+- */
+-
+-/**
+- * sleep:
+- * @milliseconds (int): number of milliseconds to wait
+- *
+- * Used within an automation script to pause the the execution of the
+- * current script for the specified amount of time. Use as
+- * 'yield Scripting.sleep(500);'
+- */
+-function sleep(milliseconds) {
+-    let cb;
+-
+-    Mainloop.timeout_add(milliseconds, function() {
+-                             if (cb)
+-                                 cb();
+-                             return false;
+-                         });
+-
+-    return function(callback) {
+-        cb = callback;
+-    };
+-}
+-
+-/**
+- * waitLeisure:
+- *
+- * Used within an automation script to pause the the execution of the
+- * current script until Cinnamon is completely idle. Use as
+- * 'yield Scripting.waitLeisure();'
+- */
+-function waitLeisure() {
+-    let cb;
+-
+-    global.run_at_leisure(function() {
+-                             if (cb)
+-                                 cb();
+-                          });
+-
+-    return function(callback) {
+-        cb = callback;
+-    };
+-}
+-
+-const PerfHelperIface =
+-    '<node> \
+-        <interface name="org.Cinnamon.PerfHelper"> \
+-            <method name="CreateWindow"> \ <arg type="i" direction="in" /> \ <arg type="i" direction="in" /> \ <arg type="b" direction="in" /> \ <arg type="b" direction="in" /> \
+-            </method> \
+-            <method name="WaitWindows" /> \
+-            <method name="DestroyWindows" /> \
+-        </interface> \
+-    </node>';
+-
+-var PerfHelperProxy = Gio.DBusProxy.makeProxyWrapper(PerfHelperIface);
+-function PerfHelper() {
+-    return new PerfHelperProxy(Gio.DBus.session, 'org.Cinnamon.PerfHelper', '/org/Cinnamon/PerfHelper');
+-}
+-
+-let _perfHelper = null;
+-function _getPerfHelper() {
+-    if (_perfHelper == null)
+-        _perfHelper = new PerfHelper();
+-
+-    return _perfHelper;
+-}
+-
+-/**
+- * createTestWindow:
+- * @width (int): width of window, in pixels
+- * @height (int): height of window, in pixels
+- * @alpha (boolean): whether the window should be alpha transparent
+- * @maximized (boolean): whethe the window should be created maximized
+- *
+- * Creates a window using cinnamon-perf-helper for testing purposes.
+- * While this function can be used with yield in an automation
+- * script to pause until the D-Bus call to the helper process returns,
+- * because of the normal X asynchronous mapping process, to actually wait
+- * until the window has been mapped and exposed, use waitTestWindows().
+- */
+-function createTestWindow(width, height, alpha, maximized) {
+-    let cb;
+-    let perfHelper = _getPerfHelper();
+-
+-    perfHelper.CreateWindowRemote(width, height, alpha, maximized,
+-                                  function(result, excp) {
+-                                      if (cb)
+-                                          cb();
+-                                  });
+-
+-    return function(callback) {
+-        cb = callback;
+-    };
+-}
+-
+-/**
+- * waitTestWindows:
+- *
+- * Used within an automation script to pause until all windows previously
+- * created with createTestWindow have been mapped and exposed.
+- */
+-function waitTestWindows() {
+-    let cb;
+-    let perfHelper = _getPerfHelper();
+-
+-    perfHelper.WaitWindowsRemote(function(result, excp) {
+-                                     if (cb)
+-                                         cb();
+-                                 });
+-
+-    return function(callback) {
+-        cb = callback;
+-    };
+-}
+-
+-/**
+- * destroyTestWindows:
+- *
+- * Destroys all windows previously created with createTestWindow().
+- * While this function can be used with yield in an automation
+- * script to pause until the D-Bus call to the helper process returns,
+- * this doesn't guarantee that Muffin has actually finished the destroy
+- * process because of normal X asynchronicity.
+- */
+-function destroyTestWindows() {
+-    let cb;
+-    let perfHelper = _getPerfHelper();
+-
+-    perfHelper.DestroyWindowsRemote(function(result, excp) {
+-                                        if (cb)
+-                                            cb();
+-                                    });
+-
+-    return function(callback) {
+-        cb = callback;
+-    };
+-}
+-
+-/**
+- * defineScriptEvent
+- * @name (string): The event will be called script.
+- * @description (string): Short human-readable description of the event
+- *
+- * Convenience function to define a zero-argument performance event
+- * within the 'script' namespace that is reserved for events defined locally
+- * within a performance automation script
+- */
+-function defineScriptEvent(name, description) {
+-    Cinnamon.PerfLog.get_default().define_event("script." + name,
+-                                             description,
+-                                             "");
+-}
+-
+-/**
+- * scriptEvent
+- * @name (string): Name registered with defineScriptEvent()
+- *
+- * Convenience function to record a script-local performance event
+- * previously defined with defineScriptEvent
+- */
+-function scriptEvent(name) {
+-    Cinnamon.PerfLog.get_default().event("script." + name);
+-}
+-
+-/**
+- * collectStatistics
+- *
+- * Convenience function to trigger statistics collection
+- */
+-function collectStatistics() {
+-    Cinnamon.PerfLog.get_default().collect_statistics();
+-}
+-
+-function _step(g, finish, onError) {
+-    try {
+-        let waitFunction = g.next();
+-        waitFunction(function() {
+-                         _step(g, finish, onError);
+-                     });
+-    } catch (err if err instanceof StopIteration) {
+-        if (finish)
+-            finish();
+-    } catch (err) {
+-        if (onError)
+-            onError(err);
+-    }
+-}
+-
+-function _collect(scriptModule, outputFile) {
+-    let eventHandlers = {};
+-
+-    for (let f in scriptModule) {
+-        let m = /([A-Za-z]+)_([A-Za-z]+)/.exec(f);
+-        if (m)
+-            eventHandlers[m[1] + "." + m[2]] = scriptModule[f];
+-    }
+-
+-    Cinnamon.PerfLog.get_default().replay(
+-        function(time, eventName, signature, arg) {
+-            if (eventName in eventHandlers)
+-                eventHandlers[eventName](time, arg);
+-        });
+-
+-    if ('finish' in scriptModule)
+-        scriptModule.finish();
+-
+-    if (outputFile) {
+-        let f = Gio.file_new_for_path(outputFile);
+-        let raw = f.replace(null, false,
+-                            Gio.FileCreateFlags.NONE,
+-                            null);
+-        let out = Gio.BufferedOutputStream.new_sized (raw, 4096);
+-        Cinnamon.write_string_to_stream (out, "{\n");
+-
+-        Cinnamon.write_string_to_stream(out, '"events":\n');
+-        Cinnamon.PerfLog.get_default().dump_events(out);
+-
+-        let monitors = Main.layoutManager.monitors;
+-        let primary = Main.layoutManager.primaryIndex;
+-        Cinnamon.write_string_to_stream(out, ',\n"monitors":\n[');
+-        for (let i = 0; i < monitors.length; i++) {
+-            let monitor = monitors[i];
+-            if (i != 0)
+-                Cinnamon.write_string_to_stream(out, ', ');
+-            Cinnamon.write_string_to_stream(out, '"%s%dx%d+%d+%d"'.format(i == primary ? "*" : "",
+-                                                                       monitor.width, monitor.height,
+-                                                                       monitor.x, monitor.y));
+-        }
+-        Cinnamon.write_string_to_stream(out, ' ]');
+-
+-        Cinnamon.write_string_to_stream(out, ',\n"metrics":\n[ ');
+-        let first = true;
+-        for (let name in scriptModule.METRICS) {
+-            let metric = scriptModule.METRICS[name];
+-            // Extra checks here because JSON.stringify generates
+-            // invalid JSON for undefined values
+-            if (metric.description == null) {
+-                log("Error: No description found for metric " + name);
+-                continue;
+-            }
+-            if (metric.units == null) {
+-                log("Error: No units found for metric " + name);
+-                continue;
+-            }
+-            if (metric.value == null) {
+-                log("Error: No value found for metric " + name);
+-                continue;
+-            }
+-
+-            if (!first)
+-                Cinnamon.write_string_to_stream(out, ',\n  ');
+-            first = false;
+-
+-            Cinnamon.write_string_to_stream(out,
+-                                         '{ "name": ' + JSON.stringify(name) + ',\n' +
+-                                         '    "description": ' + JSON.stringify(metric.description) + ',\n' +
+-                                         '    "units": ' + JSON.stringify(metric.units) + ',\n' +
+-                                         '    "value": ' + JSON.stringify(metric.value) + ' }');
+-        }
+-        Cinnamon.write_string_to_stream(out, ' ]');
+-
+-        Cinnamon.write_string_to_stream (out, ',\n"log":\n');
+-        Cinnamon.PerfLog.get_default().dump_log(out);
+-
+-        Cinnamon.write_string_to_stream (out, '\n}\n');
+-        out.close(null);
+-    } else {
+-        let metrics = [];
+-        for (let metric in scriptModule.METRICS)
+-            metrics.push(metric);
+-
+-        metrics.sort();
+-
+-        print ('------------------------------------------------------------');
+-        for (let i = 0; i < metrics.length; i++) {
+-            let metric = metrics[i];
+-            print ('# ' + scriptModule.METRIC_DESCRIPTIONS[metric]);
+-            print (metric + ': ' +  scriptModule.METRICS[metric]);
+-        }
+-        print ('------------------------------------------------------------');
+-    }
+-}
+-
+-/**
+- * runPerfScript:
+- * @scriptModule: module object with run and finish functions
+- *    and event handlers
+- *
+- * Runs a script for automated collection of performance data. The
+- * script is defined as a Javascript module with specified contents.
+- *
+- * First the run() function within the module will be called as a
+- * generator to automate a series of actions. These actions will
+- * trigger performance events and the script can also record its
+- * own performance events.
+- *
+- * Then the recorded event log is replayed using handler functions
+- * within the module. The handler for the event 'foo.bar' is called
+- * foo_bar().
+- *
+- * Finally if the module has a function called finish(), that will
+- * be called.
+- *
+- * The event handler and finish functions are expected to fill in
+- * metrics to an object within the module called METRICS. Each
+- * property of this object represents an individual metric. The
+- * name of the property is the name of the metric, the value
+- * of the property is an object with the following properties:
+- *
+- *  description: human readable description of the metric
+- *  units: a string representing the units of the metric. It has
+- *   the form '<unit> <unit> ... / <unit> / <unit> ...'. Certain
+- *   unit values are recognized: s, ms, us, B, KiB, MiB. Other
+- *   values can appear but are uninterpreted. Examples 's',
+- *   '/ s', 'frames', 'frames / s', 'MiB / s / frame'
+- *  value: computed value of the metric
+- *
+- * The resulting metrics will be written to @outputFile as JSON, or,
+- * if @outputFile is not provided, logged.
+- *
+- * After running the script and collecting statistics from the
+- * event log, Cinnamon will exit.
+- */
+-function runPerfScript(scriptModule, outputFile) {
+-    Cinnamon.PerfLog.get_default().set_enabled(true);
+-
+-    let g = scriptModule.run();
+-
+-    _step(g,
+-          function() {
+-              _collect(scriptModule, outputFile);
+-              Meta.exit(Meta.ExitCode.SUCCESS);
+-          },
+-         function(err) {
+-             log("Script failed: " + err + "\n" + err.stack);
+-             Meta.exit(Meta.ExitCode.ERROR);
+-         });
+-}
+-- 
+2.28.0
+
+
+From 6bcf36caf695edac1431497bc356df244edefa7c Mon Sep 17 00:00:00 2001
+From: James Ross <itzexor@gmail.com>
+Date: Wed, 25 Mar 2020 18:01:10 -0700
+Subject: [PATCH 5/7] build: bump min gjs version to 1.56.0
+
+which includes jason hicks' contributions for the tween min/max
+and signalHandlerIsConnected patches from CJS.
+---
+ configure.ac   | 2 +-
+ debian/control | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 5f6bb6a1..2a006e04 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -66,7 +66,7 @@ fi
+ 
+ CLUTTER_MIN_VERSION=0
+ GOBJECT_INTROSPECTION_MIN_VERSION=0.9.2
+-GJS_MIN_VERSION=1.54.0
++GJS_MIN_VERSION=1.56.0
+ MUFFIN_MIN_VERSION=4.0.3
+ GTK_MIN_VERSION=3.12.0
+ GIO_MIN_VERSION=2.35.0
+diff --git a/debian/control b/debian/control
+index f596d240..fa382975 100644
+--- a/debian/control
++++ b/debian/control
+@@ -16,7 +16,7 @@ Build-Depends:
+  intltool,
+  libcinnamon-desktop-dev (>= 3.8),
+  libcinnamon-menu-3-dev,
+- libgjs-dev (>= 1.54.0),
++ libgjs-dev (>= 1.56.0),
+  libcroco3-dev (>= 0.6.2),
+  libdbus-glib-1-dev,
+  libgirepository1.0-dev (>= 1.29.15),
+@@ -50,7 +50,7 @@ Depends:
+  cinnamon-screensaver,
+  cinnamon-session,
+  cinnamon-settings-daemon,
+- gjs (>= 1.54.0),
++ gjs (>= 1.56.0),
+  cups-pk-helper,
+  gir1.2-accountsservice-1.0,
+  gir1.2-caribou-1.0,
+@@ -75,7 +75,7 @@ Depends:
+  libcanberra-pulse,
+  libcinnamon-desktop4,
+  libcinnamon-menu-3-0,
+- libgjs0g (>= 1.54.0),
++ libgjs0g (>= 1.56.0),
+  libglib2.0-bin,
+  libmuffin0,
+  mate-panel | gnome-panel | tint2,
+-- 
+2.28.0
+
+
+From c13fccaca587a67ba3bf967cb44d8325bfd7ce1e Mon Sep 17 00:00:00 2001
+From: James Ross <itzexor@gmail.com>
+Date: Wed, 25 Mar 2020 18:10:24 -0700
+Subject: [PATCH 6/7] Revert CJS custom code import for running on GJS
+
+This branch is designed to run directly on GJS, and has a compatible
+minimum version, so we don't need these anymore.
+
+Revert "overrides.js: Add Signals patch from CJS"
+This reverts commit ceb909ed0578cdadb1d531760270e3faf0d4365c.
+Revert "overrides.js: Add Tweener patch from CJS"
+This reverts commit a039f7db996d7e049228a52eecba7513b1f4a2db.
+---
+ js/ui/overrides.js | 314 +--------------------------------------------
+ 1 file changed, 1 insertion(+), 313 deletions(-)
+
+diff --git a/js/ui/overrides.js b/js/ui/overrides.js
+index 1c306096..2dcb1b6b 100644
+--- a/js/ui/overrides.js
++++ b/js/ui/overrides.js
+@@ -1,12 +1,10 @@
+ // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
+ 
+ const Gio = imports.gi.Gio
++const Lang = imports.lang;
+ const Mainloop = imports.mainloop;
+ const GLib = imports.gi.GLib;
+ const GObject = imports.gi.GObject;
+-const Tweener = imports.tweener.tweener;
+-const TweenList = imports.tweener.tweenList;
+-const Signals = imports.signals;
+ 
+ function init() {
+     overrideDumpStack();
+@@ -14,8 +12,6 @@ function init() {
+     overrideGObject();
+     overrideMainloop();
+     overrideJS();
+-    overrideTweener();
+-    overrideSignals();
+ }
+ 
+ function check_schema_and_init(obj, method, params) {
+@@ -258,311 +254,3 @@ function installPolyfills(readOnlyError) {
+         enumerable: false
+     });
+ }
+-
+-function overrideTweener() {
+-    if (Tweener.restrictedWords.min != null) {
+-        return;
+-    }
+-
+-    Object.assign(Tweener.restrictedWords, {
+-        min: true,
+-        max: true
+-    });
+-
+-    const originalTweenListClone = TweenList.TweenList.prototype.clone;
+-    TweenList.TweenList.prototype.clone = function(omitEvents) {
+-        const tween = originalTweenListClone(omitEvents);
+-        tween.min = this.min;
+-        tween.max = this.max;
+-        return tween;
+-    };
+-
+-    Tweener._updateTweenByIndex = function(i) {
+-        var tweening = Tweener._tweenList[i];
+-
+-        if (tweening == null || !tweening.scope)
+-            return false;
+-
+-        var currentTime = Tweener._getCurrentTweeningTime(tweening);
+-
+-        if (currentTime < tweening.timeStart)
+-            return true; // Hasn't started, so return true
+-
+-        var scope = tweening.scope;
+-        var t, b, c, d, nv;
+-
+-        var isOver = false;
+-
+-        if (tweening.isCaller) {
+-            do {
+-                t = ((tweening.timeComplete - tweening.timeStart)/tweening.count) *
+-                    (tweening.timesCalled + 1);
+-                b = tweening.timeStart;
+-                c = tweening.timeComplete - tweening.timeStart;
+-                d = tweening.timeComplete - tweening.timeStart;
+-                nv = tweening.transition(t, b, c, d);
+-
+-                if (currentTime >= nv) {
+-                    Tweener._callOnFunction(tweening.onUpdate, "onUpdate", tweening.onUpdateScope,
+-                                    scope, tweening.onUpdateParams);
+-
+-                    tweening.timesCalled++;
+-                    if (tweening.timesCalled >= tweening.count) {
+-                        isOver = true;
+-                        break;
+-                    }
+-
+-                    if (tweening.waitFrames)
+-                        break;
+-                }
+-            } while (currentTime >= nv);
+-        } else {
+-            var mustUpdate, name;
+-
+-            if (currentTime >= tweening.timeComplete) {
+-                isOver = true;
+-                mustUpdate = true;
+-            } else {
+-                mustUpdate = tweening.skipUpdates < 1 ||
+-                    !tweening.skipUpdates ||
+-                    tweening.updatesSkipped >= tweening.skipUpdates;
+-            }
+-
+-            if (!tweening.hasStarted) {
+-                Tweener._callOnFunction(tweening.onStart, "onStart", tweening.onStartScope,
+-                                scope, tweening.onStartParams);
+-
+-                for (name in tweening.properties) {
+-                    var pv;
+-
+-                    if (tweening.properties[name].isSpecialProperty) {
+-                        // It's a special property, tunnel via the special property function
+-                        if (_specialPropertyList[name].preProcess != undefined) {
+-                            tweening.properties[name].valueComplete = Tweener._specialPropertyList[name].preProcess(scope, Tweener._specialPropertyList[name].parameters, tweening.properties[name].originalValueComplete, tweening.properties[name].extra);
+-                        }
+-                        pv = Tweener._specialPropertyList[name].getValue(scope, Tweener._specialPropertyList[name].parameters, tweening.properties[name].extra);
+-                    } else {
+-                        // Directly read property
+-                        pv = scope[name];
+-                    }
+-                    tweening.properties[name].valueStart = isNaN(pv) ? tweening.properties[name].valueComplete : pv;
+-                }
+-
+-                mustUpdate = true;
+-                tweening.hasStarted = true;
+-            }
+-
+-            if (mustUpdate) {
+-                for (name in tweening.properties) {
+-                    var property = tweening.properties[name];
+-
+-                    if (isOver) {
+-                        // Tweening time has finished, just set it to the final value
+-                        nv = property.valueComplete;
+-                    } else {
+-                        if (property.hasModifier) {
+-                            // Modified
+-                            t = currentTime - tweening.timeStart;
+-                            d = tweening.timeComplete - tweening.timeStart;
+-                            nv = tweening.transition(t, 0, 1, d, tweening.transitionParams);
+-                            nv = property.modifierFunction(property.valueStart, property.valueComplete, nv, property.modifierParameters);
+-                        } else {
+-                            // Normal update
+-                            t = currentTime - tweening.timeStart;
+-                            b = property.valueStart;
+-                            c = property.valueComplete - property.valueStart;
+-                            d = tweening.timeComplete - tweening.timeStart;
+-                            nv = tweening.transition(t, b, c, d, tweening.transitionParams);
+-                        }
+-                    }
+-
+-                    if (tweening.rounded)
+-                        nv = Math.round(nv);
+-
+-                    if (tweening.min !== undefined && nv < tweening.min)
+-                        nv = tweening.min;
+-                    if (tweening.max !== undefined && nv > tweening.max)
+-                        nv = tweening.max;
+-
+-                    if (property.isSpecialProperty) {
+-                        // It's a special property, tunnel via the special property method
+-                        Tweener._specialPropertyList[name].setValue(scope, nv, _specialPropertyList[name].parameters, tweening.properties[name].extra);
+-                    } else {
+-                        // Directly set property
+-                        scope[name] = nv;
+-                    }
+-                }
+-
+-                tweening.updatesSkipped = 0;
+-
+-                Tweener._callOnFunction(tweening.onUpdate, "onUpdate", tweening.onUpdateScope,
+-                                scope, tweening.onUpdateParams);
+-
+-            } else {
+-                tweening.updatesSkipped++;
+-            }
+-        }
+-
+-        if (isOver) {
+-            Tweener._callOnFunction(tweening.onComplete, "onComplete", tweening.onCompleteScope,
+-                            scope, tweening.onCompleteParams);
+-        }
+-
+-        return !isOver;
+-    }
+-
+-    Tweener._addTweenOrCaller = function(target, tweeningParameters, isCaller) {
+-        if (!target)
+-            return false;
+-
+-        var scopes; // List of objects to tween
+-        if (target instanceof Array) {
+-            // The first argument is an array
+-            scopes = target.concat(); // XXX: To copy the array I guess
+-        } else {
+-            // The first argument(s) is(are) object(s)
+-            scopes = new Array(target);
+-        }
+-
+-        var obj, istr;
+-
+-        if (isCaller) {
+-            obj = tweeningParameters;
+-        } else {
+-            obj = TweenList.makePropertiesChain(tweeningParameters);
+-
+-            var properties = Tweener._constructPropertyList(obj);
+-
+-            // Verifies whether the properties exist or not, for warning messages
+-            for (istr in properties) {
+-                if (Tweener._specialPropertyList[istr] != undefined) {
+-                    properties[istr].isSpecialProperty = true;
+-                } else {
+-                    for (var i = 0; i < scopes.length; i++) {
+-                        if (scopes[i][istr] == undefined)
+-                            log("The property " + istr + " doesn't seem to be a normal object property of " + scopes[i] + " or a registered special property");
+-                    }
+-                    properties[istr].isSpecialProperty = false;
+-                }
+-            }
+-        }
+-
+-        // Creates the main engine if it isn't active
+-        if (!Tweener._inited) Tweener._init();
+-        if (!Tweener._engineExists) Tweener._startEngine();
+-
+-        // Creates a "safer", more strict tweening object
+-        var time = obj.time || 0;
+-        var delay = obj.delay || 0;
+-
+-        var transition;
+-
+-        // FIXME: Tweener allows you to use functions with an all lower-case name
+-        if (typeof obj.transition == "string") {
+-            transition = imports.tweener.equations[obj.transition];
+-        } else {
+-            transition = obj.transition;
+-        }
+-
+-        if (!transition)
+-            transition = imports.tweener.equations["easeOutExpo"];
+-
+-        var tween;
+-
+-        for (let i = 0; i < scopes.length; i++) {
+-            if (!isCaller) {
+-                // Make a copy of the properties
+-                var copyProperties = new Object();
+-                for (istr in properties) {
+-                    copyProperties[istr] = new Tweener.PropertyInfo(properties[istr].valueStart,
+-                                                            properties[istr].valueComplete,
+-                                                            properties[istr].valueComplete,
+-                                                            properties[istr].arrayIndex || 0,
+-                                                            {},
+-                                                            properties[istr].isSpecialProperty,
+-                                                            properties[istr].modifierFunction || null,
+-                                                            properties[istr].modifierParameters || null);
+-                }
+-            }
+-
+-            tween = new TweenList.TweenList(scopes[i],
+-                                            Tweener._ticker.getTime() + ((delay * 1000) / Tweener._timeScale),
+-                                            Tweener._ticker.getTime() + (((delay * 1000) + (time * 1000)) / Tweener._timeScale),
+-                                            false,
+-                                            transition,
+-                                            obj.transitionParams || null);
+-
+-            tween.properties               =       isCaller ? null : copyProperties;
+-            tween.onStart                  =       obj.onStart;
+-            tween.onUpdate                 =       obj.onUpdate;
+-            tween.onComplete               =       obj.onComplete;
+-            tween.onOverwrite              =       obj.onOverwrite;
+-            tween.onError                  =       obj.onError;
+-            tween.onStartParams            =       obj.onStartParams;
+-            tween.onUpdateParams           =       obj.onUpdateParams;
+-            tween.onCompleteParams         =       obj.onCompleteParams;
+-            tween.onOverwriteParams        =       obj.onOverwriteParams;
+-            tween.onStartScope             =       obj.onStartScope;
+-            tween.onUpdateScope            =       obj.onUpdateScope;
+-            tween.onCompleteScope          =       obj.onCompleteScope;
+-            tween.onOverwriteScope         =       obj.onOverwriteScope;
+-            tween.onErrorScope             =       obj.onErrorScope;
+-            tween.rounded                  =       obj.rounded;
+-            tween.min                      =       obj.min;
+-            tween.max                      =       obj.max;
+-            tween.skipUpdates              =       obj.skipUpdates;
+-            tween.isCaller                 =       isCaller;
+-
+-            if (isCaller) {
+-                tween.count = obj.count;
+-                tween.waitFrames = obj.waitFrames;
+-            }
+-
+-            if (!isCaller) {
+-                // Remove other tweenings that occur at the same time
+-                Tweener.removeTweensByTime(tween.scope, tween.properties, tween.timeStart, tween.timeComplete);
+-            }
+-
+-            // And finally adds it to the list
+-            Tweener._tweenList.push(tween);
+-
+-            // Immediate update and removal if it's an immediate tween
+-            // If not deleted, it executes at the end of this frame execution
+-            if (time == 0 && delay == 0) {
+-                var myT = Tweener._tweenList.length-1;
+-                Tweener._updateTweenByIndex(myT);
+-                Tweener._removeTweenByIndex(myT);
+-            }
+-        }
+-
+-        return true;
+-    };
+-}
+-
+-function overrideSignals() {
+-    if (Signals._signalHandlerIsConnected != null) {
+-        return;
+-    }
+-
+-    function _signalHandlerIsConnected(id) {
+-        if (!( '_signalConnections' in this))
+-            return false;
+-
+-        for (let connection of this._signalConnections) {
+-            if (connection.id == id) {
+-                if (connection.disconnected)
+-                    return false;
+-                else
+-                    return true;
+-            }
+-        }
+-
+-        return false;
+-    }
+-
+-    const originalAddSignalMethods = Signals.addSignalMethods;
+-    Signals.addSignalMethods = function(proto) {
+-        originalAddSignalMethods(proto);
+-        Signals._addSignalMethod(proto, 'signalHandlerIsConnected', _signalHandlerIsConnected);
+-    };
+-}
+\ No newline at end of file
+-- 
+2.28.0
+
+
+From b5e5d27322374d5d5ae1a2e9239a87bf4df0d682 Mon Sep 17 00:00:00 2001
+From: James Ross <itzexor@gmail.com>
+Date: Wed, 25 Mar 2020 18:35:13 -0700
+Subject: [PATCH 7/7] extensions: fix file read ByteArray conversions
+
+In the future toString() directly on a UInt8Array will return a numeric
+representation, so these cases warn and need to be fixed.
+---
+ js/misc/fileUtils.js | 11 +++++++----
+ js/ui/extension.js   |  4 +++-
+ 2 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/js/misc/fileUtils.js b/js/misc/fileUtils.js
+index e3df65fc..9861d6f5 100644
+--- a/js/misc/fileUtils.js
++++ b/js/misc/fileUtils.js
+@@ -2,6 +2,7 @@
+ 
+ const Gio = imports.gi.Gio;
+ const GLib = imports.gi.GLib;
++const ByteArray = imports.byteArray;
+ 
+ var importNames = [
+     'mainloop',
+@@ -90,7 +91,7 @@ function getUserDesktopDir() {
+         try{
+             let data = userdirsFile.load_contents(null);
+             let dataDic = new Array();
+-            let lines = data[1].toString().split("\n");
++            let lines = ByteArray.toString(data[1]).split("\n");
+             for (var i in lines){
+                 if (!lines[i] || lines[i][0]=="#") continue;
+                 let line = lines[i].split("=", 2);
+@@ -264,7 +265,7 @@ function requireModule(path, dir, meta, type, async = false, returnIndex = false
+             path = `${dir}/${path}`;
+         }
+     }
+-    let success, JS;
++    let success, JSbytes, JS;
+     let file = Gio.File.new_for_commandline_arg(path);
+     let fileLoadErrorMessage = '[requireModule] Unable to load file contents.';
+     if (!file.query_exists(null)) {
+@@ -272,19 +273,21 @@ function requireModule(path, dir, meta, type, async = false, returnIndex = false
+     }
+ 
+     if (!async) {
+-        [success, JS] = file.load_contents(null);
++        [success, JSbytes] = file.load_contents(null);
+         if (!success) {
+             throw new Error(fileLoadErrorMessage);
+         }
++        JS = ByteArray.toString(JSbytes);
+         return createExports({path, dir, meta, type, file, size: JS.length, JS, returnIndex});
+     }
+     return new Promise(function(resolve, reject) {
+         file.load_contents_async(null, function(object, result) {
+             try {
+-                [success, JS] = file.load_contents_finish(result);
++                [success, JSbytes] = file.load_contents_finish(result);
+                 if (!success) {
+                     throw new Error(fileLoadErrorMessage);
+                 }
++                JS = ByteArray.toString(JSbytes);
+                 resolve(createExports({path, dir, meta, type, file, size: JS.length, JS, returnIndex, reject}));
+             } catch (e) {
+                 reject(e);
+diff --git a/js/ui/extension.js b/js/ui/extension.js
+index 076f0c2b..04982fbe 100644
+--- a/js/ui/extension.js
++++ b/js/ui/extension.js
+@@ -1,5 +1,7 @@
+ // -*- mode: js; js-indent-level: 4; indent-tabs-mode: nil -*-
+ 
++const ByteArray = imports.byteArray;
++
+ const Gio = imports.gi.Gio;
+ const GLib = imports.gi.GLib;
+ const Gtk = imports.gi.Gtk;
+@@ -621,7 +623,7 @@ function loadMetaData({state, path, uuid, userDir, folder, force}) {
+                     reject();
+                     return;
+                 }
+-                meta = JSON.parse(json);
++                meta = JSON.parse(ByteArray.toString(json));
+             } catch (e) {
+                 logError(`Failed to load/parse metadata.json`, uuid, e);
+                 meta = createMetaDummy(uuid, oldPath, State.ERROR);
+-- 
+2.28.0
+
