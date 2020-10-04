@@ -1,14 +1,15 @@
 #!/bin/sh -eux
 
-autoreconf -vif
+rm -f CMakeLists.txt
 ub_compile \
-	--disable-clamav \
 	--sysconfdir=/etc/clamav \
-	--enable-zlib-vcheck \
-	--with-dbdir=/var/lib/clamav \
-	--with-user=clamav \
-	--with-group=clamav \
-	--with-system-libmspack \
-	--disable-rpath \
-	--disable-llvm \
-	--enable-clamdtop
+    --with-dbdir=/var/lib/clamav \
+    --with-user=clamav \
+    --with-group=clamav \
+    --with-system-libmspack \
+    --disable-rpath \
+    --disable-clamav \
+    --disable-llvm \
+    --disable-milter \
+    --enable-zlib-vcheck \
+    --enable-clamdtop
