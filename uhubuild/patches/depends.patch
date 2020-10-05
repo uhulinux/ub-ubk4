@@ -1,0 +1,63 @@
+From 26df0c05f3c9b6c3f86868993fff79e15a574a63 Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Mon, 5 Oct 2020 11:56:23 +0200
+Subject: depends: python, perl
+
+
+diff --git a/src/steps/depends b/src/steps/depends
+index b61889e..8562f27 100755
+--- a/src/steps/depends
++++ b/src/steps/depends
+@@ -475,6 +475,25 @@ for pkg in $UB_PACKAGES; do
+ 		echo " $pkg: automatikus dependencia keresés fázis kihagyva"
+ 	fi # skip-autodepend
+ 
++# python: nem mindig van #!/usr/bin/python* a .py fájlok elején...
++    if [ -d ./usr/lib/python2.7 ]; then
++        if [ "$UB_DISTRIBUTION_NUM" -ge "3" ]; then
++            echo "python2" >> "$UB_TMPDIR/pkg-noversion"
++        else
++            echo "python" >> "$UB_TMPDIR/pkg-noversion"
++        fi
++    fi
++    for pv in 3.8 3.7 3.6 3.5; do
++        if [ -d ./usr/lib/python$pv ]; then
++            echo "python3" >> "$UB_TMPDIR/pkg-noversion"
++        fi
++    done
++
++# perl
++    if [ -d ./usr/lib/perl5 ]; then
++        echo "perl" >> "$UB_TMPDIR/pkg-noversion"
++    fi
++
+ # Az uhu-pkg majnem mindenkinek kell a postinst szkript miatt.
+ 	if ! grep -qx skip-postinst "$UB_SRCDIR/packages/$pkg/options" || \
+ 	   ! grep -qx skip-prerm    "$UB_SRCDIR/packages/$pkg/options" || \
+@@ -487,14 +506,6 @@ for pkg in $UB_PACKAGES; do
+ 		echo "usermode" >> "$UB_TMPDIR/pkg-noversion"
+ 	fi
+ 
+-# python: nem mindig van #!/usr/bin/python* a .py fájlok elején...
+-    if [ -d /usr/lib/python2.* ]; then
+-        echo "python2" >> "$UB_TMPDIR/file-noversion"
+-    fi
+-    if [ -d /usr/lib/python3.* ]; then
+-        echo "python3" >> "$UB_TMPDIR/file-noversion"
+-    fi
+-
+ # Megvannak a csomagnevek. Sorba rendezzük őket.
+ 	sort -u < "$UB_TMPDIR/pkg-atleast"   > "$UB_TMPDIR/pkg-atleast.tmp"
+ 	sort -u < "$UB_TMPDIR/pkg-noversion" | comm -23 - "$UB_TMPDIR/pkg-atleast.tmp" \
+diff --git a/src/uhubuild-build b/src/uhubuild-build
+index af626b4..845e1ec 100755
+--- a/src/uhubuild-build
++++ b/src/uhubuild-build
+@@ -73,6 +73,7 @@ mkdir -p "$PRETENDROOTDIR" "$UB_TMPDIR"
+ export UB_PACKAGES=$(cd "$UB_SRCDIR/packages"; echo *)
+ export UB_SOURCENAME="$(<"$UB_SRCDIR/sourcename")"
+ export UB_DISTRIBUTION="$(<"$UB_SRCDIR/distribution")"
++export UB_DISTRIBUTION_NUM=${UB_DISTRIBUTION/UHU-Linux UBK/}
+ export UB_FULLVERSION="$(<"$UB_SRCDIR/version")"
+ if grep -q ":" "$UB_SRCDIR/version"; then
+ export UB_VERSION=${UB_FULLVERSION/*:/}
