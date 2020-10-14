@@ -1,5 +1,11 @@
 #!/bin/bash -eux
 
+cat <<'EOF'>> LocalConfig.kmk
+VBOX_WITH_TESTCASES :=
+VBOX_WITH_TESTSUITE :=
+VBOX_WITH_VIRTIO =
+EOF
+
 # --disable-vmmraw: disable building 32-bit guest additions iso
 ./configure \
 	--target-arch=amd64 \
