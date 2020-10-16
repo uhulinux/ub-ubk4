@@ -3,9 +3,12 @@
 if [ -d .git ]; then
     git submodule update --init --recursive
 else
+    git clone https://github.com/Secretchronicles/tinyclipboard.git tinyclipboard
+    git clone https://github.com/Secretchronicles/pod-parser.git pod-parser
     git clone https://github.com/mruby/mruby.git mruby/mruby
-    git clone git://git.guelker.eu/tinyclipboard.git tinyclipboard
-    git clone git://git.guelker.eu/pod-cpp.git pod-parser
+    cd mruby/mruby
+    git checkout 1c09046
+    cd ../../
 fi
 
 cd tsc

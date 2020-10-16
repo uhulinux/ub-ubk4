@@ -1,6 +1,15 @@
 #!/bin/sh -eux
 
-arch="x86_64"
+install -D -p -m 755 build/release/quake2 $UB_INSTALLDIR/usr/bin/quake2
+install -D -p -m 755 build/release/q2ded $UB_INSTALLDIR/usr/bin/q2ded
+install -D -p -m 755 build/release/baseq2/game.so \
+    $UB_INSTALLDIR/usr/share/games/quake2/baseq2/game.so
+install -D -p -m 644 stuff/yq2.cfg \
+    $UB_INSTALLDIR/usr/share/games/quake2/baseq2/yq2.cfg
+install -D -p -m 644 stuff/icon/Quake2.png \
+    $UB_INSTALLDIR/usr/share/icons/hicolor/512x512/apps/quake2.png
+install -D -p -m 755 stuff/cdripper.sh \
+    $UB_INSTALLDIR/usr/share/doc/quake2/examples/cdripper.sh
 
 celdir="$UB_INSTALLDIR"/usr/share/games/quake2
 basedir="$celdir"/baseq2
@@ -19,11 +28,3 @@ unzip -L q2-3.20-x86-full-ctf.exe
 cp baseq2/pak1.pak baseq2/pak2.pak $basedir/
 cp -r baseq2/players $basedir/
 cp ctf/* $ctfdir/
-
-cd ../release${arch}
-
-install -m 755 sdlquake2 quake2 q2ded $bindir/
-cp ref*.so $celdir/
-install -m 755 game${arch}.so $basedir/
-install -m 755 ctf/game${arch}.so $ctfdir/
-ln -s /usr/lib/libGL.so.1 "$celdir"/libGL.so

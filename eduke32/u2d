@@ -1,1 +1,1 @@
-urllist http://dukeworld.duke4.net/eduke32/synthesis/ | grep -E '^[0-9]+' | sort -V | tail -n 1 | sed s/-/\./g
+urllist http://dukeworld.duke4.net/eduke32/synthesis/latest/ | grep eduke32_src_ | sed -e "s/eduke32_src_//" -e "s/.tar.xz//" | tr "-" "."

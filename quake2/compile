@@ -1,16 +1,5 @@
 #!/bin/sh -eux
 
-export ARCH="x86_64"
-
-make \
-  SDLDIR=/usr/lib \
-  BUILD_X11=YES \
-  BUILD_GLX=YES \
-  BUILD_SDL=YES \
-  BUILD_SDLGL=YES \
-  BUILD_ALSA=YES \
-  BUILD_DEDICATED=YES \
-  BUILD_QMAX=YES \
-  BUILD_CTF=YES \
-  DEFAULT_BASEDIR=/usr/share/games/quake2 \
-  build_release
+ub_compile \
+    WITH_SYSTEMWIDE=yes \
+    WITH_SYSTEMDIR=/usr/share/games/quake2

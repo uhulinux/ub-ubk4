@@ -2,5 +2,7 @@
 
 export CXXFLAGS+=' -DU_USING_ICU_NAMESPACE=1'
 ub_compile \
+    -DCMAKE_INSTALL_DATAROOTDIR=/usr/share \
+    -DCMAKE_INSTALL_MANDIR=/usr/share/man \
 	-DWL_INSTALL_DATADIR=/usr/share/widelands \
 	-DWL_INSTALL_BASEDIR=/usr

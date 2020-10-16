@@ -1,3 +1,1 @@
-build=$(urllist https://launchpad.net/widelands/+download/ | splitver '^widelands-build([0-9.]+)-src.tar.bz2$' | sort -V | tail -n 1)
-branch=$(urllist https://bazaar.launchpad.net/~widelands-dev/widelands/b$build/changes/ | grep -E '^([0-9])' | sed s/.*?.*//g | sort -V | tail -n 1 )
-echo "$build"."$branch"
+u2d https://github.com/widelands/widelands/releases/ build

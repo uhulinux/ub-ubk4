@@ -1,0 +1,84 @@
+diff -up keen/src/gamepdo.c~ keen/src/gamepdo.c
+--- keen/src/gamepdo.c~	2010-05-25 04:11:52.000000000 +0200
++++ keen/src/gamepdo.c	2020-02-28 10:20:42.675253376 +0100
+@@ -7,8 +7,6 @@
+ #include "keen.h"
+ #include "gamepdo.fdh"
+ 
+-char tempbuf[200];
+-
+ // player handler mother-function, calls all needed "gamepdo"
+ // functions for player cp
+ void gamepdo_HandlePlayer(int cp)
+diff -up keen/src/menu_custommap.c~ keen/src/menu_custommap.c
+--- keen/src/menu_custommap.c~	2010-05-25 04:11:52.000000000 +0200
++++ keen/src/menu_custommap.c	2020-02-28 10:21:45.924079291 +0100
+@@ -4,7 +4,7 @@
+ // Menu for loading custom maps/episodes
+ // Parts of this are also used by the editor's "load map" menu.
+ 
+-char tempbuf[80];
++static char tempbuf[200];
+ 
+ #define CM_NUM_VIS_ITEMS			11
+ uchar *custommap_menu[MAXM] = {(7*9)-3,72,  0, cmap_enter, cmap_exit, cmap_scroll, NULL,
+diff -up keen/src/menu_keysetup.c~ keen/src/menu_keysetup.c
+--- keen/src/menu_keysetup.c~	2010-05-25 04:11:52.000000000 +0200
++++ keen/src/menu_keysetup.c	2020-02-28 10:21:13.555184656 +0100
+@@ -4,7 +4,7 @@
+ #include "menu.h"
+ 
+ void KeyDrv_SetDefaultMappings(void);
+-uchar tempbuf[80];
++static uchar tempbuf[200];
+ 
+ uchar *keysetup_menu1[MAXM] = {32,(9*8),  2, keysetup_init, NULL, NULL, NULL,
+ 					"PLAYER 1 SETUP", MNU_SEPERATOR, NULL, 0,
+diff -up keen/src/menu_options.c~ keen/src/menu_options.c
+--- keen/src/menu_options.c~	2010-05-25 04:11:52.000000000 +0200
++++ keen/src/menu_options.c	2020-02-28 10:21:46.420077677 +0100
+@@ -7,7 +7,7 @@
+ int saved_options[NUM_OPTIONS];
+ extern uchar *keysetup_menu1[MAXM];
+ extern uchar *keysetup_menu2[MAXM];
+-char tempbuf[80];
++static char tempbuf[200];
+ 
+ uchar *option_menu[MAXM] = {(6*8)+2,2,  8, options_savestate, SaveOptions, NULL, NULL,
+ 					"Render Mode", MNU_DYNAMICTEXT, SetRenderMode, 0,
+diff -up keen/src/menu_savegames.c~ keen/src/menu_savegames.c
+--- keen/src/menu_savegames.c~	2010-05-25 04:11:52.000000000 +0200
++++ keen/src/menu_savegames.c	2020-02-28 10:21:44.508083901 +0100
+@@ -3,7 +3,7 @@
+ #include "menu.h"
+ 
+ // Menu for save and load games
+-uchar tempbuf[80];
++static uchar tempbuf[200];
+ 
+ uchar *loadgame_menu[MAXM] = {(7*8)-3,70,  0, loadsavegamenames, NULL, NULL, NULL,
+ 					"1", MNU_DYNAMICTEXT, loadgame_getgamename, 1,
+diff -up keen/src/menumanager.c~ keen/src/menumanager.c
+--- keen/src/menumanager.c~	2010-05-25 04:11:52.000000000 +0200
++++ keen/src/menumanager.c	2020-02-28 10:21:44.980082364 +0100
+@@ -10,7 +10,7 @@
+ #include "menu.h"
+ 
+ int Menu_HandleCount = 0;
+-char tempbuf[80];
++static char tempbuf[200];
+ stCurMenu menu;
+ 
+ uchar *main_menu[MAXM] = {88,79,  0, NULL, NULL, NULL, NULL,
+diff -up keen/src/misc_ui.c~ keen/src/misc_ui.c
+--- keen/src/misc_ui.c~	2010-05-25 04:11:52.000000000 +0200
++++ keen/src/misc_ui.c	2020-02-28 10:21:45.468080775 +0100
+@@ -2,7 +2,7 @@
+ #include "keen.h"
+ #include "misc_ui.fdh"
+ 
+-char tempbuf[80];
++static char tempbuf[200];
+ 
+ // pops up a message (used by youseeinyourmind and VorticonElder)
+ int twirly_timer, twirly_frame, twirl_x=-1, twirl_y=-1;

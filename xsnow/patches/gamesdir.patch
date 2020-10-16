@@ -1,6 +1,6 @@
 diff -Naur orig/src/Makefile.am patched/src/Makefile.am
---- orig/src/Makefile.am	2020-08-30 17:18:22.000000000 +0200
-+++ patched/src/Makefile.am	2020-09-08 00:39:57.816968997 +0200
+--- orig/src/Makefile.am	2020-10-13 14:50:57.000000000 +0200
++++ patched/src/Makefile.am	2020-10-15 23:28:54.235907557 +0200
 @@ -19,7 +19,7 @@
  #-# 
  SUBDIRS = Pixmaps
@@ -9,16 +9,16 @@ diff -Naur orig/src/Makefile.am patched/src/Makefile.am
 +gamesdir = $(exec_prefix)/bin
  games_PROGRAMS = xsnow
  
- xsnow_CPPFLAGS = $(XML_CFLAGS) $(GTK_CFLAGS) $(DBUS_CFLAGS) -DUSE_LIST_NODE_ALLOCATOR 
+ xsnow_CPPFLAGS = $(XML_CFLAGS) $(GTK_CFLAGS) -DUSE_LIST_NODE_ALLOCATOR 
 diff -Naur orig/src/Makefile.in patched/src/Makefile.in
---- orig/src/Makefile.in	2020-08-31 13:15:41.000000000 +0200
-+++ patched/src/Makefile.in	2020-09-08 00:40:22.169019907 +0200
-@@ -583,7 +583,7 @@
+--- orig/src/Makefile.in	2020-10-14 08:11:46.000000000 +0200
++++ patched/src/Makefile.in	2020-10-15 23:28:51.127891887 +0200
+@@ -580,7 +580,7 @@
  #-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
  #-# 
  SUBDIRS = Pixmaps
 -gamesdir = $(exec_prefix)/games
 +gamesdir = $(exec_prefix)/bin
- xsnow_CPPFLAGS = $(XML_CFLAGS) $(GTK_CFLAGS) $(DBUS_CFLAGS) -DUSE_LIST_NODE_ALLOCATOR 
- xsnow_LDADD = $(XML_LIBS)   $(GTK_LIBS)   $(DBUS_LIBS)
+ xsnow_CPPFLAGS = $(XML_CFLAGS) $(GTK_CFLAGS) -DUSE_LIST_NODE_ALLOCATOR 
+ xsnow_LDADD = $(XML_LIBS)   $(GTK_LIBS)  
  xsnow_SOURCES = clocks.c ixpm.c main.c fallensnow.c wmctrl.c docs.c \

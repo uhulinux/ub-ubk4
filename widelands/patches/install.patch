@@ -1,0 +1,85 @@
+diff -Naur orig/cmake/WlFunctions.cmake patched/cmake/WlFunctions.cmake
+--- orig/cmake/WlFunctions.cmake	2020-07-12 21:33:44.000000000 +0200
++++ patched/cmake/WlFunctions.cmake	2020-10-16 14:00:55.426319985 +0200
+@@ -289,5 +289,5 @@
+ 
+   #Quoting the CMake documentation on DESTINATION:
+   #"If a relative path is given it is interpreted relative to the value of CMAKE_INSTALL_PREFIX"
+-  install(TARGETS ${NAME} DESTINATION "." COMPONENT ExecutableFiles)
++  install(TARGETS ${NAME} DESTINATION "bin" COMPONENT ExecutableFiles)
+ endfunction()
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2020-07-12 21:33:44.000000000 +0200
++++ patched/CMakeLists.txt	2020-10-16 14:28:54.883019013 +0200
+@@ -350,13 +350,6 @@
+   )
+ endif (OPTION_BUILD_TESTS)
+ 
+-install (
+-  FILES ${CMAKE_CURRENT_BINARY_DIR}/VERSION
+-  DESTINATION ${WL_INSTALL_BASEDIR}
+-  CONFIGURATIONS Debug;Release
+-  COMPONENT CoreVersionFile
+-)
+-
+ # Installation.
+ add_subdirectory(doc)
+ if(OPTION_BUILD_TRANSLATIONS)
+@@ -399,25 +392,6 @@
+   COMPONENT MusicFiles
+ )
+ 
+-install(
+-  FILES
+-    COPYING
+-    CREDITS
+-    ChangeLog
+-  DESTINATION ${WL_INSTALL_BASEDIR}
+-  CONFIGURATIONS Debug;Release
+-  COMPONENT CoreLicenseFiles
+-)
+-
+-install(
+-  DIRECTORY
+-    doc
+-  DESTINATION ${WL_INSTALL_BASEDIR}
+-  CONFIGURATIONS Debug
+-  COMPONENT DocFiles
+-  PATTERN "CMakeLists.txt" EXCLUDE
+-)
+-
+ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${WL_INSTALL_DATADIR}/locale)
+ 
+ install(
+diff -Naur orig/xdg/CMakeLists.txt patched/xdg/CMakeLists.txt
+--- orig/xdg/CMakeLists.txt	2020-07-12 21:33:44.000000000 +0200
++++ patched/xdg/CMakeLists.txt	2020-10-16 14:28:10.690696550 +0200
+@@ -1,19 +1,19 @@
+ # GNUInstallDirs requires CMake >= 3.0.2
+-#include(GNUInstallDirs)
++include(GNUInstallDirs)
+ 
+ set(XDG_APPLICATION_ID "org.widelands.Widelands")
+ 
+ list(APPEND icon_sizes "16" "32" "48" "64" "128")
+ foreach (icon_size ${icon_sizes})
+-  #install(FILES ${CMAKE_SOURCE_DIR}/data/images/logos/wl-ico-${icon_size}.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${icon_size}x${icon_size}/apps RENAME ${XDG_APPLICATION_ID}.png)
+-  install(FILES ${CMAKE_SOURCE_DIR}/data/images/logos/wl-ico-${icon_size}.png DESTINATION ../share/icons/hicolor/${icon_size}x${icon_size}/apps RENAME ${XDG_APPLICATION_ID}.png)
++  install(FILES ${CMAKE_SOURCE_DIR}/data/images/logos/wl-ico-${icon_size}.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${icon_size}x${icon_size}/apps RENAME ${XDG_APPLICATION_ID}.png)
++  #install(FILES ${CMAKE_SOURCE_DIR}/data/images/logos/wl-ico-${icon_size}.png DESTINATION ../share/icons/hicolor/${icon_size}x${icon_size}/apps RENAME ${XDG_APPLICATION_ID}.png)
+ endforeach (icon_size ${icon_sizes})
+-#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.6           DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
+-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.6           DESTINATION ../share/man/man6)
+-#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.desktop     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
+-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.desktop     DESTINATION ../share/applications)
+-#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.appdata.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)
+-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.appdata.xml DESTINATION ../share/metainfo)
++install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.6           DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
++#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.6           DESTINATION ../share/man/man6)
++install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.desktop     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
++#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.desktop     DESTINATION ../share/applications)
++install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.appdata.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo)
++#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${XDG_APPLICATION_ID}.appdata.xml DESTINATION ../share/metainfo)
+ 
+ find_program(GTK_UPDATE_ICON_CACHE NAMES gtk-update-icon-cache)
+ if (GTK_UPDATE_ICON_CACHE)
