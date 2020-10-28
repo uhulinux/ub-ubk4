@@ -1,0 +1,71 @@
+From 5f3f17a9c64e33fb787a79dc94d902147da77d71 Mon Sep 17 00:00:00 2001
+From: Noel Grandin <noelgrandin@gmail.com>
+Date: Sat, 19 Sep 2020 20:38:29 +0200
+Subject: [PATCH] fix non-pdfium build
+
+Change-Id: Ic1e30a412927748ba58a21cf2ee922cd1a490aa4
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/103040
+Tested-by: Jenkins
+Reviewed-by: Noel Grandin <noel.grandin@collabora.co.uk>
+---
+
+diff --git a/vcl/source/filter/ipdf/pdfread.cxx b/vcl/source/filter/ipdf/pdfread.cxx
+index 39c2933..a9b079a 100644
+--- a/vcl/source/filter/ipdf/pdfread.cxx
++++ b/vcl/source/filter/ipdf/pdfread.cxx
+@@ -218,7 +218,7 @@
+     (void)rBitmaps;
+     (void)nFirstPage;
+     (void)nPages;
+-    (void)fResolutionDPI;
++    (void)pSizeHint;
+     return 0;
+ #endif // HAVE_FEATURE_PDFIUM
+ }
+diff --git a/xmlsecurity/source/pdfio/pdfdocument.cxx b/xmlsecurity/source/pdfio/pdfdocument.cxx
+index 8561c48..b2c1cc0 100644
+--- a/xmlsecurity/source/pdfio/pdfdocument.cxx
++++ b/xmlsecurity/source/pdfio/pdfdocument.cxx
+@@ -138,10 +138,10 @@
+     return std::find(rAllEOFs.begin(), rAllEOFs.end(), nFileEnd) != rAllEOFs.end();
+ }
+ 
++#if HAVE_FEATURE_PDFIUM
+ /// Collects the checksum of each page of one version of the PDF.
+ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum>& rPageChecksums)
+ {
+-#if HAVE_FEATURE_PDFIUM
+     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+     vcl::pdf::PDFiumDocument aPdfDocument(
+         FPDF_LoadMemDocument(rStream.GetData(), rStream.GetSize(), /*password=*/nullptr));
+@@ -158,10 +158,8 @@
+         BitmapChecksum nPageChecksum = pPdfPage->getChecksum();
+         rPageChecksums.push_back(nPageChecksum);
+     }
+-#else
+-    (void)rStream;
+-#endif
+ }
++#endif
+ 
+ /**
+  * Checks if incremental updates after singing performed valid modifications only.
+@@ -175,6 +173,7 @@
+         return false;
+     }
+ 
++#if HAVE_FEATURE_PDFIUM
+     SvMemoryStream aSignatureStream;
+     sal_uInt64 nPos = rStream.Tell();
+     rStream.Seek(0);
+@@ -196,6 +195,10 @@
+     // Fail if any page looks different after signing and at the end. Annotations/commenting doesn't
+     // count, though.
+     return aSignedPages == aAllPages;
++#else
++    (void)rStream;
++    return true;
++#endif
+ }
+ }
+ 
