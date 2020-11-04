@@ -1,0 +1,27 @@
+diff -Naur orig/external/libebook/icu68.patch.0 patched/external/libebook/icu68.patch.0
+--- orig/external/libebook/icu68.patch.0	1970-01-01 01:00:00.000000000 +0100
++++ patched/external/libebook/icu68.patch.0	2020-11-01 22:01:51.886179140 +0100
+@@ -0,0 +1,11 @@
++--- src/lib/EBOOKCharsetConverter.cpp	2018-01-01 12:16:28.000000000 +0100
+++++ src/lib/EBOOKCharsetConverter.cpp	2020-11-01 21:14:29.938417496 +0100
++@@ -124,7 +124,7 @@
++       m_converterToUTF8.get(), m_converterToUnicode.get(),
++       &outText, outText + out.size(), &inText, inText + length,
++       nullptr, nullptr, nullptr, nullptr,
++-      TRUE, TRUE, &status)
+++      true, true, &status)
++     ;
++     if (status==U_BUFFER_OVERFLOW_ERROR)
++     {
+diff -Naur orig/external/libebook/UnpackedTarball_libebook.mk patched/external/libebook/UnpackedTarball_libebook.mk
+--- orig/external/libebook/UnpackedTarball_libebook.mk	2020-10-21 22:09:11.000000000 +0200
++++ patched/external/libebook/UnpackedTarball_libebook.mk	2020-11-01 21:41:30.972662334 +0100
+@@ -13,4 +13,8 @@
+ 
+ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libebook))
+ 
++$(eval $(call gb_UnpackedTarball_add_patches,libebook,\
++	external/libebook/icu68.patch.0 \
++))
++
+ # vim: set noet sw=4 ts=4:

@@ -1,0 +1,13 @@
+diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUILD.gn
+--- orig/build/config/compiler/BUILD.gn	2020-11-02 17:46:24.905804933 +0100
++++ patched/build/config/compiler/BUILD.gn	2020-11-02 18:30:11.615173157 +0100
+@@ -1520,9 +1520,6 @@
+ 
+           # TODO(https://crbug.com/1050281): Clean up, enable.
+           "-Wno-non-c-typedef-for-linkage",
+-
+-          # TODO(https://crbug.com/1114873): Clean up, enable.
+-          "-Wno-string-concatenation",
+         ]
+ 
+         cflags_c += [

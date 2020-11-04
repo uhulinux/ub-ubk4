@@ -1,0 +1,26 @@
+diff -Naur orig/external/libcdr/icu68.patch patched/external/libcdr/icu68.patch
+--- orig/external/libcdr/icu68.patch	1970-01-01 01:00:00.000000000 +0100
++++ patched/external/libcdr/icu68.patch	2020-11-01 23:01:58.343234291 +0100
+@@ -0,0 +1,11 @@
++--- src/lib/libcdr_utils.cpp	2020-02-02 16:30:44.000000000 +0100
+++++ src/lib/libcdr_utils.cpp	2020-11-01 23:00:11.691085177 +0100
++@@ -108,7 +108,7 @@
++     csd = ucsdet_open(&status);
++     if (U_FAILURE(status) || !csd)
++       return 0;
++-    ucsdet_enableInputFilter(csd, TRUE);
+++    ucsdet_enableInputFilter(csd, true);
++     ucsdet_setText(csd, (const char *)buffer, bufferLength, &status);
++     if (U_FAILURE(status))
++       throw libcdr::EncodingException();
+diff -Naur orig/external/libcdr/UnpackedTarball_libcdr.mk patched/external/libcdr/UnpackedTarball_libcdr.mk
+--- orig/external/libcdr/UnpackedTarball_libcdr.mk	2020-10-21 22:09:11.000000000 +0200
++++ patched/external/libcdr/UnpackedTarball_libcdr.mk	2020-11-01 23:02:58.135318318 +0100
+@@ -17,6 +17,7 @@
+ 
+ $(eval $(call gb_UnpackedTarball_add_patches,libcdr, \
+     external/libcdr/libcdr-visibility-win.patch \
++    external/libcdr/icu68.patch \
+ ))
+ 
+ # vim: set noet sw=4 ts=4:

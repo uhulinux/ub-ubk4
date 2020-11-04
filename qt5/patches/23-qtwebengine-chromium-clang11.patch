@@ -1,0 +1,14 @@
+diff -Naur orig/qtwebengine/src/3rdparty/chromium/third_party/perfetto/src/tracing/core/virtual_destructors.cc patched/qtwebengine/src/3rdparty/chromium/third_party/perfetto/src/tracing/core/virtual_destructors.cc
+--- orig/qtwebengine/src/3rdparty/chromium/third_party/perfetto/src/tracing/core/virtual_destructors.cc	2020-09-08 06:25:05.131984754 +0200
++++ patched/qtwebengine/src/3rdparty/chromium/third_party/perfetto/src/tracing/core/virtual_destructors.cc	2020-09-08 06:26:22.947390103 +0200
+@@ -30,8 +30,8 @@ namespace perfetto {
+ Consumer::~Consumer() = default;
+ Producer::~Producer() = default;
+ TracingService::~TracingService() = default;
+-TracingService::ConsumerEndpoint::~ConsumerEndpoint() = default;
+-TracingService::ProducerEndpoint::~ProducerEndpoint() = default;
++ConsumerEndpoint::~ConsumerEndpoint() = default;
++ProducerEndpoint::~ProducerEndpoint() = default;
+ SharedMemory::~SharedMemory() = default;
+ SharedMemory::Factory::~Factory() = default;
+ SharedMemoryArbiter::~SharedMemoryArbiter() = default;

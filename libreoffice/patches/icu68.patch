@@ -1,0 +1,39 @@
+From 7e06a56ad5a1680887dba6d89d874cacbebca7d1 Mon Sep 17 00:00:00 2001
+From: Rene Engelhard <rene@debian.org>
+Date: Sun, 01 Nov 2020 18:30:49 +0100
+Subject: [PATCH] fix build with ICU 68
+
+use standard true.
+
+/home/rene/LibreOffice/git/master/i18npool/source/calendar/calendar_gregorian.cxx: In member function 'virtual void i18npool::Calendar_gregorian::setLocalDateTime(double)':
+/home/rene/LibreOffice/git/master/i18npool/source/calendar/calendar_gregorian.cxx:363:40: error: 'TRUE' was not declared in this scope
+  363 |     body->getTimeZone().getOffset( fR, TRUE, nZoneOffset, nDSTOffset, status );
+      |                                        ^~~~
+
+/usr/include/unicode/umachine.h says:
+
+@deprecated ICU 68 Use standard "true" instead.
+
+Change-Id: I45d2b0afa6a9043767af5c2cf41ba24377f2cdc4
+---
+
+diff --git a/i18npool/source/calendar/calendar_gregorian.cxx b/i18npool/source/calendar/calendar_gregorian.cxx
+index b7ae49f..59ee46f 100644
+--- a/i18npool/source/calendar/calendar_gregorian.cxx
++++ b/i18npool/source/calendar/calendar_gregorian.cxx
+@@ -347,7 +347,14 @@
+             "Calendar_gregorian::setLocalDateTime: " << std::fixed << fM << " rounded to " << fR);
+     int32_t nZoneOffset, nDSTOffset;
+     UErrorCode status = U_ZERO_ERROR;
+-    body->getTimeZone().getOffset( fR, TRUE, nZoneOffset, nDSTOffset, status );
++    body->getTimeZone().getOffset( fR,
++#if U_ICU_VERSION_MAJOR_NUM >= 68
++    true,
++#else
++    TRUE,
++#endif
++    nZoneOffset, nDSTOffset, status );
++
+     if ( !U_SUCCESS(status) ) throw ERROR;
+     status = U_ZERO_ERROR;
+     body->setTime( fR - (nZoneOffset + nDSTOffset), status );
