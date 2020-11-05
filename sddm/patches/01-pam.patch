@@ -1,29 +1,26 @@
-diff -Nur orig/services/sddm-autologin.pam mod/services/sddm-autologin.pam
---- orig/services/sddm-autologin.pam	2019-03-13 10:22:35.000000000 +0100
-+++ mod/services/sddm-autologin.pam	2019-11-12 09:31:09.195411186 +0100
-@@ -1,13 +1,13 @@
- #%PAM-1.0
- auth        required    pam_env.so
--auth        required    pam_tally.so file=/var/log/faillog onerr=succeed
-+auth        required    pam_tally2.so file=/var/log/faillog onerr=succeed
+diff -Naur orig/services/sddm-autologin.pam mod/services/sddm-autologin.pam
+--- orig/services/sddm-autologin.pam	2020-11-03 10:55:31.000000000 +0100
++++ mod/services/sddm-autologin.pam	2020-11-06 00:09:48.504879268 +0100
+@@ -3,11 +3,13 @@
+ auth        required    pam_tally2.so file=/var/log/tallylog onerr=succeed
  auth        required    pam_shells.so
  auth        required    pam_nologin.so
 +auth        [success=1 default=ignore]  pam_succeed_if.so user ingroup users
 +auth        required    pam_unix.so
  auth        required    pam_permit.so
---auth       optional    pam_gnome_keyring.so
-+account     include     system-auth
-+password    include     system-auth
-+session     include     system-auth
+ -auth       optional    pam_gnome_keyring.so
  -auth       optional    pam_kwallet5.so
 -account     include     system-local-login
 -password    include     system-local-login
 -session     include     system-local-login
---session    optional    pam_gnome_keyring.so auto_start
++account     include     system-auth
++password    include     system-auth
++session     include     system-auth
+ -session    optional    pam_gnome_keyring.so auto_start
  -session    optional    pam_kwallet5.so auto_start
-diff -Nur orig/services/sddm.pam mod/services/sddm.pam
---- orig/services/sddm.pam	2019-03-13 10:22:35.000000000 +0100
-+++ mod/services/sddm.pam	2019-11-12 09:32:05.299396218 +0100
+diff -Naur orig/services/sddm.pam mod/services/sddm.pam
+--- orig/services/sddm.pam	2020-11-03 10:55:31.000000000 +0100
++++ mod/services/sddm.pam	2020-11-06 00:07:01.468184288 +0100
 @@ -1,15 +1,15 @@
  #%PAM-1.0
  
