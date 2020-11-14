@@ -2,22 +2,24 @@
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium
 
-mv out/Release/chrome "$UB_INSTALLDIR"/usr/lib/chromium/
-mv out/Release/chromedriver "$UB_INSTALLDIR"/usr/lib/chromium/
-mv out/Release/chrome_sandbox "$UB_INSTALLDIR"/usr/lib/chromium/chrome-sandbox
-# mv out/Release/chrome.1 "$UB_INSTALLDIR"/usr/share/man/man1/chrome.1
+outdir="../object"
 
-mv out/Release/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/
-mv out/Release/*.bin "$UB_INSTALLDIR"/usr/lib/chromium/
+mv $outdir/chrome "$UB_INSTALLDIR"/usr/lib/chromium/
+mv $outdir/chromedriver "$UB_INSTALLDIR"/usr/lib/chromium/
+mv $outdir/chrome_sandbox "$UB_INSTALLDIR"/usr/lib/chromium/chrome-sandbox
+# mv $outdir/chrome.1 "$UB_INSTALLDIR"/usr/share/man/man1/chrome.1
 
-if [ -f out/Release/icudtl.dat ]; then
-mv out/Release/icudtl.dat "$UB_INSTALLDIR"/usr/lib/chromium/
+mv $outdir/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/
+mv $outdir/*.bin "$UB_INSTALLDIR"/usr/lib/chromium/
+
+if [ -f $outdir/icudtl.dat ]; then
+mv $outdir/icudtl.dat "$UB_INSTALLDIR"/usr/lib/chromium/
 fi
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/locales
-mv out/Release/locales/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/locales/
+mv $outdir/locales/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/locales/
 
-# mv out/Release/resources/ "$UB_INSTALLDIR"/usr/lib/chromium/
+# mv $outdir/resources/ "$UB_INSTALLDIR"/usr/lib/chromium/
 
 for size in 16 24 32 48 64 128 256; do
 	mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/
