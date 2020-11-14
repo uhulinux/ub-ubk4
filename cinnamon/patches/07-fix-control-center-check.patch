@@ -1,9 +1,9 @@
-diff -Nur orig/files/usr/bin/cinnamon-settings mod/files/usr/bin/cinnamon-settings
---- orig/files/usr/bin/cinnamon-settings	2017-01-07 12:20:40.000000000 +0100
-+++ mod/files/usr/bin/cinnamon-settings	2017-01-08 13:13:50.000000000 +0100
-@@ -14,7 +14,7 @@
-         os.execvp("/usr/share/cinnamon/cinnamon-settings/xlet-settings.py", (" ", module[0:-1]) + tuple(sys.argv[2:]))
-     if os.path.exists("/usr/share/cinnamon/cinnamon-settings/modules/cs_%s.py" % module):
+diff -Naur a/files/usr/bin/cinnamon-settings b/files/usr/bin/cinnamon-settings
+--- a/files/usr/bin/cinnamon-settings	2020-11-13 17:07:15.000000000 +0100
++++ b/files/usr/bin/cinnamon-settings	2020-11-14 23:30:39.019259561 +0100
+@@ -120,7 +120,7 @@
+             os.execvp("/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py", (" ",) + tuple(sys.argv[1:]))
+     elif os.path.exists("/usr/share/cinnamon/cinnamon-settings/modules/cs_%s.py" % module):
          os.execvp("/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py", (" ",) + tuple(sys.argv[1:]))
 -    elif os.path.exists("/usr/bin/cinnamon-control-center"):
 +    elif os.path.exists("/usr/bin/cinnamon-control-center-1/panels"):

@@ -1,18 +1,7 @@
-From f9bc7db25e3053d2818fbd85775826dc79a8b5e6 Mon Sep 17 00:00:00 2001
-From: Dexter Chua <dalcde@yahoo.com.hk>
-Date: Wed, 3 Jun 2015 18:41:44 +0100
-Subject: [PATCH] overrides.js: override GSettings connect function since this
- doesn't actually connect
-
----
- js/ui/overrides.js | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/js/ui/overrides.js b/js/ui/overrides.js
-index 5ceaa5e..fa4f9a9 100644
---- a/js/ui/overrides.js
-+++ b/js/ui/overrides.js
-@@ -70,6 +70,7 @@ function overrideGio() {
+diff -Naur a/js/ui/overrides.js b/js/ui/overrides.js
+--- a/js/ui/overrides.js	2020-11-13 17:07:15.000000000 +0100
++++ b/js/ui/overrides.js	2020-11-14 23:32:05.223454801 +0100
+@@ -71,6 +71,7 @@
      Gio._real_set_enum     = Gio.Settings.prototype.set_enum;
      Gio._real_get_flags    = Gio.Settings.prototype.get_flags;
      Gio._real_set_flags    = Gio.Settings.prototype.set_flags;
@@ -20,7 +9,7 @@ index 5ceaa5e..fa4f9a9 100644
  
      Gio.Settings.prototype._init        = function(params)   { check_schema_and_init(this, Gio._real_init, params); }
      Gio.Settings.prototype.get_value    = function(key)      { return check_key_and_get(this, Gio._real_get_value, key); }
-@@ -90,6 +91,18 @@ function overrideGio() {
+@@ -91,6 +92,18 @@
      Gio.Settings.prototype.set_enum     = function(key, val) { return check_key_and_set(this, Gio._real_set_enum, key, val); }
      Gio.Settings.prototype.get_flags    = function(key)      { return check_key_and_get(this, Gio._real_get_flags, key); }
      Gio.Settings.prototype.set_flags    = function(key, val) { return check_key_and_set(this, Gio._real_set_flags, key, val); }
@@ -38,7 +27,4 @@ index 5ceaa5e..fa4f9a9 100644
 +    };
  }
  
- function overrideGObject() {
--- 
-2.4.3
-
+ function overrideDumpStack() {
