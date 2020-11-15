@@ -1,0 +1,23 @@
+From a5644ba7cfc8f30cf35d33a78ab219869f2fad4a Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Sun, 15 Nov 2020 01:22:28 +0100
+Subject: [PATCH] Update autogen.sh
+
+configure.in moved to configure.ac in https://github.com/mvo5/synaptic/commit/4d73c1bd8681d4b44104a86440adfbf9c7116813
+---
+ autogen.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/autogen.sh b/autogen.sh
+index 71a5a15d..98b81e81 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -8,7 +8,7 @@ test -z "$srcdir" && srcdir=.
+ 
+ PKG_NAME="synaptic"
+ 
+-(test -f $srcdir/configure.in \
++(test -f $srcdir/configure.ac \
+   && test -f $srcdir/ChangeLog \
+   && test -d $srcdir/gtk) || {
+     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
