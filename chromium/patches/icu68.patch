@@ -210,7 +210,7 @@ diff --git a/content/zygote/zygote_linux.cc b/content/zygote/zygote_linux.cc
 index 95d5a82c25082..b6d8e5a29c55e 100644
 --- a/content/zygote/zygote_linux.cc
 +++ b/content/zygote/zygote_linux.cc
-@@ -565,7 +565,7 @@ base::ProcessId Zygote::ReadArgsAndFork(base::PickleIterator iter,
+@@ -557,7 +557,7 @@ base::ProcessId Zygote::ReadArgsAndFork(base::PickleIterator iter,
    if (!iter.ReadString16(&timezone_id))
      return -1;
    icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone(
@@ -236,7 +236,7 @@ diff --git a/third_party/blink/renderer/core/exported/web_view_test.cc b/third_p
 index a6b9552bb18d9..36809d914d1af 100644
 --- a/third_party/blink/renderer/core/exported/web_view_test.cc
 +++ b/third_party/blink/renderer/core/exported/web_view_test.cc
-@@ -4863,18 +4863,18 @@ TEST_F(ShowUnhandledTapTest, ShowUnhandledTapUIIfNeeded) {
+@@ -4867,18 +4867,18 @@ TEST_F(ShowUnhandledTapTest, ShowUnhandledTapUIIfNeeded) {
  
  TEST_F(ShowUnhandledTapTest, ShowUnhandledTapUIIfNeededWithMutateDom) {
    // Test dom mutation.
@@ -259,7 +259,7 @@ index a6b9552bb18d9..36809d914d1af 100644
  
    // Test click div with :active style.
    Tap("style_active");
-@@ -4883,10 +4883,10 @@ TEST_F(ShowUnhandledTapTest, ShowUnhandledTapUIIfNeededWithMutateStyle) {
+@@ -4887,10 +4887,10 @@ TEST_F(ShowUnhandledTapTest, ShowUnhandledTapUIIfNeededWithMutateStyle) {
  
  TEST_F(ShowUnhandledTapTest, ShowUnhandledTapUIIfNeededWithPreventDefault) {
    // Test swallowing.
