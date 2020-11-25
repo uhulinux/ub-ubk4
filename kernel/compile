@@ -26,11 +26,9 @@ ARCH="x86_64"
 VERSION="${VERSION_BASE}.$ARCH"
 ub_replace "^EXTRAVERSION =[\t ]*\(\.\([0-9]\+\)\)*.*" "EXTRAVERSION = \1-${VERSION#*-}" Makefile
 
-cp "$UB_SRCDIR"/config/.config."$ARCH" .config
-cp "$UB_SRCDIR"/config/.config."$ARCH" arch/x86/configs/"$ARCH"_defconfig
+cp "$UB_SRCDIR"/config/config."$ARCH" .config
+cp "$UB_SRCDIR"/config/config."$ARCH" arch/x86/configs/"$ARCH"_defconfig
 
-# 4.4-től nem igazán jó, CONFIG_SYSTEM_TRUSTED_KEYS="" jön pluszban, de nem kell module sig
-# make ARCH="$ARCH" oldconfig
 # diff -u <(grep -v '^#' .config|sort) <(grep -v '^#' arch/x86/configs/"$ARCH"_defconfig|sort)
 
 make oldconfig
@@ -55,7 +53,6 @@ make \
 	INSTALL_PATH="$UB_OBJECTDIR/boot" \
 	INSTALL_MOD_PATH="$UB_OBJECTDIR" \
 	modules_install
-#	modules_install mod-fw=
 
 # check module licenses
 [  -d  "$UB_OBJECTDIR"/lib/modules/"$VERSION" ]
