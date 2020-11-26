@@ -1,1 +1,2 @@
-u2d http://download.gimp.org/pub/gimp/stable/
+dir=$(urllist https://download.gimp.org/pub/gimp/ | grep -v video | grep ^v | sort -V | tail -n1 | sed -e "s/v//")
+u2d https://download.gimp.org/pub/gimp/v$dir
