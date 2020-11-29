@@ -79,10 +79,10 @@ for dist in UBK1 UBK2; do
 	done # arch
 
 	ln -s "$UB_INSTALLDIR"/usr/bin/build-clean \
-		"$UB_INSTALLDIR"/usr/bin/build-clean-"$dist"
+		"$UB_INSTALLDIR"/usr/bin/build-clean-"${dist,,}"
 
 	ln -s "$UB_INSTALLDIR"/usr/bin/build \
-		"$UB_INSTALLDIR"/usr/bin/build-"$dist"
+		"$UB_INSTALLDIR"/usr/bin/build-"${dist,,}"
 done
 
 for dist in UBK3 UBK4; do
@@ -107,19 +107,8 @@ for dist in UBK3 UBK4; do
 	done # arch
 
 	ln -s "$UB_INSTALLDIR"/usr/bin/build-clean \
-		"$UB_INSTALLDIR"/usr/bin/build-clean-"$dist"
+		"$UB_INSTALLDIR"/usr/bin/build-clean-"${dist,,}"
 
 	ln -s "$UB_INSTALLDIR"/usr/bin/build \
-		"$UB_INSTALLDIR"/usr/bin/build-"$dist"
+		"$UB_INSTALLDIR"/usr/bin/build-"${dist,,}"
 done
-
-ln -s "$UB_INSTALLDIR"/usr/bin/build \
-	"$UB_INSTALLDIR"/usr/bin/build-ubk1
-ln -s "$UB_INSTALLDIR"/usr/bin/build \
-	"$UB_INSTALLDIR"/usr/bin/build-ubk2
-ln -s "$UB_INSTALLDIR"/usr/bin/build \
-	"$UB_INSTALLDIR"/usr/bin/build-ubk3
-ln -s "$UB_INSTALLDIR"/usr/bin/build \
-	"$UB_INSTALLDIR"/usr/bin/build-ubk4
-# mkdir -p "$UB_INSTALLDIR"/usr/share/doc/Packages
-# cp "$UB_SRCDIR"/changelog "$UB_INSTALLDIR"/usr/share/doc/Packages

@@ -1,0 +1,87 @@
+From 87cfb0d855d5c8ac5af284d0c37db1be6bf0f21e Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Sun, 29 Nov 2020 21:42:17 +0100
+Subject: javítgatások
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/bash-completion/completions/build b/bash-completion/completions/build
+index 9daf93e..6a5ec09 100644
+--- a/bash-completion/completions/build
++++ b/bash-completion/completions/build
+@@ -15,3 +15,21 @@ _buildubk2()
+         COMPREPLY=($(compgen -W "$foo" -- "$cur"))
+ }
+ complete -F _buildubk2 build-ubk2
++
++_buildubk3()
++{
++        local cur foo
++        cur=${COMP_WORDS[COMP_CWORD]}
++        foo="$(/bin/ls /usr/src/UHUBUILD/UB-UBK3)"
++        COMPREPLY=($(compgen -W "$foo" -- "$cur"))
++}
++complete -F _buildubk2 build-ubk3
++
++_buildubk4()
++{
++        local cur foo
++        cur=${COMP_WORDS[COMP_CWORD]}
++        foo="$(/bin/ls /usr/src/UHUBUILD/UB-UBK4)"
++        COMPREPLY=($(compgen -W "$foo" -- "$cur"))
++}
++complete -F _buildubk2 build-ubk4
+diff --git a/src/build/build b/src/build/build
+index 1062bfa..52090ca 100755
+--- a/src/build/build
++++ b/src/build/build
+@@ -26,13 +26,13 @@ BUILD_GPGKEY=${BUILD_GPGKEY:=UBK}
+ case `basename $0` in
+ 	build)
+ 		export UHUBUILD_DISTR=UBK3;;
+-	build-ubk1|build-UBK1)
++	build-ubk1)
+ 		export UHUBUILD_DISTR=UBK1;;
+-	build-ubk2|build-UBK2)
++	build-ubk2)
+ 		export UHUBUILD_DISTR=UBK2;;
+-	build-ubk3|build-UBK3)
++	build-ubk3)
+ 		export UHUBUILD_DISTR=UBK3;;
+-	build-ubk4|build-UBK4)
++	build-ubk4)
+ 		export UHUBUILD_DISTR=UBK4;;
+ esac
+ 
+@@ -356,6 +356,7 @@ else
+ fi
+ 
+ cd "$UHUBUILD_PATH"/UB-${UHUBUILD_DISTR}/
++yellowecho "uhubuild-check..."
+ uhubuild-check "$i" || exit 1
+ 
+ echo
+diff --git a/src/build/build-clean b/src/build/build-clean
+index 7c0b887..d97684b 100755
+--- a/src/build/build-clean
++++ b/src/build/build-clean
+@@ -17,13 +17,13 @@ KVT=" könyvtár kiürítése."
+ case ${BASENAME} in
+ 	build-clean)
+ 		export DISTR=UBK3;;
+-	build-clean-ubk1|build-clean-UBK1)
++	build-clean-ubk1)
+ 		export DISTR=UBK1;;
+-	build-clean-ubk2|build-clean-UBK2)
++	build-clean-ubk2)
+ 		export DISTR=UBK2;;
+-	build-clean-ubk3|build-clean-UBK3)
++	build-clean-ubk3)
+ 		export DISTR=UBK3;;
+-	build-clean-ubk4|build-clean-UBK4)
++	build-clean-ubk4)
+ 		export DISTR=UBK4;;
+ esac
+ 
