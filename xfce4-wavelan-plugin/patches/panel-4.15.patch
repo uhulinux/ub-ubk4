@@ -1,0 +1,21 @@
+From c0033c32ec28bbdd5f735f9b52d212e881eb2219 Mon Sep 17 00:00:00 2001
+From: Andre Miranda <andreldm@xfce.org>
+Date: Sat, 19 Oct 2019 19:08:13 -0300
+Subject: [PATCH] Fix build with panel 4.15
+
+---
+ panel-plugin/wavelan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/panel-plugin/wavelan.c b/panel-plugin/wavelan.c
+index cff647d..61001bb 100644
+--- a/panel-plugin/wavelan.c
++++ b/panel-plugin/wavelan.c
+@@ -32,7 +32,7 @@
+ 
+ #include <libxfce4util/libxfce4util.h>
+ #include <libxfce4ui/libxfce4ui.h>
+-#include <libxfce4panel/xfce-panel-plugin.h>
++#include <libxfce4panel/libxfce4panel.h>
+ 
+ #include "wi.h"
