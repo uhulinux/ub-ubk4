@@ -1,9 +1,46 @@
-diff -Naur orig/external/libebook/icu68.patch.0 patched/external/libebook/icu68.patch.0
---- orig/external/libebook/icu68.patch.0	1970-01-01 01:00:00.000000000 +0100
-+++ patched/external/libebook/icu68.patch.0	2020-11-01 22:01:51.886179140 +0100
-@@ -0,0 +1,11 @@
-+--- src/lib/EBOOKCharsetConverter.cpp	2018-01-01 12:16:28.000000000 +0100
-++++ src/lib/EBOOKCharsetConverter.cpp	2020-11-01 21:14:29.938417496 +0100
+From 8335c8c20765d4f167d9b48e6a2757864a3bc7fd Mon Sep 17 00:00:00 2001
+From: Eike Rathke <erack@redhat.com>
+Date: Mon, 16 Nov 2020 23:26:56 +0100
+Subject: Update to ICU 68.1
+
+Also made it necessary to adapt two places in libcdr and libebook
+that used UBool TRUE which is gone now to use standard true
+instead.
+
+Change-Id: I1c1df3030f8b883bec6045756907ee0b78060382
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/105964
+Tested-by: Jenkins
+Reviewed-by: Eike Rathke <erack@redhat.com>
+---
+ external/libebook/UnpackedTarball_libebook.mk     |  4 ++++
+ external/libebook/libebook-no-icu-boolean.patch.1 | 12 ++++++++++++
+ 2 files changed, 16 insertions(+)
+ create mode 100644 external/libebook/libebook-no-icu-boolean.patch.1
+
+(limited to 'external/libebook')
+
+diff --git a/external/libebook/UnpackedTarball_libebook.mk b/external/libebook/UnpackedTarball_libebook.mk
+index 0b0658652fc8..4a85ee5093be 100644
+--- a/external/libebook/UnpackedTarball_libebook.mk
++++ b/external/libebook/UnpackedTarball_libebook.mk
+@@ -13,4 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libebook,$(EBOOK_TARBALL)))
+ 
+ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libebook))
+ 
++$(eval $(call gb_UnpackedTarball_add_patches,libebook, \
++    external/libebook/libebook-no-icu-boolean.patch.1 \
++))
++
+ # vim: set noet sw=4 ts=4:
+diff --git a/external/libebook/libebook-no-icu-boolean.patch.1 b/external/libebook/libebook-no-icu-boolean.patch.1
+new file mode 100644
+index 000000000000..0e53546b7cc9
+--- /dev/null
++++ b/external/libebook/libebook-no-icu-boolean.patch.1
+@@ -0,0 +1,12 @@
++diff -ur libebook.org/src/lib/EBOOKCharsetConverter.cpp libebook/src/lib/EBOOKCharsetConverter.cpp
++--- libebook.org/src/lib/EBOOKCharsetConverter.cpp	2018-01-01 12:16:28.000000000 +0100
+++++ libebook/src/lib/EBOOKCharsetConverter.cpp	2020-11-16 21:19:46.699315299 +0100
 +@@ -124,7 +124,7 @@
 +       m_converterToUTF8.get(), m_converterToUnicode.get(),
 +       &outText, outText + out.size(), &inText, inText + length,
@@ -13,15 +50,5 @@ diff -Naur orig/external/libebook/icu68.patch.0 patched/external/libebook/icu68.
 +     ;
 +     if (status==U_BUFFER_OVERFLOW_ERROR)
 +     {
-diff -Naur orig/external/libebook/UnpackedTarball_libebook.mk patched/external/libebook/UnpackedTarball_libebook.mk
---- orig/external/libebook/UnpackedTarball_libebook.mk	2020-10-21 22:09:11.000000000 +0200
-+++ patched/external/libebook/UnpackedTarball_libebook.mk	2020-11-01 21:41:30.972662334 +0100
-@@ -13,4 +13,8 @@
- 
- $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libebook))
- 
-+$(eval $(call gb_UnpackedTarball_add_patches,libebook,\
-+	external/libebook/icu68.patch.0 \
-+))
-+
- # vim: set noet sw=4 ts=4:
+-- 
+cgit v1.2.1
