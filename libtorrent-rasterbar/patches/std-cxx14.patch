@@ -1,0 +1,24 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2020-11-14 14:20:00.000000000 +0100
++++ patched/CMakeLists.txt	2020-12-04 22:43:05.090434458 +0100
+@@ -503,7 +503,7 @@
+ # C++ 11 support is required
+ target_compile_features(torrent-rasterbar
+ 	PUBLIC
+-		cxx_std_11
++		cxx_std_14
+ 		cxx_rvalue_references
+ 		cxx_reference_qualified_functions
+ 		cxx_nonstatic_member_init
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2020-11-14 14:20:00.000000000 +0100
++++ patched/configure.ac	2020-12-04 22:43:16.374450134 +0100
+@@ -144,7 +144,7 @@
+ 
+ AX_BOOST_BASE([1.58])
+ 
+-AX_CXX_COMPILE_STDCXX_11([noext], [mandatory])
++AX_CXX_COMPILE_STDCXX_14([noext], [mandatory])
+ 
+ AX_BOOST_SYSTEM()
+ AS_IF([test -z "$BOOST_SYSTEM_LIB"],
