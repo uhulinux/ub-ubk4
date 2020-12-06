@@ -1,7 +1,40 @@
 diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_MESSAGES/python.po
---- orig/lang/python/hu/LC_MESSAGES/python.po	2020-10-17 16:41:08.000000000 +0200
-+++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-10-19 17:41:29.235998166 +0200
-@@ -58,7 +58,7 @@
+--- orig/lang/python/hu/LC_MESSAGES/python.po	2020-12-04 14:51:48.000000000 +0100
++++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-12-06 19:27:16.566521316 +0100
+@@ -102,11 +102,11 @@
+ 
+ #: src/modules/unpackfs/main.py:35
+ msgid "Filling up filesystems."
+-msgstr "Fájlrendszerek betöltése."
++msgstr "Fájlrendszerek átmásolása."
+ 
+ #: src/modules/unpackfs/main.py:255
+ msgid "rsync failed with error code {}."
+-msgstr "az rsync elhalt a(z) {} hibakóddal"
++msgstr "Az rsync elhalt a(z) {} hibakóddal"
+ 
+ #: src/modules/unpackfs/main.py:300
+ msgid "Unpacking image {}/{}, file {}/{}"
+@@ -131,7 +131,7 @@
+ 
+ #: src/modules/unpackfs/main.py:437
+ msgid "Bad mount point for root partition"
+-msgstr "Rossz betöltési pont a root partíciónál"
++msgstr "Rossz csatolási pont a root partíciónál"
+ 
+ #: src/modules/unpackfs/main.py:438
+ msgid "rootMountPoint is \"{}\", which does not exist, doing nothing"
+@@ -155,8 +155,7 @@
+ "Failed to find unsquashfs, make sure you have the squashfs-tools package "
+ "installed"
+ msgstr ""
+-"unsquashfs nem található, győződj meg róla a squashfs-tools csomag telepítve"
+-" van."
++"Az unsquashfs nem található, a squashfs-tools csomag telepítve van?"
+ 
+ #: src/modules/unpackfs/main.py:479
+ msgid "The destination \"{}\" in the target system is not a directory"
+@@ -169,7 +168,7 @@
  #: src/modules/services-systemd/main.py:59
  #: src/modules/services-openrc/main.py:93
  msgid "Cannot modify service"
@@ -10,40 +43,39 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/services-systemd/main.py:60
  msgid ""
-@@ -98,11 +98,11 @@
+@@ -210,7 +209,7 @@
+ #: src/modules/dummypython/main.py:37 src/modules/dummypython/main.py:93
+ #: src/modules/dummypython/main.py:94
+ msgid "Dummy python step {}"
+-msgstr "Hamis {}. Python lépés"
++msgstr "Hamis Python lépés: {}"
  
- #: src/modules/unpackfs/main.py:35
- msgid "Filling up filesystems."
--msgstr "Fájlrendszerek betöltése."
-+msgstr "Fájlrendszerek átmásolása."
+ #: src/modules/bootloader/main.py:42
+ msgid "Install bootloader."
+@@ -218,7 +217,7 @@
  
- #: src/modules/unpackfs/main.py:254
- msgid "rsync failed with error code {}."
--msgstr "az rsync elhalt a(z) {} hibakóddal"
-+msgstr "Az rsync elhalt a(z) {} hibakóddal"
+ #: src/modules/localecfg/main.py:30
+ msgid "Configuring locales."
+-msgstr "nyelvi értékek konfigurálása."
++msgstr "Nyelvi beállítások."
  
- #: src/modules/unpackfs/main.py:299
- msgid "Unpacking image {}/{}, file {}/{}"
-@@ -127,7 +127,7 @@
+ #: src/modules/mount/main.py:30
+ msgid "Mounting partitions."
+@@ -287,11 +286,11 @@
  
- #: src/modules/unpackfs/main.py:436
- msgid "Bad mount point for root partition"
--msgstr "Rossz betöltési pont a root partíciónál"
-+msgstr "Rossz csatolási pont a root partíciónak"
+ #: src/modules/dracut/main.py:27
+ msgid "Creating initramfs with dracut."
+-msgstr "initramfs létrehozása ezzel: dracut."
++msgstr "initramfs létrehozása a dracut programmal."
  
- #: src/modules/unpackfs/main.py:437
- msgid "rootMountPoint is \"{}\", which does not exist, doing nothing"
-@@ -151,8 +151,7 @@
- "Failed to find unsquashfs, make sure you have the squashfs-tools package "
- "installed"
- msgstr ""
--"unsquashfs nem található, győződj meg róla a squashfs-tools csomag telepítve"
--" van."
-+"Az unsquashfs nem található, a squashfs-tools csomag telepítve van?"
+ #: src/modules/dracut/main.py:49
+ msgid "Failed to run dracut on the target"
+-msgstr "dracut futtatása nem sikerült a célon."
++msgstr "A dracut futtatása nem sikerült."
  
- #: src/modules/unpackfs/main.py:478
- msgid "The destination \"{}\" in the target system is not a directory"
-@@ -200,17 +199,19 @@
+ #: src/modules/grubcfg/main.py:28
+ msgid "Configure GRUB."
+@@ -339,21 +338,23 @@
  
  #: src/modules/displaymanager/main.py:894
  msgid "No display managers selected for the displaymanager module."
@@ -56,7 +88,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  "displaymanager.conf."
  msgstr ""
 -
-+ "A beléptetők listája üres, vagy nincs megadva a bothglobalstorage-ben és"
++ "A beléptetők listája üres, vagy nincs megadva a sem globalstorage-ben sem"
 + " a displaymanager.conf fájlban."
 + 
  #: src/modules/displaymanager/main.py:977
@@ -64,38 +96,10 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
 -msgstr "A kijelzőkezelő konfigurációja hiányos volt"
 +msgstr "A grafikus beléptető konfigurációja hiányos volt"
  
- #: src/modules/initcpiocfg/main.py:28
- msgid "Configuring mkinitcpio."
-@@ -331,15 +332,15 @@
- 
- #: src/modules/dracut/main.py:27
- msgid "Creating initramfs with dracut."
--msgstr "initramfs létrehozása ezzel: dracut."
-+msgstr "initramfs létrehozása a dracut programmal."
- 
- #: src/modules/dracut/main.py:49
- msgid "Failed to run dracut on the target"
--msgstr "dracut futtatása nem sikerült a célon."
-+msgstr "A dracut futtatása nem sikerült."
- 
  #: src/modules/initramfscfg/main.py:32
  msgid "Configuring initramfs."
 -msgstr "initramfs konfigurálása."
 +msgstr "Az initramfs beállítása."
  
- #: src/modules/openrcdmcryptcfg/main.py:25
- msgid "Configuring OpenRC dmcrypt service."
-@@ -356,11 +357,11 @@
- #: src/modules/dummypython/main.py:37 src/modules/dummypython/main.py:93
- #: src/modules/dummypython/main.py:94
- msgid "Dummy python step {}"
--msgstr "Hamis {}. Python lépés"
-+msgstr "Hamis Python lépés: {}"
- 
- #: src/modules/localecfg/main.py:30
- msgid "Configuring locales."
--msgstr "nyelvi értékek konfigurálása."
-+msgstr "Nyelvi beállítások."
- 
- #: src/modules/networkcfg/main.py:28
- msgid "Saving network configuration."
+ #: src/modules/hwclock/main.py:26
+ msgid "Setting hardware clock."
