@@ -1,0 +1,120 @@
+diff -Naur orig/libdbusmenu-glib/Makefile.am patched/libdbusmenu-glib/Makefile.am
+--- orig/libdbusmenu-glib/Makefile.am	2016-02-27 19:58:43.000000000 +0100
++++ patched/libdbusmenu-glib/Makefile.am	2020-12-08 05:32:59.271358349 +0100
+@@ -66,7 +66,7 @@
+ libdbusmenu_glib_la_CFLAGS = \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GLIB\""
+ 
+ libdbusmenu_glib_la_LIBADD = \
+diff -Naur orig/libdbusmenu-glib/Makefile.in patched/libdbusmenu-glib/Makefile.in
+--- orig/libdbusmenu-glib/Makefile.in	2016-02-27 20:00:13.000000000 +0100
++++ patched/libdbusmenu-glib/Makefile.in	2020-12-08 05:32:49.687317961 +0100
+@@ -498,7 +498,7 @@
+ libdbusmenu_glib_la_CFLAGS = \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GLIB\""
+ 
+ libdbusmenu_glib_la_LIBADD = \
+diff -Naur orig/libdbusmenu-gtk/Makefile.am patched/libdbusmenu-gtk/Makefile.am
+--- orig/libdbusmenu-gtk/Makefile.am	2016-02-27 19:58:43.000000000 +0100
++++ patched/libdbusmenu-gtk/Makefile.am	2020-12-08 05:33:36.631516043 +0100
+@@ -66,7 +66,7 @@
+ 	$(DBUSMENUGTK_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+ 	-I$(top_srcdir) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GTK\""
+ 
+ libdbusmenu_gtk_la_LIBADD = \
+diff -Naur orig/libdbusmenu-gtk/Makefile.in patched/libdbusmenu-gtk/Makefile.in
+--- orig/libdbusmenu-gtk/Makefile.in	2016-02-27 20:00:14.000000000 +0100
++++ patched/libdbusmenu-gtk/Makefile.in	2020-12-08 05:33:28.823483054 +0100
+@@ -507,7 +507,7 @@
+ 	$(DBUSMENUGTK_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+ 	-I$(top_srcdir) \
+-	-Wall -Werror -Wno-error=deprecated-declarations \
++	-Wall -Wno-error=deprecated-declarations \
+ 	-DG_LOG_DOMAIN="\"LIBDBUSMENU-GTK\""
+ 
+ libdbusmenu_gtk_la_LIBADD = \
+diff -Naur orig/tests/Makefile.am patched/tests/Makefile.am
+--- orig/tests/Makefile.am	2016-02-27 19:58:43.000000000 +0100
++++ patched/tests/Makefile.am	2020-12-08 05:33:18.827440847 +0100
+@@ -103,7 +103,7 @@
+ ############################################
+ 
+ DBUSMENU_GLIB_TEST_CFLAGS = \
+-	-Wall -Werror \
++	-Wall \
+ 	-DG_DISABLE_DEPRECATED \
+ 	-I$(top_srcdir) \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+diff -Naur orig/tests/Makefile.in patched/tests/Makefile.in
+--- orig/tests/Makefile.in	2016-02-27 20:00:14.000000000 +0100
++++ patched/tests/Makefile.in	2020-12-08 05:33:10.727406666 +0100
+@@ -979,7 +979,7 @@
+ # Shared vars for the dbusmenu-glib tests
+ ############################################
+ DBUSMENU_GLIB_TEST_CFLAGS = \
+-	-Wall -Werror \
++	-Wall \
+ 	-DG_DISABLE_DEPRECATED \
+ 	-I$(top_srcdir) \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+diff -Naur orig/tools/Makefile.am patched/tools/Makefile.am
+--- orig/tools/Makefile.am	2016-02-27 19:58:43.000000000 +0100
++++ patched/tools/Makefile.am	2020-12-08 05:33:58.323607769 +0100
+@@ -16,7 +16,7 @@
+ 	-I $(srcdir)/.. \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(DBUSMENUDUMPER_CFLAGS) \
+-	-Wall -Werror
++	-Wall
+ 
+ dbusmenu_dumper_LDADD = \
+ 	../libdbusmenu-glib/libdbusmenu-glib.la \
+diff -Naur orig/tools/Makefile.in patched/tools/Makefile.in
+--- orig/tools/Makefile.in	2016-02-27 20:00:14.000000000 +0100
++++ patched/tools/Makefile.in	2020-12-08 05:33:48.215565011 +0100
+@@ -454,7 +454,7 @@
+ 	-I $(srcdir)/.. \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+ 	$(DBUSMENUDUMPER_CFLAGS) \
+-	-Wall -Werror
++	-Wall
+ 
+ dbusmenu_dumper_LDADD = \
+ 	../libdbusmenu-glib/libdbusmenu-glib.la \
+diff -Naur orig/tools/testapp/Makefile.am patched/tools/testapp/Makefile.am
+--- orig/tools/testapp/Makefile.am	2016-02-27 19:58:43.000000000 +0100
++++ patched/tools/testapp/Makefile.am	2020-12-08 05:34:16.179683365 +0100
+@@ -12,7 +12,7 @@
+ 	-I $(srcdir)/../.. \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+-	-Wall -Werror
++	-Wall
+ 
+ dbusmenu_testapp_LDADD = \
+ 	$(builddir)/../../libdbusmenu-glib/libdbusmenu-glib.la \
+diff -Naur orig/tools/testapp/Makefile.in patched/tools/testapp/Makefile.in
+--- orig/tools/testapp/Makefile.in	2016-02-27 20:00:14.000000000 +0100
++++ patched/tools/testapp/Makefile.in	2020-12-08 05:34:06.883643998 +0100
+@@ -377,7 +377,7 @@
+ 	-I $(srcdir)/../.. \
+ 	$(DBUSMENUTESTS_CFLAGS) \
+ 	$(DBUSMENUGLIB_CFLAGS) \
+-	-Wall -Werror
++	-Wall
+ 
+ dbusmenu_testapp_LDADD = \
+ 	$(builddir)/../../libdbusmenu-glib/libdbusmenu-glib.la \

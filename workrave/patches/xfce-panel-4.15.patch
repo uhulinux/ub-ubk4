@@ -1,0 +1,32 @@
+From c596e32ebe5a0a6ded3b583e8a78df729ffde2d5 Mon Sep 17 00:00:00 2001
+From: Rob Caelers <rob.caelers@gmail.com>
+Date: Sun, 29 Nov 2020 14:54:58 +0100
+Subject: [PATCH] Fix XFCE applet for XFCE 4.15
+
+---
+ frontend/applets/xfce/src/main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/frontend/applets/xfce/src/main.c b/frontend/applets/xfce/src/main.c
+index 48b481b20..e49f0bc90 100644
+--- a/frontend/applets/xfce/src/main.c
++++ b/frontend/applets/xfce/src/main.c
+@@ -20,7 +20,7 @@
+ #endif
+ 
+ #include <gdk/gdk.h>
+-#include <libxfce4panel/xfce-panel-plugin.h>
++#include <libxfce4panel/libxfce4panel.h>
+ 
+ #include <gio/gio.h>
+ 
+@@ -399,7 +399,7 @@ static void workrave_applet_fill(WorkraveApplet *applet)
+ 
+ static void workrave_applet_construct(XfcePanelPlugin *plugin)
+ {
+-  WorkraveApplet *applet = panel_slice_new0(WorkraveApplet);
++  WorkraveApplet *applet = g_slice_new0(WorkraveApplet);
+   applet->plugin = plugin;
+   applet->image = NULL;
+   applet->timerbox_control = NULL;
+ 
