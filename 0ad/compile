@@ -5,7 +5,11 @@ export CHOST="x86_64-linux-gnu"
 export CBUILD="x86_64-linux-gnu"
 
 cd build/workspaces
-export CXXFLAGS+=' -DU_USING_ICU_NAMESPACE=1'
+export CXXFLAGS+=' -DU_USING_ICU_NAMESPACE=1 -Wno-deprecated-copy '
+export CXXFLAGS+=' -Wno-class-memaccess -Wno-unused-but-set-variable -DBOOST_BIND_GLOBAL_PLACEHOLDERS '
+#export CXXFLAGS+=' -Wno-catch-value= -Wno-implicit-fallthrough= -Wno-cpp -Wno-attribute-warning'
+#export CXXFLAGS+=' -Wno-unused-function -Wno-nonnull -Wno-stringop-truncation -Wno-multichar -Waligned-new= '
+#export CXXFLAGS+=' -Wno-stringop-overflow= -Wno-cast-function-type '
 export SDL2_CONFIG="pkg-config sdl2"
 export PYTHON=python2
 ./update-workspaces.sh \
