@@ -1,0 +1,12 @@
+diff -Nur orig/tools/zipdir/zipdir.c mod/tools/zipdir/zipdir.c
+--- orig/tools/zipdir/zipdir.c	2020-10-31 10:07:33.000000000 +0100
++++ mod/tools/zipdir/zipdir.c	2020-12-13 20:54:23.834474144 +0100
+@@ -781,6 +781,8 @@
+ 			if (central_dir == NULL)
+ 			{
+ 				fprintf(stderr, "Could not read central directory from %s. (Is it a zipfile?)\n", zipname);
++				fclose(ozip);
++				ozip = NULL;
+ 				update = 0;
+ 			}
+ 		}
