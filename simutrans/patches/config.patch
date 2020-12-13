@@ -1,20 +1,16 @@
-diff -Nur simutrans-src-120-3/config.template simutrans-src-120-3.patched/config.template
---- simutrans-src-120-3/config.template	2018-05-18 15:03:52.000000000 +0200
-+++ simutrans-src-120-3.patched/config.template	2018-07-08 08:20:04.148231356 +0200
-@@ -8,18 +8,18 @@
- #BACKEND = opengl
+diff -Nur orig/config.template mod/config.template
+--- orig/config.template	2020-09-01 09:35:52.000000000 +0200
++++ mod/config.template	2020-12-13 16:02:58.275366796 +0100
+@@ -13,7 +13,7 @@
  #BACKEND = sdl
  #BACKEND = sdl2
--#BACKEND = mixer_sdl
-+BACKEND = mixer_sdl
+ #BACKEND = mixer_sdl
+-#BACKEND = mixer_sdl2
++BACKEND = mixer_sdl2
  #BACKEND = posix
  
- #COLOUR_DEPTH = 0
--#COLOUR_DEPTH = 16
-+COLOUR_DEPTH = 16
- 
  #OSTYPE = amiga
- #OSTYPE = beos
+@@ -21,7 +21,7 @@
  #OSTYPE = cygwin
  #OSTYPE = freebsd
  #OSTYPE = haiku
@@ -23,7 +19,7 @@ diff -Nur simutrans-src-120-3/config.template simutrans-src-120-3.patched/config
  #OSTYPE = mingw
  #OSTYPE = mac
  
-@@ -52,7 +52,7 @@
+@@ -57,7 +57,7 @@
  #SDL2_CONFIG    = sdl2-config
  #FREETYPE_CONFIG    = freetype-config
  
