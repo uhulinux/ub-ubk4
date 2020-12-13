@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+export CXXFLAGS='-Wno-deprecated-copy -Wno-deprecated-declarations -DBOOST_BIND_GLOBAL_PLACEHOLDERS'
+
 ub_compile \
 	-DCEGUI_BUILD_PYTHON_MODULES=OFF \
 	-DCEGUI_BUILD_RENDERER_NULL=ON \
