@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+export OpenGL_GL_PREFERENCE=GLVND
+ub_compile \
+    -DCMAKE_CXX_FLAGS="-lX11 -Wno-terminate" \
+    -DwxWidgets_CONFIG_EXECUTABLE=/usr/bin/wx-config \
+    -DOpenGL_GL_PREFERENCE=GLVND
