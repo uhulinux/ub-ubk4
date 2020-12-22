@@ -1,30 +1,16 @@
 #!/bin/sh -eux
 
-install -D -p -m 755 build/release/quake2 $UB_INSTALLDIR/usr/bin/quake2
-install -D -p -m 755 build/release/q2ded $UB_INSTALLDIR/usr/bin/q2ded
-install -D -p -m 755 build/release/baseq2/game.so \
-    $UB_INSTALLDIR/usr/share/games/quake2/baseq2/game.so
-install -D -p -m 644 stuff/yq2.cfg \
-    $UB_INSTALLDIR/usr/share/games/quake2/baseq2/yq2.cfg
-install -D -p -m 644 stuff/icon/Quake2.png \
-    $UB_INSTALLDIR/usr/share/icons/hicolor/512x512/apps/quake2.png
-install -D -p -m 755 stuff/cdripper.sh \
-    $UB_INSTALLDIR/usr/share/doc/quake2/examples/cdripper.sh
+celdir=usr/share/games/quake2
+buildceldir="$UB_INSTALLDIR"/$celdir
+buildbindir="$UB_INSTALLDIR"/usr/bin
+buildbasedir="$buildceldir"/baseq2
 
-celdir="$UB_INSTALLDIR"/usr/share/games/quake2
-basedir="$celdir"/baseq2
-ctfdir="$celdir"/ctf
-bindir="$UB_INSTALLDIR"/usr/bin
-install -d -m 755 $celdir $basedir $ctfdir
-install -d -m 755 $celdir/{baseq2,ctf,xatrix,rogue}
-cp maxpak.pak $basedir/
-for i in {10,11,12,13,14,16,17,19}; do
-        cp pak${i}.pak $basedir/
-done;
-mkdir q2
-mv q2-3.20-x86-full-ctf.exe q2/
-cd q2
-unzip -L q2-3.20-x86-full-ctf.exe
-cp baseq2/pak1.pak baseq2/pak2.pak $basedir/
-cp -r baseq2/players $basedir/
-cp ctf/* $ctfdir/
+mkdir -p $buildceldir buildbasedir
+
+install -Dm755 build/release/quake2 $buildceldir/quake2
+install -Dm755 build/release/q2ded $buildceldir
+ln -s /usr/share/games/quake2/quake2 $buildbindir/quake2
+ln -s /usr/share/games/quake2/q2ded $buildbindir/q2ded
+
+install -m644 build/release/*.so $buildceldir
+install -Dm644 build/release/baseq2/game.so $buildbasedir/game.so
