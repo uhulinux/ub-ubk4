@@ -1,7 +1,7 @@
 diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-preferences.c
---- orig/terminal/terminal-preferences.c	2017-01-13 17:07:00.134741323 +0100
-+++ patched/terminal/terminal-preferences.c	2017-03-31 18:08:02.957517549 +0200
-@@ -691,7 +691,7 @@
+--- orig/terminal/terminal-preferences.c	2020-12-22 22:48:03.000000000 +0100
++++ patched/terminal/terminal-preferences.c	2020-12-24 15:44:07.784566112 +0100
+@@ -785,7 +785,7 @@
        g_param_spec_boolean ("font-allow-bold",
                              NULL,
                              "FontAllowBold",
@@ -10,7 +10,7 @@ diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-prefer
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
  
    /**
-@@ -832,7 +832,7 @@
+@@ -926,7 +926,7 @@
        g_param_spec_boolean ("misc-toolbar-default",
                              NULL,
                              "MiscToolbarDefault",
@@ -19,7 +19,7 @@ diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-prefer
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
  
    /**
-@@ -974,7 +974,7 @@
+@@ -1098,7 +1098,7 @@
        g_param_spec_uint ("scrolling-lines",
                           NULL,
                           "ScrollingLines",
@@ -28,7 +28,7 @@ diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-prefer
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
  
    /**
-@@ -994,7 +994,7 @@
+@@ -1118,7 +1118,7 @@
        g_param_spec_boolean ("scrolling-on-output",
                              NULL,
                              "ScrollingOnOutput",
@@ -37,7 +37,7 @@ diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-prefer
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
  
    /**
-@@ -1028,7 +1028,7 @@
+@@ -1152,7 +1152,7 @@
        g_param_spec_boolean ("shortcuts-no-menukey",
                              NULL,
                              "ShortcutsNoMenukey",
@@ -46,7 +46,7 @@ diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-prefer
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
  
    /**
-@@ -1038,7 +1038,7 @@
+@@ -1162,7 +1162,7 @@
        g_param_spec_boolean ("shortcuts-no-mnemonics",
                              NULL,
                              "ShortcutsNoMnemonics",
@@ -55,7 +55,7 @@ diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-prefer
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
  
    /**
-@@ -1069,7 +1069,7 @@
+@@ -1193,7 +1193,7 @@
        g_param_spec_string ("word-chars",
                             NULL,
                             "WordChars",
@@ -63,4 +63,4 @@ diff -Naur orig/terminal/terminal-preferences.c patched/terminal/terminal-prefer
 +                           "-,./?%&#:_=+@~",
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
  
-   /* install all properties */
+   /**
