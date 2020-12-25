@@ -1,6 +1,6 @@
 diff -Naur orig/libOSC/sendOSC/Makefile.am patched/libOSC/sendOSC/Makefile.am
---- orig/libOSC/sendOSC/Makefile.am	2019-07-06 23:53:43.000000000 +0200
-+++ patched/libOSC/sendOSC/Makefile.am	2019-08-16 21:28:39.329862135 +0200
+--- orig/libOSC/sendOSC/Makefile.am	2020-11-08 20:20:32.000000000 +0100
++++ patched/libOSC/sendOSC/Makefile.am	2020-12-25 20:44:42.530085440 +0100
 @@ -11,7 +11,7 @@
  
  sendOSCdir = $(bindir)
@@ -11,14 +11,14 @@ diff -Naur orig/libOSC/sendOSC/Makefile.am patched/libOSC/sendOSC/Makefile.am
  sendOSC_CFLAGS = -I.. $(mingw_CFLAGS) $(musl_CFLAGS)
  
 diff -Naur orig/src/Makefile.am patched/src/Makefile.am
---- orig/src/Makefile.am	2019-07-18 19:05:46.000000000 +0200
-+++ patched/src/Makefile.am	2019-08-16 21:38:30.955948829 +0200
-@@ -57,7 +57,7 @@
+--- orig/src/Makefile.am	2020-11-08 20:20:32.000000000 +0100
++++ patched/src/Makefile.am	2020-12-25 20:45:45.490263170 +0100
+@@ -73,7 +73,7 @@
  
  if ENABLE_OSC
  osc_SOURCES = osc.c osc.h omc-learn.c omc-learn.h osc_notify.h
 -osc_LDADD = $(top_builddir)/libOSC/.libs/libOSC.a $(top_builddir)/libOSC/client/.libs/libOSC_client.a -lm
 +osc_LDADD = $(top_builddir)/libOSC/.libs/libOSC.so $(top_builddir)/libOSC/client/.libs/libOSC_client.so -lm
+ #osc_shared_LDADD = $(top_builddir)/libOSC/.libs/libOSC.so $(top_builddir)/libOSC/client/.libs/libOSC_client.so -lm
  osc_CFLAGS = -DENABLE_OSC=1
  endif
- 
