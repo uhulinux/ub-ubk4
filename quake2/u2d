@@ -1,1 +1,1 @@
-u2d https://github.com/yquake2/yquake2/releases/ QUAKE2_ | tr "_" "."
+urllist https://github.com/yquake2/yquake2/releases/ | grep -E '^QUAKE2_' | sed s/QUAKE2_//g | tr "_" "." | sort -V | tail -n 1 | sed s/\.zip*// 
