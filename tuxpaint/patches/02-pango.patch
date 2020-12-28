@@ -1,18 +1,18 @@
 diff -Nur orig/Makefile mod/Makefile
---- orig/Makefile	2020-06-26 10:46:33.000000000 +0200
-+++ mod/Makefile	2020-06-26 10:50:16.418323888 +0200
-@@ -115,10 +115,13 @@
+--- orig/Makefile	2020-12-13 04:06:03.000000000 +0100
++++ mod/Makefile	2020-12-28 14:50:19.351725202 +0100
+@@ -127,10 +127,13 @@
  FRIBIDI_LIB:=$(shell $(PKG_CONFIG) --libs fribidi)
  FRIBIDI_CFLAGS:=$(shell $(PKG_CONFIG) --cflags fribidi)
  
 +PANGO_LIB:=$(shell $(PKG_CONFIG) --libs pangoft2)
 +PANGO_CFLAGS:=$(shell $(PKG_CONFIG) --cflags pangoft2)
 +
- windows_ARCH_LINKS:=-lintl $(PNG) -lzdll -lwinspool -lshlwapi $(FRIBIDI_LIB) -liconv
- osx_ARCH_LINKS:=$(FRIBIDI_LIB)
- beos_ARCH_LINKS:=-lintl $(PNG) -lz -lbe -lnetwork -liconv $(FRIBIDI_LIB) $(PAPER_LIB) $(STDC_LIB)
--linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB)
-+linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB) $(PANGO_LIB)
+ windows_ARCH_LINKS:=-lgdi32 -lcomdlg32 $(PNG) -lz -lwinspool -lshlwapi $(FRIBIDI_LIB) -liconv -limagequant
+ macos_ARCH_LINKS:=$(FRIBIDI_LIB) -limagequant
+ beos_ARCH_LINKS:=-lintl $(PNG) -lz -lbe -lnetwork -liconv $(FRIBIDI_LIB) $(PAPER_LIB) $(STDC_LIB) -limagequant
+-linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB) -limagequant
++linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB) $(PANGO_LIB) -limagequant
  ARCH_LINKS:=$($(OS)_ARCH_LINKS)
  
  windows_ARCH_HEADERS:=src/win32_print.h
