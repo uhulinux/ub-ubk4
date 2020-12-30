@@ -1,0 +1,66 @@
+diff -Nur orig/m4/mysql.m4 mod/m4/mysql.m4
+--- orig/m4/mysql.m4	2020-12-29 16:00:52.000000000 +0100
++++ mod/m4/mysql.m4	2020-12-29 16:08:21.066111273 +0100
+@@ -103,7 +103,6 @@
+ 	    pkgmysql=yes
+ 	    MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`
+ 	    MYSQL_LIBS=`$MYSQL_CONFIG --libs`
+-	    mysql_version=`$MYSQL_CONFIG --version`
+ 	else
+ 	    mysql_test_dir="/usr /usr/local /opt/gnome"
+ 	fi
+@@ -205,26 +204,6 @@
+     AM_CONDITIONAL(MYSQL,[test "$mysql_found" = "yes"])
+     AC_SUBST(MYSQL_LIBS)
+     AC_SUBST(MYSQL_CFLAGS)
+-dnl Try detect API version
+-    AC_MSG_CHECKING([checking for Mysql API version])
+-    AX_COMPARE_VERSION($mysql_version, [lt], [8.0.0],
+-    	[
+-    		mysql5=yes
+-    		AC_MSG_RESULT([Using MySQL 5 API])
+-    	],[
+-    		mysql5=no
+-    		AC_MSG_RESULT([Using MySQL API for version $mysql_version])
+-    		AC_MSG_CHECKING([checking for Mysql 8 API version])
+-	    	AX_COMPARE_VERSION($mysql_version, [ge], [8.0.0],
+-		    	[
+-		    		mysql8=yes
+-		    	],[
+-		    		mysql8=no
+-		    	])
+-    		AC_MSG_RESULT([$mysql8])
+-    	])
+-    AM_CONDITIONAL(MYSQL5,[test "x$mysql5" = "xyes"])
+-    AM_CONDITIONAL(MYSQL8,[test "x$mysql8" = "xyes"])
+ ])
+ 
+ 
+diff -Nur orig/providers/mysql/gda-mysql-provider.c mod/providers/mysql/gda-mysql-provider.c
+--- orig/providers/mysql/gda-mysql-provider.c	2020-12-29 16:00:52.000000000 +0100
++++ mod/providers/mysql/gda-mysql-provider.c	2020-12-29 16:08:21.066111273 +0100
+@@ -61,9 +61,6 @@
+ 
+ #define _GDA_PSTMT(x) ((GdaPStmt*)(x))
+ 
+-#ifdef MYSQL8
+-typedef bool my_bool;
+-#endif
+ /*
+  * GObject methods
+  */
+diff -Nur orig/providers/mysql/Makefile.am mod/providers/mysql/Makefile.am
+--- orig/providers/mysql/Makefile.am	2020-12-29 16:00:52.000000000 +0100
++++ mod/providers/mysql/Makefile.am	2020-12-29 16:08:21.066111273 +0100
+@@ -11,11 +11,6 @@
+ 	-I$(top_srcdir)/providers/reuseable/mysql \
+ 	$(COREDEPS_CFLAGS) $(COREDEPS_WFLAGS) $(MYSQL_CFLAGS) -DCLASS_PREFIX=\""GdaMySQL"\"
+ 
+-if MYSQL8
+-AM_CPPFLAGS += \
+-	-DMYSQL8
+-endif
+-
+ gda-mysql-handler-bin.c: $(top_srcdir)/libgda/sqlite/gda-sqlite-handler-bin.c
+ 	cat $(top_srcdir)/libgda/sqlite/gda-sqlite-handler-bin.c | sed -e 's/SQLITE/MYSQL/g' -e 's/sqlite/mysql/g' -e 's/Sqlite/Mysql/g' -e 's/SQLite/MySQL/g' > gda-mysql-handler-bin.c
+ 
