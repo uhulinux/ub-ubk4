@@ -1,17 +1,4 @@
 #!/usr/bin/env dl
 
-llvm-${UB_VERSION}.src.tar.xz llvm-${UB_VERSION}.src/
-	http://llvm.org/releases/${UB_VERSION}/
-	https://github.com/llvm/llvm-project/releases/download/llvmorg-${UB_VERSION}/
-
-clang-${UB_VERSION}.src.tar.xz clang-${UB_VERSION}.src/ :clang
-	https://github.com/llvm/llvm-project/releases/download/llvmorg-${UB_VERSION}/
-
-clang-tools-extra-${UB_VERSION}.src.tar.xz clang-tools-extra-${UB_VERSION}.src/ :clang/tools/extra
-	https://github.com/llvm/llvm-project/releases/download/llvmorg-${UB_VERSION}/
-
-compiler-rt-${UB_VERSION}.src.tar.xz compiler-rt-${UB_VERSION}.src/ :compiler-rt
-	https://github.com/llvm/llvm-project/releases/download/llvmorg-${UB_VERSION}/
-
-lld-${UB_VERSION}.src.tar.xz lld-${UB_VERSION}.src/ :lld
+llvm-project-${UB_VERSION}.tar.xz llvm-project-${UB_VERSION}/
 	https://github.com/llvm/llvm-project/releases/download/llvmorg-${UB_VERSION}/

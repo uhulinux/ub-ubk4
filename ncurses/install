@@ -2,20 +2,21 @@
 
 ub_install
 
-cp -a Install/usr/lib/.     "$UB_INSTALLDIR"/usr/lib/
-cp -a Install/usr/include/. "$UB_INSTALLDIR"/usr/include/
-
 rm "$UB_INSTALLDIR"/usr/lib/lib*_g.a
 chmod 755 "$UB_INSTALLDIR"/usr/lib/lib*.so.*
 
-ln -sf libncurses.a  "$UB_INSTALLDIR"/usr/lib/libcurses.a
 ln -sf libncursesw.a "$UB_INSTALLDIR"/usr/lib/libcursesw.a
-
-#freepascal igényli
-# ln -s libncursesw.so "$UB_INSTALLDIR"/usr/lib/libtinfo.so.5
-# ln -s "$UB_INSTALLDIR"/usr/lib/libtinfo.so.5  "$UB_INSTALLDIR"/usr/lib/libtinfo.so
 
 # Komodo-edit-11.0.2.18122 igényli
 
 ln -s "$UB_INSTALLDIR"/usr/lib/libpanelw.so.6 "$UB_INSTALLDIR"/usr/lib/libpanelw.so.5
 ln -s "$UB_INSTALLDIR"/usr/lib/libncursesw.so.6 "$UB_INSTALLDIR"/usr/lib/libncursesw.so.5
+
+# fool packages looking to link to non-wide-character ncurses libraries
+for lib in ncurses ncurses++ form panel menu; do
+    echo "INPUT(-l${lib}w)" > "$UB_INSTALLDIR/usr/lib/lib${lib}.so"
+    ln -s ${lib}w.pc "$UB_INSTALLDIR/usr/lib/pkgconfig/${lib}.pc"
+done
+
+ln -s libncurses.so "$UB_INSTALLDIR/usr/lib/libcurses.so"
+ln -s libncursesw.so.6 "$UB_INSTALLDIR/usr/lib/libncurses.so.6"

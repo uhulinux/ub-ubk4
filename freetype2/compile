@@ -1,9 +1,6 @@
 #!/bin/sh -eux
 
-rm CMakeLists.txt
-ub_compile
-ln -s . freetype2
+rm -f CMakeLists.txt
+rm -f meson.build
 
-cd ft2demos
-X11_PATH="/usr" ub_compile
-cd ..
+ub_compile

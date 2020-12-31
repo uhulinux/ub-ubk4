@@ -4,6 +4,7 @@
 # LLVM_BUILD_LLVM_DYLIB=OFF / LLVM_LINK_LLVM_DYLIB=OFF
 # másképp nem működik
 
+cd llvm
 ub_compile \
 	-DBUILD_SHARED_LIBS=OFF \
 	-DLLVM_BUILD_LLVM_DYLIB=ON \
@@ -22,6 +23,5 @@ ub_compile \
 	-DLLVM_INCLUDE_TESTS=OFF \
 	-DLLVM_TARGETS_TO_BUILD="AMDGPU;X86" \
 	-DLLVM_TOOL_LIBCXX_BUILD=OFF \
-	-DWITH_POLLY=OFF \
     -DFFI_INCLUDE_DIR=$(pkg-config --variable=includedir libffi) \
 	-DFFI_LIBRARY_DIR=$(pkg-config --cflags-only-I libffi)

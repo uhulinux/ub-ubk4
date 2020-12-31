@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
-git clone https://github.com/KhronosGroup/SPIRV-Headers.git
-mv SPIRV-Headers External/external/
+# git clone https://github.com/KhronosGroup/SPIRV-Headers.git
+# mv SPIRV-Headers External/external/
+mv External/external/SPIRV-Headers-1.5.4.raytracing.fixed External/external/SPIRV-Headers
 
 ub_compile \
 	-DBUILD_SHARED_LIBS=OFF

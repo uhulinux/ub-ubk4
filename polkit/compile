@@ -1,8 +1,8 @@
 #!/bin/sh -eux
 
-autoreconf -vif
 ub_compile \
 	--enable-verbose-mode \
+	--disable-gtk-doc \
 	--libexecdir=/usr/lib/polkit-1 \
 	--with-polkitd-user=polkit \
 	--enable-libsystemd-login=yes
