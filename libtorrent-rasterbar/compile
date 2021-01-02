@@ -1,8 +1,5 @@
 #!/bin/sh -eux
 
-./autotool.sh
-
-ub_configure \
-    --enable-python-binding
-
-ub_make
+git clone https://github.com/arvidn/try_signal.git deps/try_signal
+ub_compile \
+    -Dpython-bindings=ON

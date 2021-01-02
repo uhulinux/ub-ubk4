@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
-rm -f meson.build
+CXXFLAGS+=' -std=c++11'
+
 ub_compile \
 	--disable-documentation

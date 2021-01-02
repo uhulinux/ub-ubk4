@@ -1,7 +1,7 @@
 diff -Naur orig/src/pwqprivate.h patched/src/pwqprivate.h
---- orig/src/pwqprivate.h	2019-10-31 13:10:37.000000000 +0100
-+++ patched/src/pwqprivate.h	2020-04-21 01:11:59.501123941 +0200
-@@ -40,14 +40,14 @@
+--- orig/src/pwqprivate.h	2020-10-13 09:33:59.000000000 +0200
++++ patched/src/pwqprivate.h	2021-01-01 15:47:21.217530639 +0100
+@@ -41,8 +41,8 @@
          int type;
  };
  
@@ -12,14 +12,16 @@ diff -Naur orig/src/pwqprivate.h patched/src/pwqprivate.h
  #define PWQ_DEFAULT_DIG_CREDIT   0
  #define PWQ_DEFAULT_UP_CREDIT    0
  #define PWQ_DEFAULT_LOW_CREDIT   0
- #define PWQ_DEFAULT_OTH_CREDIT   0
- #define PWQ_DEFAULT_DICT_CHECK   1
+@@ -54,7 +54,7 @@
+ #define PWQ_DEFAULT_DICT_CHECK   0
+ #endif
+ 
 -#define PWQ_DEFAULT_USER_CHECK   1
 +#define PWQ_DEFAULT_USER_CHECK   0
+ #define PWQ_DEFAULT_USER_SUBSTR  0
  #define PWQ_DEFAULT_ENFORCING    1
  #define PWQ_DEFAULT_RETRY_TIMES  1
- #define PWQ_DEFAULT_ENFORCE_ROOT 0
-@@ -57,7 +57,7 @@
+@@ -65,7 +65,7 @@
  #define PWQ_TYPE_STR             2
  #define PWQ_TYPE_SET             3
  
@@ -29,8 +31,8 @@ diff -Naur orig/src/pwqprivate.h patched/src/pwqprivate.h
  #define PWQ_NUM_GENERATION_TRIES 3 /* how many times to try to generate the random password if it fails the check */
  #define PWQ_MIN_WORD_LENGTH      4
 diff -Naur orig/src/pwquality.conf patched/src/pwquality.conf
---- orig/src/pwquality.conf	2019-10-31 13:10:37.000000000 +0100
-+++ patched/src/pwquality.conf	2020-04-21 01:12:42.965154821 +0200
+--- orig/src/pwquality.conf	2020-10-13 09:33:59.000000000 +0200
++++ patched/src/pwquality.conf	2021-01-01 15:46:01.513325638 +0100
 @@ -3,12 +3,12 @@
  #
  # Number of characters in the new password that must not be present in the
@@ -53,5 +55,5 @@ diff -Naur orig/src/pwquality.conf patched/src/pwquality.conf
 -# usercheck = 1
 +# usercheck = 0
  #
- # Whether the check is enforced by the PAM module and possibly other
- # applications.
+ # Length of substrings from the username to check for in the password
+ # The check is enabled if the value is greater than 0 and usercheck is enabled.
