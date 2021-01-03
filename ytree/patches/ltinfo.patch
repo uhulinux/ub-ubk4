@@ -1,0 +1,12 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2021-01-01 15:19:20.000000000 +0100
++++ mod/Makefile	2021-01-03 21:11:56.110258671 +0100
+@@ -33,7 +33,7 @@
+ #CLOCK	    = -DCLOCK_SUPPORT # Experimental!
+ READLINE    = -DREADLINE_SUPPORT
+ CFLAGS      += -D_GNU_SOURCE $(COLOR) $(CLOCK) $(READLINE) $(ADD_CFLAGS)
+-LDFLAGS     += -lncurses -ltinfo -lreadline
++LDFLAGS     += -lncurses -lncursesw -lreadline
+ 
+ ###########################
+ # LINUX with Wide character support (tested with ncurses 5.4)
