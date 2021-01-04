@@ -1,8 +1,8 @@
 #!/bin/sh -eux
 
-chmod +x waf-2.0.9
+#chmod +x waf-2.0.9
 
-./waf-2.0.9 configure \
+waf configure \
 	--prefix=/usr \
 	--confdir=/etc/mpv \
 	--enable-cdda \
@@ -10,6 +10,6 @@ chmod +x waf-2.0.9
 	--enable-dvdnav \
 	--enable-libarchive \
 	--enable-libmpv-shared \
-	--enable-libsmbclient \
+	--disable-build-date \
 
-./waf-2.0.9 build
+waf build
