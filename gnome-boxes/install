@@ -1,3 +1,6 @@
 #!/bin/sh -eux
 
 ub_install
+
+# remove development files
+rm -Rf $UB_INSTALLDIR/usr/{include,lib/gnome-boxes/pkgconfig,share/gnome-boxes/gir-1.0,share/gnome-boxes/vapi}

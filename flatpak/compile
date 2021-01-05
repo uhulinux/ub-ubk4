@@ -15,4 +15,5 @@ sed -i '/locale\/C\./d' tests/make-test-runtime.sh
 NOCONFIGURE=1 ./autogen.sh
 ub_compile \
 	--with-privileged-group=root \
-    --with-priv-mode=setuid
+    --with-priv-mode=setuid \
+    --disable-documentation

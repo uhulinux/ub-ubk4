@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-intltoolize --automake --copy --force
-autoreconf -fiv
-(cd src/synthesis && autoreconf -fi && ./autogen.sh)
-
-ub_compile \
-    --enable-dbus-service \
-    --enable-gui=gtk

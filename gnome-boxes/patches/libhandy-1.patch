@@ -1,0 +1,141 @@
+diff -Naur orig/build-aux/flatpak/org.gnome.Boxes.json patched/build-aux/flatpak/org.gnome.Boxes.json
+--- orig/build-aux/flatpak/org.gnome.Boxes.json	1970-01-01 01:00:00.000000000 +0100
++++ patched/build-aux/flatpak/org.gnome.Boxes.json	2021-01-05 01:07:45.909251561 +0100
+@@ -476,8 +476,7 @@
+             "sources" : [
+                 {
+                     "type" : "git",
+-                    "url" : "https://source.puri.sm/Librem5/libhandy.git",
+-                    "branch" : "libhandy-0-0"
++                    "url" : "https://gitlab.gnome.org/gnome/libhandy.git"
+                 }
+             ]
+         },
+diff -Naur orig/data/ui/welcome-tutorial.ui patched/data/ui/welcome-tutorial.ui
+--- orig/data/ui/welcome-tutorial.ui	1970-01-01 01:00:00.000000000 +0100
++++ patched/data/ui/welcome-tutorial.ui	2021-01-05 01:07:45.909251561 +0100
+@@ -23,10 +23,9 @@
+             <property name="expand">True</property>
+ 
+             <child>
+-              <object class="HdyPaginator" id="paginator">
++              <object class="HdyCarousel" id="paginator">
+                 <property name="visible">True</property>
+                 <property name="animation-duration">400</property>
+-                <property name="indicator-style">dots</property>
+                 <property name="margin-bottom">12</property>
+                 <signal name="notify::position" handler="on_position_changed"/>
+ 
+diff -Naur orig/src/app.vala patched/src/app.vala
+--- orig/src/app.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/app.vala	2021-01-05 01:14:16.678583268 +0100
+@@ -133,6 +133,8 @@
+     public override void startup () {
+         base.startup ();
+ 
++        Hdy.init ();
++
+         string [] args = {};
+         unowned string [] args2 = args;
+         Gtk.init (ref args2);
+diff -Naur orig/src/main.vala patched/src/main.vala
+--- orig/src/main.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/main.vala	2021-01-05 01:14:16.678583268 +0100
+@@ -79,8 +79,6 @@
+         error (err.message);
+     }
+ 
+-    Hdy.init (ref args);
+-
+     var app = new Boxes.App ();
+ 
+     var exit_status = app.run (args);
+diff -Naur orig/src/meson.build patched/src/meson.build
+--- orig/src/meson.build	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/meson.build	2021-01-05 01:13:53.702502274 +0100
+@@ -26,7 +26,6 @@
+   '-DGETTEXT_PACKAGE="gnome-boxes"',
+   '-DCACHEDIR="/var/cache/"',
+   '-DG_LOG_DOMAIN="Boxes"',
+-  '-DHANDY_USE_UNSTABLE_API=1',
+ ]
+ 
+ if get_option ('buildtype').contains ('debug')
+@@ -154,6 +153,21 @@
+   valac.find_library ('spice-client-gtk-3.0'),
+ ]
+ 
++libhandy = dependency ('libhandy-1', version: '>= 1.0.0', required: false)
++if not libhandy.found()
++  libhandy = subproject(
++    'libhandy',
++    default_options: [
++      'package_subdir=' + meson.project_name(),
++      'examples=false',
++      'glade_catalog=disabled',
++      'tests=false',
++    ]
++  )
++  dependencies += libhandy.get_variable('libhandy_vapi')
++else
++  dependencies += libhandy
++endif
+ 
+ if get_option('rdp')
+   vala_sources += ['rdp-display.vala']
+@@ -165,7 +179,6 @@
+   vala_args += '--define=FLATPAK'
+ 
+   dependencies += dependency ('govf-0.1')
+-  dependencies += dependency ('libhandy-0.0', version: '>= 0.0.11')
+ 
+   if get_option('rdp')
+     dependencies += dependency ('gtk-frdp-0.1')
+@@ -175,17 +188,6 @@
+     dependency ('gudev-1.0', version: '>= 165'),
+   ]
+ 
+-  libhandy = subproject(
+-    'libhandy',
+-    default_options: [
+-      'package_subdir=' + meson.project_name(),
+-      'examples=false',
+-      'glade_catalog=disabled',
+-      'tests=false',
+-    ]
+-  )
+-  dependencies += libhandy.get_variable('libhandy_vapi')
+-
+   if get_option('rdp')
+     gtk_frdp = subproject(
+       'gtk-frdp',
+diff -Naur orig/src/welcome-tutorial.vala patched/src/welcome-tutorial.vala
+--- orig/src/welcome-tutorial.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/welcome-tutorial.vala	2021-01-05 01:07:45.913251572 +0100
+@@ -5,7 +5,7 @@
+ [GtkTemplate (ui = "/org/gnome/Boxes/ui/welcome-tutorial.ui")]
+ private class Boxes.WelcomeTutorial : Gtk.Dialog {
+     [GtkChild]
+-    private Paginator paginator;
++    private Carousel paginator;
+     [GtkChild]
+     private Button go_back_button;
+     [GtkChild]
+diff -Naur orig/subprojects/libhandy.rej patched/subprojects/libhandy.rej
+--- orig/subprojects/libhandy.rej	1970-01-01 01:00:00.000000000 +0100
++++ patched/subprojects/libhandy.rej	2021-01-05 01:07:45.913251572 +0100
+@@ -0,0 +1,5 @@
++--- subprojects/libhandy
+++++ subprojects/libhandy
++@@ -1 +1 @@
++-Subproject commit aa6b6f43d505383538a2a3e7b4fcdd6a8ada85ff
+++Subproject commit 0293e21eeaff3d7f2e230a709a229bab92269197
+diff -Naur orig/subprojects/libhandy.wrap patched/subprojects/libhandy.wrap
+--- orig/subprojects/libhandy.wrap	1970-01-01 01:00:00.000000000 +0100
++++ patched/subprojects/libhandy.wrap	2021-01-05 01:07:45.913251572 +0100
+@@ -1,4 +1,4 @@
+ [wrap-git]
+ directory=libhandy
+ url=https://gitlab.gnome.org/gnome/libhandy.git
+-revision=libhandy-0-0
++revision=master
