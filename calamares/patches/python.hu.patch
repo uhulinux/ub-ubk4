@@ -1,7 +1,16 @@
-diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_MESSAGES/python.po
---- orig/lang/python/hu/LC_MESSAGES/python.po	2020-12-04 14:51:48.000000000 +0100
-+++ patched/lang/python/hu/LC_MESSAGES/python.po	2020-12-06 19:27:16.566521316 +0100
-@@ -102,11 +102,11 @@
+diff -Nur orig/lang/python/hu/LC_MESSAGES/python.po mod/lang/python/hu/LC_MESSAGES/python.po
+--- orig/lang/python/hu/LC_MESSAGES/python.po	2020-12-07 17:09:14.000000000 +0100
++++ mod/lang/python/hu/LC_MESSAGES/python.po	2021-01-05 20:31:08.710422321 +0100
+@@ -58,7 +58,7 @@
+ #: src/modules/services-systemd/main.py:59
+ #: src/modules/services-openrc/main.py:93
+ msgid "Cannot modify service"
+-msgstr "a szolgáltatást nem lehet módosítani"
++msgstr "A szolgáltatást nem lehet módosítani"
+ 
+ #: src/modules/services-systemd/main.py:60
+ msgid ""
+@@ -98,11 +98,11 @@
  
  #: src/modules/unpackfs/main.py:35
  msgid "Filling up filesystems."
@@ -11,11 +20,20 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  #: src/modules/unpackfs/main.py:255
  msgid "rsync failed with error code {}."
 -msgstr "az rsync elhalt a(z) {} hibakóddal"
-+msgstr "Az rsync elhalt a(z) {} hibakóddal"
++msgstr "A rsync elhalt a(z) {} hibakóddal"
  
  #: src/modules/unpackfs/main.py:300
  msgid "Unpacking image {}/{}, file {}/{}"
-@@ -131,7 +131,7 @@
+@@ -118,7 +118,7 @@
+ 
+ #: src/modules/unpackfs/main.py:431
+ msgid "No mount point for root partition"
+-msgstr "Nincs betöltési pont a root partíciónál"
++msgstr "Nincs csatolási pont a root partíciónál"
+ 
+ #: src/modules/unpackfs/main.py:432
+ msgid "globalstorage does not contain a \"rootMountPoint\" key, doing nothing"
+@@ -127,7 +127,7 @@
  
  #: src/modules/unpackfs/main.py:437
  msgid "Bad mount point for root partition"
@@ -24,7 +42,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/unpackfs/main.py:438
  msgid "rootMountPoint is \"{}\", which does not exist, doing nothing"
-@@ -155,8 +155,7 @@
+@@ -151,8 +151,7 @@
  "Failed to find unsquashfs, make sure you have the squashfs-tools package "
  "installed"
  msgstr ""
@@ -34,48 +52,7 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  
  #: src/modules/unpackfs/main.py:479
  msgid "The destination \"{}\" in the target system is not a directory"
-@@ -169,7 +168,7 @@
- #: src/modules/services-systemd/main.py:59
- #: src/modules/services-openrc/main.py:93
- msgid "Cannot modify service"
--msgstr "a szolgáltatást nem lehet módosítani"
-+msgstr "A szolgáltatást nem lehet módosítani"
- 
- #: src/modules/services-systemd/main.py:60
- msgid ""
-@@ -210,7 +209,7 @@
- #: src/modules/dummypython/main.py:37 src/modules/dummypython/main.py:93
- #: src/modules/dummypython/main.py:94
- msgid "Dummy python step {}"
--msgstr "Hamis {}. Python lépés"
-+msgstr "Hamis Python lépés: {}"
- 
- #: src/modules/bootloader/main.py:42
- msgid "Install bootloader."
-@@ -218,7 +217,7 @@
- 
- #: src/modules/localecfg/main.py:30
- msgid "Configuring locales."
--msgstr "nyelvi értékek konfigurálása."
-+msgstr "Nyelvi beállítások."
- 
- #: src/modules/mount/main.py:30
- msgid "Mounting partitions."
-@@ -287,11 +286,11 @@
- 
- #: src/modules/dracut/main.py:27
- msgid "Creating initramfs with dracut."
--msgstr "initramfs létrehozása ezzel: dracut."
-+msgstr "initramfs létrehozása a dracut programmal."
- 
- #: src/modules/dracut/main.py:49
- msgid "Failed to run dracut on the target"
--msgstr "dracut futtatása nem sikerült a célon."
-+msgstr "A dracut futtatása nem sikerült."
- 
- #: src/modules/grubcfg/main.py:28
- msgid "Configure GRUB."
-@@ -339,21 +338,23 @@
+@@ -200,17 +199,18 @@
  
  #: src/modules/displaymanager/main.py:894
  msgid "No display managers selected for the displaymanager module."
@@ -86,20 +63,47 @@ diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_M
  msgid ""
  "The displaymanagers list is empty or undefined in both globalstorage and "
  "displaymanager.conf."
- msgstr ""
--
-+ "A beléptetők listája üres, vagy nincs megadva a sem globalstorage-ben sem"
-+ " a displaymanager.conf fájlban."
-+ 
+-msgstr ""
++msgstr "A beléptetők listája üres, vagy nincs megadva a sem globalstorage-ben sem"
++" a displaymanager.conf fájlban."
+ 
  #: src/modules/displaymanager/main.py:977
  msgid "Display manager configuration was incomplete"
 -msgstr "A kijelzőkezelő konfigurációja hiányos volt"
 +msgstr "A grafikus beléptető konfigurációja hiányos volt"
  
+ #: src/modules/initcpiocfg/main.py:28
+ msgid "Configuring mkinitcpio."
+@@ -331,15 +331,15 @@
+ 
+ #: src/modules/dracut/main.py:27
+ msgid "Creating initramfs with dracut."
+-msgstr "initramfs létrehozása ezzel: dracut."
++msgstr "initramfs létrehozása a dracut programmal."
+ 
+ #: src/modules/dracut/main.py:49
+ msgid "Failed to run dracut on the target"
+-msgstr "dracut futtatása nem sikerült a célon."
++msgstr "dracut futtatása nem sikerült."
+ 
  #: src/modules/initramfscfg/main.py:32
  msgid "Configuring initramfs."
 -msgstr "initramfs konfigurálása."
-+msgstr "Az initramfs beállítása."
++msgstr "Az initramfs konfigurálása."
  
- #: src/modules/hwclock/main.py:26
- msgid "Setting hardware clock."
+ #: src/modules/openrcdmcryptcfg/main.py:26
+ msgid "Configuring OpenRC dmcrypt service."
+@@ -356,11 +356,11 @@
+ #: src/modules/dummypython/main.py:37 src/modules/dummypython/main.py:93
+ #: src/modules/dummypython/main.py:94
+ msgid "Dummy python step {}"
+-msgstr "Hamis {}. Python lépés"
++msgstr "Hamis Python lépés: {}"
+ 
+ #: src/modules/localecfg/main.py:30
+ msgid "Configuring locales."
+-msgstr "nyelvi értékek konfigurálása."
++msgstr "Nyelvi beállítások."
+ 
+ #: src/modules/networkcfg/main.py:28
+ msgid "Saving network configuration."
