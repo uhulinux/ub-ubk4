@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-sed -i 's:includedir=${prefix}/include:includedir=${prefix}/include/glew-1.13.0:' glewmx.pc
-make GLEW_DEST=${UB_INSTALLDIR}/usr install.all
-rm -R ${UB_INSTALLDIR}/usr/bin
-rm ${UB_INSTALLDIR}/usr/lib/{libGLEW.so*,libGLEW.a}
-rm ${UB_INSTALLDIR}/usr/lib/pkgconfig/glew.pc
