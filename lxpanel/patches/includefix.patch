@@ -1,0 +1,50 @@
+From 7a69f6ba6e4298349627124f3b1cdb03abe9b82c Mon Sep 17 00:00:00 2001
+From: Ionen Wolkens <sudinave@gmail.com>
+Date: Wed, 11 Nov 2020 15:33:02 -0500
+Subject: [PATCH] Remove unneeded gdk-pixbuf-xlib.h inclusions
+
+gdk-pixbuf-xlib was removed from gdk-pixbuf in version 2.42.0.
+
+Bug: https://bugs.gentoo.org/753923
+---
+ plugins/launchtaskbar.c | 1 -
+ plugins/task-button.c   | 1 -
+ src/plugin.c            | 1 -
+ 3 files changed, 3 deletions(-)
+
+diff --git a/plugins/launchtaskbar.c b/plugins/launchtaskbar.c
+index f6179f28..0b35d0f1 100644
+--- a/plugins/launchtaskbar.c
++++ b/plugins/launchtaskbar.c
+@@ -68,7 +68,6 @@
+ #include <X11/Xutil.h>
+ 
+ #include <gdk-pixbuf/gdk-pixbuf.h>
+-#include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ #include <gdk/gdk.h>
+ #include <glib/gi18n.h>
+ 
+diff --git a/plugins/task-button.c b/plugins/task-button.c
+index 577c04ac..3744cc79 100644
+--- a/plugins/task-button.c
++++ b/plugins/task-button.c
+@@ -43,7 +43,6 @@
+ #include <X11/Xutil.h>
+ 
+ #include <gdk-pixbuf/gdk-pixbuf.h>
+-#include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ #include <gdk/gdk.h>
+ #include <glib/gi18n.h>
+ #include <cairo-xlib.h>
+diff --git a/src/plugin.c b/src/plugin.c
+index 5b2398b3..aa1c3d01 100644
+--- a/src/plugin.c
++++ b/src/plugin.c
+@@ -29,7 +29,6 @@
+ #include "private.h"
+ 
+ #include <gdk-pixbuf/gdk-pixbuf.h>
+-#include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ #include <gdk/gdk.h>
+ #include <string.h>
+ #include <stdlib.h>

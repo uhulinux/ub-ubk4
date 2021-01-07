@@ -1,0 +1,16 @@
+diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
+--- orig/CMakeLists.txt	2020-12-22 17:35:50.000000000 +0100
++++ patched/CMakeLists.txt	2021-01-05 20:48:37.845464956 +0100
+@@ -136,9 +136,9 @@
+   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+ 
+-  install(FILES README.txt README-commercial.txt kdsoap.pri kdwsdl2cpp.pri DESTINATION ${INSTALL_DOC_DIR})
+-  install(DIRECTORY LICENSES DESTINATION ${INSTALL_DOC_DIR})
+-
++  # install(FILES README.txt README-commercial.txt kdsoap.pri kdwsdl2cpp.pri DESTINATION ${INSTALL_DOC_DIR})
++  # install(DIRECTORY LICENSES DESTINATION ${INSTALL_DOC_DIR})
++  
+   include(CMakePackageConfigHelpers)
+ 
+   write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/KDSoap/KDSoapConfigVersion.cmake"
