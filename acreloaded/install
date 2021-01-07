@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/usr/share/acreloaded
+cd source/src
+ub_install
+cd ../..
+
+cp -rf bot config packages acr/packages ${UB_INSTALLDIR}/usr/share/acreloaded
+
+install -Dm755 bin_unix/native_client ${UB_INSTALLDIR}/usr/share/acreloaded/native_client
+install -Dm755 bin_unix/native_server ${UB_INSTALLDIR}/usr/share/acreloaded/native_server
