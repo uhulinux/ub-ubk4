@@ -1,0 +1,16 @@
+#!/bin/sh -eux
+
+lacdir=${UB_INSTALLDIR}/usr/share/games/lac
+desktopdir=${UB_INSTALLDIR}/usr/share/applications
+pixmapdir=${UB_INSTALLDIR}/usr/share/pixmaps
+CONFIG_DIR=$lacdir
+mkdir -p $lacdir/bin $desktopdir $pixmapdir
+
+cp -r bin/{music,textures,sounds,models} $lacdir/
+cp bin/Release/Lac08p40 $lacdir/bin/
+chmod +x $lacdir/bin/Lac08p40
+cp lac.png $pixmapdir/
+cp lac.desktop $desktopdir/
+cp LacControls*.txt $CONFIG_DIR/
+cp LacConfig.txt $CONFIG_DIR/
+cp DefaultHeightMap.LAC $CONFIG_DIR/DefaultHeightMap.LAC
