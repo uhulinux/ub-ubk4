@@ -1,0 +1,12 @@
+diff -Naur orig/gptcurses.cc patched/gptcurses.cc
+--- orig/gptcurses.cc	2020-02-17 23:34:11.000000000 +0100
++++ patched/gptcurses.cc	2021-01-07 22:00:29.976227662 +0100
+@@ -26,7 +26,7 @@
+ #ifdef __APPLE__
+ #include <ncurses.h>
+ #else
+-#include <ncursesw/ncurses.h>
++#include <ncurses.h>
+ #endif
+ #include "gptcurses.h"
+ #include "support.h"
