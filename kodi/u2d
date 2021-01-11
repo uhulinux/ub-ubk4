@@ -1,1 +1,1 @@
-urllist https://github.com/xbmc/xbmc/releases/ | grep -E '+([0-9.]+)-L' | grep "\.tar\." | sed -e "s/-.*//g" | sort -V | tail -n1 
+urllist https://github.com/xbmc/xbmc/releases/ | grep tar.gz | sed s/-.*//g | sort -V | tail -n 1
