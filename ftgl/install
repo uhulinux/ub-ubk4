@@ -1,4 +1,8 @@
 #!/bin/sh -eux
 
 ub_install
+
+mkdir -p ${UB_INSTALLDIR}/usr/lib/pkgconfig
+cp ${UB_COMPILEDIR}/ftgl.pc ${UB_INSTALLDIR}/usr/lib/pkgconfig/ftgl.pc
+
 rm -rf ${UB_INSTALLDIR}/usr/share/doc
