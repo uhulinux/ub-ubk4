@@ -5,12 +5,14 @@ ub_install
 rm "$UB_INSTALLDIR"/usr/lib/lib*_g.a
 chmod 755 "$UB_INSTALLDIR"/usr/lib/lib*.so.*
 
-ln -sf libncursesw.a "$UB_INSTALLDIR"/usr/lib/libcursesw.a
-
-# Komodo-edit-11.0.2.18122 igényli
-
-ln -s "$UB_INSTALLDIR"/usr/lib/libpanelw.so.6 "$UB_INSTALLDIR"/usr/lib/libpanelw.so.5
-ln -s "$UB_INSTALLDIR"/usr/lib/libncursesw.so.6 "$UB_INSTALLDIR"/usr/lib/libncursesw.so.5
+# compat symlinks
+mkdir -p $UB_INSTALLDIR/usr/include/ncursesw
+for header in *.h; do
+    if [ ! -L $header ]; then
+    ln -s $header $UB_INSTALLDIR/usr/include/ncursesw/$header
+    fi
+done
+ln -s $UB_INSTALLDIR/usr/include/ncursesw/ncurses.h $UB_INSTALLDIR/usr/include/ncursesw/curses.h
 
 # fool packages looking to link to non-wide-character ncurses libraries
 for lib in ncurses ncurses++ form panel menu; do
@@ -18,5 +20,10 @@ for lib in ncurses ncurses++ form panel menu; do
     ln -s ${lib}w.pc "$UB_INSTALLDIR/usr/lib/pkgconfig/${lib}.pc"
 done
 
+ln -sf libncursesw.a "$UB_INSTALLDIR"/usr/lib/libcursesw.a
 ln -s libncurses.so "$UB_INSTALLDIR/usr/lib/libcurses.so"
 ln -s libncursesw.so.6 "$UB_INSTALLDIR/usr/lib/libncurses.so.6"
+
+# Komodo-edit-11.0.2.18122 igényli
+ln -s "$UB_INSTALLDIR"/usr/lib/libpanelw.so.6 "$UB_INSTALLDIR"/usr/lib/libpanelw.so.5
+ln -s "$UB_INSTALLDIR"/usr/lib/libncursesw.so.6 "$UB_INSTALLDIR"/usr/lib/libncursesw.so.5
