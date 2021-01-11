@@ -5,15 +5,6 @@ ub_install
 rm "$UB_INSTALLDIR"/usr/lib/lib*_g.a
 chmod 755 "$UB_INSTALLDIR"/usr/lib/lib*.so.*
 
-# compat symlinks
-mkdir -p $UB_INSTALLDIR/usr/include/ncursesw
-for header in *.h; do
-    if [ ! -L $header ]; then
-    ln -s $header $UB_INSTALLDIR/usr/include/ncursesw/$header
-    fi
-done
-ln -s $UB_INSTALLDIR/usr/include/ncursesw/ncurses.h $UB_INSTALLDIR/usr/include/ncursesw/curses.h
-
 # fool packages looking to link to non-wide-character ncurses libraries
 for lib in ncurses ncurses++ form panel menu; do
     echo "INPUT(-l${lib}w)" > "$UB_INSTALLDIR/usr/lib/lib${lib}.so"
