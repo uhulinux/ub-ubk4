@@ -1,0 +1,17 @@
+diff -Nur orig/tools/Linux/kodi.sh.in mod/tools/Linux/kodi.sh.in
+--- orig/tools/Linux/kodi.sh.in	2020-12-07 06:54:45.000000000 +0100
++++ mod/tools/Linux/kodi.sh.in	2021-01-12 13:57:33.177481780 +0100
+@@ -25,7 +25,12 @@
+ exec_prefix="@exec_prefix@"
+ datarootdir="@datarootdir@"
+ LIBDIR="@libdir@"
+-APP_BINARY=$LIBDIR/${bin_name}/@APP_BINARY@
++if [ ${XDG_SESSION_TYPE} == "wayland" ];then
++APPNAME=kodi-wayland
++else
++APPNAME=kodi-x11
++fi
++APP_BINARY=$LIBDIR/${bin_name}/${APPNAME}
+ CRASHLOG_DIR=${CRASHLOG_DIR:-$HOME}
+ KODI_DATA=${KODI_DATA:-"${HOME}/.${bin_name}"} # mapped to special://home/
+ WINDOWING=${WINDOWING:-"auto"}

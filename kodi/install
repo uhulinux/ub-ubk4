@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
+cd build-w
 ub_install
-
-# rm "$UB_INSTALLDIR"/usr/share/xbmc/addons/skin.confluence/media/Textures.xbt
-# install -D -m 0755 xbmc-xrandr "$UB_INSTALLDIR"/usr/share/xbmc/ (/usr/lib/kodi alá kerül)
-# install -D -m 0755 tools/TexturePacker/TexturePacker "$UB_INSTALLDIR"/usr/share/xbmc/
+cd ../build-x
+ub_install

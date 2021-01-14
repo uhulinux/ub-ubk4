@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
 # vulkan-overlay-layer: https://github.com/KhronosGroup/glslang
-
+# kodi: https://bugs.launchpad.net/ubuntu/+source/mesa/+bug/1836979/comments/9
+# kodi: https://github.com/uhulinux/ub-ubk4/issues/3#issuecomment-759607534
 ub_compile \
     -Dplatforms=x11,wayland \
     -Ddri3=true \
@@ -27,3 +28,5 @@ ub_compile \
 	-Dlmsensors=true \
     -Dswr-arches=avx,avx2 \
 	-Dtools=all \
+    -Db_ndebug=true \
+    -Db_lto=true
