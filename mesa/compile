@@ -1,32 +1,31 @@
 #!/bin/sh -eux
 
 # vulkan-overlay-layer: https://github.com/KhronosGroup/glslang
-# kodi: https://bugs.launchpad.net/ubuntu/+source/mesa/+bug/1836979/comments/9
-# kodi: https://github.com/uhulinux/ub-ubk4/issues/3#issuecomment-759607534
+
 ub_compile \
     -Dplatforms=x11,wayland \
-    -Ddri3=true \
+    -Ddri3=enabled \
     -Dgallium-extra-hud=true \
-    -Dgallium-vdpau=true \
-    -Dgallium-xvmc=true \
-    -Dgallium-va=true \
-    -Dgallium-xa=true \
+    -Dgallium-vdpau=enabled \
+    -Dgallium-xvmc=enabled \
+    -Dgallium-va=enabled \
+    -Dgallium-xa=enabled \
     -Dgallium-nine=true \
     -Dgallium-opencl=icd \
 	-Dgallium-omx=bellagio \
     -Dvulkan-drivers=amd,intel \
     -Dvulkan-overlay-layer=true \
     -Dvulkan-device-select-layer=true \
-    -Dgles1=false \
-    -Dgles2=true \
-	-Dgbm=true \
+    -Dgles1=disabled \
+    -Dgles2=enabled \
+	-Dgbm=enabled \
 	-Dglx=dri \
-    -Degl=true \
+    -Degl=enabled \
 	-Dglvnd=true \
-	-Dllvm=true \
-	-Dlibunwind=true \
-	-Dlmsensors=true \
+	-Dllvm=enabled \
+	-Dlibunwind=enabled \
+	-Dlmsensors=enabled \
     -Dswr-arches=avx,avx2 \
 	-Dtools=all \
-    -Db_ndebug=true \
-    -Db_lto=true
+	-Db_ndebug=true \
+	-Db_lto=true
