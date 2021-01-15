@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+ub_install
+
+sed -i -e "s/^Version:.*/Version: $UB_VERSION/" $UB_INSTALLDIR/usr/lib/pkgconfig/sigc++-3.0.pc

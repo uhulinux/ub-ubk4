@@ -1,0 +1,2 @@
+ver="$(urllist "https://download.gnome.org/sources/libsigc++/" | grep -E '^3+\.[0-9]*['02468'](\.[0-9.])?$' | sort -V | tail -n 1)"
+u2d "https://download.gnome.org/sources/libsigc++/$ver"
