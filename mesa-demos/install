@@ -1,9 +1,36 @@
 #!/bin/sh -eux
 
+mkdir -p $UB_INSTALLDIR/usr/share/mesa-demos
+
+cd build
 ub_install
-# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/egl/opengles2/es2_info ${UB_INSTALLDIR}/usr/bin/
-# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/egl/opengles1/es1_info ${UB_INSTALLDIR}/usr/bin/
-# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/demos/{glinfo,glxinfo} ${UB_INSTALLDIR}/usr/bin/
-# mv ${UB_INSTALLDIR}/usr/share/mesa-demos/xdemos/{glxgears,pbinfo} ${UB_INSTALLDIR}/usr/bin/
-mkdir -p ${UB_INSTALLDIR}/usr/share/pixmaps
+cd $UB_INSTALLDIR/usr
+mv \
+    glsl \
+    redbook \
+    perf \
+    tests \
+    slang \
+    fpglsl \
+    egl \
+    vp \
+    gs \
+    trivial \
+    xdemos \
+    tools \
+    fp \
+    vpglsl \
+    demos \
+    samples \
+    objviewer \
+    data \
+    doc \
+    -t $UB_INSTALLDIR/usr/share/mesa-demos
+cd ${UB_COMPILEDIR}
 mv icon.png ${UB_INSTALLDIR}/usr/share/pixmaps/mesa-demos.png
+mv $UB_INSTALLDIR/usr/share/mesa-demos/demos/glxinfo $UB_INSTALLDIR/usr/bin/
+mv $UB_INSTALLDIR/usr/share/mesa-demos/xdemos/{glxgears,glxdemo,glxheads} $UB_INSTALLDIR/usr/bin/
+
+mv $UB_INSTALLDIR/usr/share/mesa-demos/egl/opengles2/{es2_info,es2tri,es2gears_x11} $UB_INSTALLDIR/usr/bin/
+mkdir -p $UB_INSTALLDIR/usr/share/man/man1
+cp debian/*.1 $UB_INSTALLDIR/usr/share/man/man1/
