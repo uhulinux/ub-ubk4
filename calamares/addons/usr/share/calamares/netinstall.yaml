@@ -13,10 +13,8 @@
     - qt5
     - tslib
     - tdb
-    - luit
     - neon
     - openipmi
-    - xzoom
 
   subgroups:
     -   name: "Konsole"
@@ -94,14 +92,12 @@
         critical: false
         selected: true
         packages:
-        - isdn4k-utils
         - curlftpfs
         - bluez
         - bluez-firmware
         - bluez-hcidump
         - apache
         - apache-mod-fcgid
-        - apache-mod-php
         - fuse-smbnetfs
         - fuse-sshfs
         - tigervnc
@@ -110,9 +106,7 @@
         - nmap
         - opensshd
         - openvpn
-        - php
         - rdesktop
-        - w3m
         - wvdial
         - usb-modeswitch
         - x11vnc
@@ -125,6 +119,7 @@
     - exif
     - xsane
     - gimp
+    - gimp3
     - gqview
     - imagemagick
     - jpeg-turbo-tools
@@ -178,8 +173,6 @@
     - pulseaudio
     - sbc
     - speexdsp
-    - bladeenc
-    - dvd+rw-tools
     - cdrdao
     - cdrkit
     - enscript
@@ -321,7 +314,6 @@
                 selected: false
                 packages:
                 - icewm
-                - icewm-xdgmenu
                 - slim
                 - icon-theme-gnome
 
@@ -330,12 +322,10 @@
                 critical: false
                 selected: false
                 packages:
-                - icewm-themes
-                - icewm-theme-winclassic2
-                - icewm-theme-win7
-                - icewm-theme-win31
-                - icewm-theme-ubuntu
-                - icewm-theme-nitrogen
+                - icewm-theme-silverxp
+                - icewm-theme-win95
+                - icewm-theme-winxp
+                - icewm-theme-winxp-new
 
     -   name: "Openbox"
         description: "Openbox windowmanager"
@@ -343,7 +333,6 @@
         selected: false
         packages:
         - openbox
-        - openbox-debian-themes
         - openbox-menu
         - slim
 
@@ -405,32 +394,7 @@
                 critical: false
                 selected: false
                 packages:
-                -   lxpanel
-                -   lxsession
-                -   lxtask
-                -   lxde-common
-                -   icon-theme-adwaita
-                -   lxappearance
-                -   lxappearance-obconf
-                -   libfm
-                -   pcmanfm
-                -   xscreensaver
-                -   lxinput
-                -   lxmenu-data
-                -   menu-cache
-                -   obconf
-                -   openbox
-                -   lxdm
-
-            -   name: "LXDE extra"
-                description: "LXDE extra packages"
-                critical: false
-                selected: false
-                packages:
-                -   gpicview
-                -   lxmusic
-                -   lxrandr
-                -   lxterminal
+                -   lxde
 
     -   name: "LXQT"
         description: "Lxqt desktop"
@@ -443,36 +407,8 @@
                 critical: false
                 selected: false
                 packages:
-                - compton-conf
-                - lxqt-about
-                - lxqt-admin
-                - lxqt-config
-                - lxqt-notificationd
-                - lxqt-panel
-                - lxqt-policykit
-                - lxqt-powermanagement
-                - lxqt-qtplugin
-                - lxqt-runner
-                - lxqt-session
-                - lxqt-sudo
-                - obconf-qt
-                - pavucontrol-qt
-                - pcmanfm-qt
+                - lxqt
                 - sddm
-                - icon-theme-adwaita
-
-            -   name: "LXQT extra"
-                description: "LXQT extra packages"
-                critical: false
-                selected: false
-                packages:
-                - lximage-qt
-                - lxqt-openssh-askpass
-                - lxqt-themes
-                - qterminal
-                - qtermwidget
-                - xarchiver
-                - qpdfview
 
 - name: "Big Desktops"
   description: "Desktop environments"
@@ -491,52 +427,10 @@
                 critical: false
                 selected: false
                 packages:
-                - caja
-                - caja-extensions
-                - marco
-                - mate-control-center
-                - mate-desktop
-                - mate-menu
-                - mate-menus
-                - mate-notification-daemon
-                - mate-panel
-                - mate-polkit
-                - mate-power-manager
-                - mate-screensaver
-                - mate-session-manager
-                - mate-settings-daemon
-                - mate-icon-theme
-                - mate-system-monitor
-                - mate-terminal
-                - mate-backgrounds
-                - mate-applets
-                - atril
-                - caja-extension-atril
-                - engrampa
-                - caja-extension-engrampa
-                - pluma
-                - sddm
-
-            -   name: "MATE extra"
-                description: "MATE extra apps, applets and themes"
-                critical: false
-                selected: false
-                packages:
-                - brisk-menu
-                - eom
-                - mate-calc
-                - mate-media
-                - mate-applet-lockkeys
-                - mate-applet-uptime
-                - mate-indicator-applet
-                - mate-sensors-applet
-                - mate-themes
-                - mate-icon-theme-faenza
-                - mate-tweak
-                - mate-user-guide
-                - mate-user-share
-                - mate-utils
-
+                - mate
+                - lightdm
+                - lighdm-qt5-greeter
+                
     -   name: "Xfce"
         description: "Xfce desktop"
         critical: false
@@ -566,34 +460,17 @@
                 critical: false
                 selected: false
                 packages:
-                - ark
-                - calligra
-                - digikam
-                - dolphin
-                - dolphin-plugins
-                - filelight
-                - gwenview
-                - k3b
-                - k9copy
-                - kaffeine
-                - kate
-                - kcalc
-                - kdiff3
-                - khelpcenter
-                - konqueror
-                - konsole
-                - kpartitionmanager
-                - krusader
-                - ksystemlog
-                - okular
-                - spectacle
-                - tellico
+                - kde
+                - kde-apps
+                - sddm
 
             -   name: "KDE apps-pim"
                 description: "KDE pim applications"
                 critical: false
                 selected: false
                 packages:
+                - kde
+                - sddm
                 - kde-apps-pim
 
     -   name: "Cinnamon"
@@ -622,83 +499,37 @@
         selected: false
         subgroups:
 
-            -   name: "Gnome base"
+            -   name: "Gnome full"
+                description: "Gnome full desktop"
+                critical: false
+                selected: false
+                packages:
+                - gnome
+
+            -   name: "Gnome core"
                 description: "Gnome base packages"
                 critical: false
                 selected: false
                 packages:
                 - gnome-core
-                - gdm
-                - blueman
-                - gnome-screensaver
-                - gnome-session
-                - evolution
-                - gnome-tweak-tool
-                - gedit
-                - gksu
-                - gnome-power-manager
-                - gnome2-mime-data
 
             -   name: "Gnome apps"
                 description: "Gnome applications"
                 critical: false
                 selected: false
                 packages:
-                - gnome-packagekit
-                - gnome-weather
-                - gthumb
-                - planner
-                - sound-juicer
-                - vinagre
-                - accerciser
-                - anjuta
-                - bijiben
-                - brasero
-                - gitg
-                - gnome-boxes
-                - gnome-builder
-                - gnome-calendar
-                - gnome-clocks
-                - gnome-dictionary
-                - gnome-maps
-                - gnome-music
-                - gnome-nettool
-                - gnome-photos
-                - gnome-sound-recorder
-                - gnome-todo
-                - gnome-color-manager
-                - gnome-documents
+                - gnome-core
+                - gnome-apps
                 - gnomeradio
-                - polari
-                - rygel
-                - seahorse
-                - nautilus-sendto
-                - dconf-editor
-                - gconf-editor
 
-            -   name: "Gnome games"
-                description: "Games for gnome"
+            -   name: "Gnome extra"
+                description: "Games extra applications"
                 critical: false
                 selected: false
                 packages:
-                - aisleriot
-                - five-or-more
-                - four-in-a-row
-                - hitori
-                - iagno
-                - lightsoff
-                - tali
-                - swell-foop
-                - gnome-klotski
-                - gnome-mahjongg
-                - gnome-mines
-                - gnome-nibbles
-                - gnome-sudoku
-                - gnome-taquin
-                - gnome-tetravex
-                - gnome-chess
-                - gnome-robots
-                - quadrapassel
+                - gnome-core
+                - gnome-extra
+                - gnomeradio
 
 - name: "Display Managers"
   description: "Graphical Display Managers"
@@ -713,8 +544,6 @@
         packages:
         - sddm
         - sddm-config-editor
-        - sddm-theme-solarized
-        - sddm-theme-urbanlifestyle
 
     -   name: "lightdm"
         description: "GTK Light Display Manager"
@@ -724,6 +553,7 @@
         - lightdm
         - lightdm-gtk-greeter
         - lightdm-gtk-greeter-settings
+        - lightdm-qt5-greeter
 
     -   name: "slim"
         description: "GTK Simple Display Manager"
@@ -766,12 +596,8 @@
         -   firefox
         -   opera
         -   chromium
-        -   midori
         -   otter
-        -   dillo
         -   falkon
-        -   links
-        -   links-x11
         -   epiphany
 
     -   name:   "Email"
@@ -799,7 +625,6 @@
         selected:   false
         packages:
         -   pidgin
-        -   ekiga
         -   seamonkey
 
 - name: "Multimedia"
@@ -814,14 +639,12 @@
         selected: false
         packages:
         - ffmpeg
-        - bino
         - mplayer
         - smplayer
         - smtube
         - vlc
         - kaffeine
         - kodi
-        - gxine
         - xine-ui
 
     -   name: "Youtube players & downloaders"
@@ -829,7 +652,6 @@
         critical: false
         selected: false
         packages:
-        - flashplayer
         - minitube
         - smtube
         - youtube-dl
@@ -866,6 +688,7 @@
         - dvdstyler
         - dvdrip
         - dvdauthor
+        - mkvtoolnix
 
     -   name: "TV"
         description: "Analog & DVB TV players"
@@ -916,16 +739,15 @@
                     - vdr-plugin-channellists
                     - vdr-plugin-sc
                     - vdr-plugin-streamdev
-                    - vdr-plugin-xvdr
                     - vdr-plugin-zappilot
                     - vdr-remote
                     - vdr-screenshot
                     - vdr-softhddevice
                     - vdr-plugin-tvguide
                     - vdr-plugin-tvguideng
-                    - vdr-wirbelscan
                     - vdr-xine
                     - vdr-xineliboutput
+                    - kodi-addon-pvr-vnsi
 
                 -   name: "VDR tools"
                     description: "VDR tools"
@@ -963,7 +785,172 @@
   description: "Games"
   critical: false
   selected: false
-  packages:
-    - fortune
-    - fortune-hu
-    - spider
+  subgroups:
+
+    -   name: "RTS games"
+        description: "Real Time Strategie games"
+        critical: false
+        selected: false
+        packages:
+            - 0ad
+            - widelands
+            - dark-oberon
+            - lincity
+            - lincity-ng
+            - megaglest
+            - opendungeons
+            - openttd
+            - simutrans
+
+    -   name: "Strategie games"
+        description: "Non Real Time Strategie games"
+        critical: false
+        selected: false
+        packages:
+            - deflektor
+            - fillets
+            - freeciv
+            - wesnoth
+        
+    -   name: "FPS games"
+        description: "First Person Shooters"
+        critical: false
+        selected: false
+        packages:
+            - alaphone-marathon
+            - d1x-rebirth
+            - d2x-rebirt
+            - darkpaces
+            - eduke32
+            - gzdoom
+            - prboom
+            - quake2
+            - sauerbraten
+            - smokinguns
+            - vavoom
+            - wolf4sdl
+            - zdoom
+            
+    -   name: "Shooter games"
+        description: "Shooters"
+        critical: false
+        selected: false
+        packages:
+            - barrage
+            - chromium-bsu
+            - criticalmass
+            - frozen-bubble
+            - komi
+            - powermanga
+            - sdl-invaders
+            - westbang
+        
+    -   name: "Solid 3d games"
+        description: "Solid 3d games"
+        critical: false
+        selected: false
+        packages:
+            - alien8
+            - hoh
+        
+    -   name: "Action games"
+        description: "Action games"
+        critical: false
+        selected: false
+        packages:
+            - blobwars
+            - clonekeen
+            - digger
+            - hedgewars
+            - heroes
+            - humphrey
+            - jumpnbump
+            - lbreakout
+            - moon-buggy
+            - neverball
+            - njam
+            - pinball
+            - pingus
+            - rocksndiamons
+            - sdl-ball
+            - supertux
+            - tomatoes
+            - toppler
+            - trackballs
+            - tsc
+            - vorton
+            - worminator3
+            - xrick
+            
+    -   name: "Simulation games"
+        description: "Simulators"
+        critical: false
+        selected: false
+        packages:
+            - caph
+            - cave9
+            - gnubik
+            - golems
+            - gtklife
+            - oolite
+            - rubix
+    
+    -   name: "War games"
+        description: "War games"
+        critical: false
+        selected: false
+        packages:
+            - bzflag
+            - dangerdeep
+            - lac
+        
+    -   name: "Board games"
+        description: "Board games"
+        critical: false
+        selected: false
+        packages:
+            - chessx
+            - dreamchess
+            - fairymax
+            - gnuchess
+            - gshogi
+            - lmarbles
+            - ltris
+            - pychess
+            - ri-li
+            - tetzle
+            - vitetris
+            - xye
+            - zaz
+        
+    -   name: "Card games"
+        description: "Card games"
+        critical: false
+        selected: false
+        packages:
+            - pysolfc
+
+        
+    -   name: "Sport games"
+        description: "Sport games"
+        critical: false
+        selected: false
+        packages:
+            - etracer
+            - foobillard+
+            - gav
+            - miniracer
+            - stuntrally
+            - supertuxkart
+            - torcs
+            - trigger-rally
+            - tuxracer
+            - ultimatestunts
+            - x-moto
+    
+    -   name: "Kids games"
+        description: "games for children"
+        critical: false
+        selected: false
+        packages:
+            - gcompris
