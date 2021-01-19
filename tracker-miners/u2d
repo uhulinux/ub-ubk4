@@ -1,5 +1,5 @@
-for dir in $(urllist https://ftp.acc.umu.se/pub/GNOME/sources/tracker/ | grep -E '^[3-9]' | sort -Vr);do
-ver=$(u2d https://ftp.acc.umu.se/pub/GNOME/sources/tracker/$dir)
+for dir in $(urllist https://download.gnome.org/sources/tracker-miners/ | grep -E '^[3-9]' | sort -Vr);do
+ver=$(u2d https://download.gnome.org/sources/tracker-miners/$dir)
 if [ $ver ];then
     echo $ver
     exit
