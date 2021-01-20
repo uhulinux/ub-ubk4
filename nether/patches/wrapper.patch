@@ -1,0 +1,28 @@
+diff -Nur orig/netherearth_launch mod/netherearth_launch
+--- orig/netherearth_launch	2019-08-07 00:08:55.000000000 +0200
++++ mod/netherearth_launch	2021-01-20 16:57:59.028375970 +0100
+@@ -1,14 +1,19 @@
+ #!/bin/sh
+-NE=/usr/share/games/netherearth
++NE=/usr/share/games/nether
+ NEL=$HOME/.netherearth
+ 
+ if [ ! -d $NEL ] ; then
+-  mkdir $NEL
+-  ln -s $NE/netherearth $NEL
++  mkdir -p $NEL/maps
++  ln -s $NE/nether_earth $NEL
+   ln -s $NE/textures $NEL
+   ln -s $NE/sound $NEL
+   ln -s $NE/models $NEL
+-  cp -f $NE/{nether.cfg,*.map} $NEL
++  cp -f $NE/maps/* $NEL/maps/
++  cp -f $NE/nether.cfg $NEL
+ fi
+ cd $NEL
+-exec ./netherearth
++if [ -f /usr/bin/padsp ] ; then
++  padsp ./nether_earth "$@"
++  else
++  ./nether_earth "$@"
++fi

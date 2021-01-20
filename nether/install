@@ -3,7 +3,10 @@
 mkdir -p ${UB_INSTALLDIR}/usr/share/{pixmaps,games/nether/maps}
 cp -a nether_earth models sound textures ${UB_INSTALLDIR}/usr/share/games/nether/
 cp netherearth.xpm ${UB_INSTALLDIR}/usr/share/pixmaps/
-cp *.map ${UB_INSTALLDIR}/usr/share/games/nether/maps
+cp *.map ${UB_INSTALLDIR}/usr/share/games/nether/maps/
+cp *.cfg ${UB_INSTALLDIR}/usr/share/games/nether/
+cp netherearth_launch ${UB_INSTALLDIR}/usr/bin/nether
+chmod +x ${UB_INSTALLDIR}/usr/bin/nether
 chmod +x ${UB_INSTALLDIR}/usr/share/games/nether/nether_earth
 chmod 777 ${UB_INSTALLDIR}/usr/share/games/nether/models/*
 chmod 777 ${UB_INSTALLDIR}/usr/share/games/nether/sound/*
