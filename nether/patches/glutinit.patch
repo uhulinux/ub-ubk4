@@ -1,0 +1,23 @@
+diff -Nur orig/main.cpp mod/main.cpp
+--- orig/main.cpp	2019-08-07 00:08:55.000000000 +0200
++++ mod/main.cpp	2021-01-20 13:11:30.723789366 +0100
+@@ -19,6 +19,8 @@
+ #include "shadow3dobject.h"
+ #include "piece3dobject.h"
+ #include "nether.h"
++#include "GL/gl.h"
++#include "GL/glut.h"
+ 
+ /*						GLOBAL VARIABLES INITIALIZATION:							*/ 
+ 
+@@ -148,7 +150,9 @@
+ 	screen_sfc = initialization((fullscreen ? SDL_FULLSCREEN : 0));
+ 	if (screen_sfc==0) return 0;
+ 
+-	time=init_time=SDL_GetTicks();
++	glutInit(&argc, argv);
++
++    time=init_time=SDL_GetTicks();
+ 
+ 	while (!quit) {
+ 		while( SDL_PollEvent( &event ) ) {

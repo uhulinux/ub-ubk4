@@ -1,0 +1,30 @@
+diff -Nur orig/glprintf.cpp mod/glprintf.cpp
+--- orig/glprintf.cpp	2019-08-07 00:08:55.000000000 +0200
++++ mod/glprintf.cpp	2021-01-20 12:14:01.008921558 +0100
+@@ -7,6 +7,7 @@
+ #include "stdarg.h"
+ #include "GL/gl.h"
+ #include "GL/glut.h"
++#include <cstring>
+ 
+ void glprintf(const char *fmt, ...)						
+ {
+@@ -132,4 +133,4 @@
+ 	} /* for */ 
+ 
+ 	glPopMatrix();
+-} /* fittedglprintf */ 
+\ Nincs új sor a fájl végén
++} /* fittedglprintf */ 
+diff -Nur orig/myglutaux.cpp mod/myglutaux.cpp
+--- orig/myglutaux.cpp	2019-08-07 00:08:55.000000000 +0200
++++ mod/myglutaux.cpp	2021-01-20 12:27:47.620665682 +0100
+@@ -14,7 +14,7 @@
+ #include "bitmap.h"
+ 
+ #include "myglutaux.h"
+-
++#include <cstring>
+ 
+ 
+ C3DObject *characters[256]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
