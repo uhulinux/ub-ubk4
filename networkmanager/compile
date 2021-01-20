@@ -4,8 +4,9 @@ ub_compile \
 	-Dudev_dir=/usr/lib/udev/ \
 	-Dpppd_plugin_dir=/usr/lib/pppd/2.4.8 \
 	-Dconfig_dhcp_default=internal \
+	-Ddhcpcd=no \
+	-Dsession_tracking_consolekit=false \
 	-Dsession_tracking=systemd \
-	-Dlibnm_glib=true \
 	-Difupdown=true \
 	-Dmodify_system=true \
 	-Dconcheck=true \
@@ -14,5 +15,4 @@ ub_compile \
 	-Dqt=false \
 	-Dbluez5_dun=true \
 	-Dpolkit_agent=true \
-	-Dibft=true
 #	-Dteamdctl=true \
