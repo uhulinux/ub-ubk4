@@ -1,0 +1,147 @@
+diff -Nur orig/examples/factorial mod/examples/factorial
+--- orig/examples/factorial	2012-05-12 00:56:14.000000000 +0200
++++ mod/examples/factorial	2021-01-20 10:10:31.639582707 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ # This is a Python program to display large factorials and test "fact.py".
+ 
+@@ -8,13 +8,13 @@
+ import string
+ 
+ def usage():
+-	print "This program calculates large factorials."
+-	print "Requires and tests \"fact.py\"."
+-	print
+-	print "Usage: %s integer_expressions" % os.path.basename(sys.argv[0])
+-	print
+-	print "The integer expressions should be separated by spaces."
+-	print "A factorial is the product of all positive integers <= a given integer."
++	print("This program calculates large factorials.")
++	print("Requires and tests \"fact.py\".")
++	print()
++	print("Usage: %s integer_expressions" % os.path.basename(sys.argv[0]))
++	print()
++	print("The integer expressions should be separated by spaces.")
++	print("A factorial is the product of all positive integers <= a given integer.")
+ 	sys.exit(2)
+ 
+ args = sys.argv[1:]
+@@ -23,8 +23,8 @@
+ else:
+ 	try:
+ 		num = eval(string.join(args))
+-		print "factorial(", num, ") =", factorial(num)
++		print("factorial(", num, ") =", factorial(num))
+ 	except:
+ 		for arg in args:
+ 			num = eval(arg)
+-			print "factorial(", num, ") =", factorial(num)
++			print("factorial(", num, ") =", factorial(num))
+diff -Nur orig/examples/fact.py mod/examples/fact.py
+--- orig/examples/fact.py	2012-05-12 00:55:22.000000000 +0200
++++ mod/examples/fact.py	2021-01-20 10:09:29.783748081 +0100
+@@ -7,7 +7,7 @@
+ def factorial(x):
+ 	"Return x! (x factorial)."
+ 	if (x < 0 or (x % 1.0) != 0.0):
+-		raise ValueError, "Factorial argument must be a positive integer."
++		raise ValueError("Factorial argument must be a positive integer.")
+ 	if (x == 0):
+ 		return x + 1
+ 	d = x
+@@ -15,6 +15,6 @@
+ 		x -= 1
+ 		temp = d * x
+ 		if (temp <= d):
+-			raise ValueError, "Factorial result too large."
++			raise ValueError("Factorial result too large.")
+ 		d = temp
+ 	return d
+diff -Nur orig/primes/matho-mult mod/primes/matho-mult
+--- orig/primes/matho-mult	2011-08-04 14:12:08.000000000 +0200
++++ mod/primes/matho-mult	2021-01-20 10:10:02.919659610 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ # Python program to multiply many large integers separated by spaces or newlines.
+ # The integers to multiply may be entered on the command-line or into standard input.
+@@ -15,7 +15,7 @@
+ 	# read stdin if no command line args
+ 	while True:
+ 		try:
+-			input_line = raw_input()
++			input_line = input()
+ 		except:
+ 			break;
+ 		for s in string.split(input_line):
+@@ -24,4 +24,4 @@
+ 	# multiply together the command-line args
+ 	for arg in args:
+ 		prod *= int(arg)
+-print prod
++print(prod)
+diff -Nur orig/primes/matho-sum mod/primes/matho-sum
+--- orig/primes/matho-sum	2011-08-04 14:04:54.000000000 +0200
++++ mod/primes/matho-sum	2021-01-20 10:09:54.935680951 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ # Python program to sum many large integers separated by spaces or newlines.
+ # The integers to sum may be entered on the command-line or into standard input.
+@@ -12,7 +12,7 @@
+ 	# read stdin if no command line args
+ 	while True:
+ 		try:
+-			input_line = raw_input()
++			input_line = input()
+ 		except:
+ 			break;
+ 		for s in string.split(input_line):
+@@ -21,4 +21,4 @@
+ 	# sum together the command-line args
+ 	for arg in args:
+ 		sum += int(arg)
+-print sum
++print(sum)
+diff -Nur orig/primes/primorial mod/primes/primorial
+--- orig/primes/primorial	2012-06-14 17:11:52.000000000 +0200
++++ mod/primes/primorial	2021-01-20 10:09:45.923705019 +0100
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ # This is a Python program to display large primorials.
+ # A primorial is the product of all primes up to the given number.
+@@ -16,11 +16,11 @@
+ import sys
+ 
+ def usage(ev):
+-	print "This program calculates large primorials."
+-	print
+-	print "Usage: %s integers" % os.path.basename(sys.argv[0])
+-	print
+-	print "A primorial is the product of all primes up to the given number."
++	print("This program calculates large primorials.")
++	print()
++	print("Usage: %s integers" % os.path.basename(sys.argv[0]))
++	print()
++	print("A primorial is the product of all primes up to the given number.")
+ 	sys.exit(ev)
+ 
+ def output_primorial(arg):
+@@ -36,9 +36,9 @@
+ 	for arg in args:
+ 		try:
+ 			if (int(arg) < 1):
+-				print >>sys.stderr, "Number too small."
++				print("Number too small.", file=sys.stderr)
+ 				sys.exit(1)
+ 		except:
+-			print >>sys.stderr, "Positive integer required."
++			print("Positive integer required.", file=sys.stderr)
+ 			usage(1)
+ 		output_primorial(arg)
