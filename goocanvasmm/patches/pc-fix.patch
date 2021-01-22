@@ -1,0 +1,11 @@
+diff -Nur orig/goocanvas/goocanvasmm.pc.in mod/goocanvas/goocanvasmm.pc.in
+--- orig/goocanvas/goocanvasmm.pc.in	2014-12-11 10:14:51.000000000 +0100
++++ mod/goocanvas/goocanvasmm.pc.in	2021-01-22 17:46:01.559460933 +0100
+@@ -14,6 +14,6 @@
+ Description: C++ binding for goocanvas
+ Version: @GOOCANVASMM_VERSION@
+ URL: http://www.gtkmm.org/
+-Requires: @GOOCANVASMM_MODULES@
++Requires: glibmm-2.4 >= 2.46.1 gtkmm-3.0 >= 3.18.0
+ Libs: -L${libdir} -lgoocanvasmm-@GOOCANVASMM_API_VERSION@
+ Cflags: -I${includedir}/@GOOCANVASMM_MODULE_NAME@ -I${libdir}/@GOOCANVASMM_MODULE_NAME@/include
