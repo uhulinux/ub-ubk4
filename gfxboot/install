@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-export VERSION="${UB_VERSION}"
-ub_install
-mkdir -p ${UB_INSTALLDIR}/usr/share/man/man8
-cp doc/gfxboot.8 ${UB_INSTALLDIR}/usr/share/man/man8/
-rm -rf ${UB_INSTALLDIR}/etc/bootsplash/themes/openSUSE/
