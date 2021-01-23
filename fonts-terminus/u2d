@@ -1,2 +1,2 @@
 dir=$(urllist https://sourceforge.net/projects/terminus-font/files/ | splitver '^terminus-font-([0-9.]+)$' | sort -V | tail -n 1)
-_geturl https://sourceforge.net/projects/terminus-font/files/terminus-font-$dir | grep download | grep $dir | grep tar | sed s/.*font-// | sed s/\\.tar.*//
+_geturl https://sourceforge.net/projects/terminus-font/files/terminus-font-$dir | grep download | grep "$dir" | grep tar | sed s/.*font-// | sed s/\\.tar.*//

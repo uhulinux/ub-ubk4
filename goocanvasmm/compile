@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-export GOOCANVASMM_CFLAGS+='-I/usr/include/goocanvas-3.0 '
-export CXXFLAGS+="$(pkg-config --cflags gtkmm-3.0)"
-export GOOCANVASMM_LIBS+='-lgoocanvas-3.0'
-ub_compile \
-	--disable-documentation
