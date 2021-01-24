@@ -1,6 +1,6 @@
-diff -Naur orig/suite/app/profile/suite-prefs.js patched/suite/app/profile/suite-prefs.js
---- orig/suite/app/profile/suite-prefs.js	2020-02-18 00:36:20.000000000 +0100
-+++ patched/suite/app/profile/suite-prefs.js	2020-03-07 15:40:31.308106018 +0100
+diff -Naur orig/comm/suite/app/profile/suite-prefs.js patched/comm/suite/app/profile/suite-prefs.js
+--- orig/comm/suite/app/profile/suite-prefs.js	2020-11-10 23:06:33.000000000 +0100
++++ patched/comm/suite/app/profile/suite-prefs.js	2021-01-23 22:08:57.197487922 +0100
 @@ -17,6 +17,9 @@
   *  - Computed values (e.g. 50 * 1024) don't work.
   */
@@ -11,7 +11,7 @@ diff -Naur orig/suite/app/profile/suite-prefs.js patched/suite/app/profile/suite
  pref("startup.homepage_override_url","chrome://navigator-region/locale/region.properties");
  pref("general.skins.selectedSkin", "classic/1.0");
  
-@@ -63,7 +66,7 @@
+@@ -65,7 +68,7 @@
  
  pref("browser.download.manager.addToRecentDocs", true);
  pref("browser.download.manager.resumeOnWakeDelay", 10000);
@@ -20,7 +20,7 @@ diff -Naur orig/suite/app/profile/suite-prefs.js patched/suite/app/profile/suite
  pref("browser.download.manager.focusWhenStarting", false);
  pref("browser.download.progress.closeWhenDone", false);
  
-@@ -493,10 +496,10 @@
+@@ -487,10 +490,10 @@
  // App-specific update preferences
  
  // Whether or not app updates are enabled
@@ -33,7 +33,7 @@ diff -Naur orig/suite/app/profile/suite-prefs.js patched/suite/app/profile/suite
  
  // If set to true, the Update Service will present no UI for any event.
  pref("app.update.silent", false);
-@@ -587,7 +590,8 @@
+@@ -579,7 +582,8 @@
  // Disable add-ons installed into the shared user and shared system areas by
  // default. This does not include the application directory. See the SCOPE
  // constants in AddonManager.jsm for values to use here

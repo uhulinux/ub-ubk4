@@ -1,6 +1,6 @@
-diff -Nrup -U 8 a/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc b/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc
---- a/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc	2020-02-18 02:37:58.000000000 +0300
-+++ b/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc	2020-03-02 00:34:19.000000000 +0300
+diff -Nrup -U 8 a/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc b/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc
+--- a/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc	2020-02-18 02:37:58.000000000 +0300
++++ b/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.cc	2020-03-02 00:34:19.000000000 +0300
 @@ -79,17 +79,19 @@ VP9EncoderImpl::VP9EncoderImpl()
        num_temporal_layers_(0),
        num_spatial_layers_(0),
@@ -255,9 +255,9 @@ diff -Nrup -U 8 a/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/
  int VP9EncoderImpl::RegisterEncodeCompleteCallback(
      EncodedImageCallback* callback) {
    encoded_complete_callback_ = callback;
-diff -Nrup -U 8 a/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h b/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h
---- a/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h	2020-02-18 02:37:58.000000000 +0300
-+++ b/mozilla/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h	2020-03-02 00:32:05.000000000 +0300
+diff -Nrup -U 8 a/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h b/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h
+--- a/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h	2020-02-18 02:37:58.000000000 +0300
++++ b/media/webrtc/trunk/webrtc/modules/video_coding/codecs/vp9/vp9_impl.h	2020-03-02 00:32:05.000000000 +0300
 @@ -77,24 +77,26 @@ class VP9EncoderImpl : public VP9Encoder
  
    void PopulateCodecSpecific(CodecSpecificInfo* codec_specific,
