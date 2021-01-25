@@ -5,18 +5,19 @@ CXX="ccache clang++ -march=k8 -m64"
 
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/thunderbird/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
-export PYTHON=/usr/bin/python2
+export PYTHON=/usr/bin/python3
+export MACH_USE_SYSTEM_PYTHON=1
 
 : > .mozconfig
 cat > .mozconfig << _EOF_
 mk_add_options MOZ_OBJDIR=$UB_OBJECTDIR
 ac_add_options --prefix=/usr
 ac_add_options --enable-application=comm/mail
-ac_add_options --enable-calendar
 ac_add_options --enable-release
 ac_add_options --enable-official-branding
 ac_add_options --enable-optimize="-O2"
 ac_add_options --enable-crashreporter
+ac_add_options --enable-calendar
 ac_add_options --with-system-icu
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-libvpx
