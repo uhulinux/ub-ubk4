@@ -1,0 +1,17 @@
+diff -Naur orig/src/resolve/resolv.conf patched/src/resolve/resolv.conf
+--- orig/src/resolve/resolv.conf	2020-11-26 19:00:50.000000000 +0100
++++ patched/src/resolve/resolv.conf	2021-01-26 02:07:05.267722084 +0100
+@@ -14,6 +14,10 @@
+ # See man:systemd-resolved.service(8) for details about the supported modes of
+ # operation for /etc/resolv.conf.
+ 
+-nameserver 127.0.0.53
+-options edns0 trust-ad
+-search .
++nameserver 8.8.8.8
++nameserver 8.8.4.4
++nameserver 9.9.9.10
++nameserver 2001:4860:4860::8888
++nameserver 2001:4860:4860::8844
++nameserver 2620:fe::10
++
