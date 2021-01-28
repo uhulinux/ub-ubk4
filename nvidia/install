@@ -16,6 +16,7 @@ egldir="$sharedir"/egl/egl_external_platform.d
 vulcandir="$sharedir"/vulcan/icd.d
 xconfdir="$sharedir"/X11/x.org.conf.d
 glvnddir="$sharedir"/glvnd/egl_vendor.d
+vdpaudir=$cellibdir/vdpau
 
 #könyvtárgyártás
 mkdir -p "$cellibdir"/nvidia \
@@ -28,7 +29,8 @@ mkdir -p "$cellibdir"/nvidia \
 	"$egldir" \
 	"$vulcandir" \
 	"$xconfdir" \
-	"$glvnddir"
+	"$glvnddir" \
+	"$vdpaudir"
 
 #kernelmodulok elhelyezése
 cp kernel/*.ko "$moduldir"/
@@ -77,6 +79,9 @@ mv	libOpenGL.so.0 "$cellibdir"/nvidia/
 mv	nvidia_drv.so "$xmoduldir"/drivers/
 # mv	tls "$cellibdir"
 
+# vdpau cuccok
+mv libvdpau_nvidia.so.${UB_VERSION} $vdpaudir
+
 # minden maradék *.so áthelyezése a libekbe
 
 mv *.so.* "$cellibdir"/
@@ -104,7 +109,7 @@ mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
 cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
 cp _out/Linux_x86_64/libXNVCtrl.a "${UB_INSTALLDIR}"/usr/lib/libXNVCtrl.a
 
-#pc
+# pc rendberakás
 cat <<'EOF' > "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 prefix=/usr
 libdir=${prefix}/lib
@@ -119,13 +124,22 @@ EOF
 
 sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
-#linkgyártások
+# nem kell gtk2
+rm -f "${UB_INSTALLDIR}"/usr/lib/libnvidia-gtk2*
+
+# linkgyártások
 cd "$cellibdir"
 
 ln -s libwfb.so xorg/modules/libnvidia-wfb.so.${UB_VERSION}
-ln -s libvdpau_nvidia.so.${UB_VERSION} libvdpau_nvidia.so.1
-ln -s libvdpau_nvidia.so.1 libvdpau_nvidia.so
 for i in `ls -1 libnv*`;do
+lib=$(echo $i | sed s/\.${UB_VERSION}//g)
+solink=$(echo $lib | sed s/so\..*/so/)
+ln -s $i $lib.1
+ln -s $lib.1 $solink
+done
+
+cd $vdpaudir
+for i in `ls -1 libvdpau*`;do
 lib=$(echo $i | sed s/\.${UB_VERSION}//g)
 solink=$(echo $lib | sed s/so\..*/so/)
 ln -s $i $lib.1
