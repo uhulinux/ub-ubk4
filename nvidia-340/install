@@ -10,6 +10,7 @@ mandir="$UB_INSTALLDIR"/usr/share/man/man1/
 vendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
 pixmapdir="$UB_INSTALLDIR"/usr/share/pixmaps/
 shnvdir="$UB_INSTALLDIR"/usr/share/nvidia
+vdpaudir=$cellibdir/vdpau
 
 #könyvtárgyártás
 mkdir -p "$cellibdir"/nvidia \
@@ -19,7 +20,8 @@ mkdir -p "$cellibdir"/nvidia \
 	"$mandir" \
 	"$vendordir" \
 	"$pixmapdir" \
-	"$shnvdir"
+	"$shnvdir" \
+	"$vdpaudir"
 
 #kernelmodulok
 cp kernel/{nvidia.ko,uvm/nvidia-uvm.ko} "$moduldir"/
@@ -55,10 +57,8 @@ mv	libglx.so."$UB_VERSION" "$cellibdir"/nvidia/
 mv	nvidia_drv.so "$xmoduldir"/drivers/
 mv	tls "$cellibdir"
 
-# remove conflicting vdpau lib
-###Jó nekünk az!
-#rm "libvdpau.so.$UB_VERSION"
-#rm "libvdpau_trace.so.$UB_VERSION"
+# vdpau cuccok
+mv libvdpau_nvidia.so.${UB_VERSION} $vdpaudir
 
 #### Error: Nincs meg ez a lib: libGL.so (igényli: /usr/lib/libnvidia-ifr.so.319.60)
 # Az igényelt libGL.so szimlink ütközne a mesa-dev -el,
@@ -97,17 +97,25 @@ EOF
 
 sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
+# nem kell gtk2
+rm -f "${UB_INSTALLDIR}"/usr/lib/libnvidia-gtk2*
+
 #linkgyártások
 cd "$cellibdir"
 ln -s libwfb.so xorg/modules/libnvidia-wfb.so."$UB_VERSION"
-ln -s "libvdpau_nvidia.so.$UB_VERSION" libvdpau_nvidia.so
-ln -s "libnvcuvid.so.$UB_VERSION" libnvcuvid.so.1
-ln -s libnvcuvid.so.1 libnvcuvid.so
 ln -s "libcuda.so.$UB_VERSION" libcuda.so
-ln -s "libnvidia-ml.so.$UB_VERSION" libnvidia-ml.so.1
-ln -s libnvidia-ml.so.1 libnvidia-ml.so
 
-ln -s "libnvidia-compiler.so.$UB_VERSION" libnvidia-compiler.so.1
-ln -s "libnvidia-glcore.so.$UB_VERSION" libnvidia-glcore.so.1
-ln -s "libnvidia-glsi.so.$UB_VERSION" libnvidia-glsi.so.1
-ln -s "libnvidia-tls.so.$UB_VERSION" tls/libnvidia-tls.so.1
+for i in `ls -1 libnv*`;do
+lib=$(echo $i | sed s/\.${UB_VERSION}//g)
+solink=$(echo $lib | sed s/so\..*/so/)
+ln -s $i $lib.1
+ln -s $lib.1 $solink
+done
+
+cd $vdpaudir
+for i in `ls -1 libvdpau*`;do
+lib=$(echo $i | sed s/\.${UB_VERSION}//g)
+solink=$(echo $lib | sed s/so\..*/so/)
+ln -s $i $lib.1
+ln -s $lib.1 $solink
+done
