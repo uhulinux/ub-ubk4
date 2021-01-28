@@ -1,6 +1,6 @@
 diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2020-09-22 02:23:04.938957931 +0200
-+++ patched/browser/app/profile/firefox.js	2020-09-22 02:24:13.467068731 +0200
+--- orig/browser/app/profile/firefox.js	2021-01-18 19:29:32.000000000 +0100
++++ patched/browser/app/profile/firefox.js	2021-01-27 22:25:40.575333666 +0100
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -14,7 +14,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.hiddenWindowChromeURL", "chrome://browser/content/hiddenWindowMac.xhtml");
  
  // Enables some extra Extension System Logging (can reduce performance)
-@@ -59,7 +65,8 @@
+@@ -61,7 +67,8 @@
  
  // Disable add-ons that are not installed by the user in all scopes by default.
  // See the SCOPE constants in AddonManager.jsm for values to use here.
@@ -24,7 +24,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -74,8 +81,8 @@
+@@ -76,8 +83,8 @@
  pref("extensions.webextensions.background-delayed-startup", true);
  
  // Require signed add-ons by default
@@ -35,7 +35,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
  
  // Enable extensionStorage storage actor by default
-@@ -142,7 +149,7 @@
+@@ -144,7 +151,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
  #ifndef XP_WIN
@@ -44,7 +44,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -234,7 +241,7 @@
+@@ -236,7 +243,7 @@
  pref("browser.touchmode.auto", true);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -53,8 +53,8 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -287,7 +294,7 @@
- pref("browser.urlbar.ctrlCanonizesURLs", true);
+@@ -304,7 +311,7 @@
+ pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
 -pref("browser.urlbar.autoFill", true);
@@ -62,7 +62,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // Whether to warm up network connections for autofill or search results.
  pref("browser.urlbar.speculativeConnect.enabled", true);
-@@ -318,7 +325,7 @@
+@@ -336,7 +343,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -71,7 +71,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -814,7 +821,7 @@
+@@ -849,7 +856,7 @@
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
  #ifdef UNIX_BUT_NOT_MAC
