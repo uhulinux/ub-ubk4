@@ -75,28 +75,6 @@ mv *.so.* "$cellibdir"/
 cp nvidia-application-profiles-${UB_VERSION}-rc $shnvdir/
 cp nvidia-application-profiles-${UB_VERSION}-key-documentation $shnvdir/
 
-#libxnvctrl
-
-cd libxnvctrl
-mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
-cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
-cp libXNVCtrl.a "${UB_INSTALLDIR}"/usr/lib/libXNVCtrl.a
-
-#pc
-cat <<'EOF' > "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
-prefix=/usr
-libdir=${prefix}/lib
-includedir=${prefix}/include/NVCtrl
-
-Name: libXNVCtrl
-Description: Library for accessing NV-CONTROL extension in NVIDIA's latest drivers.
-Version: %version%
-Libs: -L${libdir} -lXNVCtrl
-Cflags: -I${includedir}
-EOF
-
-sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
-
 # nem kell gtk2
 rm -f "${UB_INSTALLDIR}"/usr/lib/libnvidia-gtk2*
 
