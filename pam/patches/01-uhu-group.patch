@@ -1,8 +1,8 @@
-diff -Naur Linux-PAM-0.99.3.0.orig/modules/pam_group/group.conf Linux-PAM-0.99.3.0/modules/pam_group/group.conf
---- Linux-PAM-0.99.3.0.orig/modules/pam_group/group.conf	2005-12-19 11:38:17.000000000 +0100
-+++ Linux-PAM-0.99.3.0/modules/pam_group/group.conf	2006-02-07 13:48:10.000000000 +0100
-@@ -95,5 +95,12 @@
- #xsh; tty* ;*;Al0900-1800;floppy
+diff -Naur orig/modules/pam_group/group.conf patched/modules/pam_group/group.conf
+--- orig/modules/pam_group/group.conf	2020-11-24 23:56:49.000000000 +0100
++++ patched/modules/pam_group/group.conf	2021-02-01 16:22:02.280887200 +0100
+@@ -102,5 +102,12 @@
+ #xsh; tty* ;%admin;Al0000-2400;plugdev
  
  #
 +# Default of UHU-Linux: grant access to several groups when the user

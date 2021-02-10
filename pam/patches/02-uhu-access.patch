@@ -1,9 +1,9 @@
-diff -Naur Linux-PAM-0.99.8.1.orig/modules/pam_access/access.conf Linux-PAM-0.99.8.1/modules/pam_access/access.conf
---- Linux-PAM-0.99.8.1.orig/modules/pam_access/access.conf	2007-06-22 09:48:28.000000000 +0200
-+++ Linux-PAM-0.99.8.1/modules/pam_access/access.conf	2007-08-14 16:55:14.000000000 +0200
+diff -Naur orig/modules/pam_access/access.conf patched/modules/pam_access/access.conf
+--- orig/modules/pam_access/access.conf	2020-11-24 23:56:49.000000000 +0100
++++ patched/modules/pam_access/access.conf	2021-02-01 16:25:42.389523929 +0100
 @@ -120,3 +120,5 @@
  #
  # All other users should be denied to get access from all sources.
- #- : ALL : ALL
+ #-:ALL:ALL
 +
 ++ : ALL : *
