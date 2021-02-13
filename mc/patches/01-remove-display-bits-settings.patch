@@ -1,9 +1,9 @@
 diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
---- orig/src/filemanager/boxes.c	2020-01-01 16:52:34.000000000 +0100
-+++ patched/src/filemanager/boxes.c	2020-01-19 19:50:04.395511582 +0100
+--- orig/src/filemanager/boxes.c	2021-01-10 12:50:16.000000000 +0100
++++ patched/src/filemanager/boxes.c	2021-02-12 22:21:38.218832636 +0100
 @@ -104,9 +104,11 @@
  static unsigned long panel_list_formats_id, panel_user_format_id, panel_brief_cols_id;
- static unsigned long mini_user_status_id, mini_user_format_id;
+ static unsigned long user_mini_status_id, mini_user_format_id;
  
 +#if 0
  #ifdef HAVE_CHARSET
@@ -13,7 +13,7 @@ diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
  
  #if defined(ENABLE_VFS) && defined(ENABLE_VFS_FTP)
  static unsigned long ftpfs_always_use_proxy_id, ftpfs_proxy_host_id;
-@@ -331,6 +333,7 @@
+@@ -364,6 +366,7 @@
  
  /* --------------------------------------------------------------------------------------------- */
  
@@ -21,7 +21,7 @@ diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
  #ifdef HAVE_CHARSET
  static int
  sel_charset_button (WButton * button, int action)
-@@ -361,6 +364,7 @@
+@@ -394,6 +397,7 @@
      return 0;
  }
  #endif /* HAVE_CHARSET */
@@ -29,7 +29,7 @@ diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
  
  /* --------------------------------------------------------------------------------------------- */
  
-@@ -899,6 +903,7 @@
+@@ -941,6 +945,7 @@
  
  /* --------------------------------------------------------------------------------------------- */
  
@@ -37,7 +37,7 @@ diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
  #ifndef HAVE_CHARSET
  void
  display_bits_box (void)
-@@ -1015,6 +1020,7 @@
+@@ -1057,6 +1062,7 @@
      }
  }
  #endif /* HAVE_CHARSET */
@@ -46,8 +46,8 @@ diff -Naur orig/src/filemanager/boxes.c patched/src/filemanager/boxes.c
  /* --------------------------------------------------------------------------------------------- */
  /** Show tree in a box, not on a panel */
 diff -Naur orig/src/filemanager/boxes.h patched/src/filemanager/boxes.h
---- orig/src/filemanager/boxes.h	2020-01-01 16:52:34.000000000 +0100
-+++ patched/src/filemanager/boxes.h	2020-01-19 19:52:57.181311588 +0100
+--- orig/src/filemanager/boxes.h	2021-01-10 12:50:16.000000000 +0100
++++ patched/src/filemanager/boxes.h	2021-02-12 22:21:38.218832636 +0100
 @@ -25,7 +25,9 @@
                         int *brief_cols);
  const panel_field_t *sort_box (dir_sort_options_t * op, const panel_field_t * sort_field);
@@ -57,10 +57,10 @@ diff -Naur orig/src/filemanager/boxes.h patched/src/filemanager/boxes.h
 +#endif
  void configure_vfs_box (void);
  void jobs_box (void);
- char *cd_box (void);
-diff -Naur orig/src/filemanager/midnight.c patched/src/filemanager/midnight.c
---- orig/src/filemanager/midnight.c	2020-01-01 16:52:34.000000000 +0100
-+++ patched/src/filemanager/midnight.c	2020-01-19 19:50:04.399511623 +0100
+ char *cd_box (const WPanel * panel);
+diff -Naur orig/src/filemanager/filemanager.c patched/src/filemanager/filemanager.c
+--- orig/src/filemanager/filemanager.c	2021-01-10 12:50:16.000000000 +0100
++++ patched/src/filemanager/filemanager.c	2021-02-12 22:24:02.807410142 +0100
 @@ -1214,9 +1214,11 @@
          diff_view_cmd ();
          break;
@@ -71,11 +71,11 @@ diff -Naur orig/src/filemanager/midnight.c patched/src/filemanager/midnight.c
          break;
 +#endif
      case CK_Edit:
-         edit_cmd ();
+         edit_cmd (current_panel);
          break;
 diff -Naur orig/src/setup.c patched/src/setup.c
---- orig/src/setup.c	2020-01-01 16:52:34.000000000 +0100
-+++ patched/src/setup.c	2020-01-19 19:50:04.399511623 +0100
+--- orig/src/setup.c	2021-01-10 12:50:16.000000000 +0100
++++ patched/src/setup.c	2021-02-12 22:21:39.894838908 +0100
 @@ -304,11 +304,13 @@
      { "confirm_view_dir", &confirm_view_dir },
      { "safe_delete", &safe_delete },

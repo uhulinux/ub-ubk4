@@ -1,16 +1,7 @@
 diff -Naur orig/misc/ext.d/sound.sh patched/misc/ext.d/sound.sh
---- orig/misc/ext.d/sound.sh	2019-06-16 19:49:31.000000000 +0200
-+++ patched/misc/ext.d/sound.sh	2019-06-30 21:07:59.681734631 +0200
-@@ -35,7 +35,7 @@
-     case "${filetype}" in
-     common)
-         if [ -n "$DISPLAY" ]; then
--            (xmms  "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-+            (totem  "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-         else
-             play "${MC_EXT_FILENAME}"
-         fi
-@@ -45,18 +45,18 @@
+--- orig/misc/ext.d/sound.sh	2021-01-10 12:50:16.000000000 +0100
++++ patched/misc/ext.d/sound.sh	2021-02-12 22:43:08.553278420 +0100
+@@ -48,7 +48,7 @@
          #tracker "${MC_EXT_FILENAME}"
          ;;
      wav22)
@@ -19,25 +10,3 @@ diff -Naur orig/misc/ext.d/sound.sh patched/misc/ext.d/sound.sh
          ;;
      mp3)
          if [ -n "$DISPLAY" ]; then
--            (xmms "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-+            (totem "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-         else
-             mpg123 "${MC_EXT_FILENAME}"
-         fi
-         ;;
-     ogg)
-         if [ -n "$DISPLAY" ]; then
--            (xmms "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-+            (totem "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-         else
-             ogg123 "${MC_EXT_FILENAME}"
-         fi
-@@ -69,7 +69,7 @@
-         ;;
-     playlist)
-         if [ -n "$DISPLAY" ]; then
--            (xmms -p "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-+            (totem -p "${MC_EXT_FILENAME}" >/dev/null 2>&1 &)
-         else
-             mplayer -vo null -playlist "${MC_EXT_FILENAME}"
-         fi

@@ -12,7 +12,7 @@ diff -Naur mc-4.8.18.orig/lib/shell.c mc-4.8.18/lib/shell.c
      else if (access ("/bin/ash", X_OK) == 0)
          mc_shell->path = g_strdup ("/bin/ash");
      else if (access ("/bin/dash", X_OK) == 0)
-@@ -149,6 +153,12 @@
+@@ -149,6 +151,12 @@
          mc_shell->type = SHELL_ZSH;
          mc_shell->name = "zsh";
      }
@@ -39,7 +39,7 @@ diff -Naur mc-4.8.18.orig/lib/shell.h mc-4.8.18/lib/shell.h
 diff -Naur mc-4.8.18.orig/src/subshell/common.c mc-4.8.18/src/subshell/common.c
 --- mc-4.8.18.orig/src/subshell/common.c	2016-09-22 18:24:12.000000000 +0000
 +++ mc-4.8.18/src/subshell/common.c	2017-02-20 18:48:22.681514000 +0000
-@@ -320,6 +320,12 @@
+@@ -370,6 +370,12 @@
  
          break;
  
@@ -52,7 +52,7 @@ diff -Naur mc-4.8.18.orig/src/subshell/common.c mc-4.8.18/src/subshell/common.c
          /* TODO: Find a way to pass initfile to TCSH, ZSH and FISH */
      case SHELL_TCSH:
      case SHELL_ZSH:
-@@ -367,6 +373,7 @@
+@@ -421,6 +427,7 @@
  
      case SHELL_ASH_BUSYBOX:
      case SHELL_DASH:
@@ -60,8 +60,8 @@ diff -Naur mc-4.8.18.orig/src/subshell/common.c mc-4.8.18/src/subshell/common.c
      case SHELL_TCSH:
      case SHELL_FISH:
          execl (mc_global.shell->path, mc_global.shell->path, (char *) NULL);
-@@ -801,6 +808,11 @@
-                     "PS1='\\u@\\h:\\w\\$ '\n", subshell_pipe[WRITE]);
+@@ -1080,6 +1087,11 @@
+                     command_buffer_pipe[WRITE], subshell_pipe[WRITE]);
          break;
  
 +    case SHELL_MKSH:
