@@ -1,0 +1,232 @@
+diff -Naur orig/app/systemsettings.desktop patched/app/systemsettings.desktop
+--- orig/app/systemsettings.desktop	2021-02-11 13:25:09.000000000 +0100
++++ patched/app/systemsettings.desktop	2021-02-17 14:04:11.338315796 +0100
+@@ -6,7 +6,6 @@
+ X-KDE-StartupNotify=true
+ X-KDE-Shortcuts=Tools
+ OnlyShowIn=KDE;
+-Actions=kcm_lookandfeel;kcm_users;screenlocker;powerdevilprofilesconfig;kcm_kscreen;
+ 
+ GenericName=System Settings
+ GenericName[ar]=إعدادات النّظام
+@@ -228,175 +227,3 @@
+ X-DBUS-StartupType=Unique
+ X-DBUS-ServiceName=org.kde.systemsettings
+ Categories=Qt;KDE;Settings;
+-
+-[Desktop Action kcm_lookandfeel]
+-Name=Global Theme
+-Name[ast]=Estilu global
+-Name[az]=Qlobal Mövzu
+-Name[ca]=Tema global
+-Name[cs]=Celkový motiv
+-Name[el]=Καθολικό θέμα
+-Name[en_GB]=Global Theme
+-Name[es]=Tema global
+-Name[et]=Globaalne teema
+-Name[eu]=Gai orokorra
+-Name[fi]=Yleisteema
+-Name[fr]=Thème global
+-Name[hu]=Globális téma
+-Name[ia]=Thema Global
+-Name[it]=Tema globale
+-Name[lt]=Visuotinis apipavidalinimas
+-Name[nl]=Globaal thema
+-Name[nn]=Globalt tema
+-Name[pa]=ਗਲੋਬਲ ਥੀਮ
+-Name[pl]=Globalny wygląd
+-Name[pt]=Tema Global
+-Name[pt_BR]=Tema global
+-Name[ro]=Tematică globală
+-Name[ru]=Оформление рабочей среды
+-Name[sk]=Globálna téma
+-Name[sl]=Globalna tema
+-Name[sv]=Globalt tema
+-Name[uk]=Загальна тема
+-Name[vi]=Chủ đề toàn cục
+-Name[x-test]=xxGlobal Themexx
+-Name[zh_CN]=全局主题
+-Icon=preferences-desktop-theme-global
+-Exec=systemsettings5 kcm_lookandfeel
+-
+-[Desktop Action kcm_users]
+-Name=Users
+-Name[ast]=Usuarios
+-Name[az]=İstifadəçilər
+-Name[ca]=Usuaris
+-Name[el]=Χρήστες
+-Name[en_GB]=Users
+-Name[es]=Usuarios
+-Name[et]=Kasutajad
+-Name[eu]=Erabiltzaileak
+-Name[fi]=Käyttäjät
+-Name[fr]=Utilisateurs
+-Name[hu]=Felhasználók
+-Name[ia]=Usatores
+-Name[it]=Utenti
+-Name[lt]=Naudotojai
+-Name[nl]=Gebruikers
+-Name[nn]=Brukarar
+-Name[pa]=ਵਰਤੋਂਕਾਰ
+-Name[pl]=Użytkownicy
+-Name[pt]=Utilizadores
+-Name[pt_BR]=Usuários
+-Name[ro]=Utilizatori
+-Name[ru]=Пользователи
+-Name[sk]=Používatelia
+-Name[sl]=Uporabniki
+-Name[sv]=Användare
+-Name[uk]=Користувачі
+-Name[vi]=Người dùng
+-Name[x-test]=xxUsersxx
+-Name[zh_CN]=用户
+-Icon=preferences-system-users
+-Exec=systemsettings5 kcm_users
+-
+-[Desktop Action screenlocker]
+-Name=Screen Locking
+-Name[az]=Ekran Kilidlənməsi
+-Name[ca]=Bloqueig de pantalla
+-Name[cs]=Uzamykání obrazovky
+-Name[el]=Κλείδωμα οθόνης
+-Name[en_GB]=Screen Locking
+-Name[es]=Bloqueo de pantalla
+-Name[et]=Ekraani lukustamine
+-Name[eu]=Pantaila giltzatzea
+-Name[fi]=Näytön lukitus
+-Name[fr]=Verrouillage d'écran
+-Name[hu]=Képernyőzárolás
+-Name[ia]=Schermo blocate
+-Name[it]=Blocco dello schermo
+-Name[lt]=Ekrano užrakinimas
+-Name[nl]=Scherm vergrendelen
+-Name[nn]=Skjerm­låsing
+-Name[pa]=ਸਕਰੀਨ ਲਾਕ
+-Name[pl]=Blokada ekranu
+-Name[pt]=Bloqueio do Ecrã
+-Name[pt_BR]=Bloqueio de tela
+-Name[ro]=Blocarea ecranului
+-Name[ru]=Блокировка экрана
+-Name[sk]=Zamykanie obrazovky
+-Name[sl]=Zaklepanje zaslona
+-Name[sv]=Skärmlåsning
+-Name[uk]=Блокування екрана
+-Name[vi]=Khoá màn hình
+-Name[x-test]=xxScreen Lockingxx
+-Name[zh_CN]=锁屏
+-Icon=preferences-desktop-user-password
+-Exec=systemsettings5 screenlocker
+-
+-[Desktop Action powerdevilprofilesconfig]
+-Name=Energy Saving
+-Name[ast]=Aforru d'enerxía
+-Name[az]=Enerjiyə Qənaət
+-Name[ca]=Estalvi d'energia
+-Name[cs]=Úsporný režim
+-Name[el]=Εξοικονόμηση ενέργειας
+-Name[en_GB]=Energy Saving
+-Name[es]=Ahorro de energía
+-Name[et]=Energia säästmine
+-Name[eu]=Energia aurreztea
+-Name[fi]=Virransäästö
+-Name[fr]=Économie d'énergie
+-Name[hu]=Energiatakarékosság
+-Name[ia]=Sparnio de energia
+-Name[it]=Risparmio energetico
+-Name[lt]=Energijos taupymas
+-Name[nl]=Energiebesparing
+-Name[nn]=Straum­sparing
+-Name[pa]=ਊਰਜਾ ਬੱਚਤ
+-Name[pl]=Oszczędzanie energii
+-Name[pt]=Poupança de Energia
+-Name[pt_BR]=Economia de energia
+-Name[ro]=Economisire energie
+-Name[ru]=Энергосбережение
+-Name[sk]=Úspora energie
+-Name[sl]=Varčevanje z energijo
+-Name[sv]=Energibesparing
+-Name[uk]=Заощадження енергії
+-Name[vi]=Tiết kiệm năng lượng
+-Name[x-test]=xxEnergy Savingxx
+-Name[zh_CN]=节能
+-Icon=preferences-system-power-management
+-Exec=systemsettings5 powerdevilprofilesconfig
+-
+-[Desktop Action kcm_kscreen]
+-Name=Display Configuration
+-Name[az]=Ekran Ayarları
+-Name[ca]=Configuració de la pantalla
+-Name[cs]=Nastavení zobrazení
+-Name[el]=Διαμόρφωση οθόνης
+-Name[en_GB]=Display Configuration
+-Name[es]=Configuración de la pantalla
+-Name[et]=Ekraani seadistamine
+-Name[eu]=Bistaratze-konfigurazioa
+-Name[fi]=Näyttöasetukset
+-Name[fr]=Configuration des affichages
+-Name[hu]=Kijelzőbeállítás
+-Name[ia]=Configuration  de monstrator
+-Name[it]=Configurazione dello schermo
+-Name[lt]=Ekrano konfigūracija
+-Name[nl]=Instellingen van het scherm
+-Name[nn]=Skjerm­oppsett
+-Name[pa]=ਡਿਸਪਲੇਅ ਸੰਰਚਨਾ
+-Name[pl]=Ustawienia wyświetlania
+-Name[pt]=Configuração do Ecrã
+-Name[pt_BR]=Configurações da tela
+-Name[ro]=Configurare afișaj
+-Name[ru]=Настройка экранов
+-Name[sk]=Nastavenie obrazovky
+-Name[sl]=Nastavitev zaslona
+-Name[sv]=Bildskärmsinställning
+-Name[uk]=Налаштування дисплея
+-Name[vi]=Cấu hình hiển thị
+-Name[x-test]=xxDisplay Configurationxx
+-Name[zh_CN]=显示器配置
+-Icon=preferences-desktop-display-randr
+-Exec=systemsettings5 kcm_kscreen
+diff -Naur orig/sidebar/SidebarMode.cpp patched/sidebar/SidebarMode.cpp
+--- orig/sidebar/SidebarMode.cpp	2021-02-11 13:25:09.000000000 +0100
++++ patched/sidebar/SidebarMode.cpp	2021-02-17 14:03:04.690157610 +0100
+@@ -26,7 +26,6 @@
+ #include "ModuleView.h"
+ #include "ToolTips/tooltipmanager.h"
+ 
+-#include <QGuiApplication>
+ #include <QHBoxLayout>
+ 
+ #include <KAboutData>
+@@ -139,18 +138,21 @@
+         setDynamicSortFilter(true);
+         // prepare default items
+         m_defaultModel = new QStandardItemModel(this);
+-
+-        KService::Ptr service = KService::serviceByDesktopName(qGuiApp->desktopFileName());
+-        if (service) {
+-            const auto actions = service->actions();
+-            for (const KServiceAction &action : actions) {
+-                QStandardItem *item = new QStandardItem();
+-                item->setData(QUrl(QStringLiteral("kcm:%1.desktop").arg(action.name())), ResultModel::ResourceRole);
+-                m_defaultModel->appendRow(item);
+-            }
+-        } else {
+-            qCritical() << "Failed to find desktop file for" << qGuiApp->desktopFileName();
+-        }
++        QStandardItem *item = new QStandardItem();
++        item->setData(QUrl(QStringLiteral("kcm:kcm_lookandfeel.desktop")), ResultModel::ResourceRole);
++        m_defaultModel->appendRow(item);
++        item = new QStandardItem();
++        item->setData(QUrl(QStringLiteral("kcm:kcm_users.desktop")), ResultModel::ResourceRole);
++        m_defaultModel->appendRow(item);
++        item = new QStandardItem();
++        item->setData(QUrl(QStringLiteral("kcm:screenlocker.desktop")), ResultModel::ResourceRole);
++        m_defaultModel->appendRow(item);
++        item = new QStandardItem();
++        item->setData(QUrl(QStringLiteral("kcm:powerdevilprofilesconfig.desktop")), ResultModel::ResourceRole);
++        m_defaultModel->appendRow(item);
++        item = new QStandardItem();
++        item->setData(QUrl(QStringLiteral("kcm:kcm_kscreen.desktop")), ResultModel::ResourceRole);
++        m_defaultModel->appendRow(item);
+     }
+ 
+     void setResultModel(ResultModel *model)
