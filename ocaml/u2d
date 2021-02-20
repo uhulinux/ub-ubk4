@@ -1,8 +1,1 @@
-for minor in `urllist http://caml.inria.fr/pub/distrib/ | splitver '^ocaml-([0-9.]+)$' | sort -Vr`;do
-verzio=$(u2d http://caml.inria.fr/pub/distrib/ocaml-"$minor"/ ocaml-)
-if [ "$verzio" ];then
-echo $verzio
-break
-fi
-done
-
+u2d https://github.com/ocaml/ocaml/releases/
