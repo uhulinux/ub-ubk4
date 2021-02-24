@@ -14,10 +14,6 @@ for i in /etc/profile.d/*.sh /etc/profile.local; do
 done
 unset i
 
-# Setup some environment variables.
-export HISTSIZE=100000
-export HISTIGNORE="&:[bf]g:exit"
-
 # Set some defaults for graphical systems
 export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share/}
 export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg/}

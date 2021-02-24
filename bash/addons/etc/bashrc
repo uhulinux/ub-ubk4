@@ -25,21 +25,10 @@ if [ -t 1 -a "$TERM" = "xterm" ]; then
 fi
 unset pshostname psmain psxtermtitle pscolor psreset
 
-# Néhány alias
-alias df='df -h'
-alias du='du -h'
-alias ls='ls --color=auto'
-alias ll='ls -l --color=auto'
-alias la='ls -la --color=auto'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-alias .......='cd ../../../../../..'
-alias ........='cd ../../../../../../..'
-alias -- +='pushd .'
-alias -- -='popd'
+# Setup some environment variables.
+export HISTSIZE=10000
+export HISTIGNORE="&:[bf]g:exit"
+export HISTCONTROL=ignoredups:erasedups
 
 if [ -t 1 ]; then
 	stty ixany
