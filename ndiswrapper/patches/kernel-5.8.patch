@@ -1,0 +1,60 @@
+diff -Naur orig/driver/loader.c patched/driver/loader.c
+--- orig/driver/loader.c	2020-05-03 14:18:33.000000000 +0200
++++ patched/driver/loader.c	2021-02-23 23:58:30.060659561 +0100
+@@ -147,6 +147,11 @@
+ 		TRACE1("image size: %zu bytes", load_driver->sys_files[i].size);
+ 
+ #ifdef CONFIG_X86_64
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
++		pe_image->image =
++			__vmalloc(load_driver->sys_files[i].size,
++				  GFP_KERNEL | __GFP_HIGHMEM);
++#else
+ #ifdef PAGE_KERNEL_EXECUTABLE
+ 		pe_image->image =
+ 			__vmalloc(load_driver->sys_files[i].size,
+@@ -160,6 +165,7 @@
+ #else
+ #error x86_64 should have either PAGE_KERNEL_EXECUTABLE or PAGE_KERNEL_EXEC
+ #endif
++#endif /* kernel 5.8 */
+ #else
+ 		/* hate to play with kernel macros, but PAGE_KERNEL_EXEC is
+ 		 * not available to modules! */
+diff -Naur orig/driver/ntoskernel.c patched/driver/ntoskernel.c
+--- orig/driver/ntoskernel.c	2020-05-03 14:18:33.000000000 +0200
++++ patched/driver/ntoskernel.c	2021-02-24 00:06:34.027189874 +0100
+@@ -821,8 +821,12 @@
+ 		addr = kmalloc(size, irql_gfp());
+ 	else {
+ 		if (irql_gfp() & GFP_ATOMIC) {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
++			addr = __vmalloc(size, GFP_ATOMIC | __GFP_HIGHMEM);
++#else
+ 			addr = __vmalloc(size, GFP_ATOMIC | __GFP_HIGHMEM,
+ 					 PAGE_KERNEL);
++#endif
+ 			TRACE1("%p, %zu", addr, size);
+ 		} else {
+ 			addr = vmalloc(size);
+diff -Naur orig/driver/pe_linker.c patched/driver/pe_linker.c
+--- orig/driver/pe_linker.c	2020-05-03 14:18:33.000000000 +0200
++++ patched/driver/pe_linker.c	2021-02-24 00:03:26.458206990 +0100
+@@ -413,6 +413,9 @@
+ 
+ 	image_size = pe->opt_hdr->SizeOfImage;
+ #ifdef CONFIG_X86_64
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
++	image = __vmalloc(image_size, GFP_KERNEL | __GFP_HIGHMEM);
++#else
+ #ifdef PAGE_KERNEL_EXECUTABLE
+ 	image = __vmalloc(image_size, GFP_KERNEL | __GFP_HIGHMEM,
+ 			  PAGE_KERNEL_EXECUTABLE);
+@@ -422,6 +425,7 @@
+ #else
+ #error x86_64 should have either PAGE_KERNEL_EXECUTABLE or PAGE_KERNEL_EXEC
+ #endif
++#endif /* kernel 5.8 */
+ #else
+ #ifdef cpu_has_nx
+ 	/* hate to play with kernel macros, but PAGE_KERNEL_EXEC is
