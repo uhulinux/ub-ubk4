@@ -14,6 +14,15 @@ for i in /etc/profile.d/*.sh /etc/profile.local; do
 done
 unset i
 
+SHELL=${SHELL:-${BASH:-/bin/bash}}
+
+PAGER=less
+LESS='-iMS'
+
+# Setup some environment variables.
+export HISTSIZE=10000
+export HISTCONTROL=ignoredups:erasedups
+
 # Set some defaults for graphical systems
 export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share/}
 export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg/}

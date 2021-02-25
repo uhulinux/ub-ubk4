@@ -25,11 +25,6 @@ if [ -t 1 -a "$TERM" = "xterm" ]; then
 fi
 unset pshostname psmain psxtermtitle pscolor psreset
 
-# Setup some environment variables.
-export HISTSIZE=10000
-export HISTIGNORE="&:[bf]g:exit"
-export HISTCONTROL=ignoredups:erasedups
-
 if [ -t 1 ]; then
 	stty ixany
 fi
