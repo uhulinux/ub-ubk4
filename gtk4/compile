@@ -1,0 +1,15 @@
+#!/bin/sh -eux
+
+rm -f subprojects/{gtk-doc,libsass,sassc}.wrap
+
+ub_compile \
+    -Dx11-backend=true \
+	-Dwayland-backend=true \
+	-Dbroadway-backend=false \
+	-Dvulkan=enabled \
+	-Dgtk_doc=false \
+	-Dman-pages=false \
+	-Ddemos=true \
+	-Dbuild-examples=false \
+	-Dbuild-tests=false \
+	-Dinstall-tests=false

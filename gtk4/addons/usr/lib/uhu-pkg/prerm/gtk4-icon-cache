@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+if [ ! -f /var/lib/uhu-pkg/gtk4-icon-cache ]; then
+	exit 0
+fi
+
+if grep -q '^/usr/share/icons/' /var/lib/dpkg/info/"$1".list; then
+	rm -f /var/lib/uhu-pkg/gtk4-icon-cache
+fi

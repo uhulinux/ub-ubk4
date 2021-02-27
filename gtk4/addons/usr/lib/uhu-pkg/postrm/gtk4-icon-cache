@@ -1,0 +1,29 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+update_icon_cache ()
+{
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo -n "  Updating icon cache ..."
+	for i in /usr/share/icons/*; do
+		if [ -L "$i" -o ! -f "$i/index.theme" ]; then
+			continue
+		fi
+		gtk4-update-icon-cache -f -i -q "$i"
+	done
+	true > /var/lib/uhu-pkg/gtk4-icon-cache
+	while [ ! /var/lib/uhu-pkg/gtk4-icon-cache -ot /var/lib/dpkg/info \
+	     -a ! /var/lib/uhu-pkg/gtk4-icon-cache -nt /var/lib/dpkg/info ]; do
+		sleep 0.1
+		true > /var/lib/uhu-pkg/gtk4-icon-cache
+	done
+	[ -z "${UHU_PKG_QUIET+x}" ] && echo
+}
+
+if [ "$2" = "upgrade" ]; then
+	exit 0
+fi
+
+if [ ! -f /var/lib/uhu-pkg/gtk4-icon-cache ]; then
+	update_icon_cache
+fi
