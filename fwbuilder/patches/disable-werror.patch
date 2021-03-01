@@ -1,9 +1,9 @@
 diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
---- orig/CMakeLists.txt	2019-05-30 23:40:23.000000000 +0200
-+++ patched/CMakeLists.txt	2019-05-30 23:44:47.973344998 +0200
-@@ -17,7 +17,7 @@
- set(FWB_INSTALL_BINDIR ${CMAKE_INSTALL_BINDIR})
- 
+--- orig/CMakeLists.txt	2021-03-01 19:56:43.000000000 +0100
++++ patched/CMakeLists.txt	2021-03-01 21:11:15.684987458 +0100
+@@ -45,7 +45,7 @@
+ set(CMAKE_CXX_STANDARD 11)
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
  set(CXX_DEFAULT_FLAGS # clang/GCC warnings
 -	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wall;-Wextra;-Werror;-Wno-overloaded-virtual>
 +	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wall;-Wextra;-Wno-overloaded-virtual>

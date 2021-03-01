@@ -1,2 +1,0 @@
-lista=`curl -s -k https://raw.githubusercontent.com/DrMcCoy/DMCRadio/master/ChangeLog`
-echo "$lista" | grep Version | sed 's/.*sion //g' | sed 's/)//g' | sort -V | tail -n 1
