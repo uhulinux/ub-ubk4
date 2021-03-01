@@ -1,0 +1,23 @@
+#!/bin/sh -eux
+
+# lesz keresztfordítás?
+host=$(uname -m)
+cross=1
+if [ "$host" == "x86_64" ] && [ "$UB_ARCH" == "amd64" ];then
+    cross=0
+fi
+
+ub_compile \
+    -DCROSS_COMPILE32=$cross \
+    -DBUNDLED_LIBS=0 \
+    -DCMAKE_LIBRARY_PATH=/usr/lib \
+    -DINSTALL_DEFAULT_BASEDIR=/usr/lib/etlegacy\
+    -DINSTALL_DEFAULT_BINDIR=bin \
+    -DINSTALL_DEFAULT_MODDIR=lib/etlegacy \
+    -DBUILD_SERVER=1 \
+    -DBUILD_CLIENT=1 \
+    -DBUILD_MOD=0 \
+    -DBUILD_MOD_PK3=0 \
+    -DBUILD_PAK3_PK3=0 \
+    -DFEATURE_AUTOUPDATE=0 \
+    -DINSTALL_OMNIBOT=0
