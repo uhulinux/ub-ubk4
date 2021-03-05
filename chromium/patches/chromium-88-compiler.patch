@@ -1,6 +1,6 @@
 From f4d0b0eb899005b4b8b6388e1d8bb82cc0018fc8 Mon Sep 17 00:00:00 2001
 From: Mike Gilbert <floppym@gentoo.org>
-Date: Thu, 20 Aug 2020 19:12:21 +0000
+Date: Sun, 15 Nov 2020 08:37:23 +0000
 Subject: [PATCH] Disable various compiler configs
 
 ---
@@ -8,10 +8,10 @@ Subject: [PATCH] Disable various compiler configs
  1 file changed, 17 insertions(+), 35 deletions(-)
 
 diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 06c166f..fe5d340 100644
+index 9d66490..a2bc09e 100644
 --- a/build/config/compiler/BUILD.gn
 +++ b/build/config/compiler/BUILD.gn
-@@ -254,8 +254,6 @@ config("compiler") {
+@@ -259,8 +259,6 @@
  
    configs += [
      # See the definitions below.
@@ -20,7 +20,7 @@ index 06c166f..fe5d340 100644
      ":compiler_codegen",
      ":compiler_deterministic",
    ]
-@@ -488,17 +486,6 @@ config("compiler") {
+@@ -501,17 +499,6 @@
      ldflags += [ "-Wl,-z,keep-text-section-prefix" ]
    }
  
@@ -38,7 +38,7 @@ index 06c166f..fe5d340 100644
    # C11/C++11 compiler flags setup.
    # ---------------------------
    if (is_linux || is_chromeos || is_android || (is_nacl && is_clang) ||
-@@ -1575,7 +1562,7 @@ config("chromium_code") {
+@@ -1588,7 +1575,7 @@
        defines = [ "_HAS_NODISCARD" ]
      }
    } else {
@@ -47,7 +47,7 @@ index 06c166f..fe5d340 100644
      if (treat_warnings_as_errors) {
        cflags += [ "-Werror" ]
  
-@@ -1584,10 +1571,6 @@ config("chromium_code") {
+@@ -1597,10 +1584,6 @@
        # well.
        ldflags = [ "-Werror" ]
      }
@@ -58,7 +58,7 @@ index 06c166f..fe5d340 100644
  
      # In Chromium code, we define __STDC_foo_MACROS in order to get the
      # C99 macros on Mac and Linux.
-@@ -1596,15 +1579,6 @@ config("chromium_code") {
+@@ -1609,15 +1592,6 @@
        "__STDC_FORMAT_MACROS",
      ]
  
@@ -74,7 +74,7 @@ index 06c166f..fe5d340 100644
      if (is_mac) {
        cflags_objc = [ "-Wobjc-missing-property-synthesis" ]
        cflags_objcc = [ "-Wobjc-missing-property-synthesis" ]
-@@ -2002,7 +1976,8 @@ config("default_stack_frames") {
+@@ -2017,7 +1991,8 @@
  }
  
  # Default "optimization on" config.
@@ -84,7 +84,7 @@ index 06c166f..fe5d340 100644
    if (is_win) {
      if (chrome_pgo_phase != 2) {
        # Favor size over speed, /O1 must be before the common flags.
-@@ -2037,7 +2012,8 @@ config("optimize") {
+@@ -2052,7 +2027,8 @@
  }
  
  # Turn off optimizations.
@@ -94,7 +94,7 @@ index 06c166f..fe5d340 100644
    if (is_win) {
      cflags = [
        "/Od",  # Disable optimization.
-@@ -2077,7 +2053,8 @@ config("no_optimize") {
+@@ -2092,7 +2068,8 @@
  # Turns up the optimization level. On Windows, this implies whole program
  # optimization and link-time code generation which is very expensive and should
  # be used sparingly.
@@ -104,7 +104,7 @@ index 06c166f..fe5d340 100644
    if (is_nacl && is_nacl_irt) {
      # The NaCl IRT is a special case and always wants its own config.
      # Various components do:
-@@ -2109,7 +2086,8 @@ config("optimize_max") {
+@@ -2124,7 +2101,8 @@
  #
  # TODO(crbug.com/621335) - rework how all of these configs are related
  # so that we don't need this disclaimer.
@@ -114,7 +114,7 @@ index 06c166f..fe5d340 100644
    if (is_nacl && is_nacl_irt) {
      # The NaCl IRT is a special case and always wants its own config.
      # Various components do:
-@@ -2134,7 +2112,8 @@ config("optimize_speed") {
+@@ -2149,7 +2127,8 @@
    }
  }
  
@@ -124,7 +124,7 @@ index 06c166f..fe5d340 100644
    cflags = [ "-O1" ] + common_optimize_on_cflags
    ldflags = common_optimize_on_ldflags
    visibility = [ ":default_optimization" ]
-@@ -2251,7 +2230,8 @@ config("win_pdbaltpath") {
+@@ -2264,7 +2243,8 @@
  }
  
  # Full symbols.
@@ -134,7 +134,7 @@ index 06c166f..fe5d340 100644
    if (is_win) {
      if (is_clang) {
        cflags = [ "/Z7" ]  # Debug information in the .obj files.
-@@ -2346,7 +2326,8 @@ config("symbols") {
+@@ -2366,7 +2346,8 @@
  # Minimal symbols.
  # This config guarantees to hold symbol for stack trace which are shown to user
  # when crash happens in unittests running on buildbot.
@@ -144,7 +144,7 @@ index 06c166f..fe5d340 100644
    if (is_win) {
      # Functions, files, and line tables only.
      cflags = []
-@@ -2399,7 +2380,8 @@ config("minimal_symbols") {
+@@ -2423,7 +2404,8 @@
  # This configuration contains function names only. That is, the compiler is
  # told to not generate debug information and the linker then just puts function
  # names in the final debug information.
@@ -154,6 +154,3 @@ index 06c166f..fe5d340 100644
    if (is_win) {
      ldflags = [ "/DEBUG" ]
  
--- 
-2.26.2
-
