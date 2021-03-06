@@ -13,7 +13,7 @@ diff -Naur orig/lib/dpkg/dpkg.h patched/lib/dpkg/dpkg.h
 diff -Naur orig/po/hu.po patched/po/hu.po
 --- orig/po/hu.po	2019-02-23 17:59:53.000000000 +0100
 +++ patched/po/hu.po	2019-03-19 01:52:54.281666341 +0100
-@@ -2227,8 +2227,8 @@
+@@ -2309,8 +2309,8 @@
  msgstr "--%s --recursive legalább 1 ösvény argumentumot vár"
  
  #: src/archives.c
@@ -27,7 +27,7 @@ diff -Naur orig/po/hu.po patched/po/hu.po
 diff -Naur orig/src/archives.c patched/src/archives.c
 --- orig/src/archives.c	2019-02-23 15:26:43.000000000 +0100
 +++ patched/src/archives.c	2019-03-19 01:52:54.281666341 +0100
-@@ -1497,7 +1497,7 @@
+@@ -1518,7 +1518,7 @@
  
          /* Check if it looks like a .deb file. */
          nodename = treenode_get_pathname(node);
@@ -36,7 +36,7 @@ diff -Naur orig/src/archives.c patched/src/archives.c
            continue;
  
          arglist = m_realloc(arglist, sizeof(char *) * (nfiles + 2));
-@@ -1508,7 +1508,7 @@
+@@ -1529,7 +1529,7 @@
      }
  
      if (!nfiles)
