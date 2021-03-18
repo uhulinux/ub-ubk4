@@ -14,13 +14,17 @@ mkdir -p $UB_INSTALLDIR/usr/share/doc/Packages/etlegacy
 mv $UB_INSTALLDIR/usr/lib/etlegacy/INSTALL.txt $UB_INSTALLDIR/usr/share/doc/Packages/etlegacy/
 rm -f $UB_INSTALLDIR/usr/lib/etlegacy/COPYING.txt
 
+# share
+cp -a  $UB_INSTALLDIR/usr/lib/etlegacy/share $UB_INSTALLDIR/usr/
+rm -rf $UB_INSTALLDIR/usr/lib/etlegacy/share
+
 # systemd
-mkdir -p $UB_INSTALLDIR/etc/xdg/etlagacy/etmain
-cp misc/etlegacy.conf $UB_INSTALLDIR/etc/xdg/etlagacy/
+mkdir -p $UB_INSTALLDIR/etc/xdg/etlegacy/etmain
+cp misc/etlegacy.conf $UB_INSTALLDIR/etc/xdg/etlegacy/
 cp misc/etlegacy.service $UB_INSTALLDIR/usr/lib/systemd/system/
 
 # config linkek
-mv $UB_INSTALLDIR/usr/lib/etlegacy/etmain/*.cfg $UB_INSTALLDIR/etc/xdg/etlagacy/etmain/
+mv $UB_INSTALLDIR/usr/lib/etlegacy/etmain/*.cfg $UB_INSTALLDIR/etc/xdg/etlegacy/etmain/
 ln -s /etc/xdg/etlegacy/etmain/{etl_server,legacy,{campaign,lms,mapvote,objective}cycle}.cfg \
 $UB_INSTALLDIR/usr/lib/etlegacy/etmain/
 
@@ -31,13 +35,13 @@ ln -s /etc/xdg/etlegacy/etmain $UB_INSTALLDIR/var/lib/etlegacy-server/
 # mod
 
 # kibontás
-tar -x -f 234
-rm -f 234
+tar -x -f 237
+rm -f 237
 
 # etlegacy fájlok eljhelyezése
 cd etlegacy*
 mkdir -p $UB_INSTALLDIR/usr/lib/etlegacy/legacy
-cp legacy/legacy_v$UB_VERSION.pk3 $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
+cp legacy/legacy_v${UB_VERSION_HEAD2}.pk3 $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
 cp legacy/qagame.mp.*.so $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
 
 # Geiop helyadatok
