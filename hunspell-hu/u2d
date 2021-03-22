@@ -1,5 +1,5 @@
-for minor in `urllist http://download.documentfoundation.org/libreoffice/src/ | splitver '^([0-9.]+)$' | sort -Vr`;do
-verzio=$(u2d http://download.documentfoundation.org/libreoffice/src/"$minor"/)
+for minor in `urllist https://download.documentfoundation.org/libreoffice/src/ | splitver '^([0-9.]+)$' | sort -Vr`;do
+verzio=$(u2d https://download.documentfoundation.org/libreoffice/src/"$minor"/)
 if [ "$verzio" ];then
 echo $verzio
 break
