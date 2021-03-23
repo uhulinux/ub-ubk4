@@ -1,6 +1,6 @@
 diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2021-01-18 19:29:32.000000000 +0100
-+++ patched/browser/app/profile/firefox.js	2021-01-27 22:25:40.575333666 +0100
+--- orig/browser/app/profile/firefox.js	2021-03-18 14:48:28.000000000 +0100
++++ patched/browser/app/profile/firefox.js	2021-03-23 01:12:26.302460338 +0100
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -24,7 +24,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -76,8 +83,8 @@
+@@ -72,8 +79,8 @@
  pref("extensions.webextensions.background-delayed-startup", true);
  
  // Require signed add-ons by default
@@ -35,7 +35,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
  
  // Enable extensionStorage storage actor by default
-@@ -144,7 +151,7 @@
+@@ -140,7 +147,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
  #ifndef XP_WIN
@@ -44,7 +44,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -236,7 +243,7 @@
+@@ -232,7 +239,7 @@
  pref("browser.touchmode.auto", true);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -62,7 +62,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // Whether to warm up network connections for autofill or search results.
  pref("browser.urlbar.speculativeConnect.enabled", true);
-@@ -336,7 +343,7 @@
+@@ -344,7 +351,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -71,12 +71,12 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -849,7 +856,7 @@
+@@ -836,7 +843,7 @@
+ // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
- #ifdef UNIX_BUT_NOT_MAC
--  pref("browser.backspace_action", 2);
-+  pref("browser.backspace_action", 0);
- #else
-   pref("browser.backspace_action", 0);
- #endif
+-pref("browser.backspace_action", 2);
++pref("browser.backspace_action", 0);
+ 
+ pref("intl.regional_prefs.use_os_locales", false);
+ 
