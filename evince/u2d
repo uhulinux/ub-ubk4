@@ -1,1 +1,2 @@
-u2dgnome evince
+url=https://download.gnome.org/core/3.38
+u2d $url/$(urllist $url/ | grep -E '^([0-9.]+)' | sort -V | tail -n 1)/sources/ evince-
