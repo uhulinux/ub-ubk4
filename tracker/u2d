@@ -1,7 +1,2 @@
-for dir in $(urllist https://ftp.acc.umu.se/pub/GNOME/sources/tracker/ | grep -E '^[3-9]' | sort -Vr);do
-ver=$(u2d https://ftp.acc.umu.se/pub/GNOME/sources/tracker/$dir)
-if [ $ver ];then
-    echo $ver
-    exit
-fi
-done
+url=https://download.gnome.org/core/3.38
+u2d $url/$(urllist $url/ | grep -E '^([0-9.]+)' | sort -V | tail -n 1)/sources/ tracker-
