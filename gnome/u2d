@@ -1,1 +1,2 @@
-u2dgnome gnome-shell
+url=https://download.gnome.org/core/3.38
+echo $(urllist $url/ | grep -E '^([0-9.]+)' | sort -V | tail -n 1)
