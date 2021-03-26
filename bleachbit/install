@@ -1,7 +1,3 @@
 #!/bin/sh -eux
 
-python3 setup.py install --root=${UB_INSTALLDIR}
-cp bleachbit.py ${UB_INSTALLDIR}/usr/bin/bleachbit
-mkdir -p ${UB_INSTALLDIR}/usr/share/{applications,pixmaps}
-cp org.bleachbit.BleachBit.desktop ${UB_INSTALLDIR}/usr/share/applications/
-cp bleachbit.png ${UB_INSTALLDIR}/usr/share/pixmaps/
+make prefix=/usr DESTDIR=${UB_INSTALLDIR} install
