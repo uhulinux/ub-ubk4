@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+export CFLAGS+=" -D_GNU_SOURCE -fno-omit-frame-pointer -DSBCL_HOME=/usr/lib/sbcl"
+export GNUMAKE="make"
+export SBCL_HOME=/usr/lib/sbcl
+
+sh make.sh sbcl --prefix=/usr --fancy
+make -C doc/manual info
