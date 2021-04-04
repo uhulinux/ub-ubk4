@@ -1,12 +1,4 @@
 #!/bin/sh -eux
 
-./configure \
-	--prefix-dir=/usr \
-	--binary-dir=bin \
-	--data-dir=share/games/openttd \
-	--icon-dir=share/pixmaps \
-	--doc-dir=share/doc/Packages/openttd \
-	--personal-dir=.openttd \
-	--menu-name="OpenTTD" \
-	--install-dir="$UB_INSTALLDIR"
-ub_make
+ub_compile \
+    -DCMAKE_INSTALL_BINDIR=bin
