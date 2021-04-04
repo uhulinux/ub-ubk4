@@ -1,0 +1,33 @@
+From 79616ed36e05b8ae56eb1acc0afca5d9df68affb Mon Sep 17 00:00:00 2001
+From: Bert Gijsbers <gijsbers@science.uva.nl>
+Date: Sat, 3 Apr 2021 00:22:36 +0200
+Subject: [PATCH] Prefer object icon over default icon.
+
+---
+ src/objmenu.cc | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/objmenu.cc b/src/objmenu.cc
+index ecf82fc4..f109754c 100644
+--- a/src/objmenu.cc
++++ b/src/objmenu.cc
+@@ -40,15 +40,16 @@ YMenuItem* ObjectMenu::addObject(DObject* object, const char* icon,
+                                  ObjectMenu* sub, bool checked) {
+     YMenuItem* item = getObjectItem(object);
+     if (item) {
+-        if (icon == nullptr) {
++        if (object->getIcon() != null) {
+             item->setIcon(object->getIcon());
+-        } else if (*icon) {
++        }
++        else if (nonempty(icon)) {
+             item->setIcon(YIcon::getIcon(icon));
+         }
+         if (checked) {
+             item->setChecked(true);
+         }
+-        add(item, icon);
++        add(item);
+     }
+     return item;
+ }
