@@ -1,6 +1,6 @@
-diff -Naur orig/configure.ac patched/configure.ac
---- orig/configure.ac	2020-10-04 19:32:33.000000000 +0200
-+++ patched/configure.ac	2020-10-13 22:39:54.064743987 +0200
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2021-03-28 23:52:55.000000000 +0200
++++ mod/configure.ac	2021-04-13 11:45:11.560698479 +0200
 @@ -59,7 +59,6 @@
  m4_define([glib_required_version], [2.56.2])
  m4_define([gtk_mac_integration_required_version], [2.0.0])
@@ -9,7 +9,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  m4_define([harfbuzz_required_version], [0.9.19])
  m4_define([intltool_required_version], [0.40.1])
  m4_define([json_glib_required_version], [1.2.6])
-@@ -2625,16 +2624,9 @@
+@@ -2647,16 +2646,9 @@
  
  # Check for GTK_DOC_CHECK availability. The GTK_DOC_CHECK invocation
  # must be on its own line, gtkdocize relies on it
@@ -26,7 +26,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  
  
  #############################
-@@ -2969,27 +2961,6 @@
+@@ -2991,27 +2983,6 @@
  plug-ins/twain/Makefile
  plug-ins/common/Makefile
  modules/Makefile
@@ -54,9 +54,9 @@ diff -Naur orig/configure.ac patched/configure.ac
  docs/Makefile
  menus/Makefile
  cursors/Makefile
-diff -Naur orig/docs/Makefile.am patched/docs/Makefile.am
---- orig/docs/Makefile.am	2012-03-12 20:18:08.000000000 +0100
-+++ patched/docs/Makefile.am	2020-10-13 22:39:54.064743987 +0200
+diff -Nur orig/docs/Makefile.am mod/docs/Makefile.am
+--- orig/docs/Makefile.am	2021-03-28 23:52:56.000000000 +0200
++++ mod/docs/Makefile.am	2021-04-13 11:25:09.303294192 +0200
 @@ -1,10 +1,5 @@
  ## Process this file with automake to produce Makefile.in
  
@@ -68,9 +68,9 @@ diff -Naur orig/docs/Makefile.am patched/docs/Makefile.am
  mans = \
  	gimp-$(GIMP_APP_VERSION).1	\
  	gimprc-$(GIMP_APP_VERSION).5
-diff -Naur orig/Makefile.am patched/Makefile.am
---- orig/Makefile.am	2018-05-20 17:50:05.000000000 +0200
-+++ patched/Makefile.am	2020-10-13 22:39:54.064743987 +0200
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2021-03-28 23:52:55.000000000 +0200
++++ mod/Makefile.am	2021-04-13 11:28:04.042871395 +0200
 @@ -36,7 +36,6 @@
  	$(GIMP_MODULES)		\
  	$(GIMP_PLUGINS)		\
@@ -79,17 +79,20 @@ diff -Naur orig/Makefile.am patched/Makefile.am
  	docs			\
  	build
  
-@@ -85,12 +84,7 @@
+@@ -84,14 +83,10 @@
+ 	authors.xml		\
  	authors.xsl		\
  	config.h.win32		\
- 	gimp-zip.in		\
+-	gimp-zip.in		\
 -	git-version.h		\
 -	gtk-doc.make
 -
 -
 -DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
--
-+	git-version.h
++	gimp-zip.in
  
+ 
++	git-version.h
  check-defs:
  	@$(PYTHON) $(top_srcdir)/tools/defcheck.py $(top_srcdir) || \
+ 	  ( echo "*** .def files inconsistent ***"; exit 1; )
