@@ -1,6 +1,5 @@
 #!/bin/sh -eux
 
-tar -xzf master-pdf-editor-${UB_VERSION}-qt5.x86_64.tar.gz
-cd master-pdf-editor-5
 mkdir -p ${UB_INSTALLDIR}/usr/lib/master-pdf-editor-5
+mv net.code-industry.masterpdfeditor5.desktop ${UB_INSTALLDIR}/usr/share/applications/
 cp -r * ${UB_INSTALLDIR}/usr/lib/master-pdf-editor-5/

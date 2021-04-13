@@ -1,11 +1,6 @@
 #!/bin/sh -eux
 
-git clone https://github.com/moneymanagerex/database.git database
-git clone https://github.com/moneymanagerex/LuaGlue.git 3rd/LuaGlue
-git clone https://github.com/moneymanagerex/html-template.git 3rd/cgitemplate
-git clone https://github.com/diepes/sorttable.js.git 3rd/sorttable.js
-git clone https://github.com/FVANCOP/ChartNew.js 3rd/ChartNew.js
-
+git submodule update --init
 export LIBS="-lpthread -lm -ldl"
 ub_compile
 make po
