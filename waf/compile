@@ -4,7 +4,7 @@ _py_ver=$(python3 -c "import sys; print(str(sys.version_info.major)+'.'+str(sys.
 sed -e "/test(i/ s|dirname|'python${_py_ver}/site-packages/waf'|" -i waf-light
 
 # Extract license
-head -n 30 waf-light | tail -n 25 > LICENSE
+head -n 30 waf-light | tail -n 28 | sed -e 's/# //g; s/"""//g' > LICENSE
 
 # Fix spaces to tabs.
 # find -iname '*.py' -exec sed -i 's/ \{8\}/\t/g' '{}' +

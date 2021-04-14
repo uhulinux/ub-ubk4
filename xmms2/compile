@@ -3,5 +3,6 @@
 export CFLAGS="-DHAVE_G_FILE_QUERY_FILE_TYPE"
 waf configure \
 	--prefix=/usr \
-	--with-default-output-plugin=pulse
+	--with-default-output-plugin=pulse \
+	--without-optionals=python
 waf build
