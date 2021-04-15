@@ -1,8 +1,1 @@
-url=http://download.videolan.org/pub/videolan/vlc
-for dir in `urllist $url | grep -E '^([0-9.]+)' | sort -Vr`;do
-    ver=$(u2d $url/$dir)
-    if [ "$ver" ];then
-        echo $ver
-        exit
-    fi
-done
+u2dsubdir http://download.videolan.org/pub/videolan/vlc/
