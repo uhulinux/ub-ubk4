@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
-ub_install
+mkdir -p ${UB_INSTALLDIR}/usr/share/opendungeons
+rm -rf scripts/win32
+cp -r * ${UB_INSTALLDIR}/usr/share/opendungeons/
