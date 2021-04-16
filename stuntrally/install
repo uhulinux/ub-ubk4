@@ -1,5 +1,11 @@
 #!/bin/sh -eux
 
-ub_install
-rm -rf ${UB_INSTALLDIR}/usr/include
-rm -rf ${UB_INSTALLDIR}/usr/share/games/stuntrally/tracks/build
+mkdir -p ${UB_INSTALLDIR}/usr/share/stuntrally
+mv lib/64/* lib/
+cp -r share ${UB_INSTALLDIR}/usr/
+rm -rf lib/64/ lib/32 share
+rm lib/libstdc++.so.6 lib/libSDL2-2.0.so.1 bin/*_x86
+cp /usr/lib/libSDL2-2.0.so.0 lib/libSDL2-2.0.so.1
+cp -r * ${UB_INSTALLDIR}/usr/share/stuntrally/
+ln -s ${UB_INSTALLDIR}/usr/share/stuntrally/stuntrally ${UB_INSTALLDIR}/usr/bin/stuntrally
+ln -s ${UB_INSTALLDIR}/usr/share/stuntrally/sr-editor ${UB_INSTALLDIR}/usr/bin/sr-editor
