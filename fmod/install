@@ -2,7 +2,9 @@
 
 mkdir -p ${UB_INSTALLDIR}/usr/lib
 mkdir -p ${UB_INSTALLDIR}/usr/include/fmodex
-cp -d api/lib/* "$UB_INSTALLDIR"/usr/lib/
+# csak 64 bites kell
+cp -d api/lib/libfmodex64* "$UB_INSTALLDIR"/usr/lib/
+cp -d api/lib/libfmodexL64* "$UB_INSTALLDIR"/usr/lib/
 cp -d api/inc/* "$UB_INSTALLDIR"/usr/include/fmodex
 
 ln -s "$UB_INSTALLDIR"/usr/lib/libfmodex64-${UB_VERSION}.so "$UB_INSTALLDIR"/usr/lib/libfmodex.so.4
