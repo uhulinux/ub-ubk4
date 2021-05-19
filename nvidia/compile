@@ -10,11 +10,14 @@ chmod +x $forras.run
 ./"$forras".run -x
 mv $forras/* ./
 rm -f $forras.run
+rm -rf $forras
+rm nvidia-settings*
 bsdtar -xf nvidia-persistenced-init.tar.bz2
-patch -i "$UB_SRCDIR"/patches/menu.patch.skip
 cd kernel
 make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
-
-cd ../libxnvctrl
-make clean
-make
+cd ../nvsett
+export NV_USE_BUNDLED_LIBJANSSON=0
+export PREFIX=/usr
+ub_compile
+cd src/libXNVCtrl
+ub_compile

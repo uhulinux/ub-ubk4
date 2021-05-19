@@ -31,12 +31,25 @@ mkdir -p "$cellibdir"/nvidia \
 	"$glvnddir" \
 	"$vdpaudir"
 
+	cd nvsett
+export NV_USE_BUNDLED_LIBJANSSON=0
+export PREFIX=/usr
+ub_install
+
+# desktop
+mv	doc/nvidia-settings.desktop "$desktopdir"/
+mv	doc/nvidia-settings.png "$pixmapdir"/
+gunzip	$mandir/nvidia-settings.1.gz
+cd ..
+
+# felesleges gtk libek
+rm libnvidia-gtk*
+
 #kernelmodulok
 cp kernel/*.ko "$moduldir"/
 
 # binárisok
 mv	nvidia-xconfig \
-	nvidia-settings \
 	nvidia-bug-report.sh \
 	nvidia-smi \
 	nvidia-cuda-mps-server \
@@ -45,10 +58,6 @@ mv	nvidia-xconfig \
 	nvidia-persistenced \
 	nvidia-debugdump \
 	"$UB_INSTALLDIR"/usr/bin/
-
-# desktop
-mv	nvidia-settings.desktop "$desktopdir"/
-mv	nvidia-settings.png "$pixmapdir"/
 
 # man
 gunzip	*.1.gz
@@ -59,7 +68,7 @@ mv	nvidia.icd "$vendordir"/
 
 # Áthelyezzük a nem a $cellibdir alá kerülő *.so-kat a "$cellibdir"/nvidia/ alá
 
-# postinstből majd liblx.so nevű link lesz rá a $cellibdir/xorg/extensions alá
+# postinstből majd libglx.so nevű link lesz rá a $cellibdir/xorg/extensions alá
 mv	libglx.so."$UB_VERSION" "$cellibdir"/nvidia/
 
 # libglvnd ütközések, a libglvnd elsőbbséget élvez
@@ -101,8 +110,27 @@ mv nvidia-drm-outputclass.conf $xconfdir/10-nvidia-drm-outputclass.conf
 mv nvidia-persistenced-init/systemd/nvidia-persistenced.service.template \
     $UB_INSTALLDIR/usr/lib/systemd/system/nvidia-persistenced.service
 
-# nem kell gtk2
-rm -f "${UB_INSTALLDIR}"/usr/lib/libnvidia-gtk2*
+#libxnvctrl
+
+cd nvsett/src/libXNVCtrl
+mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
+cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
+cp libXNVCtrl.a "${cellibdir}"/
+
+# pc rendberakás
+cat <<'EOF' > "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
+prefix=/usr
+libdir=${prefix}/lib
+includedir=${prefix}/include/NVCtrl
+
+Name: libXNVCtrl
+Description: Library for accessing NV-CONTROL extension in NVIDIA's kurrent drivers.
+Version: %version%
+Libs: -L${libdir} -lXNVCtrl
+Cflags: -I${includedir}
+EOF
+
+sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
 #linkgyártások
 cd "$cellibdir"
@@ -122,3 +150,6 @@ solink=$(echo $lib | sed s/so\..*/so/)
 ln -s $i $lib.1
 ln -s $lib.1 $solink
 done
+
+# Támogatott chepkhez a verzió beillesztése a csomag leírásába
+sed "s/version/${UB_VERSION}/g" -i ${UB_SRCDIR}/packages/nvidia-390/description/hu

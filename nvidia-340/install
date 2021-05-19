@@ -23,12 +23,22 @@ mkdir -p "$cellibdir"/nvidia \
 	"$shnvdir" \
 	"$vdpaudir"
 
+cd nvsett
+export NV_USE_BUNDLED_LIBJANSSON=0
+export PREFIX=/usr
+ub_install
+
+# desktop
+mv	doc/nvidia-settings.desktop "$desktopdir"/
+mv	doc/nvidia-settings.png "$pixmapdir"/
+gunzip	$mandir/nvidia-settings.1.gz
+cd ..
+
 #kernelmodulok
 cp kernel/{nvidia.ko,uvm/nvidia-uvm.ko} "$moduldir"/
 
 # binárisok
 mv	nvidia-xconfig \
-	nvidia-settings \
 	nvidia-bug-report.sh \
 	nvidia-smi \
 	nvidia-modprobe \
@@ -37,10 +47,6 @@ mv	nvidia-xconfig \
 	nvidia-cuda-mps-server \
 	nvidia-cuda-mps-control \
 	"$UB_INSTALLDIR"/usr/bin/
-
-# desktop
-mv	nvidia-settings.desktop "$desktopdir"/
-mv	nvidia-settings.png "$pixmapdir"/
 
 # man
 gunzip	*.1.gz
@@ -75,8 +81,27 @@ mv *.so.* "$cellibdir"/
 cp nvidia-application-profiles-${UB_VERSION}-rc $shnvdir/
 cp nvidia-application-profiles-${UB_VERSION}-key-documentation $shnvdir/
 
-# nem kell gtk2
-rm -f "${UB_INSTALLDIR}"/usr/lib/libnvidia-gtk2*
+#libxnvctrl
+
+cd nvsett/src/libXNVCtrl
+mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
+cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
+cp libXNVCtrl.a "${cellibdir}"/
+
+# pc rendberakás
+cat <<'EOF' > "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
+prefix=/usr
+libdir=${prefix}/lib
+includedir=${prefix}/include/NVCtrl
+
+Name: libXNVCtrl
+Description: Library for accessing NV-CONTROL extension in NVIDIA's kurrent drivers.
+Version: %version%
+Libs: -L${libdir} -lXNVCtrl
+Cflags: -I${includedir}
+EOF
+
+sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
 #linkgyártások
 cd "$cellibdir"
@@ -97,3 +122,6 @@ solink=$(echo $lib | sed s/so\..*/so/)
 ln -s $i $lib.1
 ln -s $lib.1 $solink
 done
+
+# Támogatott chepkhez a verzió beillesztése a csomag leírásába
+sed "s/version/${UB_VERSION}/g" -i ${UB_SRCDIR}/packages/nvidia-340/description/hu

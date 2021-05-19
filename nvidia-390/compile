@@ -11,7 +11,12 @@ chmod +x $forras.run
 mv $forras/* ./
 rm $forras.*
 sed -i 's/__NV_VK_ICD__/libGLX_nvidia.so.0/' nvidia_icd.json.template
+sed -i 's%__UTILS_PATH__/%%' nvidia-settings.desktop
+sed -i 's%__PIXMAP_PATH__/nvidia-settings.png%nvidia-settings%' nvidia-settings.desktop
 bsdtar -xf nvidia-persistenced-init.tar.bz2
-patch -i "$UB_SRCDIR"/patches/menu.patch.skip
 cd kernel
 make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
+cd ../nvsett
+export NV_USE_BUNDLED_LIBJANSSON=0
+export PREFIX=/usr
+ub_compile
