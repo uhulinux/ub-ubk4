@@ -1,0 +1,12 @@
+diff -Nur orig/video.c mod/video.c
+--- orig/video.c	2021-01-05 09:07:45.000000000 +0100
++++ mod/video.c	2021-01-11 20:18:15.855314317 +0100
+@@ -10558,7 +10558,7 @@
+ 	if (filled < 1 + 2 * decoder->Interlaced && decoder->Closing) {
+ 	    // FIXME: rewrite MixVideo to support less surfaces
+ 	    if ((VideoShowBlackPicture && !decoder->TrickSpeed)
+-		|| (VideoShowBlackPicture && decoder->Closing < -300)) {
++		|| decoder->Closing < -300) {
+ 		VdpauBlackSurface(decoder);
+ 		VdpauMessage(4, "video/vdpau: black surface displayed\n");
+ #ifdef USE_SCREENSAVER
