@@ -1,0 +1,12 @@
+diff -Naur orig/cmake-proxies/wxWidgets/CMakeLists.txt patched/cmake-proxies/wxWidgets/CMakeLists.txt
+--- orig/cmake-proxies/wxWidgets/CMakeLists.txt	2021-04-13 21:53:40.000000000 +0200
++++ patched/cmake-proxies/wxWidgets/CMakeLists.txt	2021-05-03 15:11:10.682677875 +0200
+@@ -239,7 +239,7 @@
+ 
+ string( REGEX MATCHALL "\".+(Audacity).+\"" ours "${output}")
+ if( NOT ours )
+-   message( FATAL_ERROR
++   message( STATUS
+       "\n########################################################################\n"
+       "Audacity version 3.0.0 or higher requires use of a customized version of "
+       "wxWidgets.  For details:\n"

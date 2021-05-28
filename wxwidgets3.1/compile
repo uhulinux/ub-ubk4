@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+ub_compile \
+    -DwxBUILD_SHARED=ON \
+    -DwxBUILD_PRECOMP=OFF \
+	-DwxUSE_OPENGL=ON \
+	-DwxUSE_UNICODE=ON \
+	-DwxUSE_IPV6=ON \
+	-DwxUSE_INTL=ON \
+	-DwxUSE_GRAPHICS_CONTEXT=ON \
+	-DwxUSE_MEDIACTRL=ON \
+	-DwxUSE_WEBVIEW=ON \
+	-DwxUSE_REGEX=sys \
+	-DwxUSE_ZLIB=sys \
+	-DwxUSE_EXPAT=sys \
+	-DwxUSE_LIBJPEG=sys \
+	-DwxUSE_LIBPNG=sys \
+	-DwxUSE_LIBTIFF=sys

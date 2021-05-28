@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install
+cp ${UB_INSTALLDIR}/usr/lib/wx/include/gtk3-unicode-${UB_VERSION_HEAD2}/wx/setup.h \
+    ${UB_INSTALLDIR}/usr/include/wx-${UB_VERSION_HEAD2}/wx/setup.h
+
+ln -s /usr/lib/wx/config/gtk3-unicode-${UB_VERSION_HEAD2} ${UB_INSTALLDIR}/usr/bin/wx-config
+ln -s /usr/bin/wxrc ${UB_INSTALLDIR}/usr/bin/wxrc-${UB_VERSION_HEAD2}
