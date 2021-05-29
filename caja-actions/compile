@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+rm -Rf docs/help/{ko,ky}
+
+ub_compile \
+    --disable-html-manuals \
+    --disable-pdf-manuals \
+    --disable-maintainer-mode
