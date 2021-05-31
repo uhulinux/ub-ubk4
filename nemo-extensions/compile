@@ -1,12 +1,18 @@
 #!/bin/sh -eux
 
-extensions="nemo-fileroller nemo-image-converter nemo-preview nemo-python nemo-seahorse nemo-share"
+extensions="
+nemo-python
+nemo-dropbox
+nemo-fileroller
+nemo-image-converter
+nemo-preview
+nemo-repairer
+nemo-seahorse
+nemo-share
+nemo-terminal"
+
 for progs in ${extensions}; do
 cd $progs
-  if [ -f autogen.sh ]; then
-    rm -f autogen.sh
-    autoreconf -vif
-  fi
-  ub_compile
+ub_compile
 cd ..
 done

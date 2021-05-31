@@ -10,9 +10,6 @@ ub_replace "$UB_INSTALLDIR" "" "$UB_INSTALLDIR/etc/fppkg/default"
 # allways -fPIC
 echo -e "#ifdef cpux86_64\n# for x86_64 use -fPIC by default\n-Cg\n#endif" >> "$UB_INSTALLDIR/etc/fpc.cfg"
 
-# search paths fix for linkage
-sed s%#-Fl\\/lib\;%-Fl\\/lib\;% -i $UB_INSTALLDIR/etc/fpc.cfg
-
 # fix symlink
 rm "$UB_INSTALLDIR/usr/bin/ppcx64"
 ln -s "../lib/fpc/$UB_VERSION/ppcx64" "$UB_INSTALLDIR/usr/bin/ppcx64"

@@ -1,2 +1,1 @@
-echo "1.4.0.8"
-# sflist dosemu dosemu | sort -V | tail -n 1
+geturl https://sourceforge.net/p/dosemu/code/ref/master/tags/ | grep dosemu- | sed s/.*-//g | sed s/\\/tree.*//g | sort -V | tail -n 1

@@ -1,8 +1,4 @@
 #!/bin/sh -eux
 
-patch -i $UB_SRCDIR/patches/01-destdir-support.patch.skip
-ub_install \
-	PREFIX=/usr
-
+make PREFIX=/usr DESTDIR=${UB_INSTALLDIR} install
 rm "$UB_INSTALLDIR"/usr/bin/unrar
-cp license.txt order.htm rar.txt readme.txt technote.txt whatsnew.txt ../

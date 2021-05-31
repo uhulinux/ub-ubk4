@@ -1,28 +1,56 @@
 #!/bin/sh -eux
 
-extensions="nemo-seahorse nemo-preview nemo-fileroller nemo-python nemo-image-converter nemo-share"
+extensions="
+nemo-python
+nemo-dropbox
+nemo-fileroller
+nemo-image-converter
+nemo-preview
+nemo-repairer
+nemo-seahorse
+nemo-share
+nemo-terminal"
+
 for progs in ${extensions};do
 cd $progs
 ub_install
-if [ "$progs" == "nemo-seahorse" ];then
-make -C tool DESTDIR=$UB_INSTALLDIR uninstall
-rm -rf $UB_INSTALLDIR/usr/share/{GConf,glib-2.0,nemo-seahorse}
-fi
 cd ..
 done
-mkdir -p "$UB_INSTALLDIR"/usr/share/{nemo-terminal,glib-2.0/schemas,nemo-python/extensions/}
-cd nemo-terminal
-    cp src/nemo_terminal.py "$UB_INSTALLDIR"/usr/share/nemo-python/extensions/nemo_terminal.py
-    cp src/org.nemo.extensions.nemo-terminal.gschema.xml "$UB_INSTALLDIR"/usr/share/glib-2.0/schemas/org.nemo.extensions.nemo-terminal.gschema.xml
-  cp pixmap/logo_120x120.png "$UB_INSTALLDIR"/usr/share/nemo-terminal/logo_120x120.png
-cd -
+
+cp nemo-image-converter/build/src/libnemo-image-converter.so ${UB_INSTALLDIR}/usr/lib/nemo/extensions-3.0/libnemo-image-converter.so
+pythonok="
+nemo-audio-tab
+nemo-compare
+nemo-emblems
+nemo-pastebin"
+
+# nemo-media-columns
+# elodázva, mert kellene neki:python3-pil,python3-mediainfo,python3-pypdf2,python3-stopit
+
+for progs in ${pythonok}; do
+cd $progs
+python3 setup.py install --root=${UB_INSTALLDIR}
+cd ..
+done
+
+doksimaps="
+nemo-fileroller
+nemo-seahorse
+nemo-share
+nemo-python
+nemo-preview
+nemo-terminal
+nemo-image-converter
+nemo-pastebin
+nemo-dropbox
+nemo-repairer"
 
 docdir=$UB_INSTALLDIR/usr/share/doc/Packages
-mkdir -p $docdir/{nemo-fileroller,nemo-seahorse,nemo-share,nemo-python,nemo-preview,nemo-terminal,nemo-image-converter}
-cp nemo-fileroller/{COPYING,README} $docdir/nemo-fileroller/
-cp nemo-seahorse/{COPYING,ChangeLog,README,THANKS} $docdir/nemo-seahorse/
-cp nemo-seahorse/{AUTHORS,ChangeLog,COPYING,README} $docdir/nemo-share/
-cp nemo-python/{AUTHORS,ChangeLog,COPYING,README} $docdir/nemo-python/
-cp nemo-preview/{AUTHORS,COPYING,README} $docdir/nemo-preview/
-cp nemo-terminal/{AUTHORS,COPYING,README} $docdir/nemo-terminal/
-cp nemo-image-converter/{AUTHORS,COPYING,README} $docdir/nemo-image-converter/
+for doksimap in ${doksimaps};do
+mkdir -p $docdir/$doksimap
+cp  $doksimap/{COPYING,README} $docdir/$doksimap/
+done
+
+mkdir -p $docdir/{nemo-audio-tab,nemo-emblems}
+cp nemo-audio-tab/COPYING.GPL3 $docdir/nemo-audio-tab/
+cp nemo-emblems/COPYING.GPL3  $docdir/nemo-emblems/
