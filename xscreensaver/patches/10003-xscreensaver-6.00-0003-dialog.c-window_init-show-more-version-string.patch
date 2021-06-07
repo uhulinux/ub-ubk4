@@ -1,0 +1,27 @@
+From 13e1203d8cc00a8462dbd2656257b46b411b2854 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Mon, 3 May 2021 15:00:31 +0900
+Subject: [PATCH] dialog.c: window_init: show more version string
+
+Fedora modifies version string to "6.00-1.fc34" to show rpm "release", for example.
+Let's allow more length for version string for password dialog.
+---
+ driver/dialog.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/driver/dialog.c b/driver/dialog.c
+index 9a8173f..3020880 100644
+--- a/driver/dialog.c
++++ b/driver/dialog.c
+@@ -959,7 +959,7 @@ window_init (Widget root_widget, Bool splash_p)
+     *s = 0;
+     ws->heading_label = (char *) malloc (100);
+     ws->version = strdup(version);
+-    sprintf (ws->heading_label, "XScreenSaver %.4s, v%.10s", year, version);
++    sprintf (ws->heading_label, "XScreenSaver %.4s, v%.14s", year, version);
+ 
+     if (splash_p)
+       {
+-- 
+2.31.1
+
