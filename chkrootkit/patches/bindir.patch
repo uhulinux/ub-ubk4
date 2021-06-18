@@ -1,24 +1,17 @@
 diff -Nur orig/chkrootkit mod/chkrootkit
---- orig/chkrootkit	2019-02-12 00:58:02.000000000 +0100
-+++ mod/chkrootkit	2019-04-15 15:13:14.160559368 +0200
-@@ -35,6 +35,9 @@
+--- orig/chkrootkit	2021-06-09 18:59:50.000000000 +0200
++++ mod/chkrootkit	2021-06-18 13:22:28.539284037 +0200
+@@ -35,6 +35,10 @@
  # Tools
  TOOLS="aliens asp bindshell lkm rexedcs sniffer w55808 wted scalper slapper z2 chkutmp OSX_RSPLUG"
  
 +# Path of supporting binaries.
 +BIN=/usr/lib/chkrootkit
 +
++
  # Return Codes
  INFECTED=0
  NOT_INFECTED=1
-@@ -183,6 +186,7 @@
- }
- 
- sniffer () {
-+STATUS=${NOT_INFECTED}
-     if [ "${ROOTDIR}" != "/" ]; then
-       echo "not tested"
-       return ${NOT_TESTED}
 @@ -193,31 +197,31 @@
      fi
  
@@ -70,7 +63,7 @@ diff -Nur orig/chkrootkit mod/chkrootkit
      fi
  
 -    if ./chklastlog -f ${ROOTDIR}${WTMP} -l ${ROOTDIR}${LASTLOG}
-+    if "$BIN/chklastlog" -f ${ROOTDIR}${WTMP} -l ${ROOTDIR}${LASTLOG}
++    if $BIN/chklastlog -f ${ROOTDIR}${WTMP} -l ${ROOTDIR}${LASTLOG}
      then
        if [ "${QUIET}" != "t" ]; then echo "chklastlog: nothing deleted"; fi
      fi
@@ -120,9 +113,9 @@ diff -Nur orig/chkrootkit mod/chkrootkit
      prog=""
      if [  \( "${SYSTEM}" = "Linux"  -o \( "${SYSTEM}" = "FreeBSD" -a \
         `echo ${V} | ${awk} '{ if ($1 > 4.3 || $1 < 6.0) print 1; else print 0 }'` -eq 1 \) \) -a "${ROOTDIR}" = "/" ]; then
--       [  -x ./chkproc -a "`find /proc 2>/dev/null| wc -l`" -gt 1 ] && prog="./chkproc"
+-       [  -x ./chkproc -a "`find /proc -maxdepth 1 2>/dev/null| wc -l`" -gt 1 ] && prog="./chkproc"
 -      [  -x ./chkdirs ] && prog="$prog ./chkdirs"
-+       [  -x $BIN/chkproc -a "`find /proc 2>/dev/null| wc -l`" -gt 1 ] && prog="$BIN/chkproc"
++       [  -x $BIN/chkproc -a "`find /proc -maxdepth 1 2>/dev/null| wc -l`" -gt 1 ] && prog="$BIN/chkproc"
 +      [  -x $BIN/chkdirs ] && prog="$prog $BIN/chkdirs"
        if [ "$prog" = "" -o ${mode} = "pm" ]; then
           echo "not tested: can't exec $prog"
@@ -136,7 +129,7 @@ diff -Nur orig/chkrootkit mod/chkrootkit
           return 5
        fi
  
-@@ -351,7 +355,7 @@
+@@ -352,7 +356,7 @@
        if [ "${DEBUG}" = "t" ]; then
             ${echo} "*** PV=$PV ***"
        fi
@@ -145,16 +138,16 @@ diff -Nur orig/chkrootkit mod/chkrootkit
           if [ "${QUIET}" != "t" ]; then echo "chkproc: nothing detected"; fi
        else
           echo "chkproc: Warning: Possible LKM Trojan installed"
-@@ -360,7 +364,7 @@
-       for i in /usr/share /usr/bin /usr/sbin /lib; do
-          [ -d $i ] && dirs="$dirs $i"
+@@ -363,7 +367,7 @@
+             [ -d $i ] && dirs="$dirs $i"
+          fi 
        done
 -      if ./chkdirs $dirs;  then
 +      if $BIN/chkdirs $dirs;  then
           if [ "${QUIET}" != "t" ]; then echo "chkdirs: nothing detected"; fi
        else
  	    echo "chkdirs: Warning: Possible LKM Trojan installed"
-@@ -1887,18 +1891,18 @@
+@@ -1957,18 +1961,18 @@
  
     if [ "${SYSTEM}" = "Linux" ]
     then
