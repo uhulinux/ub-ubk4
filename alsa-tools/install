@@ -1,26 +1,4 @@
 #!/bin/sh -eux
 
-# hdsp{conf,mixer}: fltk kellene neki
-for i in \
-	as10k1 \
-	envy24control \
-	mixartloader \
-	pcxhrloader \
-	rmedigicontrol\
-	seq/sbiload   \
-	sscape_ctl    \
-	us428control  \
-	usx2yloader \
-	vxloader \
-	echomixer     \
-	hwmixvolume \
-	hdajackretask \
-	hda-verb \
-	hdajacksensetest
-do
-	cd "$i"
-	ub_install
-	cd -
-done
-
-rm "$UB_INSTALLDIR"/etc/hotplug/usb/tascam_*
+ub_install
+rm -rf "$UB_INSTALLDIR"/etc/hotplug

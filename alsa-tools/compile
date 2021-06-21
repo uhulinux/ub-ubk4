@@ -1,25 +1,3 @@
 #!/bin/sh -eux
 
-# hdsp{conf,mixer}: fltk kellene neki
-# mixartloader, hdsploader, vxloader: ezek mar nem kellenek az udev miatt
-for i in \
-	as10k1 \
-	envy24control \
-	mixartloader \
-	pcxhrloader \
-	rmedigicontrol\
-	seq/sbiload   \
-	sscape_ctl    \
-	us428control  \
-	usx2yloader \
-	vxloader \
-	echomixer     \
-	hwmixvolume \
-	hdajackretask \
-	hda-verb \
-	hdajacksensetest
-do
-	cd "$UB_COMPILEDIR/$i"
-	autoreconf -vif
-	ub_compile
-done
+ub_make configure
