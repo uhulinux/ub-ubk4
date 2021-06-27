@@ -3,10 +3,3 @@
 ub_install
 rm -f "${UB_INSTALLDIR}"/etc/xdg/menus/cinnamon-applications-merged
 mv ${UB_INSTALLDIR}/usr/bin/cinnamon-settings ${UB_INSTALLDIR}/usr/bin/cinnamon-settings.bin
-
-# crazy debian-specific install paths
-debianpysitedir=usr/lib/python3/dist-packages/
-pysitedir=$(python3 -c "import site; print(site.getsitepackages()[0])")
-mkdir -p ${UB_INSTALLDIR}${pysitedir}
-mv ${UB_INSTALLDIR}/$debianpysitedir/cinnamon ${UB_INSTALLDIR}${pysitedir}/
-rm -rf ${UB_INSTALLDIR}/usr/lib/python3
