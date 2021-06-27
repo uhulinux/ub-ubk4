@@ -1,0 +1,314 @@
+diff -Nur orig/data/tools/wesnoth_addon_manager mod/data/tools/wesnoth_addon_manager
+--- orig/data/tools/wesnoth_addon_manager	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wesnoth_addon_manager	2020-04-04 14:04:23.390273378 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """
+ add-on_manager.py -- a command-line client for the Wesnoth add-on server
+@@ -15,12 +15,12 @@
+ from wesnoth.campaignserver_client import CampaignClient
+ 
+ # This is the validation code for the -u arguments. It checks if the input path is valid
+-def valid_file_path(path):
+-    if os.path.isdir(path) or os.path.isfile(path):
+-        return path
++def valid_file_path(path):
++    if os.path.isdir(path) or os.path.isfile(path):
++        return path
+     else:
+         sys.stderr.write("No such file or directory: %s\n" % path)
+-        sys.exit(1)
++        sys.exit(1)
+     return None
+ 
+ if __name__ == "__main__":
+diff -Nur orig/data/tools/wmlflip mod/data/tools/wmlflip
+--- orig/data/tools/wmlflip	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlflip	2020-04-04 13:16:06.118294957 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ """
+ wmlflip -- coordinate transformation for .cfg macro calls.
+ 
+@@ -33,11 +33,17 @@
+ 
+ More transformations would be easy to write.
+ """
++from __future__ import print_function
+ 
+-import sys, os, time, getopt, cStringIO, re
++from past.builtins import cmp
++from future import standard_library
++standard_library.install_aliases()
++from builtins import zip
++from builtins import object
++import sys, os, time, getopt, io, re
+ from wesnoth.wmltools import *
+ 
+-class ParseArgs:
++class ParseArgs(object):
+     "Mine macro argument locations out of a .cfg file."
+     def __init__(self, fp, verbose=False):
+         self.fp = fp
+@@ -56,20 +62,20 @@
+             return self.fp.read(1)
+     def ungetchar(self, c):
+         if verbose:
+-            print "pushing back", c
++            print("pushing back", c)
+         self.pushback = c
+     def parse_until(self, enders):
+         "Parse until we reach specified terminator."
+         if self.verbose:
+             self.lead += "*"
+-            print self.lead + " parse_until(%s) starts" % enders
++            print(self.lead + " parse_until(%s) starts" % enders)
+         while True:
+             c = self.getchar()
+             if self.verbose:
+-                print self.lead + "I see", c
++                print(self.lead + "I see", c)
+             if c in enders:
+                 if self.verbose:
+-                    print self.lead + "parse_until(%s) ends" % enders
++                    print(self.lead + "parse_until(%s) ends" % enders)
+                     self.lead = self.lead[:-1]
+                 return c
+             elif c == '{':
+@@ -78,7 +84,7 @@
+         "We see a start of call."
+         if self.verbose:
+             self.lead += "*"
+-            print self.lead + "parse_call()"
++            print(self.lead + "parse_call()")
+         self.namestack.append(["", []])
+         # Fill in the name of the called macro
+         while True:
+@@ -88,12 +94,12 @@
+             else:
+                 break
+         if self.verbose:
+-            print self.lead + "name", self.namestack[-1]
++            print(self.lead + "name", self.namestack[-1])
+         # Discard if no arguments
+         if c == '}':
+             self.namestack.pop()
+             if self.verbose:
+-                print self.lead + "parse_call() ends"
++                print(self.lead + "parse_call() ends")
+                 self.lead = self.lead[:-1]
+             return
+         # If non-space, this is something like a filename include;
+@@ -103,7 +109,7 @@
+                 c =  self.getchar()
+                 if c == '}':
+                     if self.verbose:
+-                        print self.lead + "parse_call() ends"
++                        print(self.lead + "parse_call() ends")
+                         self.lead = self.lead[:-1]
+                     return
+         # It's a macro call with arguments;
+@@ -115,21 +121,21 @@
+         # Record the scope we just parsed
+         self.parsed.append(self.namestack.pop())
+         if self.verbose:
+-            print self.lead + "parse_call() ends"
++            print(self.lead + "parse_call() ends")
+             self.lead = self.lead[:-1]
+     def parse_actual(self):
+         "Parse an actual argument."
+         # Skip leading whitespace
+         if self.verbose:
+             self.lead += "*"
+-            print self.lead + "parse_actual() begins"
++            print(self.lead + "parse_actual() begins")
+         while True:
+             c = self.getchar()
+             if not c.isspace():
+                 break
+         if c == '}':
+             if self.verbose:
+-                print "** parse_actual() returns False"
++                print("** parse_actual() returns False")
+                 self.lead = self.lead[:-1]
+             return False
+         # Looks like we have a real argument
+@@ -146,7 +152,7 @@
+             argend = self.fp.tell()
+         elif c == '"':
+             if verbose:
+-                print self.lead + "starting string argument"
++                print(self.lead + "starting string argument")
+             self.parse_until(['"'])
+             argend = self.fp.tell()
+         else:
+@@ -155,7 +161,7 @@
+             self.ungetchar(ender)
+         self.namestack[-1][1].append((argstart, argend))
+         if self.verbose:
+-            print self.lead + "parse_actual() returns True"
++            print(self.lead + "parse_actual() returns True")
+             self.lead = self.lead[:-1]
+         return True
+ 
+@@ -191,10 +197,10 @@
+     fp.close()
+ 
+     # Get argument offsets from it.
+-    calls = ParseArgs(cStringIO.StringIO(content), verbose)
++    calls = ParseArgs(io.StringIO(content), verbose)
+ 
+     # Filter out irrelevant calls.
+-    parsed = filter(lambda x: x[0] in relevant, calls.parsed)
++    parsed = [x for x in calls.parsed if x[0] in relevant]
+ 
+     # Extract coordinate pair locations from macro arguments.
+     pairs = []
+@@ -250,23 +256,23 @@
+         elif switch in ('-x'):
+             flip_x = True
+         elif switch in ('-y'):
+-            print >>sys.stderr, "Vertical flip is not yet supported."
++            print("Vertical flip is not yet supported.", file=sys.stderr)
+             sys.exit(0)
+         elif switch == '-v':
+             verbose += 1
+     if verbose:
+-        print "Debugging output enabled."
++        print("Debugging output enabled.")
+ 
+     if mapfile:
+         (mx, my) = mapsize(mapfile)
+-        print >>sys.stderr, "%s is %d wide by %d high" % (mapfile, mx, my)
++        print("%s is %d wide by %d high" % (mapfile, mx, my), file=sys.stderr)
+ 
+     if arguments and not flip_x and not translate:
+-        print >>sys.stderr, "No coordinate transform is specified."
++        print("No coordinate transform is specified.", file=sys.stderr)
+         sys.exit(0)
+ 
+     if flip_x and not mapfile:
+-        print >>sys.stderr, "X flip transformation needs to know the map size.."
++        print("X flip transformation needs to know the map size..", file=sys.stderr)
+         sys.exit(0)
+ 
+     if translate:
+@@ -279,7 +285,7 @@
+         # For each file named on the command line...
+         for filename in arguments:
+             if verbose:
+-                print >>sys.stderr, "Processing file", filename
++                print("Processing file", filename, file=sys.stderr)
+ 
+             (content, pairs) = transformables(filename, relevant, verbose > 1)
+ 
+@@ -310,7 +316,7 @@
+                 # This is generic again
+                 target.append((xn, yn))
+                 if verbose:
+-                    print "(%d, %d) -> (%d, %d)" % (x, y, xn, yn)
++                    print("(%d, %d) -> (%d, %d)" % (x, y, xn, yn))
+ 
+             # Perform the actual transformation
+             for (((xs, xe), (ys, ye)), (xn, yn)) in zip(pairs, target):
+diff -Nur orig/data/tools/wmlindent mod/data/tools/wmlindent
+--- orig/data/tools/wmlindent	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlindent	2020-04-04 13:16:25.630268341 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """\
+ wmlindent - re-indent WML in a uniform way.
+diff -Nur orig/data/tools/wmllint mod/data/tools/wmllint
+--- orig/data/tools/wmllint	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmllint	2020-04-04 13:16:37.034252785 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ #
+ # wmllint -- check WML for conformance to the most recent dialect
+diff -Nur orig/data/tools/wmllint-1.4 mod/data/tools/wmllint-1.4
+--- orig/data/tools/wmllint-1.4	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmllint-1.4	2020-04-04 13:16:50.254234752 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ #
+ # wmllint -- check WML for conformance to the most recent dialect
+ #
+diff -Nur orig/data/tools/wmlscope mod/data/tools/wmlscope
+--- orig/data/tools/wmlscope	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlscope	2020-04-04 13:17:02.310218306 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ #
+ # wmlscope -- generate reports on WML macro and resource usage
+diff -Nur orig/data/tools/wmlunits mod/data/tools/wmlunits
+--- orig/data/tools/wmlunits	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlunits	2020-04-04 13:17:13.706202761 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """
+ wmlunits -- tool to output information on all units in HTML
+diff -Nur orig/data/tools/wmlvalidator mod/data/tools/wmlvalidator
+--- orig/data/tools/wmlvalidator	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlvalidator	2020-04-04 13:17:54.290147401 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/python3
+ """
+ wmltest -- tool to validate the syntax and semantics of WML.
+ 
+@@ -8,6 +8,7 @@
+ #-define verbosity levels better
+ 
+ from __future__ import print_function
++from builtins import object
+ import wesnoth.wmldata as wmldata
+ import wesnoth.wmlparser as wmlparser
+ import wesnoth.wmlgrammar as wmlgrammar
+@@ -16,7 +17,7 @@
+ def print_indent(string, depth, char=' '):
+     print("%s%s" % (depth * char, string))
+ 
+-class Validator:
++class Validator(object):
+     """
+     The class that takes a wmlgrammar object to validate wml trees with
+     """
+@@ -35,7 +36,7 @@
+         normal = '\033[0m'
+         bold = '\033[1m'
+         underline = '\033[4m'
+-        for k, v in self.validate_result.iteritems():
++        for k, v in self.validate_result.items():
+             print("%s%s%s" % (bold, k, normal))
+             for i in v:
+                 print("%s#%d: %s%s %s" % (underline, i['line'], i['origin'], normal, i['message']))
+diff -Nur orig/data/tools/wmlxgettext mod/data/tools/wmlxgettext
+--- orig/data/tools/wmlxgettext	2020-02-02 02:45:55.000000000 +0100
++++ mod/data/tools/wmlxgettext	2020-04-04 13:18:10.150125766 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ 
+ 
+ # encoding: utf-8
+diff -Nur orig/run_wml_tests mod/run_wml_tests
+--- orig/run_wml_tests	2020-02-02 02:45:55.000000000 +0100
++++ mod/run_wml_tests	2020-04-04 13:09:53.582803128 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ # encoding: utf-8
+ """
+ This script runs a sequence of wml unit test scenarios.
