@@ -1,0 +1,74 @@
+--- vavoom-1.33/libs/core/exception.h	2010-04-03 18:27:57.000000000 +0200
++++ vavoom-1.33.new/libs/core/exception.h	2016-08-09 12:20:12.901732326 +0200
+@@ -23,7 +23,7 @@
+ //**
+ //**************************************************************************
+ 
+-#define DO_GUARD		1
++#define DO_GUARD		0
+ #define DO_CHECK		1
+ 
+ #ifdef PARANOID
+@@ -95,9 +95,9 @@
+ #endif
+ 
+ #if defined(_DEBUG) || !DO_GUARD
+-#define guard(name)		{static const char __FUNC_NAME__[] = #name; {
+-#define unguard			}}
+-#define unguardf(msg)	}}
++#define guard(name)		{
++#define unguard			}
++#define unguardf(msg)		}
+ #elif defined(USE_GUARD_SIGNAL_CONTEXT)
+ #define guard(name)		{static const char __FUNC_NAME__[] = #name; \
+ 	__Context __LOCAL_CONTEXT__; try { if (setjmp(__Context::Env)) { \
+--- vavoom-1.33/source/sys_bsd.cpp	2010-04-03 16:16:11.000000000 +0200
++++ vavoom-1.33.new/source/sys_bsd.cpp	2016-08-09 12:27:56.608952461 +0200
+@@ -270,7 +270,7 @@
+ 	signal(s, SIG_IGN);
+ 
+ 	//	Exit with error message
+-#ifdef __linux__
++#if defined __linux__ && DO_GUARD
+ 	switch (s)
+ 	{
+ 	case SIGABRT:
+--- vavoom-1.33/source/vc_object.cpp	2016-08-09 12:31:16.124337565 +0200
++++ vavoom-1.33.new/source/vc_object.cpp	2016-08-09 12:15:13.828657354 +0200
+@@ -135,7 +135,7 @@
+ //
+ //==========================================================================
+ 
+-void VObject::operator delete(void* Object)
++void VObject::operator delete(void* Object) noexcept
+ {
+ 	Z_Free(Object);
+ }
+@@ -146,7 +146,12 @@
+ //
+ //==========================================================================
+ 
+-void VObject::operator delete(void* Object, const char*, int)
++void VObject::operator delete(void* Object, const char*, int) noexcept
++{
++	Z_Free(Object);
++}
++
++void VObject::operator delete(void* Object, std::size_t size) noexcept
+ {
+ 	Z_Free(Object);
+ }
+--- vavoom-1.33/source/vc_object.h	2010-04-03 16:16:11.000000000 +0200
++++ vavoom-1.33.new/source/vc_object.h	2016-08-09 12:15:25.499738024 +0200
+@@ -147,8 +147,9 @@
+ #endif
+ 	void* operator new(size_t);
+ 	void* operator new(size_t, const char*, int);
+-	void operator delete(void*);
+-	void operator delete(void*, const char*, int);
++	void operator delete(void*) noexcept;
++	void operator delete(void*, const char*, int) noexcept;
++	void operator delete(void*, std::size_t size) noexcept;
+ #ifdef ZONE_DEBUG_NEW
+ #define new ZONE_DEBUG_NEW
+ #endif
