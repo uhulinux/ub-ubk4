@@ -1,10 +1,20 @@
 #!/bin/bash -eux
 
+function alprogi {
+	cd $1
+    export PREFIX=/usr
+    ub_install
+    gunzip	$mandir/nvidia-$1.1.gz
+    cd -
+}
+
 KVER="$(ls -1 /lib/modules | grep x86_64)"
 #célkönyvtárak
 moduldir="$UB_INSTALLDIR"/lib/modules/"$KVER"/kernel/drivers/video
 cellibdir="$UB_INSTALLDIR"/usr/lib
+celbindir="$UB_INSTALLDIR"/usr/bin
 xmoduldir="$cellibdir"/xorg/modules
+sharedir="$UB_INSTALLDIR"/usr/share
 desktopdir="$UB_INSTALLDIR"/usr/share/applications
 mandir="$UB_INSTALLDIR"/usr/share/man/man1/
 vendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
@@ -23,38 +33,32 @@ mkdir -p "$cellibdir"/nvidia \
 	"$shnvdir" \
 	"$vdpaudir"
 
-cd nvsett
 export NV_USE_BUNDLED_LIBJANSSON=0
-export PREFIX=/usr
-ub_install
+alprogi settings
+alprogi xconfig
+alprogi modprobe
 
 # desktop
-mv	doc/nvidia-settings.desktop "$desktopdir"/
-mv	doc/nvidia-settings.png "$pixmapdir"/
-gunzip	$mandir/nvidia-settings.1.gz
-cd ..
+mv	settings/doc/nvidia-settings.desktop "$desktopdir"/
+mv	settings/doc/nvidia-settings.png "$pixmapdir"/
 
 #kernelmodulok
 cp kernel/{nvidia.ko,uvm/nvidia-uvm.ko} "$moduldir"/
 
-# binárisok
-mv	nvidia-xconfig \
-	nvidia-bug-report.sh \
-	nvidia-smi \
-	nvidia-modprobe \
-	nvidia-debugdump \
-	nvidia-persistenced \
-	nvidia-cuda-mps-server \
-	nvidia-cuda-mps-control \
-	"$UB_INSTALLDIR"/usr/bin/
-
-# man
-gunzip	*.1.gz
-rm -f nvidia-installer.1
-mv	*.1 "$mandir"/
+# binárisok elhelyezése #nvidia-smi,nvidia-cuda-mps nvidia-persistenced
+binaries="nvidia-cuda-mps-control nvidia-smi nvidia-persistenced"
+for binari in $binaries;do
+    mv $binari $celbindir/
+    gunzip ${binari}.1.gz
+    mv $binari.1 $mandir/
+done
 
 # vendor
 mv	nvidia.icd "$vendordir"/
+
+# wrapped-software-rendering lib. Postinstből lehet majd rá libcwfb.so link, ha
+# nem ütközik az x.org-server által szállítottal libcwfb.so fájllal
+mv libnvidia-wfb.so.${UB_VERSION} $xmoduldir
 
 # biztonságba helyezés a régi módon
 mv	libglx.so."$UB_VERSION" "$cellibdir"/nvidia/
@@ -64,15 +68,7 @@ mv	nvidia_drv.so "$xmoduldir"/drivers/
 mv	tls "$cellibdir"
 
 # vdpau cuccok
-mv libvdpau_nvidia.so.${UB_VERSION} $vdpaudir
-
-#### Error: Nincs meg ez a lib: libGL.so (igényli: /usr/lib/libnvidia-ifr.so.319.60)
-# Az igényelt libGL.so szimlink ütközne a mesa-dev -el,
-# a mesa-dev függés viszont felrántana egy rakás dev -et,
-# ezért lemondunk az NvIFROpenGL library használatáról egyelőre
-#rm -f libnvidia-ifr.so."$UB_VERSION"
-#### Error: Nincs meg ez a lib: libGL.so.1 (igényli: /usr/lib/libnvidia-fbc.so.340.17)
-#rm -f libnvidia-fbc.so."$UB_VERSION"
+mv libvdpau_n*.so.${UB_VERSION} $vdpaudir
 
 # minden áthelyezése a libekbe
 mv *.so.* "$cellibdir"/
@@ -81,9 +77,13 @@ mv *.so.* "$cellibdir"/
 cp nvidia-application-profiles-${UB_VERSION}-rc $shnvdir/
 cp nvidia-application-profiles-${UB_VERSION}-key-documentation $shnvdir/
 
+# két videókártyás rendszereknek
+mv persistenced/init/systemd/nvidia-persistenced.service.template \
+    $UB_INSTALLDIR/usr/lib/systemd/system/nvidia-persistenced.service
+
 #libxnvctrl
 
-cd nvsett/src/libXNVCtrl
+cd settings/src/libXNVCtrl
 mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
 cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
 cp libXNVCtrl.a "${cellibdir}"/
@@ -105,7 +105,6 @@ sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNV
 
 #linkgyártások
 cd "$cellibdir"
-ln -s libwfb.so xorg/modules/libnvidia-wfb.so."$UB_VERSION"
 ln -s "libcuda.so.$UB_VERSION" libcuda.so
 
 for i in `ls -1 libnv*`;do
@@ -115,13 +114,13 @@ ln -s $i $lib.1
 ln -s $lib.1 $solink
 done
 
-cd $vdpaudir
-for i in `ls -1 libvdpau*`;do
-lib=$(echo $i | sed s/\.${UB_VERSION}//g)
-solink=$(echo $lib | sed s/so\..*/so/)
-ln -s $i $lib.1
-ln -s $lib.1 $solink
-done
+# tls
+ln -s libnvidia-tls.so.${UB_VERSION} tls/libnvidia-tls.so.1
+ln -s libnvidia-tls.so.1 tls/libnvidia-tls.so
+
+# vdpau
+ln -s libvdpau_nvidia.so.${UB_VERSION} vdpau/libvdpau_nvidia.so.1
+ln -s libvdpau_nvidia.so.1 vdpau/libvdpau_nvidia.so
 
 # Támogatott chepkhez a verzió beillesztése a csomag leírásába
 sed "s/version/${UB_VERSION}/g" -i ${UB_SRCDIR}/packages/nvidia-340/description/hu

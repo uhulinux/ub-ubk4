@@ -3,5 +3,14 @@
 NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32.run
 	http://download.nvidia.com/XFree86/Linux-x86_64/${UB_VERSION}/
 
-${UB_VERSION}.tar.gz nvidia-settings-${UB_VERSION}/ :nvsett
-	https://github.com/NVIDIA/nvidia-settings/archive/
+nvidia-settings-${UB_VERSION}.tar.bz2 nvidia-settings-${UB_VERSION}/ :settings
+	http://http.download.nvidia.com/XFree86/nvidia-settings/
+
+nvidia-xconfig-${UB_VERSION}.tar.bz2 nvidia-xconfig-${UB_VERSION}/ :xconfig
+	http://http.download.nvidia.com/XFree86/nvidia-xconfig/
+
+nvidia-modprobe-${UB_VERSION}.tar.bz2 nvidia-modprobe-${UB_VERSION}/ :modprobe
+	http://http.download.nvidia.com/XFree86/nvidia-modprobe/
+
+nvidia-persistenced-${UB_VERSION}.tar.bz2 nvidia-persistenced-${UB_VERSION}/ :persistenced
+	http://http.download.nvidia.com/XFree86/nvidia-persistenced/

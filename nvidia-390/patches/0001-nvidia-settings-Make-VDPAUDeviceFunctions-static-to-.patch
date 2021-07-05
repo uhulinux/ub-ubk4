@@ -37,10 +37,10 @@ it by moving the definition of this structure into ctkvdpau.c.
  src/gtk+-2.x/ctkvdpau.h | 24 ------------------------
  2 files changed, 23 insertions(+), 24 deletions(-)
 
-diff --git a/nvset//src/gtk+-2.x/ctkvdpau.c b/nvsett/src/gtk+-2.x/ctkvdpau.c
+diff --git a/settings//src/gtk+-2.x/ctkvdpau.c b/settings/src/gtk+-2.x/ctkvdpau.c
 index 2f120f0..6149c28 100644
---- a/nvsett/src/gtk+-2.x/ctkvdpau.c
-+++ b/nvsett/src/gtk+-2.x/ctkvdpau.c
+--- a/settings/src/gtk+-2.x/ctkvdpau.c
++++ b/settings/src/gtk+-2.x/ctkvdpau.c
 @@ -103,6 +103,29 @@ const gchar* __video_mixer_parameter_help =
  const gchar* __video_mixer_attribute_help =
  "This shows the video mixer attributes and any applicable ranges.";
@@ -71,10 +71,10 @@ index 2f120f0..6149c28 100644
  static int queryOutputSurface(CtkVDPAU *ctk_vdpau, VdpDevice device,
                                VdpGetProcAddress *getProcAddress);
  
-diff --git a/nvsett/src/gtk+-2.x/ctkvdpau.h b/nvsett/src/gtk+-2.x/ctkvdpau.h
+diff --git a/settings/src/gtk+-2.x/ctkvdpau.h b/settings/src/gtk+-2.x/ctkvdpau.h
 index ec58d36..2652f6f 100644
---- a/nvsett/src/gtk+-2.x/ctkvdpau.h
-+++ b/nvsett/src/gtk+-2.x/ctkvdpau.h
+--- a/settings/src/gtk+-2.x/ctkvdpau.h
++++ b/settings/src/gtk+-2.x/ctkvdpau.h
 @@ -45,30 +45,6 @@ G_BEGIN_DECLS
  #define CTK_VDPAU_GET_CLASS(obj) \
      (G_TYPE_INSTANCE_GET_CLASS ((obj), CTK_TYPE_VDPAU, CtkVDPAUClass))

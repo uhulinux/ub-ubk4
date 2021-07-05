@@ -1,27 +1,34 @@
 #!/bin/bash -eux
 
-# Kézzel-lábbal installálunk
+function alprogi {
+	cd $1
+    export PREFIX=/usr
+    ub_install
+    gunzip	$mandir/nvidia-$1.1.gz
+    cd -
+}
+
 KVER="$(ls -1 /lib/modules | grep x86_64)"
 
-#célkönyvtár változók
-celbindir="$UB_INSTALLDIR"/usr/bin
+#célkönyvtárak
 cellibdir="$UB_INSTALLDIR"/usr/lib
+celbindir="$UB_INSTALLDIR"/usr/bin
+etcdir="$UB_INSTALLDIR"/etc
 moduldir="$UB_INSTALLDIR"/lib/modules/"$KVER"/kernel/drivers/video
 xmoduldir="$cellibdir"/xorg/modules
 sharedir="$UB_INSTALLDIR"/usr/share
 desktopdir="$sharedir"/applications
 mandir="$sharedir"/man/man1
-vendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
+openclvendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
 pixmapdir="$sharedir"/pixmaps/
 egldir="$sharedir"/egl/egl_external_platform.d
-vulcandir="$sharedir"/vulcan/icd.d
+vulcandir="$etcdir"/vulcan/icd.d
 xconfdir="$sharedir"/X11/x.org.conf.d
 glvnddir="$sharedir"/glvnd/egl_vendor.d
 vdpaudir=$cellibdir/vdpau
-firmwaredir=$cellibdir/firmware
-systemddir=$cellibdir/systemd
-systemdsystemdir=${systemddir}/system
-vulcanlayerdir=$sharedir/vulcan/implicit_layer.d
+firmwaredir="$UB_INSTALLDIR"/lib/firmware
+profilesdir=$sharedir/nvidia
+vulcanlayerdir=$etcdir/vulcan/implicit_layer.d
 
 #könyvtárgyártás
 mkdir -p "$cellibdir"/nvidia \
@@ -29,7 +36,7 @@ mkdir -p "$cellibdir"/nvidia \
 	"$xmoduldir"/{drivers,extensions} \
 	"$desktopdir" \
 	"$mandir" \
-	"$vendordir" \
+	"$openclvendordir" \
 	"$pixmapdir" \
 	"$egldir" \
 	"$vulcandir" \
@@ -39,38 +46,26 @@ mkdir -p "$cellibdir"/nvidia \
 	"$firmwaredir" \
     "systemdsystemdir" \
     "$celbindir" \
+    "$profilesdir" \
     "$vulcanlayerdir"
 
-cd nvsett
 export NV_USE_BUNDLED_LIBJANSSON=0
-export PREFIX=/usr
-ub_install
+alprogi settings
+alprogi xconfig
+alprogi modprobe
 
 # desktop
-mv	doc/nvidia-settings.desktop "$desktopdir"/
-mv	doc/nvidia-settings.png "$pixmapdir"/
-gunzip	$mandir/nvidia-settings.1.gz
-cd ..
+mv	settings/doc/nvidia-settings.desktop "$desktopdir"/
+mv	settings/doc/nvidia-settings.png "$pixmapdir"/
 
 # felesleges gtk libek
 rm libnvidia-gtk*
-rm $cellibdir/libnvidia-gtk2*
 
 #kernelmodulok
 cp kernel/*.ko "$moduldir"/
 
-#---------------
-# firmware
-cp firmware/gsp.bin ${firmwaredir}/
-
-# new power management support
-cp systemd/system/*.service ${systemdsystemdir}/
-cp systemd/nvidia-sleep.sh $celbindir/
-cp systemd/system-sleep/nvidia $systemddir/
-#---------------
-
-# binárisok elhelyezése #nvidia-smi,nvidia-cuda-mps,nvidia-xconfig
-binaries="nvidia-cuda-mps-control nvidia-modprobe nvidia-persistenced nvidia-smi nvidia-xconfig"
+# binárisok elhelyezése #nvidia-smi,nvidia-cuda-mps nvidia-persistenced
+binaries="nvidia-cuda-mps-control nvidia-smi nvidia-persistenced"
 for binari in $binaries;do
     mv $binari $celbindir/
     gunzip ${binari}.1.gz
@@ -78,10 +73,8 @@ for binari in $binaries;do
 done
 mv nvidia-cuda-mps-server $celbindir/
 
-mv nvidia-ngx-updater $celbindir/
-
-# vendor
-mv	nvidia.icd "$vendordir"/
+# openclvendor
+mv	nvidia.icd "$openclvendordir"/
 
 # Áthelyezzük a nem a $cellibdir alá kerülő *.so-kat a "$cellibdir"/nvidia/ alá
 
@@ -103,6 +96,9 @@ mv	nvidia_drv.so "$xmoduldir"/drivers/
 # vdpau cuccok
 mv libvdpau_nvidia.so.${UB_VERSION} $vdpaudir
 
+# nem kell gtk2 lib
+rm $cellibdir/libnvidia-gtk2.*
+
 # minden maradék *.so áthelyezése a libekbe
 
 mv *.so.* "$cellibdir"/
@@ -119,17 +115,20 @@ mv nvidia_layers.json $vulcanlayerdir/
 
 # két videókártyás rendszereknek
 mv nvidia-drm-outputclass.conf $xconfdir/10-nvidia-drm-outputclass.conf
-
-# két videókártyás rendszereknek persistenced.service
-mv nvidia-persistenced-init/systemd/nvidia-persistenced.service.template \
+mv persistenced/init/systemd/nvidia-persistenced.service.template \
     $UB_INSTALLDIR/usr/lib/systemd/system/nvidia-persistenced.service
 
+# applications-profiles
+mv nvidia-application-profiles-* $profilesdir/
+
+# firmware
+mv firmware/gsp.bin $firmwaredir
 #libxnvctrl
 
-cd nvsett/src/libXNVCtrl
+cd settings/src/libXNVCtrl
 mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
 cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
-cp _out/Linux_x86_64/libXNVCtrl.a "${UB_INSTALLDIR}"/usr/lib/libXNVCtrl.a
+cp _out/Linux_x86_64/libXNVCtrl.a "${cellibdir}"/
 
 # pc rendberakás
 cat <<'EOF' > "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
@@ -138,7 +137,7 @@ libdir=${prefix}/lib
 includedir=${prefix}/include/NVCtrl
 
 Name: libXNVCtrl
-Description: Library for accessing NV-CONTROL extension in NVIDIA's latest drivers.
+Description: Library for accessing NV-CONTROL extension in NVIDIA's kurrent drivers.
 Version: %version%
 Libs: -L${libdir} -lXNVCtrl
 Cflags: -I${includedir}
@@ -146,10 +145,9 @@ EOF
 
 sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
-# linkgyártások
+#linkgyártások
 cd "$cellibdir"
 
-ln -s libwfb.so xorg/modules/libnvidia-wfb.so.${UB_VERSION}
 for i in `ls -1 libnv*`;do
 lib=$(echo $i | sed s/\.${UB_VERSION}//g)
 solink=$(echo $lib | sed s/so\..*/so/)
@@ -157,13 +155,16 @@ ln -s $i $lib.1
 ln -s $lib.1 $solink
 done
 
-cd $vdpaudir
-for i in `ls -1 libvdpau*`;do
-lib=$(echo $i | sed s/\.${UB_VERSION}//g)
-solink=$(echo $lib | sed s/so\..*/so/)
-ln -s $i $lib.1
-ln -s $lib.1 $solink
-done
+# cuda
+ln -s libcuda.so.${UB_VERSION} libcuda.so
 
-# Támogatott chepkhez a verzió beillesztése a csomag leírásába
+# wayland
+ln -s libnvidia-egl-wayland.so libnvidia-egl-wayland.so.1
+ln -s libEGL_nvidia.so.${UB_VERSION} libEGL_nvidia.so.0
+
+# vdpau
+ln -s libvdpau_nvidia.so.${UB_VERSION} vdpau/libvdpau_nvidia.so.1
+ln -s libvdpau_nvidia.so.1 vdpau/libvdpau_nvidia.so
+
+# Támogatott chipekhez a verzió beillesztése a csomag leírásába
 sed "s/version/${UB_VERSION}/g" -i ${UB_SRCDIR}/packages/nvidia/description/hu
