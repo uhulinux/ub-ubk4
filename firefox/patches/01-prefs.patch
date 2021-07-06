@@ -1,6 +1,6 @@
 diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2021-03-18 14:48:28.000000000 +0100
-+++ patched/browser/app/profile/firefox.js	2021-03-23 01:12:26.302460338 +0100
+--- orig/browser/app/profile/firefox.js	2021-06-22 21:30:06.000000000 +0200
++++ patched/browser/app/profile/firefox.js	2021-06-25 00:22:02.506591824 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -44,8 +44,8 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -232,7 +239,7 @@
- pref("browser.touchmode.auto", true);
+@@ -254,7 +261,7 @@
+ pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
 -pref("browser.shell.checkDefaultBrowser", true);
@@ -53,7 +53,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -304,7 +311,7 @@
+@@ -325,7 +332,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -62,7 +62,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // Whether to warm up network connections for autofill or search results.
  pref("browser.urlbar.speculativeConnect.enabled", true);
-@@ -344,7 +351,7 @@
+@@ -372,7 +379,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -71,7 +71,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -836,7 +843,7 @@
+@@ -880,7 +887,7 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
