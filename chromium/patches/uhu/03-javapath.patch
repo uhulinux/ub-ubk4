@@ -1,15 +1,14 @@
 diff -Naur orig/third_party/closure_compiler/compiler.py patched/third_party/closure_compiler/compiler.py
---- orig/third_party/closure_compiler/compiler.py	2021-01-18 22:29:44.000000000 +0100
-+++ patched/third_party/closure_compiler/compiler.py	2021-01-21 16:36:21.125187714 +0100
-@@ -12,9 +12,9 @@
+--- orig/third_party/closure_compiler/compiler.py	2021-07-19 20:45:40.000000000 +0200
++++ patched/third_party/closure_compiler/compiler.py	2021-07-23 00:25:22.095236919 +0200
+@@ -12,8 +12,8 @@
  import subprocess
  
  
 -_CURRENT_DIR = os.path.join(os.path.dirname(__file__))
+-_JAVA_PATH = os.path.join(_CURRENT_DIR, "..", "jdk", "current", "bin", "java")
 +_CURRENT_DIR = "/usr"
- _JAVA_BIN = "java"
--_JDK_PATH = os.path.join(_CURRENT_DIR, "..", "jdk", "current", "bin", _JAVA_BIN)
-+_JDK_PATH = os.path.join(_CURRENT_DIR, "lib", "java", "jre", "bin", _JAVA_BIN)
- _JAVA_PATH = _JDK_PATH if os.path.isfile(_JDK_PATH) else _JAVA_BIN
++_JAVA_PATH = os.path.join(_CURRENT_DIR, "lib", "java", "jre", "bin", "java")
+ assert os.path.isfile(_JAVA_PATH), "java only allowed in android builds"
  
- 
+ class Compiler(object):

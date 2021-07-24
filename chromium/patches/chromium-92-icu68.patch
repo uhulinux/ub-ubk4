@@ -1,0 +1,62 @@
+diff -Naur orig/third_party/blink/renderer/platform/wtf/date_math.cc patched/third_party/blink/renderer/platform/wtf/date_math.cc
+--- orig/third_party/blink/renderer/platform/wtf/date_math.cc	2021-07-19 20:45:22.000000000 +0200
++++ patched/third_party/blink/renderer/platform/wtf/date_math.cc	2021-07-23 22:37:11.046490476 +0200
+@@ -671,9 +671,12 @@
+     UErrorCode status = U_ZERO_ERROR;
+     // Handle the conversion of localtime to UTC the same way as the
+     // latest ECMA 262 spec for Javascript (v8 does that, too).
++    // TODO(jshin): Once http://bugs.icu-project.org/trac/ticket/13705
++    // is fixed, no casting would be necessary.
+     static_cast<const icu::BasicTimeZone*>(timezone.get())
+-        ->getOffsetFromLocal(ms, UCAL_TZ_LOCAL_FORMER, UCAL_TZ_LOCAL_FORMER,
+-                             raw_offset, dst_offset, status);
++        ->getOffsetFromLocal(ms, icu::BasicTimeZone::kFormer,
++                             icu::BasicTimeZone::kFormer, raw_offset,
++                             dst_offset, status);
+     DCHECK(U_SUCCESS(status));
+     offset = static_cast<int>((raw_offset + dst_offset) / kMsPerMinute);
+   }
+diff -Naur orig/v8/src/objects/intl-objects.cc patched/v8/src/objects/intl-objects.cc
+--- orig/v8/src/objects/intl-objects.cc	2021-07-19 20:47:38.000000000 +0200
++++ patched/v8/src/objects/intl-objects.cc	2021-07-24 22:08:59.550360664 +0200
+@@ -2033,15 +2033,23 @@
+ bool ICUTimezoneCache::GetOffsets(double time_ms, bool is_utc,
+                                   int32_t* raw_offset, int32_t* dst_offset) {
+   UErrorCode status = U_ZERO_ERROR;
++  // TODO(jshin): ICU TimeZone class handles skipped time differently from
++  // Ecma 262 (https://github.com/tc39/ecma262/pull/778) and icu::TimeZone
++  // class does not expose the necessary API. Fixing
++  // http://bugs.icu-project.org/trac/ticket/13268 would make it easy to
++  // implement the proposed spec change. A proposed fix for ICU is
++  //    https://chromium-review.googlesource.com/851265 .
++  // In the meantime, use an internal (still public) API of icu::BasicTimeZone.
++  // Once it's accepted by the upstream, get rid of cast. Note that casting
++  // TimeZone to BasicTimeZone is safe because we know that icu::TimeZone used
++  // here is a BasicTimeZone.
+   if (is_utc) {
+     GetTimeZone()->getOffset(time_ms, false, *raw_offset, *dst_offset, status);
+   } else {
+-    // Note that casting TimeZone to BasicTimeZone is safe because we know that
+-    // icu::TimeZone used here is a BasicTimeZone.
+     static_cast<const icu::BasicTimeZone*>(GetTimeZone())
+-        ->getOffsetFromLocal(time_ms, UCAL_TZ_LOCAL_FORMER,
+-                             UCAL_TZ_LOCAL_FORMER, *raw_offset, *dst_offset,
+-                             status);
++        ->getOffsetFromLocal(time_ms, icu::BasicTimeZone::kFormer,
++                             icu::BasicTimeZone::kFormer, *raw_offset,
++                             *dst_offset, status);
+   }
+ 
+   return U_SUCCESS(status);
+diff -Naur orig/v8/src/objects/intl-objects.h patched/v8/src/objects/intl-objects.h
+--- orig/v8/src/objects/intl-objects.h	2021-07-19 20:47:38.000000000 +0200
++++ patched/v8/src/objects/intl-objects.h	2021-07-24 22:06:17.730162095 +0200
+@@ -21,7 +21,7 @@
+ #include "unicode/locid.h"
+ #include "unicode/uversion.h"
+ 
+-#define V8_MINIMUM_ICU_VERSION 69
++#define V8_MINIMUM_ICU_VERSION 68
+ 
+ namespace U_ICU_NAMESPACE {
+ class BreakIterator;
