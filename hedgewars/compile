@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
 export QTDIR=/usr/lib/qt5
-
 mkdir -p build
 cd build
 cmake \
@@ -12,6 +11,7 @@ cmake \
 	-DNOVIDEOREC=0 \
 	-DGHFLAGS=-dynamic \
 	-DFONTS_DIRS="/usr/share/fonts/truetype" \
+	-DBUILD_ENGINE_C=on \
 	..
 
 ub_make

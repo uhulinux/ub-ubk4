@@ -1,0 +1,31 @@
+#!/bin/sh -eux
+
+make DESTDIR=$UB_INSTALLDIR install
+
+# Remove static libs
+#find "$UB_INSTALLDIR"/usr/lib \( -name "*.a" -o -name "*.o" -o -name "*.p_o" -o -name "*.p_hi" -o -name "*.hi" \) -delete
+# Remove obj files, empty-dyrectories
+find "$UB_INSTALLDIR"/usr/lib \( -name "*.o" -o -name "*.p_o" \) -delete
+find "$UB_INSTALLDIR"/usr/lib -type d -empty -delete
+
+# completions
+mkdir -p $UB_INSTALLDIR/usr/share/bash-completion/completions
+cp utils/completion/ghc.bash $UB_INSTALLDIR/usr/share/bash-completion/completions/ghc
+
+# limkek a depends részére
+
+cd "$UB_INSTALLDIR"/usr/lib/ghc-${UB_VERSION}
+for so in `ls -1`;do
+    sofile=""
+    if [ -d $so ];then
+        cd $so
+        sofile=$(ls -1 *.so 2> /dev/null | wc -l)
+        if [ ! "$sofile" == 0 ];then
+            sofile=$(ls -1 *.so)
+            for sof in $sofile;do
+                ln -s $so/$sof ../$sof
+            done
+        fi
+        cd ..
+    fi
+done
