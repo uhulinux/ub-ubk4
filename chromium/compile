@@ -82,15 +82,6 @@ python3 build/linux/unbundle/replace_gn_files.py --system-libraries "${_syslibs[
 mkdir -p third_party/node/linux/node-linux-x64/bin
 ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/node
 
-# llvm
-# mkdir -p third_party/llvm-build/Release+Asserts/bin
-# export PATH=`pwd`/third_party/llvm-build/Release+Asserts/bin:$PATH
-# ln -s /usr/bin/clang third_party/llvm-build/Release+Asserts/bin/clang
-# ln -s /usr/bin/clang++ third_party/llvm-build/Release+Asserts/bin/clang++
-
-# Force script incompatible with Python 3 to use /usr/bin/python2
-# sed -i '1s|python$|&2|' third_party/dom_distiller_js/protoc_plugins/*.py
-
 # gn a buildhoz
 tools/gn/bootstrap/bootstrap.py --build-path=$outdir --gn-gen-args=" ${_flags[@]} "
 
@@ -101,7 +92,7 @@ export LDFLAGS+="-Wl,-rpath,/usr/lib/chromium/ -Wl,--no-keep-memory"
 $outdir/gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
 
 # gn args list - kihagyható, de segít a lehetséges opciók megadásához
-# $outdir/gn args --list $UB_COMPILEDIR/$outdir > $UB_COMPILEDIR/$outdir/gn-args-full.list
+$outdir/gn args --list $UB_COMPILEDIR/$outdir > $UB_COMPILEDIR/$outdir/gn-args-full.list
 
 # ninja
 LC_ALL=C ninja -j 2 -C $outdir -v pdf chrome chrome_sandbox chromedriver
