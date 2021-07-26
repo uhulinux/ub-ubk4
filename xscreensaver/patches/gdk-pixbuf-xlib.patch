@@ -1,0 +1,36 @@
+diff -Naur orig/hacks/recanim.c patched/hacks/recanim.c
+--- orig/hacks/recanim.c	2021-03-21 01:30:59.000000000 +0100
++++ patched/hacks/recanim.c	2021-05-24 14:40:18.240501959 +0200
+@@ -26,7 +26,7 @@
+ # ifdef HAVE_GTK2
+ #  include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ # else  /* !HAVE_GTK2 */
+-#  include <gdk-pixbuf/gdk-pixbuf-xlib.h>
++#  include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ # endif /* !HAVE_GTK2 */
+ #endif /* HAVE_GDK_PIXBUF */
+ 
+diff -Naur orig/hacks/ximage-loader.c patched/hacks/ximage-loader.c
+--- orig/hacks/ximage-loader.c	2021-03-21 01:30:59.000000000 +0100
++++ patched/hacks/ximage-loader.c	2021-05-24 14:40:30.312521139 +0200
+@@ -38,7 +38,7 @@
+ # ifdef HAVE_GTK2
+ #  include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ # else  /* !HAVE_GTK2 */
+-#  include <gdk-pixbuf/gdk-pixbuf-xlib.h>
++#  include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ # endif /* !HAVE_GTK2 */
+ 
+ # if (__GNUC__ >= 4)
+diff -Naur orig/hacks/xscreensaver-getimage.c patched/hacks/xscreensaver-getimage.c
+--- orig/hacks/xscreensaver-getimage.c	2021-03-21 01:30:59.000000000 +0100
++++ patched/hacks/xscreensaver-getimage.c	2021-05-24 14:40:44.520543671 +0200
+@@ -58,7 +58,7 @@
+ # ifdef HAVE_GTK2
+ #  include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ # else  /* !HAVE_GTK2 */
+-#  include <gdk-pixbuf/gdk-pixbuf-xlib.h>
++#  include <gdk-pixbuf-xlib/gdk-pixbuf-xlib.h>
+ # endif /* !HAVE_GTK2 */
+ 
+ # if (__GNUC__ >= 4)
