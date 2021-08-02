@@ -1,8 +1,9 @@
 #!/bin/sh -eux
 
+rm -f CMakeLists.txt
 ./autogen.sh
 NCURSES_CONFIG=/usr/bin/ncursesw6-config ub_compile \
 	--bindir=/usr/bin \
-	--enable-sdl \
-	--enable-sdl-mixer \
+	--enable-sdl2 \
+	--enable-sdl2-mixer \
 	LIBS=-lncursesw
