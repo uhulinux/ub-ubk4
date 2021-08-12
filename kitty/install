@@ -10,7 +10,4 @@ cd linux-package
 cp -r * "${UB_INSTALLDIR}"/usr/
 cd -
 mkdir -p "${UB_INSTALLDIR}"/usr/share/doc/Packages/kitty
-rm -rf "${UB_INSTALLDIR}"/usr/share/doc/kitty/html
-install -Dm644 docs/generated/conf/kitty.conf "${UB_INSTALLDIR}"/usr/share/doc/Packages/kitty/kitty.conf
-mkdir -p "$UB_INSTALLDIR/usr/share/terminfo"
 tic -x -o "$UB_INSTALLDIR/usr/share/terminfo" terminfo/kitty.terminfo
