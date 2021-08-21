@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
 make \
-	MANDIR="$UB_INSTALLDIR"/usr/share/man \
+	DESTDIR="$UB_INSTALLDIR" \
+	prefix=/usr \
 	install
 
 # attr

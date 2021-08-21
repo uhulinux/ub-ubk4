@@ -1,6 +1,6 @@
-diff -Nur orig/lang/python/hu/LC_MESSAGES/python.po mod/lang/python/hu/LC_MESSAGES/python.po
---- orig/lang/python/hu/LC_MESSAGES/python.po	2020-12-07 17:09:14.000000000 +0100
-+++ mod/lang/python/hu/LC_MESSAGES/python.po	2021-01-05 20:31:08.710422321 +0100
+diff -Naur orig/lang/python/hu/LC_MESSAGES/python.po patched/lang/python/hu/LC_MESSAGES/python.po
+--- orig/lang/python/hu/LC_MESSAGES/python.po	2021-08-05 14:51:31.000000000 +0200
++++ patched/lang/python/hu/LC_MESSAGES/python.po	2021-08-16 20:38:28.533223623 +0200
 @@ -58,7 +58,7 @@
  #: src/modules/services-systemd/main.py:59
  #: src/modules/services-openrc/main.py:93
@@ -20,7 +20,7 @@ diff -Nur orig/lang/python/hu/LC_MESSAGES/python.po mod/lang/python/hu/LC_MESSAG
  #: src/modules/unpackfs/main.py:255
  msgid "rsync failed with error code {}."
 -msgstr "az rsync elhalt a(z) {} hibakóddal"
-+msgstr "A rsync elhalt a(z) {} hibakóddal"
++msgstr "Az rsync elhalt a(z) {} hibakóddal"
  
  #: src/modules/unpackfs/main.py:300
  msgid "Unpacking image {}/{}, file {}/{}"
@@ -54,12 +54,12 @@ diff -Nur orig/lang/python/hu/LC_MESSAGES/python.po mod/lang/python/hu/LC_MESSAG
  msgid "The destination \"{}\" in the target system is not a directory"
 @@ -200,17 +199,18 @@
  
- #: src/modules/displaymanager/main.py:894
+ #: src/modules/displaymanager/main.py:906
  msgid "No display managers selected for the displaymanager module."
 -msgstr "Nincs kijelzőkezelő kiválasztva a kijelzőkezelő modulhoz."
 +msgstr "Nincs kiválasztott grafikus beléptetö a megfelelő modulhoz."
  
- #: src/modules/displaymanager/main.py:895
+ #: src/modules/displaymanager/main.py:907
  msgid ""
  "The displaymanagers list is empty or undefined in both globalstorage and "
  "displaymanager.conf."
@@ -67,14 +67,14 @@ diff -Nur orig/lang/python/hu/LC_MESSAGES/python.po mod/lang/python/hu/LC_MESSAG
 +msgstr "A beléptetők listája üres, vagy nincs megadva a sem globalstorage-ben sem"
 +" a displaymanager.conf fájlban."
  
- #: src/modules/displaymanager/main.py:977
+ #: src/modules/displaymanager/main.py:989
  msgid "Display manager configuration was incomplete"
 -msgstr "A kijelzőkezelő konfigurációja hiányos volt"
 +msgstr "A grafikus beléptető konfigurációja hiányos volt"
  
  #: src/modules/initcpiocfg/main.py:28
  msgid "Configuring mkinitcpio."
-@@ -331,15 +331,15 @@
+@@ -364,15 +364,15 @@
  
  #: src/modules/dracut/main.py:27
  msgid "Creating initramfs with dracut."
@@ -84,7 +84,7 @@ diff -Nur orig/lang/python/hu/LC_MESSAGES/python.po mod/lang/python/hu/LC_MESSAG
  #: src/modules/dracut/main.py:49
  msgid "Failed to run dracut on the target"
 -msgstr "dracut futtatása nem sikerült a célon."
-+msgstr "dracut futtatása nem sikerült."
++msgstr "A dracut futtatása nem sikerült."
  
  #: src/modules/initramfscfg/main.py:32
  msgid "Configuring initramfs."
@@ -93,7 +93,7 @@ diff -Nur orig/lang/python/hu/LC_MESSAGES/python.po mod/lang/python/hu/LC_MESSAG
  
  #: src/modules/openrcdmcryptcfg/main.py:26
  msgid "Configuring OpenRC dmcrypt service."
-@@ -356,11 +356,11 @@
+@@ -393,11 +393,11 @@
  #: src/modules/dummypython/main.py:37 src/modules/dummypython/main.py:93
  #: src/modules/dummypython/main.py:94
  msgid "Dummy python step {}"

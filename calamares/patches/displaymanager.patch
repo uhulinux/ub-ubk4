@@ -1,6 +1,6 @@
 diff -Naur orig/src/modules/displaymanager/displaymanager.conf patched/src/modules/displaymanager/displaymanager.conf
---- orig/src/modules/displaymanager/displaymanager.conf	2021-04-14 13:05:11.000000000 +0200
-+++ patched/src/modules/displaymanager/displaymanager.conf	2021-04-15 09:49:50.943732014 +0200
+--- orig/src/modules/displaymanager/displaymanager.conf	2021-07-14 09:29:20.000000000 +0200
++++ patched/src/modules/displaymanager/displaymanager.conf	2021-07-21 20:33:05.826739835 +0200
 @@ -20,9 +20,7 @@
    - sddm
    - lightdm
@@ -12,9 +12,9 @@ diff -Naur orig/src/modules/displaymanager/displaymanager.conf patched/src/modul
  # Enable the following settings to force a desktop environment
  # in your displaymanager configuration file. This will attempt
 diff -Naur orig/src/modules/displaymanager/main.py patched/src/modules/displaymanager/main.py
---- orig/src/modules/displaymanager/main.py	2021-04-14 13:05:11.000000000 +0200
-+++ patched/src/modules/displaymanager/main.py	2021-04-15 09:54:45.884353420 +0200
-@@ -182,19 +182,14 @@
+--- orig/src/modules/displaymanager/main.py	2021-07-14 09:29:20.000000000 +0200
++++ patched/src/modules/displaymanager/main.py	2021-07-21 20:35:37.987016406 +0200
+@@ -182,23 +182,16 @@
      DesktopEnvironment('/usr/bin/startlxde', 'LXDE'),
      DesktopEnvironment('/usr/bin/lxqt-session', 'lxqt'),
      DesktopEnvironment('/usr/bin/pekwm', 'pekwm'),
@@ -31,11 +31,15 @@ diff -Naur orig/src/modules/displaymanager/main.py patched/src/modules/displayma
      DesktopEnvironment('/usr/bin/dwm', 'dwm'),
      DesktopEnvironment('/usr/bin/jwm', 'jwm'),
      DesktopEnvironment('/usr/bin/icewm-session', 'icewm-session'),
+     DesktopEnvironment('/usr/bin/fvwm3', 'fvwm3'),
+     DesktopEnvironment('/usr/bin/sway', 'sway'),
+-    DesktopEnvironment('/usr/bin/ukui-session', 'ukui'),
+-    DesktopEnvironment('/usr/bin/cutefish-session', 'cutefish-xsession'),    
 +    DesktopEnvironment('/usr/bin/start-lumina-desktop', 'Lumina-DE'),
  ]
  
  
-@@ -923,6 +918,8 @@
+@@ -927,6 +920,8 @@
  
          if dm_instance is None:
              libcalamares.utils.debug("{!s} selected but not installed".format(dm))
