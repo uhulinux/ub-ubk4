@@ -40,12 +40,15 @@ use_sysroot=false
 symbol_level=0
 enable_linux_installer=false
 enable_nacl=false
-enable_swiftshader=false
+enable_swiftshader=true
 enable_widevine=true
 enable_hangout_services_extension=false
 use_custom_libcxx=false
 use_gnome_keyring=false
 use_kerberos=false
+use_system_lcms2=true
+use_system_wayland_scanner=true
+use_system_zlib=true
 icu_use_data_file=false
 ")
 
@@ -92,7 +95,7 @@ export LDFLAGS+="-Wl,-rpath,/usr/lib/chromium/ -Wl,--no-keep-memory"
 $outdir/gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
 
 # gn args list - kihagyható, de segít a lehetséges opciók megadásához
-$outdir/gn args --list $UB_COMPILEDIR/$outdir > $UB_COMPILEDIR/$outdir/gn-args-full.list
+# $outdir/gn args --list $UB_COMPILEDIR/$outdir > $UB_COMPILEDIR/$outdir/gn-args-full.list
 
 # ninja
 LC_ALL=C ninja -j 2 -C $outdir -v pdf chrome chrome_sandbox chromedriver

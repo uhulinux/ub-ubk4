@@ -14,8 +14,8 @@ if [ ! -f "$UB_INSTALLDIR"/usr/lib/thunderbird/run-mozilla.sh ]; then
 	cp "$UB_COMPILEDIR"/build/unix/run-mozilla.sh "$UB_INSTALLDIR"/usr/lib/thunderbird/run-mozilla.sh
 fi
 
-mkdir -p "$UB_INSTALLDIR"/usr/lib/thunderbird/distribution/extensions
-mv "$UB_COMPILEDIR"/hu.xpi "$UB_INSTALLDIR"/usr/lib/thunderbird/distribution/extensions/langpack-hu@thunderbird.mozilla.org.xpi
+mkdir -p "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions
+mv "$UB_COMPILEDIR"/hu.xpi "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions/langpack-hu@thunderbird.mozilla.org.xpi
 
 # install icons
 for i in 16 22 24 32 48 64 128 256; do

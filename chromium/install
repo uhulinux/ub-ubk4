@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
-mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium
+# mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium
+mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/swiftshader
 
 outdir="../object"
 
@@ -13,14 +14,17 @@ mv $outdir/crashpad_handler "$UB_INSTALLDIR"/usr/lib/chromium/crashpad_handler
 mv $outdir/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/
 mv $outdir/*.bin "$UB_INSTALLDIR"/usr/lib/chromium/
 
+mv $outdir/libEGL.so "$UB_INSTALLDIR"/usr/lib/chromium/
+mv $outdir/libGLESv2.so "$UB_INSTALLDIR"/usr/lib/chromium/
+
+mv $outdir/swiftshader/*.so "$UB_INSTALLDIR"/usr/lib/chromium/swiftshader/
+
 if [ -f $outdir/icudtl.dat ]; then
 mv $outdir/icudtl.dat "$UB_INSTALLDIR"/usr/lib/chromium/
 fi
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/locales
 mv $outdir/locales/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/locales/
-
-# mv $outdir/resources/ "$UB_INSTALLDIR"/usr/lib/chromium/
 
 for size in 16 24 32 48 64 128 256; do
 	mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/

@@ -1,6 +1,6 @@
 diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/profile/all-thunderbird.js
---- orig/comm/mail/app/profile/all-thunderbird.js	2021-08-05 04:55:05.000000000 +0200
-+++ patched/comm/mail/app/profile/all-thunderbird.js	2021-08-12 03:21:31.818236407 +0200
+--- orig/comm/mail/app/profile/all-thunderbird.js	2021-08-20 00:33:39.000000000 +0200
++++ patched/comm/mail/app/profile/all-thunderbird.js	2021-08-21 23:03:34.016323579 +0200
 @@ -10,6 +10,10 @@
  #endif
  #endif
@@ -26,14 +26,14 @@ diff -Naur orig/comm/mail/app/profile/all-thunderbird.js patched/comm/mail/app/p
  // default. This does not include the application directory. See the SCOPE
  // constants in AddonManager.jsm for values to use here
 -pref("extensions.autoDisableScopes", 15);
-+pref("extensions.autoDisableScopes", 0);
++pref("extensions.autoDisableScopes", 11);
 +pref("extensions.shownSelectionUI", true);
  
  // Enable add-ons installed and owned by the application, like the default theme.
  pref("extensions.startupScanScopes", 4);
 diff -Naur orig/comm/suite/app/profile/suite-prefs.js patched/comm/suite/app/profile/suite-prefs.js
---- orig/comm/suite/app/profile/suite-prefs.js	2021-08-05 04:55:09.000000000 +0200
-+++ patched/comm/suite/app/profile/suite-prefs.js	2021-08-12 03:22:49.782476566 +0200
+--- orig/comm/suite/app/profile/suite-prefs.js	2021-08-20 00:33:39.000000000 +0200
++++ patched/comm/suite/app/profile/suite-prefs.js	2021-08-21 23:04:25.464454070 +0200
 @@ -16,6 +16,9 @@
   *  - Computed values (e.g. 50 * 1024) don't work.
   */
@@ -57,12 +57,10 @@ diff -Naur orig/comm/suite/app/profile/suite-prefs.js patched/comm/suite/app/pro
  
  // If set to true, the Update Service will present no UI for any event.
  pref("app.update.silent", false);
-@@ -582,7 +585,8 @@
- 
+@@ -583,6 +586,7 @@
  // Disable add-ons installed into the shared user and shared system areas by
  // default. See the SCOPE constants in AddonManager.jsm for values to use here.
--pref("extensions.autoDisableScopes", 11);
-+pref("extensions.autoDisableScopes", 0);
+ pref("extensions.autoDisableScopes", 11);
 +pref("extensions.shownSelectionUI", true);
  
  // Enable add-ons installed and owned by the application, like the default theme.
