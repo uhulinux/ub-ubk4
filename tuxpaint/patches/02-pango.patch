@@ -1,7 +1,7 @@
 diff -Nur orig/Makefile mod/Makefile
---- orig/Makefile	2020-12-13 04:06:03.000000000 +0100
-+++ mod/Makefile	2020-12-28 14:50:19.351725202 +0100
-@@ -127,10 +127,13 @@
+--- orig/Makefile	2021-09-04 22:21:43.995872377 +0200
++++ mod/Makefile	2021-09-04 22:25:18.984774499 +0200
+@@ -193,11 +193,14 @@
  FRIBIDI_LIB:=$(shell $(PKG_CONFIG) --libs fribidi)
  FRIBIDI_CFLAGS:=$(shell $(PKG_CONFIG) --cflags fribidi)
  
@@ -10,6 +10,7 @@ diff -Nur orig/Makefile mod/Makefile
 +
  windows_ARCH_LINKS:=-lgdi32 -lcomdlg32 $(PNG) -lz -lwinspool -lshlwapi $(FRIBIDI_LIB) -liconv -limagequant
  macos_ARCH_LINKS:=$(FRIBIDI_LIB) -limagequant
+ ios_ARCH_LINKS=$(FRIBIDI_LIB) -limagequant -ljpeg -lbz2 $(shell $(PKG_CONFIG) --libs freetype2 libtiff-4 libwebp libffi harfbuzz libmpg123 ogg vorbisenc vorbisidec libxml-2.0 pangoft2 libpcre)
  beos_ARCH_LINKS:=-lintl $(PNG) -lz -lbe -lnetwork -liconv $(FRIBIDI_LIB) $(PAPER_LIB) $(STDC_LIB) -limagequant
 -linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB) -limagequant
 +linux_ARCH_LINKS:=$(PAPER_LIB) $(FRIBIDI_LIB) $(PANGO_LIB) -limagequant
