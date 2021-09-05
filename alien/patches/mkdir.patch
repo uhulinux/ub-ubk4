@@ -1,0 +1,12 @@
+diff -Nur orig/Alien/Package.pm mod/Alien/Package.pm
+--- orig/Alien/Package.pm	2021-04-07 18:04:03.000000000 +0200
++++ mod/Alien/Package.pm	2021-09-05 11:58:20.974757571 +0200
+@@ -254,7 +254,7 @@
+ 	my $this=shift;
+ 	
+ 	my $workdir = $this->name."-".$this->version;
+-	$this->do("mkdir $workdir") or
++	$this->do("mkdir -p $workdir") or
+ 		die "unable to mkdir $workdir: $!";
+ 	# If the parent directory is suid/sgid, mkdir will make the root
+ 	# directory of the package inherit those bits. That is a bad thing,
