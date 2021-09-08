@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+ub_install install-man \
+    TLP_ULIB=/usr/lib/udev \
+    TLP_SYSD=/usr/lib/systemd/system
+
+rm -Rf $UB_INSTALLDIR/lib
+rm -Rf $UB_INSTALLDIR/etc/init.d

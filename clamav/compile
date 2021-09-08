@@ -1,15 +1,8 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
-autoreconf -vif
 ub_compile \
-	--sysconfdir=/etc/clamav \
-    --with-dbdir=/var/lib/clamav \
-    --with-system-libmspack \
-    --disable-rpath \
-    --disable-clamav \
-    --disable-llvm \
-    --enable-zlib-vcheck \
-    --enable-clamdtop \
-    --sbindir=/usr/sbin \
-    --disable-milter
+    -DBYTECODE_RUNTIME=none \
+    -DENABLE_EXTERNAL_MSPACK=ON \
+    -DDATABASE_DIRECTORY=/var/lib/clamav \
+    -DENABLE_MILTER=OFF \
+    -DAPP_CONFIG_DIRECTORY=/etc/clamav
