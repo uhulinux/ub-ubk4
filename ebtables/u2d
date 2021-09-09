@@ -1,1 +1,0 @@
-sflist ebtables ebtables | grep -E 'ebtables-[0-9-]+$' | sed s/ebtables-//g | sed -r 's/-([^-]*)$/+\1/' | sed s/-/./g | sort -V | tail -n 1
