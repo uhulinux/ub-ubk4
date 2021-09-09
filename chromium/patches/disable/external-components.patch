@@ -1,7 +1,7 @@
 diff -Naur orig/chrome/browser/extensions/external_component_loader.cc patched/chrome/browser/extensions/external_component_loader.cc
---- orig/chrome/browser/extensions/external_component_loader.cc	2021-03-02 18:45:03.000000000 +0100
-+++ patched/chrome/browser/extensions/external_component_loader.cc	2021-03-03 01:11:34.353170991 +0100
-@@ -31,18 +31,6 @@
+--- orig/chrome/browser/extensions/external_component_loader.cc	2021-09-01 03:39:26.000000000 +0200
++++ patched/chrome/browser/extensions/external_component_loader.cc	2021-09-05 18:01:23.799177055 +0200
+@@ -29,18 +29,6 @@
  
  void ExternalComponentLoader::StartLoading() {
    auto prefs = std::make_unique<base::DictionaryValue>();
@@ -18,5 +18,5 @@ diff -Naur orig/chrome/browser/extensions/external_component_loader.cc patched/c
 -  }
 -#endif
  
-   if (media_router::MediaRouterEnabled(profile_) &&
-       FeatureSwitch::load_media_router_component_extension()->IsEnabled()) {
+   LoadFinished(std::move(prefs));
+ }
