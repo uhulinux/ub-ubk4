@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
+export CFLAGS+='-Wno-error=stringop-truncation'
 ub_make user LIBDIR=/usr/lib
