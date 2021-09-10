@@ -1,0 +1,12 @@
+diff -Naur orig/clang/lib/Driver/ToolChains/Linux.cpp patched/clang/lib/Driver/ToolChains/Linux.cpp
+--- orig/clang/lib/Driver/ToolChains/Linux.cpp	2021-02-03 22:51:10.000000000 +0100
++++ patched/clang/lib/Driver/ToolChains/Linux.cpp	2021-04-08 21:17:45.195777693 +0200
+@@ -545,7 +545,7 @@
+   case llvm::Triple::x86_64: {
+     bool X32 = Triple.getEnvironment() == llvm::Triple::GNUX32;
+ 
+-    LibDir = X32 ? "libx32" : "lib64";
++    LibDir = X32 ? "libx32" : "/usr/lib";
+     Loader = X32 ? "ld-linux-x32.so.2" : "ld-linux-x86-64.so.2";
+     break;
+   }

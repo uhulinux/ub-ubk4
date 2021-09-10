@@ -1,0 +1,42 @@
+From 6cc1568ff5cffa4c4ac1cd40d3ea5afede99e505 Mon Sep 17 00:00:00 2001
+From: Dave Airlie <airlied@redhat.com>
+Date: Wed, 11 Nov 2020 11:33:33 +1000
+Subject: [PATCH] clover: fix compilation with clang + llvm 12.
+
+clang in llvm 12 no longer accepts "-cl-denorms-are-zero" as a cc1
+options which is how this code uses it.
+
+For now just pick the correct cc1 equivalent.
+
+This fixes a crash with llvm master and CL conversions tests
+
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Acked-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/12286>
+---
+ src/gallium/frontends/clover/llvm/invocation.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/src/gallium/frontends/clover/llvm/invocation.cpp b/src/gallium/frontends/clover/llvm/invocation.cpp
+index aada225e366..c3f54c1ed2c 100644
+--- a/src/gallium/frontends/clover/llvm/invocation.cpp
++++ b/src/gallium/frontends/clover/llvm/invocation.cpp
+@@ -224,8 +224,18 @@ namespace {
+       // Parse the compiler options.  A file name should be present at the end
+       // and must have the .cl extension in order for the CompilerInvocation
+       // class to recognize it as an OpenCL source file.
++#if LLVM_VERSION_MAJOR >= 12
++      std::vector<const char *> copts;
++      for (auto &opt : opts) {
++         if (opt == "-cl-denorms-are-zero")
++            copts.push_back("-fdenormal-fp-math=positive-zero");
++         else
++            copts.push_back(opt.c_str());
++      }
++#else
+       const std::vector<const char *> copts =
+          map(std::mem_fn(&std::string::c_str), opts);
++#endif
+ 
+       const target &target = ir_target;
+       const cl_version device_clc_version = dev.device_clc_version();
