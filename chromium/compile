@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
 # patchset: https://github.com/stha09/chromium-patches
-# clang_base_path=\"/usr\"
 
 if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 15 ]; then
 	echo "At least 15 GB free space is required!"
@@ -46,9 +45,6 @@ enable_hangout_services_extension=false
 use_custom_libcxx=false
 use_gnome_keyring=false
 use_kerberos=false
-use_system_lcms2=true
-use_system_wayland_scanner=true
-use_system_zlib=true
 icu_use_data_file=false
 ")
 
