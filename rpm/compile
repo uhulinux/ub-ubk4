@@ -9,6 +9,8 @@ export _POSIX2_VERSION=199209
 #rm -rf sqlite
 #rm -rf zlib
 
+export LUA_CFLAGS=$(pkg-config --cflags lua53)
+export LUA_LIBS=$(pkg-config --libs lua53)
 ub_compile \
 	--disable-db1 \
 	--enable-v5-packages=yes \
@@ -17,5 +19,4 @@ ub_compile \
 	--with-gnu-ld \
 	--without-selinux \
 	--enable-python \
-	--without-lua \
 	CPPFLAGS="-I/usr/include/nspr4 -I/usr/include/nss3"
