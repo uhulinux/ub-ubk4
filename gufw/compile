@@ -1,3 +1,6 @@
 #!/bin/sh -eux
 
+PYTHONVERSION="$(python -c 'import sys; print("{}.{}".format(sys.version_info.major, sys.version_info.minor))')"
+sed 's|/usr/share/gufw/gufw/gufw.py $1|/usr/lib/python'"${PYTHONVERSION}"'/site-packages/gufw/gufw.py "$@"|' -i bin/gufw-pkexec
+
 ub_compile
