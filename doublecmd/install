@@ -1,4 +1,7 @@
 #!/bin/sh -eux
 
-install/linux/install.sh --install-prefix=$UB_INSTALLDIR
-rm -rf ${UB_INSTALLDIR}/usr/share/doublecmd/doc
+cp -a doublecmd ${UB_INSTALLDIR}/usr/lib/
+mkdir -p ${UB_INSTALLDIR}/usr/share/pixmaps
+cp doublecmd/doublecmd.png ${UB_INSTALLDIR}/usr/share/pixmaps/
+rm -rf ${UB_INSTALLDIR}/usr/lib/doublecmd/pixmaps/dctheme
+rm -rf ${UB_INSTALLDIR}/usr/lib/doublecmd/doc
