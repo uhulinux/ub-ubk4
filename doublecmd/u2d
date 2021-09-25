@@ -1,3 +1,1 @@
-geturl https://sourceforge.net/projects/doublecmd/files/Double%20Commander%20Source/ | \
-grep src.tar | sed s/.*doublecmd-/doublecmd-/g | sed s/\\/.*//g | \
-splitver '^doublecmd-([0-9.]+).src.tar.gz$' | sort -V | tail -n 1
+geturl https://sourceforge.net/projects/doublecmd/files/DC%20for%20Linux%2064%20bit/ |grep " Commander " | sed 's/.*Commander //g' | sed 's/ beta.*//g' | sort -V | tail -n 1

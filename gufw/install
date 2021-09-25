@@ -2,9 +2,9 @@
 
 ub_install
 
-mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/48x48/apps/ ${UB_INSTALLDIR}/usr/share/icons/hicolor/scalable/apps
-mv data/icons/48x48/apps/gufw.png ${UB_INSTALLDIR}/usr/share/icons/hicolor/48x48/apps/gufw.png
-mv data/icons/scalable/apps/gufw* ${UB_INSTALLDIR}/usr/share/icons/hicolor/scalable/apps/
+mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor
+cp -a build/share ${UB_INSTALLDIR}/usr/
+cp -a data/icons/* ${UB_INSTALLDIR}/usr/share/icons/hicolor/
 
 mv $UB_INSTALLDIR/usr/bin/gufw-pkexec $UB_INSTALLDIR/usr/sbin/gufw
 rm $UB_INSTALLDIR/usr/bin/gufw
