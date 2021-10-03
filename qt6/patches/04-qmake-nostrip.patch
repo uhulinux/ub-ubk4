@@ -1,0 +1,12 @@
+diff -Naur orig/qtbase/mkspecs/common/gcc-base.conf patched/qtbase/mkspecs/common/gcc-base.conf
+--- orig/qtbase/mkspecs/common/gcc-base.conf	2021-07-30 10:56:53.000000000 +0200
++++ patched/qtbase/mkspecs/common/gcc-base.conf	2021-08-28 19:41:09.387899667 +0200
+@@ -31,6 +31,8 @@
+ # you can use the manual test in tests/manual/mkspecs.
+ #
+ 
++CONFIG += nostrip
++
+ QMAKE_CFLAGS_OPTIMIZE      = -O2
+ QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
+ QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og

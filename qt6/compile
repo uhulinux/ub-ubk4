@@ -1,0 +1,72 @@
+#!/bin/sh -eux
+
+# https://doc.qt.io/qt-6/whatsnew60.html#removed-modules-in-qt-6-0
+
+export LDFLAGS=" -Wl,--no-keep-memory "
+export NINJAFLAGS=" -j2 "
+
+mkdir build
+cd build
+cmake \
+    -G Ninja \
+	-DQT_QMAKE_TARGET_MKSPEC=linux-g++-64 \
+	-DCMAKE_INSTALL_PREFIX=/usr \
+    -DINSTALL_ARCHDATADIR=lib/qt6 \
+    -DINSTALL_BINDIR=lib/qt6/bin \
+    -DINSTALL_DATADIR=lib/qt6 \
+    -DINSTALL_DOCDIR=share/doc/qt6 \
+    -DINSTALL_EXAMPLESDIR=share/doc/qt6/examples \
+    -DINSTALL_INCLUDEDIR=include/qt6 \
+    -DINSTALL_LIBDIR=lib \
+    -DINSTALL_LIBEXECDIR=lib/qt6/libexec \
+    -DINSTALL_MKSPECSDIR=lib/qt6/mkspecs \
+    -DINSTALL_PUBLICBINDIR=usr/bin \
+	-DINSTALL_SYSCONFDIR=/etc/xdg \
+	\
+	-DCMAKE_BUILD_TYPE=Release \
+	-DBUILD_SHARED_LIBS=ON \
+	-DQT_USE_CCACHE=ON \
+	-DBUILD_WITH_PCH=OFF \
+	-DINPUT_journald=yes \
+	-DINPUT_qml_debug=yes \
+    -DINPUT_reduce_relocations=yes \
+    -DINPUT_rpath=no \
+	\
+	-DQT_BUILD_EXAMPLES=FALSE \
+	-DQT_BUILD_TESTS=FALSE \
+	-DBUILD_qtwebengine=ON \
+	-DBUILD_qttranslations=ON \
+	\
+	-DINPUT_accessibility=yes \
+	\
+	-DINPUT_sql_sqlite=yes \
+	\
+	-DINPUT_freetype=system \
+	-DINPUT_harfbuzz=system \
+	-DINPUT_libjpeg=system \
+	-DINPUT_libpng=system \
+	-DINPUT_pcre=system \
+	-DINPUT_system_sqlite=yes \
+	-DINPUT_system_zlib=yes \
+	\
+	-DINPUT_dbus=linked \
+	-DINPUT_openssl=linked \
+	-DINPUT_ssl=yes \
+	\
+    -DINPUT_cups=yes \
+    -DINPUT_glib=yes \
+    -DINPUT_gtk3=yes \
+    -DINPUT_opengl=yes \
+    -DINPUT_linuxfb=no \
+    -DINPUT_eglfs=yes \
+    -DINPUT_kms=no \
+    -DINPUT_libproxy=no \
+	\
+    -DINPUT_fontconfig=yes \
+    -DINPUT_evdev=yes \
+    -DINPUT_mtdev=yes \
+    -DINPUT_libinput=yes \
+    -DINPUT_tslib=yes \
+    ..
+
+ninja -j2
