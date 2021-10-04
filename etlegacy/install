@@ -1,22 +1,16 @@
 #!/bin/sh -eux
 
-# alapinstallálás
+# engine
 ub_install
 
-# alap mod eltávolítása
+# mod
 rm -rf $UB_INSTALLDIR/usr/lib/etlegacy/legacy
 
-# a szükséges enemy-territory adatokra linkek
+# assets
 ln -s /usr/share/enemy-territory/etmain/{pak0,pak1,pak2}.pk3 $UB_INSTALLDIR/usr/lib/etlegacy/etmain/
 
-# doc
-mkdir -p $UB_INSTALLDIR/usr/share/doc/Packages/etlegacy
-mv $UB_INSTALLDIR/usr/lib/etlegacy/INSTALL.txt $UB_INSTALLDIR/usr/share/doc/Packages/etlegacy/
+#doc
 rm -f $UB_INSTALLDIR/usr/lib/etlegacy/COPYING.txt
-
-# share
-cp -a  $UB_INSTALLDIR/usr/lib/etlegacy/share $UB_INSTALLDIR/usr/
-rm -rf $UB_INSTALLDIR/usr/lib/etlegacy/share
 
 # systemd
 mkdir -p $UB_INSTALLDIR/etc/xdg/etlegacy/etmain
@@ -34,14 +28,14 @@ ln -s /etc/xdg/etlegacy/etmain $UB_INSTALLDIR/var/lib/etlegacy-server/
 
 # mod
 
-# kibontás
-tar -x -f 237
-rm -f 237
+# kibontás etlegacy fájlok eljhelyezése
 
-# etlegacy fájlok eljhelyezése
+tar -x -f 316
+rm -f 316
+
 cd etlegacy*
 mkdir -p $UB_INSTALLDIR/usr/lib/etlegacy/legacy
-cp legacy/legacy_v${UB_VERSION_HEAD2}.pk3 $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
+cp legacy/legacy_v${UB_VERSION}.pk3 $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
 cp legacy/qagame.mp.*.so $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
 
 # Geiop helyadatok
