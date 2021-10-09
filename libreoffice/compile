@@ -68,6 +68,7 @@ export QT5DIR=/usr/lib/qt5
     --disable-debug \
     --disable-odk \
     --disable-firebird-sdbc \
+    --disable-skia \
     --enable-avahi \
     --enable-fetch-external \
     --enable-gstreamer-1-0 \
@@ -79,10 +80,10 @@ export QT5DIR=/usr/lib/qt5
     --enable-gtk3-kde5 \
     --enable-kf5 \
     --enable-qt5 \
-    --disable-pdfimport \
-    --disable-poppler \
-    --disable-pdfium \
+    --enable-pdfimport \
+    --enable-poppler \
+    --enable-pdfium \
     --enable-release-build
 
 # az unitcheck és a slowcheck nem kell
-make build-nocheck
+make build
