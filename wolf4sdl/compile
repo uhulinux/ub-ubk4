@@ -1,9 +1,5 @@
 #!/bin/sh -eux
 
-for i in `ls -1 $UB_SCRDIR/patches`;do
-patch -Np1 --binary -i $UB_SCRDIR/patches/$i
-done
-
 export CFLAGS=" -Wall -Wno-sign-compare -Wno-switch "
 export LDFLAGS=" -Wl,-z,defs -Wl,--as-needed "
 export DATADIR="/usr/share/games/wolf3d"
