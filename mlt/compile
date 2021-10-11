@@ -1,11 +1,5 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
 ub_compile \
-	--enable-gpl \
-	--enable-gpl3 \
-	--qimage-libdir=/usr/lib/qt5/lib \
-	--qimage-includedir=/usr/lib/qt5/include \
-	--avformat-swscale \
-#	--target-arch=i386 \
-#	--avformat-vdpau
+	-DGPL=ON \
+	-DGPL3=ON
