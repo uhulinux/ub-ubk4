@@ -1,0 +1,28 @@
+diff -Naur orig/meson.build patched/meson.build
+--- orig/meson.build	2021-08-03 19:28:41.000000000 +0200
++++ patched/meson.build	2021-10-19 07:40:20.699406374 +0200
+@@ -1,18 +1,18 @@
+ project(
+   'mate-desktop',
+   'c',
+-  version: '1.25.0',
++  version: '1.26.0',
+   license: [ 'GPL-2', 'FDL-1.1', 'LGPL-2' ],
+ )
+ 
+ matedt_version = meson.project_version()
+ version_array = matedt_version.split('.')
+ mate_major_version = version_array[0].to_int()
+-mate_minor_version = version_array[0].to_int()
+-mate_micro_version = version_array[0].to_int()
+-mate_platform = 1
+-mate_minor = 24
+-mate_micro = 0
++mate_minor_version = version_array[1].to_int()
++mate_micro_version = version_array[2].to_int()
++mate_platform = mate_major_version
++mate_minor = mate_minor_version
++mate_micro = mate_micro_version
+ 
+ matedt_api_version = '2.0'
+ matedt_api_name = '@0@-@1@'.format(meson.project_name(), matedt_api_version)
