@@ -1,2 +1,0 @@
-dir=$(geturl http://downloads.activestate.com/Komodo/releases/ | grep releases | sed s%.*releases/%% | grep -E '^[0-9]' | sed s%/.*%% | sort -V | tail -n 1)
-urllist http://downloads.activestate.com/Komodo/releases/$dir/ | splitver '^Komodo-Edit-([0-9.\-]+)-linux-x86.tar.gz$' | sed s/-/\\./g
