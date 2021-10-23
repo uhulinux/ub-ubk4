@@ -1,2 +1,2 @@
-urllist http://ftp.debian.org/debian/pool/main/n/ntfs-3g/ | grep ntfs-3g_ | grep orig | sort -V | tail -n 1 | sed s/.*_// | sed s/A.*//
+urllist https://github.com/tuxera/ntfs-3g/tags/ | grep -E '^([0-9.]+)$' | sort -V | tail -n 1
 
