@@ -1,1 +1,1 @@
-urllist https://github.com/diegonehab/luasocket/releases/ | splitver '^v([0-9.rc-]+).tar.gz$' | sed s/-/~/ | sort -V | tail -n 1
+urllist https://github.com/diegonehab/luasocket/tags/ | splitver '^v([0-9.rc-]+).tar.gz$' | sed s/-/~/ | sort -V | tail -n 1
