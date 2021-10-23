@@ -1,1 +1,1 @@
-urllist https://github.com/dosemu2/dosemu2/releases/ | grep -E 'tar\.' | grep -E '^[0-9]' | sed /dev/d |sed s/\.tar.*// | sort -V | tail -n 1 | sed s/pre/~pre/
+urllist https://github.com/dosemu2/dosemu2/tags/ | grep -E 'tar\.' | grep -E '^[0-9]' | sed /dev/d |sed s/\.tar.*// | sort -V | tail -n 1 | sed s/pre/~pre/

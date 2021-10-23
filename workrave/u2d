@@ -1,1 +1,1 @@
-urllist https://github.com/rcaelers/workrave/releases/ | sed s/_/\./g | splitver '^v([0-9.]+).tar.gz$' | sort -V | tail -n 1
+urllist https://github.com/rcaelers/workrave/tags/ | sed s/_/\./g | splitver '^v([0-9.]+).tar.gz$' | sort -V | tail -n 1
