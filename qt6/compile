@@ -5,9 +5,7 @@
 export LDFLAGS=" -Wl,--no-keep-memory "
 export NINJAFLAGS=" -j2 "
 
-mkdir build
-cd build
-cmake \
+ub_compile \
     -G Ninja \
 	-DQT_QMAKE_TARGET_MKSPEC=linux-g++-64 \
 	-DCMAKE_INSTALL_PREFIX=/usr \
@@ -22,6 +20,7 @@ cmake \
     -DINSTALL_MKSPECSDIR=lib/qt6/mkspecs \
     -DINSTALL_PUBLICBINDIR=usr/bin \
 	-DINSTALL_SYSCONFDIR=/etc/xdg \
+	-DINSTALL_TRANSLATIONSDIR=lib/qt6/translations \
 	\
 	-DCMAKE_BUILD_TYPE=Release \
 	-DBUILD_SHARED_LIBS=ON \
@@ -66,7 +65,4 @@ cmake \
     -DINPUT_evdev=yes \
     -DINPUT_mtdev=yes \
     -DINPUT_libinput=yes \
-    -DINPUT_tslib=yes \
-    ..
-
-ninja -j2
+    -DINPUT_tslib=yes
