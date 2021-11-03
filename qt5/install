@@ -24,9 +24,3 @@ install -Dm644 $UB_COMPILEDIR/qttools/src/linguist/linguist/images/icons/linguis
                   "$UB_INSTALLDIR"/usr/share/pixmaps/linguist-qt5.png
 install -Dm644 $UB_COMPILEDIR/qttools/src/qdbus/qdbusviewer/images/qdbusviewer-128.png \
                   "$UB_INSTALLDIR"/usr/share/pixmaps/qdbusviewer-qt5.png
-
-# pkgconfig linkek
-mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
-for pc in "$UB_INSTALLDIR"/usr/lib/qt5/lib/pkgconfig/*.pc; do
-	ln -s ../../lib/qt5/lib/pkgconfig/`basename $pc` "$UB_INSTALLDIR"/usr/lib/pkgconfig/`basename $pc`
-done

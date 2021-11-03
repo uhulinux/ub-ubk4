@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
-# qtwebengine: külön csomag
+# headerdir /usr/lib/qt5/include
+# libdir /usr/lib/qt5/lib
 
 cd $UB_OBJECTDIR
 
@@ -10,6 +11,8 @@ $UB_COMPILEDIR/configure \
 	-platform linux-g++-64 \
 	-prefix /usr/lib/qt5 \
 	-sysconfdir /etc/xdg \
+	-headerdir /usr/include/qt5 \
+	-libdir /usr/lib \
 	\
 	-release            \
 	-opensource         \
