@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
-qmake Launchy.pro
+cd src
+rm -f CMakeLists.txt
+qmake src.pro
 ub_compile

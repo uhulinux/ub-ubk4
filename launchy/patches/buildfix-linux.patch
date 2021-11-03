@@ -1,0 +1,69 @@
+diff -Naur orig/src/Launchy/Launchy.pro patched/src/Launchy/Launchy.pro
+--- orig/src/Launchy/Launchy.pro	2021-07-20 12:33:02.000000000 +0200
++++ patched/src/Launchy/Launchy.pro	2021-11-03 01:01:27.096805050 +0100
+@@ -133,7 +133,7 @@
+     HEADERS += Linux/AppLinux.h \
+                Linux/LaunchyWidgetLinux.h \
+                Linux/IconProviderLinux.h
+-    LIBS += -L$$OUT_PWD/src/lib/ $$DESTDIR/liblaunchy.so $$DESTDIR/libpluginpy.so
++    LIBS += -L$$OUT_PWD/src/lib/ $$DESTDIR/libLaunchy.so $$DESTDIR/libPluginPy.so
+ 
+     PREFIX   = /usr
+     DEFINES += SKINS_PATH=\\\"$$PREFIX/share/launchy/skins/\\\" \
+diff -Naur orig/src/LaunchyLib/LaunchyLib.cpp patched/src/LaunchyLib/LaunchyLib.cpp
+--- orig/src/LaunchyLib/LaunchyLib.cpp	2021-07-20 12:33:02.000000000 +0200
++++ patched/src/LaunchyLib/LaunchyLib.cpp	2021-11-03 01:05:41.941645685 +0100
+@@ -143,6 +143,8 @@
+ 
+ #elif defined(Q_OS_MAC)
+ 
++namespace launchy {
++
+ int getDesktop() {
+     return DESKTOP_MAC;
+ }
+@@ -156,8 +158,12 @@
+     return;
+ }
+ 
++} // namespace launchy
++
+ #elif defined(Q_OS_LINUX)
+ 
++namespace launchy {
++
+ int getDesktop() {
+     QStringList list = QProcess::systemEnvironment();
+     foreach(QString s, list) {
+@@ -210,4 +216,6 @@
+     return;
+ }
+ 
++} // namespace launchy
++
+ #endif
+diff -Naur orig/src/PluginPy/PluginPy.pro patched/src/PluginPy/PluginPy.pro
+--- orig/src/PluginPy/PluginPy.pro	2021-07-20 12:33:02.000000000 +0200
++++ patched/src/PluginPy/PluginPy.pro	2021-11-03 01:07:57.050091782 +0100
+@@ -34,7 +34,8 @@
+ CONFIG(debug, debug|release):DESTDIR = ../debug
+ CONFIG(release, debug|release):DESTDIR = ../release
+ 
+-LIBS += $$DESTDIR/Launchy.lib
++win32:LIBS += $$DESTDIR/Launchy.lib
++unix:LIBS += -L$$DESTDIR -lLaunchy
+ 
+ # extra target copy to python
+ CONFIG += file_copies
+@@ -67,9 +68,8 @@
+ }
+ 
+ unix:!macx {
+-    #python3-config
+-    INCLUDEPATH += /usr/include/python3.6m
+-    LIBS += -lpython3.6m -lpthread -ldl  -lutil -lm
++    CONFIG += link_pkgconfig
++    PKGCONFIG += python3-embed
+ 
+     PREFIX = /usr
+     target.path = $$PREFIX/lib/
