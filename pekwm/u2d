@@ -1,5 +1,1 @@
-lista=$(curl -k -s https://raw.githubusercontent.com/pekdon/pekwm/master/CMakeLists.txt | grep 'VERSION_')
-MAJOR=$(echo $lista | sed 's/.*MAJOR '// | sed s/\).*//)
-MINOR=$(echo $lista | sed 's/.*MINOR '// | sed s/\).*//)
-PATCH=$(echo $lista | sed 's/.*PATCH '// | sed s/\).*//)
-echo $MAJOR.$MINOR.$PATCH
+u2d https://github.com/pekdon/pekwm/tags release-

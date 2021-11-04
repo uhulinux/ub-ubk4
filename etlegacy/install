@@ -30,8 +30,8 @@ ln -s /etc/xdg/etlegacy/etmain $UB_INSTALLDIR/var/lib/etlegacy-server/
 
 # kibontás etlegacy fájlok eljhelyezése
 
-tar -x -f 316
-rm -f 316
+tar -x -f 328
+rm -f 328
 
 cd etlegacy*
 mkdir -p $UB_INSTALLDIR/usr/lib/etlegacy/legacy
@@ -40,3 +40,6 @@ cp legacy/qagame.mp.*.so $UB_INSTALLDIR/usr/lib/etlegacy/legacy/
 
 # Geiop helyadatok
 ln -s /usr/share/GeoIP/GeoIP.dat $UB_INSTALLDIR/usr/lib/etlegacy/legacy
+
+# desktop igazítás
+sed /PrefersNonDefaultGPU/d -i $UB_INSTALLDIR/usr/share/applications/com.etlegacy.ETLegacy.desktop
