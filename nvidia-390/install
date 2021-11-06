@@ -44,7 +44,6 @@ mkdir -p "$cellibdir"/nvidia \
 export NV_USE_BUNDLED_LIBJANSSON=0
 alprogi settings
 alprogi xconfig
-alprogi modprobe
 
 # desktop
 mv	settings/doc/nvidia-settings.desktop "$desktopdir"/
@@ -52,13 +51,12 @@ mv	settings/doc/nvidia-settings.png "$pixmapdir"/
 
 # felesleges gtk libek
 rm libnvidia-gtk*
-rm $cellibdir/libnvidia-gtk2*
 
 #kernelmodulok
 cp kernel/*.ko "$moduldir"/
 
 # binárisok elhelyezése
-binaries="nvidia-cuda-mps-control nvidia-smi nvidia-persistenced"
+binaries="nvidia-cuda-mps-control nvidia-smi"
 for binari in $binaries;do
     mv $binari $celbindir/
     gunzip ${binari}.1.gz
@@ -77,6 +75,10 @@ mv	nvidia.icd "$openclvendordir"/
 
 # postinstből majd libglx.so nevű link lesz rá a $cellibdir/xorg/extensions alá
 mv	libglx.so."$UB_VERSION" "$cellibdir"/nvidia/
+
+# wrapped-software-rendering lib. Postinstből lehet majd rá libcwfb.so link, ha
+# nem ütközik az x.org-server által szállítottal libcwfb.so fájllal
+mv libnvidia-wfb.so.${UB_VERSION} $xmoduldir
 
 # libglvnd ütközések, a libglvnd elsőbbséget élvez
 mv	libEGL.so.1.1.0 "$cellibdir"/nvidia/

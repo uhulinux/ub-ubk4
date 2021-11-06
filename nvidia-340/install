@@ -45,8 +45,8 @@ mv	settings/doc/nvidia-settings.png "$pixmapdir"/
 #kernelmodulok
 cp kernel/{nvidia.ko,uvm/nvidia-uvm.ko} "$moduldir"/
 
-# binárisok elhelyezése #nvidia-smi,nvidia-cuda-mps nvidia-persistenced
-binaries="nvidia-cuda-mps-control nvidia-smi nvidia-persistenced"
+# binárisok elhelyezése #nvidia-smi,nvidia-cuda-mps
+binaries="nvidia-cuda-mps-control nvidia-smi"
 for binari in $binaries;do
     mv $binari $celbindir/
     gunzip ${binari}.1.gz

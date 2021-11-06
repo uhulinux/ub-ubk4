@@ -58,6 +58,9 @@ alprogi modprobe
 mv	settings/doc/nvidia-settings.desktop "$desktopdir"/
 mv	settings/doc/nvidia-settings.png "$pixmapdir"/
 
+# felesleges gtk libek
+rm libnvidia-gtk*
+
 #kernelmodulok
 cp kernel/*.ko "$moduldir"/
 
@@ -161,4 +164,4 @@ ln -s libvdpau_nvidia.so.${UB_VERSION} vdpau/libvdpau_nvidia.so.1
 ln -s libvdpau_nvidia.so.1 vdpau/libvdpau_nvidia.so
 
 # Támogatott chipekhez a verzió beillesztése a csomag leírásába
-sed "s/version/${UB_VERSION}/g" -i ${UB_SRCDIR}/packages/nvidia/description/hu
+sed "s/version/${UB_VERSION}/g" -i ${UB_SRCDIR}/packages/nvidia-470/description/hu
