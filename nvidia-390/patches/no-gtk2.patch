@@ -1,0 +1,20 @@
+diff -Nur orig/settings/src/Makefile mod/settings/src/Makefile
+--- orig/settings/src/Makefile	2021-07-20 19:35:01.000000000 +0200
++++ mod/settings/src/Makefile	2021-11-05 17:54:54.630774395 +0100
+@@ -130,7 +130,6 @@
+ 
+ GTK2LIB_NAME = libnvidia-gtk2.so
+ GTK2LIB_DIR  = $(OUTPUTDIR)/gtk2
+-GTK2LIB = $(OUTPUTDIR)/$(GTK2LIB_NAME)
+ GTK2LIB_SONAME = $(GTK2LIB_NAME).$(NVIDIA_SETTINGS_VERSION)
+ 
+ ifdef BUILD_GTK3LIB
+@@ -274,8 +273,6 @@
+ 
+ NVIDIA_GTKLIB_install: $(GTK2LIB) $(GTK3LIB)
+ 	$(MKDIR) $(LIBDIR)
+-	$(INSTALL) $(INSTALL_LIB_ARGS) $(GTK2LIB) \
+-	    $(LIBDIR)/$(GTK2LIB_SONAME)
+ ifdef BUILD_GTK3LIB
+ 	$(INSTALL) $(INSTALL_LIB_ARGS) $(GTK3LIB) \
+ 	    $(LIBDIR)/$(GTK3LIB_SONAME)

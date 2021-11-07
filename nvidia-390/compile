@@ -18,9 +18,11 @@ mv $forras/* ./
 rm -rf $forras
 patch -Np1 < "$UB_SRCDIR"/patches/nvidia-json.skip
 cd kernel
+patch -Np1 < "$UB_SRCDIR"/patches/drm-detection.skip
 make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
 cd ..
 export NV_USE_BUNDLED_LIBJANSSON=0
 alprogi settings
 alprogi xconfig
 alprogi modprobe
+alprogi persistenced

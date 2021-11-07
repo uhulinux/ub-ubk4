@@ -1,0 +1,21 @@
+diff -Nur orig/conftest.sh mod/conftest.sh
+--- orig/conftest.sh	2021-10-14 12:14:41.000000000 +0200
++++ mod/conftest.sh	2021-11-06 19:22:21.275619624 +0100
+@@ -1292,7 +1292,7 @@
+             #include <drm/drm_drv.h>
+             #endif
+ 
+-            #if !defined(CONFIG_DRM) && !defined(CONFIG_DRM_MODULE)
++            #if !defined(CONFIG_DRM_KMS_HELPER) && !defined(CONFIG_DRM_MODULE)
+             #error DRM not enabled
+             #endif
+ 
+@@ -1951,7 +1951,7 @@
+             #include <drm/drmP.h>
+             #endif
+             #include <drm/drm_atomic.h>
+-            #if !defined(CONFIG_DRM) && !defined(CONFIG_DRM_MODULE)
++            #if !defined(CONFIG_DRM_KMS_HELPER) && !defined(CONFIG_DRM_MODULE)
+             #error DRM not enabled
+             #endif
+             void conftest_drm_atomic_modeset_available(void) {
