@@ -1,7 +1,7 @@
-diff -Naurd a/configur.h b/configur.h
---- a/configur.h	2014-06-29 04:01:37.000000000 +0200
-+++ b/configur.h	2014-06-29 09:23:29.000000000 +0200
-@@ -673,7 +673,7 @@
+diff -Nur orig/configur.h mod/configur.h
+--- orig/configur.h	2021-10-23 22:58:14.000000000 +0200
++++ mod/configur.h	2021-11-13 20:15:36.026436331 +0100
+@@ -683,7 +683,7 @@
  #if defined(_AMIGA) || defined(__AROS__)
  # define DEFAULT_AREXX_SEMANTICS        1
  #else
@@ -10,7 +10,7 @@ diff -Naurd a/configur.h b/configur.h
  #endif
  /*
   * Indicates that AREXX BIFs are available by default on Amiga and AROS, but
-@@ -682,7 +682,7 @@
+@@ -692,7 +692,7 @@
  #if defined(_AMIGA) || defined(__AROS__)
  # define DEFAULT_AREXX_BIFS             1
  #else
@@ -19,9 +19,9 @@ diff -Naurd a/configur.h b/configur.h
  #endif
  /*
   * Indicates if the user want the "broken" semantics of ADDRESS COMMAND
-diff -Naurd a/makefile.com b/makefile.com
---- a/makefile.com	2014-06-29 04:01:48.000000000 +0200
-+++ b/makefile.com	2014-06-29 09:24:16.000000000 +0200
+diff -Nur orig/makefile.com mod/makefile.com
+--- orig/makefile.com	2020-04-14 23:58:53.000000000 +0200
++++ mod/makefile.com	2021-11-13 20:18:01.831022372 +0100
 @@ -10,11 +10,11 @@
  #   PROGNAME  What to call the compiled	program
  #
@@ -36,33 +36,27 @@ diff -Naurd a/makefile.com b/makefile.com
  
  include $(SRCDIR)\regina.ver
  VERDOT = $(VER_DOT)
-diff -Naurd a/Makefile.in b/Makefile.in
---- a/Makefile.in	2014-06-29 04:01:24.000000000 +0200
-+++ b/Makefile.in	2014-06-29 09:25:52.000000000 +0200
-@@ -1054,18 +1054,8 @@
+diff -Nur orig/Makefile.in mod/Makefile.in
+--- orig/Makefile.in	2021-11-01 05:24:34.000000000 +0100
++++ mod/Makefile.in	2021-11-13 20:19:55.323456734 +0100
+@@ -1077,12 +1077,8 @@
  	$(INSTALL) -m 644 -c ./pl.mtb $(DESTDIR)$(sharedir)/pl.mtb
  	$(INSTALL) -m 644 -c ./tr.mtb $(DESTDIR)$(sharedir)/tr.mtb
  	$(INSTALL) -m 644 -c ./sv.mtb $(DESTDIR)$(sharedir)/sv.mtb
--	$(DESTDIR)$(bindir)/rexx $(srcdir)/preinst.rexx $(bindir)/rexx $(srcdir)/demo/rexxcps.rexx  $(DESTDIR)$(examplesdir)/rexxcps.rexx
--	-chmod 755 $(DESTDIR)$(examplesdir)/rexxcps.rexx
--	$(DESTDIR)$(bindir)/rexx $(srcdir)/preinst.rexx $(bindir)/rexx $(srcdir)/demo/animal.rexx   $(DESTDIR)$(examplesdir)/animal.rexx
--	-chmod 755 $(DESTDIR)$(examplesdir)/animal.rexx
--	$(DESTDIR)$(bindir)/rexx $(srcdir)/preinst.rexx $(bindir)/rexx $(srcdir)/demo/block.rexx    $(DESTDIR)$(examplesdir)/block.rexx
--	-chmod 755 $(DESTDIR)$(examplesdir)/block.rexx
--	$(DESTDIR)$(bindir)/rexx $(srcdir)/preinst.rexx $(bindir)/rexx $(srcdir)/demo/dateconv.rexx $(DESTDIR)$(examplesdir)/dateconv.rexx
--	-chmod 755 $(DESTDIR)$(examplesdir)/dateconv.rexx
--	$(DESTDIR)$(bindir)/rexx $(srcdir)/preinst.rexx $(bindir)/rexx $(srcdir)/demo/timeconv.rexx $(DESTDIR)$(examplesdir)/timeconv.rexx
--	-chmod 755 $(DESTDIR)$(examplesdir)/timeconv.rexx
--	$(DESTDIR)$(bindir)/rexx $(srcdir)/preinst.rexx $(bindir)/rexx $(srcdir)/demo/newstr.rexx   $(DESTDIR)$(examplesdir)/newstr.rexx
--	-chmod 755 $(DESTDIR)$(examplesdir)/newstr.rexx
+-	$(INSTALL) -m 755 $(srcdir)/demo/rexxcps.rexx  $(DESTDIR)$(examplesdir)/rexxcps.rexx
+-	$(INSTALL) -m 755 $(srcdir)/demo/animal.rexx   $(DESTDIR)$(examplesdir)/animal.rexx
+-	$(INSTALL) -m 755 $(srcdir)/demo/block.rexx    $(DESTDIR)$(examplesdir)/block.rexx
+-	$(INSTALL) -m 755 $(srcdir)/demo/dateconv.rexx $(DESTDIR)$(examplesdir)/dateconv.rexx
+-	$(INSTALL) -m 755 $(srcdir)/demo/timeconv.rexx $(DESTDIR)$(examplesdir)/timeconv.rexx
+-	$(INSTALL) -m 755 $(srcdir)/demo/newstr.rexx   $(DESTDIR)$(examplesdir)/newstr.rexx
 +	$(INSTALL) -m 644 -c $(srcdir)/demo/extqueue.rexx $(DESTDIR)$(sharedir)/
 +	$(INSTALL) -m 644 -c $(srcdir)/demo/gci-try.rexx $(DESTDIR)$(sharedir)/
  
- installregina:
- 	$(INSTALL) -s -m 755 -c ./regina$(binarybitprefix)$(EXE) $(DESTDIR)$(bindir)/regina$(binarybitprefix)$(EXE)
-diff -Naurd a/os2funcs.c b/os2funcs.c
---- a/os2funcs.c	2014-06-29 04:01:57.000000000 +0200
-+++ b/os2funcs.c	2014-06-29 09:28:48.000000000 +0200
+ installdoc:
+ 	$(INSTALL) -m 644 -c ./doc/regina.pdf $(DESTDIR)/$(PACKAGE)-$(VERDOTUNQUOTED)-doc.pdf
+diff -Nur orig/os2funcs.c mod/os2funcs.c
+--- orig/os2funcs.c	2015-04-04 07:19:54.000000000 +0200
++++ mod/os2funcs.c	2021-11-13 20:56:43.176826007 +0100
 @@ -218,6 +218,9 @@
  #elif defined(__WINS__) || defined(__EPOC32__)
     beep( freq, dur );
