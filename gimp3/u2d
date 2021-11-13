@@ -1,2 +1,4 @@
-dir=$(urllist https://download.gimp.org/pub/gimp/ | grep -v video | grep ^v | sort -V | tail -n1 | sed -e "s/v//")
-u2d https://download.gimp.org/pub/gimp/v$dir
+#dir=$(urllist https://download.gimp.org/pub/gimp/ | grep -v video | grep ^v | sort -V | tail -n1 | sed -e "s/v//")
+#u2d https://download.gimp.org/pub/gimp/v$dir
+# noupdate: glib >= 2.68.0 kellene már
+echo 2.99.6
