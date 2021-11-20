@@ -1,17 +1,7 @@
-From f4d0b0eb899005b4b8b6388e1d8bb82cc0018fc8 Mon Sep 17 00:00:00 2001
-From: Mike Gilbert <floppym@gentoo.org>
-Date: Sun, 8 Aug 2021 08:50:00 +0000
-Subject: [PATCH] Disable various compiler configs
-
----
- build/config/compiler/BUILD.gn | 105 ++++++---------------------------
- 1 file changed, 17 insertions(+), 88 deletions(-)
-
-diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
-index 0bb155a..e95c023 100644
---- a/build/config/compiler/BUILD.gn
-+++ b/build/config/compiler/BUILD.gn
-@@ -292,8 +292,6 @@
+diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUILD.gn
+--- orig/build/config/compiler/BUILD.gn	2021-11-12 11:24:14.000000000 +0100
++++ patched/build/config/compiler/BUILD.gn	2021-11-16 01:40:48.075677071 +0100
+@@ -293,8 +293,6 @@
  
    configs += [
      # See the definitions below.
@@ -20,7 +10,7 @@ index 0bb155a..e95c023 100644
      ":compiler_codegen",
      ":compiler_deterministic",
    ]
-@@ -531,31 +529,6 @@
+@@ -533,24 +531,6 @@
      ldflags += [ "-Wl,-z,keep-text-section-prefix" ]
    }
  
@@ -40,19 +30,12 @@ index 0bb155a..e95c023 100644
 -        ldflags += [ "-Wl,-mllvm,-instcombine-lower-dbg-declare=0" ]
 -      }
 -    }
--
--    # TODO(crbug.com/1235145): Investigate why/if this should be needed.
--    if (is_win) {
--      cflags += [ "/clang:-ffp-contract=off" ]
--    } else {
--      cflags += [ "-ffp-contract=off" ]
--    }
 -  }
 -
    # C11/C++11 compiler flags setup.
    # ---------------------------
    if (is_linux || is_chromeos || is_android || (is_nacl && is_clang) ||
-@@ -1246,45 +1219,6 @@
+@@ -1241,45 +1221,6 @@
      }
    }
  
@@ -98,7 +81,7 @@ index 0bb155a..e95c023 100644
    # Tells the compiler not to use absolute paths when passing the default
    # paths to the tools it invokes. We don't want this because we don't
    # really need it and it can mess up the goma cache entries.
-@@ -1704,7 +1638,7 @@
+@@ -1562,7 +1503,7 @@
        defines = [ "_HAS_NODISCARD" ]
      }
    } else {
@@ -107,7 +90,7 @@ index 0bb155a..e95c023 100644
      if (treat_warnings_as_errors) {
        cflags += [ "-Werror" ]
  
-@@ -1713,10 +1647,6 @@
+@@ -1571,10 +1512,6 @@
        # well.
        ldflags = [ "-Werror" ]
      }
@@ -118,7 +101,7 @@ index 0bb155a..e95c023 100644
  
      # In Chromium code, we define __STDC_foo_MACROS in order to get the
      # C99 macros on Mac and Linux.
-@@ -1725,15 +1655,6 @@
+@@ -1583,15 +1520,6 @@
        "__STDC_FORMAT_MACROS",
      ]
  
@@ -134,7 +117,7 @@ index 0bb155a..e95c023 100644
      if (is_mac) {
        cflags_objc = [ "-Wobjc-missing-property-synthesis" ]
        cflags_objcc = [ "-Wobjc-missing-property-synthesis" ]
-@@ -2101,7 +2022,8 @@
+@@ -1961,7 +1889,8 @@
  }
  
  # Default "optimization on" config.
@@ -144,7 +127,7 @@ index 0bb155a..e95c023 100644
    if (is_win) {
      if (chrome_pgo_phase != 2) {
        # Favor size over speed, /O1 must be before the common flags.
-@@ -2141,7 +2063,8 @@
+@@ -2001,7 +1930,8 @@
  }
  
  # Turn off optimizations.
@@ -154,7 +137,7 @@ index 0bb155a..e95c023 100644
    if (is_win) {
      cflags = [
        "/Od",  # Disable optimization.
-@@ -2181,7 +2104,8 @@
+@@ -2041,7 +1971,8 @@
  # Turns up the optimization level. On Windows, this implies whole program
  # optimization and link-time code generation which is very expensive and should
  # be used sparingly.
@@ -164,7 +147,7 @@ index 0bb155a..e95c023 100644
    if (is_nacl && is_nacl_irt) {
      # The NaCl IRT is a special case and always wants its own config.
      # Various components do:
-@@ -2214,7 +2138,8 @@
+@@ -2074,7 +2005,8 @@
  #
  # TODO(crbug.com/621335) - rework how all of these configs are related
  # so that we don't need this disclaimer.
@@ -174,7 +157,7 @@ index 0bb155a..e95c023 100644
    if (is_nacl && is_nacl_irt) {
      # The NaCl IRT is a special case and always wants its own config.
      # Various components do:
-@@ -2240,7 +2165,8 @@
+@@ -2100,7 +2032,8 @@
    }
  }
  
@@ -184,7 +167,7 @@ index 0bb155a..e95c023 100644
    cflags = [ "-O1" ] + common_optimize_on_cflags
    rustflags = [ "-Copt-level=1" ]
    ldflags = common_optimize_on_ldflags
-@@ -2360,7 +2286,8 @@
+@@ -2220,7 +2153,8 @@
  }
  
  # Full symbols.
@@ -194,7 +177,7 @@ index 0bb155a..e95c023 100644
    if (is_win) {
      if (is_clang) {
        cflags = [ "/Z7" ]  # Debug information in the .obj files.
-@@ -2474,7 +2401,8 @@
+@@ -2334,7 +2268,8 @@
  # Minimal symbols.
  # This config guarantees to hold symbol for stack trace which are shown to user
  # when crash happens in unittests running on buildbot.
@@ -204,7 +187,7 @@ index 0bb155a..e95c023 100644
    if (is_win) {
      # Functions, files, and line tables only.
      cflags = []
-@@ -2546,7 +2474,8 @@
+@@ -2406,7 +2341,8 @@
  # This configuration contains function names only. That is, the compiler is
  # told to not generate debug information and the linker then just puts function
  # names in the final debug information.
@@ -214,5 +197,3 @@ index 0bb155a..e95c023 100644
    if (is_win) {
      ldflags = [ "/DEBUG" ]
  
--- 
-2.31.1

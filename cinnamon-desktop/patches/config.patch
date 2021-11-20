@@ -1,24 +1,52 @@
-diff -Naur cinnamon-desktop-2.8.0.orig/schemas/org.cinnamon.desktop.background.gschema.xml.in.in cinnamon-desktop-2.8.0/schemas/org.cinnamon.desktop.background.gschema.xml.in.in
---- cinnamon-desktop-2.8.0.orig/schemas/org.cinnamon.desktop.background.gschema.xml.in.in	2015-10-16 13:00:30.000000000 +0000
-+++ cinnamon-desktop-2.8.0/schemas/org.cinnamon.desktop.background.gschema.xml.in.in	2015-11-20 19:04:16.543027956 +0000
-@@ -10,7 +10,7 @@
-       </_description>
+diff -Nur orig/schemas/org.cinnamon.desktop.background.gschema.xml.in mod/schemas/org.cinnamon.desktop.background.gschema.xml.in
+--- orig/schemas/org.cinnamon.desktop.background.gschema.xml.in	2021-11-17 18:11:49.291435687 +0100
++++ mod/schemas/org.cinnamon.desktop.background.gschema.xml.in	2021-11-17 18:18:31.578730508 +0100
+@@ -11,7 +11,7 @@
+       </description>
      </key>
      <key name="picture-uri" type="s">
 -      <default>'file://@datadir@/themes/Adwaita/backgrounds/adwaita-timed.xml'</default>
 +      <default>'file://@datadir@/backgrounds/UHU/uhu_linux_ubk.jpg'</default>
-       <_summary>Picture URI</_summary>
-       <_description>
+       <summary>Picture URI</summary>
+       <description>
          URI to use for the background image. Not that the backend only supports
-diff -Naur cinnamon-desktop-2.8.0.orig/schemas/org.cinnamon.desktop.interface.gschema.xml.in.in cinnamon-desktop-2.8.0/schemas/org.cinnamon.desktop.interface.gschema.xml.in.in
---- cinnamon-desktop-2.8.0.orig/schemas/org.cinnamon.desktop.interface.gschema.xml.in.in	2015-10-16 13:00:30.000000000 +0000
-+++ cinnamon-desktop-2.8.0/schemas/org.cinnamon.desktop.interface.gschema.xml.in.in	2015-11-20 19:04:16.543027956 +0000
-@@ -97,7 +97,7 @@
-       </_description>
+diff -Nur orig/schemas/org.cinnamon.desktop.interface.gschema.xml.in mod/schemas/org.cinnamon.desktop.interface.gschema.xml.in
+--- orig/schemas/org.cinnamon.desktop.interface.gschema.xml.in	2021-11-17 18:11:49.291435687 +0100
++++ mod/schemas/org.cinnamon.desktop.interface.gschema.xml.in	2021-11-17 18:20:34.707761628 +0100
+@@ -98,7 +98,7 @@
+       </description>
      </key>
      <key name="icon-theme" type="s">
 -      <default>'gnome'</default>
 +      <default>'Adwaita'</default>
-       <_summary>Icon Theme</_summary>
-       <_description>
+       <summary>Icon Theme</summary>
+       <description>
          Icon theme to use for the panel, nautilus etc.
+diff -Nur orig/schemas/org.cinnamon.desktop.screensaver.gschema.xml.in mod/schemas/org.cinnamon.desktop.screensaver.gschema.xml.in
+--- orig/schemas/org.cinnamon.desktop.screensaver.gschema.xml.in	2021-11-15 13:11:43.000000000 +0100
++++ mod/schemas/org.cinnamon.desktop.screensaver.gschema.xml.in	2021-11-17 18:24:16.077636321 +0100
+@@ -77,21 +77,21 @@
+       </description>
+     </key>
+     <key name="font-date" type="s">
+-      <default>"Ubuntu 24"</default>
++      <default>"Cantarell 24"</default>
+       <summary>The date time font</summary>
+       <description>
+         This is the font that the date uses for the screen locker.
+       </description>
+     </key>
+     <key name="font-time" type="s">
+-      <default>"Ubuntu 64"</default>
++      <default>"Cantarell 64"</default>
+       <summary>The time font</summary>
+       <description>
+         This is the font that the time uses for the screen locker.
+       </description>
+     </key>
+     <key name="font-message" type="s">
+-      <default>"Ubuntu 14"</default>
++      <default>"Cantarell 14"</default>
+       <summary>The away message font</summary>
+       <description>
+         This is the font that the away message use for the screen locker.

@@ -1,0 +1,55 @@
+From 6c6c990727caa881b7b3f045dfaa0a167d347507 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Tue, 4 May 2021 09:58:54 +0900
+Subject: [PATCH] blurb: show 1/100 sec on linux
+
+---
+ driver/blurb.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/driver/blurb.c b/driver/blurb.c
+index d732a9b..010923b 100644
+--- a/driver/blurb.c
++++ b/driver/blurb.c
+@@ -28,8 +28,23 @@ blurb (void)
+   struct tm tm;
+   time_t now;
+   int i;
++#ifdef __linux__
++  struct timespec tp;
++  unsigned int sec_per_100 = 0;
++#endif
++
++#ifdef __linux__
++  if ( (clock_gettime(CLOCK_REALTIME_COARSE, &tp)) == 0 )
++  {
++    now = tp.tv_sec;
++    sec_per_100 = tp.tv_nsec / 10000000; /* 10^9 / 10^7 */
++  }
++  else
++#endif
++  {
++    now = time ((time_t *) 0);
++  }
+ 
+-  now = time ((time_t *) 0);
+   localtime_r (&now, &tm);
+   i = strlen (progname);
+   if (i > 40) i = 40;
+@@ -44,6 +59,13 @@ blurb (void)
+   buf[i++] = ':';
+   buf[i++] = '0' + (tm.tm_sec >= 10 ? tm.tm_sec/10 : 0);
+   buf[i++] = '0' + (tm.tm_sec % 10);
++
++#ifdef __linux__
++  buf[i++] = '.';
++  buf[i++] = '0' + (sec_per_100 >= 10 ? sec_per_100/10 : 0);
++  buf[i++] = '0' + (sec_per_100 % 10);
++#endif
++
+   buf[i] = 0;
+   return buf;
+ }
+-- 
+2.31.1
+
