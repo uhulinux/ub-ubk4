@@ -1,0 +1,29 @@
+From af813d73f39a3c023ceb9fe41bdadd5dd72f42bc Mon Sep 17 00:00:00 2001
+From: Ingo Blechschmidt <iblech@web.de>
+Date: Sun, 10 Jan 2021 16:04:07 +0000
+Subject: [PATCH 8/9] Make mirror checkbox not override the chosen level
+
+---
+ menu/jumpnbump_menu.py.pre | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/menu/jumpnbump_menu.py.pre b/menu/jumpnbump_menu.py.pre
+index bfd8f90..7b62e8e 100644
+--- a/menu/jumpnbump_menu.py.pre
++++ b/menu/jumpnbump_menu.py.pre
+@@ -163,9 +163,9 @@ def get_level():
+     level = []
+     if (mirror.get_active()):
+         level.append('-mirror')
+-    else:
+-        level.append('-dat')
+-        level.append(choosen_level)
++
++    level.append('-dat')
++    level.append(choosen_level)
+ 
+     return level
+ 
+-- 
+2.33.0
+

@@ -1,0 +1,39 @@
+From 8a6873baa395f16048c6865f7036650a3b2bbe76 Mon Sep 17 00:00:00 2001
+From: Frank Birbacher <frank.birbacher@gmail.com>
+Date: Sun, 27 Dec 2020 12:59:33 +0000
+Subject: [PATCH 9/9] Fix dj channel signedness
+
+---
+ dj.h        | 2 +-
+ sdl/sound.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dj.h b/dj.h
+index 07f4a32..985548b 100644
+--- a/dj.h
++++ b/dj.h
+@@ -115,7 +115,7 @@ extern void dj_mix(void);
+ extern char dj_set_num_sfx_channels(char num_channels);
+ extern void dj_set_sfx_volume(char volume);
+ extern char dj_get_sfx_volume(void);
+-extern void dj_play_sfx(unsigned char sfx_num, unsigned short freq, char volume, char panning, unsigned short delay, char channel);
++extern void dj_play_sfx(unsigned char sfx_num, unsigned short freq, char volume, char panning, unsigned short delay, signed char channel);
+ extern char dj_get_sfx_settings(unsigned char sfx_num, sfx_data *data);
+ extern char dj_set_sfx_settings(unsigned char sfx_num, sfx_data *data);
+ extern void dj_set_sfx_channel_volume(char channel_num, char volume);
+diff --git a/sdl/sound.c b/sdl/sound.c
+index ff1ee7e..4ea56af 100644
+--- a/sdl/sound.c
++++ b/sdl/sound.c
+@@ -357,7 +357,7 @@ void dj_set_sfx_volume(char volume)
+ 	SDL_UnlockAudio();
+ }
+ 
+-void dj_play_sfx(unsigned char sfx_num, unsigned short freq, char volume, char panning, unsigned short delay, char channel)
++void dj_play_sfx(unsigned char sfx_num, unsigned short freq, char volume, char panning, unsigned short delay, signed char channel)
+ {
+ 	int slot;
+ 
+-- 
+2.33.0
+

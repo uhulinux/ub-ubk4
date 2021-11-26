@@ -1,0 +1,66 @@
+From ae43333d1ccd0ecfb82ad0ef034aea2be3e03664 Mon Sep 17 00:00:00 2001
+From: Solene Rapenne <solene@perso.pw>
+Date: Tue, 17 Dec 2019 18:10:44 +0100
+Subject: [PATCH 2/9] update network usage documentation
+
+---
+ README.md        |  8 ++++----
+ dist/jumpnbump.6 | 14 ++++++--------
+ 2 files changed, 10 insertions(+), 12 deletions(-)
+
+diff --git a/README.md b/README.md
+index 4810374..aaa394c 100644
+--- a/README.md
++++ b/README.md
+@@ -42,12 +42,12 @@ You can launch them with `jumpnbump -dat levelname.dat`.
+ Jump 'n Bump can be played in multiplayer over the network. This can be done
+ with these commands:
+ 
+-Player 1: `jumpnbump -port 7777 -net 0 <ip_or_hostname_of_player2> <port_of_player2>`
+-Player 2: `jumpnbump -port 7777 -net 1 <ip_or_hostname_of_player1> <port_of_player1>`
++Player 1: `jumpnbump -server 1`
++Player 2: `jumpnbump -connect <ip_or_hostname_of_player1>`
+ 
+-You have to make sure that the port udp/7777 is open in your firewall.
++You have to make sure that the port tcp/11111 is open in your firewall.
+ 
+-You can add -net 2 and -net 3 for 3rd and 4th player, and make sure that all
++You can add -server 2 and -server 3 for 3rd and 4th player, and make sure that all
+ the players are using the same `-dat level.dat`, if any.
+ 
+ ## Compilation
+diff --git a/dist/jumpnbump.6 b/dist/jumpnbump.6
+index 040fb37..de747db 100644
+--- a/dist/jumpnbump.6
++++ b/dist/jumpnbump.6
+@@ -2,7 +2,7 @@
+ .SH NAME
+ jumpnbump \- Cute multiplayer platform game with bunnies
+ .SH SYNOPSIS
+-jumpnbump \fR[\fB-dat \fIlevelname\fR] [\fB-port \fIport \fB-net \fIplayer hostname rport\fR] [\fB-fullscreen\fR] [\fB-nosound\fR] [\fB-musicnosound\fR] [\fB-nogore\fR] [\fB-noflies\fR] [\fB-mirror\fR] [\fB-scaleup\fR] [\fB-v\fR] [\fB-h\fR]
++jumpnbump \fR[\fB-dat \fIlevelname\fR] [\fB-server \fIclients_number\fR] [\fB-connect \fIhostname\fR] [\fB-fullscreen\fR] [\fB-nosound\fR] [\fB-musicnosound\fR] [\fB-nogore\fR] [\fB-noflies\fR] [\fB-mirror\fR] [\fB-scaleup\fR] [\fB-v\fR] [\fB-h\fR]
+ .SH DESCRIPTION
+ You, as a bunny, have to jump on your opponents to make them
+ explode. It's a true multiplayer game, you can't play this alone.
+@@ -10,13 +10,11 @@ It has network support.
+ .SH OPTIONS
+ .IP "-dat \fIlevelname\fR"
+ Load \fIlevelname\fR and use it as the level for this game.
+-.IP "-port \fIport\fR"
+-Use \fIport\fR as the port to listen on for a network game. Use this
+-with -net.
+-.IP "-net \fIplayer hostname rport"
+-Connect (using a network) to another person running Jump 'n Bump on
+-\fIhostname\fR, and listening on \fIrport\fR. You will be player
+-number \fIplayer\fR.
++.IP "-server \fIclients_number\fR"
++Start as a server waiting on port TCP 11111 and wait for \fIclient_numbers\fR
++clients to connect before starting the game.
++.IP "-connect \fIhostname"
++Connect (using IP network) to remote server \fIhostname\fR.
+ .IP "-fullscreen"
+ Run Jump 'n Bump in fullscreen mode.
+ .IP "-nosound"
+-- 
+2.33.0
+

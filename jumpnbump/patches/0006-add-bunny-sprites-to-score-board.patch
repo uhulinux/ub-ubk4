@@ -1,0 +1,37 @@
+From 05e377b77098dfbf81228dbf94e32e1450059128 Mon Sep 17 00:00:00 2001
+From: Fabian Greffrath <fabian@greffrath.com>
+Date: Thu, 7 May 2020 15:26:59 +0200
+Subject: [PATCH 6/9] add bunny sprites to score board
+
+---
+ main.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/main.c b/main.c
+index 87b4e95..8b9dca5 100644
+--- a/main.c
++++ b/main.c
+@@ -781,8 +781,20 @@ static int menu_loop(void)
+ 
+ 		register_background(NULL, NULL);
+ 
++		main_info.page_info[0].num_pobs = 0;
++		main_info.page_info[1].num_pobs = 0;
++
++		for (c1 = 0; c1 < JNB_MAX_PLAYERS; c1++) {
++			static const int x[] = {100, 160, 220, 280}, y[] = {80, 110, 140, 170};
++
++			add_pob(main_info.view_page, x[c1] - 5, 30, player[c1].image + c1 * 18, &rabbit_gobs);
++			add_pob(main_info.view_page, 60, y[c1] - 2, player[c1].image + c1 * 18, &rabbit_gobs);
++		}
++
+ 		draw_begin();
+ 
++		draw_pobs(main_info.view_page);
++
+ 		put_text(main_info.view_page, 100, 50, "DOTT", 2);
+ 		put_text(main_info.view_page, 160, 50, "JIFFY", 2);
+ 		put_text(main_info.view_page, 220, 50, "FIZZ", 2);
+-- 
+2.33.0
+
