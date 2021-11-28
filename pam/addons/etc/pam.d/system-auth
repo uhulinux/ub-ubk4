@@ -15,7 +15,7 @@ session		required	pam_env.so
 session		required	pam_envfeed.so
 session		required	pam_limits.so
 session     required    pam_loginuid.so
-session     required    pam_systemd.so
+session     required    pam_systemd.so kill-session-processes=1
 session		[success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
 session		optional	pam_lastlog.so never
 session		optional	pam_motd.so
