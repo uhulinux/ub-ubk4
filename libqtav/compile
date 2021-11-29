@@ -1,4 +1,11 @@
 #!/bin/sh -eux
 
-qmake "CONFIG+=no_rpath recheck no-examples" QtAV.pro
-ub_make
+# qmake "CONFIG+=no_rpath recheck no-examples" QtAV.pro
+# ub_make
+git clone https://github.com/wang-bin/capi.git contrib/capi
+
+ub_compile \
+    -DBUILD_EXAMPLES=OFF \
+    -DBUILD_TESTS=OFF \
+    -DQT_INSTALL_QML=/usr/lib/qt5/qml \
+    -DQTAV_INSTALL_QML=/usr/lib/qt5/qml
