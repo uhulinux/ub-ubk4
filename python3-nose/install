@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+python3 setup.py install --prefix=/usr --root="$UB_INSTALLDIR"
+rm -rf ${UB_INSTALLDIR}/usr/share/man
+mv ${UB_INSTALLDIR}/usr/man ${UB_INSTALLDIR}/usr/share/
