@@ -1,6 +1,15 @@
 diff -Naur orig/epson-printer-utility-1.0.2/configure.ac patched/epson-printer-utility-1.0.2/configure.ac
 --- orig/epson-printer-utility-1.0.2/configure.ac	2017-04-24 03:51:11.000000000 +0200
-+++ patched/epson-printer-utility-1.0.2/configure.ac	2018-12-29 23:41:32.312986045 +0100
++++ patched/epson-printer-utility-1.0.2/configure.ac	2021-12-04 01:27:38.632366269 +0100
+@@ -3,7 +3,7 @@
+ 
+ AC_PREREQ()
+ AC_INIT(PrinterUtility, 1.0.2, epson@localdomain)
+-AM_INIT_AUTOMAKE
++AM_INIT_AUTOMAKE([gnu nostdinc subdir-objects 1.7.6 --warnings=all])
+ 
+ 
+ AC_CONFIG_SRCDIR(PrinterUtility/Main.cpp)
 @@ -15,9 +15,9 @@
  PACKAGE_NAME=$EPS_PREFIX-utility
  AC_SUBST(PACKAGE_NAME)
@@ -23,3 +32,158 @@ diff -Naur orig/epson-printer-utility-1.0.2/configure.ac patched/epson-printer-u
  fi
  AC_SUBST(LIBARCH)
  
+@@ -73,8 +73,6 @@
+ # Save this value here, since automake will set cflags later
+ cflags_set=${CFLAGS+set}
+ 
+-AM_INIT_AUTOMAKE([gnu nostdinc subdir-objects 1.7.6 --warnings=all])
+-
+ LIBUSB_VERSION=$VERSION
+ 
+ #
+@@ -259,26 +257,6 @@
+     AC_DEFINE_UNQUOTED(HAVE_OLD_DEV_USB_USB_H)])
+ fi
+ 
+-#pkg-config: pkg-config is a tool to simplify checks for libraries and versions.
+-pkgconfig_msg="no (http://www.epson.co.jp)"
+-try_pkgconfig=true
+-have_pkgconfig=false
+-AC_ARG_WITH(pkgconfig, [  --without-pkgconfig     don"t use pkg-config],[
+-  if test x$withval = xno; then
+-    try_pkgconfig=false
+-    pkgconfig_msg="no (not requested)"
+-  fi])
+-if $try_pkgconfig; then
+-  AC_PATH_PROG(PKG_CONFIG,pkg-config)
+-  if test -n "${PKG_CONFIG}"; then
+-    have_pkgconfig=true
+-    pkgconfig_msg="yes"
+-  fi
+-fi
+-# guessing directory to install *.pc into
+-pkgconfigdir="${libdir}/pkgconfig"
+-AC_SUBST(pkgconfigdir)
+-
+ # Check if the user wants to enable documentation
+ AC_MSG_CHECKING(if we should build the documentation)
+ AC_ARG_ENABLE(build-docs, [  --disable-build-docs    turn off building documentation],
+diff -Naur orig/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am patched/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am
+--- orig/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am	2015-04-21 10:25:50.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am	2021-12-04 01:31:52.325672081 +0100
+@@ -1,3 +1,5 @@
++export CC=g++
++
+ noinst_LIBRARIES = libEPSCommonLib.a
+ 
+ 
+@@ -16,28 +18,32 @@
+   		-DGCOMSW_EL_CDLABEL	\
+   		-DGCOMSW_EF_MAINTE
+ 
+-AM_CFLAGS=-w -c \
++AM_CFLAGS=-w -c -fPIC \
+ 	-I./escpr-lib/inc \
+ 	-I./epsmp/linux \
+ 	-I./epsmp	\
+ 	-I./..
+-AM_CXXFLAGS=-w -c
++AM_CXXFLAGS=-w -c -fPIC
+ 
+ AM_CPPFLAGS = \
+ 	-I./escpr-lib/inc \
+ 	-I./epsmp/linux \
+ 	-I./epsmp	\
+ 	-I./..	\
+-	-I/opt/lsb/include/QtCore	\
+-	-I/opt/lsb/include
++	-I/usr/include/qt5 \
++	-I/usr/include/qt5/QtCore \
++	-I/usr/include/qt5/QtGui \
++	-I/usr/include/qt5/QtWidgets \
++	-I/usr/include/qt5/QtNetwork
+ 
+ libEPSCommonLib_a_LIBADD = \
+-	/opt/lsb/$(LIBARCH)/libQtCore.so \
+-	/opt/lsb/$(LIBARCH)/libQtGui.so \
+-	/opt/lsb/$(LIBARCH)/libpthread.so \
+-	/opt/lsb/$(LIBARCH)/libcupsimage.so \
+-	/opt/lsb/$(LIBARCH)/libcups.so \
+-   /opt/lsb/$(LIBARCH)/libQtNetwork.so
++	/usr/$(LIBARCH)/libQt5Core.so \
++	/usr/$(LIBARCH)/libQt5Gui.so \
++	/usr/$(LIBARCH)/libQt5Widgets.so \
++	/usr/$(LIBARCH)/libQt5Network.so \
++	/usr/$(LIBARCH)/libpthread.so \
++	/usr/$(LIBARCH)/libcupsimage.so \
++	/usr/$(LIBARCH)/libcups.so
+ 	
+ libEPSCommonLib_a_SOURCES = \
+ 	escpr-lib/src/epson-cbt.c	\
+@@ -58,7 +64,7 @@
+ 	escpr-lib/src/epson-usb.c	\
+ 	escpr-lib/src/epson-wifi.c	\
+ 	epsmp/linux/epsmp-linux-portal-io.c \
+-	epsmp/linux/XAsyncSocket.c \
++	epsmp/linux/XAsyncSocket.cpp \
+ 	epsmp/linux/linux_cmn.c	\
+ 	epsmp/linux/linux_net.c	\
+ 	epsmp/epsmp-scale.c	\
+diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am patched/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am
+--- orig/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am	2016-07-21 07:38:30.000000000 +0200
++++ patched/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am	2021-12-04 01:30:13.269162379 +0100
+@@ -3,8 +3,8 @@
+ bindir=$(EPS_BIN_DIR)
+ bin_PROGRAMS =$(EPS_PREFIX)-utility
+ 
+-AM_CFLAGS=-g -w -c
+-AM_CXXFLAGS=-g -w 
++AM_CFLAGS=-g -w -c -fPIC
++AM_CXXFLAGS=-g -w -fPIC
+ 
+ if ARCH_CON
+     DEFS+=-DX86_64
+@@ -14,20 +14,18 @@
+ 	-DQT_NO_DEBUG_OUTPUT
+ 
+ __EPS_PREFIX__utility_CPPFLAGS = \
+-	-I/opt/lsb/include/QtCore \
+-	-I/opt/lsb/include/QtCore \
+-	-I/opt/lsb/include/QtGui \
+-	-I/opt/lsb/include/QtGui \
+-   -I/opt/lsb/include/QtNetwork \
++    -I/usr/include/qt5 \
++	-I/usr/include/qt5/QtCore \
++	-I/usr/include/qt5/QtGui \
++	-I/usr/include/qt5/QtWidgets \
++    -I/usr/include/qt5/QtNetwork \
+ 	-I/../EPUCommon	\
+ 	-I/..	\
+-	-I/opt/lsb/include \
+ 	-I../EPSCommonLib/	\
+ 	-I../EPSCommonLib/escpr-lib/inc \
+ 	-I../EPSCommonLib/epsmp/linux \
+ 	-I../EPSCommonLib/epsmp
+ 
+-
+ __EPS_PREFIX__utility_SOURCES = \
+ 	Main.cpp \
+ 	EPUMainWindow.cpp \
+@@ -53,10 +51,11 @@
+ 	qrc_Resources.cpp
+ 
+ __EPS_PREFIX__utility_LDADD = \
+-	/opt/lsb/$(LIBARCH)/libQtCore.so \
+-	/opt/lsb/$(LIBARCH)/libQtGui.so \
+-	/opt/lsb/$(LIBARCH)/libpthread.so \
+-	/opt/lsb/$(LIBARCH)/libcupsimage.so \
+-	/opt/lsb/$(LIBARCH)/libcups.so \
+-   /opt/lsb/$(LIBARCH)/libQtNetwork.so \
++	/usr/$(LIBARCH)/libQt5Core.so \
++	/usr/$(LIBARCH)/libQt5Gui.so \
++	/usr/$(LIBARCH)/libQt5Widgets.so \
++	/usr/$(LIBARCH)/libQt5Network.so \
++	/usr/$(LIBARCH)/libpthread.so \
++	/usr/$(LIBARCH)/libcupsimage.so \
++	/usr/$(LIBARCH)/libcups.so \
+ 	../EPSCommonLib/libEPSCommonLib.a

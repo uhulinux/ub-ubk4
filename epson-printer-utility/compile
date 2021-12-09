@@ -4,6 +4,7 @@
 find . -iname Makefile -delete
 
 cd epson-printer-utility-1.0.2
+libtoolize --force
 autoreconf -vif
 ub_configure
 ub_make clean
@@ -19,6 +20,8 @@ cd ..
 ub_make
 
 cd ../epson-backend-1.0.1
+rm -f m4/*
+libtoolize --force
 autoreconf -vif
 ub_configure
 ub_make clean
