@@ -1,0 +1,15 @@
+diff -Nur orig/setup.py mod/setup.py
+--- orig/setup.py	2021-08-17 08:07:24.000000000 +0200
++++ mod/setup.py	2021-12-20 10:17:21.748168052 +0100
+@@ -903,11 +903,6 @@
+ 
+ 
+ def create_linux_bundle_gunk(ddir: str, libdir_name: str) -> None:
+-    if not os.path.exists('docs/_build/html'):
+-        make = "gmake" if is_freebsd else "make"
+-        run_tool([make, 'docs'])
+-    copy_man_pages(ddir)
+-    copy_html_docs(ddir)
+     for (icdir, ext) in {'256x256': 'png', 'scalable': 'svg'}.items():
+         icdir = os.path.join(ddir, 'share', 'icons', 'hicolor', icdir, 'apps')
+         safe_makedirs(icdir)
