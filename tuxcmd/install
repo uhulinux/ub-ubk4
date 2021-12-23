@@ -1,4 +1,4 @@
 #!/bin/sh -eux
 
-make DESTDIR=$UB_INSTALLDIR/usr install
-rm -rf "$UB_INSTALLDIR"/usr/lib64
+chmod +x tuxcmd
+mv tuxcmd $UB_INSTALLDIR/usr/bin

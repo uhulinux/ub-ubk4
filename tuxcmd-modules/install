@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
-make DESTDIR=$UB_INSTALLDIR/usr install
+mkdir -p $UB_INSTALLDIR/usr/lib/tuxcmd
+mv *.so $UB_INSTALLDIR/usr/lib/tuxcmd/
