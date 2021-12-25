@@ -1,0 +1,27 @@
+diff -Nur orig/buildconfig/config_unix.py mod/buildconfig/config_unix.py
+--- orig/buildconfig/config_unix.py	2021-05-15 13:19:10.000000000 +0200
++++ mod/buildconfig/config_unix.py	2021-05-15 13:36:24.994229354 +0200
+@@ -213,12 +213,6 @@
+     ])
+     is_freebsd = 'FreeBSD' in platform.system()
+     is_hurd = platform.system() == 'GNU'
+-    if not is_freebsd and not is_hurd:
+-        porttime_dep = get_porttime_dep()
+-        DEPS.append(
+-            Dependency('PORTMIDI', 'portmidi.h', 'libportmidi.so', ['portmidi'])
+-        )
+-        DEPS.append(porttime_dep)
+     DEPS.append(find_freetype())
+ 
+     if not DEPS[0].found:
+diff -Nur orig/buildconfig/Setup.SDL2.in mod/buildconfig/Setup.SDL2.in
+--- orig/buildconfig/Setup.SDL2.in	2021-05-15 13:19:10.000000000 +0200
++++ mod/buildconfig/Setup.SDL2.in	2021-05-15 13:27:07.820290902 +0200
+@@ -28,7 +28,6 @@
+ mixer src_c/mixer.c $(SDL) $(MIXER) $(DEBUG)
+ mixer_music src_c/music.c $(SDL) $(MIXER) $(DEBUG)
+ scrap src_c/scrap.c $(SDL) $(SCRAP) $(DEBUG)
+-pypm src_c/pypm.c $(SDL) $(PORTMIDI) $(PORTTIME) $(DEBUG)
+ 
+ _sdl2.sdl2 src_c/_sdl2/sdl2.c $(SDL) $(DEBUG) -Isrc_c
+ _sdl2.audio src_c/_sdl2/audio.c $(SDL) $(DEBUG) -Isrc_c
