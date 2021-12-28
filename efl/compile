@@ -3,12 +3,14 @@
 # luajit kell
 
 # profile: release, debug, dev
+export CFLAGS+=' -fvisibility=hidden'
 ub_compile \
 	-Dwl=true \
 	-Dfb=true \
 	-Dbuild-examples=false \
 	-Dbuild-tests=false \
-	-Devas-loaders-disabler=json,avif
+	-Devas-loaders-disabler=json,avif,heif \
+    -Ddrm=true
 
 for size in 16 24 32 48 64; do
     convert data/elementary/desktop/elementary.png -resize ${size}x${size} data/elementary/desktop/elementary_${size}.png
