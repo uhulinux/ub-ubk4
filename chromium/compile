@@ -9,6 +9,10 @@ fi
 
 # gcc-vel sokkal gyorsabb a build, mivel használja a ccache-t
 # linkelni viszont az lld-vel kell (use_lld=true), a többi elszáll
+# export CC=gcc
+# export CXX=g++
+# export AR=ar
+# export NM=nm
 export CC=clang
 export CXX=clang++
 export AR=llvm-ar
@@ -23,6 +27,7 @@ custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 host_toolchain=\"//build/toolchain/linux/unbundle:default\"
 is_debug=false
 cc_wrapper=\"ccache\"
+clang_base_path=\"/usr\"
 is_clang=false
 is_cfi=false
 is_official_build=true
