@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+echo "$UB_COMPILEDIR"
+sed -i 's/opt/usr\/lib/' "$UB_COMPILEDIR"/usr/share/applications/cisco-pt.desktop
+sed -i 's/opt/usr\/lib/' "$UB_COMPILEDIR"/usr/share/applications/cisco-ptsa.desktop
+sed -i 's/opt/usr\/lib/' "$UB_COMPILEDIR"/opt/pt/packettracer
+sed -i 's/opt/usr\/lib/' "$UB_COMPILEDIR"/opt/pt/linguist
