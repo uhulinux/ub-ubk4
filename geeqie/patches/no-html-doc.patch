@@ -1,53 +1,24 @@
-diff -Naur orig/Makefile.am patched/Makefile.am
---- orig/Makefile.am	2019-07-26 20:19:11.000000000 +0200
-+++ patched/Makefile.am	2019-08-04 19:12:32.632535496 +0200
-@@ -10,9 +10,9 @@
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2022-01-16 15:23:16.000000000 +0100
++++ mod/Makefile.am	2022-01-17 17:42:30.076781873 +0100
+@@ -10,9 +10,8 @@
  readmedir = @readmedir@
  
  if HAVE_MARKDOWN
 -readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS README.html ChangeLog.html
-+readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS
- else
+-else
 -readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS ChangeLog.html
++readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS
 +readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS
  endif
  
  desktopdir = $(datadir)/applications
-@@ -37,9 +37,3 @@
- DISTCLEANFILES = config.report
- CLEANFILES = $(desktop_DATA) ChangeLog.html
+@@ -49,8 +48,4 @@
+ CLEANFILES = $(desktop_DATA) ChangeLog.html $(appdata_DATA)
  
--.PHONY: ChangeLog
+ .PHONY: ChangeLog
 -ChangeLog.html:
 -	./gen_changelog.sh
--
--README.html: README.md
--	./gen_readme.sh
-diff -Naur orig/Makefile.in patched/Makefile.in
---- orig/Makefile.in	2019-07-26 20:19:11.000000000 +0200
-+++ patched/Makefile.in	2019-08-04 19:13:41.553152325 +0200
-@@ -485,8 +485,8 @@
- SUBDIRS = src po doc plugins
- DIST_SUBDIRS = src po doc plugins
- man_MANS = geeqie.1
--@HAVE_MARKDOWN_FALSE@readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS ChangeLog.html
--@HAVE_MARKDOWN_TRUE@readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS README.html ChangeLog.html
-+@HAVE_MARKDOWN_FALSE@readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS
-+@HAVE_MARKDOWN_TRUE@readme_DATA = README.md COPYING ChangeLog TODO README.lirc AUTHORS
- desktopdir = $(datadir)/applications
- desktop_in_files = geeqie.desktop.in
- desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@@ -1149,13 +1149,6 @@
- dist-hook: geeqie.spec
- 	cp $(top_builddir)/geeqie.spec $(distdir)
  
--.PHONY: ChangeLog
--ChangeLog.html:
--	./gen_changelog.sh
--
 -README.html: README.md
 -	./gen_readme.sh
--
- # Tell versions [3.59,3.63) of GNU make to not export all variables.
- # Otherwise a system limit (for SysV at least) may be exceeded.
- .NOEXPORT:

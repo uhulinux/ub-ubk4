@@ -1,7 +1,4 @@
 #!/bin/sh -eux
 
-export LDFLAGS='-Wl,--as-needed'
-
-ub_compile \
-	--enable-lirc \
-	--disable-gpu-accel
+NOCONFIGURE=1 ./autogen.sh
+ub_compile
