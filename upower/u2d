@@ -1,3 +1,2 @@
-#tag=$(u2d https://gitlab.freedesktop.org/upower/upower/tags/)
-#echo ${tag//_/.}
-u2d https://upower.freedesktop.org/releases/ upower-
+urllist https://gitlab.freedesktop.org/upower/upower/-/tags/ | grep tar | sed s/.*UPOWER_/upower-/ | sed s/_/./g | parsever | sort -V | tail -n1
+#u2d https://upower.freedesktop.org/releases/ upower-
