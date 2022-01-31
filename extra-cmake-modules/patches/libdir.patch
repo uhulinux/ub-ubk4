@@ -1,7 +1,7 @@
-diff -Naur orig/kde-modules/KDEInstallDirs.cmake patched/kde-modules/KDEInstallDirs.cmake
---- orig/kde-modules/KDEInstallDirs.cmake	2019-12-05 22:14:02.000000000 +0100
-+++ patched/kde-modules/KDEInstallDirs.cmake	2019-12-27 18:00:41.048697665 +0100
-@@ -242,35 +242,6 @@
+diff -Naur orig/kde-modules/KDEInstallDirsCommon.cmake patched/kde-modules/KDEInstallDirsCommon.cmake
+--- orig/kde-modules/KDEInstallDirsCommon.cmake	2021-12-02 07:14:53.000000000 +0100
++++ patched/kde-modules/KDEInstallDirsCommon.cmake	2021-12-25 13:37:07.669746257 +0100
+@@ -15,35 +15,6 @@
  # GNUInstallDirs code deals with re-configuring, but that is dealt with
  # by the _define_* macros in this module).
  set(_LIBDIR_DEFAULT "lib")
@@ -37,7 +37,7 @@ diff -Naur orig/kde-modules/KDEInstallDirs.cmake patched/kde-modules/KDEInstallD
  
  set(_gnu_install_dirs_vars
      BINDIR
-@@ -450,7 +421,7 @@
+@@ -236,7 +207,7 @@
  _define_relative(SBINDIR EXECROOTDIR "sbin"
      "system admin executables"
      SBIN_INSTALL_DIR)
