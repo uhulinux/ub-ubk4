@@ -1,2 +1,1 @@
-alap=$(sflist nagios | grep nrpe- | sort | tail -n 1)
-sflist nagios "$alap"  | splitver '^nrpe-([0-9.]+).tar.gz$' | sort -V | tail -n 1
+u2d https://github.com/NagiosEnterprises/nrpe/tags/ nrpe-

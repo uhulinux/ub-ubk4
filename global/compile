@@ -1,4 +1,8 @@
 #!/bin/sh -eux
 
+autoreconf -vif
+export PYTHON=/usr/bin/python3
 ub_compile \
-	--with-exuberant-ctags=/usr/bin/ctags
+	--with-exuberant-ctags=/usr/bin/etags \
+    --with-sqlite3 \
+    --with-universal-ctags=/usr/bin/ctags

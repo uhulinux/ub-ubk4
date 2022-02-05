@@ -1,6 +1,6 @@
-diff -Naur hostapd-2.9-orig/hostapd/defconfig hostapd-2.9/hostapd/defconfig
---- hostapd-2.9-orig/hostapd/defconfig	2019-08-07 15:25:25.000000000 +0200
-+++ hostapd-2.9/hostapd/defconfig	2019-10-04 19:06:09.359899169 +0200
+diff -Nur orig/hostapd/defconfig mod/hostapd/defconfig
+--- orig/hostapd/defconfig	2022-01-16 21:51:29.000000000 +0100
++++ mod/hostapd/defconfig	2022-01-30 16:36:11.441613307 +0100
 @@ -13,7 +13,7 @@
  CONFIG_DRIVER_HOSTAP=y
  
@@ -10,7 +10,7 @@ diff -Naur hostapd-2.9-orig/hostapd/defconfig hostapd-2.9/hostapd/defconfig
  
  # Driver interface for drivers using the nl80211 kernel interface
  CONFIG_DRIVER_NL80211=y
-@@ -81,34 +81,34 @@
+@@ -75,34 +75,34 @@
  CONFIG_EAP_TTLS=y
  
  # EAP-SIM for the integrated EAP server
@@ -53,7 +53,7 @@ diff -Naur hostapd-2.9-orig/hostapd/defconfig hostapd-2.9/hostapd/defconfig
  
  # EAP-TEAP for the integrated EAP server
  # Note: The current EAP-TEAP implementation is experimental and should not be
-@@ -121,17 +121,17 @@
+@@ -115,17 +115,17 @@
  #CONFIG_EAP_TEAP=y
  
  # Wi-Fi Protected Setup (WPS)
@@ -76,7 +76,7 @@ diff -Naur hostapd-2.9-orig/hostapd/defconfig hostapd-2.9/hostapd/defconfig
  
  # EAP-EKE for the integrated EAP server
  #CONFIG_EAP_EKE=y
-@@ -142,20 +142,20 @@
+@@ -136,13 +136,13 @@
  
  # RADIUS authentication server. This provides access to the integrated EAP
  # server from external hosts using RADIUS.
@@ -92,11 +92,22 @@ diff -Naur hostapd-2.9-orig/hostapd/defconfig hostapd-2.9/hostapd/defconfig
  
  # Use the hostapd's IEEE 802.11 authentication (ACL), but without
  # the IEEE 802.11 Management capability (e.g., FreeBSD/net80211)
- #CONFIG_DRIVER_RADIUS_ACL=y
- 
- # IEEE 802.11n (High Throughput) support
--#CONFIG_IEEE80211N=y
+@@ -410,3 +410,18 @@
+ # DPP version 3 support (experimental and still changing; do not enable for
+ # production use)
+ #CONFIG_DPP3=y
++
++# custom configuration options
++
++# IEEE 802.11F/IAPP
++CONFIG_IAPP=y
++
++# IEEE 802.11w (management frame protection)
++CONFIG_IEEE80211W=y
++
++# IEEE 802.11n (High Throughput) support
 +CONFIG_IEEE80211N=y
- 
- # Wireless Network Management (IEEE Std 802.11v-2011)
- # Note: This is experimental and not complete implementation.
++
++CONFIG_MESH=y
++CONFIG_SAE=y
++CONFIG_WPS2=y

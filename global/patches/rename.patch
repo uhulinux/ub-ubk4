@@ -1,0 +1,21 @@
+diff -Nur orig/global/global.c mod/global/global.c
+--- orig/global/global.c	2021-12-17 12:39:48.000000000 +0100
++++ mod/global/global.c	2022-01-30 10:38:09.000000000 +0100
+@@ -1098,7 +1098,7 @@
+ {
+ 	FILE *ip;
+ 	STRBUF *sb = strbuf_open(0);
+-	char *lid = usable("lid");
++	char *lid = usable("lid-idutils");
+ 	char *line, *p;
+ 	char *argv[10];
+ 	int i = 0;
+@@ -1307,7 +1307,7 @@
+ 	STRBUF *ib = strbuf_open(0);
+ 	char encoded_pattern[IDENTLEN];
+ 	char path[MAXPATHLEN];
+-	char *lid = usable("lid");
++	char *lid = usable("lid-idutils");
+ 	int linenum, count;
+ 	char *p, *q, *grep;
+ 	char *argv[20];
