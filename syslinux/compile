@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-sed -i 's|win32/syslinux.exe||g' Makefile
-export LDFLAGS+=--no-dynamic-linker
-export EXTRA_CFLAGS=-fno-PIE
-export UB_MAKE_PROCS=1
-ub_make bios efi64

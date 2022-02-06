@@ -1,1 +1,0 @@
-urllist https://repo.or.cz/syslinux.git/tags/ | grep syslinux- | sed -e "s/syslinux-//" | grep -E "^[0-9]" | sort -V | tail -n1 | tr "-" "~"
