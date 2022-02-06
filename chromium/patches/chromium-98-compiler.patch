@@ -1,20 +1,21 @@
 diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUILD.gn
---- orig/build/config/compiler/BUILD.gn	2021-12-31 01:57:18.000000000 +0100
-+++ patched/build/config/compiler/BUILD.gn	2022-01-05 01:16:34.549679505 +0100
-@@ -296,8 +296,6 @@
+--- orig/build/config/compiler/BUILD.gn	2022-02-01 01:41:38.000000000 +0100
++++ patched/build/config/compiler/BUILD.gn	2022-02-02 11:25:53.558417570 +0100
+@@ -291,9 +291,6 @@
  
    configs += [
      # See the definitions below.
 -    ":clang_revision",
+-    ":rustc_revision",
 -    ":compiler_cpu_abi",
      ":compiler_codegen",
      ":compiler_deterministic",
    ]
-@@ -539,24 +537,6 @@
+@@ -534,31 +531,6 @@
      ldflags += [ "-Wl,-z,keep-text-section-prefix" ]
    }
  
--  if (is_clang && !is_nacl && !use_xcode_clang && current_os != "zos") {
+-  if (is_clang && !is_nacl && current_os != "zos") {
 -    cflags += [ "-fcrash-diagnostics-dir=" + clang_diagnostic_dir ]
 -
 -    # TODO(hans): Remove this once Clang generates better optimized debug info
@@ -30,12 +31,19 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
 -        ldflags += [ "-Wl,-mllvm,-instcombine-lower-dbg-declare=0" ]
 -      }
 -    }
+-
+-    # TODO(crbug.com/1235145): Investigate why/if this should be needed.
+-    if (is_win) {
+-      cflags += [ "/clang:-ffp-contract=off" ]
+-    } else {
+-      cflags += [ "-ffp-contract=off" ]
+-    }
 -  }
 -
    # C11/C++11 compiler flags setup.
    # ---------------------------
    if (is_linux || is_chromeos || is_android || (is_nacl && is_clang) ||
-@@ -1251,45 +1231,6 @@
+@@ -1231,45 +1203,6 @@
      }
    }
  
@@ -81,7 +89,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    # Tells the compiler not to use absolute paths when passing the default
    # paths to the tools it invokes. We don't want this because we don't
    # really need it and it can mess up the goma cache entries.
-@@ -1567,7 +1508,7 @@
+@@ -1556,7 +1489,7 @@
        defines = [ "_HAS_NODISCARD" ]
      }
    } else {
@@ -90,7 +98,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
      if (treat_warnings_as_errors) {
        cflags += [ "-Werror" ]
  
-@@ -1576,10 +1517,6 @@
+@@ -1565,10 +1498,6 @@
        # well.
        ldflags = [ "-Werror" ]
      }
@@ -101,7 +109,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
  
      # In Chromium code, we define __STDC_foo_MACROS in order to get the
      # C99 macros on Mac and Linux.
-@@ -1588,15 +1525,6 @@
+@@ -1577,15 +1506,6 @@
        "__STDC_FORMAT_MACROS",
      ]
  
@@ -117,7 +125,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
      if (is_mac) {
        cflags_objc = [ "-Wobjc-missing-property-synthesis" ]
        cflags_objcc = [ "-Wobjc-missing-property-synthesis" ]
-@@ -1964,7 +1892,8 @@
+@@ -1988,7 +1908,8 @@
  }
  
  # Default "optimization on" config.
@@ -127,7 +135,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    if (is_win) {
      if (chrome_pgo_phase != 2) {
        # Favor size over speed, /O1 must be before the common flags.
-@@ -2004,7 +1933,8 @@
+@@ -2026,7 +1947,8 @@
  }
  
  # Turn off optimizations.
@@ -137,7 +145,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    if (is_win) {
      cflags = [
        "/Od",  # Disable optimization.
-@@ -2044,7 +1974,8 @@
+@@ -2066,7 +1988,8 @@
  # Turns up the optimization level. On Windows, this implies whole program
  # optimization and link-time code generation which is very expensive and should
  # be used sparingly.
@@ -147,7 +155,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    if (is_nacl && is_nacl_irt) {
      # The NaCl IRT is a special case and always wants its own config.
      # Various components do:
-@@ -2077,7 +2008,8 @@
+@@ -2099,7 +2022,8 @@
  #
  # TODO(crbug.com/621335) - rework how all of these configs are related
  # so that we don't need this disclaimer.
@@ -157,7 +165,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    if (is_nacl && is_nacl_irt) {
      # The NaCl IRT is a special case and always wants its own config.
      # Various components do:
-@@ -2103,7 +2035,8 @@
+@@ -2125,7 +2049,8 @@
    }
  }
  
@@ -167,7 +175,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    cflags = [ "-O1" ] + common_optimize_on_cflags
    rustflags = [ "-Copt-level=1" ]
    ldflags = common_optimize_on_ldflags
-@@ -2223,7 +2156,8 @@
+@@ -2245,7 +2170,8 @@
  }
  
  # Full symbols.
@@ -177,7 +185,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    if (is_win) {
      if (is_clang) {
        cflags = [ "/Z7" ]  # Debug information in the .obj files.
-@@ -2348,7 +2282,8 @@
+@@ -2369,7 +2295,8 @@
  # Minimal symbols.
  # This config guarantees to hold symbol for stack trace which are shown to user
  # when crash happens in unittests running on buildbot.
@@ -187,7 +195,7 @@ diff -Naur orig/build/config/compiler/BUILD.gn patched/build/config/compiler/BUI
    if (is_win) {
      # Functions, files, and line tables only.
      cflags = []
-@@ -2418,7 +2353,8 @@
+@@ -2438,7 +2365,8 @@
  # This configuration contains function names only. That is, the compiler is
  # told to not generate debug information and the linker then just puts function
  # names in the final debug information.
