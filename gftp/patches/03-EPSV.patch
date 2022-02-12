@@ -1,0 +1,34 @@
+From fd8e18d49f350e96337b7e7a4b3b6ecca14649e5 Mon Sep 17 00:00:00 2001
+From: wdlkmpx <wdlkmpx@gmail.com>
+Date: Fri, 11 Feb 2022 20:04:32 +0800
+Subject: [PATCH] ftp.c: EPSV: deal with a broken server or `pure-ftpd -b`
+
+---
+ lib/protocol_ftp.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/lib/protocol_ftp.c b/lib/protocol_ftp.c
+index 263d580..5113ee8 100644
+--- a/lib/protocol_ftp.c
++++ b/lib/protocol_ftp.c
+@@ -816,6 +816,20 @@ static int ftp_do_data_connection_new (gftp_request * request)
+   {
+       if (USE_EPSV) {
+           resp = ftp_send_command (request, "EPSV\r\n", -1, 1, 1);
++          if (resp == '5') {
++              // deal with a broken server or pure-ftpd -b
++              request->logging_function (gftp_logging_error, request, _("* The server is broken!\n"));
++              if (AFPROT == AF_INET6) {
++                  gftp_disconnect (request);
++                  return GFTP_ERETRYABLE;
++              }
++              request->logging_function (gftp_logging_error, request, "* Or maybe it's pure-FTPd with `BrokenClientsCompatibility=yes`, `pure-ftpd -b`, `pure-ftpd --brokenclientscompatibility`\n");
++              USE_EPSV = USE_EPRT = 0;
++              ftpdat->feat[FTP_FEAT_EPSV] = 0;
++              ftpdat->feat[FTP_FEAT_EPRT] = 0;
++              ftpdat->feat[FTP_FEAT_MLSD] = 0;
++              resp = ftp_send_command (request, "PASV\r\n", -1, 1, 1);
++          }
+       } else {
+           resp = ftp_send_command (request, "PASV\r\n", -1, 1, 1);
+       }
