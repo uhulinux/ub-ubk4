@@ -1,1 +1,2 @@
-sflist sdedit sdedit/4.0 | splitver '^sdedit-([0-9.]+)-src.tar.gz$' | sort -V | tail -n 1
+dir=$(sflist sdedit sdedit | sort -V | tail -n 1)
+sflist sdedit sdedit/$dir | grep src | sed s/sdedit-// | sed s/-.*//

@@ -1,1 +1,1 @@
-sflist ufraw ufraw | splitver '^ufraw-([0-9.]+)$' | sort -V | tail -n 1
+curl -k -s https://raw.githubusercontent.com/sergiomb2/ufraw/master/configure.ac | grep AC_INIT | sed 's/.*\].\[//g' | sed 's/\].*//'
