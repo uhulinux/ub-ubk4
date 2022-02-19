@@ -1,8 +1,8 @@
 #!/bin/sh -eux
 
-dpkg-deb -x opera-stable_${UB_VERSION}_amd64.deb .
+# dpkg-deb -x opera-stable_${UB_VERSION}_amd64.deb .
 
-rm -f opera-stable_*.deb
+# rm -f opera-stable_*.deb
 
 cd usr/share/applications
 patch -i $UB_SRCDIR/patches/desktop.patch.skip
