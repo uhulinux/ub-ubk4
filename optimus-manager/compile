@@ -1,9 +1,3 @@
 #!/bin/sh -eux
-echo 251i > patch.ed
-echo '           "\tModulePath \"/usr/lib/xorg/modules\"\n" \' >> patch.ed
-echo '.' >> patch.ed
-echo 'w' >> patch.ed
-echo 'q' >> patch.ed
-ed optimus_manager/xorg.py < patch.ed
-#egy kis hekizes, mert rossz helyen keresi az xorg modulokat nvidiahoz
+
 /usr/bin/python3 setup.py build

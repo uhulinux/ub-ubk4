@@ -41,10 +41,3 @@ install -Dm755 config/nvidia-enable.sh "${UB_INSTALLDIR}/etc/optimus-manager/nvi
 install -Dm755 config/nvidia-disable.sh "${UB_INSTALLDIR}/etc/optimus-manager/nvidia-disable.sh"
 
 /usr/bin/python3 setup.py install --root="${UB_INSTALLDIR}/" --optimize=1 --skip-build
-
-echo "Az optimus-manager.service engedelyezese..."
-
-mkdir -p ${UB_INSTALLDIR}/usr/lib/systemd/system/graphical.target.wants/
-ln -s ${UB_INSTALLDIR}/usr/lib/systemd/system/optimus-manager.service ${UB_INSTALLDIR}/usr/lib/systemd/system/graphical.target.wants/optimus-manager.service
-
-echo "Az optimus-manager helyes mukodesehez ujra kell inditanod a szamitogepet!"
