@@ -1,0 +1,19 @@
+diff -Naur a/optimus_manager/xorg.py b/optimus_manager/xorg.py
+--- a/optimus_manager/xorg.py	2021-02-28 04:55:37.000000000 +0100
++++ b/optimus_manager/xorg.py	2022-02-20 17:36:27.967991071 +0100
+@@ -243,12 +243,9 @@
+ 
+     return "Section \"Files\"\n" \
+            "\tModulePath \"/usr/lib/nvidia\"\n" \
+-           "\tModulePath \"/usr/lib32/nvidia\"\n" \
+-           "\tModulePath \"/usr/lib32/nvidia/xorg/modules\"\n" \
+-           "\tModulePath \"/usr/lib32/xorg/modules\"\n" \
+-           "\tModulePath \"/usr/lib64/nvidia/xorg/modules\"\n" \
+-           "\tModulePath \"/usr/lib64/nvidia/xorg\"\n" \
+-           "\tModulePath \"/usr/lib64/xorg/modules\"\n" \
++           "\tModulePath \"/usr/lib/xorg/modules\"\n" \
++           "\tModulePath \"/usr/lib/nvidia/xorg/modules\"\n" \
++           "\tModulePath \"/usr/lib/nvidia/xorg\"\n" \
+            "EndSection\n\n"
+ 
+ 
