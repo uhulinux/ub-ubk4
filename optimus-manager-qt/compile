@@ -1,0 +1,6 @@
+#!/bin/sh -xeu
+
+mkdir ${UB_COMPILEDIR}/build
+cd build
+cmake -D CMAKE_INSTALL_PREFIX="${UB_INSTALLDIR}/usr" ..
+cmake --build .

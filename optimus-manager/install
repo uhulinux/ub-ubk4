@@ -1,0 +1,50 @@
+#!/bin/sh -eux
+
+echo "optimus-managert telepitem..."
+
+install -Dm644 LICENSE "${UB_INSTALLDIR}/usr/share/licenses/optimus-manager/LICENSE"
+install -Dm644 modules/optimus-manager.conf "${UB_INSTALLDIR}/usr/lib/modprobe.d/optimus-manager.conf"
+install -Dm644 systemd/optimus-manager.service "${UB_INSTALLDIR}/usr/lib/systemd/system/optimus-manager.service"
+#meghekizzuk, a gyari konfig intel igpukkal fixen nem lesz jo (legalabbis Intel HD 5500-zal fixen nem)
+#ha modesettingen hagyom a drivert akkor No display hibaval elszall az X.org
+
+sed -i '59s/modesetting/intel/g' optimus-manager.conf
+
+#hekizes vege
+
+install -Dm644 optimus-manager.conf "${UB_INSTALLDIR}/usr/share/optimus-manager.conf"
+
+install -Dm644 systemd/logind/10-optimus-manager.conf "${UB_INSTALLDIR}/usr/lib/systemd/logind.conf.d/10-optimus-manager.conf"
+install -Dm755 systemd/suspend/optimus-manager.py "${UB_INSTALLDIR}/usr/lib/systemd/system-sleep/optimus-manager.py"
+
+#meg tobb hekizes, mert /sbin alatt keresgel...
+
+sed -i 's/sbin/bin/g' login_managers/sddm/20-optimus-manager.conf
+sed -i 's/sbin/bin/g' login_managers/lightdm/20-optimus-manager.conf
+
+#hekizes vege
+
+install -Dm644 login_managers/sddm/20-optimus-manager.conf "${UB_INSTALLDIR}/etc/sddm.conf.d/20-optimus-manager.conf"
+install -Dm644 login_managers/lightdm/20-optimus-manager.conf "${UB_INSTALLDIR}/etc/lightdm/lightdm.conf.d/20-optimus-manager.conf"
+
+install -Dm644 config/xorg/integrated-mode/integrated-gpu.conf "${UB_INSTALLDIR}/etc/optimus-manager/xorg/integrated-mode/integrated-gpu.conf"
+install -Dm644 config/xorg/nvidia-mode/nvidia-gpu.conf "${UB_INSTALLDIR}/etc/optimus-manager/xorg/nvidia-mode/nvidia-gpu.conf"
+install -Dm644 config/xorg/nvidia-mode/integrated-gpu.conf "${UB_INSTALLDIR}/etc/optimus-manager/xorg/nvidia-mode/integrated-gpu.conf"
+install -Dm644 config/xorg/hybrid-mode/integrated-gpu.conf "${UB_INSTALLDIR}/etc/optimus-manager/xorg/hybrid-mode/integrated-gpu.conf"
+install -Dm644 config/xorg/hybrid-mode/nvidia-gpu.conf "${UB_INSTALLDIR}/etc/optimus-manager/xorg/hybrid-mode/nvidia-gpu.conf"
+
+install -Dm755 config/xsetup-nvidia.sh "${UB_INSTALLDIR}/etc/optimus-manager/xsetup-nvidia.sh"
+install -Dm755 config/xsetup-hybrid.sh "${UB_INSTALLDIR}/etc/optimus-manager/xsetup-hybrid.sh"
+install -Dm755 config/xsetup-integrated.sh "${UB_INSTALLDIR}/etc/optimus-manager/xsetup-integrated.sh"
+
+install -Dm755 config/nvidia-enable.sh "${UB_INSTALLDIR}/etc/optimus-manager/nvidia-enable.sh"
+install -Dm755 config/nvidia-disable.sh "${UB_INSTALLDIR}/etc/optimus-manager/nvidia-disable.sh"
+
+/usr/bin/python3 setup.py install --root="${UB_INSTALLDIR}/" --optimize=1 --skip-build
+
+echo "Az optimus-manager.service engedelyezese..."
+
+mkdir -p ${UB_INSTALLDIR}/usr/lib/systemd/system/graphical.target.wants/
+ln -s ${UB_INSTALLDIR}/usr/lib/systemd/system/optimus-manager.service ${UB_INSTALLDIR}/usr/lib/systemd/system/graphical.target.wants/optimus-manager.service
+
+echo "Az optimus-manager helyes mukodesehez ujra kell inditanod a szamitogepet!"
