@@ -1,2 +1,1 @@
-#urllist 'http://mirror.pcbeta.com/google/rpm/i386/google-chrome32/' | splitver '^google-chrome-stable-([0-9.]+)-1.i386.rpm$' | sort -V | tail -n 1
-urllist https://chromium.googlesource.com/chromium/src.git | grep -E '^([0-9][0-9][.][0-9.]+)' | sort -V | tail -n 1
+urllist https://chromereleases.googleblog.com/search/label/Stable%20updates | grep -E 'pretty=fuller' | sed -e 's/\?pretty.*//' -e 's/.*\.\.//' | sort -V | tail -n1
