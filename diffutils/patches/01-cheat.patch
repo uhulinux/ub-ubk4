@@ -1,7 +1,7 @@
 diff -Naur orig/configure patched/configure
---- orig/configure	2016-08-21 07:21:59.134741323 +0200
-+++ patched/configure	2017-04-30 01:09:07.416434071 +0200
-@@ -5641,7 +5641,7 @@
+--- orig/configure	2021-08-02 03:56:20.000000000 +0200
++++ patched/configure	2021-08-02 23:04:55.290212192 +0200
+@@ -6267,7 +6267,7 @@
  
  
  
@@ -11,9 +11,9 @@ diff -Naur orig/configure patched/configure
  if test -n "$ac_tool_prefix"; then
    # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
 diff -Naur orig/doc/diffutils.info patched/doc/diffutils.info
---- orig/doc/diffutils.info	2016-08-21 07:22:04.134741323 +0200
-+++ patched/doc/diffutils.info	2017-04-30 01:14:20.476419130 +0200
-@@ -1865,6 +1865,15 @@
+--- orig/doc/diffutils.info	2021-08-02 03:56:25.000000000 +0200
++++ patched/doc/diffutils.info	2021-08-02 23:04:55.294212203 +0200
+@@ -1866,6 +1866,15 @@
  or 'cp -sR').  Before editing a file in the copy for the first time, you
  should break the link and replace it with a regular copy.
  
@@ -30,8 +30,8 @@ diff -Naur orig/doc/diffutils.info patched/doc/diffutils.info
  options that change the way it compares files.  Performance has more
  than one dimension.  These options improve one aspect of performance at
 diff -Naur orig/man/diff.1 patched/man/diff.1
---- orig/man/diff.1	2016-08-21 07:22:04.134741323 +0200
-+++ patched/man/diff.1	2017-04-30 01:09:07.440434367 +0200
+--- orig/man/diff.1	2021-08-02 03:56:25.000000000 +0200
++++ patched/man/diff.1	2021-08-02 23:04:55.294212203 +0200
 @@ -235,6 +235,24 @@
  If \fB\-\-from\-file\fR or \fB\-\-to\-file\fR is given, there are no restrictions on FILE(s).
  If a FILE is '\-', read standard input.
@@ -58,9 +58,9 @@ diff -Naur orig/man/diff.1 patched/man/diff.1
  Written by Paul Eggert, Mike Haertel, David Hayes,
  Richard Stallman, and Len Tower.
 diff -Naur orig/src/diff.c patched/src/diff.c
---- orig/src/diff.c	2016-08-09 03:50:37.134741323 +0200
-+++ patched/src/diff.c	2017-04-30 01:09:07.440434367 +0200
-@@ -103,7 +103,11 @@
+--- orig/src/diff.c	2021-06-12 07:50:55.000000000 +0200
++++ patched/src/diff.c	2021-08-02 23:08:19.210768329 +0200
+@@ -105,7 +105,11 @@
  /* Report files compared that are the same (-s).
     Normally nothing is output when that happens.  */
  static bool report_identical_files;
@@ -73,32 +73,32 @@ diff -Naur orig/src/diff.c patched/src/diff.c
  static char const shortopts[] =
  "0123456789abBcC:dD:eEfF:hHiI:lL:nNpPqrsS:tTuU:vwW:x:X:yZ";
  
-@@ -655,6 +659,7 @@
- 	}
+@@ -659,6 +663,7 @@
+         }
        prev = c;
      }
 +  cheat = (getenv("DIFF_DONT_CHEAT") == NULL);
  
    if (colors_style == AUTO)
      {
-@@ -1268,9 +1273,11 @@
+@@ -1274,9 +1279,11 @@
    else if ((same_files
- 	    = (cmp.file[0].desc != NONEXISTENT
- 	       && cmp.file[1].desc != NONEXISTENT
--	       && 0 < same_file (&cmp.file[0].stat, &cmp.file[1].stat)
-+	       && (( 0 < same_file (&cmp.file[0].stat, &cmp.file[1].stat)
- 	       && same_file_attributes (&cmp.file[0].stat,
--					&cmp.file[1].stat)))
-+					&cmp.file[1].stat))
-+	       || (cheat && most_likely_same_content (&cmp.file[0].stat,
-+						      &cmp.file[1].stat)))))
- 	   && no_diff_means_no_output)
+             = (cmp.file[0].desc != NONEXISTENT
+                && cmp.file[1].desc != NONEXISTENT
+-               && 0 < same_file (&cmp.file[0].stat, &cmp.file[1].stat)
++               && (( 0 < same_file (&cmp.file[0].stat, &cmp.file[1].stat)
+                && same_file_attributes (&cmp.file[0].stat,
+-                                        &cmp.file[1].stat)))
++                                        &cmp.file[1].stat))
++    	       || (cheat && most_likely_same_content (&cmp.file[0].stat,
++    						      &cmp.file[1].stat)))))
+            && no_diff_means_no_output)
      {
        /* The two named files are actually the same physical file.
 diff -Naur orig/src/system.h patched/src/system.h
---- orig/src/system.h	2016-08-05 01:37:45.134741323 +0200
-+++ patched/src/system.h	2017-04-30 01:09:07.444434416 +0200
-@@ -211,4 +211,15 @@
+--- orig/src/system.h	2021-01-02 02:37:49.000000000 +0100
++++ patched/src/system.h	2021-08-02 23:04:55.294212203 +0200
+@@ -229,6 +229,17 @@
      && (s)->st_ctime == (t)->st_ctime)
  #endif
  
@@ -114,3 +114,5 @@ diff -Naur orig/src/system.h patched/src/system.h
 +#endif
 +
  #define STREQ(a, b) (strcmp (a, b) == 0)
+ 
+ #ifndef FALLTHROUGH

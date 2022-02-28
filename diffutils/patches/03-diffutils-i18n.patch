@@ -1,7 +1,7 @@
 diff -Naur orig/src/diff.c patched/src/diff.c
---- orig/src/diff.c	2017-04-30 01:09:07.440434367 +0200
-+++ patched/src/diff.c	2017-04-30 01:22:49.563151561 +0200
-@@ -75,6 +75,8 @@
+--- orig/src/diff.c	2021-08-02 23:08:19.210768329 +0200
++++ patched/src/diff.c	2021-08-02 23:19:20.688543752 +0200
+@@ -77,6 +77,8 @@
  static void check_stdout (void);
  static void usage (void);
  
@@ -10,9 +10,9 @@ diff -Naur orig/src/diff.c patched/src/diff.c
  /* If comparing directories, compare their common subdirectories
     recursively.  */
  static bool recursive;
-@@ -300,6 +302,13 @@
-   re_set_syntax (RE_SYNTAX_GREP | RE_NO_POSIX_BACKTRACKING);
-   excluded = new_exclude ();
+@@ -304,6 +306,13 @@
+   presume_output_tty = false;
+   xstdopen ();
  
 +#ifdef HANDLE_MULTIBYTE
 +  if (MB_CUR_MAX > 1)
@@ -25,8 +25,8 @@ diff -Naur orig/src/diff.c patched/src/diff.c
  
    while ((c = getopt_long (argc, argv, shortopts, longopts, NULL)) != -1)
 diff -Naur orig/src/diff.h patched/src/diff.h
---- orig/src/diff.h	2016-08-05 01:37:45.134741323 +0200
-+++ patched/src/diff.h	2017-04-30 01:22:49.563151561 +0200
+--- orig/src/diff.h	2021-01-02 02:37:49.000000000 +0100
++++ patched/src/diff.h	2021-08-02 23:19:20.688543752 +0200
 @@ -23,6 +23,17 @@
  #include <stdio.h>
  #include <unlocked-io.h>
@@ -59,8 +59,8 @@ diff -Naur orig/src/diff.h patched/src/diff.h
  extern struct change *find_change (struct change *);
  extern struct change *find_reverse_change (struct change *);
 diff -Naur orig/src/io.c patched/src/io.c
---- orig/src/io.c	2016-08-05 01:37:45.134741323 +0200
-+++ patched/src/io.c	2017-04-30 01:22:49.571151668 +0200
+--- orig/src/io.c	2021-01-02 02:37:49.000000000 +0100
++++ patched/src/io.c	2021-08-02 23:21:40.752947545 +0200
 @@ -23,6 +23,7 @@
  #include <cmpbuf.h>
  #include <file-type.h>
@@ -400,20 +400,20 @@ diff -Naur orig/src/io.c patched/src/io.c
 +
        /* Hash this line until we find a newline.  */
        switch (ig_white_space)
- 	{
+         {
 @@ -397,7 +710,7 @@
- 	    else if (!diff_length_compare_anyway)
- 	      continue;
+             else if (!diff_length_compare_anyway)
+               continue;
  
--	    if (! lines_differ (eqline, ip))
-+	    if (! lines_differ (eqline, eqs[i].length + 1, ip, length + 1))
- 	      break;
- 	  }
+-            if (! lines_differ (eqline, ip))
++            if (! lines_differ (eqline, eqs[i].length + 1, ip, length + 1))
+               break;
+           }
  
 diff -Naur orig/src/util.c patched/src/util.c
---- orig/src/util.c	2016-08-17 22:37:55.134741323 +0200
-+++ patched/src/util.c	2017-04-30 01:22:49.583151829 +0200
-@@ -986,7 +986,8 @@
+--- orig/src/util.c	2021-01-02 02:37:49.000000000 +0100
++++ patched/src/util.c	2021-08-02 23:19:20.688543752 +0200
+@@ -985,7 +985,8 @@
     Return nonzero if the lines differ.  */
  
  bool
@@ -423,7 +423,7 @@ diff -Naur orig/src/util.c patched/src/util.c
  {
    register char const *t1 = s1;
    register char const *t2 = s2;
-@@ -1142,6 +1143,354 @@
+@@ -1141,6 +1142,354 @@
  
    return true;
  }
