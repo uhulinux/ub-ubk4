@@ -1,5 +1,4 @@
 #!/bin/sh -eux
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=$UB_VERSION
-rm exercises.py
-python3 setup.py build
+python -m build --wheel --no-isolation
