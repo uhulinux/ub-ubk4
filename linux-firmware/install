@@ -6,8 +6,6 @@
 
 make -C linux-firmware DESTDIR=${UB_INSTALLDIR} install
 
-cp -r nouveau ${UB_INSTALLDIR}/lib/firmware/
-
 cp -a dvb-firmware/* ${UB_INSTALLDIR}/lib/firmware
 
 rm -Rf ${UB_INSTALLDIR}/lib/firmware/.git
