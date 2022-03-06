@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+2to3 -w -n nose
 python3 setup.py install --prefix=/usr --root="$UB_INSTALLDIR"
 rm -rf ${UB_INSTALLDIR}/usr/share/man
 mv ${UB_INSTALLDIR}/usr/man ${UB_INSTALLDIR}/usr/share/

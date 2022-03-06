@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+sed -e '/\/usr\/local\/share\/jupyter/d' -i jupyter_core/paths.py
+python3 setup.py build
