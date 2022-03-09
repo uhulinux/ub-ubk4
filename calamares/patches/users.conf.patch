@@ -1,6 +1,6 @@
 diff -Naur orig/src/modules/users/users.conf patched/src/modules/users/users.conf
---- orig/src/modules/users/users.conf	2020-12-04 14:51:48.000000000 +0100
-+++ patched/src/modules/users/users.conf	2020-12-06 19:31:39.486125069 +0100
+--- orig/src/modules/users/users.conf	2022-03-04 14:42:13.000000000 +0100
++++ patched/src/modules/users/users.conf	2022-03-09 13:43:43.056586921 +0100
 @@ -32,13 +32,6 @@
      - name: users
        must_exist: true
@@ -21,6 +21,6 @@ diff -Naur orig/src/modules/users/users.conf patched/src/modules/users/users.con
  # potentially confusing users.
 -sudoersGroup:    wheel
 +# sudoersGroup:    wheel
- 
- # Setting this to false, causes the root account to be disabled.
- # When disabled, hides the "Use the same password for administrator"
+ # If set to `false` (the default), writes a sudoers file with `(ALL)`
+ # so that the command can be run as any user. If set to `true`, writes
+ # `(ALL:ALL)` so that any user and any group can be chosen.

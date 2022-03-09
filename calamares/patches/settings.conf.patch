@@ -1,7 +1,12 @@
 diff -Naur orig/settings.conf patched/settings.conf
---- orig/settings.conf	2021-08-05 14:51:31.000000000 +0200
-+++ patched/settings.conf	2021-08-16 20:39:37.365922940 +0200
-@@ -120,38 +120,26 @@
+--- orig/settings.conf	2022-03-04 14:42:13.000000000 +0100
++++ patched/settings.conf	2022-03-09 13:40:15.476176653 +0100
+@@ -115,44 +115,30 @@
+ sequence:
+ - show:
+   - welcome
+-#  - notesqml
+   - locale
    - keyboard
    - partition
    - users
@@ -13,6 +18,7 @@ diff -Naur orig/settings.conf patched/settings.conf
 -#  - dummyprocess
 -#  - dummypython
    - partition
+-#  - zfs
    - mount
 -  - unpackfs
 +  - chrootcfg
@@ -46,7 +52,7 @@ diff -Naur orig/settings.conf patched/settings.conf
    - finished
  
  # A branding component is a directory, either in SHARE/calamares/branding or
-@@ -232,3 +220,8 @@
+@@ -233,3 +219,8 @@
  #
  #
  quit-at-end: false

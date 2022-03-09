@@ -1,12 +1,12 @@
 diff -Naur orig/src/modules/grubcfg/main.py patched/src/modules/grubcfg/main.py
---- orig/src/modules/grubcfg/main.py	2020-01-28 17:42:21.000000000 +0100
-+++ patched/src/modules/grubcfg/main.py	2020-01-30 22:19:26.272566225 +0100
-@@ -141,7 +141,7 @@
-                         )
-                 ]
+--- orig/src/modules/grubcfg/main.py	2022-03-04 14:42:13.000000000 +0100
++++ patched/src/modules/grubcfg/main.py	2022-03-09 13:19:37.861641392 +0100
+@@ -172,7 +172,7 @@
+             if partition["fs"] == "zfs" and partition["mountPoint"] == "/":
+                 zfs_root_path = get_zfs_root()
  
--    kernel_params = ["quiet"]
-+    kernel_params = []
+-    kernel_params = libcalamares.job.configuration.get("kernel_params", ["quiet"])
++    kernel_params = libcalamares.job.configuration.get("kernel_params", [])
  
-     if cryptdevice_params:
-         kernel_params.extend(cryptdevice_params)
+     # Currently, grub doesn't detect this properly so it must be set manually
+     if zfs_root_path:
