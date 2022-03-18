@@ -36,3 +36,7 @@ rm -rf ${UB_INSTALLDIR}/usr/share/doc/icewm
 rm -rf $icewmmappa/themes/SilverXP/FreeBSD
 rm -f $icewmmappa/taskbar/xfreeos2.xpm
 rm -f $icewmmappa/taskbar/debian.xpm
+
+#preferences módosítások
+sed 's/\# ConfirmLogout\=1/ConfirmLogout\=0/' -i ${UB_INSTALLDIR}/usr/share/icewm/preferences
+sed 's/\# TaskBarShowCollapseButton=0/TaskBarShowCollapseButton=1/' -i ${UB_INSTALLDIR}/usr/share/icewm/preferences
