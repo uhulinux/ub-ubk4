@@ -1,7 +1,17 @@
 #!/bin/sh -eux
 
+if [ -d .git ]; then
 git submodule init
 git submodule update
+else
+git clone https://github.com/flaviotordini/idle lib/idle
+git clone https://github.com/flaviotordini/media lib/media
+git clone https://github.com/flaviotordini/http lib/http
+git clone https://github.com/flaviotordini/updater lib/updater
+git clone https://github.com/flaviotordini/js lib/js
+git clone https://github.com/flaviotordini/promises lib/promises
+fi
+
 qmake
 ub_replace -O3 -O2 Makefile
 ub_compile
