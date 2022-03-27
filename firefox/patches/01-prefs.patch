@@ -19,22 +19,11 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  // Disable add-ons that are not installed by the user in all scopes by default.
  // See the SCOPE constants in AddonManager.jsm for values to use here.
 -pref("extensions.autoDisableScopes", 15);
-+pref("extensions.autoDisableScopes", 0);
++pref("extensions.autoDisableScopes", 11);
 +pref("extensions.showMismatchUI", false);
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -67,8 +74,8 @@
- pref("extensions.webextensions.background-delayed-startup", true);
- 
- // Require signed add-ons by default
--pref("extensions.langpacks.signatures.required", true);
--pref("xpinstall.signatures.required", true);
-+pref("extensions.langpacks.signatures.required", false);
-+pref("xpinstall.signatures.required", false);
- pref("xpinstall.signatures.devInfoURL", "https://wiki.mozilla.org/Addons/Extension_Signing");
- 
- // Enable extensionStorage storage actor by default
 @@ -135,7 +142,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
