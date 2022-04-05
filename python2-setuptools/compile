@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
-
-sed -i -e "s,/usr/bin/env python,/usr/bin/env python2," setup.py
-python2 bootstrap.py
-python2 setup.py build
