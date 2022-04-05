@@ -1,6 +1,6 @@
 diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
---- orig/gio/glocalfileinfo.c	2020-03-11 13:21:39.000000000 +0100
-+++ patched/gio/glocalfileinfo.c	2020-05-16 02:20:29.632664845 +0200
+--- orig/gio/glocalfileinfo.c	1970-01-01 01:00:00.000000000 +0100
++++ patched/gio/glocalfileinfo.c	2021-03-16 23:45:33.998113586 +0100
 @@ -66,6 +66,12 @@
  #include "glib-private.h"
  
@@ -31,7 +31,7 @@ diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
  #ifndef G_OS_WIN32
  
  typedef struct {
-@@ -1358,16 +1374,132 @@
+@@ -1387,16 +1403,132 @@
    
  }
  
@@ -165,7 +165,7 @@ diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
  
    uri = g_filename_to_uri (path, NULL, NULL);
  
-@@ -1386,6 +1518,7 @@
+@@ -1415,6 +1547,7 @@
        _g_file_info_set_attribute_byte_string_by_id (info, G_FILE_ATTRIBUTE_ID_THUMBNAIL_PATH, filename);
        _g_file_info_set_attribute_boolean_by_id (info, G_FILE_ATTRIBUTE_ID_THUMBNAIL_IS_VALID,
                                                  thumbnail_verify (filename, uri, stat_buf));
@@ -173,7 +173,7 @@ diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
      }
    else
      {
-@@ -1399,6 +1532,7 @@
+@@ -1428,6 +1561,7 @@
            _g_file_info_set_attribute_byte_string_by_id (info, G_FILE_ATTRIBUTE_ID_THUMBNAIL_PATH, filename);
            _g_file_info_set_attribute_boolean_by_id (info, G_FILE_ATTRIBUTE_ID_THUMBNAIL_IS_VALID,
                                                      thumbnail_verify (filename, uri, stat_buf));
@@ -181,7 +181,7 @@ diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
          }
        else
          {
-@@ -1414,9 +1548,32 @@
+@@ -1443,9 +1577,32 @@
                _g_file_info_set_attribute_boolean_by_id (info, G_FILE_ATTRIBUTE_ID_THUMBNAILING_FAILED, TRUE);
                _g_file_info_set_attribute_boolean_by_id (info, G_FILE_ATTRIBUTE_ID_THUMBNAIL_IS_VALID,
                                                          thumbnail_verify (filename, uri, stat_buf));
@@ -214,7 +214,7 @@ diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
    g_free (basename);
    g_free (filename);
    g_free (uri);
-@@ -1770,6 +1927,18 @@
+@@ -1838,6 +1995,18 @@
  
    info = g_file_info_new ();
  
@@ -233,7 +233,7 @@ diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
    /* Make sure we don't set any unwanted attributes */
    g_file_info_set_attribute_mask (info, attribute_matcher);
    
-@@ -1904,7 +2073,9 @@
+@@ -1970,7 +2139,9 @@
        _g_file_attribute_matcher_matches_id (attribute_matcher,
  					    G_FILE_ATTRIBUTE_ID_STANDARD_ICON) ||
        _g_file_attribute_matcher_matches_id (attribute_matcher,
@@ -244,7 +244,7 @@ diff -Naur orig/gio/glocalfileinfo.c patched/gio/glocalfileinfo.c
      {
        char *content_type = get_content_type (basename, path, stat_ok ? &statbuf : NULL, is_symlink, symlink_broken, flags, FALSE);
  
-@@ -2021,9 +2192,9 @@
+@@ -2087,9 +2258,9 @@
                                              G_FILE_ATTRIBUTE_ID_THUMBNAILING_FAILED))
      {
        if (stat_ok)

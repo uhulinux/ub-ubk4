@@ -1,7 +1,7 @@
 diff -Naur orig/cmake/systemd.cmake patched/cmake/systemd.cmake
---- orig/cmake/systemd.cmake	2019-05-13 20:13:06.000000000 +0200
-+++ patched/cmake/systemd.cmake	2019-05-22 04:13:33.300975988 +0200
-@@ -46,8 +46,7 @@
+--- orig/cmake/systemd.cmake	2021-07-05 12:15:47.000000000 +0200
++++ patched/cmake/systemd.cmake	2021-07-20 02:55:43.991543933 +0200
+@@ -47,8 +47,7 @@
          SET(HAVE_SYSTEMD TRUE)
          SET(SYSTEMD_SCRIPTS mariadb-service-convert galera_new_cluster galera_recovery)
          IF(DEB)
@@ -9,5 +9,5 @@ diff -Naur orig/cmake/systemd.cmake patched/cmake/systemd.cmake
 -          SET(SYSTEMD_EXECSTARTPOST "ExecStartPost=/etc/mysql/debian-start")
 +          SET(SYSTEMD_EXECSTARTPOST "ExecStartPost=/usr/bin/mysqld-ping")
          ENDIF()
-         MESSAGE_ONCE(systemd "Systemd features enabled")
-       ELSE()
+ 	IF(URING_FOUND)
+ 	  SET(SYSTEMD_LIMIT "# For liburing and io_uring_setup()

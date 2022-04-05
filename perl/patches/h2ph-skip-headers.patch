@@ -1,0 +1,11 @@
+diff -Naur a/utils/h2ph.PL b/utils/h2ph.PL
+--- a/utils/h2ph.PL	2022-02-19 13:15:58.000000000 +0100
++++ b/utils/h2ph.PL	2022-03-29 02:33:19.607664248 +0200
+@@ -92,6 +92,7 @@
+ my ($t, $tab, %curargs, $new, $eval_index, $dir, $name, $args, $outfile);
+ my ($incl, $incl_type, $incl_quote, $next);
+ while (defined (my $file = next_file())) {
++    next if $file eq 'machine/ansi.h' || $file eq 'sys/_types.h' || $file eq 'asm/intrinsics.h' || $file eq 'mach_apicdef.h' || $file eq 'mach_mpspec.h' || $file eq 'bits/linux/close_range.h';
+     if (-l $file and -d $file) {
+         link_if_possible($file) if ($opt_l);
+         next;

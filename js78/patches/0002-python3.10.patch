@@ -1,0 +1,58 @@
+diff -Naur orig/python/mozbuild/mozbuild/backend/configenvironment.py patched/python/mozbuild/mozbuild/backend/configenvironment.py
+--- orig/python/mozbuild/mozbuild/backend/configenvironment.py	2021-09-28 12:04:57.000000000 +0200
++++ patched/python/mozbuild/mozbuild/backend/configenvironment.py	2021-12-19 19:26:18.399200552 +0100
+@@ -9,7 +9,8 @@
+ import sys
+ import json
+ 
+-from collections import Iterable, OrderedDict
++from collections import OrderedDict
++from collections.abc import Iterable
+ from types import ModuleType
+ 
+ import mozpack.path as mozpath
+diff -Naur orig/python/mozbuild/mozbuild/makeutil.py patched/python/mozbuild/mozbuild/makeutil.py
+--- orig/python/mozbuild/mozbuild/makeutil.py	2021-09-28 12:04:57.000000000 +0200
++++ patched/python/mozbuild/mozbuild/makeutil.py	2021-12-19 19:27:00.895470732 +0100
+@@ -7,7 +7,7 @@
+ import os
+ import re
+ import six
+-from collections import Iterable
++from collections.abc import Iterable
+ 
+ 
+ class Makefile(object):
+diff -Naur orig/python/mozbuild/mozbuild/util.py patched/python/mozbuild/mozbuild/util.py
+--- orig/python/mozbuild/mozbuild/util.py	2021-09-28 12:04:57.000000000 +0200
++++ patched/python/mozbuild/mozbuild/util.py	2021-12-19 19:36:09.534981025 +0100
+@@ -22,6 +22,7 @@
+ import stat
+ import sys
+ import time
++from collections.abc import Sequence
+ from collections import (
+     OrderedDict,
+ )
+@@ -782,7 +783,7 @@
+         self._strings = StrictOrderingOnAppendList()
+         self._children = {}
+ 
+-    class StringListAdaptor(collections.Sequence):
++    class StringListAdaptor(collections.abc.Sequence):
+         def __init__(self, hsl):
+             self._hsl = hsl
+ 
+diff -Naur orig/testing/mozbase/manifestparser/manifestparser/filters.py patched/testing/mozbase/manifestparser/manifestparser/filters.py
+--- orig/testing/mozbase/manifestparser/manifestparser/filters.py	2021-09-28 12:04:57.000000000 +0200
++++ patched/testing/mozbase/manifestparser/manifestparser/filters.py	2021-12-19 19:30:06.192651804 +0100
+@@ -12,7 +12,8 @@
+ 
+ import itertools
+ import os
+-from collections import defaultdict, MutableSequence
++from collections import defaultdict
++from collections.abc import MutableSequence
+ 
+ import six
+ from six import string_types

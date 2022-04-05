@@ -1,21 +1,21 @@
 diff -Naur orig/man/CMakeLists.txt patched/man/CMakeLists.txt
---- orig/man/CMakeLists.txt	2020-08-07 14:57:35.000000000 +0200
-+++ patched/man/CMakeLists.txt	2020-08-14 21:47:50.097369686 +0200
-@@ -16,7 +16,7 @@
- SET(MAN1_SERVER innochecksum.1 my_print_defaults.1 myisam_ftdump.1 myisamchk.1
+--- orig/man/CMakeLists.txt	2021-08-03 16:48:39.000000000 +0200
++++ patched/man/CMakeLists.txt	2021-09-19 00:47:55.893485339 +0200
+@@ -17,7 +17,7 @@
+ SET(MAN1_SERVER innochecksum.1 myisam_ftdump.1 myisamchk.1
                  aria_chk.1 aria_dump_log.1 aria_ftdump.1 aria_pack.1 aria_read_log.1
                  aria_s3_copy.1
 -		myisamlog.1 myisampack.1 mysql.server.1 mariadb-conv.1
 +		myisamlog.1 myisampack.1 mariadb-conv.1
- 		mysql_convert_table_format.1 mysql_fix_extensions.1
+ 		mysql_fix_extensions.1
  		mysql_install_db.1
- 		mysql_secure_installation.1 mysql_setpermission.1
+ 		mysql_upgrade.1
 diff -Naur orig/support-files/CMakeLists.txt patched/support-files/CMakeLists.txt
---- orig/support-files/CMakeLists.txt	2020-08-07 14:57:39.000000000 +0200
-+++ patched/support-files/CMakeLists.txt	2020-08-14 21:50:50.089339590 +0200
+--- orig/support-files/CMakeLists.txt	2021-08-03 16:48:41.000000000 +0200
++++ patched/support-files/CMakeLists.txt	2021-09-19 00:50:36.654028588 +0200
 @@ -50,8 +50,8 @@
  
- IF(UNIX)
+ IF(UNIX AND NOT WITHOUT_SERVER)
    SET(prefix ${CMAKE_INSTALL_PREFIX})
 -  FOREACH(script mysqld_multi.server mysql-log-rotate binary-configure wsrep_notify)
 -    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${script}.sh 
@@ -48,7 +48,7 @@ diff -Naur orig/support-files/CMakeLists.txt patched/support-files/CMakeLists.tx
 -        INSTALL(FILES ${out} DESTINATION ${inst_location}/policy/selinux COMPONENT SupportFiles)
 -      ENDFOREACH()
 -      IF(RPM)
--        EXECUTE_PROCESS(COMMAND rpm -q --qf "%{VERSION}-%{RELEASE}" libsepol
+-        EXECUTE_PROCESS(COMMAND rpm -q --qf "%{VERSION}" libsepol
 -                        OUTPUT_VARIABLE LIBSEPOL_VERSION RESULT_VARIABLE err)
 -        IF (NOT err)
 -          SET(CPACK_RPM_server_PACKAGE_REQUIRES
@@ -74,7 +74,7 @@ diff -Naur orig/support-files/CMakeLists.txt patched/support-files/CMakeLists.tx
  
    IF(HAVE_SYSTEMD)
      CONFIGURE_FILE(mariadb.service.in
-@@ -203,11 +176,5 @@
+@@ -220,11 +193,5 @@
                COMPONENT IniFiles)
      ENDIF()
  

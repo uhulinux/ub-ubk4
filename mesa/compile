@@ -14,8 +14,7 @@ ub_compile \
     -Dgallium-opencl=icd \
 	-Dgallium-omx=bellagio \
     -Dvulkan-drivers=amd,intel \
-    -Dvulkan-overlay-layer=true \
-    -Dvulkan-device-select-layer=true \
+    -Dvulkan-layers=device-select,intel-nullhw,overlay \
     -Dgles1=disabled \
     -Dgles2=enabled \
 	-Dgbm=enabled \
@@ -25,7 +24,6 @@ ub_compile \
 	-Dllvm=enabled \
 	-Dlibunwind=enabled \
 	-Dlmsensors=enabled \
-    -Dswr-arches=avx,avx2 \
 	-Dtools=all \
 	-Db_ndebug=true \
 	-Db_lto=true

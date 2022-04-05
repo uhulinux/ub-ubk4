@@ -1,0 +1,12 @@
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2020-11-26 19:00:50.000000000 +0100
++++ b/meson.build	2022-04-03 11:13:40.088789314 +0200
+@@ -43,7 +43,7 @@
+ 
+ want_ossfuzz = get_option('oss-fuzz')
+ want_libfuzzer = get_option('llvm-fuzz')
+-if want_ossfuzz + want_libfuzzer > 1
++if want_ossfuzz and want_libfuzzer > 1
+         error('only one of oss-fuzz or llvm-fuzz can be specified')
+ endif
+ 
