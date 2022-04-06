@@ -1,0 +1,29 @@
+diff -Naur a/data/meson.build b/data/meson.build
+--- a/data/meson.build	1970-01-01 01:00:00.000000000 +0100
++++ b/data/meson.build	2022-04-06 15:25:38.024472404 +0200
+@@ -2,7 +2,6 @@
+ desktop_conf.set('VERSION', glade_version)
+ 
+ i18n.merge_file(
+-  'desktop',
+   type: 'desktop',
+   input: configure_file(
+     input: 'org.gnome.Glade.desktop.in.in',
+@@ -18,7 +17,6 @@
+ appdata = glade_name + '.appdata.xml'
+ 
+ i18n.merge_file(
+-  'appdata',
+   input: 'org.gnome.Glade.appdata.xml.in',
+   output: '@BASENAME@',
+   po_dir: po_dir,
+diff -Naur a/help/LINGUAS b/help/LINGUAS
+--- a/help/LINGUAS	1970-01-01 01:00:00.000000000 +0100
++++ b/help/LINGUAS	2022-04-06 15:27:41.744882126 +0200
+@@ -1,6 +1,5 @@
+ # please keep this list sorted alphabetically
+ #
+-da
+ bg
+ ca
+ cs

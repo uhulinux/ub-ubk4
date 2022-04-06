@@ -1,8 +1,5 @@
 #!/bin/sh -eux
 
-jobs="-j${UB_MAKE_PROCS:-$(_procs)}"
-
 # Drop UB_INSTALLDIR because reference the chroot
 find "$UB_INSTALLDIR/usr/lib/cmake" -type f -name '*.cmake' \
 	-exec sed -i -e "s,$UB_INSTALLDIR,,g" {} \;
-ln -s Boost-${UB_VERSION} $UB_INSTALLDIR/usr/lib/cmake/Boost

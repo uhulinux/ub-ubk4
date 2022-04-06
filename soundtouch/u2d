@@ -1,1 +1,2 @@
-urllist https://codeberg.org/soundtouch/soundtouch/tags/ | grep -E '^([0-9.]+)$' | sort -V | tail -n 1
+curl -s -k https://codeberg.org/soundtouch/soundtouch/raw/branch/master/CMakeLists.txt | grep project | grep VERSION | sed -e "s/project(SoundTouch VERSION //" | sed -e "s/ LANGUAGES .*//"
+# u2d https://www.surina.net/soundtouch/

@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+export CFLAGS="-I/usr/include/python3.10"
 ub_configure
 
 find . -name Makefile | while read f; do

@@ -32,14 +32,6 @@ ln -s /usr/lib/java/{COPYRIGHT,LICENSE,README.html,THIRDPARTYLICENSEREADME.txt} 
 mv "$UB_INSTALLDIR"/usr/lib/java/jre/lib/desktop/{applications,icons,mime} "$UB_INSTALLDIR"/usr/share/
 rm -Rf "$UB_INSTALLDIR"/usr/lib/java/jre/lib/desktop
 
-# firefox plugin
-mkdir -p "$UB_INSTALLDIR"/usr/lib/firefox/plugins
-ln -s /usr/lib/java/jre/lib/"$UB_ARCH"/libnpjp2.so "$UB_INSTALLDIR"/usr/lib/firefox/plugins/
-
-# mozilla plugin
-mkdir -p "$UB_INSTALLDIR"/usr/lib/mozilla/plugins
-ln -s /usr/lib/java/jre/lib/"$UB_ARCH"/libnpjp2.so "$UB_INSTALLDIR"/usr/lib/mozilla/plugins/
-
 # fix permissions
 chmod -R a+rX,u+w,go-w "$UB_INSTALLDIR"
 

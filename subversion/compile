@@ -8,7 +8,7 @@ rm -rf neon
 ./get-deps.sh py3c
 
 export PYTHON=python3
-autoreconf -vif
+./autogen.sh
 ub_compile \
 	--with-apache-libexecdir=/usr/lib/apache \
 	--with-utf8proc=internal \

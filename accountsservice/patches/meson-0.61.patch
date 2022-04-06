@@ -1,0 +1,11 @@
+diff -Naur a/data/meson.build b/data/meson.build
+--- a/data/meson.build	2019-04-23 17:16:09.000000000 +0200
++++ b/data/meson.build	2022-04-06 13:30:08.376277544 +0200
+@@ -29,7 +29,6 @@
+ policy = act_namespace.to_lower() + '.policy'
+ 
+ i18n.merge_file(
+-  policy,
+   input: policy + '.in',
+   output: policy,
+   po_dir: po_dir,

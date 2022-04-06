@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
+rm -f CMakeLists.txt
+
 ub_compile \
-	--enable-sdl-dlopen \
 	--disable-arts --disable-esd --disable-nas \
 	--enable-alsa --enable-pulseaudio-shared \
 	--enable-video-wayland \

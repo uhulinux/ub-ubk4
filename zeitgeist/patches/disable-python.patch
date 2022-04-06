@@ -1,7 +1,7 @@
-diff -Naur orig/configure patched/configure
---- orig/configure	2020-10-15 08:46:04.000000000 +0200
-+++ patched/configure	2020-10-19 14:47:54.002093523 +0200
-@@ -814,15 +814,6 @@
+diff -Naur a/configure b/configure
+--- a/configure	2022-01-12 19:40:50.000000000 +0100
++++ b/configure	2022-04-02 18:45:29.938261094 +0200
+@@ -841,15 +841,6 @@
  LDFLAGS
  CFLAGS
  CC
@@ -9,15 +9,25 @@ diff -Naur orig/configure patched/configure
 -pyexecdir
 -pkgpythondir
 -pythondir
--PYTHON_PLATFORM
 -PYTHON_EXEC_PREFIX
 -PYTHON_PREFIX
+-PYTHON_PLATFORM
 -PYTHON_VERSION
 -PYTHON
  MAINT
  MAINTAINER_MODE_FALSE
  MAINTAINER_MODE_TRUE
-@@ -923,7 +914,6 @@
+@@ -928,9 +919,6 @@
+ enable_option_checking
+ enable_silent_rules
+ enable_maintainer_mode
+-with_python_sys_prefix
+-with_python_prefix
+-with_python_exec_prefix
+ enable_dependency_tracking
+ enable_static
+ enable_shared
+@@ -956,7 +944,6 @@
        ac_precious_vars='build_alias
  host_alias
  target_alias
@@ -25,7 +35,19 @@ diff -Naur orig/configure patched/configure
  CC
  CFLAGS
  LDFLAGS
-@@ -1621,7 +1611,6 @@
+@@ -1635,11 +1622,6 @@
+ Optional Packages:
+   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+-  --with-python-sys-prefix
+-                          use Python's sys.prefix and sys.exec_prefix values
+-  --with-python_prefix    override the default PYTHON_PREFIX
+-  --with-python_exec_prefix
+-                          override the default PYTHON_EXEC_PREFIX
+   --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
+                           both]
+   --with-aix-soname=aix|svr4|both
+@@ -1657,7 +1639,6 @@
                            Build the FTS extension with dee-icu
  
  Some influential environment variables:
@@ -33,22 +55,14 @@ diff -Naur orig/configure patched/configure
    CC          C compiler command
    CFLAGS      C compiler flags
    LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
-@@ -3225,270 +3214,6 @@
+@@ -3929,405 +3910,6 @@
  
-   MAINT=$MAINTAINER_MODE_TRUE
  
--
--
--
--
--
--
--
--
+ 
 -        if test -n "$PYTHON"; then
 -      # If the user set $PYTHON, use it and don't search something else.
--      { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $PYTHON version is >= 3" >&5
--$as_echo_n "checking whether $PYTHON version is >= 3... " >&6; }
+-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $PYTHON version is >= 3" >&5
+-printf %s "checking whether $PYTHON version is >= 3... " >&6; }
 -      prog="import sys
 -# split strings by '.' and convert to numeric.  Append some zeros
 -# because we need at least 4 digits for the hex conversion.
@@ -62,25 +76,27 @@ diff -Naur orig/configure patched/configure
 -   ($PYTHON -c "$prog") >&5 2>&5
 -   ac_status=$?
 -   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); }; then :
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
--$as_echo "yes" >&6; }
--else
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
--$as_echo "no" >&6; }
+-   (exit $ac_status); }
+-then :
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-printf "%s\n" "yes" >&6; }
+-else $as_nop
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-printf "%s\n" "no" >&6; }
 -			       as_fn_error $? "Python interpreter is too old" "$LINENO" 5
 -fi
 -      am_display_PYTHON=$PYTHON
 -    else
 -      # Otherwise, try each interpreter until we find one that satisfies
 -      # VERSION.
--      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for a Python interpreter with version >= 3" >&5
--$as_echo_n "checking for a Python interpreter with version >= 3... " >&6; }
--if ${am_cv_pathless_PYTHON+:} false; then :
--  $as_echo_n "(cached) " >&6
--else
+-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for a Python interpreter with version >= 3" >&5
+-printf %s "checking for a Python interpreter with version >= 3... " >&6; }
+-if test ${am_cv_pathless_PYTHON+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
 -
--	for am_cv_pathless_PYTHON in python python2 python3  python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3  python3.2 python3.1 python3.0  python2.7 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1  python2.0 none; do
+-	for am_cv_pathless_PYTHON in python python2 python3  python3.11 python3.10  python3.9 python3.8 python3.7 python3.6 python3.5 python3.4 python3.3  python3.2 python3.1 python3.0  python2.7 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1  python2.0 none; do
 -	  test "$am_cv_pathless_PYTHON" = none && break
 -	  prog="import sys
 -# split strings by '.' and convert to numeric.  Append some zeros
@@ -95,24 +111,26 @@ diff -Naur orig/configure patched/configure
 -   ($am_cv_pathless_PYTHON -c "$prog") >&5 2>&5
 -   ac_status=$?
 -   echo "$as_me:$LINENO: \$? = $ac_status" >&5
--   (exit $ac_status); }; then :
+-   (exit $ac_status); }
+-then :
 -  break
 -fi
 -	done
 -fi
--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_pathless_PYTHON" >&5
--$as_echo "$am_cv_pathless_PYTHON" >&6; }
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_pathless_PYTHON" >&5
+-printf "%s\n" "$am_cv_pathless_PYTHON" >&6; }
 -      # Set $PYTHON to the absolute path of $am_cv_pathless_PYTHON.
 -      if test "$am_cv_pathless_PYTHON" = none; then
 -	PYTHON=:
 -      else
 -        # Extract the first word of "$am_cv_pathless_PYTHON", so it can be a program name with args.
 -set dummy $am_cv_pathless_PYTHON; ac_word=$2
--{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
--$as_echo_n "checking for $ac_word... " >&6; }
--if ${ac_cv_path_PYTHON+:} false; then :
--  $as_echo_n "(cached) " >&6
--else
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-printf %s "checking for $ac_word... " >&6; }
+-if test ${ac_cv_path_PYTHON+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
 -  case $PYTHON in
 -  [\\/]* | ?:[\\/]*)
 -  ac_cv_path_PYTHON="$PYTHON" # Let the user override the test with a path.
@@ -122,11 +140,15 @@ diff -Naur orig/configure patched/configure
 -for as_dir in $PATH
 -do
 -  IFS=$as_save_IFS
--  test -z "$as_dir" && as_dir=.
+-  case $as_dir in #(((
+-    '') as_dir=./ ;;
+-    */) ;;
+-    *) as_dir=$as_dir/ ;;
+-  esac
 -    for ac_exec_ext in '' $ac_executable_extensions; do
--  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
--    ac_cv_path_PYTHON="$as_dir/$ac_word$ac_exec_ext"
--    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+-    ac_cv_path_PYTHON="$as_dir$ac_word$ac_exec_ext"
+-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
 -    break 2
 -  fi
 -done
@@ -138,11 +160,11 @@ diff -Naur orig/configure patched/configure
 -fi
 -PYTHON=$ac_cv_path_PYTHON
 -if test -n "$PYTHON"; then
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON" >&5
--$as_echo "$PYTHON" >&6; }
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PYTHON" >&5
+-printf "%s\n" "$PYTHON" >&6; }
 -else
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
--$as_echo "no" >&6; }
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-printf "%s\n" "no" >&6; }
 -fi
 -
 -
@@ -152,42 +174,172 @@ diff -Naur orig/configure patched/configure
 -
 -
 -  if test "$PYTHON" = :; then
--      as_fn_error $? "no suitable Python interpreter found" "$LINENO" 5
+-        as_fn_error $? "no suitable Python interpreter found" "$LINENO" 5
 -  else
 -
--
--  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON version" >&5
--$as_echo_n "checking for $am_display_PYTHON version... " >&6; }
--if ${am_cv_python_version+:} false; then :
--  $as_echo_n "(cached) " >&6
--else
--  am_cv_python_version=`$PYTHON -c "import sys; sys.stdout.write(sys.version[:3])"`
+-              { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON version" >&5
+-printf %s "checking for $am_display_PYTHON version... " >&6; }
+-if test ${am_cv_python_version+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
+-  am_cv_python_version=`$PYTHON -c "import sys; print ('%u.%u' % sys.version_info[:2])"`
 -fi
--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_version" >&5
--$as_echo "$am_cv_python_version" >&6; }
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_version" >&5
+-printf "%s\n" "$am_cv_python_version" >&6; }
 -  PYTHON_VERSION=$am_cv_python_version
 -
 -
--
--  PYTHON_PREFIX='${prefix}'
--
--  PYTHON_EXEC_PREFIX='${exec_prefix}'
--
--
--
--  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON platform" >&5
--$as_echo_n "checking for $am_display_PYTHON platform... " >&6; }
--if ${am_cv_python_platform+:} false; then :
--  $as_echo_n "(cached) " >&6
--else
+-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON platform" >&5
+-printf %s "checking for $am_display_PYTHON platform... " >&6; }
+-if test ${am_cv_python_platform+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
 -  am_cv_python_platform=`$PYTHON -c "import sys; sys.stdout.write(sys.platform)"`
 -fi
--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_platform" >&5
--$as_echo "$am_cv_python_platform" >&6; }
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_platform" >&5
+-printf "%s\n" "$am_cv_python_platform" >&6; }
 -  PYTHON_PLATFORM=$am_cv_python_platform
 -
 -
--  # Just factor out some code duplication.
+-                            if test "x$prefix" = xNONE; then
+-    am__usable_prefix=$ac_default_prefix
+-  else
+-    am__usable_prefix=$prefix
+-  fi
+-
+-  # Allow user to request using sys.* values from Python,
+-  # instead of the GNU $prefix values.
+-
+-# Check whether --with-python-sys-prefix was given.
+-if test ${with_python_sys_prefix+y}
+-then :
+-  withval=$with_python_sys_prefix; am_use_python_sys=:
+-else $as_nop
+-  am_use_python_sys=false
+-fi
+-
+-
+-  # Allow user to override whatever the default Python prefix is.
+-
+-# Check whether --with-python_prefix was given.
+-if test ${with_python_prefix+y}
+-then :
+-  withval=$with_python_prefix; am_python_prefix_subst=$withval
+-   am_cv_python_prefix=$withval
+-   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for explicit $am_display_PYTHON prefix" >&5
+-printf %s "checking for explicit $am_display_PYTHON prefix... " >&6; }
+-   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_prefix" >&5
+-printf "%s\n" "$am_cv_python_prefix" >&6; }
+-else $as_nop
+-
+-   if $am_use_python_sys; then
+-     # using python sys.prefix value, not GNU
+-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for python default $am_display_PYTHON prefix" >&5
+-printf %s "checking for python default $am_display_PYTHON prefix... " >&6; }
+-if test ${am_cv_python_prefix+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
+-  am_cv_python_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.prefix)"`
+-fi
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_prefix" >&5
+-printf "%s\n" "$am_cv_python_prefix" >&6; }
+-
+-               case $am_cv_python_prefix in
+-     $am__usable_prefix*)
+-       am__strip_prefix=`echo "$am__usable_prefix" | sed 's|.|.|g'`
+-       am_python_prefix_subst=`echo "$am_cv_python_prefix" | sed "s,^$am__strip_prefix,\\${prefix},"`
+-       ;;
+-     *)
+-       am_python_prefix_subst=$am_cv_python_prefix
+-       ;;
+-     esac
+-   else # using GNU prefix value, not python sys.prefix
+-     am_python_prefix_subst='${prefix}'
+-     am_python_prefix=$am_python_prefix_subst
+-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GNU default $am_display_PYTHON prefix" >&5
+-printf %s "checking for GNU default $am_display_PYTHON prefix... " >&6; }
+-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_python_prefix" >&5
+-printf "%s\n" "$am_python_prefix" >&6; }
+-   fi
+-fi
+-
+-  # Substituting python_prefix_subst value.
+-  PYTHON_PREFIX=$am_python_prefix_subst
+-
+-
+-  # emacs-page Now do it all over again for Python exec_prefix, but with yet
+-  # another conditional: fall back to regular prefix if that was specified.
+-
+-# Check whether --with-python_exec_prefix was given.
+-if test ${with_python_exec_prefix+y}
+-then :
+-  withval=$with_python_exec_prefix; am_python_exec_prefix_subst=$withval
+-   am_cv_python_exec_prefix=$withval
+-   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for explicit $am_display_PYTHON exec_prefix" >&5
+-printf %s "checking for explicit $am_display_PYTHON exec_prefix... " >&6; }
+-   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_exec_prefix" >&5
+-printf "%s\n" "$am_cv_python_exec_prefix" >&6; }
+-else $as_nop
+-
+-   # no explicit --with-python_exec_prefix, but if
+-   # --with-python_prefix was given, use its value for python_exec_prefix too.
+-   if test -n "$with_python_prefix"
+-then :
+-  am_python_exec_prefix_subst=$with_python_prefix
+-    am_cv_python_exec_prefix=$with_python_prefix
+-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for python_prefix-given $am_display_PYTHON exec_prefix" >&5
+-printf %s "checking for python_prefix-given $am_display_PYTHON exec_prefix... " >&6; }
+-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_exec_prefix" >&5
+-printf "%s\n" "$am_cv_python_exec_prefix" >&6; }
+-else $as_nop
+-
+-    # Set am__usable_exec_prefix whether using GNU or Python values,
+-    # since we use that variable for pyexecdir.
+-    if test "x$exec_prefix" = xNONE; then
+-      am__usable_exec_prefix=$am__usable_prefix
+-    else
+-      am__usable_exec_prefix=$exec_prefix
+-    fi
+-    #
+-    if $am_use_python_sys; then # using python sys.exec_prefix, not GNU
+-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for python default $am_display_PYTHON exec_prefix" >&5
+-printf %s "checking for python default $am_display_PYTHON exec_prefix... " >&6; }
+-if test ${am_cv_python_exec_prefix+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
+-  am_cv_python_exec_prefix=`$PYTHON -c "import sys; sys.stdout.write(sys.exec_prefix)"`
+-fi
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_exec_prefix" >&5
+-printf "%s\n" "$am_cv_python_exec_prefix" >&6; }
+-                        case $am_cv_python_exec_prefix in
+-      $am__usable_exec_prefix*)
+-        am__strip_prefix=`echo "$am__usable_exec_prefix" | sed 's|.|.|g'`
+-        am_python_exec_prefix_subst=`echo "$am_cv_python_exec_prefix" | sed "s,^$am__strip_prefix,\\${exec_prefix},"`
+-        ;;
+-      *)
+-        am_python_exec_prefix_subst=$am_cv_python_exec_prefix
+-        ;;
+-     esac
+-   else # using GNU $exec_prefix, not python sys.exec_prefix
+-     am_python_exec_prefix_subst='${exec_prefix}'
+-     am_python_exec_prefix=$am_python_exec_prefix_subst
+-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GNU default $am_display_PYTHON exec_prefix" >&5
+-printf %s "checking for GNU default $am_display_PYTHON exec_prefix... " >&6; }
+-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_python_exec_prefix" >&5
+-printf "%s\n" "$am_python_exec_prefix" >&6; }
+-   fi
+-fi
+-fi
+-
+-  # Substituting python_exec_prefix_subst.
+-  PYTHON_EXEC_PREFIX=$am_python_exec_prefix_subst
+-
+-
+-  # Factor out some code duplication into this shell variable.
 -  am_python_setup_sysconfig="\
 -import sys
 -# Prefer sysconfig over distutils.sysconfig, for better compatibility
@@ -208,92 +360,90 @@ diff -Naur orig/configure patched/configure
 -    pass"
 -
 -
--            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON script directory" >&5
--$as_echo_n "checking for $am_display_PYTHON script directory... " >&6; }
--if ${am_cv_python_pythondir+:} false; then :
--  $as_echo_n "(cached) " >&6
--else
--  if test "x$prefix" = xNONE
--     then
--       am_py_prefix=$ac_default_prefix
--     else
--       am_py_prefix=$prefix
--     fi
--     am_cv_python_pythondir=`$PYTHON -c "
+-              { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON script directory (pythondir)" >&5
+-printf %s "checking for $am_display_PYTHON script directory (pythondir)... " >&6; }
+-if test ${am_cv_python_pythondir+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
+-  if test "x$am_cv_python_prefix" = x; then
+-     am_py_prefix=$am__usable_prefix
+-   else
+-     am_py_prefix=$am_cv_python_prefix
+-   fi
+-   am_cv_python_pythondir=`$PYTHON -c "
 -$am_python_setup_sysconfig
 -if can_use_sysconfig:
--    sitedir = sysconfig.get_path('purelib', vars={'base':'$am_py_prefix'})
+-  sitedir = sysconfig.get_path('purelib', vars={'base':'$am_py_prefix'})
 -else:
--    from distutils import sysconfig
--    sitedir = sysconfig.get_python_lib(0, 0, prefix='$am_py_prefix')
+-  from distutils import sysconfig
+-  sitedir = sysconfig.get_python_lib(0, 0, prefix='$am_py_prefix')
 -sys.stdout.write(sitedir)"`
--     case $am_cv_python_pythondir in
--     $am_py_prefix*)
--       am__strip_prefix=`echo "$am_py_prefix" | sed 's|.|.|g'`
--       am_cv_python_pythondir=`echo "$am_cv_python_pythondir" | sed "s,^$am__strip_prefix,$PYTHON_PREFIX,"`
--       ;;
--     *)
--       case $am_py_prefix in
--         /usr|/System*) ;;
--         *)
--	  am_cv_python_pythondir=$PYTHON_PREFIX/lib/python$PYTHON_VERSION/site-packages
--	  ;;
--       esac
--       ;;
+-   #
+-   case $am_cv_python_pythondir in
+-   $am_py_prefix*)
+-     am__strip_prefix=`echo "$am_py_prefix" | sed 's|.|.|g'`
+-     am_cv_python_pythondir=`echo "$am_cv_python_pythondir" | sed "s,^$am__strip_prefix,\\${PYTHON_PREFIX},"`
+-     ;;
+-   *)
+-     case $am_py_prefix in
+-       /usr|/System*) ;;
+-       *) am_cv_python_pythondir="\${PYTHON_PREFIX}/lib/python$PYTHON_VERSION/site-packages"
+-          ;;
 -     esac
+-     ;;
+-   esac
 -
 -fi
--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_pythondir" >&5
--$as_echo "$am_cv_python_pythondir" >&6; }
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_pythondir" >&5
+-printf "%s\n" "$am_cv_python_pythondir" >&6; }
 -  pythondir=$am_cv_python_pythondir
 -
 -
+-          pkgpythondir=\${pythondir}/$PACKAGE
 -
--  pkgpythondir=\${pythondir}/$PACKAGE
 -
--
--        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON extension module directory" >&5
--$as_echo_n "checking for $am_display_PYTHON extension module directory... " >&6; }
--if ${am_cv_python_pyexecdir+:} false; then :
--  $as_echo_n "(cached) " >&6
--else
--  if test "x$exec_prefix" = xNONE
--     then
--       am_py_exec_prefix=$am_py_prefix
--     else
--       am_py_exec_prefix=$exec_prefix
--     fi
--     am_cv_python_pyexecdir=`$PYTHON -c "
+-          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $am_display_PYTHON extension module directory (pyexecdir)" >&5
+-printf %s "checking for $am_display_PYTHON extension module directory (pyexecdir)... " >&6; }
+-if test ${am_cv_python_pyexecdir+y}
+-then :
+-  printf %s "(cached) " >&6
+-else $as_nop
+-  if test "x$am_cv_python_exec_prefix" = x; then
+-     am_py_exec_prefix=$am__usable_exec_prefix
+-   else
+-     am_py_exec_prefix=$am_cv_python_exec_prefix
+-   fi
+-   am_cv_python_pyexecdir=`$PYTHON -c "
 -$am_python_setup_sysconfig
 -if can_use_sysconfig:
--    sitedir = sysconfig.get_path('platlib', vars={'platbase':'$am_py_prefix'})
+-  sitedir = sysconfig.get_path('platlib', vars={'platbase':'$am_py_exec_prefix'})
 -else:
--    from distutils import sysconfig
--    sitedir = sysconfig.get_python_lib(1, 0, prefix='$am_py_prefix')
+-  from distutils import sysconfig
+-  sitedir = sysconfig.get_python_lib(1, 0, prefix='$am_py_exec_prefix')
 -sys.stdout.write(sitedir)"`
--     case $am_cv_python_pyexecdir in
--     $am_py_exec_prefix*)
--       am__strip_prefix=`echo "$am_py_exec_prefix" | sed 's|.|.|g'`
--       am_cv_python_pyexecdir=`echo "$am_cv_python_pyexecdir" | sed "s,^$am__strip_prefix,$PYTHON_EXEC_PREFIX,"`
--       ;;
--     *)
--       case $am_py_exec_prefix in
--         /usr|/System*) ;;
--         *)
--	   am_cv_python_pyexecdir=$PYTHON_EXEC_PREFIX/lib/python$PYTHON_VERSION/site-packages
--	   ;;
--       esac
--       ;;
+-   #
+-   case $am_cv_python_pyexecdir in
+-   $am_py_exec_prefix*)
+-     am__strip_prefix=`echo "$am_py_exec_prefix" | sed 's|.|.|g'`
+-     am_cv_python_pyexecdir=`echo "$am_cv_python_pyexecdir" | sed "s,^$am__strip_prefix,\\${PYTHON_EXEC_PREFIX},"`
+-     ;;
+-   *)
+-     case $am_py_exec_prefix in
+-       /usr|/System*) ;;
+-       *) am_cv_python_pyexecdir="\${PYTHON_EXEC_PREFIX}/lib/python$PYTHON_VERSION/site-packages"
+-          ;;
 -     esac
+-     ;;
+-   esac
 -
 -fi
--{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_pyexecdir" >&5
--$as_echo "$am_cv_python_pyexecdir" >&6; }
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $am_cv_python_pyexecdir" >&5
+-printf "%s\n" "$am_cv_python_pyexecdir" >&6; }
 -  pyexecdir=$am_cv_python_pyexecdir
 -
 -
--
--  pkgpyexecdir=\${pyexecdir}/$PACKAGE
+-      pkgpyexecdir=\${pyexecdir}/$PACKAGE
 -
 -
 -
@@ -301,10 +451,17 @@ diff -Naur orig/configure patched/configure
 -
 -
 -
+-
+-
+-
+-
+-
+-
+-
+ 
  ac_ext=c
  ac_cpp='$CPP $CPPFLAGS'
- ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-@@ -18841,7 +18566,7 @@
+@@ -20638,7 +20220,7 @@
  fi
  
  
@@ -313,7 +470,7 @@ diff -Naur orig/configure patched/configure
  
  
  #################################################
-@@ -19656,24 +19381,6 @@
+@@ -21481,24 +21063,6 @@
  fi
  
  #################################################
@@ -321,24 +478,24 @@ diff -Naur orig/configure patched/configure
 -#################################################
 -
 -# check for python3-rdflib
--{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for python3-rdflib" >&5
--$as_echo_n "checking for python3-rdflib... " >&6; }
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for python3-rdflib" >&5
+-printf %s "checking for python3-rdflib... " >&6; }
 -echo "import rdflib" | $PYTHON - 2>/dev/null
 -if test $? -ne 0 ; then
--  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
--$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-  { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
 -as_fn_error $? "failed.  Please install the python3-rdflib package.
 -See \`config.log' for more details" "$LINENO" 5; }
 -else
--  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
--$as_echo "yes" >&6; }
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-printf "%s\n" "yes" >&6; }
 -fi
 -
 -#################################################
  # Summary
  #################################################
  
-@@ -20848,8 +20555,6 @@
+@@ -22667,8 +22231,6 @@
      "extensions/fts++/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/fts++/Makefile" ;;
      "extensions/fts++/test/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/fts++/test/Makefile" ;;
      "data/Makefile") CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
@@ -347,19 +504,10 @@ diff -Naur orig/configure patched/configure
      "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
      "test/dbus/Makefile") CONFIG_FILES="$CONFIG_FILES test/dbus/Makefile" ;;
      "test/direct/Makefile") CONFIG_FILES="$CONFIG_FILES test/direct/Makefile" ;;
-diff -Naur orig/configure.ac patched/configure.ac
---- orig/configure.ac	2020-10-15 08:18:17.000000000 +0200
-+++ patched/configure.ac	2020-10-19 14:45:23.742427172 +0200
-@@ -11,8 +11,6 @@
- AM_INIT_AUTOMAKE([1.11 tar-ustar dist-xz no-dist-gzip -Wno-portability])
- AM_MAINTAINER_MODE([enable])
- 
--AM_PATH_PYTHON([3])
--
- AC_PROG_CC
- AM_PROG_CC_C_O
- AC_PROG_CXX
-@@ -64,8 +62,6 @@
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2022-01-12 19:37:39.000000000 +0100
++++ b/configure.ac	2022-04-02 18:41:26.017256128 +0200
+@@ -64,8 +64,6 @@
  	extensions/fts++/Makefile
  	extensions/fts++/test/Makefile
  	data/Makefile
@@ -368,7 +516,7 @@ diff -Naur orig/configure.ac patched/configure.ac
  	test/Makefile
  	test/dbus/Makefile
  	test/direct/Makefile
-@@ -248,19 +244,6 @@
+@@ -248,19 +246,6 @@
  fi
  
  #################################################
@@ -388,9 +536,9 @@ diff -Naur orig/configure.ac patched/configure.ac
  # Summary
  #################################################
  
-diff -Naur orig/data/Makefile.am patched/data/Makefile.am
---- orig/data/Makefile.am	2017-02-18 15:23:08.000000000 +0100
-+++ patched/data/Makefile.am	2020-10-19 14:49:51.042451126 +0200
+diff -Naur a/data/Makefile.am b/data/Makefile.am
+--- a/data/Makefile.am	2017-03-14 12:02:14.000000000 +0100
++++ b/data/Makefile.am	2022-04-02 18:38:39.588567986 +0200
 @@ -1,9 +1,5 @@
  NULL =
  
@@ -409,51 +557,10 @@ diff -Naur orig/data/Makefile.am patched/data/Makefile.am
  	zeitgeist.service.in \
  	$(xdgautostart_in_files) \
  	$(NULL)
-diff -Naur orig/data/Makefile.in patched/data/Makefile.in
---- orig/data/Makefile.in	2020-10-15 08:46:06.000000000 +0200
-+++ patched/data/Makefile.in	2020-10-19 14:50:17.834609526 +0200
-@@ -399,9 +399,6 @@
- top_builddir = @top_builddir@
- top_srcdir = @top_srcdir@
- NULL = 
--SUBDIRS = \
--	ontology \
--	$(NULL)
- 
- servicedir = $(datadir)/dbus-1/services
- nodist_service_DATA = org.gnome.zeitgeist.Engine.service
-@@ -421,7 +418,6 @@
- 
- EXTRA_DIST = \
- 	org.gnome.zeitgeist.Engine.service.in \
--	ontology2code \
- 	zeitgeist.service.in \
- 	$(xdgautostart_in_files) \
- 	$(NULL)
-diff -Naur orig/Makefile.am patched/Makefile.am
---- orig/Makefile.am	2019-01-31 19:25:14.000000000 +0100
-+++ patched/Makefile.am	2020-10-19 14:41:13.619081626 +0200
-@@ -7,7 +7,6 @@
- 	src \
- 	extensions \
- 	data \
--	python \
- 	test \
- 	examples \
- 	po \
-diff -Naur orig/Makefile.in patched/Makefile.in
---- orig/Makefile.in	2020-10-15 08:46:06.000000000 +0200
-+++ patched/Makefile.in	2020-10-19 14:41:13.619081626 +0200
-@@ -195,7 +195,7 @@
- ETAGS = etags
- CTAGS = ctags
- CSCOPE = cscope
--DIST_SUBDIRS = libzeitgeist src extensions data python test examples \
-+DIST_SUBDIRS = libzeitgeist src extensions data test examples \
- 	po doc datahub
- am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
- 	$(top_srcdir)/build-aux/compile \
-@@ -343,11 +343,6 @@
+diff -Naur a/data/Makefile.in b/data/Makefile.in
+--- a/data/Makefile.in	2022-01-12 19:40:51.000000000 +0100
++++ b/data/Makefile.in	2022-04-02 18:40:01.612907386 +0200
+@@ -315,11 +315,6 @@
  PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
  PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
  POSUB = @POSUB@
@@ -465,20 +572,88 @@ diff -Naur orig/Makefile.in patched/Makefile.in
  RANLIB = @RANLIB@
  SED = @SED@
  SET_MAKE = @SET_MAKE@
-@@ -413,12 +408,10 @@
+@@ -384,13 +379,9 @@
+ mkdir_p = @mkdir_p@
  oldincludedir = @oldincludedir@
  pdfdir = @pdfdir@
- pkgpyexecdir = @pkgpyexecdir@
+-pkgpyexecdir = @pkgpyexecdir@
 -pkgpythondir = @pkgpythondir@
  prefix = @prefix@
  program_transform_name = @program_transform_name@
  psdir = @psdir@
- pyexecdir = @pyexecdir@
+-pyexecdir = @pyexecdir@
 -pythondir = @pythondir@
  runstatedir = @runstatedir@
  sbindir = @sbindir@
  sharedstatedir = @sharedstatedir@
-@@ -430,7 +423,7 @@
+@@ -401,9 +392,6 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ NULL = 
+-SUBDIRS = \
+-	ontology \
+-	$(NULL)
+ 
+ servicedir = $(datadir)/dbus-1/services
+ nodist_service_DATA = org.gnome.zeitgeist.Engine.service
+@@ -423,7 +411,6 @@
+ 
+ EXTRA_DIST = \
+ 	org.gnome.zeitgeist.Engine.service.in \
+-	ontology2code \
+ 	zeitgeist.service.in \
+ 	$(xdgautostart_in_files) \
+ 	$(NULL)
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2019-02-06 10:07:46.000000000 +0100
++++ b/Makefile.am	2022-04-02 18:35:25.207761669 +0200
+@@ -7,7 +7,6 @@
+ 	src \
+ 	extensions \
+ 	data \
+-	python \
+ 	test \
+ 	examples \
+ 	po \
+diff -Naur a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2022-01-12 19:40:51.000000000 +0100
++++ b/Makefile.in	2022-04-02 18:37:21.152242968 +0200
+@@ -193,7 +193,7 @@
+   unique=`for i in $$list; do \
+     if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+   done | $(am__uniquify_input)`
+-DIST_SUBDIRS = libzeitgeist src extensions data python test examples \
++DIST_SUBDIRS = libzeitgeist src extensions data test examples \
+ 	po doc datahub
+ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
+ 	$(top_srcdir)/build-aux/compile \
+@@ -346,11 +346,6 @@
+ PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+ PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+ POSUB = @POSUB@
+-PYTHON = @PYTHON@
+-PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
+-PYTHON_PLATFORM = @PYTHON_PLATFORM@
+-PYTHON_PREFIX = @PYTHON_PREFIX@
+-PYTHON_VERSION = @PYTHON_VERSION@
+ RANLIB = @RANLIB@
+ SED = @SED@
+ SET_MAKE = @SET_MAKE@
+@@ -415,13 +410,9 @@
+ mkdir_p = @mkdir_p@
+ oldincludedir = @oldincludedir@
+ pdfdir = @pdfdir@
+-pkgpyexecdir = @pkgpyexecdir@
+-pkgpythondir = @pkgpythondir@
+ prefix = @prefix@
+ program_transform_name = @program_transform_name@
+ psdir = @psdir@
+-pyexecdir = @pyexecdir@
+-pythondir = @pythondir@
+ runstatedir = @runstatedir@
+ sbindir = @sbindir@
+ sharedstatedir = @sharedstatedir@
+@@ -433,7 +424,7 @@
  top_srcdir = @top_srcdir@
  NULL = 
  ACLOCAL_AMFLAGS = --install -I m4 ${ACLOCAL_FLAGS}
