@@ -5,9 +5,6 @@ rm -Rf texmf-dist/doc
 # rm -Rf texmf-dist/fonts/source
 rm -Rf texmf-dist/scripts/context/stubs/{mswin,source,win64}
 
-mv -v texk/web2c/pdftexdir/pdftoepdf-poppler0.86.0.cc texk/web2c/pdftexdir/pdftoepdf.cc
-mv -v texk/web2c/pdftexdir/pdftosrc-poppler0.83.0.cc texk/web2c/pdftexdir/pdftosrc.cc
-
 mkdir build
 cd build
 ../configure \
@@ -35,8 +32,6 @@ cd build
 	--with-system-libpng \
 	--with-system-mpfr \
 	--with-system-pixman \
-	--with-system-poppler \
-	--with-system-xpdf \
 	--with-system-zlib \
 	--with-system-zziplib \
 	--with-x \

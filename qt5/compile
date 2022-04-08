@@ -6,6 +6,8 @@
 cd $UB_OBJECTDIR
 
 export LD_LIBRARY_PATH="$(pwd)"/lib
+export LDFLAGS=" -Wl,--no-keep-memory "
+export NINJAFLAGS=" -j2 "
 
 $UB_COMPILEDIR/configure \
 	-platform linux-g++-64 \
