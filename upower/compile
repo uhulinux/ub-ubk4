@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--with-udevrulesdir=/usr/lib/udev/rules.d
+    -Dos_backend=linux \
+	-Dudevrulesdir=/usr/lib/udev/rules.d \
+	-Dgtk-doc=false

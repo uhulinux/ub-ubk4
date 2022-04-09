@@ -1,0 +1,948 @@
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2019-10-03 21:52:00.000000000 +0200
++++ b/CMakeLists.txt	2022-03-15 19:03:28.090515571 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.12)
+ 
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ 
+@@ -92,6 +92,15 @@
+     libffmpegthumbnailer/filmstripfilter.cpp
+ )
+ 
++target_link_libraries(libffmpegthumbnailerobj
++    FFmpeg::avformat
++    FFmpeg::avcodec
++    FFmpeg::avutil
++    FFmpeg::avfilter
++    $<$<BOOL:${HAVE_JPEG}>:${JPEG_LIBRARIES}>
++    $<$<BOOL:${HAVE_PNG}>:PNG::PNG>
++)
++
+ # we use our own deprecated struct menbers, so disable the warning about it
+ set_source_files_properties(libffmpegthumbnailer/videothumbnailerc.cpp PROPERTIES COMPILE_FLAGS -Wno-deprecated-declarations)
+ 
+@@ -118,12 +127,7 @@
+ if (ENABLE_STATIC)
+     add_library(libffmpegthumbnailerstatic STATIC $<TARGET_OBJECTS:libffmpegthumbnailerobj>)
+     target_link_libraries(libffmpegthumbnailerstatic
+-        FFmpeg::avformat
+-        FFmpeg::avcodec
+-        FFmpeg::avutil
+-        FFmpeg::avfilter
+-        $<$<BOOL:${HAVE_JPEG}>:${JPEG_LIBRARIES}>
+-        $<$<BOOL:${HAVE_PNG}>:PNG::PNG>
++        libffmpegthumbnailerobj
+         $<$<BOOL:${ENABLE_GIO}>:${CMAKE_DL_LIBS}>
+     )
+ 
+@@ -140,16 +144,11 @@
+ if (ENABLE_SHARED)
+     add_library(libffmpegthumbnailer SHARED $<TARGET_OBJECTS:libffmpegthumbnailerobj>)
+     target_link_libraries(libffmpegthumbnailer
+-        FFmpeg::avformat
+-        FFmpeg::avcodec
+-        FFmpeg::avutil
+-        FFmpeg::avfilter
+-        $<$<BOOL:${HAVE_JPEG}>:${JPEG_LIBRARIES}>
+-        $<$<BOOL:${HAVE_PNG}>:PNG::PNG>
++        libffmpegthumbnailerobj
+     )
+ 
+     set_target_properties(libffmpegthumbnailer PROPERTIES
+-        PREFIX ""
++        OUTPUT_NAME ffmpegthumbnailer
+         VERSION ${FFMPEGTHUMBNAILER_SOVERSION_CURRENT}.${FFMPEGTHUMBNAILER_SOVERSION_REVISION}.${FFMPEGTHUMBNAILER_SOVERSION_AGE}
+         SOVERSION ${FFMPEGTHUMBNAILER_SOVERSION_CURRENT}
+         PUBLIC_HEADER "${LIB_HDRS}"
+diff -Naur a/dist/ffmpegthumbnailer.thumbnailer b/dist/ffmpegthumbnailer.thumbnailer
+--- a/dist/ffmpegthumbnailer.thumbnailer	2019-10-03 21:52:00.000000000 +0200
++++ b/dist/ffmpegthumbnailer.thumbnailer	2022-03-15 19:03:28.090515571 +0100
+@@ -1,4 +1,4 @@
+ [Thumbnailer Entry]
+ TryExec=ffmpegthumbnailer
+ Exec=ffmpegthumbnailer -i %i -o %o -s %s -f
+-MimeType=video/jpeg;video/mp4;video/mpeg;video/quicktime;video/x-ms-asf;video/x-ms-wm;video/x-ms-wmv;video/x-ms-asx;video/x-ms-wmx;video/x-ms-wvx;video/x-msvideo;video/x-flv;video/x-matroska;application/mxf;video/3gp;video/3gpp;video/dv;video/divx;video/fli;video/flv;video/mp2t;video/mp4v-es;video/msvideo;video/ogg;video/vivo;video/vnd.divx;video/vnd.mpegurl;video/vnd.rn-realvideo;application/vnd.rn-realmedia;video/vnd.vivo;video/webm;video/x-anim;video/x-avi;video/x-flc;video/x-fli;video/x-flic;video/x-m4v;video/x-mpeg;video/x-mpeg2;video/x-nsv;video/x-ogm+ogg;video/x-theora+ogg
++MimeType=video/jpeg;video/mp4;video/mpeg;video/quicktime;video/x-ms-asf;video/x-ms-wm;video/x-ms-wmv;video/x-ms-asx;video/x-ms-wmx;video/x-ms-wvx;video/x-msvideo;video/x-flv;video/x-matroska;application/x-matroska;application/mxf;video/3gp;video/3gpp;video/dv;video/divx;video/fli;video/flv;video/mp2t;video/mp4v-es;video/msvideo;video/ogg;video/vivo;video/vnd.divx;video/vnd.mpegurl;video/vnd.rn-realvideo;application/vnd.rn-realmedia;video/vnd.vivo;video/webm;video/x-anim;video/x-avi;video/x-flc;video/x-fli;video/x-flic;video/x-m4v;video/x-mpeg;video/x-mpeg2;video/x-nsv;video/x-ogm+ogg;video/x-theora+ogg
+diff -Naur a/kffmpegthumbnailer/Changelog b/kffmpegthumbnailer/Changelog
+--- a/kffmpegthumbnailer/Changelog	2019-10-03 21:52:00.000000000 +0200
++++ b/kffmpegthumbnailer/Changelog	2022-03-15 19:03:28.090515571 +0100
+@@ -1,5 +1,11 @@
+ KFFmpegThumbnailer
+ 
++version 1.2.0 (October 28, 2020)
++- Fixed builds for KDE 5
++- Added options menu, allowing to select preferred thumbnails
++- Added option to use cover pictures from media files
++- Removed deprecated frame generation code
++
+ version 1.1.0 (January 06, 2010)
+ - Updated to ffmpegthumbnailer 2.0.0 interface
+ 
+@@ -7,4 +13,4 @@
+ - Fixed thumbnails not being generated for filenames containing non-ascii characters (Thanks to fedux.c)
+ 
+ version 1.0.0 (December 24, 2009)
+-- Initial release
+\ Nincs új sor a fájl végén
++- Initial release
+diff -Naur a/kffmpegthumbnailer/CMakeLists.txt b/kffmpegthumbnailer/CMakeLists.txt
+--- a/kffmpegthumbnailer/CMakeLists.txt	2019-10-03 21:52:00.000000000 +0200
++++ b/kffmpegthumbnailer/CMakeLists.txt	2022-03-15 19:03:28.090515571 +0100
+@@ -1,12 +1,21 @@
+ project(kffmpegthumbnailer)
+ 
+-find_package(KDE4 REQUIRED)
+-find_package(PkgConfig)
++cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
++set(QT_MIN_VERSION "5.2.0")
+ 
+-include(KDE4Defaults)
+-include(MacroOptionalAddSubdirectory)
++find_package(ECM 1.0.0 REQUIRED NO_MODULE)
++set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
++
++include(FeatureSummary)
++include(WriteBasicConfigVersionFile)
++include(KDEInstallDirs)
++include(KDECMakeSettings)
++include(KDECompilerSettings NO_POLICY_SCOPE)
+ include(FindPkgConfig)
+ 
++find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui)
++find_package(KF5 REQUIRED COMPONENTS KIO I18n Config)
++
+ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "kffmpegthumbnailer video thumbnailer for kde")
+ set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
+ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYRIGHT")
+@@ -20,19 +29,17 @@
+ 
+ include(CPack)
+ 
+-pkg_check_modules(AVUTIL libavutil)
+-pkg_check_modules(AVFORMAT libavformat)
+-pkg_check_modules(AVCODEC libavcodec)
+-pkg_check_modules(SWSCALE libswscale)
+ pkg_check_modules(FFMPEG_THUMBNAILER libffmpegthumbnailer)
+ 
+-include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} ${AVUTIL_INCLUDES} ${AVFORMAT_INCLUDES} ${AVCODEC_INCLUDES} ${SWSCALE_INCLUDES} ${FFMPEG_THUMBNAILER_INCLUDES})
++include_directories(${CMAKE_CURRENT_BINARY_DIR} ${QT_INCLUDES} ${FFMPEG_THUMBNAILER_INCLUDES})
+ 
+ set(kffmpegthumbnailer_SRCS kffmpegthumbnailer.cpp)
+ string(REGEX REPLACE "-fno-exceptions " "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+ 
+-kde4_add_plugin(kffmpegthumbnailer ${kffmpegthumbnailer_SRCS})
+-target_link_libraries(kffmpegthumbnailer ${KDE4_KIO_LIBS} ${AVUTIL_LIBRARIES} ${AVFORMAT_LIBRARIES} ${AVCODEC_LIBRARIES} ${SWSCALE_LIBRARIES} ${FFMPEG_THUMBNAILER_LIBRARIES})
++kconfig_add_kcfg_files(kffmpegthumbnailer_SRCS kffmpegthumbnailersettings5.kcfgc)
++add_library(kffmpegthumbnailer MODULE ${kffmpegthumbnailer_SRCS})
++target_link_libraries(kffmpegthumbnailer Qt5::Core Qt5::Gui KF5::KIOWidgets KF5::KIOCore KF5::ConfigCore KF5::ConfigGui ${FFMPEG_THUMBNAILER_LIBRARIES})
+ 
++install(FILES kffmpegthumbnailersettings5.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+ install(TARGETS kffmpegthumbnailer DESTINATION ${PLUGIN_INSTALL_DIR})
+ install(FILES kffmpegthumbnailer.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+diff -Naur a/kffmpegthumbnailer/.gitignore b/kffmpegthumbnailer/.gitignore
+--- a/kffmpegthumbnailer/.gitignore	1970-01-01 01:00:00.000000000 +0100
++++ b/kffmpegthumbnailer/.gitignore	2022-03-15 19:03:28.090515571 +0100
+@@ -0,0 +1,7 @@
++*.cmake
++*.so
++Makefile
++prefix.sh
++CMakeCache.txt
++CMakeFiles
++*_autogen
+diff -Naur a/kffmpegthumbnailer/kffmpegthumbnailer.cpp b/kffmpegthumbnailer/kffmpegthumbnailer.cpp
+--- a/kffmpegthumbnailer/kffmpegthumbnailer.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/kffmpegthumbnailer/kffmpegthumbnailer.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -15,12 +15,19 @@
+ //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ 
+ #include "kffmpegthumbnailer.h"
++#include "kffmpegthumbnailersettings5.h"
++
++#include <limits>
+ 
+ #include <QImage>
++#include <QCheckBox>
++#include <QFormLayout>
++#include <QRegExpValidator>
++#include <QWidget>
+ 
+ extern "C"
+ {
+-    KDE_EXPORT ThumbCreator* new_creator()
++    Q_DECL_EXPORT ThumbCreator *new_creator()
+     {
+         return new KFFMpegThumbnailer();
+     }
+@@ -29,22 +36,52 @@
+ 
+ KFFMpegThumbnailer::KFFMpegThumbnailer()
+ {
+-    m_Thumbnailer.addFilter(&m_FilmStrip);
++    thumbCache.setMaxCost(KFFMpegThumbnailerSettings::cacheSize());
+ }
+ 
+ KFFMpegThumbnailer::~KFFMpegThumbnailer()
+ {
+ }
+ 
+-bool KFFMpegThumbnailer::create(const QString& path, int width, int /*heigth*/, QImage& img)
++bool KFFMpegThumbnailer::create(const QString& path, int width, int /*height*/, QImage& img)
+ {
++    int seqIdx = static_cast<int>(sequenceIndex());
++
++    const QList<int> seekPercentages = KFFMpegThumbnailerSettings::sequenceSeekPercentages();
++    const int numSeekPercentages = seekPercentages.size();
++
++    seqIdx %= numSeekPercentages;
++
++    const QString cacheKey = QString("%1$%2@%3").arg(path).arg(seqIdx).arg(width);
++
++    QImage* cachedImg = thumbCache[cacheKey];
++    if (cachedImg) {
++        img = *cachedImg;
++        return true;
++    }
++
+     try
+     {
+         std::vector<uint8_t> pixelBuffer;
+-        
+-        m_Thumbnailer.setThumbnailSize(width);    
++        KFFMpegThumbnailerSettings* settings = KFFMpegThumbnailerSettings::self();
++        settings->load();
++
++        if (settings->addFilmstrip())
++        {
++            m_Thumbnailer.addFilter(&m_FilmStrip);
++        }
++        else 
++        {
++            m_Thumbnailer.clearFilters();
++        }
++
++        m_Thumbnailer.setPreferEmbeddedMetadata(settings->useMetadataCovers());
++        m_Thumbnailer.setSmartFrameSelection(settings->useSmartSelection());
++        m_Thumbnailer.setSeekPercentage(seekPercentages[seqIdx]);
++
++        m_Thumbnailer.setThumbnailSize(width);
+         m_Thumbnailer.generateThumbnail(std::string(path.toUtf8()), Png, pixelBuffer);
+-        
++
+         if (!img.loadFromData(&pixelBuffer.front(), pixelBuffer.size(), "PNG"))
+         {
+             return false;
+@@ -54,12 +91,89 @@
+     {
+         return false;
+     }
+-    
++
++    const int cacheCost = static_cast<int>((img.sizeInBytes()+1023) / 1024);
++    thumbCache.insert(cacheKey, new QImage(img), cacheCost);
++
+     return true;
+ }
+ 
++float KFFMpegThumbnailer::sequenceIndexWraparoundPoint() const
++{
++    return static_cast<float>(KFFMpegThumbnailerSettings::sequenceSeekPercentages().size());
++}
++
+ ThumbCreator::Flags KFFMpegThumbnailer::flags() const
+ {
+-    return (Flags)(DrawFrame);
++    return static_cast<Flags>(None);
+ }
+ 
++QWidget *KFFMpegThumbnailer::createConfigurationWidget()
++{
++    QWidget* widget = new QWidget();
++    QFormLayout* formLayout = new QFormLayout(widget);
++
++    m_addFilmStripCheckBox = new QCheckBox("Embed filmstrip effect");
++    m_addFilmStripCheckBox->setChecked(KFFMpegThumbnailerSettings::addFilmstrip());
++    formLayout->addRow(m_addFilmStripCheckBox);
++
++    m_useMetadataCheckBox = new QCheckBox("Use metadata embedded cover pictures");
++    m_useMetadataCheckBox->setChecked(KFFMpegThumbnailerSettings::useMetadataCovers());
++    formLayout->addRow(m_useMetadataCheckBox);
++
++    m_useSmartSelectionCheckBox = new QCheckBox("Use smart (slower) frame selection");
++    m_useSmartSelectionCheckBox->setChecked(KFFMpegThumbnailerSettings::useSmartSelection());
++    formLayout->addRow(m_useSmartSelectionCheckBox);
++
++    QString seekPercentagesStr;
++    for (const int sp : KFFMpegThumbnailerSettings::sequenceSeekPercentages()) {
++        if (!seekPercentagesStr.isEmpty()) {
++            seekPercentagesStr.append(' ');
++        }
++        seekPercentagesStr.append(QString().setNum(sp));
++    }
++
++    m_sequenceSeekPercentagesLineEdit = new QLineEdit();
++    m_sequenceSeekPercentagesLineEdit->setText(seekPercentagesStr);
++    formLayout->addRow("Sequence seek percentages", m_sequenceSeekPercentagesLineEdit);
++
++    m_thumbCacheSizeSpinBox = new QSpinBox();
++    m_thumbCacheSizeSpinBox->setRange(0, std::numeric_limits<int>::max());
++    m_thumbCacheSizeSpinBox->setValue(KFFMpegThumbnailerSettings::cacheSize());
++    formLayout->addRow("Cache size (KiB)", m_thumbCacheSizeSpinBox);
++
++    return widget;
++}
++
++void KFFMpegThumbnailer::writeConfiguration(const QWidget* /*configurationWidget*/)
++{
++    KFFMpegThumbnailerSettings* settings = KFFMpegThumbnailerSettings::self();
++
++    settings->setAddFilmstrip(m_addFilmStripCheckBox->isChecked());
++    settings->setUseMetadataCovers(m_useMetadataCheckBox->isChecked());
++    settings->setUseSmartSelection(m_useSmartSelectionCheckBox->isChecked());
++
++    const QStringList seekPercentagesStrList = m_sequenceSeekPercentagesLineEdit->text()
++            .split(QRegExp("(\\s*,\\s*)|\\s+"), Qt::SkipEmptyParts);
++    QList<int> seekPercentages;
++    bool seekPercentagesValid = true;
++
++    for (const QString str : seekPercentagesStrList) {
++        const int sp = str.toInt(&seekPercentagesValid);
++
++        if (!seekPercentagesValid) {
++            break;
++        }
++
++        seekPercentages << sp;
++    }
++
++    if (seekPercentagesValid) {
++        settings->setSequenceSeekPercentages(seekPercentages);
++    }
++
++    settings->setCacheSize(m_thumbCacheSizeSpinBox->value());
++    thumbCache.setMaxCost(m_thumbCacheSizeSpinBox->value());
++
++    settings->save();
++}
+diff -Naur a/kffmpegthumbnailer/kffmpegthumbnailer.desktop b/kffmpegthumbnailer/kffmpegthumbnailer.desktop
+--- a/kffmpegthumbnailer/kffmpegthumbnailer.desktop	2019-10-03 21:52:00.000000000 +0200
++++ b/kffmpegthumbnailer/kffmpegthumbnailer.desktop	2022-03-15 19:03:28.090515571 +0100
+@@ -7,5 +7,7 @@
+ X-KDE-Library=kffmpegthumbnailer
+ ServiceTypes=ThumbCreator
+ CacheThumbnail=true
+-ThumbnailerVersion=1
++HandleSequences=true
++ThumbnailerVersion=2
+ IgnoreMaximumSize=true
++Configurable=true
+diff -Naur a/kffmpegthumbnailer/kffmpegthumbnailer.h b/kffmpegthumbnailer/kffmpegthumbnailer.h
+--- a/kffmpegthumbnailer/kffmpegthumbnailer.h	2019-10-03 21:52:00.000000000 +0200
++++ b/kffmpegthumbnailer/kffmpegthumbnailer.h	2022-03-15 19:03:28.090515571 +0100
+@@ -18,23 +18,40 @@
+ #define KFFMPEG_THUMBNAILER_H
+ 
+ #include <QObject>
+-#include <kio/thumbcreator.h>
++#include <QCache>
++#include <QCheckBox>
++#include <QLineEdit>
++#include <QSpinBox>
++#include <kio/thumbsequencecreator.h>
+ 
+ #include <libffmpegthumbnailer/videothumbnailer.h>
+ #include <libffmpegthumbnailer/filmstripfilter.h>
+ 
+-class KFFMpegThumbnailer : public QObject, public ThumbCreator
++class KFFMpegThumbnailer : public QObject, public ThumbSequenceCreator
+ {
+     Q_OBJECT
++
++private:
++    typedef QCache<QString, QImage> ThumbCache;
++
+ public:
+     KFFMpegThumbnailer();
+     virtual ~KFFMpegThumbnailer();
+-    virtual bool create(const QString& path, int width, int heught, QImage& img);
+-    virtual Flags flags() const;
+-    
++    virtual bool create(const QString& path, int width, int height, QImage& img) override;
++    virtual float sequenceIndexWraparoundPoint() const;
++    virtual Flags flags() const override;
++    virtual QWidget* createConfigurationWidget() override;
++    virtual void writeConfiguration(const QWidget* configurationWidget) override;
++
+ private:
+     ffmpegthumbnailer::VideoThumbnailer    m_Thumbnailer;
+     ffmpegthumbnailer::FilmStripFilter     m_FilmStrip;
++    ThumbCache thumbCache;
++    QCheckBox*                             m_addFilmStripCheckBox;
++    QCheckBox*                             m_useMetadataCheckBox;
++    QCheckBox*                             m_useSmartSelectionCheckBox;
++    QLineEdit*                             m_sequenceSeekPercentagesLineEdit;
++    QSpinBox*                              m_thumbCacheSizeSpinBox;
+ };
+ 
+ #endif
+diff -Naur a/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfg b/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfg
+--- a/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfg	1970-01-01 01:00:00.000000000 +0100
++++ b/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfg	2022-03-15 19:03:28.090515571 +0100
+@@ -0,0 +1,29 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
++      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
++      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
++    <kcfgfile name="kffmpegthumbsrc"/>
++    <group name="General">
++      <entry name="addFilmstrip" type="Bool">
++          <label>Embed filmstrip effect</label>
++          <default>false</default>
++      </entry>
++      <entry name="useMetadataCovers" type="Bool">
++          <label>Use metadata embedded cover pictures</label>
++          <default>true</default>
++      </entry>
++      <entry name="useSmartSelection" type="Bool">
++          <label>Use smart (slower) frame selection</label>
++          <default>false</default>
++      </entry>
++      <entry name="sequenceSeekPercentages" type="IntList">
++          <label>Sequence seek percentages</label>
++          <default>20,35,50,65,80</default>
++      </entry>
++      <entry name="cacheSize" type="UInt">
++          <label>Cache size (KiB)</label>
++          <default>51200</default>
++      </entry>
++    </group>
++</kcfg>
+diff -Naur a/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfgc b/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfgc
+--- a/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfgc	1970-01-01 01:00:00.000000000 +0100
++++ b/kffmpegthumbnailer/kffmpegthumbnailersettings5.kcfgc	2022-03-15 19:03:28.090515571 +0100
+@@ -0,0 +1,4 @@
++File=kffmpegthumbnailersettings5.kcfg
++ClassName=KFFMpegThumbnailerSettings
++Singleton=true
++Mutators=true
+diff -Naur a/libffmpegthumbnailer/filmstripfilter.cpp b/libffmpegthumbnailer/filmstripfilter.cpp
+--- a/libffmpegthumbnailer/filmstripfilter.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/filmstripfilter.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -26,7 +26,7 @@
+ {
+     if (videoWidth <= SMALLEST_FILM_STRIP_WIDTH * 2)
+     {
+-        return NULL;
++        return nullptr;
+     }
+     
+     if (videoWidth <= 96)
+diff -Naur a/libffmpegthumbnailer/histogram.h b/libffmpegthumbnailer/histogram.h
+--- a/libffmpegthumbnailer/histogram.h	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/histogram.h	2022-03-15 19:03:28.090515571 +0100
+@@ -17,7 +17,7 @@
+ #ifndef HISTOGRAM_H
+ #define HISTOGRAM_H
+ 
+-#include <string.h>
++#include <array>
+ 
+ namespace ffmpegthumbnailer
+ {
+@@ -25,16 +25,9 @@
+ template <typename T>
+ struct Histogram
+ {
+-    T r[256];
+-    T g[256];
+-    T b[256];
+-
+-    Histogram()
+-    {
+-        memset(r, 0, 256 * sizeof(T));
+-        memset(g, 0, 256 * sizeof(T));
+-        memset(b, 0, 256 * sizeof(T));
+-    }
++    std::array<T, 256> r{};
++    std::array<T, 256> g{};
++    std::array<T, 256> b{};
+ };
+ 
+ }
+diff -Naur a/libffmpegthumbnailer/imagewriter.h b/libffmpegthumbnailer/imagewriter.h
+--- a/libffmpegthumbnailer/imagewriter.h	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/imagewriter.h	2022-03-15 19:03:28.090515571 +0100
+@@ -26,11 +26,10 @@
+ class ImageWriter
+ {
+ public:
+-    ImageWriter() {}
+-    virtual ~ImageWriter() {}
++   virtual ~ImageWriter() = default;
+ 
+-	virtual void setText(const std::string& key, const std::string& value) = 0;
+-	virtual void writeFrame(uint8_t** rgbData, int width, int height, int quality) = 0;
++   virtual void setText(const std::string& key, const std::string& value) = 0;
++   virtual void writeFrame(uint8_t** rgbData, int width, int height, int quality) = 0;
+ };
+ 
+ }
+diff -Naur a/libffmpegthumbnailer/jpegwriter.cpp b/libffmpegthumbnailer/jpegwriter.cpp
+--- a/libffmpegthumbnailer/jpegwriter.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/jpegwriter.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -41,8 +41,8 @@
+ 
+ JpegWriter::JpegWriter(const string& outputFile)
+ : ImageWriter()
+-, m_pFile(NULL)
+-, m_pBufferWriter(NULL)
++, m_pFile(nullptr)
++, m_pBufferWriter(nullptr)
+ {
+     init();
+ 	m_pFile = outputFile == "-" ? stdout : fopen(outputFile.c_str(), "wb");
+@@ -57,8 +57,8 @@
+ 
+ JpegWriter::JpegWriter(std::vector<uint8_t>& outputBuffer)
+ : ImageWriter()
+-, m_pFile(NULL)
+-, m_pBufferWriter(NULL)
++, m_pFile(nullptr)
++, m_pBufferWriter(nullptr)
+ {
+     init();
+ 
+@@ -115,7 +115,7 @@
+ 
+ void jpegInitDestination(j_compress_ptr pCompressionInfo)
+ {
+-    BufferWriter* bufWriter = reinterpret_cast<BufferWriter*>(pCompressionInfo->dest);
++    auto bufWriter = reinterpret_cast<BufferWriter*>(pCompressionInfo->dest);
+ 
+     bufWriter->m_pDataBuffer = (uint8_t*)(*pCompressionInfo->mem->alloc_small) ((j_common_ptr) pCompressionInfo, JPOOL_IMAGE, JPEG_WORK_BUFFER_SIZE);
+     bufWriter->m_DestMgr.next_output_byte = bufWriter->m_pDataBuffer;
+@@ -124,7 +124,7 @@
+ 
+ boolean jpegFlushWorkBuffer(j_compress_ptr pCompressionInfo)
+ {
+-    BufferWriter* bufWriter = reinterpret_cast<BufferWriter*>(pCompressionInfo->dest);
++    auto bufWriter = reinterpret_cast<BufferWriter*>(pCompressionInfo->dest);
+ 
+     size_t prevSize = bufWriter->m_pDataSink->size();
+     bufWriter->m_pDataSink->resize(prevSize + JPEG_WORK_BUFFER_SIZE);
+@@ -139,7 +139,7 @@
+ 
+ void jpegDestroyDestination(j_compress_ptr pCompressionInfo)
+ {
+-    BufferWriter* bufWriter = reinterpret_cast<BufferWriter*>(pCompressionInfo->dest);
++    auto bufWriter = reinterpret_cast<BufferWriter*>(pCompressionInfo->dest);
+     size_t datacount = JPEG_WORK_BUFFER_SIZE - bufWriter->m_DestMgr.free_in_buffer;
+ 
+     size_t prevSize = bufWriter->m_pDataSink->size();
+diff -Naur a/libffmpegthumbnailer/moviedecoder.cpp b/libffmpegthumbnailer/moviedecoder.cpp
+--- a/libffmpegthumbnailer/moviedecoder.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/moviedecoder.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -41,11 +41,6 @@
+ namespace ffmpegthumbnailer
+ {
+ 
+-struct SilenceLogLevel
+-{
+-    SilenceLogLevel() { av_log_set_level(AV_LOG_QUIET); }
+-};
+-
+ MovieDecoder::MovieDecoder(AVFormatContext* pavContext)
+ : m_VideoStream(-1)
+ , m_pFormatContext(pavContext)
+@@ -70,8 +65,6 @@
+ 
+ void MovieDecoder::initialize(const string& filename, bool preferEmbeddedMetadata)
+ {
+-    av_register_all();
+-    avcodec_register_all();
+     avformat_network_init();
+ 
+     string inputFile = filename == "-" ? "pipe:" : filename;
+@@ -97,8 +90,7 @@
+ {
+     if (m_pVideoCodecContext)
+     {
+-        avcodec_close(m_pVideoCodecContext);
+-        m_pVideoCodecContext = nullptr;
++        avcodec_free_context(&m_pVideoCodecContext);
+     }
+ 
+     if ((!m_FormatContextWasGiven) && m_pFormatContext)
+@@ -152,10 +144,10 @@
+     for (unsigned int i = 0; i < m_pFormatContext->nb_streams; ++i)
+     {
+         AVStream *stream = m_pFormatContext->streams[i];
+-        auto ctx = m_pFormatContext->streams[i]->codec;
+-        if (ctx->codec_type == AVMEDIA_TYPE_VIDEO)
++        auto par = m_pFormatContext->streams[i]->codecpar;
++        if (par->codec_type == AVMEDIA_TYPE_VIDEO)
+         {
+-            if (!preferEmbeddedMetadata || !isStillImageCodec(ctx->codec_id))
++            if (!preferEmbeddedMetadata || !isStillImageCodec(par->codec_id))
+             {
+                 videoStreams.push_back(i);
+                 continue;
+@@ -203,8 +195,7 @@
+     }
+ 
+     m_pVideoStream = m_pFormatContext->streams[m_VideoStream];
+-    m_pVideoCodecContext = m_pVideoStream->codec;
+-    m_pVideoCodec = avcodec_find_decoder(m_pVideoCodecContext->codec_id);
++    m_pVideoCodec = avcodec_find_decoder(m_pVideoStream->codecpar->codec_id);
+ 
+     if (m_pVideoCodec == nullptr)
+     {
+@@ -214,6 +205,20 @@
+         throw logic_error("Video Codec not found");
+     }
+ 
++    m_pVideoCodecContext = avcodec_alloc_context3(m_pVideoCodec);
++
++    if (m_pVideoCodecContext == nullptr)
++    {
++        destroy();
++        throw logic_error("Could not allocate video codec context");
++    }
++
++    if (avcodec_parameters_to_context(m_pVideoCodecContext, m_pVideoStream->codecpar) < 0)
++    {
++        destroy();
++        throw logic_error("Could not configure video codec context");
++    }
++
+     m_pVideoCodecContext->workaround_bugs = 1;
+ 
+     if (avcodec_open2(m_pVideoCodecContext, m_pVideoCodec, nullptr) < 0)
+@@ -386,13 +391,6 @@
+ 
+ void MovieDecoder::initializeFilterGraph(const AVRational& timeBase, const std::string& size, bool maintainAspectRatio)
+ {
+-    static const AVPixelFormat pixelFormats[] = { AV_PIX_FMT_RGB24, AV_PIX_FMT_NONE };
+-
+-    auto del = [] (AVBufferSinkParams* p) { av_freep(p); };
+-    std::unique_ptr<AVBufferSinkParams, decltype(del)> buffersinkParams(av_buffersink_params_alloc(), del);
+-
+-    avfilter_register_all();
+-
+     m_pFilterGraph = avfilter_graph_alloc();
+     assert(m_pFilterGraph);
+ 
+@@ -404,10 +402,8 @@
+ 
+     checkRc(avfilter_graph_create_filter(&m_pFilterSource, avfilter_get_by_name("buffer"), "thumb_buffer", ss.str().c_str(), nullptr, m_pFilterGraph),
+             "Failed to create filter source");
+-    buffersinkParams->pixel_fmts = pixelFormats;
+-    checkRc(avfilter_graph_create_filter(&m_pFilterSink, avfilter_get_by_name("buffersink"), "thumb_buffersink", nullptr, buffersinkParams.get(), m_pFilterGraph),
++    checkRc(avfilter_graph_create_filter(&m_pFilterSink, avfilter_get_by_name("buffersink"), "thumb_buffersink", nullptr, nullptr, m_pFilterGraph),
+             "Failed to create filter sink");
+-    buffersinkParams.release();
+ 
+     AVFilterContext* yadifFilter = nullptr;
+     if (m_pFrame->interlaced_frame != 0)
+@@ -500,15 +496,15 @@
+     }
+ 
+     checkRc(av_seek_frame(m_pFormatContext, -1, timestamp, 0), "Seeking in video failed");
+-    avcodec_flush_buffers(m_pFormatContext->streams[m_VideoStream]->codec);
++    avcodec_flush_buffers(m_pVideoCodecContext);
+ 
+     int keyFrameAttempts = 0;
+-    bool gotFrame = 0;
++    bool gotFrame;
+ 
+     do
+     {
+         int count = 0;
+-        gotFrame = 0;
++        gotFrame = false;
+ 
+         while (!gotFrame && count < 20)
+         {
+@@ -552,17 +548,33 @@
+         return false;
+     }
+ 
+-    av_frame_unref(m_pFrame);
+-
+-    int frameFinished;
++    int rc = avcodec_send_packet(m_pVideoCodecContext, m_pPacket);
++    if(rc == AVERROR(EAGAIN))
++    {
++        rc = 0;
++    }
+ 
+-    int bytesDecoded = avcodec_decode_video2(m_pVideoCodecContext, m_pFrame, &frameFinished, m_pPacket);
+-    if (bytesDecoded < 0)
++    if(rc == AVERROR_EOF)
++    {
++        return false;
++    }
++    else if(rc < 0)
+     {
+-        throw logic_error("Failed to decode video frame: bytesDecoded < 0");
++        throw logic_error("Failed to decode video frame: avcodec_send_packet() < 0");
+     }
+ 
+-    return frameFinished > 0;
++    rc = avcodec_receive_frame(m_pVideoCodecContext, m_pFrame);
++    switch(rc)
++    {
++        case 0:
++            return true;
++
++        case AVERROR(EAGAIN):
++            return false;
++
++        default:
++            throw logic_error("Failed to decode video frame: avcodec_receive_frame() < 0");
++    }
+ }
+ 
+ bool MovieDecoder::getVideoPacket()
+@@ -570,8 +582,6 @@
+     bool framesAvailable = true;
+     bool frameDecoded = false;
+ 
+-    int attempts = 0;
+-
+     if (m_pPacket)
+     {
+         av_packet_unref(m_pPacket);
+@@ -580,6 +590,7 @@
+ 
+     m_pPacket = new AVPacket();
+ 
++
+     while (framesAvailable && !frameDecoded)
+     {
+         framesAvailable = av_read_frame(m_pFormatContext, m_pPacket) >= 0;
+@@ -644,7 +655,7 @@
+ 
+ int32_t MovieDecoder::getStreamRotation()
+ {
+-    int32_t* matrix = reinterpret_cast<int32_t*>(av_stream_get_side_data(m_pVideoStream, AV_PKT_DATA_DISPLAYMATRIX, nullptr));
++    auto matrix = reinterpret_cast<int32_t*>(av_stream_get_side_data(m_pVideoStream, AV_PKT_DATA_DISPLAYMATRIX, nullptr));
+     if (matrix)
+     {
+         auto angle = lround(av_display_rotation_get(matrix));
+diff -Naur a/libffmpegthumbnailer/moviedecoder.h b/libffmpegthumbnailer/moviedecoder.h
+--- a/libffmpegthumbnailer/moviedecoder.h	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/moviedecoder.h	2022-03-15 19:03:28.090515571 +0100
+@@ -78,7 +78,7 @@
+     int                     m_VideoStream;
+     AVFormatContext*        m_pFormatContext;
+     AVCodecContext*         m_pVideoCodecContext;
+-    AVCodec*                m_pVideoCodec;
++    const AVCodec*          m_pVideoCodec;
+     AVFilterGraph*          m_pFilterGraph;
+     AVFilterContext*        m_pFilterSource;
+     AVFilterContext*        m_pFilterSink;
+diff -Naur a/libffmpegthumbnailer/pngwriter.cpp b/libffmpegthumbnailer/pngwriter.cpp
+--- a/libffmpegthumbnailer/pngwriter.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/pngwriter.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -28,9 +28,9 @@
+ 
+ PngWriter::PngWriter(const string& outputFile)
+ : ImageWriter()
+-, m_FilePtr(NULL)
+-, m_PngPtr(NULL)
+-, m_InfoPtr(NULL)
++, m_FilePtr(nullptr)
++, m_PngPtr(nullptr)
++, m_InfoPtr(nullptr)
+ {
+     init();
+     m_FilePtr = outputFile == "-" ? stdout : fopen(outputFile.c_str(), "wb");
+@@ -45,12 +45,12 @@
+ 
+ PngWriter::PngWriter(std::vector<uint8_t>& outputBuffer)
+ : ImageWriter()
+-, m_FilePtr(NULL)
+-, m_PngPtr(NULL)
+-, m_InfoPtr(NULL)
++, m_FilePtr(nullptr)
++, m_PngPtr(nullptr)
++, m_InfoPtr(nullptr)
+ {
+     init();
+-    png_set_write_fn(m_PngPtr, (png_voidp) &outputBuffer, writeDataCallback, NULL);
++    png_set_write_fn(m_PngPtr, (png_voidp)&outputBuffer, writeDataCallback, nullptr);
+ }
+ 
+ PngWriter::~PngWriter()
+@@ -64,7 +64,7 @@
+ 
+ void PngWriter::init()
+ {
+-    m_PngPtr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
++    m_PngPtr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+     if (!m_PngPtr)
+     {
+         throw logic_error("Failed to create png write structure");
+@@ -73,7 +73,7 @@
+     m_InfoPtr = png_create_info_struct(m_PngPtr);
+     if (!m_InfoPtr)
+     {
+-        png_destroy_write_struct(&m_PngPtr, (png_infopp) NULL);
++        png_destroy_write_struct(&m_PngPtr, (png_infopp) nullptr);
+         throw logic_error("Failed to create png info structure");
+     }
+ }
+@@ -101,7 +101,7 @@
+                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+ 
+     png_set_rows(m_PngPtr, m_InfoPtr, rgbData);
+-    png_write_png(m_PngPtr, m_InfoPtr, 0, NULL);
++    png_write_png(m_PngPtr, m_InfoPtr, 0, nullptr);
+ }
+ 
+ void writeDataCallback(png_structp png_ptr, png_bytep data, png_size_t length)
+diff -Naur a/libffmpegthumbnailer/rgbwriter.cpp b/libffmpegthumbnailer/rgbwriter.cpp
+--- a/libffmpegthumbnailer/rgbwriter.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/rgbwriter.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -57,7 +57,7 @@
+ 
+ void RgbWriter::writeFrame(uint8_t** rgbData, int width, int height, int /*quality*/)
+ {
+-    const size_t lineSize = static_cast<size_t>(width * 3);
++    const auto lineSize = static_cast<size_t>(width * 3);
+ 
+     if (m_FilePtr)
+     {
+diff -Naur a/libffmpegthumbnailer/videothumbnailerc.cpp b/libffmpegthumbnailer/videothumbnailerc.cpp
+--- a/libffmpegthumbnailer/videothumbnailerc.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/videothumbnailerc.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -40,7 +40,7 @@
+ 
+ extern "C" video_thumbnailer* video_thumbnailer_create(void)
+ {
+-    video_thumbnailer* thumbnailer = new video_thumbnailer_struct();
++    auto thumbnailer = new video_thumbnailer_struct();
+ 
+     thumbnailer->thumbnail_size             = 128;
+     thumbnailer->seek_percentage            = 10;
+@@ -65,9 +65,9 @@
+ 
+ extern "C" image_data* video_thumbnailer_create_image_data(void)
+ {
+-    image_data* data        = new image_data();
++    auto data               = new image_data();
+ 
+-    data->image_data_ptr    = 0;
++    data->image_data_ptr    = nullptr;
+     data->image_data_size   = 0;
+     data->image_data_width  = 0;
+     data->image_data_height = 0;
+@@ -78,14 +78,14 @@
+ 
+ extern "C" void video_thumbnailer_destroy_image_data(image_data* data)
+ {
+-    data->image_data_ptr    = 0;
++    data->image_data_ptr    = nullptr;
+     data->image_data_size   = 0;
+     data->image_data_width  = 0;
+     data->image_data_height = 0;
+ 
+-    std::vector<uint8_t>* dataVector = reinterpret_cast<std::vector<uint8_t>* >(data->internal_data);
++    auto dataVector = reinterpret_cast<std::vector<uint8_t>*>(data->internal_data);
+     delete dataVector;
+-    data->internal_data     = 0;
++    data->internal_data     = nullptr;
+ 
+     delete data;
+ }
+diff -Naur a/libffmpegthumbnailer/videothumbnailer.cpp b/libffmpegthumbnailer/videothumbnailer.cpp
+--- a/libffmpegthumbnailer/videothumbnailer.cpp	2019-10-03 21:52:00.000000000 +0200
++++ b/libffmpegthumbnailer/videothumbnailer.cpp	2022-03-15 19:03:28.090515571 +0100
+@@ -32,6 +32,7 @@
+ #include <stdexcept>
+ #include <cassert>
+ #include <cerrno>
++#include <cstring>
+ #include <memory>
+ #include <regex>
+ #include <algorithm>
+@@ -204,6 +205,7 @@
+     applyFilters(videoFrame);
+ 
+     vector<uint8_t*> rowPointers;
++    rowPointers.reserve(videoFrame.height);
+     for (int i = 0; i < videoFrame.height; ++i)
+     {
+         rowPointers.push_back(&(videoFrame.frameData[i * videoFrame.lineSize]));
+@@ -378,13 +380,12 @@
+ int VideoThumbnailer::getBestThumbnailIndex(vector<VideoFrame>& videoFrames, const vector<Histogram<int> >& histograms)
+ {
+     Histogram<float> avgHistogram;
+-    for (size_t i = 0; i < histograms.size(); ++i)
+-    {
++    for (auto&& histogram : histograms) {
+         for (int j = 0; j < 255; ++j)
+         {
+-            avgHistogram.r[j] += static_cast<float>(histograms[i].r[j]) / histograms.size();
+-            avgHistogram.g[j] += static_cast<float>(histograms[i].g[j]) / histograms.size();
+-            avgHistogram.b[j] += static_cast<float>(histograms[i].b[j]) / histograms.size();
++            avgHistogram.r[j] += static_cast<float>(histogram.r[j]) / histograms.size();
++            avgHistogram.g[j] += static_cast<float>(histogram.g[j]) / histograms.size();
++            avgHistogram.b[j] += static_cast<float>(histogram.b[j]) / histograms.size();
+         }
+     }
+ 
+diff -Naur a/.travis.yml b/.travis.yml
+--- a/.travis.yml	2019-10-03 21:52:00.000000000 +0200
++++ b/.travis.yml	2022-03-15 19:03:28.090515571 +0100
+@@ -48,7 +48,7 @@
+       os: osx
+       env:
+         - BUILD_TYPE=Release
+-      osx_image: xcode9
++      osx_image: xcode12
+ 
+ before_install:
+   ############################################################################
+@@ -77,7 +77,7 @@
+   ############################################################################
+   - |
+     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+-      CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz"
++      CMAKE_URL="https://cmake.org/files/v3.12/cmake-3.12.3-Linux-x86_64.tar.gz"
+       mkdir -p ${DEPS_DIR}/cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C ${DEPS_DIR}/cmake
+       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+     fi
+@@ -86,16 +86,16 @@
+   ############################################################################
+   - |
+     if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+-      brew update
+-      brew install ffmpeg
++      HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
++      brew upgrade cmake
+     fi
+ 
+ install:
+   - |
+     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+-      wget http://ffmpeg.org/releases/ffmpeg-3.1.3.tar.bz2
+-      tar xf ffmpeg-3.1.3.tar.bz2
+-      cd ffmpeg-3.1.3 && ./configure --prefix=/${DEPS_DIR}/local --disable-static --enable-shared --disable-avdevice --disable-doc --disable-htmlpages --disable-manpages --disable-programs --disable-encoders --disable-muxers --enable-swscale --disable-yasm --enable-protocol=file --enable-protocol=http --enable-iconv  && make -j4 install
++      wget https://www.ffmpeg.org/releases/ffmpeg-4.4.tar.bz2
++      tar xf ffmpeg-4.4.tar.bz2
++      cd ffmpeg-4.4 && ./configure --prefix=/${DEPS_DIR}/local --disable-static --enable-shared --disable-avdevice --disable-doc --disable-htmlpages --disable-manpages --disable-programs --disable-encoders --disable-muxers --enable-swscale --disable-yasm --enable-protocol=file --enable-protocol=http --enable-iconv  && make -j4 install
+       cd ..
+     fi
+ 
+@@ -112,4 +112,4 @@
+     notification_email: dirk.vdb@gmail.com
+     build_command_prepend: "cmake ."
+     build_command: "make -j4"
+-    branch_pattern: coverity_scan
+\ Nincs új sor a fájl végén
++    branch_pattern: coverity_scan

@@ -16,7 +16,7 @@ rsync -a \
     --exclude="*.app"   --exclude="tools/install" \
     . "$UB_INSTALLDIR"/usr/lib/lazarus
 
-mv "$UB_INSTALLDIR"/usr/lib/lazarus/README.txt .
+mv "$UB_INSTALLDIR"/usr/lib/lazarus/README.md .
 install -Dm644 install/lazarus.desktop "$UB_INSTALLDIR"/usr/share/applications/lazarus.desktop
 install -Dm644 images/ide_icon48x48.png "$UB_INSTALLDIR"/usr/share/pixmaps/lazarus.png
 ln -sf /usr/lib/lazarus/lazarus "$UB_INSTALLDIR"/usr/bin/lazarus
