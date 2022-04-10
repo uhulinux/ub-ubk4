@@ -1,0 +1,45 @@
+diff -Naur orig/src/gui.c patched/src/gui.c
+--- orig/src/gui.c	2021-04-05 17:03:30.578869898 +0200
++++ patched/src/gui.c	2021-04-05 17:04:42.119049254 +0200
+@@ -24,6 +24,7 @@
+ #include <glib/gi18n.h>
+ #include <gio/gio.h>
+ #include <gtk/gtk.h>
++#include <ctype.h>
+ #include <math.h>
+ #include <stdlib.h>
+ #include "gui.h"
+diff -Naur orig/src/Makefile.am patched/src/Makefile.am
+--- orig/src/Makefile.am	2021-04-05 17:03:30.570869878 +0200
++++ patched/src/Makefile.am	2021-04-05 17:06:45.315357865 +0200
+@@ -65,6 +65,6 @@
+ BUILT_SOURCES = \
+ 	$(GNOMERADIO_RESOURCES)
+ 
+-gnomeradio_LDADD = $(ALSA_LIBS) $(GNOME_LIBS) $(GSTREAMER_LIBS) $(XML_LIBS) $(LIRC) -lpthread
++gnomeradio_LDADD = $(ALSA_LIBS) $(GNOME_LIBS) $(GSTREAMER_LIBS) $(XML_LIBS) $(LIRC) -lpthread -lm
+ 
+ CLEANFILES = $(BUILT_SOURCES)
+diff -Naur orig/src/Makefile.in patched/src/Makefile.in
+--- orig/src/Makefile.in	2008-09-13 18:01:57.000000000 +0200
++++ patched/src/Makefile.in	2021-04-05 17:07:56.799536807 +0200
+@@ -279,7 +279,7 @@
+             v4l1.c \
+             v4l2.c
+ 
+-gnomeradio_LDADD = $(GNOME_LIBS) $(GSTREAMER_LIBS) $(LIRC)
++gnomeradio_LDADD = $(GNOME_LIBS) $(GSTREAMER_LIBS) $(LIRC) -lpthread -lm
+ all: all-am
+ 
+ .SUFFIXES:
+diff -Naur orig/src/utils.c patched/src/utils.c
+--- orig/src/utils.c	2021-04-05 17:03:30.538869798 +0200
++++ patched/src/utils.c	2021-04-05 17:06:23.259302636 +0200
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include <fcntl.h>
++#include <unistd.h>
+ #include "utils.h"
+ 
+ int open_read(const char *filename)

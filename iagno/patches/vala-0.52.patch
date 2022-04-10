@@ -1,0 +1,341 @@
+diff -Naur orig/src/base-headerbar.vala patched/src/base-headerbar.vala
+--- orig/src/base-headerbar.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/base-headerbar.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -20,7 +20,7 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/base-headerbar.ui")]
+ private class BaseHeaderBar : NightTimeAwareHeaderBar, AdaptativeWidget
+ {
+-    [GtkChild] protected Box center_box;
++    [GtkChild] protected unowned Box center_box;
+ 
+     construct
+     {
+@@ -190,13 +190,13 @@
+     * * default widgets
+     \*/
+ 
+-    [GtkChild] private   Button     go_back_button;
+-    [GtkChild] private   Separator  ltr_left_separator;
+-    [GtkChild] private   Label      title_label;
+-    [GtkChild] private   MenuButton info_button;
+-    [GtkChild] private   Separator  ltr_right_separator;
++    [GtkChild] private   unowned Button     go_back_button;
++    [GtkChild] private   unowned Separator  ltr_left_separator;
++    [GtkChild] private   unowned Label      title_label;
++    [GtkChild] private   unowned MenuButton info_button;
++    [GtkChild] private   unowned Separator  ltr_right_separator;
+ 
+-    [GtkChild] protected Stack      quit_button_stack;
++    [GtkChild] protected unowned Stack      quit_button_stack;
+ 
+     protected void set_default_widgets_states (string?  title_label_text_or_null,
+                                                bool     show_go_back_button,
+diff -Naur orig/src/base-view.vala patched/src/base-view.vala
+--- orig/src/base-view.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/base-view.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -20,7 +20,7 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/base-view.ui")]
+ private class BaseView : Stack, AdaptativeWidget
+ {
+-    [GtkChild] protected Grid main_grid;
++    [GtkChild] protected unowned Grid main_grid;
+ 
+     internal virtual bool handle_copy_text (out string copy_text)
+     {
+@@ -109,7 +109,7 @@
+     * * notifications
+     \*/
+ 
+-    [GtkChild] private Overlay notifications_overlay;
++    [GtkChild] private unowned Overlay notifications_overlay;
+ 
+     private bool notifications_revealer_created = false;
+     private NotificationsRevealer notifications_revealer;
+diff -Naur orig/src/base-window.vala patched/src/base-window.vala
+--- orig/src/base-window.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/base-window.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -74,9 +74,9 @@
+     * * main layout
+     \*/
+ 
+-    [GtkChild] private Grid main_grid;
+-    [GtkChild] private Button unfullscreen_button;
+-    [GtkChild] private Overlay main_overlay;
++    [GtkChild] private unowned Grid main_grid;
++    [GtkChild] private unowned Button unfullscreen_button;
++    [GtkChild] private unowned Overlay main_overlay;
+ 
+     protected void add_to_main_overlay (Widget widget)
+     {
+diff -Naur orig/src/game-actionbar.vala patched/src/game-actionbar.vala
+--- orig/src/game-actionbar.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/game-actionbar.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -28,8 +28,8 @@
+     [CCode (notify = false)] public string  window_name  { private get; protected construct set; default = ""   ; }
+     [CCode (notify = false)] public Widget? game_widget  { private get; protected construct    ; default = null ; }
+ 
+-    [GtkChild] private ActionBar action_bar;
+-    [GtkChild] private Label game_label;
++    [GtkChild] private unowned ActionBar action_bar;
++    [GtkChild] private unowned Label game_label;
+ 
+     construct
+     {
+@@ -93,7 +93,7 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/game-actionbar-placeholder.ui")]
+ private class GameActionBarPlaceHolder : Revealer, AdaptativeWidget
+ {
+-    [GtkChild] private Widget placeholder_child;
++    [GtkChild] private unowned Widget placeholder_child;
+     private GameActionBar actionbar;
+ 
+     internal GameActionBarPlaceHolder (GameActionBar _actionbar)
+diff -Naur orig/src/game-headerbar.vala patched/src/game-headerbar.vala
+--- orig/src/game-headerbar.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/game-headerbar.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -23,8 +23,8 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/game-headerbar.ui")]
+ private class GameHeaderBar : BaseHeaderBar, AdaptativeWidget
+ {
+-    [GtkChild] private Button           new_game_button;
+-    [GtkChild] private Button           back_button;
++    [GtkChild] private unowned Button           new_game_button;
++    [GtkChild] private unowned Button           back_button;
+ 
+     [CCode (notify = false)] public bool window_has_name { private get; protected construct set; default = false; }
+     [CCode (notify = false)] public string window_name   { private get; protected construct set; default = ""; }
+diff -Naur orig/src/history-button.vala patched/src/history-button.vala
+--- orig/src/history-button.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/history-button.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -25,8 +25,8 @@
+ {
+     [CCode (notify = false)] public ThemeManager theme_manager { private get; protected construct; }
+ 
+-    [GtkChild] private Stack stack;
+-    [GtkChild] private DrawingArea drawing;
++    [GtkChild] private unowned Stack stack;
++    [GtkChild] private unowned DrawingArea drawing;
+ 
+     internal HistoryButton (GLib.Menu menu, ThemeManager theme_manager)
+     {
+diff -Naur orig/src/iagno.vala patched/src/iagno.vala
+--- orig/src/iagno.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/iagno.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -142,6 +142,7 @@
+         Intl.textdomain (GETTEXT_PACKAGE);
+ 
+         Environment.set_application_name (PROGRAM_NAME);
++        Environment.set_prgname ("org.gnome.Reversi");
+         Window.set_default_icon_name ("org.gnome.Reversi");
+ 
+         return new Iagno ().run (args);
+diff -Naur orig/src/new-game-screen.vala patched/src/new-game-screen.vala
+--- orig/src/new-game-screen.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/new-game-screen.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -23,11 +23,11 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/new-game-screen.ui")]
+ private class NewGameScreen : Box, AdaptativeWidget
+ {
+-    [GtkChild] private ModelButton modelbutton_one;
+-    [GtkChild] private ModelButton modelbutton_two;
++    [GtkChild] private unowned ModelButton modelbutton_one;
++    [GtkChild] private unowned ModelButton modelbutton_two;
+ 
+-    [GtkChild] private Gtk.MenuButton menubutton_one;
+-    [GtkChild] private Gtk.MenuButton menubutton_two;
++    [GtkChild] private unowned Gtk.MenuButton menubutton_one;
++    [GtkChild] private unowned Gtk.MenuButton menubutton_two;
+ 
+     construct
+     {
+@@ -106,12 +106,12 @@
+         map.connect (() => games_box.show ());
+     }
+ 
+-    [GtkChild] private Box          games_box;
+-    [GtkChild] private Box          options_box;
++    [GtkChild] private unowned Box          games_box;
++    [GtkChild] private unowned Box          options_box;
+ 
+-    [GtkChild] private Label        games_label;
+-    [GtkChild] private Label        options_label;
+-    [GtkChild] private Separator    options_separator;
++    [GtkChild] private unowned Label        games_label;
++    [GtkChild] private unowned Label        options_label;
++    [GtkChild] private unowned Separator    options_separator;
+ 
+     private bool phone_size = false;
+     private bool extra_thin = false;
+diff -Naur orig/src/notifications-revealer.vala patched/src/notifications-revealer.vala
+--- orig/src/notifications-revealer.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/notifications-revealer.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -20,7 +20,7 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/notifications-revealer.ui")]
+ private class NotificationsRevealer : Revealer, AdaptativeWidget
+ {
+-    [GtkChild] private Label notification_label;
++    [GtkChild] private unowned Label notification_label;
+ 
+     construct
+     {
+diff -Naur orig/src/overlayed-list.vala patched/src/overlayed-list.vala
+--- orig/src/overlayed-list.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/overlayed-list.vala	2021-04-05 02:31:34.537403776 +0200
+@@ -20,12 +20,12 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/overlayed-list.ui")]
+ private abstract class OverlayedList : Overlay, AdaptativeWidget
+ {
+-    [GtkChild] protected ListBox        main_list_box;
++    [GtkChild] protected unowned ListBox        main_list_box;
+                private   StyleContext   main_list_box_context;
+                protected GLib.ListStore main_list_store = new GLib.ListStore (typeof (Widget));
+ 
+-    [GtkChild] private   ScrolledWindow scrolled;
+-    [GtkChild] private   Box            edit_mode_box;
++    [GtkChild] private   unowned ScrolledWindow scrolled;
++    [GtkChild] private   unowned Box            edit_mode_box;
+ 
+     /*\
+     * * differed construct
+@@ -45,8 +45,8 @@
+     }
+ 
+ 
+-    [GtkChild] private ModelButton enter_edit_mode_button;
+-    [GtkChild] private ModelButton leave_edit_mode_button;
++    [GtkChild] private unowned ModelButton enter_edit_mode_button;
++    [GtkChild] private unowned ModelButton leave_edit_mode_button;
+     [CCode (notify = false)] public string edit_mode_action_prefix
+     {
+         construct
+@@ -89,11 +89,11 @@
+     internal void set_window_size (AdaptativeWidget.WindowSize new_size)
+     {
+         if (!AdaptativeWidget.WindowSize.is_extra_thin (new_size) && AdaptativeWidget.WindowSize.is_extra_flat (new_size))
+-            set_horizontal (ref main_context, ref edit_mode_box);
++            set_horizontal (ref main_context, edit_mode_box);
+         else
+-            set_vertical (ref main_context, ref edit_mode_box);
++            set_vertical (ref main_context, edit_mode_box);
+     }
+-    private static inline void set_horizontal (ref StyleContext main_context, ref Box edit_mode_box)
++    private static inline void set_horizontal (ref StyleContext main_context, Box edit_mode_box)
+     {
+         main_context.remove_class ("vertical");
+         edit_mode_box.halign = Align.END;
+@@ -102,7 +102,7 @@
+         edit_mode_box.width_request = 160;
+         main_context.add_class ("horizontal");
+     }
+-    private static inline void set_vertical (ref StyleContext main_context, ref Box edit_mode_box)
++    private static inline void set_vertical (ref StyleContext main_context, Box edit_mode_box)
+     {
+         main_context.remove_class ("horizontal");
+         edit_mode_box.halign = Align.CENTER;
+@@ -118,9 +118,9 @@
+ 
+     internal bool next_match ()
+     {
+-        return _next_match (ref main_list_box);
++        return _next_match (main_list_box);
+     }
+-    private static inline bool _next_match (ref ListBox main_list_box)
++    private static inline bool _next_match (ListBox main_list_box)
+     {
+         ListBoxRow? row = main_list_box.get_selected_row ();    // TODO multiple rows and focus-only lists
+         if (row == null)
+@@ -130,7 +130,7 @@
+ 
+         if (row == null)
+         {
+-            _scroll_bottom (ref main_list_box);
++            _scroll_bottom (main_list_box);
+             return false;
+         }
+         main_list_box.select_row ((!) row);
+@@ -140,9 +140,9 @@
+ 
+     internal bool previous_match ()
+     {
+-        return _previous_match (ref main_list_box);
++        return _previous_match (main_list_box);
+     }
+-    private static inline bool _previous_match (ref ListBox main_list_box)
++    private static inline bool _previous_match (ListBox main_list_box)
+     {
+         uint n_items = main_list_box.get_children ().length ();  // FIXME OverlayedList.n_items is unreliable
+         if (n_items == 0)
+@@ -189,9 +189,9 @@
+ 
+     protected int [] get_selected_rows_indices ()
+     {
+-        return _get_selected_rows_indices (ref main_list_box);
++        return _get_selected_rows_indices (main_list_box);
+     }
+-    private static inline int [] _get_selected_rows_indices (ref ListBox main_list_box)
++    private static inline int [] _get_selected_rows_indices (ListBox main_list_box)
+     {
+         int [] indices = new int [0];
+         main_list_box.selected_foreach ((_list_box, selected_row) => {
+@@ -205,9 +205,9 @@
+ 
+     protected void scroll_top ()
+     {
+-        _scroll_top (ref main_list_box);
++        _scroll_top (main_list_box);
+     }
+-    private static inline void _scroll_top (ref ListBox main_list_box)
++    private static inline void _scroll_top (ListBox main_list_box)
+     {
+         Adjustment adjustment = main_list_box.get_adjustment ();
+         adjustment.set_value (adjustment.get_lower ());
+@@ -215,9 +215,9 @@
+ 
+     protected void scroll_bottom ()
+     {
+-        _scroll_bottom (ref main_list_box);
++        _scroll_bottom (main_list_box);
+     }
+-    private static inline void _scroll_bottom (ref ListBox main_list_box)
++    private static inline void _scroll_bottom (ListBox main_list_box)
+     {
+         Adjustment adjustment = main_list_box.get_adjustment ();
+         adjustment.set_value (adjustment.get_upper ());
+@@ -225,9 +225,9 @@
+ 
+     internal bool handle_copy_text (out string copy_text)
+     {
+-        return _handle_copy_text (out copy_text, ref main_list_box);
++        return _handle_copy_text (out copy_text, main_list_box);
+     }
+-    private static inline bool _handle_copy_text (out string copy_text, ref ListBox main_list_box)
++    private static inline bool _handle_copy_text (out string copy_text, ListBox main_list_box)
+     {
+         List<weak ListBoxRow> selected_rows = main_list_box.get_selected_rows ();
+         OverlayedListRow row;
+@@ -283,9 +283,9 @@
+ 
+     internal SelectionState get_selection_state ()
+     {
+-        return _get_selection_state (ref main_list_box, ref main_list_store);
++        return _get_selection_state (main_list_box, ref main_list_store);
+     }
+-    private static inline SelectionState _get_selection_state (ref ListBox main_list_box, ref GLib.ListStore main_list_store)
++    private static inline SelectionState _get_selection_state (ListBox main_list_box, ref GLib.ListStore main_list_store)
+     {
+         List<weak ListBoxRow> selected_rows = main_list_box.get_selected_rows ();
+         uint n_selected_rows = selected_rows.length ();
+diff -Naur orig/src/registry-placeholder.vala patched/src/registry-placeholder.vala
+--- orig/src/registry-placeholder.vala	1970-01-01 01:00:00.000000000 +0100
++++ patched/src/registry-placeholder.vala	2021-04-05 02:31:34.545403787 +0200
+@@ -20,8 +20,8 @@
+ [GtkTemplate (ui = "/org/gnome/Reversi/ui/registry-placeholder.ui")]
+ private class RegistryPlaceholder : Grid
+ {
+-    [GtkChild] private Label placeholder_label;
+-    [GtkChild] private Image placeholder_image;
++    [GtkChild] private unowned Label placeholder_label;
++    [GtkChild] private unowned Image placeholder_image;
+ 
+     [CCode (notify = false)] public string label     { internal construct set { placeholder_label.label = value; }}
+     [CCode (notify = false)] public string icon_name { private get; internal construct; }

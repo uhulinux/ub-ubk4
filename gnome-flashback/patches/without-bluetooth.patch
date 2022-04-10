@@ -1,0 +1,245 @@
+diff -Naur a/configure b/configure
+--- a/configure	2022-03-19 09:20:59.000000000 +0100
++++ b/configure	2022-04-10 19:05:48.162670751 +0200
+@@ -22088,14 +22088,12 @@
+ pkg_failed=no
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+ " >&5
+ printf %s "checking for
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22107,14 +22105,12 @@
+     if test -n "$PKG_CONFIG" && \
+     { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
+   gio-unix-2.0 >= \$GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= \$CANBERRA_REQUIRED
+   libgnome-panel >= \$LIBGNOME_PANEL_REQUIRED
+   upower-glib
+ \""; } >&5
+   ($PKG_CONFIG --exists --print-errors "
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22124,7 +22120,6 @@
+   test $ac_status = 0; }; then
+   pkg_cv_SYSTEM_INDICATORS_CFLAGS=`$PKG_CONFIG --cflags "
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22142,14 +22137,12 @@
+     if test -n "$PKG_CONFIG" && \
+     { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
+   gio-unix-2.0 >= \$GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= \$CANBERRA_REQUIRED
+   libgnome-panel >= \$LIBGNOME_PANEL_REQUIRED
+   upower-glib
+ \""; } >&5
+   ($PKG_CONFIG --exists --print-errors "
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22159,7 +22152,6 @@
+   test $ac_status = 0; }; then
+   pkg_cv_SYSTEM_INDICATORS_LIBS=`$PKG_CONFIG --libs "
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22186,7 +22178,6 @@
+         if test $_pkg_short_errors_supported = yes; then
+ 	        SYSTEM_INDICATORS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22194,7 +22185,6 @@
+         else
+ 	        SYSTEM_INDICATORS_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22205,7 +22195,6 @@
+ 
+ 	as_fn_error $? "Package requirements (
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+@@ -22242,45 +22231,6 @@
+ 
+ fi
+ 
+-save_CFLAGS="$CFLAGS"
+-CFLAGS=$SYSTEM_INDICATORS_CFLAGS
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for BLUETOOTH_TYPE_SPEAKERS" >&5
+-printf %s "checking for BLUETOOTH_TYPE_SPEAKERS... " >&6; }
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-
+-    #include <bluetooth-client.h>
+-
+-int
+-main (void)
+-{
+-
+-    int type = BLUETOOTH_TYPE_SPEAKERS;
+-
+-  ;
+-  return 0;
+-}
+-
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"
+-then :
+-
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-printf "%s\n" "yes" >&6; }
+-
+-printf "%s\n" "#define HAVE_BLUETOOTH_TYPE_SPEAKERS 1" >>confdefs.h
+-
+-
+-else $as_nop
+-
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-printf "%s\n" "no" >&6; }
+-
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+-CFLAGS="$save_CFLAGS"
+-
+ 
+ 
+ # Check whether --with-compiz-session was given.
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2022-03-19 09:20:16.000000000 +0100
++++ b/configure.ac	2022-04-10 19:04:01.390411897 +0200
+@@ -327,29 +327,11 @@
+ 
+ PKG_CHECK_MODULES([SYSTEM_INDICATORS], [
+   gio-unix-2.0 >= $GLIB_REQUIRED
+-  gnome-bluetooth-1.0
+   libcanberra-gtk3 >= $CANBERRA_REQUIRED
+   libgnome-panel >= $LIBGNOME_PANEL_REQUIRED
+   upower-glib
+ ])
+ 
+-save_CFLAGS="$CFLAGS"
+-CFLAGS=$SYSTEM_INDICATORS_CFLAGS
+-AC_MSG_CHECKING([for BLUETOOTH_TYPE_SPEAKERS])
+-AC_COMPILE_IFELSE([
+-  AC_LANG_PROGRAM([
+-    #include <bluetooth-client.h>
+-  ], [
+-    int type = BLUETOOTH_TYPE_SPEAKERS;
+-  ])
+-], [
+-  AC_MSG_RESULT([yes])
+-  AC_DEFINE([HAVE_BLUETOOTH_TYPE_SPEAKERS], [1], [xxx])
+-], [
+-  AC_MSG_RESULT([no])
+-])
+-CFLAGS="$save_CFLAGS"
+-
+ dnl **************************************************************************
+ dnl Compiz session
+ dnl **************************************************************************
+diff -Naur a/system-indicators/Makefile.am b/system-indicators/Makefile.am
+--- a/system-indicators/Makefile.am	2021-11-02 11:13:49.000000000 +0100
++++ b/system-indicators/Makefile.am	2022-04-10 19:02:49.922235508 +0200
+@@ -21,8 +21,6 @@
+ system_indicators_la_SOURCES = \
+ 	si-applet.c \
+ 	si-applet.h \
+-	si-bluetooth.c \
+-	si-bluetooth.h \
+ 	si-desktop-menu-item.c \
+ 	si-desktop-menu-item.h \
+ 	si-indicator.c \
+diff -Naur a/system-indicators/Makefile.in b/system-indicators/Makefile.in
+--- a/system-indicators/Makefile.in	2022-03-19 09:21:00.000000000 +0100
++++ b/system-indicators/Makefile.in	2022-04-10 19:02:22.354166787 +0200
+@@ -153,7 +153,6 @@
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ am__objects_1 =
+ am_system_indicators_la_OBJECTS = system_indicators_la-si-applet.lo \
+-	system_indicators_la-si-bluetooth.lo \
+ 	system_indicators_la-si-desktop-menu-item.lo \
+ 	system_indicators_la-si-indicator.lo \
+ 	system_indicators_la-si-input-sources.lo \
+@@ -186,7 +185,6 @@
+ depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
+ am__maybe_remake_depfiles = depfiles
+ am__depfiles_remade = ./$(DEPDIR)/system_indicators_la-si-applet.Plo \
+-	./$(DEPDIR)/system_indicators_la-si-bluetooth.Plo \
+ 	./$(DEPDIR)/system_indicators_la-si-desktop-menu-item.Plo \
+ 	./$(DEPDIR)/system_indicators_la-si-indicator.Plo \
+ 	./$(DEPDIR)/system_indicators_la-si-input-sources.Plo \
+@@ -469,8 +467,6 @@
+ system_indicators_la_SOURCES = \
+ 	si-applet.c \
+ 	si-applet.h \
+-	si-bluetooth.c \
+-	si-bluetooth.h \
+ 	si-desktop-menu-item.c \
+ 	si-desktop-menu-item.h \
+ 	si-indicator.c \
+@@ -578,7 +574,6 @@
+ 	-rm -f *.tab.c
+ 
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/system_indicators_la-si-applet.Plo@am__quote@ # am--include-marker
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/system_indicators_la-si-bluetooth.Plo@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/system_indicators_la-si-desktop-menu-item.Plo@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/system_indicators_la-si-indicator.Plo@am__quote@ # am--include-marker
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/system_indicators_la-si-input-sources.Plo@am__quote@ # am--include-marker
+@@ -624,13 +619,6 @@
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(system_indicators_la_CPPFLAGS) $(CPPFLAGS) $(system_indicators_la_CFLAGS) $(CFLAGS) -c -o system_indicators_la-si-applet.lo `test -f 'si-applet.c' || echo '$(srcdir)/'`si-applet.c
+ 
+-system_indicators_la-si-bluetooth.lo: si-bluetooth.c
+-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(system_indicators_la_CPPFLAGS) $(CPPFLAGS) $(system_indicators_la_CFLAGS) $(CFLAGS) -MT system_indicators_la-si-bluetooth.lo -MD -MP -MF $(DEPDIR)/system_indicators_la-si-bluetooth.Tpo -c -o system_indicators_la-si-bluetooth.lo `test -f 'si-bluetooth.c' || echo '$(srcdir)/'`si-bluetooth.c
+-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/system_indicators_la-si-bluetooth.Tpo $(DEPDIR)/system_indicators_la-si-bluetooth.Plo
+-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='si-bluetooth.c' object='system_indicators_la-si-bluetooth.lo' libtool=yes @AMDEPBACKSLASH@
+-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(system_indicators_la_CPPFLAGS) $(CPPFLAGS) $(system_indicators_la_CFLAGS) $(CFLAGS) -c -o system_indicators_la-si-bluetooth.lo `test -f 'si-bluetooth.c' || echo '$(srcdir)/'`si-bluetooth.c
+-
+ system_indicators_la-si-desktop-menu-item.lo: si-desktop-menu-item.c
+ @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(system_indicators_la_CPPFLAGS) $(CPPFLAGS) $(system_indicators_la_CFLAGS) $(CFLAGS) -MT system_indicators_la-si-desktop-menu-item.lo -MD -MP -MF $(DEPDIR)/system_indicators_la-si-desktop-menu-item.Tpo -c -o system_indicators_la-si-desktop-menu-item.lo `test -f 'si-desktop-menu-item.c' || echo '$(srcdir)/'`si-desktop-menu-item.c
+ @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/system_indicators_la-si-desktop-menu-item.Tpo $(DEPDIR)/system_indicators_la-si-desktop-menu-item.Plo
+@@ -814,7 +802,6 @@
+ 
+ distclean: distclean-am
+ 		-rm -f ./$(DEPDIR)/system_indicators_la-si-applet.Plo
+-	-rm -f ./$(DEPDIR)/system_indicators_la-si-bluetooth.Plo
+ 	-rm -f ./$(DEPDIR)/system_indicators_la-si-desktop-menu-item.Plo
+ 	-rm -f ./$(DEPDIR)/system_indicators_la-si-indicator.Plo
+ 	-rm -f ./$(DEPDIR)/system_indicators_la-si-input-sources.Plo
+@@ -868,7 +855,6 @@
+ 
+ maintainer-clean: maintainer-clean-am
+ 		-rm -f ./$(DEPDIR)/system_indicators_la-si-applet.Plo
+-	-rm -f ./$(DEPDIR)/system_indicators_la-si-bluetooth.Plo
+ 	-rm -f ./$(DEPDIR)/system_indicators_la-si-desktop-menu-item.Plo
+ 	-rm -f ./$(DEPDIR)/system_indicators_la-si-indicator.Plo
+ 	-rm -f ./$(DEPDIR)/system_indicators_la-si-input-sources.Plo

@@ -1,0 +1,27 @@
+From 07dceb9358b11ddefa99d2d1f5234b48c6d0413f Mon Sep 17 00:00:00 2001
+From: TAO ZUHONG <taozuhong@gmail.com>
+Date: Thu, 10 Feb 2022 14:05:24 +0000
+Subject: [PATCH] Fixed compilation error
+
+---
+ libgda/Gda-6.0-custom.vala | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libgda/Gda-6.0-custom.vala b/libgda/Gda-6.0-custom.vala
+index d046c5c24..4d1408648 100644
+--- a/libgda/Gda-6.0-custom.vala
++++ b/libgda/Gda-6.0-custom.vala
+@@ -92,7 +92,10 @@ namespace Gda {
+ 	[CCode (cheader_filename = "libgda.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "gda_sql_statement_get_type ()")]
+ 	[Compact]
+ 	public class SqlStatement {
++		#if VALA_0_50
++		#else
+ 		public static Gda.SqlStatementContentsInfo get_contents_infos (Gda.SqlStatementType type);
++		#endif
+ 	}
+ 
+ }
+-- 
+GitLab
+

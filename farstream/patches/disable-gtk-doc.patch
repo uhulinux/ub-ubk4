@@ -1,0 +1,102 @@
+diff -Naur orig/autogen.sh patched/autogen.sh
+--- orig/autogen.sh	2020-03-11 22:05:08.000000000 +0100
++++ patched/autogen.sh	2021-05-27 19:07:43.272124767 +0200
+@@ -24,7 +24,7 @@
+ fi
+ . common/gst-autogen.sh
+ 
+-CONFIGURE_DEF_OPT='--enable-gtk-doc'
++CONFIGURE_DEF_OPT='--disable-gtk-doc'
+ 
+ autogen_options $@
+ 
+diff -Naur orig/configure.ac patched/configure.ac
+--- orig/configure.ac	2020-03-12 00:26:39.000000000 +0100
++++ patched/configure.ac	2021-05-27 19:11:02.200857076 +0200
+@@ -198,10 +198,6 @@
+ dnl check for gobject-introspection
+ GOBJECT_INTROSPECTION_CHECK([0.10.1])
+ 
+-dnl check for documentation tools
+-GTK_DOC_CHECK([1.18])
+-AG_GST_PLUGIN_DOCS([1.8],[2.1])
+-
+ dnl Make automake happy with per-target flags
+ AM_PROG_CC_C_O
+ 
+@@ -418,10 +414,6 @@
+ examples/Makefile
+ examples/gui/Makefile
+ examples/commandline/Makefile
+-docs/Makefile
+-docs/libs/Makefile
+-docs/plugins/Makefile
+-docs/version.entities
+ dnl docs/plugins/Makefile
+ )
+ AC_OUTPUT
+diff -Naur orig/gst/fsrawconference/Makefile.am patched/gst/fsrawconference/Makefile.am
+--- orig/gst/fsrawconference/Makefile.am	2016-03-10 16:08:07.000000000 +0100
++++ patched/gst/fsrawconference/Makefile.am	2021-05-27 19:14:41.165660133 +0200
+@@ -43,19 +43,3 @@
+ 
+ EXTRA_DIST = $(preferences_DATA)
+ 
+-# Optionally build a library to allow building the gtk-doc
+-
+-if ENABLE_GTK_DOC
+-noinst_LTLIBRARIES += libfsrawconference_doc.la
+-
+-nodist_libfsrawconference_doc_la_CFLAGS = -DBUILD_GTK_DOC
+-
+-nodist_libfsrawconference_doc_la_SOURCES = \
+-	$(libfsrawconference_la_SOURCES)
+-
+-libfsrawconference_doc_la_LIBADD = $(libfsrawconference_la_LIBADD)
+-
+-CLEANFILES = $(BUILT_SOURCES)
+-
+-endif
+-
+diff -Naur orig/gst/fsrtpconference/Makefile.am patched/gst/fsrtpconference/Makefile.am
+--- orig/gst/fsrtpconference/Makefile.am	2020-03-11 22:05:08.000000000 +0100
++++ patched/gst/fsrtpconference/Makefile.am	2021-05-27 19:15:11.813772291 +0200
+@@ -74,19 +74,6 @@
+ 
+ EXTRA_DIST = $(preferences_DATA)
+ 
+-# Optionally build a library to allow building the gtk-doc
+-
+-if ENABLE_GTK_DOC
+-noinst_LTLIBRARIES += libfsrtpconference_doc.la
+-
+-nodist_libfsrtpconference_doc_la_CFLAGS = -DBUILD_GTK_DOC
+-
+-nodist_libfsrtpconference_doc_la_SOURCES = \
+-	$(libfsrtpconference_la_SOURCES)
+-libfsrtpconference_doc_la_LIBADD = $(libfsrtpconference_la_LIBADD)
+-
+-endif
+-
+ # Build the build sources
+ 
+ 
+diff -Naur orig/Makefile.am patched/Makefile.am
+--- orig/Makefile.am	2020-03-11 22:05:08.000000000 +0100
++++ patched/Makefile.am	2021-05-27 19:11:51.961039842 +0200
+@@ -7,7 +7,6 @@
+ 	gst $(SUBDIRS_EXT)	\
+ 	transmitters		\
+ 	tests 			\
+-	docs			\
+ 	common			\
+ 	common-modified		\
+ 	examples
+@@ -18,7 +17,6 @@
+ 	gst $(SUBDIRS_EXT)	\
+ 	transmitters		\
+ 	tests 			\
+-	docs			\
+ 	common			\
+ 	common-modified		\
+ 	examples

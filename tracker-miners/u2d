@@ -1,2 +1,7 @@
-url=https://download.gnome.org/core/3.38
-u2d $url/$(urllist $url/ | grep -E '^([0-9.]+)' | sort -V | tail -n 1)/sources/ tracker-miners-
+for dir in $(urllist https://download.gnome.org/sources/tracker-miners/ | grep -E '^[3-9]' | sort -Vr);do
+ver=$(u2d https://download.gnome.org/sources/tracker-miners/$dir)
+if [ $ver ];then
+    echo $ver
+    exit
+fi
+done

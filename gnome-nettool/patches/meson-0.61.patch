@@ -1,0 +1,22 @@
+diff -Naur a/data/meson.build b/data/meson.build
+--- a/data/meson.build	1970-01-01 01:00:00.000000000 +0100
++++ b/data/meson.build	2022-04-10 03:12:09.411486645 +0200
+@@ -20,16 +20,14 @@
+                             output: 'gnome-nettool.desktop.in',
+                             configuration: desktop_conf)
+ 
+-i18n.merge_file('desktop',
+-                type: 'desktop',
++i18n.merge_file(type: 'desktop',
+                 input: desktop_in,
+                 output: 'gnome-nettool.desktop',
+                 po_dir: po_dir,
+                 install: true,
+                 install_dir: join_paths(prefix, datadir, 'applications'))
+ 
+-i18n.merge_file('appdata',
+-                type: 'xml',
++i18n.merge_file(type: 'xml',
+                 input: 'gnome-nettool.appdata.xml.in',
+                 output: 'gnome-nettool.appdata.xml',
+                 po_dir: po_dir,
