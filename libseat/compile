@@ -1,8 +1,8 @@
 #!/bin/sh -eux
 
  ub_compile \
-    -Dlogind=enabled \
-    -Dseatd=disabled \
+    -Dlibseat-logind=systemd \
+    -Dlibseat-seatd=disabled \
     -Dserver=disabled \
     -Dexamples=disabled \
     -Dman-pages=disabled
