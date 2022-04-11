@@ -1,4 +1,8 @@
 #!/bin/sh -eux
 
+git clone https://gitlab.com/inkscape/extensions.git share/extensions
+git clone https://gitlab.com/inkscape/lib2geom.git src/3rdparty/2geom
+git clone https://gitlab.com/inkscape/themes.git share/themes
+
 ub_compile \
     -DBUILD_TESTING=OFF

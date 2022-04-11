@@ -1,0 +1,12 @@
+diff -Naur a/data/meson.build b/data/meson.build
+--- a/data/meson.build	2021-11-14 19:44:17.000000000 +0100
++++ b/data/meson.build	2022-03-17 14:08:39.952734465 +0100
+@@ -4,7 +4,7 @@
+ desktop_in.set('VERSION', meson.project_version())
+ 
+ desktop_file = 'mozo.desktop'
+-i18n.merge_file(desktop_file,
++i18n.merge_file(
+   input: configure_file(
+     input: desktop_file + '.in.in',
+     output: desktop_file + '.in',

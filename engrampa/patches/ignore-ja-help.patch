@@ -1,0 +1,24 @@
+diff -Naur a/help/Makefile.am b/help/Makefile.am
+--- a/help/Makefile.am	2021-08-07 01:13:09.000000000 +0200
++++ b/help/Makefile.am	2022-04-11 03:52:50.327098497 +0200
+@@ -11,7 +11,7 @@
+ 
+ # Add linguas to be ignored, e.g. IGNORE_HELP_LINGUAS = ca de es fr
+ if USE_NLS
+-IGNORE_HELP_LINGUAS =
++IGNORE_HELP_LINGUAS = ja
+ HELP_LINGUAS = $(if $(IGNORE_HELP_LINGUAS), \
+ 	$(filter-out $(IGNORE_HELP_LINGUAS),$(subst /,,$(dir $(wildcard */*.po)))), \
+ 	$(subst /,,$(dir $(wildcard */*.po))) )
+diff -Naur a/help/Makefile.in b/help/Makefile.in
+--- a/help/Makefile.in	2021-08-07 01:15:00.000000000 +0200
++++ b/help/Makefile.in	2022-04-11 03:53:29.991203597 +0200
+@@ -305,7 +305,7 @@
+ 
+ 
+ # Add linguas to be ignored, e.g. IGNORE_HELP_LINGUAS = ca de es fr
+-@USE_NLS_TRUE@IGNORE_HELP_LINGUAS = 
++@USE_NLS_TRUE@IGNORE_HELP_LINGUAS = ja
+ @USE_NLS_FALSE@HELP_LINGUAS = 
+ @USE_NLS_TRUE@HELP_LINGUAS = $(if $(IGNORE_HELP_LINGUAS), \
+ @USE_NLS_TRUE@	$(filter-out $(IGNORE_HELP_LINGUAS),$(subst /,,$(dir $(wildcard */*.po)))), \
