@@ -1,6 +1,6 @@
-diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
---- orig/CMakeLists.txt	2020-05-14 08:53:49.000000000 +0200
-+++ patched/CMakeLists.txt	2021-06-23 21:08:40.431531212 +0200
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2022-03-18 14:15:32.794182720 +0100
++++ b/CMakeLists.txt	2022-03-18 14:17:44.386736635 +0100
 @@ -1,4 +1,4 @@
 -cmake_minimum_required(VERSION 2.8.12)
 +cmake_minimum_required(VERSION 3.16)
@@ -60,7 +60,7 @@ diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
  find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
      COMPONENTS
      Core
-@@ -641,8 +632,8 @@
+@@ -646,8 +637,8 @@
  	)
  endif()
  
@@ -71,9 +71,9 @@ diff -Naur orig/CMakeLists.txt patched/CMakeLists.txt
      set(FREETYPE_INCLUDE_DIRS "")
  else()
      add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
-diff -Naur orig/libs/text/CMakeLists.txt patched/libs/text/CMakeLists.txt
---- orig/libs/text/CMakeLists.txt	2020-05-14 08:51:31.000000000 +0200
-+++ patched/libs/text/CMakeLists.txt	2021-06-23 21:09:36.943878668 +0200
+diff -Naur a/libs/text/CMakeLists.txt b/libs/text/CMakeLists.txt
+--- a/libs/text/CMakeLists.txt	2020-05-14 08:51:31.000000000 +0200
++++ b/libs/text/CMakeLists.txt	2022-03-18 14:17:44.386736635 +0100
 @@ -152,11 +152,11 @@
  endif()
  
