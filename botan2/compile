@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+./configure.py \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --build-targets=shared \
+    --enable-shared-library \
+    --disable-static-library \
+    --with-pkg-config \
+    --without-documentation \
+    --no-install-python-module
+ub_make

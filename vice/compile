@@ -1,12 +1,10 @@
 #!/bin/sh -eux
 
-ub_replace -O3 -O2 configure.ac
-
 ./autogen.sh
 ./configure \
 	--prefix=/usr \
 	--enable-ethernet \
-	--enable-external-ffmpeg \
+	--disable-external-ffmpeg \
 	--enable-lame \
 	--disable-static-lame \
 	--sysconfdir=/etc \

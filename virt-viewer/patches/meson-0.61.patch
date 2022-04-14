@@ -1,0 +1,27 @@
+diff -Naur a/data/meson.build b/data/meson.build
+--- a/data/meson.build	1970-01-01 01:00:00.000000000 +0100
++++ b/data/meson.build	2022-03-19 18:58:44.759139773 +0100
+@@ -2,7 +2,6 @@
+   desktop = 'remote-viewer.desktop'
+ 
+   i18n.merge_file (
+-    desktop,
+     type: 'desktop',
+     input: desktop + '.in',
+     output: desktop,
+@@ -14,7 +13,6 @@
+   mimetypes = 'virt-viewer-mime.xml'
+ 
+   i18n.merge_file (
+-    mimetypes,
+     type: 'xml',
+     input: mimetypes + '.in',
+     output: mimetypes,
+@@ -27,7 +25,6 @@
+   metainfo = 'remote-viewer.appdata.xml'
+ 
+   i18n.merge_file (
+-    metainfo,
+     type: 'xml',
+     input: metainfo + '.in',
+     output: metainfo,

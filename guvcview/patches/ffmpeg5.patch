@@ -1,0 +1,44 @@
+diff -Naur a/gview_encoder/encoder.c b/gview_encoder/encoder.c
+--- a/gview_encoder/encoder.c	2022-03-20 19:51:37.885311419 +0100
++++ b/gview_encoder/encoder.c	2022-03-20 19:55:37.237876717 +0100
+@@ -446,10 +446,6 @@
+ 
+ 	video_codec_data->codec_context = avcodec_alloc_context3(video_codec_data->codec);
+ 
+-	avcodec_get_context_defaults3 (
+-			video_codec_data->codec_context,
+-			video_codec_data->codec);
+-
+ 	if(video_codec_data->codec_context == NULL)
+ 	{
+ 		fprintf(stderr, "ENCODER: FATAL memory allocation failure (encoder_video_init): %s\n", strerror(errno));
+@@ -710,7 +706,6 @@
+ 	}
+ 
+ 	audio_codec_data->codec_context = avcodec_alloc_context3(audio_codec_data->codec);
+-	avcodec_get_context_defaults3 (audio_codec_data->codec_context, audio_codec_data->codec);
+ 
+ 	if(audio_codec_data->codec_context == NULL)
+ 	{
+diff -Naur a/gview_v4l2core/jpeg_decoder.c b/gview_v4l2core/jpeg_decoder.c
+--- a/gview_v4l2core/jpeg_decoder.c	2021-10-27 19:34:54.000000000 +0200
++++ b/gview_v4l2core/jpeg_decoder.c	2022-03-20 19:57:34.686148705 +0100
+@@ -1409,7 +1409,6 @@
+ 
+ #if LIBAVCODEC_VER_AT_LEAST(53,6)
+ 	codec_data->context = avcodec_alloc_context3(codec_data->codec);
+-	avcodec_get_context_defaults3 (codec_data->context, codec_data->codec);
+ #else
+ 	codec_data->context = avcodec_alloc_context();
+ 	avcodec_get_context_defaults(codec_data->context);
+diff -Naur a/gview_v4l2core/uvc_h264.c b/gview_v4l2core/uvc_h264.c
+--- a/gview_v4l2core/uvc_h264.c	2021-10-27 19:34:54.000000000 +0200
++++ b/gview_v4l2core/uvc_h264.c	2022-03-20 19:57:41.306163932 +0100
+@@ -1004,7 +1004,6 @@
+ 
+ #if LIBAVCODEC_VER_AT_LEAST(53,6)
+ 	h264_ctx->context = avcodec_alloc_context3(h264_ctx->codec);
+-	avcodec_get_context_defaults3 (h264_ctx->context, h264_ctx->codec);
+ #else
+ 	h264_ctx->context = avcodec_alloc_context();
+ 	avcodec_get_context_defaults(h264_ctx->context);

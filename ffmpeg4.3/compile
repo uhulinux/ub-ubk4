@@ -1,0 +1,79 @@
+#!/bin/sh -eux
+
+# --disable-openssl: GnuTLS and OpenSSL must not be enabled at the same time.
+# a gnutls kevésbé problémás (API változások probléma)
+
+configopts="
+	--prefix=/usr \
+	--incdir=/usr/include/ffmpeg4.3 \
+	--libdir=/usr/lib/ffmpeg4.3 \
+	--disable-static \
+	--disable-doc \
+	--disable-programs \
+	--disable-stripping \
+	--disable-debug \
+	--enable-shared \
+	--enable-pic \
+	--enable-pthreads \
+	--enable-postproc \
+"
+licensing="
+	--enable-gpl \
+	--enable-nonfree \
+	--enable-version3
+"
+extlibs="
+    --disable-libopencv \
+	--disable-libsmbclient \
+	--disable-libtesseract \
+	--enable-gcrypt \
+	--enable-gmp \
+	--enable-gnutls \
+	--enable-ladspa \
+	--enable-libaom \
+	--enable-libass \
+	--enable-libbluray \
+	--enable-libcaca \
+	--enable-libcdio \
+	--enable-libcelt \
+	--enable-libdc1394 \
+	--enable-libdrm \
+	--enable-libfdk-aac \
+	--enable-libfontconfig \
+	--enable-libfreetype \
+	--enable-libfribidi \
+	--enable-libgme \
+	--enable-libgsm \
+	--enable-libiec61883 \
+	--enable-libmodplug \
+	--enable-libmp3lame \
+	--enable-libopencore-amrnb \
+	--enable-libopencore-amrwb \
+	--enable-libopenjpeg \
+	--enable-libopus \
+	--enable-libpulse \
+	--enable-librsvg \
+	--enable-libsoxr \
+	--enable-libspeex \
+	--enable-libssh \
+	--enable-libtheora \
+	--enable-libv4l2 \
+	--enable-libvidstab \
+	--enable-libvorbis \
+	--enable-libvpx \
+	--enable-libwebp \
+	--enable-libx264 \
+	--enable-libx265 \
+	--enable-libxml2 \
+	--enable-libxvid \
+	--enable-libzmq \
+	--enable-libzvbi
+	--enable-openal \
+	--enable-opengl \
+  "
+
+./configure \
+	$configopts \
+	$licensing \
+	$extlibs
+ub_make

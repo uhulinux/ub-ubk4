@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-install -d "$UB_INSTALLDIR"/usr/share/terminfo
-export TERMINFO="$UB_INSTALLDIR"/usr/share/terminfo
-ub_install
-sed -i 's/\"rxvt\"/"urxvt"/' doc/rxvt-tabbed
-install -D -m755 doc/rxvt-tabbed "$UB_INSTALLDIR"/usr/bin/urxvt-tabbed

@@ -1,0 +1,35 @@
+diff -Naur a/Makefile b/Makefile
+--- a/Makefile	2022-02-16 22:45:43.000000000 +0100
++++ b/Makefile	2022-03-19 16:02:59.464371265 +0100
+@@ -16,17 +16,17 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ 
+-PREFIX=/usr/local
++PREFIX=/usr
+ 
+ CC=gcc
+ INSTALL=install
+ 
+ VERSION=2.0.2
+ TREE_DEST=tree
+-DESTDIR=${PREFIX}/bin
++DESTDIR=
+ MAN=tree.1
+ # Probably needs to be ${PREFIX}/share/man for most systems now
+-MANDIR=${PREFIX}/man
++MANDIR=${PREFIX}/share/man
+ OBJS=tree.o list.o hash.o color.o file.o filter.o info.o unix.o xml.o json.o html.o strverscmp.o
+ 
+ # Uncomment options below for your particular OS:
+@@ -105,8 +105,8 @@
+ install: tree
+ 	$(INSTALL) -d $(DESTDIR)
+ 	$(INSTALL) -d $(MANDIR)/man1
+-	$(INSTALL) $(TREE_DEST) $(DESTDIR)/$(TREE_DEST); \
+-	$(INSTALL) -m 644 doc/$(MAN) $(MANDIR)/man1/$(MAN)
++	$(INSTALL) $(TREE_DEST) $(DESTDIR)/$(PREFIX)/bin/$(TREE_DEST); \
++	$(INSTALL) -m 644 doc/$(MAN) $(DESTDIR)/$(MANDIR)/man1/$(MAN)
+ 
+ distclean:
+ 	rm -f *.o *~

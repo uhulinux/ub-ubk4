@@ -1,0 +1,42 @@
+From 14335180432152ad094300d0afd00d8e390469b2 Mon Sep 17 00:00:00 2001
+From: oreo639 <31916379+Oreo639@users.noreply.github.com>
+Date: Sat, 26 Mar 2022 12:00:27 -0700
+Subject: [PATCH] pdftoipe: fix building with poppler-22.03.0
+
+---
+ pdftoipe/pdftoipe.cpp | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/pdftoipe/pdftoipe.cpp b/pdftoipe/pdftoipe.cpp
+index 2e6ce77..bd2d86d 100644
+--- a/pdftoipe/pdftoipe.cpp
++++ b/pdftoipe/pdftoipe.cpp
+@@ -87,22 +87,20 @@ int main(int argc, char *argv[])
+   if (quiet)
+     globalParams->setErrQuiet(quiet);
+ 
+-  GooString *ownerPW, *userPW;
++  std::optional<GooString> ownerPW, userPW;
+   if (ownerPassword[0]) {
+-    ownerPW = new GooString(ownerPassword);
++    ownerPW = GooString(ownerPassword);
+   } else {
+-    ownerPW = 0;
++    ownerPW = std::nullopt;
+   }
+   if (userPassword[0]) {
+-    userPW = new GooString(userPassword);
++    userPW = GooString(userPassword);
+   } else {
+-    userPW = 0;
++    userPW = std::nullopt;
+   }
+ 
+   // open PDF file
+-  PDFDoc *doc = new PDFDoc(fileName, ownerPW, userPW);
+-  delete userPW;
+-  delete ownerPW;
++  PDFDoc *doc = new PDFDoc(std::make_unique<GooString>(fileName), ownerPW, userPW);
+ 
+   if (!doc->isOk())
+     return 1;

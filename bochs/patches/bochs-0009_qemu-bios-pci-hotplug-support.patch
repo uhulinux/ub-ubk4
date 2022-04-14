@@ -1,13 +1,7 @@
-qemu: bios: pci hotplug support (Marcelo Tosatti)
-
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-Signed-off-by: Anthony Liguori <aliguori@us.ibm.com>
-
-Index: bochs/bios/acpi-dsdt.dsl
-===================================================================
---- bochs.orig/bios/acpi-dsdt.dsl
-+++ bochs/bios/acpi-dsdt.dsl
-@@ -91,6 +91,61 @@ DefinitionBlock (
+diff -Naur a/bios/acpi-dsdt.dsl b/bios/acpi-dsdt.dsl
+--- a/bios/acpi-dsdt.dsl	2021-08-17 21:28:45.606023925 +0200
++++ b/bios/acpi-dsdt.dsl	2021-08-17 21:30:29.702871636 +0200
+@@ -91,6 +91,61 @@
                 prt_slot3(0x001f),
              })
  
@@ -69,7 +63,7 @@ Index: bochs/bios/acpi-dsdt.dsl
              Name (_CRS, ResourceTemplate ()
              {
                  WordBusNumber (ResourceProducer, MinFixed, MaxFixed, PosDecode,
-@@ -605,8 +660,50 @@ DefinitionBlock (
+@@ -603,8 +658,50 @@
          Method(_L00) {
              Return(0x01)
          }
@@ -121,8 +115,3 @@ Index: bochs/bios/acpi-dsdt.dsl
          }
          Method(_L02) {
              Return(0x01)
-
--- 
-
-
-

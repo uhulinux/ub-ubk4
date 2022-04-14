@@ -1,16 +1,7 @@
-qemu: bios: provide gpe _L0x methods (Glauber Costa)
-
-provide methods for gpe blk 0, even though they do nothing atm
-    
-Signed-off-by: Glauber Costa <gcosta@redhat.com>
-Signed-off-by: Avi Kivity <avi@qumranet.com>
-Signed-off-by: Anthony Liguori <aliguori@us.ibm.com>
-
-Index: bochs/bios/acpi-dsdt.dsl
-===================================================================
---- bochs.orig/bios/acpi-dsdt.dsl
-+++ bochs/bios/acpi-dsdt.dsl
-@@ -597,4 +597,59 @@ DefinitionBlock (
+diff -Naur a/bios/acpi-dsdt.dsl b/bios/acpi-dsdt.dsl
+--- a/bios/acpi-dsdt.dsl	2017-04-17 09:26:00.000000000 +0200
++++ b/bios/acpi-dsdt.dsl	2021-08-17 21:28:45.606023925 +0200
+@@ -595,4 +595,59 @@
          Zero,  /* reserved */
          Zero   /* reserved */
      })
@@ -70,11 +61,10 @@ Index: bochs/bios/acpi-dsdt.dsl
 +    }
 +
  }
-Index: bochs/bios/rombios32.c
-===================================================================
---- bochs.orig/bios/rombios32.c
-+++ bochs/bios/rombios32.c
-@@ -1647,6 +1647,8 @@ void acpi_bios_init(void)
+diff -Naur a/bios/rombios32.c b/bios/rombios32.c
+--- a/bios/rombios32.c	2021-06-27 16:50:26.000000000 +0200
++++ b/bios/rombios32.c	2021-08-17 21:28:45.606023925 +0200
+@@ -1747,6 +1747,8 @@
      fadt->pm_tmr_len = 4;
      fadt->plvl2_lat = cpu_to_le16(0xfff); // C2 state not supported
      fadt->plvl3_lat = cpu_to_le16(0xfff); // C3 state not supported
@@ -83,10 +73,3 @@ Index: bochs/bios/rombios32.c
      /* WBINVD + PROC_C1 + PWR_BUTTON + SLP_BUTTON + FIX_RTC */
      fadt->flags = cpu_to_le32((1 << 0) | (1 << 2) | (1 << 4) | (1 << 5) | (1 << 6));
      acpi_build_table_header((struct acpi_table_header *)fadt, "FACP",
-
--- 
-
-
-
-
-

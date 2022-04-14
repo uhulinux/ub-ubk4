@@ -1,5 +1,6 @@
 #!/bin/sh -eux
 
+export PKG_CONFIG_PATH='/usr/lib/ffmpeg4.3/pkgconfig'
 autoreconf -vif
 ub_compile \
 	--without-oss \
