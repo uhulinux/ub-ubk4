@@ -1,30 +1,21 @@
 #!/bin/bash -eux
 
-function alprogi {
-	cd $1
-    export PREFIX=/usr
-    ub_install
-    gunzip	$mandir/nvidia-$1.1.gz
-    cd ..
-}
+KVER="$(ls -1 /lib/modules | grep x86_64)"
 
 #célkönyvtárak
 cellibdir="$UB_INSTALLDIR"/usr/lib
-celbindir="$UB_INSTALLDIR"/usr/bin
-sharedir="$UB_INSTALLDIR"/usr/share
-etcdir="$UB_INSTALLDIR"/etc
-moduldir="$UB_INSTALLDIR"/lib/modules/"$(ls -1 /lib/modules | grep x86_64)"/kernel/drivers/video
+moduldir="$UB_INSTALLDIR"/lib/modules/"$KVER"/kernel/drivers/video
 xmoduldir="$cellibdir"/xorg/modules
+sharedir="$UB_INSTALLDIR"/usr/share
 desktopdir="$sharedir"/applications
 mandir="$sharedir"/man/man1
-openclvendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
+vendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
 pixmapdir="$sharedir"/pixmaps/
 egldir="$sharedir"/egl/egl_external_platform.d
-vulcandir="$etcdir"/vulcan/icd.d
+vulcandir="$sharedir"/vulcan/icd.d
 xconfdir="$sharedir"/X11/x.org.conf.d
 glvnddir="$sharedir"/glvnd/egl_vendor.d
 vdpaudir=$cellibdir/vdpau
-profilesdir=$sharedir/nvidia
 
 #könyvtárgyártás
 mkdir -p "$cellibdir"/nvidia \
@@ -32,24 +23,24 @@ mkdir -p "$cellibdir"/nvidia \
 	"$xmoduldir"/{drivers,extensions} \
 	"$desktopdir" \
 	"$mandir" \
-	"$openclvendordir" \
+	"$vendordir" \
 	"$pixmapdir" \
 	"$egldir" \
 	"$vulcandir" \
 	"$xconfdir" \
 	"$glvnddir" \
-	"$vdpaudir" \
-    "$profilesdir"
+	"$vdpaudir"
 
+	cd nvsett
 export NV_USE_BUNDLED_LIBJANSSON=0
-alprogi settings
-alprogi xconfig
-alprogi modprobe
-alprogi persistenced
+export PREFIX=/usr
+ub_install
 
 # desktop
-mv	settings/doc/nvidia-settings.desktop "$desktopdir"/
-mv	settings/doc/nvidia-settings.png "$pixmapdir"/
+mv	doc/nvidia-settings.desktop "$desktopdir"/
+mv	doc/nvidia-settings.png "$pixmapdir"/
+gunzip	$mandir/nvidia-settings.1.gz
+cd ..
 
 # felesleges gtk libek
 rm libnvidia-gtk*
@@ -57,30 +48,34 @@ rm libnvidia-gtk*
 #kernelmodulok
 cp kernel/*.ko "$moduldir"/
 
-# binárisok elhelyezése
-binaries="nvidia-cuda-mps-control nvidia-smi"
-for binari in $binaries;do
-    mv $binari $celbindir/
-    gunzip ${binari}.1.gz
-    mv $binari.1 $mandir/
+# binárisok (patchelf)
+binaries='
+    nvidia-xconfig
+	nvidia-smi
+	nvidia-modprobe
+	nvidia-debugdump
+	nvidia-persistenced
+	nvidia-cuda-mps-server
+	nvidia-cuda-mps-control
+'
+for binary in $binaries;do
+    patchelf --set-interpreter /usr/lib/ld-linux-x86-64.so.2 $binary
+    mv $binary "$UB_INSTALLDIR"/usr/bin/
 done
-mv nvidia-cuda-mps-server $celbindir/
 
-# openclvendor
-mv	nvidia.icd "$openclvendordir"/
+mv	nvidia-bug-report.sh "$UB_INSTALLDIR"/usr/bin/
 
-# wrapped-software-rendering lib. Postinstből lehet majd rá libcwfb.so link, ha
-# nem ütközik az x.org-server által szállítottal libcwfb.so fájllal
-# mv libnvidia-wfb.so.${UB_VERSION} $xmoduldir
+# man
+gunzip	*.1.gz
+mv	*.1 "$mandir"/
+
+# vendor
+mv	nvidia.icd "$vendordir"/
 
 # Áthelyezzük a nem a $cellibdir alá kerülő *.so-kat a "$cellibdir"/nvidia/ alá
 
 # postinstből majd libglx.so nevű link lesz rá a $cellibdir/xorg/extensions alá
 mv	libglx.so."$UB_VERSION" "$cellibdir"/nvidia/
-
-# wrapped-software-rendering lib. Postinstből lehet majd rá libcwfb.so link, ha
-# nem ütközik az x.org-server által szállítottal libcwfb.so fájllal
-mv libnvidia-wfb.so.${UB_VERSION} $xmoduldir
 
 # libglvnd ütközések, a libglvnd elsőbbséget élvez
 mv	libEGL.so.1.1.0 "$cellibdir"/nvidia/
@@ -91,12 +86,11 @@ mv	libGLX.so.0 "$cellibdir"/nvidia/
 mv	libGLdispatch.so.0 "$cellibdir"/nvidia/
 mv	libOpenGL.so.0 "$cellibdir"/nvidia/
 
-# glvnd rendszer van, a legacy libGL.so.${UB_VERSION} átmozgatása
+# glvnd rendszer van és nem legacy
 mv	libGL.so.${UB_VERSION} "$cellibdir"/nvidia/
 
 # nvidia driver az x.org-server részére
 mv	nvidia_drv.so "$xmoduldir"/drivers/
-
 mv	tls "$cellibdir"
 
 # vdpau cuccok
@@ -111,21 +105,20 @@ mv *.so.* "$cellibdir"/
 # glvnd
 mv 10_nvidia.json "$glvnddir"/
 
-# wailand, vulcan
+#wailand, vulcan
 mv 10_nvidia_wayland.json $egldir/
 mv nvidia_icd.json.template $vulcandir/nvidia_icd.json
 
 # két videókártyás rendszereknek
 mv nvidia-drm-outputclass.conf $xconfdir/10-nvidia-drm-outputclass.conf
-mv persistenced/init/systemd/nvidia-persistenced.service.template \
+
+# két videókártyás rendszereknek persistenced.service
+mv nvidia-persistenced-init/systemd/nvidia-persistenced.service.template \
     $UB_INSTALLDIR/usr/lib/systemd/system/nvidia-persistenced.service
 
-# applications-profiles
-mv nvidia-application-profiles-* $profilesdir/
+#libxnvctrl
 
-## libxnvctrl csomag
-
-cd settings/src/libXNVCtrl
+cd nvsett/src/libXNVCtrl
 mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
 cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
 cp libXNVCtrl.a "${cellibdir}"/
@@ -145,10 +138,10 @@ EOF
 
 sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
-## linkgyártások
-
-# általános
+#linkgyártások
 cd "$cellibdir"
+
+ln -s libwfb.so xorg/modules/libnvidia-wfb.so.${UB_VERSION}
 for i in `ls -1 libnv*`;do
 lib=$(echo $i | sed s/\.${UB_VERSION}//g)
 solink=$(echo $lib | sed s/so\..*/so/)
@@ -156,24 +149,13 @@ ln -s $i $lib.1
 ln -s $lib.1 $solink
 done
 
-# cuda
-ln -s libcuda.so.${UB_VERSION} libcuda.so.1
-ln -s libcuda.so.1 libcuda.so
+cd $vdpaudir
+for i in `ls -1 libvdpau*`;do
+lib=$(echo $i | sed s/\.${UB_VERSION}//g)
+solink=$(echo $lib | sed s/so\..*/so/)
+ln -s $i $lib.1
+ln -s $lib.1 $solink
+done
 
-# wayland
-ln -s libnvidia-egl-wayland.so libnvidia-egl-wayland.so.1
-ln -s libEGL_nvidia.so.${UB_VERSION} libEGL_nvidia.so.0
-
-# vulkan
-ln -s libGLX_nvidia.so.${UB_VERSION} libGLX_nvidia.so.0
-
-# tls
-ln -s libnvidia-tls.so.${UB_VERSION} tls/libnvidia-tls.so.1
-ln -s libnvidia-tls.so.1 tls/libnvidia-tls.so
-
-# vdpau
-ln -s libvdpau_nvidia.so.${UB_VERSION} vdpau/libvdpau_nvidia.so.1
-ln -s libvdpau_nvidia.so.1 vdpau/libvdpau_nvidia.so
-
-# Támogatott chipkhez a verzió beillesztése a csomag leírásába
+# Támogatott chepkhez a verzió beillesztése a csomag leírásába
 sed "s/version/${UB_VERSION}/g" -i ${UB_SRCDIR}/packages/nvidia-390/description/hu

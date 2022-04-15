@@ -1,12 +1,5 @@
 #!/bin/bash -eux
 
-function alprogi {
-	cd $1
-    export PREFIX=/usr
-    ub_compile
-    cd -
-}
-
 #előkészület
 KVER="$(ls -1 /lib/modules | grep x86_64)"
 moduldir="$UB_COMPILEDIR/lib/modules/"$KVER"/kernel/drivers/video"
@@ -16,23 +9,21 @@ forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
 chmod +x $forras.run
 ./"$forras".run -x
 mv $forras/* ./
-rm -rf $forras
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.5.patch.skip
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.6.patch.skip
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.7.patch.skip
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.7-reinstate-legacy-support.patch.skip
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.8.patch.skip
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.9.patch.skip
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.10.patch.skip
-patch -Np1 < "$UB_SRCDIR"/patches/kernel-5.11.patch.skip
+rm *.run
+# https://aur.archlinux.org/packages/nvidia-340xx-dkms
+patch -Np1 < "$UB_SRCDIR"/patches/0001-kernel-5.7.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0002-kernel-5.8.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0003-kernel-5.9.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0004-kernel-5.10.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0005-kernel-5.11.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0006-kernel-5.14.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0007-kernel-5.15.patch.skip
 cd kernel
 make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
 export UB_MAKE_PROCS=1
 cd uvm
 make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir/uvm module
-cd ../..
+cd ../../nvsett
 export NV_USE_BUNDLED_LIBJANSSON=0
-alprogi settings
-alprogi settings/src/libXNVCtrl
-alprogi xconfig
-alprogi modprobe
+export PREFIX=/usr
+ub_compile

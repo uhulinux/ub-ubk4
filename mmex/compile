@@ -20,6 +20,8 @@ git clone https://github.com/fmtlib/fmt 3rd/fmt
 git clone https://github.com/moneymanagerex/general-reports general-reports
 fi
 
+patch -Np1 < "$UB_SRCDIR"/patches/general-reports-filename.patch.skip
+
 export LIBS="-lpthread -lm -ldl"
 ub_compile
 make po

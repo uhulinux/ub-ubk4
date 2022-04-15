@@ -1,7 +1,7 @@
 diff -Naur orig/src/modules/users/CreateUserJob.cpp patched/src/modules/users/CreateUserJob.cpp
 --- orig/src/modules/users/CreateUserJob.cpp	2020-12-04 14:51:48.000000000 +0100
 +++ patched/src/modules/users/CreateUserJob.cpp	2020-12-06 19:16:05.777748938 +0100
-@@ -65,8 +65,7 @@
+@@ -64,8 +64,7 @@
      }
  #else
      useraddCommand << "useradd"
@@ -11,7 +11,7 @@ diff -Naur orig/src/modules/users/CreateUserJob.cpp patched/src/modules/users/Cr
      if ( !shell.isEmpty() )
      {
          useraddCommand << "-s" << shell;
-@@ -158,7 +157,7 @@
+@@ -157,7 +156,7 @@
  
      m_status = tr( "Setting file permissions" );
      emit progress( 0.9 );

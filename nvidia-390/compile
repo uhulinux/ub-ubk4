@@ -1,10 +1,4 @@
 #!/bin/bash -eux
-function alprogi {
-	cd $1
-    export PREFIX=/usr
-    ub_compile
-    cd ..
-}
 
 #előkészület
 KVER="$(ls -1 /lib/modules | grep x86_64)"
@@ -15,14 +9,14 @@ mkdir -p $moduldir
 chmod +x $forras.run
 ./"$forras".run -x
 mv $forras/* ./
-rm -rf $forras
-patch -Np1 < "$UB_SRCDIR"/patches/nvidia-json.skip
+rm $forras.*
+sed -i 's/__NV_VK_ICD__/libGLX_nvidia.so.0/' nvidia_icd.json.template
+sed -i 's%__UTILS_PATH__/%%' nvidia-settings.desktop
+sed -i 's%__PIXMAP_PATH__/nvidia-settings.png%nvidia-settings%' nvidia-settings.desktop
+bsdtar -xf nvidia-persistenced-init.tar.bz2
 cd kernel
-patch -Np1 < "$UB_SRCDIR"/patches/drm-detection.skip
 make SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
-cd ..
+cd ../nvsett
 export NV_USE_BUNDLED_LIBJANSSON=0
-alprogi settings
-alprogi xconfig
-alprogi modprobe
-alprogi persistenced
+export PREFIX=/usr
+ub_compile

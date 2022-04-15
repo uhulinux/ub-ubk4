@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-sed -i 's/extern int command_count;/static int command_count;/' src/command.c
-sed -i 's/CLK_TCK/CLOCKS_PER_SEC/' src/main.c
-export LDFLAGS+=' -lm '
-ub_replace -O3 -O2 src/Makefile
-ub_replace -O3 -O2 src/Makefile.in
-ub_replace -O3 -O2 src/Makefile.am
-ub_compile
