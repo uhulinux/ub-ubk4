@@ -1,0 +1,12 @@
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2021-09-25 17:17:47.000000000 +0200
++++ b/configure.ac	2022-04-17 14:53:01.941926229 +0200
+@@ -14,7 +14,7 @@
+ 
+ py_module=libxml2
+ AC_MSG_CHECKING(for python module $py_module)
+-echo "import $py_module" | $PYTHON - &>/dev/null
++echo "import $py_module" | $PYTHON - >/dev/null 2>&1
+ if test $? -ne 0; then
+ 	AC_MSG_RESULT(not found)
+ 	AC_MSG_ERROR(Python module $py_module is needed to run this package)
