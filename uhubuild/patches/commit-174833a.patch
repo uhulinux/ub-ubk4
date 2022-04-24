@@ -1,0 +1,40 @@
+From 174833a71ff97a0573b55e331b6dfd3aaf9f8755 Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Fri, 22 Apr 2022 06:15:10 +0200
+Subject: ub_list javítás addons-nál
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/src/helpers/ub_cp b/src/helpers/ub_cp
+index b619018..2704602 100755
+--- a/src/helpers/ub_cp
++++ b/src/helpers/ub_cp
+@@ -16,10 +16,10 @@ if [ ! -d "$TO" ]; then
+ fi
+ 
+ cd "$1"
+-ub_list | while read f; do
++while read f; do
+ 	if [ -d "$f" ]; then
+ 		mkdir -p "$TO/${f#./}"
+ 	else
+ 		cp -dp --parents --target-directory="$TO" -- "$f"
+ 	fi
+-done
++done < <(ub_list . -print)
+diff --git a/src/helpers/ub_list b/src/helpers/ub_list
+index 18f855f..27a3091 100755
+--- a/src/helpers/ub_list
++++ b/src/helpers/ub_list
+@@ -4,8 +4,7 @@ unset STOPLIST
+ STOPLIST[${#STOPLIST[@]}]=".svn"
+ STOPLIST[${#STOPLIST[@]}]="CVS"
+ STOPLIST[${#STOPLIST[@]}]=".cvsignore"
+-STOPLIST[${#STOPLIST[@]}]="RCS"
+-STOPLIST[${#STOPLIST[@]}]="SCCS"
++STOPLIST[${#STOPLIST[@]}]=".git"
+ STOPLIST[${#STOPLIST[@]}]=".gitignore"
+ STOPLIST[${#STOPLIST[@]}]="*~"
+ STOPLIST[${#STOPLIST[@]}]=".#*"
