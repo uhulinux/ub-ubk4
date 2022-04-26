@@ -44,7 +44,7 @@ mv "$UB_INSTALLDIR/usr/lib/virtualbox/virtualbox.xml" "$UB_INSTALLDIR/usr/share/
 cd ../../../..
 ln -s ../lib/virtualbox/VBoxTunctl "$UB_INSTALLDIR"/usr/bin/VBoxTunctl
 
-#create wrapper scripts
+# create wrapper scripts
 for file in VBoxManage VBoxSDL VBoxSVC VirtualBox
 do
     echo '#!/bin/bash' > "$UB_INSTALLDIR"/usr/bin/$file
@@ -54,3 +54,6 @@ do
 done
 
 mv Oracle_VM_VirtualBox_Extension_Pack.vbox-extpack "$UB_INSTALLDIR"/usr/lib/virtualbox/ExtensionPacks/
+
+# remove unneeded python2 script
+rm -f "$UB_INSTALLDIR"/usr/lib/virtualbox/rdesktop-vrdp-keymaps/convert-map
