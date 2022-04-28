@@ -6903,27 +6903,30 @@ CONFIG_USB_HIDDEV=y
 #
 # USB HID Boot Protocol drivers
 #
-# CONFIG_USB_KBD is not set
-# CONFIG_USB_MOUSE is not set
+CONFIG_USB_KBD=m
+CONFIG_USB_MOUSE=m
 # end of USB HID Boot Protocol drivers
 # end of USB HID support
 
 #
 # I2C HID support
 #
-# CONFIG_I2C_HID_ACPI is not set
+CONFIG_I2C_HID_ACPI=y
 # end of I2C HID support
+
+CONFIG_I2C_HID_CORE=y
 
 #
 # Intel ISH HID support
 #
-# CONFIG_INTEL_ISH_HID is not set
+CONFIG_INTEL_ISH_HID=y
+# CONFIG_INTEL_ISH_FIRMWARE_DOWNLOADER is not set
 # end of Intel ISH HID support
 
 #
 # AMD SFH HID Support
 #
-# CONFIG_AMD_SFH_HID is not set
+CONFIG_AMD_SFH_HID=y
 # end of AMD SFH HID Support
 # end of HID support
 
@@ -8109,6 +8112,7 @@ CONFIG_CHROMEOS_PSTORE=m
 # CONFIG_CHROMEOS_TBMC is not set
 CONFIG_CROS_EC=m
 # CONFIG_CROS_EC_I2C is not set
+# CONFIG_CROS_EC_ISHTP is not set
 # CONFIG_CROS_EC_SPI is not set
 # CONFIG_CROS_EC_LPC is not set
 CONFIG_CROS_EC_PROTO=y
