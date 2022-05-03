@@ -1,14 +1,10 @@
 #!/bin/sh -eux
 
-cp include/xwayland-config.h.in include/xwayland-config.h.meson.in
-
 ub_compile \
     -Dxorg=true \
     -Dxephyr=true \
-    -Dxwayland=true \
     -Dglamor=true \
     -Dxnest=true \
-    -Ddmx=true \
     -Dxvfb=true \
     -Dxwin=false \
     -Dbuilder_addr="ubk@ubk.hu" \
@@ -19,7 +15,6 @@ ub_compile \
     -Dxdm-auth-1=true \
     -Dsecure-rpc=false \
     -Dxkb_output_dir="/var/lib/xkb" \
-    -Dos_vendor="UHU-Linux" \
     -Dsuid_wrapper=false \
 	-Dudev=true \
 	-Dhal=false \

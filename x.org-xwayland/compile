@@ -1,0 +1,11 @@
+#!/bin/sh -eux
+
+ub_compile \
+    -Dipv6=true \
+    -Dxvfb=false \
+    -Dxdmcp=false \
+    -Dxcsecurity=true \
+    -Ddri3=true \
+    -Dxwayland_eglstream=true \
+    -Dglamor=true \
+    -Dxkb_output_dir=/var/lib/xkb
