@@ -5,20 +5,14 @@
 
 export RPM_PACKAGE_VERSION=no
 ub_compile \
-	--with-pam \
-	--without-shadow \
-	--without-kerberos \
-    --with-browser=xdg-open \
-    --with-systemd \
-	--with-login-manager=no \
-	--with-gtk \
-	--with-gl \
-	--without-gle \
-	--with-pixbuf \
-    --disable-locking \
-	--with-image-directory=no \
-	--with-text-file=no \
-	--without-readdisplay \
-	--with-setuid-hacks \
-	--with-proc-interrupts \
-	--with-jpeg
+    --libexecdir=/usr/lib \
+    --with-x-app-defaults=/usr/share/X11/app-defaults \
+    --without-setuid-hacks \
+    --without-setcap-hacks \
+    --with-pam \
+    --with-login-manager=no \
+    --with-gtk \
+    --with-gl \
+    --without-gle \
+    --with-pixbuf \
+    --with-jpeg

@@ -1,7 +1,7 @@
-diff -Naur orig/locate/updatedb.sh patched/locate/updatedb.sh
---- orig/locate/updatedb.sh	2019-06-23 11:00:40.000000000 +0200
-+++ patched/locate/updatedb.sh	2019-09-14 09:13:54.201006511 +0200
-@@ -160,9 +160,17 @@
+diff -Naur a/locate/updatedb.sh b/locate/updatedb.sh
+--- a/locate/updatedb.sh	2022-01-03 00:34:22.000000000 +0100
++++ b/locate/updatedb.sh	2022-03-10 13:57:46.604037748 +0100
+@@ -160,10 +160,18 @@
  : ${PRUNEPATHS="
  /afs
  /amd
@@ -13,12 +13,13 @@ diff -Naur orig/locate/updatedb.sh patched/locate/updatedb.sh
  /sfs
 +/sys
  /tmp
+ /usr/tmp
 +/var/cache
 +/var/mail
 +/var/spool
- /usr/tmp
  /var/tmp
  "}
+ 
 @@ -186,18 +194,12 @@
  
  # Directory to hold intermediate files.
@@ -30,7 +31,7 @@ diff -Naur orig/locate/updatedb.sh patched/locate/updatedb.sh
 -  else
 -    : ${TMPDIR=/tmp}
 -  fi
-+: ${TMPDIR=/tmp}
++  : ${TMPDIR=/tmp}
  fi
  export TMPDIR
  
@@ -40,25 +41,27 @@ diff -Naur orig/locate/updatedb.sh patched/locate/updatedb.sh
  
  # The directory containing the subprograms.
  if test -n "$LIBEXECDIR" ; then
-@@ -259,19 +261,30 @@
+@@ -258,21 +260,32 @@
+ NFS
  afs
  autofs
- cifs
 +cdfs
+ cifs
  coda
 +configfs
  devfs
  devpts
  ftpfs
 +fuse
+ fuse.s3fs
 +hugetlbfs
  iso9660
  mfs
  ncpfs
- nfs
 +NFS
-+ocfs2
+ nfs
  nfs4
++ocfs2
  proc
 +ramfs
 +relayfs

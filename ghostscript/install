@@ -36,8 +36,6 @@ fi
 cp sobin/gxpsc "${UB_INSTALLDIR}"/usr/bin/
 ln -s gxpsc "${UB_INSTALLDIR}"/usr/bin/gxps
 cp sobin/libgxps.so.${UB_VERSION_HEAD2} "${UB_INSTALLDIR}"/usr/lib/
-ln -s libgxps.so.${UB_VERSION_HEAD2} "${UB_INSTALLDIR}"/usr/lib/libgxps.so.${UB_VERSION_HEAD1}
-ln -s libgxps.so.${UB_VERSION_HEAD1} "${UB_INSTALLDIR}"/usr/lib/libgxps.so
 
 # ghostpcl rész
 cp sobin/gpcl6c "${UB_INSTALLDIR}"/usr/bin/
@@ -46,8 +44,6 @@ ln -s gpcl6 "${UB_INSTALLDIR}"/usr/bin/pcl6
 ln -s "${UB_INSTALLDIR}"/usr/share/ghostpcl/tools/pcl2pdf "${UB_INSTALLDIR}"/usr/bin/pcl2pdf
 ln -s "${UB_INSTALLDIR}"/usr/share/ghostpcl/tools/pcl2pdfwr "${UB_INSTALLDIR}"/usr/bin/pcl2pdfwr
 cp sobin/libgpcl6.so.${UB_VERSION_HEAD2} "${UB_INSTALLDIR}"/usr/lib/
-ln -s libgpcl6.so.${UB_VERSION_HEAD2} "${UB_INSTALLDIR}"/usr/lib/libgpcl6.so.${UB_VERSION_HEAD1}
-ln -s libgpcl6.so.${UB_VERSION_HEAD1} "${UB_INSTALLDIR}"/usr/lib/libgpcl6.so
 
 # ijs
 cd ijs

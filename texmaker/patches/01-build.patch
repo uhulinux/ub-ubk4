@@ -1,6 +1,6 @@
-diff -Naur orig/BUILD.sh patched/BUILD.sh
---- orig/BUILD.sh	2017-07-10 10:22:17.134739579 +0200
-+++ patched/BUILD.sh	2017-07-15 22:45:54.291345045 +0200
+diff -Naur a/BUILD.sh b/BUILD.sh
+--- a/BUILD.sh	2017-07-10 10:22:16.000000000 +0200
++++ b/BUILD.sh	2022-05-04 18:52:55.983491297 +0200
 @@ -24,8 +24,8 @@
  	echo "Texmaker compilation:"
  	echo "----------------------------------------"
@@ -21,7 +21,7 @@ diff -Naur orig/BUILD.sh patched/BUILD.sh
  		done
  	fi
  	echo -ne "\n" # just print a space to make a nicer output
-@@ -55,13 +55,13 @@
+@@ -55,15 +55,15 @@
  
  	if [[ ${SYSTEM} == "1" ]]; then # run if linux is detected
  		while [[ -z ${PREFIX} ]]; do # get installation path for Texmaker
@@ -36,15 +36,8 @@ diff -Naur orig/BUILD.sh patched/BUILD.sh
 -			read -p "Enter directory for the icon file (example: /usr/share/pixmaps): " ICONDIR
 +			ICONDIR=/usr/share/pixmaps
  		done
- 		${QTDIR}/qmake PREFIX=${PREFIX} DESKTOPDIR=${DESKTOPDIR} ICONDIR=${ICONDIR} texmaker.pro # run qmake
+-		${QTDIR}/qmake PREFIX=${PREFIX} DESKTOPDIR=${DESKTOPDIR} ICONDIR=${ICONDIR} texmaker.pro # run qmake
++		${QTDIR}/bin/qmake PREFIX=${PREFIX} DESKTOPDIR=${DESKTOPDIR} ICONDIR=${ICONDIR} texmaker.pro # run qmake
  		QMAKE_EXIT="$?" # get exit code of qmake
-diff -Naur orig/utilities/texmaker.desktop patched/utilities/texmaker.desktop
---- orig/utilities/texmaker.desktop	2017-07-14 01:16:02.134739579 +0200
-+++ patched/utilities/texmaker.desktop	2017-07-15 22:40:06.454884889 +0200
-@@ -1,5 +1,5 @@
- [Desktop Entry]
--Categories=Office;Publishing;Qt;X-SuSE-Core-Office;X-Mandriva-Office-Publishing;X-Misc;
-+Categories=Office;Publishing;Qt;X-Misc;
- Exec=texmaker %F
- GenericName=LaTeX Editor
- GenericName[fr]=Editeur LaTeX
+ 		if [[ $? == ${QMAKE_EXIT} ]]; then # check if qmake was successful
+ 			echo -ne "\nqmake [${txtgrn}Successful${txtrst}]\n"
