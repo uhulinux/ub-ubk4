@@ -156,8 +156,9 @@ done
 # cuda
 ln -s libcuda.so.${UB_VERSION} libcuda.so
 
+# egl-wayland ütközések
+rm libnvidia-egl-wayland.so*
 # wayland
-ln -s libnvidia-egl-wayland.so libnvidia-egl-wayland.so.1
 ln -s libEGL_nvidia.so.${UB_VERSION} libEGL_nvidia.so.0
 
 # vdpau
