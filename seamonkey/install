@@ -1,10 +1,10 @@
 #!/bin/sh -eux
 
-export SHELL=/bin/bash
-
 cd "$UB_OBJECTDIR"
 
-ub_install
+export PYTHON=/usr/bin/python2
+export MACH_USE_SYSTEM_PYTHON=1
+DESTDIR="$UB_INSTALLDIR" "$UB_COMPILEDIR"/mach install
 
 rm -f "$UB_INSTALLDIR"/usr/lib/seamonkey/seamonkey
 rm -f "$UB_INSTALLDIR"/usr/bin/seamonkey
