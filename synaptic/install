@@ -9,3 +9,12 @@ rm -f "$UB_INSTALLDIR"/usr/share/applications/synaptic-kde.desktop
 
 sed -i -e 's|\[pt_PT\]|\[pt\]|g' \
   "$UB_INSTALLDIR"/usr/share/applications/synaptic.desktop
+
+cat <<'EOF' > "${UB_INSTALLDIR}"/usr/bin/synaptic-start
+#!/bin/bash
+
+xhost +si:localuser:root
+synaptic-pkexec
+xhost -si:localuser:root
+EOF
+ln -s "${UB_INSTALLDIR}"/usr/bin/synaptic-start "${UB_INSTALLDIR}"/usr/bin/synaptic
