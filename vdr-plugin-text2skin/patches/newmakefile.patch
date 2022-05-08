@@ -1,6 +1,6 @@
 diff -Nur orig/Makefile mod/Makefile
---- orig/Makefile	2018-05-01 19:11:04.000000000 +0200
-+++ mod/Makefile	2018-05-01 20:22:28.518520385 +0200
+--- orig/Makefile	2022-04-09 09:00:48.000000000 +0200
++++ mod/Makefile	2022-04-09 10:02:39.942299744 +0200
 @@ -7,7 +7,7 @@
  # TBD: is this still true?
  
@@ -10,25 +10,8 @@ diff -Nur orig/Makefile mod/Makefile
  
  
  # DO NOT EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU'RE DOING
-@@ -17,44 +17,38 @@
- # The official name of this plugin.
- # This name will be used in the '-P...' option of VDR to load the plugin.
- # By default the main source file also carries this name.
--# IMPORTANT: the presence of this macro is important for the Make.config
--# file. So it must be defined, even if it is not used here!
--#
-+
- PLUGIN = text2skin
+@@ -33,28 +33,32 @@
  
- ### The version number of this plugin (taken from the main source file):
- 
- VERSION = $(shell grep 'const char \*cText2SkinPlugin::VERSION *=' $(PLUGIN).c | awk '{ print $$5 }' | sed -e 's/[";]//g')
- 
--### The C++ compiler and options:
--
--CXX      ?= g++
--CXXFLAGS ?= -fPIC -Wall -Werror=overloaded-virtual
--
  ### The directory environment:
  
 -VDRDIR = ../../..
@@ -40,19 +23,18 @@ diff -Nur orig/Makefile mod/Makefile
 +#
  TMPDIR = /tmp
  
--### Make sure that necessary options are included (VDR >= 1.7.13):
--
+ ### Make sure that necessary options are included (VDR >= 1.7.13):
+ 
 --include $(VDRDIR)/Make.global
 -
 -### Allow user defined options to overwrite defaults:
-+### The compiler options:
+-
+--include $(VDRDIR)/Make.config
 +export CFLAGS   = $(call PKGCFG,cflags)
 +export CXXFLAGS = $(call PKGCFG,cxxflags)
  
---include $(VDRDIR)/Make.config
--
--### The version number of VDR's plugin API (taken from VDR's "config.h"):
--
+ ### The version number of VDR's plugin API (taken from VDR's "config.h"):
+ 
 -APIVERSION = $(shell sed -ne '/define APIVERSION/s/^.*"\(.*\)".*$$/\1/p' \
 -                         $(VDRDIR)/config.h)
 +### The version number of VDR's plugin API:
@@ -70,7 +52,7 @@ diff -Nur orig/Makefile mod/Makefile
  ### The object files (add further files here):
  
  OBJS = $(PLUGIN).o loader.o display.o render.o common.o bitmap.o \
-@@ -85,19 +79,19 @@
+@@ -85,19 +89,19 @@
  	CXXFLAGS += -g -fno-inline
  	DEFINES += -DDEBUG
  else
@@ -94,10 +76,11 @@ diff -Nur orig/Makefile mod/Makefile
  
  ### Implicit rules:
  
-@@ -117,17 +111,16 @@
+@@ -116,18 +120,16 @@
+ 
  ### Internationalization (I18N):
  
- PODIR     = po
+-PODIR     = po
 -LOCALEDIR = $(VDRDIR)/locale
  I18Npo    = $(notdir $(wildcard $(PODIR)/*.po))
  I18Npot   = $(PODIR)/$(PLUGIN).pot
@@ -114,13 +97,13 @@ diff -Nur orig/Makefile mod/Makefile
  	@touch $@
  
  $(LOCALEDIR)/%/LC_MESSAGES/vdr-$(PLUGIN).mo: $(PODIR)/%.po
-@@ -140,12 +133,15 @@
+@@ -140,12 +142,14 @@
  
  ### Targets:
  
 -libvdr-$(PLUGIN).so: $(OBJS)
+-	@echo LD $@
 +$(SOFILE): $(OBJS)
- 	@echo LD $@
  	$(Q)$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(LIBS) -o $@
  	@echo IN $@ $(LIBDIR)/$@.$(APIVERSION)
 -	$(Q)cp --remove-destination $@ $(LIBDIR)/$@.$(APIVERSION)

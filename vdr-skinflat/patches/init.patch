@@ -1,0 +1,34 @@
+diff -Nur orig/imageloader.c mod/imageloader.c
+--- orig/imageloader.c	2013-09-22 12:40:24.000000000 +0200
++++ mod/imageloader.c	2021-01-12 10:30:10.501901413 +0100
+@@ -7,7 +7,6 @@
+ using namespace Magick;
+ 
+ cImageLoader::cImageLoader() {
+-    InitializeMagick(NULL);
+     logoExtension = "png";
+ }
+ 
+diff -Nur orig/skinflat.c mod/skinflat.c
+--- orig/skinflat.c	2013-09-22 12:40:24.000000000 +0200
++++ mod/skinflat.c	2021-01-12 10:33:51.794080157 +0100
+@@ -7,6 +7,7 @@
+  */
+ #include <getopt.h>
+ #include <vdr/plugin.h>
++#include <Magick++.h>
+ 
+ #if defined(APIVERSNUM) && APIVERSNUM < 10734
+ #error "VDR-1.7.34 API version or greater is required!"
+@@ -74,6 +75,11 @@
+     return true;
+ }
+ 
++__attribute__((constructor)) static void init(void) {
++   Magick::InitializeMagick(NULL);
++}
++
++
+ bool cPluginFlat::Initialize(void) {
+     Config.Init();
+     return true;
