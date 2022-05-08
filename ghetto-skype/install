@@ -1,8 +1,0 @@
-#!/bin/sh -eux
-
-cp -r "$UB_COMPILEDIR"/usr "$UB_INSTALLDIR"/
-cp -r "$UB_COMPILEDIR"/opt/* "$UB_INSTALLDIR"/usr/lib/ghetto-skype
-
-rm -Rf "$UB_INSTALLDIR"/usr/share/lintian
-
-ln -s /usr/lib/ghetto-skype/ghetto-skype "$UB_INSTALLDIR"/usr/bin/ghetto-skype

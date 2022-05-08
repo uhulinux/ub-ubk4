@@ -1,4 +1,7 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--with-card-theme-formats=svg
+	-Dgconf=false \
+	-Dtheme_pysol=true \
+	-Dtheme_pysol_path=/usr/share/PySolFC \
+	-Dtheme_kde_path=/usr/share/carddecks
