@@ -15,6 +15,7 @@ ccache --max-size=12G
 # mv *.{gz,zip,bz2,xz} src/
 
 export QT5DIR=/usr/lib/qt5
+export QT6DIR=/usr/lib/qt6
 
 # ha van a distro-configs alatt megfelelő tartalmú .conf fájl, ekkor az
 # ./autogen.sh --with-distro=<conffile> is használható
@@ -83,8 +84,9 @@ export QT5DIR=/usr/lib/qt5
     --enable-gtk3-kde5 \
     --enable-kf5 \
     --enable-qt5 \
-    --enable-pdfimport \
-    --enable-pdfium \
+    --enable-qt6 \
+    --disable-pdfimport \
+    --disable-pdfium \
     --enable-release-build
 
 # az unitcheck és a slowcheck nem kell
