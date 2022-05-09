@@ -1,17 +1,7 @@
---- a/src/Fl.cxx
-+++ b/src/Fl.cxx
-@@ -928,7 +928,7 @@
- 
- ////////////////////////////////////////////////////////////////
- 
--Fl_Widget* fl_oldfocus; // kludge for Fl_Group...
-+FL_EXPORT Fl_Widget* fl_oldfocus; // kludge for Fl_Group...
- 
- /**
-     Sets the widget that will receive FL_KEYBOARD events.
---- a/FL/x.H
-+++ b/FL/x.H
-@@ -114,7 +114,7 @@ FL_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.
+diff -Naur a/FL/x.H b/FL/x.H
+--- a/FL/x.H	2021-11-20 19:10:34.000000000 +0100
++++ b/FL/x.H	2022-05-09 01:54:18.567574598 +0200
+@@ -106,7 +106,7 @@
  // With Xlib / X11 fonts, fl_xfont will return the current selected font.
  // With XFT / X11 fonts, fl_xfont will attempt to return the bitmap "core" font most
  // similar to (usually the same as) the current XFT font.
@@ -20,3 +10,15 @@
  {
  public:
    Fl_XFont_On_Demand(XFontStruct* p = NULL) : ptr(p) { }
+diff -Naur a/src/Fl.cxx b/src/Fl.cxx
+--- a/src/Fl.cxx	2021-11-20 19:10:34.000000000 +0100
++++ b/src/Fl.cxx	2022-05-09 01:54:18.567574598 +0200
+@@ -974,7 +974,7 @@
+ 
+ ////////////////////////////////////////////////////////////////
+ 
+-Fl_Widget* fl_oldfocus; // kludge for Fl_Group...
++FL_EXPORT Fl_Widget* fl_oldfocus; // kludge for Fl_Group...
+ 
+ /**
+     Sets the widget that will receive FL_KEYBOARD events.

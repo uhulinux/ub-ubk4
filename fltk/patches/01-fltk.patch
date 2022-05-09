@@ -1,7 +1,7 @@
-diff -Naur orig/documentation/Makefile patched/documentation/Makefile
---- orig/documentation/Makefile	2011-10-25 04:17:29.000000000 +0200
-+++ patched/documentation/Makefile	2015-01-25 16:31:36.788192625 +0100
-@@ -84,11 +84,6 @@
+diff -Naur a/documentation/Makefile b/documentation/Makefile
+--- a/documentation/Makefile	2021-11-20 19:10:34.000000000 +0100
++++ b/documentation/Makefile	2022-05-09 01:52:39.499296746 +0200
+@@ -86,11 +86,6 @@
  	  $(INSTALL_DATA) fltk.pdf $(DESTDIR)$(docdir); \
  	fi
  	echo "Installing man pages in $(DESTDIR)$(mandir) ..."
@@ -13,7 +13,7 @@ diff -Naur orig/documentation/Makefile patched/documentation/Makefile
  	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/man1
  	$(INSTALL_MAN) $(SRC_DOCDIR)/fluid.man $(DESTDIR)$(mandir)/man1/fluid.1
  	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk-config.man $(DESTDIR)$(mandir)/man1/fltk-config.1
-@@ -96,10 +91,6 @@
+@@ -98,10 +93,6 @@
  	$(INSTALL_MAN) $(SRC_DOCDIR)/fltk.man $(DESTDIR)$(mandir)/man3/fltk.3
  
  install-linux install-osx:
@@ -24,9 +24,9 @@ diff -Naur orig/documentation/Makefile patched/documentation/Makefile
  	-$(INSTALL_DIR) $(DESTDIR)$(mandir)/man6
  	$(INSTALL_MAN) $(SRC_DOCDIR)/blocks.man $(DESTDIR)$(mandir)/man6/blocks.6
  	$(INSTALL_MAN) $(SRC_DOCDIR)/checkers.man $(DESTDIR)$(mandir)/man6/checkers.6
-diff -Naur orig/fluid/fluid.desktop patched/fluid/fluid.desktop
---- orig/fluid/fluid.desktop	2010-11-14 17:37:34.000000000 +0100
-+++ patched/fluid/fluid.desktop	2015-01-25 16:32:16.024387187 +0100
+diff -Naur a/fluid/fluid.desktop b/fluid/fluid.desktop
+--- a/fluid/fluid.desktop	2021-11-20 19:10:34.000000000 +0100
++++ b/fluid/fluid.desktop	2022-05-09 01:52:39.499296746 +0200
 @@ -1,6 +1,7 @@
  [Desktop Entry]
  Name=FLUID
