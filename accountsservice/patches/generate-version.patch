@@ -1,0 +1,12 @@
+diff -Naur a/generate-version.sh b/generate-version.sh
+--- a/generate-version.sh	2022-02-23 16:27:48.000000000 +0100
++++ b/generate-version.sh	2022-03-16 02:22:26.798638997 +0100
+@@ -7,7 +7,7 @@
+ 
+ # If it's not from a git checkout, assume it's from a tarball
+ if [ "$TOPLEVEL_WORKING_DIR" != "$CWD" ]; then
+-    VERSION_FROM_DIR_NAME=$(basename "$CWD" | sed -n 's/^accountsservice-\([^-]*\)$/\1/p')
++    VERSION_FROM_DIR_NAME=$UB_VERSION
+ 
+     if [ -n "$VERSION_FROM_DIR_NAME" ]; then
+         echo "$VERSION_FROM_DIR_NAME"

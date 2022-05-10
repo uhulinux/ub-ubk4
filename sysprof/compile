@@ -1,5 +1,4 @@
 #!/bin/sh -eux
 
-export CFLAGS=" -ffat-lto-objects"
-
-ub_compile
+ub_compile \
+	-Dlibunwind=false
