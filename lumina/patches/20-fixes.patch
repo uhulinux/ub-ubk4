@@ -1,0 +1,36 @@
+diff -Naur a/src-qt5/core/libLumina/LDesktopUtils.cpp b/src-qt5/core/libLumina/LDesktopUtils.cpp
+--- a/src-qt5/core/libLumina/LDesktopUtils.cpp	2021-12-26 03:33:45.000000000 +0100
++++ b/src-qt5/core/libLumina/LDesktopUtils.cpp	2022-05-14 22:04:24.130028105 +0200
+@@ -14,7 +14,7 @@
+ #include "LuminaThemes.h"
+ 
+ QString LDesktopUtils::LuminaDesktopVersion(){
+-  QString ver = "1.6.0";
++  QString ver = "1.6.2";
+   #ifdef GIT_VERSION
+   ver.append( QString(" (Git Revision: %1)").arg(GIT_VERSION) );
+   #endif
+diff -Naur a/src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro b/src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro
+--- a/src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro	2021-12-26 03:33:45.000000000 +0100
++++ b/src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro	2022-05-14 22:15:50.084510049 +0200
+@@ -18,7 +18,7 @@
+ 
+ RESOURCES += lumina-sudo.qrc
+ 
+-TRANSLATIONS =  i18n/lsum_udo_af.ts \
++TRANSLATIONS =  i18n/lum_sudo_af.ts \
+                 i18n/lum_sudo_ar.ts \
+                 i18n/lum_sudo_az.ts \
+                 i18n/lum_sudo_bg.ts \
+@@ -86,4 +86,11 @@
+                 i18n/lum_sudo_zh_TW.ts \
+                 i18n/lum_sudo_zu.ts
+ 
++dotrans.path=$${L_SHAREDIR}/lumina-desktop/i18n/
++dotrans.extra=cd $$PWD/i18n && $${LRELEASE} -nounfinished *.ts && cp *.qm $(INSTALL_ROOT)$${L_SHAREDIR}/lumina-desktop/i18n/
++
+ INSTALLS += target
++
++WITH_I18N{
++  INSTALLS += dotrans
++}
