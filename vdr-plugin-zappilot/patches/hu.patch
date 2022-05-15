@@ -1,0 +1,165 @@
+diff -Nur orig/HISTORY mod/HISTORY
+--- orig/HISTORY	2021-04-24 17:17:14.000000000 +0200
++++ mod/HISTORY	2022-05-15 13:18:43.000000000 +0200
+@@ -1,12 +1,11 @@
+ VDR Plugin 'zappilot' Revision History
+ --------------------------------------
+-
+-2021-04-24: Version 0.0.6
+-  - Support for VDR >= 2.3.1
+-
+-2013-03-17: Version 0.0.5
++2018-06-07:Version 0.0.6
++  - porting to vdr-2.3.1
++  - added hu translation
++2013-03-17:Version 0.0.5
+   - skip changing channel when pressing OK button on the same channel
+-  - added alternative key layout for fast browse mode
++  - added alternative key layout for fast browse mode 
+     (up/down switches channels, left/right next/previous epg item)
+   - updated Makefile for vdr-1.7.34+
+   - reformatted code
+@@ -18,11 +17,11 @@
+   - Added fast browse
+   - Moved homepage to http://projects.vdr-developer.org/projects/show/plg-zappilot
+ 
+-2007-08-21: Version 0.0.3
++2007-08-21: Version 0.0.3 
+   - Added support for gettext (VDR >= 1.5.7)
+   - Clean the code, correct minors bugs
+ 
+-2006-04-30: Version 0.0.2
++2006-04-30: Version 0.0.2 
+   - plugin is accessible from Main Menu
+   - VDR's new APIVERSION feature
+   - Maintenance release for vdr-1.4+
+diff -Nur orig/po/es_ES.po mod/po/es_ES.po
+--- orig/po/es_ES.po	2021-04-24 17:17:14.000000000 +0200
++++ mod/po/es_ES.po	2022-05-15 13:18:43.000000000 +0200
+@@ -11,7 +11,7 @@
+ "PO-Revision-Date: 2007-08-21 23:24+0200\n"
+ "Last-Translator: Ruben Nunez Francisco <ruben.nunez@tang-it.com>\n"
+ "Language-Team: <vdr@linuxtv.org>\n"
+-"Language: \n"
++"Language: es_ES\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+diff -Nur orig/po/fi_FI.po mod/po/fi_FI.po
+--- orig/po/fi_FI.po	2021-04-24 17:17:14.000000000 +0200
++++ mod/po/fi_FI.po	2022-05-15 13:18:43.000000000 +0200
+@@ -14,7 +14,7 @@
+ "PO-Revision-Date: 2007-08-21 23:24+0200\n"
+ "Last-Translator: Rolf Ahrenberg <rahrenbe@cc.hut.fi>\n"
+ "Language-Team: <vdr@linuxtv.org>\n"
+-"Language: \n"
++"Language: fi_FI\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+diff -Nur orig/po/fr_FR.po mod/po/fr_FR.po
+--- orig/po/fr_FR.po	2021-04-24 17:17:14.000000000 +0200
++++ mod/po/fr_FR.po	2022-05-15 13:18:43.000000000 +0200
+@@ -14,7 +14,7 @@
+ "PO-Revision-Date: 2007-08-21 23:24+0200\n"
+ "Last-Translator: Nicolas Huillard <nhuillard@e-dition.fr>\n"
+ "Language-Team: <vdr@linuxtv.org>\n"
+-"Language: \n"
++"Language: fr_FR\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+diff -Nur orig/po/hu.po mod/po/hu.po
+--- orig/po/hu.po	1970-01-01 01:00:00.000000000 +0100
++++ mod/po/hu.po	2022-05-15 13:18:43.000000000 +0200
+@@ -0,0 +1,54 @@
++msgid ""
++msgstr ""
++"Project-Id-Version: VDR 2.4.0\n"
++"POT-Creation-Date: 2018-05-07 12:17+0200\n"
++"PO-Revision-Date: 2018-05-07 12:20+0200\n"
++"Last-Translator: Kiss Attila <attus@enterpriseforever.com>\n"
++"Language-Team: \n"
++"Language: hu\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++"X-Generator: Poedit 1.8.12\n"
++"X-Poedit-Basepath: ..\n"
++"Plural-Forms: nplurals=2; plural=(n != 1);\n"
++"X-Poedit-KeywordsList: tr\n"
++"X-Poedit-SearchPath-0: .\n"
++
++msgid "A zapping co-pilot"
++msgstr "Gyors csatorna váltó"
++
++msgid "ZapPilot"
++msgstr ""
++
++#: zappilotosd.c:125
++msgid "Switch timer added!"
++msgstr "Kapcsoló időzítő adva!"
++
++#: zappilotosd.c:147
++msgid "Switch timer deleted!"
++msgstr "Kapcsoló időzítő törölve!"
++
++#: zappilotsetup.c:22
++msgid "Close on OK"
++msgstr "OK : bezár"
++
++#: zappilotsetup.c:23
++msgid "Hide main menu entry"
++msgstr "menüpont elrejtés"
++
++#: zappilotsetup.c:24
++msgid "Fast browse"
++msgstr "Gyors keresés"
++
++#: zappilotsetup.c:25
++msgid "Fast browse (alt. key layout)"
++msgstr "Gyors keresés (alt. bill.)"
++
++#: zappilotsetup.c:28
++msgid "Switch timer"
++msgstr "Kapcsoló időzítő"
++
++#: zappilotsetup.c:29
++msgid "Switch ... minutes before start"
++msgstr "Átkapcsolás előtti perc"
+diff -Nur orig/po/it_IT.po mod/po/it_IT.po
+--- orig/po/it_IT.po	2021-04-24 17:17:14.000000000 +0200
++++ mod/po/it_IT.po	2022-05-15 13:18:43.000000000 +0200
+@@ -11,7 +11,7 @@
+ "PO-Revision-Date: 2010-08-09 19:40+0100\n"
+ "Last-Translator: Diego Pierotto <vdr-italian@tiscali.it>\n"
+ "Language-Team: <vdr@linuxtv.org>\n"
+-"Language: \n"
++"Language: it_IT\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+diff -Nur orig/po/sk_SK.po mod/po/sk_SK.po
+--- orig/po/sk_SK.po	2021-04-24 17:17:14.000000000 +0200
++++ mod/po/sk_SK.po	2022-05-15 13:18:43.000000000 +0200
+@@ -11,7 +11,7 @@
+ "PO-Revision-Date: 2011-02-15 21:31+0100\n"
+ "Last-Translator: Milan Hrala <hrala.milan@gmail.com>\n"
+ "Language-Team: Milan Hrala <hrala.milan@gmail.com>\n"
+-"Language: \n"
++"Language: sk_SK\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+diff -Nur orig/zappilot.c mod/zappilot.c
+--- orig/zappilot.c	2021-04-24 17:17:14.000000000 +0200
++++ mod/zappilot.c	2022-05-15 13:18:43.000000000 +0200
+@@ -12,7 +12,7 @@
+ 
+ #include <vdr/plugin.h>
+ 
+-static const char *VERSION        = "0.0.6";
++static const char *VERSION        = "0.0.5";
+ static const char *DESCRIPTION    = trNOOP("A zapping co-pilot");
+ static const char *MAINMENUENTRY  = trNOOP("ZapPilot");
+ 
