@@ -1,12 +1,11 @@
-diff -Naur orig/dpkg-deb/build.c patched/dpkg-deb/build.c
---- orig/dpkg-deb/build.c	2019-01-23 22:36:34.000000000 +0100
-+++ patched/dpkg-deb/build.c	2019-03-19 01:56:34.376425255 +0100
-@@ -591,7 +591,7 @@
+diff -Naur a/src/deb/build.c b/src/deb/build.c
+--- a/src/deb/build.c	2022-03-26 18:17:59.000000000 +0100
++++ b/src/deb/build.c	2022-05-15 05:07:57.709320278 +0200
+@@ -593,7 +593,6 @@
      pkg = check_control_area(ctrldir, dir);
      if (debar == NULL)
        debar = gen_dest_pathname_from_pkg(dest, pkg);
 -    info(_("building package '%s' in '%s'."), pkg->set->name, debar);
-+//    info(_("building package '%s' in '%s'."), pkg->set->name, debar);
    }
    m_output(stdout, _("<standard output>"));
  

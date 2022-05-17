@@ -1,6 +1,6 @@
-diff -Naur orig/lib/dpkg/dpkg.h patched/lib/dpkg/dpkg.h
---- orig/lib/dpkg/dpkg.h	2021-01-09 07:04:59.000000000 +0100
-+++ patched/lib/dpkg/dpkg.h	2021-03-06 01:32:37.659997004 +0100
+diff -Naur a/lib/dpkg/dpkg.h b/lib/dpkg/dpkg.h
+--- a/lib/dpkg/dpkg.h	2022-05-15 04:53:25.382600825 +0200
++++ b/lib/dpkg/dpkg.h	2022-05-15 05:01:34.644167828 +0200
 @@ -71,6 +71,7 @@
  #define POSTINSTFILE       "postinst"
  #define PRERMFILE          "prerm"
@@ -9,9 +9,9 @@ diff -Naur orig/lib/dpkg/dpkg.h patched/lib/dpkg/dpkg.h
  /* Debconf config maintainer script. */
  #define MAINTSCRIPT_FILE_CONFIG		"config"
  #define TRIGGERSCIFILE     "triggers"
-diff -Naur orig/src/remove.c patched/src/remove.c
---- orig/src/remove.c	2021-01-09 07:04:59.000000000 +0100
-+++ patched/src/remove.c	2021-03-06 01:32:37.659997004 +0100
+diff -Naur a/src/main/remove.c b/src/main/remove.c
+--- a/src/main/remove.c	2022-03-26 18:17:59.000000000 +0100
++++ b/src/main/remove.c	2022-05-15 05:05:06.236855908 +0200
 @@ -225,7 +225,8 @@
  {
    /* We need the postrm and list files for --purge. */

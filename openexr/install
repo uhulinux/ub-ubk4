@@ -2,13 +2,7 @@
 
 ub_install
 
-# Install python modules
-cd build
-_pythonpath=`python -c "from sysconfig import get_path; print(get_path('platlib'))"`
-install -Dm755 python3*/*.so -t "$UB_INSTALLDIR"/$_pythonpath
-chrpath -d "$UB_INSTALLDIR"/$_pythonpath/*.so # Remove insecure RPATH
-
-# FHS tiltott mappa eltávilítás
+# FHS tiltott mappa eltávolítás
 rm -rf "$UB_INSTALLDIR"/usr/sr
 
 # nem kell pdf doksitömeg.
