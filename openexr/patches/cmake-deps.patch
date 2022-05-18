@@ -1,12 +1,11 @@
-diff -Naur orig/cmake/OpenEXRConfig.cmake.in patched/cmake/OpenEXRConfig.cmake.in
---- orig/cmake/OpenEXRConfig.cmake.in	2021-09-30 01:12:14.000000000 +0200
-+++ patched/cmake/OpenEXRConfig.cmake.in	2021-10-15 21:39:07.649392973 +0200
-@@ -9,8 +9,5 @@
+diff -Naur a/cmake/OpenEXRConfig.cmake.in b/cmake/OpenEXRConfig.cmake.in
+--- a/cmake/OpenEXRConfig.cmake.in	2022-04-07 02:52:25.000000000 +0200
++++ b/cmake/OpenEXRConfig.cmake.in	2022-05-18 03:10:46.530087337 +0200
+@@ -9,7 +9,6 @@
  endif()
  unset(openexr_needthreads)
  
 -find_dependency(ZLIB REQUIRED)
--find_dependency(Imath REQUIRED)
--
+ find_dependency(Imath REQUIRED)
+ 
  include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
- check_required_components("@PROJECT_NAME@")
