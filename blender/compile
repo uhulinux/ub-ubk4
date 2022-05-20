@@ -2,6 +2,7 @@
 
 # TBB: USD, OPENIMAGEDENOISE, OPENVDB, MOD_FLUID
 
+pythonver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 ub_compile \
 	-DCMAKE_SKIP_RPATH=ON \
 	-DBUILD_SHARED_LIBS=OFF \
@@ -26,7 +27,7 @@ ub_compile \
     -DWITH_OPENIMAGEDENOISE=OFF \
     -DWITH_OPENVDB=OFF \
     -DWITH_MOD_FLUID=OFF \
-	-DPYTHON_VERSION=3.10 \
+	-DPYTHON_VERSION=$pythonver \
 	-DPYTHON_LIBPATH=/usr/lib \
-	-DPYTHON_LIBRARY=python3.10 \
-	-DPYTHON_INCLUDE_DIRS=/usr/include/python3.10
+	-DPYTHON_LIBRARY=python$pythonver \
+	-DPYTHON_INCLUDE_DIRS=/usr/include/python$pythonver

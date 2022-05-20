@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
-export PYTHONPATH=`pwd`:/usr/lib/python3.10
+pythonver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+export PYTHONPATH=`pwd`:/usr/lib/python$pythonver
 waf install --destdir=${UB_INSTALLDIR}

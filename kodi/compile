@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+pythonver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+
 mkdir -p build-x build-w
 cd build-x
 cmake \
@@ -44,7 +46,7 @@ cmake \
 	-DENABLE_VDPAU=ON \
 	-DENABLE_XSLT=ON \
 	-DJava_JAVA_EXECUTABLE=/usr/lib/java/jre/bin/java \
-	-DPYTHON_INCLUDE_DIR=/usr/include/python3.10 \
+	-DPYTHON_INCLUDE_DIR=/usr/include/python$pythonver \
 	-DAPP_RENDER_SYSTEM=gl \
 	-DCORE_PLATFORM_NAME=x11 \
     ..
@@ -92,7 +94,7 @@ cmake \
 	-DENABLE_VDPAU=ON \
 	-DENABLE_XSLT=ON \
 	-DJava_JAVA_EXECUTABLE=/usr/lib/java/jre/bin/java \
-	-DPYTHON_INCLUDE_DIR=/usr/include/python3.10 \
+	-DPYTHON_INCLUDE_DIR=/usr/include/python$pythonver \
 	-DAPP_RENDER_SYSTEM=gl \
 	-DCORE_PLATFORM_NAME=wayland \
 ..

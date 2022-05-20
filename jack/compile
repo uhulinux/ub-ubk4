@@ -8,7 +8,8 @@ sed -e "s/load('xcode'/load('xcode', tooldir='tools'/g" \
     -e "s/load('xcode6'/load('xcode6', tooldir='tools'/g" \
     -i wscript
 
-export PYTHONPATH=`pwd`:/usr/lib/python3.10
+pythonver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+export PYTHONPATH=`pwd`:/usr/lib/python$pythonver
 waf configure \
 		--prefix=/usr \
 		--dbus \
