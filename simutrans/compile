@@ -2,4 +2,4 @@
 
 cp config.template config.default
 sed -e 's|\\#define|#define|' -i Makefile
-make VERBOSE=1 BACKEND=sdl2 OSTYPE=linux
+make VERBOSE=1 BACKEND=sdl2 OSTYPE=linux USE_FLUIDSYNTH_MIDI=1
