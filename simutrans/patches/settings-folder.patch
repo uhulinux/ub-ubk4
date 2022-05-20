@@ -1,9 +1,9 @@
-diff -Nur orig/sys/simsys.cc mod/sys/simsys.cc
---- orig/sys/simsys.cc	2020-12-13 15:57:14.295703096 +0100
-+++ mod/sys/simsys.cc	2020-12-13 15:56:32.183744023 +0100
-@@ -363,7 +363,7 @@
- 	find_directory(B_USER_DIRECTORY, &userDir);
- 	sprintf(buffer, "%s/simutrans", userDir.Path());
+diff -Naur a/sys/simsys.cc b/sys/simsys.cc
+--- a/sys/simsys.cc	2022-01-28 12:17:50.000000000 +0100
++++ b/sys/simsys.cc	2022-05-19 21:02:28.629016137 +0200
+@@ -395,7 +395,7 @@
+ #elif defined __ANDROID__
+ 	tstrncpy(buffer,SDL_GetPrefPath("Simutrans Team","simutrans"),lengthof(buffer));
  #else
 -	sprintf(buffer, "%s/simutrans", getenv("HOME"));
 +	sprintf(buffer, "%s/.simutrans", getenv("HOME"));
