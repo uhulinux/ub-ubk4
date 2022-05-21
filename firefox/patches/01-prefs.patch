@@ -1,6 +1,6 @@
-diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firefox.js
---- orig/browser/app/profile/firefox.js	2021-11-29 17:08:48.000000000 +0100
-+++ patched/browser/app/profile/firefox.js	2021-12-11 01:43:43.604179686 +0100
+diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
+--- a/browser/app/profile/firefox.js	2022-05-20 03:58:55.000000000 +0200
++++ b/browser/app/profile/firefox.js	2022-05-21 17:29:01.991703885 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -24,7 +24,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -135,7 +142,7 @@
+@@ -146,7 +153,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
  #ifndef XP_WIN
@@ -33,7 +33,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -272,7 +279,7 @@
+@@ -262,7 +269,7 @@
  pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -42,7 +42,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -355,7 +362,7 @@
+@@ -353,7 +360,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -51,7 +51,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // Whether to warm up network connections for autofill or search results.
  pref("browser.urlbar.speculativeConnect.enabled", true);
-@@ -434,7 +441,7 @@
+@@ -444,7 +451,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -60,7 +60,7 @@ diff -Naur orig/browser/app/profile/firefox.js patched/browser/app/profile/firef
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -972,7 +979,7 @@
+@@ -1021,7 +1028,7 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
