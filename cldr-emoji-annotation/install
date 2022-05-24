@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
-ub_install
+mkdir -p ${UB_INSTALLDIR}/usr/share/unicode/cldr/common/annotations{,Derived}
+cp common/annotations/*.xml ${UB_INSTALLDIR}/usr/share/unicode/cldr/common/annotations/
+cp common/annotationsDerived/*.xml ${UB_INSTALLDIR}/usr/share/unicode/cldr/common/annotationsDerived/
