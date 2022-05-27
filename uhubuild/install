@@ -12,26 +12,8 @@ rmdir "${UB_INSTALLDIR}"/usr/lib/uhubuild/build
 mkdir -p "${UB_INSTALLDIR}/usr/share/uhubuild"
 cp -a config words "${UB_INSTALLDIR}/usr/share/uhubuild/"
 
-# build
 mkdir -p "${UB_INSTALLDIR}/usr/share/bash-completion"
 cp -a bash-completion/completions "${UB_INSTALLDIR}/usr/share/bash-completion/"
-
-# sources.list
-mkdir -p "${UB_INSTALLDIR}/etc/apt"
-
-for dist in UBK1 UBK2 UBK3 UBK4 UBK5; do
-
-cat > "$UB_INSTALLDIR"/etc/apt/sources.list-build-$dist <<END
-# /etc/apt/sources.list
-
-deb file:/usr/src/UHUBUILD/packages-$dist/amd64 ./
-
-deb http://download.ubk.hu/pkg/${dist,,}/main/amd64 ./
-deb http://quantum-mirror.hu/mirrors/pub/ubk/pkg/${dist,,}/main/amd64 ./
-
-END
-
-done
 
 # symlinks
 cd "${UB_INSTALLDIR}/usr/bin"
@@ -57,58 +39,42 @@ chmod 755 usr/lib/uhubuild/steps/*
 chmod 755 usr/bin/ub_*
 
 # build
-
-for dist in UBK1 UBK2; do
-	for arch in i386 amd64; do
-		for a in 1 2 3 ; do
-			mkdir -p "$UB_INSTALLDIR"/var/uhubuild/"$dist"/"$arch"/chroot${a}
-		done
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/UB-"$dist"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/extrarelease/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/failed/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/compile/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/install/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/logpack/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/tmp/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
-		cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
-		uhu-scanpkgs
-		echo "Label: UHU-Linux" > Release
-		echo "Origin: ubk.hu" >> Release
-		echo "Version: $dist" >> Release
-	done # arch
-
-	ln -s "$UB_INSTALLDIR"/usr/bin/build-clean \
-		"$UB_INSTALLDIR"/usr/bin/build-clean-"${dist,,}"
-
-	ln -s "$UB_INSTALLDIR"/usr/bin/build \
-		"$UB_INSTALLDIR"/usr/bin/build-"${dist,,}"
-done
-
 for dist in UBK3 UBK4 UBK5; do
-	for arch in amd64; do
-		for a in 1 2 3 ; do
-			mkdir -p "$UB_INSTALLDIR"/var/uhubuild/"$dist"/"$arch"/chroot${a}
-		done
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/UB-"$dist"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/extrarelease/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/failed/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/compile/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/install/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/logpack/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/tmp/"$arch"
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/ub
-		mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
-		cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/"$arch"
-		uhu-scanpkgs
-		echo "Label: UHU-Linux" > Release
-		echo "Origin: ubk.hu" >> Release
-		echo "Version: $dist" >> Release
-	done # arch
+	for a in 1 2 3 ; do
+		mkdir -p "$UB_INSTALLDIR"/var/uhubuild/"$dist"/amd64/chroot${a}
+	done
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/UB-"$dist"
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/extrarelease/amd64
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/failed/amd64
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/compile/amd64
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/snapshot/install/amd64
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/logpack/amd64
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/misc-"$dist"/tmp/amd64
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/ub
+mkdir -p "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/amd64
+cd "$UB_INSTALLDIR"/usr/src/UHUBUILD/packages-"$dist"/amd64
+uhu-scanpkgs
+echo "Label: UHU-Linux" > Release
+echo "Origin: ubk.hu" >> Release
+echo "Version: $dist" >> Release
 
-	ln -s "$UB_INSTALLDIR"/usr/bin/build-clean \
-		"$UB_INSTALLDIR"/usr/bin/build-clean-"${dist,,}"
+ln -s "$UB_INSTALLDIR"/usr/bin/build-clean \
+	"$UB_INSTALLDIR"/usr/bin/build-clean-"${dist,,}"
 
-	ln -s "$UB_INSTALLDIR"/usr/bin/build \
-		"$UB_INSTALLDIR"/usr/bin/build-"${dist,,}"
+ln -s "$UB_INSTALLDIR"/usr/bin/build \
+	"$UB_INSTALLDIR"/usr/bin/build-"${dist,,}"
+
+# sources.list
+mkdir -p "${UB_INSTALLDIR}/etc/apt"
+
+cat > "$UB_INSTALLDIR"/etc/apt/sources.list-build-$dist <<END
+# /etc/apt/sources.list
+
+deb file:/usr/src/UHUBUILD/packages-$dist/amd64 ./
+
+deb http://download.ubk.hu/pkg/${dist,,}/main/amd64 ./
+deb http://quantum-mirror.hu/mirrors/pub/ubk/pkg/${dist,,}/main/amd64 ./
+
+END
+
 done

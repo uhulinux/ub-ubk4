@@ -1,0 +1,304 @@
+diff -Naur a/bash-completion/completions/build b/bash-completion/completions/build
+--- a/bash-completion/completions/build	2022-05-28 01:13:08.368340467 +0200
++++ b/bash-completion/completions/build	2022-05-28 01:15:31.280692856 +0200
+@@ -1,21 +1,3 @@
+-_buildubk1()
+-{
+-        local cur foo
+-        cur=${COMP_WORDS[COMP_CWORD]}
+-        foo="$(/bin/ls /usr/src/UHUBUILD/UB-UBK1)"
+-        COMPREPLY=($(compgen -W "$foo" -- "$cur"))
+-}
+-complete -F _buildubk1 build-ubk1
+-
+-_buildubk2()
+-{
+-        local cur foo
+-        cur=${COMP_WORDS[COMP_CWORD]}
+-        foo="$(/bin/ls /usr/src/UHUBUILD/UB-UBK2)"
+-        COMPREPLY=($(compgen -W "$foo" -- "$cur"))
+-}
+-complete -F _buildubk2 build-ubk2
+-
+ _buildubk3()
+ {
+         local cur foo
+diff -Naur a/GPG b/GPG
+--- a/GPG	2022-05-28 01:13:08.368340467 +0200
++++ b/GPG	2022-05-28 01:13:08.368340467 +0200
+@@ -1,21 +1,28 @@
+ gpg-s tároló használata UBK kulcssal
+ 
++apt 2.3.15-től:
++Ha létezik az /etc/apt/trusted.gpg, töröljük.
++
+ root-ként:
+ gpg --keyserver hkp://keys.gnupg.net --recv-keys 12A3276B
+ gpg --import ubk-secret.asc
+-apt-key add ubk.asc
++gpg --export 12A3276B > ubk.gpg
++mv ubk.gpg /etc/apt/trusted.gpg.d/ubk.gpg
++  VAGY
++wget http://ubk.hu/gpg/ubk.gpg
++mv ubk.gpg /etc/apt/trusted.gpg.d/ubk.gpg
+ 
+ saját új kulccsal:
+ root-ként:
+ gpg --gen-key
+-gpg --export -a kulcsazonosító > utvonal/sajat.asc
+-apt-key add utvonal/sajat.asc
++gpg --export kulcsazonosító > utvonal/sajat.gpg
++mv utvonal/sajat.gpg /etc/apt/trusted.gpg.d/sajat.gpg
+ 
+ saját meglévő kulccsal:
+ userként:
+-gpg --export -a kulcsazonosító > utvonal/sajat.asc
++gpg --export kulcsazonosító > utvonal/sajat.gpg
+ gpg --export-secret-key -a kulcsazonosító > utvonal/sajat-privat.asc
+ root-ként:
+-gpg --import utvonal/sajat.asc
++gpg --import utvonal/sajat.gpg
+ gpg --import utvonal/sajat-privat.asc
+-apt-key add utvonal/sajat.asc
++mv utvonal/sajat.gpg /etc/apt/trusted.gpg.d/sajat.gpg
+diff -Naur a/src/build/build b/src/build/build
+--- a/src/build/build	2022-05-28 01:13:08.368340467 +0200
++++ b/src/build/build	2022-05-28 01:13:08.372340477 +0200
+@@ -25,7 +25,7 @@
+ 
+ case `basename $0` in
+ 	build)
+-		export UHUBUILD_DISTR=UBK3;;
++		export UHUBUILD_DISTR=UBK4;;
+ 	build-ubk1)
+ 		export UHUBUILD_DISTR=UBK1;;
+ 	build-ubk2)
+@@ -72,23 +72,6 @@
+ 
+ for j in "$@"; do
+ 	case $1 in
+-		-64)
+-			if [ "$(uname -m)" != "x86_64" ];then
+-				die "Csak 64 bites módban indítva lehet 64 bites fordítást készíteni!"
+-			fi
+-			yellowecho "64 bites fordítás."
+-			echo
+-			export UB_ARCH="amd64"
+-			shift;;
+-		-32)
+-            if [ "$UHUBUILD_DISTR_NUM" >= "3" ]; then
+-                redecho " 32 bites fordítás nem lehetséges."
+-            else
+-			    yellowecho "32 bites fordítás."
+-			    echo
+-			    export UB_ARCH="i386"
+-			fi
+-			shift;;
+ 		-cc|--create-contents)
+ 			yellowecho "Contents.gz készítése a packages könyvtárban."
+ 			echo
+@@ -153,7 +136,7 @@
+ 			echo
+ 			appleecho "HASZNÁLAT:"
+ 			echo
+-			appleecho "build-${UHUBUILD_DISTR} $1 [-64][-pv][-ps][-ns][-ncs][-nis][-rs][-rc][-ch1][-ch2][-ch3]"
++			appleecho "build-${UHUBUILD_DISTR} $1 [-pv][-ps][-ns][-ncs][-nis][-rs][-rc][-ch1][-ch2][-ch3]"
+ 			appleecho "[-rch][-nuch][-usc|-usi][-cc][-ner] csomag1 [csomag2] [csomag3] [...]"
+ 			echo
+ 			appleecho "vagy (posix kapcsolókkal):"
+@@ -176,11 +159,6 @@
+ 			appleecho "megjelenő, a csomag nevével azonos nevű fájl is jelzi."
+ 			echo
+ 			appleecho "Opcionálisan megadható kapcsolók jelentése:"
+-			appleecho "[-64]:"
+-			appleecho "64 bites fordítás. Ez az alapértelmezett."
+-			echo
+-			appleecho "[-32]:"
+-			appleecho "32 bites fordítás. UBK3 és későbbi kiadások esetén nem használható."
+ 			echo
+ 			appleecho "[-ns|--no-snapshot]:"
+ 			appleecho "Nem készülnek snapshot fájlok."
+diff -Naur a/src/build/build-clean b/src/build/build-clean
+--- a/src/build/build-clean	2022-05-28 01:13:08.368340467 +0200
++++ b/src/build/build-clean	2022-05-28 01:13:08.372340477 +0200
+@@ -13,10 +13,11 @@
+ BASENAME=`basename $0`
+ BASE=`pwd`
+ KVT=" könyvtár kiürítése."
++arch="amd64"
+ 
+ case ${BASENAME} in
+ 	build-clean)
+-		export DISTR=UBK3;;
++		export DISTR=UBK4;;
+ 	build-clean-ubk1)
+ 		export DISTR=UBK1;;
+ 	build-clean-ubk2)
+@@ -90,55 +91,41 @@
+ 
+ function chrootdir_torles() {
+ 	echo "A chroot könyvtárak kiürítése."
+-	for arch in amd64 i386; do
+-		for a in 1 2 3 ; do
+-			cd ${UHUBUILD_VAR}/${DISTR}/${arch}/chroot${a}/
+-			rm -rf *
+-		done
++    for a in 1 2 3 ; do
++		cd ${UHUBUILD_VAR}/${DISTR}/${arch}/chroot${a}/
++		rm -rf *
+ 	done
+ }
+ 
+ function snapshots_torles() {
+ 	echo "A snapshot$KVT"
+-	for arch in amd64 i386; do
+ 	rm -rf ${UHUBUILD_PATH}/misc-${DISTR}/snapshot/compile/${arch}/* 2>/dev/null
+ 	rm -rf ${UHUBUILD_PATH}/misc-${DISTR}/snapshot/install/${arch}/* 2>/dev/null
+-	done
+ }
+ 
+ function extrarel_torles() {
+ 	echo "Az extrarelease$KVT"
+-	for arch in amd64 i386; do
+ 	rm -f ${UHUBUILD_PATH}/misc-${DISTR}/extrarelease/${arch}/* 2>/dev/null
+-	done
+ }
+ 
+ function faileds_torles() {
+ 	echo "A failed$KVT"
+-	for arch in amd64 i386; do
+ 	rm -rf ${UHUBUILD_PATH}/misc-${DISTR}/failed/${arch}/* 2>/dev/null
+-	done
+ }
+ 
+ function packages_torles() {
+ 	echo "Az összes UHU csomag törlése."
+-	for arch in amd64 i386; do
+ 	rm -f ${UHUBUILD_PATH}/packages-${DISTR}/${arch}/* 2>/dev/null
+-	done
+ }
+ 
+ function logpack_torles() {
+ 	echo "A logpack$KVT"
+-	for arch in amd64 i386; do
+ 	rm -rf ${UHUBUILD_PATH}/misc-${DISTR}/logpack/${arch}/* 2>/dev/null
+-	done
+ }
+ 
+ function tmp_torles() {
+ 	echo "A tmp$KVT"
+-	for arch in amd64 i386; do
+ 	rm -rf ${UHUBUILD_PATH}/misc-${DISTR}/tmp/${arch}/* 2>/dev/null
+-	done
+ }
+ 
+ function patches_torles() {
+diff -Naur a/src/build/build-clean-all b/src/build/build-clean-all
+--- a/src/build/build-clean-all	2022-05-28 01:13:08.368340467 +0200
++++ b/src/build/build-clean-all	2022-05-28 01:13:08.372340477 +0200
+@@ -9,6 +9,6 @@
+ 	exit 1
+ }
+ 
+-for i in ubk1 ubk2 ubk3 ubk4 ubk5; do
++for i in ubk3 ubk4 ubk5; do
+ 	/usr/bin/build-clean-"$i" "$@"
+ done
+diff -Naur a/src/helpers/ub_configure b/src/helpers/ub_configure
+--- a/src/helpers/ub_configure	2022-05-28 01:13:08.368340467 +0200
++++ b/src/helpers/ub_configure	2022-05-28 01:13:08.372340477 +0200
+@@ -2,18 +2,9 @@
+ 
+ . /usr/lib/uhubuild/common
+ 
+-case "${UB_ARCH}" in
+-	i386)
+-		export UB_HOST="i686-linux-gnu"
+-		export UB_MARCH="-m32"
+-		;;
+-	amd64)
+-		export UB_HOST="x86_64-linux-gnu"
+-		export UB_MARCH="-m64"
+-		;;
+-esac
++export UB_HOST="x86_64-linux-gnu"
+ 
+-UB_CFLAGS="-O2 $UB_MARCH -mtune=generic ${CFLAGS:-}"
++UB_CFLAGS="-O2 -m64 -mtune=generic ${CFLAGS:-}"
+ 
+ export CFLAGS="$UB_CFLAGS"
+ 
+diff -Naur a/src/steps/conffiles b/src/steps/conffiles
+--- a/src/steps/conffiles	2022-05-28 01:13:08.368340467 +0200
++++ b/src/steps/conffiles	2022-05-28 01:13:08.372340477 +0200
+@@ -27,12 +27,6 @@
+ 			echo "${conffile#/}"
+ 		done < "$UB_SRCDIR/packages/$pkg/conffiles"
+ 	fi
+-	for i in etc/runlevel.d/default/*.service; do
+-		j="${i/default/custom}"
+-		mkdir -p etc/runlevel.d/custom
+-		true >"$j"
+-		echo "$j"
+-	done
+ 	} | sort -u > "$UB_ADMINDIR/conffiles-noslash-$pkg"
+ 
+ 	rm -f DEBIAN/conffiles
+diff -Naur a/src/uhubuild-build b/src/uhubuild-build
+--- a/src/uhubuild-build	2022-05-28 01:13:08.368340467 +0200
++++ b/src/uhubuild-build	2022-05-28 01:13:08.372340477 +0200
+@@ -24,10 +24,6 @@
+ 
+ export UB_ARCH=$UHUBUILD_ARCH
+ 
+-if [ "$UB_ARCH" == "amd64" ] && [ "$(uname -m)" == "i686" ];then
+-    die "Csak 64 bites módban indítva lehet 64 bites csomagot készíteni!"
+-fi
+-
+ # A forrás könyvtár vagy az aktuális, vagy a megadott paraméter
+ if [ -z "${UHUBUILD_SRCDIR:-}" ]; then
+ 	export UHUBUILD_SRCDIR="$(cd "${1:-.}" && pwd -P)"
+diff -Naur a/src/uhubuild-commonenvironment b/src/uhubuild-commonenvironment
+--- a/src/uhubuild-commonenvironment	2022-05-28 01:13:08.368340467 +0200
++++ b/src/uhubuild-commonenvironment	2022-05-28 01:13:08.372340477 +0200
+@@ -29,4 +29,3 @@
+ export PYTHON="${PYTHON:-python3}"
+ 
+ umask 022
+-
+diff -Naur a/src/uhubuild-expand b/src/uhubuild-expand
+--- a/src/uhubuild-expand	2022-05-28 01:13:08.368340467 +0200
++++ b/src/uhubuild-expand	2022-05-28 01:13:08.372340477 +0200
+@@ -8,4 +8,3 @@
+ 
+ dpkg-deb --control "$1"
+ ar x "$1" data.tar.gz
+-
+diff -Naur a/src/uhubuild-extract b/src/uhubuild-extract
+--- a/src/uhubuild-extract	2022-05-28 01:13:08.368340467 +0200
++++ b/src/uhubuild-extract	2022-05-28 01:13:08.372340477 +0200
+@@ -16,4 +16,3 @@
+ 
+ dpkg-deb --control "$1"
+ dpkg-deb --extract "$1" .
+-
+diff -Naur a/src/uhubuild-prepare-chroot b/src/uhubuild-prepare-chroot
+--- a/src/uhubuild-prepare-chroot	2022-05-28 01:13:08.368340467 +0200
++++ b/src/uhubuild-prepare-chroot	2022-05-28 01:13:08.372340477 +0200
+@@ -256,4 +256,3 @@
+ if [ "$perm" != "777" ] || [ "$perm" != "1777" ]; then
+     chmod 777 $UHUBUILD_CHROOTDIR/tmp
+ fi
+-
+diff -Naur a/src/uhubuild-u2d.sh b/src/uhubuild-u2d.sh
+--- a/src/uhubuild-u2d.sh	2022-05-28 01:13:08.368340467 +0200
++++ b/src/uhubuild-u2d.sh	2022-05-28 01:13:08.372340477 +0200
+@@ -143,8 +143,6 @@
+ 	fi
+     ver="$(urllist "https://download.gnome.org/sources/$project/" | grep -E '^[0-9.]+['$reg'](\.[0-9.])?$' | sort -V | tail -n 1)"
+ 	u2d "https://download.gnome.org/sources/$project/$ver/"
+-#	ver="$(urllist "https://mirrors.gethosted.online/gnome/sources/$project/" | grep -E '^[0-9.]+['$reg'](\.[0-9.])?$' | sort -V | tail -n 1)"
+-#	u2d "https://mirrors.gethosted.online/gnome/sources/$project/$ver/"
+ }
+ 
+ # script for mate projects
