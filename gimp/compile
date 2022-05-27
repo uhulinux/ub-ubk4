@@ -1,7 +1,5 @@
 #!/bin/sh -eux
 
-autoreconf -vif
-
 sed 's:-DGIMP_protect_DISABLE_DEPRECATED:-DGIMP_DISABLE_DEPRECATED:g' -i configure #615144
 	fgrep -q GIMP_DISABLE_DEPRECATED configure
 
