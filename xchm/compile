@@ -1,8 +1,5 @@
 #!/bin/sh -eux
 
-# /bin/sh: @MKINSTALLDIRS@: Nincs ilyen fájl vagy könyvtár
-autoreconf -vif
-
 LIBS="$(wx-config --libs all)"
 export LIBS
 ub_compile

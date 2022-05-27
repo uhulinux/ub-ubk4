@@ -1,10 +1,4 @@
 #!/bin/sh -eux
 
-rm -f m4/glib-gettext.m4
 rm -rf CMakeLists.txt
-autoreconf -vif
-export CFLAGS+=" -I/usr/include/openssl-1.0"
-export CPPFLAGS+=" -I/usr/include/openssl-1.0"
-export LDFLAGS+=" -L/usr/lib/openssl-1.0"
-export CXXFLAGS+=" -I/usr/include/openssl-1.0"
 ub_compile

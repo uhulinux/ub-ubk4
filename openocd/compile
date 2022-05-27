@@ -1,9 +1,8 @@
 #!/bin/sh -eux
 
 _features=(amtjtagaccel arm-jtag-ew at91rm9200 buspirate ep93xx ftdi gw16012 jlink oocd_trace opendous osbdm parport presto_libftdi remote-bitbang rlink stlink ti-icdi ulink usbprog vsllink)
-autoreconf -vif
 ./configure  \
-	 --disable-werror \
+	--disable-werror \
 	--prefix=/usr \
 	${_features[@]/#/--enable-}
 ub_make
