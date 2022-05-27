@@ -1,9 +1,9 @@
-diff -Naur orig/Modules/GNUInstallDirs.cmake patched/Modules/GNUInstallDirs.cmake
---- orig/Modules/GNUInstallDirs.cmake	2020-03-20 11:26:14.000000000 +0100
-+++ patched/Modules/GNUInstallDirs.cmake	2020-04-08 19:27:06.437984987 +0200
-@@ -241,9 +241,9 @@
-       endif()
-     else() # not debian, rely on CMAKE_SIZEOF_VOID_P:
+diff -Naur a/Modules/GNUInstallDirs.cmake b/Modules/GNUInstallDirs.cmake
+--- a/Modules/GNUInstallDirs.cmake	2022-05-25 15:42:51.000000000 +0200
++++ b/Modules/GNUInstallDirs.cmake	2022-05-27 23:50:07.961992469 +0200
+@@ -284,9 +284,9 @@
+     elseif(NOT DEFINED __system_type_for_install)
+       # not debian, alpine, arch, or conda so rely on CMAKE_SIZEOF_VOID_P:
        if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 -        set(_LIBDIR_DEFAULT "lib64")
 +        set(_LIBDIR_DEFAULT "lib")
@@ -13,10 +13,10 @@ diff -Naur orig/Modules/GNUInstallDirs.cmake patched/Modules/GNUInstallDirs.cmak
          endif()
        endif()
      endif()
-diff -Naur orig/Modules/Platform/UnixPaths.cmake patched/Modules/Platform/UnixPaths.cmake
---- orig/Modules/Platform/UnixPaths.cmake	2020-03-20 11:26:14.000000000 +0100
-+++ patched/Modules/Platform/UnixPaths.cmake	2020-04-08 19:25:30.581703881 +0200
-@@ -60,7 +60,7 @@
+diff -Naur a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
+--- a/Modules/Platform/UnixPaths.cmake	2022-05-25 15:42:51.000000000 +0200
++++ b/Modules/Platform/UnixPaths.cmake	2022-05-27 23:52:34.494446296 +0200
+@@ -64,7 +64,7 @@
    )
  
  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
@@ -25,8 +25,8 @@ diff -Naur orig/Modules/Platform/UnixPaths.cmake patched/Modules/Platform/UnixPa
    )
  
  if(CMAKE_SYSROOT_COMPILE)
-@@ -87,6 +87,6 @@
- unset(_cmake_sysroot_compile)
+@@ -102,6 +102,6 @@
+ endif()
  
  # Enable use of lib32 and lib64 search path variants by default.
 -set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS TRUE)
@@ -35,10 +35,10 @@ diff -Naur orig/Modules/Platform/UnixPaths.cmake patched/Modules/Platform/UnixPa
 +set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
 +set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
 +set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS FALSE)
-diff -Naur orig/Source/cmExportInstallFileGenerator.cxx patched/Source/cmExportInstallFileGenerator.cxx
---- orig/Source/cmExportInstallFileGenerator.cxx	2020-03-20 11:26:14.000000000 +0100
-+++ patched/Source/cmExportInstallFileGenerator.cxx	2020-04-08 19:25:30.581703881 +0200
-@@ -200,11 +200,7 @@
+diff -Naur a/Source/cmExportInstallFileGenerator.cxx b/Source/cmExportInstallFileGenerator.cxx
+--- a/Source/cmExportInstallFileGenerator.cxx	2022-05-25 15:42:51.000000000 +0200
++++ b/Source/cmExportInstallFileGenerator.cxx	2022-05-27 23:54:56.770887171 +0200
+@@ -211,11 +211,7 @@
         << "get_filename_component(_IMPORT_PREFIX"
         << " \"${CMAKE_CURRENT_LIST_FILE}\" PATH)\n";
      if (cmHasLiteralPrefix(absDestS, "/lib/") ||

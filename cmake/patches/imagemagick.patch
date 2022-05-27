@@ -1,7 +1,7 @@
-diff -Naur orig/Modules/FindImageMagick.cmake patched/Modules/FindImageMagick.cmake
---- orig/Modules/FindImageMagick.cmake	2016-07-07 16:47:27.000000000 +0200
-+++ patched/Modules/FindImageMagick.cmake	2016-07-31 20:32:05.258618842 +0200
-@@ -177,17 +177,21 @@
+diff -Naur a/Modules/FindImageMagick.cmake b/Modules/FindImageMagick.cmake
+--- a/Modules/FindImageMagick.cmake	2022-05-25 15:42:51.000000000 +0200
++++ b/Modules/FindImageMagick.cmake	2022-05-27 23:46:31.013368270 +0200
+@@ -180,17 +180,21 @@
  # Start Actual Work
  #---------------------------------------------------------------------
  # Try to find a ImageMagick installation binary path.
@@ -17,7 +17,7 @@ diff -Naur orig/Modules/FindImageMagick.cmake patched/Modules/FindImageMagick.cm
 +find_program(ImageMagick_EXECUTABLE_FILENAME
    NAMES mogrify${CMAKE_EXECUTABLE_SUFFIX}
    )
-
+ 
 +if(ImageMagick_EXECUTABLE_FILENAME)
 +  get_filename_component(ImageMagick_EXECUTABLE_DIR "${ImageMagick_EXECUTABLE_FILENAME}" DIRECTORY)
 +endif()
