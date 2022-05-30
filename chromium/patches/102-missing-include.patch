@@ -1,0 +1,12 @@
+diff -Naur a/third_party/blink/common/fenced_frame/fenced_frame_utils.cc b/third_party/blink/common/fenced_frame/fenced_frame_utils.cc
+--- a/third_party/blink/common/fenced_frame/fenced_frame_utils.cc	2022-05-19 04:17:03.000000000 +0200
++++ b/third_party/blink/common/fenced_frame/fenced_frame_utils.cc	2022-05-26 00:42:48.080662763 +0200
+@@ -4,6 +4,8 @@
+ 
+ #include "third_party/blink/public/common/fenced_frame/fenced_frame_utils.h"
+ 
++#include <cstring>
++
+ #include "base/guid.h"
+ #include "base/strings/string_util.h"
+ 
