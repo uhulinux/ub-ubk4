@@ -1,6 +1,8 @@
 #!/bin/sh -eux
 
-ub_compile \
+./bootstrap
+ub_configure \
 	--with-udev-rules \
 	--with-udevdir=/etc/udev \
 	--with-polkit-1
+ub_make
