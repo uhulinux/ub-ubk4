@@ -1,1 +1,1 @@
-urllist https://github.com/xbmc/xbmc/tags/ | grep tar.gz | sort -V | tail -n 1 | sed s/-.*//
+urllist https://github.com/xbmc/xbmc/tags/ | grep tar.gz  | sed /Nexus/d | sed s/-.*//| sort -V | tail -n 1
