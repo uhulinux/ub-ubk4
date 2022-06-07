@@ -1,2 +1,2 @@
-egesz=$(urllist http://www.portaudio.com/archives/ | splitver '^pa_stable_v([0-9_]+).tgz$' | sort -V | tail -n 1)
+egesz=$(urllist https://github.com/PortAudio/portaudio/tags/ | splitver '^pa_stable_v([0-9_]+).tar.gz$' | sort -V | tail -n 1)
 echo $(echo $egesz | sed s/_.*/~/ | sed -r ':a;s/(^|[^0-9.])([0-9]+)([0-9]{2})/\1\2\.\3/g;ta')$(echo $egesz | sed s/.*_//)
