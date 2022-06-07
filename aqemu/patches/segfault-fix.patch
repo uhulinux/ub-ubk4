@@ -1,0 +1,28 @@
+diff -Naur a/src/System_Info.cpp b/src/System_Info.cpp
+--- a/src/System_Info.cpp	2016-05-31 14:34:02.000000000 +0200
++++ b/src/System_Info.cpp	2022-06-07 02:01:23.881976395 +0200
+@@ -745,16 +745,6 @@
+ 	System_Info::Emulator_QEMU_2_0[ "qemu-system-ppc" ] = ad;
+ 	
+ 	ad = Available_Devices();
+-	ad.System = Device_Map( "Power PC EMB 32Bit", "qemu-system-ppcemb" );
+-	ad.CPU_List += CPU_PPC;
+-	ad.Machine_List += Machine_PPC_0_10_0;
+-	ad.Network_Card_List += Network_Card_PPC;
+-	ad.Video_Card_List += QEMU_Video_Cards_v0_10_0;
+-	ad.Audio_Card_List = Audio_Card_PPC;
+-	ad.PSO_Initial_Graphic_Mode = true;
+-	System_Info::Emulator_QEMU_2_0[ "qemu-system-ppcemb" ] = ad;
+-	
+-	ad = Available_Devices();
+ 	ad.System = Device_Map( "Power PC 64Bit", "qemu-system-ppc64" );
+ 	
+ 	QList<Device_Map> CPU_PPC_64 = CPU_PPC;
+@@ -1134,7 +1124,6 @@
+ 	emulFiles[ "qemu-system-mipsel" ] = "";
+ 	emulFiles[ "qemu-system-ppc" ] = "";
+ 	emulFiles[ "qemu-system-ppc64" ] = "";
+-	emulFiles[ "qemu-system-ppcemb" ] = "";
+ 	emulFiles[ "qemu-system-sh4" ] = "";
+ 	emulFiles[ "qemu-system-sh4eb" ] = "";
+ 	emulFiles[ "qemu-system-sparc" ] = "";
