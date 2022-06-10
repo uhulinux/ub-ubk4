@@ -77,13 +77,14 @@ mkdir -p third_party/node/linux/node-linux-x64/bin
 ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin/node
 
 # gn a buildhoz
-tools/gn/bootstrap/bootstrap.py --build-path=$outdir --gn-gen-args=" ${_flags[@]} "
+# tools/gn/bootstrap/bootstrap.py --build-path=$outdir --gn-gen-args=" ${_flags[@]} "
 
 # extra flags
 export LDFLAGS+="-Wl,-rpath,/usr/lib/chromium/ -Wl,--no-keep-memory"
 
 # build options: az --args utáni sorok nem kezdődhetnek tab karakterrel!
-$outdir/gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
+# $outdir/gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
+gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
 
 # gn args list - kihagyható, de segít a lehetséges opciók megadásához
 # $outdir/gn args --list $UB_COMPILEDIR/$outdir > $UB_COMPILEDIR/$outdir/gn-args-full.list
