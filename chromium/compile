@@ -48,6 +48,7 @@ enable_hangout_services_extension=false
 use_custom_libcxx=false
 use_gnome_keyring=false
 use_kerberos=false
+gtk_version=3
 icu_use_data_file=false
 ")
 
@@ -88,6 +89,7 @@ gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
 
 # gn args list - kihagyható, de segít a lehetséges opciók megadásához
 # $outdir/gn args --list $UB_COMPILEDIR/$outdir > $UB_COMPILEDIR/$outdir/gn-args-full.list
+# gn args --list $outdir > $outdir/gn-args-full.list
 
 # ninja
 LC_ALL=C ninja -j 2 -C $outdir -v pdf chrome chrome_sandbox chromedriver
