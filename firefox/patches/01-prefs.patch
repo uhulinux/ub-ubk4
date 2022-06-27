@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2022-05-20 03:58:55.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2022-05-21 17:29:01.991703885 +0200
+--- a/browser/app/profile/firefox.js	2022-06-23 09:08:33.000000000 +0200
++++ b/browser/app/profile/firefox.js	2022-06-27 20:53:29.455923496 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -42,16 +42,16 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -353,7 +360,7 @@
+@@ -355,7 +362,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
 -pref("browser.urlbar.autoFill", true);
 +pref("browser.urlbar.autoFill", false);
  
- // Whether to warm up network connections for autofill or search results.
- pref("browser.urlbar.speculativeConnect.enabled", true);
-@@ -444,7 +451,7 @@
+ // Whether enabling adaptive history autofill.
+ pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
+@@ -465,7 +472,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -60,7 +60,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -1021,7 +1028,7 @@
+@@ -1045,7 +1052,7 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
