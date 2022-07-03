@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
 --- a/browser/app/profile/firefox.js	2022-06-23 09:08:33.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2022-06-27 20:53:29.455923496 +0200
++++ b/browser/app/profile/firefox.js	2022-07-03 16:47:25.043833113 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -69,3 +69,13 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  pref("intl.regional_prefs.use_os_locales", false);
  
+@@ -1829,9 +1836,7 @@
+ pref("dom.storage_access.enabled", true);
+ 
+ // Enable URL query stripping in Nightly.
+-#ifdef NIGHTLY_BUILD
+ pref("privacy.query_stripping.enabled", true);
+-#endif
+ 
+ pref("browser.contentblocking.cryptomining.preferences.ui.enabled", true);
+ pref("browser.contentblocking.fingerprinting.preferences.ui.enabled", true);
