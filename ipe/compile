@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
 export QTDIR="/usr/lib/qt5"
+export CXXFLAGS='-DIPE_NO_SPELLCHECK'
 
 # ocsmány windows sorvégek vannak a lua szkriptekben
 for f in `find -iname \*.lua`; do

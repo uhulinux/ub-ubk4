@@ -1,6 +1,6 @@
-diff -Nur orig/data/translations/hu_HU.lst mod/data/translations/hu_HU.lst
---- orig/data/translations/hu_HU.lst	1970-01-01 01:00:00.000000000 +0100
-+++ mod/data/translations/hu_HU.lst	2021-06-25 18:06:09.296705318 +0200
+diff -Naur a/data/translations/hu_HU.lst b/data/translations/hu_HU.lst
+--- a/data/translations/hu_HU.lst	1970-01-01 01:00:00.000000000 +0100
++++ b/data/translations/hu_HU.lst	2022-07-05 16:07:21.092251440 +0200
 @@ -0,0 +1,133 @@
 +# Please, don't change the idx
 +
@@ -135,22 +135,36 @@ diff -Nur orig/data/translations/hu_HU.lst mod/data/translations/hu_HU.lst
 +*[idx] 108 [engl] 10th [trans] 10.
 +
 +*[idx] 109 [engl] Unknown [trans] Ismeetlen
-diff -Nur orig/data/translations/languages.lst mod/data/translations/languages.lst
---- orig/data/translations/languages.lst	2021-06-25 01:48:58.000000000 +0200
-+++ mod/data/translations/languages.lst	2021-06-25 18:12:15.858110790 +0200
-@@ -8,3 +8,4 @@
- *[lang] eo    [language] Esperanto
- *[lang] du_NL [language] Dutch
- *[lang] ro_RO [language] Romanian
+diff -Naur a/data/translations/languages.lst b/data/translations/languages.lst
+--- a/data/translations/languages.lst	2022-06-16 05:33:49.000000000 +0200
++++ b/data/translations/languages.lst	2022-07-05 16:08:26.252501858 +0200
+@@ -3,6 +3,7 @@
+ *[lang] fi_FI [language] Finnish
+ *[lang] es_ES [language] Español
+ *[lang] fr_FR [language] français
 +*[lang] hu_HU [language] Magyar
-diff -Nur orig/data/translations/Makefile.am mod/data/translations/Makefile.am
---- orig/data/translations/Makefile.am	2021-06-25 01:48:58.000000000 +0200
-+++ mod/data/translations/Makefile.am	2021-06-25 17:49:32.199207366 +0200
-@@ -13,6 +13,7 @@
- 	eo.lst		\
- 	du_NL.lst	\
- 	ro_RO.lst	\
+ *[lang] pl_PL [language] polski
+ *[lang] se_SE [language] svenska
+ *[lang] eo    [language] Esperanto
+diff -Naur a/data/translations/Makefile.am b/data/translations/Makefile.am
+--- a/data/translations/Makefile.am	2022-06-16 05:33:49.000000000 +0200
++++ b/data/translations/Makefile.am	2022-07-05 16:10:18.776916049 +0200
+@@ -8,6 +8,7 @@
+ 	fi_FI.lst	\
+ 	es_ES.lst	\
+ 	fr_FR.lst	\
 +	hu_HU.lst	\
- 	xx_XX.lst
- 
- EXTRA_DIST = $(pkgdata_DATA)
+ 	it_IT.lst	\
+ 	pl_PL.lst	\
+ 	se_SE.lst	\
+diff -Naur a/data/translations/Makefile.in b/data/translations/Makefile.in
+--- a/data/translations/Makefile.in	2022-06-16 05:34:09.000000000 +0200
++++ b/data/translations/Makefile.in	2022-07-05 16:10:04.520863502 +0200
+@@ -268,6 +268,7 @@
+ 	fi_FI.lst	\
+ 	es_ES.lst	\
+ 	fr_FR.lst	\
++	hu_HU.lst	\
+ 	it_IT.lst	\
+ 	pl_PL.lst	\
+ 	se_SE.lst	\
