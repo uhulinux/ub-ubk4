@@ -1,6 +1,6 @@
-diff -Naur orig/fbreader/Makefile patched/fbreader/Makefile
---- orig/fbreader/Makefile	2012-11-30 13:41:25.000000000 +0100
-+++ patched/fbreader/Makefile	2019-05-30 22:51:46.992966617 +0200
+diff -Naur a/fbreader/Makefile b/fbreader/Makefile
+--- a/fbreader/Makefile	2012-12-24 05:00:26.000000000 +0100
++++ b/fbreader/Makefile	2022-07-04 00:40:18.594556520 +0200
 @@ -22,7 +22,7 @@
  		fi; \
  	done;
@@ -10,12 +10,12 @@ diff -Naur orig/fbreader/Makefile patched/fbreader/Makefile
  	@echo ' OK'
  
  FBSHAREDIR = $(DESTDIR)$(SHAREDIR)/FBReader
-diff -Naur orig/makefiles/arch/desktop.mk patched/makefiles/arch/desktop.mk
---- orig/makefiles/arch/desktop.mk	2012-11-30 13:41:25.000000000 +0100
-+++ patched/makefiles/arch/desktop.mk	2019-05-30 22:51:46.992966617 +0200
+diff -Naur a/makefiles/arch/desktop.mk b/makefiles/arch/desktop.mk
+--- a/makefiles/arch/desktop.mk	2022-07-04 00:37:49.922168736 +0200
++++ b/makefiles/arch/desktop.mk	2022-07-04 00:40:18.594556520 +0200
 @@ -14,29 +14,11 @@
  
- CFLAGS = -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG
+ CFLAGS = -fPIC -pipe -fno-exceptions -Wall -Wno-ctor-dtor-privacy -W -DLIBICONV_PLUG
  LDFLAGS =
 -EXTERNAL_INCLUDE = $(shell pkg-config --cflags fribidi) 
 +EXTERNAL_INCLUDE = $(shell pkg-config --cflags fribidi)
@@ -47,9 +47,9 @@ diff -Naur orig/makefiles/arch/desktop.mk patched/makefiles/arch/desktop.mk
  
  RM = rm -rvf
  RM_QUIET = rm -rf
-diff -Naur orig/makefiles/platforms.mk patched/makefiles/platforms.mk
---- orig/makefiles/platforms.mk	2012-11-30 13:41:25.000000000 +0100
-+++ patched/makefiles/platforms.mk	2019-05-30 23:00:02.963812337 +0200
+diff -Naur a/makefiles/platforms.mk b/makefiles/platforms.mk
+--- a/makefiles/platforms.mk	2012-12-24 05:00:26.000000000 +0100
++++ b/makefiles/platforms.mk	2022-07-04 00:40:18.594556520 +0200
 @@ -6,10 +6,6 @@
  $(error TARGET_ARCH is not defined. Please edit $(ROOTDIR)/makefiles/target.mk)
  endif
@@ -61,67 +61,83 @@ diff -Naur orig/makefiles/platforms.mk patched/makefiles/platforms.mk
  ifeq "$(TARGET_STATUS)" ""
  	TARGET_STATUS = release
  endif
-diff -Naur orig/zlibrary/ui/src/qt4/application/LineEditParameter.cpp patched/zlibrary/ui/src/qt4/application/LineEditParameter.cpp
---- orig/zlibrary/ui/src/qt4/application/LineEditParameter.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/application/LineEditParameter.cpp	2019-05-30 22:51:46.992966617 +0200
-@@ -17,9 +17,9 @@
-  * 02110-1301, USA.
-  */
+diff -Naur a/trash/waiting-icons/ZLQtWaitingIcons.cpp b/trash/waiting-icons/ZLQtWaitingIcons.cpp
+--- a/trash/waiting-icons/ZLQtWaitingIcons.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/trash/waiting-icons/ZLQtWaitingIcons.cpp	2022-07-05 01:34:48.161857167 +0200
+@@ -20,7 +20,7 @@
+ #include <cmath>
+ #include <algorithm>
  
--#include <QtGui/QBoxLayout>
--#include <QtGui/QLineEdit>
--#include <QtGui/QToolBar>
-+#include <QtWidgets/QBoxLayout>
-+#include <QtWidgets/QLineEdit>
-+#include <QtWidgets/QToolBar>
- #include <QtGui/QKeyEvent>
+-#include <QtGui/QPainter>
++#include <QPainter>
  
- #include "ZLQtApplicationWindow.h"
-diff -Naur orig/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp patched/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp
---- orig/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp	2019-05-30 22:51:46.992966617 +0200
-@@ -17,17 +17,17 @@
+ #include <ZLibrary.h>
+ #include <ZLFile.h>
+diff -Naur a/trash/waiting-icons/ZLQtWaitingIcons.h b/trash/waiting-icons/ZLQtWaitingIcons.h
+--- a/trash/waiting-icons/ZLQtWaitingIcons.h	2012-12-24 05:00:26.000000000 +0100
++++ b/trash/waiting-icons/ZLQtWaitingIcons.h	2022-07-05 01:34:36.473823386 +0200
+@@ -20,10 +20,10 @@
+ #ifndef __ZLQTWAITINGICONS_H__
+ #define __ZLQTWAITINGICONS_H__
+ 
+-#include <QtCore/QTimer>
+-#include <QtGui/QLabel>
+-#include <QtGui/QMovie>
+-#include <QtGui/QColor>
++#include <QTimer>
++#include <QLabel>
++#include <QMovie>
++#include <QColor>
+ 
+ class ZLQtWaitingIcon : public QLabel {
+ 
+diff -Naur a/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp b/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp
+--- a/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.cpp	2022-07-05 01:20:59.371436912 +0200
+@@ -17,14 +17,14 @@
   * 02110-1301, USA.
   */
  
 -#include <QtGui/QApplication>
-+#include <QtWidgets/QApplication>
- #include <QtGui/QPixmap>
- #include <QtGui/QImage>
- #include <QtGui/QIcon>
+-#include <QtGui/QPixmap>
+-#include <QtGui/QIcon>
 -#include <QtGui/QToolBar>
 -#include <QtGui/QMenuBar>
 -#include <QtGui/QMenu>
--#include <QtGui/QToolButton>
--#include <QtGui/QLayout>
-+#include <QtWidgets/QToolBar>
-+#include <QtWidgets/QMenuBar>
-+#include <QtWidgets/QMenu>
-+#include <QtWidgets/QToolButton>
-+#include <QtWidgets/QLayout>
- #include <QtGui/QWheelEvent>
--#include <QtGui/QDockWidget>
-+#include <QtWidgets/QDockWidget>
- #include <QtCore/QObjectList>
+-#include <QtGui/QLineEdit>
+-#include <QtGui/QWheelEvent>
++#include <QApplication>
++#include <QPixmap>
++#include <QIcon>
++#include <QToolBar>
++#include <QMenuBar>
++#include <QMenu>
++#include <QLineEdit>
++#include <QWheelEvent>
  
  #include <ZLibrary.h>
-diff -Naur orig/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h patched/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h
---- orig/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h	2019-05-30 22:51:46.992966617 +0200
-@@ -22,8 +22,8 @@
- 
+ #include <ZLPopupData.h>
+diff -Naur a/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h b/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h
+--- a/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/application/ZLQtApplicationWindow.h	2022-07-05 01:20:34.227362639 +0200
+@@ -23,10 +23,10 @@
  #include <map>
+ #include <list>
  
 -#include <QtGui/QMainWindow>
 -#include <QtGui/QAction>
-+#include <QtWidgets/QMainWindow>
-+#include <QtWidgets/QAction>
- #include <QtGui/QCursor>
+-#include <QtGui/QMenu>
+-#include <QtGui/QCursor>
++#include <QMainWindow>
++#include <QAction>
++#include <QMenu>
++#include <QCursor>
  
- class QDockWidget;
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp	2019-05-30 22:51:46.996966672 +0200
+ #include <ZLOptions.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp	2022-07-05 01:23:16.759841796 +0200
 @@ -17,10 +17,10 @@
   * 02110-1301, USA.
   */
@@ -130,111 +146,118 @@ diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialogContent.cpp patched/zlibra
 -#include <QtGui/QDesktopWidget>
 -#include <QtGui/QWidget>
 -#include <QtGui/QLayout>
-+#include <QtWidgets/QApplication>
-+#include <QtWidgets/QDesktopWidget>
-+#include <QtWidgets/QWidget>
-+#include <QtWidgets/QLayout>
++#include <QApplication>
++#include <QDesktopWidget>
++#include <QWidget>
++#include <QLayout>
  
  #include "ZLQtDialogContent.h"
  #include "ZLQtOptionView.h"
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp	2019-05-30 22:51:46.992966617 +0200
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.cpp	2022-07-05 01:21:33.491537607 +0200
 @@ -17,8 +17,8 @@
   * 02110-1301, USA.
   */
  
 -#include <QtGui/QApplication>
 -#include <QtGui/QPushButton>
-+#include <QtWidgets/QApplication>
-+#include <QtWidgets/QPushButton>
++#include <QApplication>
++#include <QPushButton>
  
- #include <ZLDialogManager.h>
- 
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h	2019-05-30 22:51:46.992966617 +0200
+ #include "ZLQtDialog.h"
+ #include "ZLQtDialogContent.h"
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h b/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtDialog.h	2022-07-05 01:21:46.139574912 +0200
 @@ -20,8 +20,8 @@
  #ifndef __ZLQTDIALOG_H__
  #define __ZLQTDIALOG_H__
  
 -#include <QtGui/QDialog>
 -#include <QtGui/QLayout>
-+#include <QtWidgets/QDialog>
-+#include <QtWidgets/QLayout>
++#include <QDialog>
++#include <QLayout>
  
  #include <ZLDialog.h>
  
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp	2019-05-30 22:51:46.996966672 +0200
-@@ -17,11 +17,11 @@
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtDialogManager.cpp	2022-07-05 01:23:21.059854442 +0200
+@@ -17,14 +17,14 @@
   * 02110-1301, USA.
   */
  
 -#include <QtGui/QApplication>
+-#include <QtGui/QMainWindow>
 -#include <QtGui/QMessageBox>
 -#include <QtGui/QFileDialog>
-+#include <QtWidgets/QApplication>
-+#include <QtWidgets/QMessageBox>
-+#include <QtWidgets/QFileDialog>
- #include <QtGui/QClipboard>
+-#include <QtGui/QClipboard>
 -#include <QtGui/QDesktopWidget>
-+#include <QtWidgets/QDesktopWidget>
+-#include <QtGui/QLineEdit>
+-#include <QtGui/QToolBar>
++#include <QApplication>
++#include <QMainWindow>
++#include <QMessageBox>
++#include <QFileDialog>
++#include <QClipboard>
++#include <QDesktopWidget>
++#include <QLineEdit>
++#include <QToolBar>
  
  #include "ZLQtDialogManager.h"
  #include "ZLQtDialog.h"
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp	2019-05-30 22:51:46.996966672 +0200
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtOpenFileDialog.cpp	2022-07-05 01:22:31.319708054 +0200
 @@ -17,7 +17,7 @@
   * 02110-1301, USA.
   */
  
 -#include <QtGui/QFileDialog>
-+#include <QtWidgets/QFileDialog>
++#include <QFileDialog>
  
  #include "ZLQtOpenFileDialog.h"
  
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp	2019-05-30 22:51:46.996966672 +0200
-@@ -17,11 +17,11 @@
-  * 02110-1301, USA.
-  */
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.cpp	2022-07-05 01:23:24.287863936 +0200
+@@ -19,13 +19,13 @@
+ 
+ #include <algorithm>
  
 -#include <QtGui/QApplication>
--#include <QtGui/QDesktopWidget>
 -#include <QtGui/QLayout>
+-#include <QtGui/QStackedLayout>
+-#include <QtGui/QListWidget>
+-#include <QtGui/QDialogButtonBox>
 -#include <QtGui/QPushButton>
--#include <QtGui/QButtonGroup>
-+#include <QtWidgets/QApplication>
-+#include <QtWidgets/QDesktopWidget>
-+#include <QtWidgets/QLayout>
-+#include <QtWidgets/QPushButton>
-+#include <QtWidgets/QButtonGroup>
- #include <QtGui/QResizeEvent>
+-#include <QtGui/QResizeEvent>
++#include <QApplication>
++#include <QLayout>
++#include <QStackedLayout>
++#include <QListWidget>
++#include <QDialogButtonBox>
++#include <QPushButton>
++#include <QResizeEvent>
  
- #include <ZLDialogManager.h>
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h patched/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h	2019-05-30 22:51:46.996966672 +0200
-@@ -20,9 +20,9 @@
+ #include "ZLQtOptionsDialog.h"
+ #include "ZLQtDialogContent.h"
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionsDialog.h	2022-07-05 01:23:00.867795039 +0200
+@@ -20,7 +20,7 @@
  #ifndef __ZLQTOPTIONSDIALOG_H__
  #define __ZLQTOPTIONSDIALOG_H__
  
--#include <QtGui/QWidget>
--#include <QtGui/QTabWidget>
 -#include <QtGui/QDialog>
-+#include <QtWidgets/QWidget>
-+#include <QtWidgets/QTabWidget>
-+#include <QtWidgets/QDialog>
++#include <QDialog>
  
- #include "../../../../core/src/desktop/dialogs/ZLDesktopOptionsDialog.h"
+ #include <ZLOptionsDialog.h>
  
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp	2019-05-30 22:51:46.996966672 +0200
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp	2022-07-05 01:23:11.203825451 +0200
 @@ -19,16 +19,16 @@
  
  #include <cctype>
@@ -249,23 +272,37 @@ diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.cpp patched/zlibrary/
 -#include <QtGui/QLineEdit>
 -#include <QtGui/QSlider>
 -#include <QtGui/QLayout>
-+#include <QtWidgets/QCheckBox>
-+#include <QtWidgets/QComboBox>
-+#include <QtWidgets/QLabel>
-+#include <QtWidgets/QGroupBox>
-+#include <QtWidgets/QRadioButton>
-+#include <QtWidgets/QPushButton>
-+#include <QtWidgets/QSpinBox>
-+#include <QtWidgets/QLineEdit>
-+#include <QtWidgets/QSlider>
-+#include <QtWidgets/QLayout>
++#include <QCheckBox>
++#include <QComboBox>
++#include <QLabel>
++#include <QGroupBox>
++#include <QRadioButton>
++#include <QPushButton>
++#include <QSpinBox>
++#include <QLineEdit>
++#include <QSlider>
++#include <QLayout>
  
  #include <ZLStringUtil.h>
  #include <ZLDialogManager.h>
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp	2019-05-30 22:51:46.996966672 +0200
-@@ -19,11 +19,11 @@
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.h b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.h
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtOptionView.h	2022-07-05 01:23:42.599917775 +0200
+@@ -20,8 +20,8 @@
+ #ifndef __ZLQTOPTIONVIEW_H__
+ #define __ZLQTOPTIONVIEW_H__
+ 
+-#include <QtCore/QObject>
+-#include <QtCore/QSize>
++#include <QObject>
++#include <QSize>
+ 
+ #include <ZLOptionsDialog.h>
+ #include <ZLOptionEntry.h>
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp	2022-07-05 01:23:58.759965262 +0200
+@@ -19,12 +19,12 @@
  
  #include <unistd.h>
  
@@ -274,88 +311,171 @@ diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.cpp patched/zlibr
 -#include <QtGui/QWidget>
 -#include <QtGui/QLabel>
 -#include <QtGui/QLayout>
-+#include <QtWidgets/QApplication>
-+#include <QtWidgets/QDesktopWidget>
-+#include <QtWidgets/QWidget>
-+#include <QtWidgets/QLabel>
-+#include <QtWidgets/QLayout>
- #include <QtCore/QThreadPool>
+-#include <QtCore/QThreadPool>
++#include <QApplication>
++#include <QDesktopWidget>
++#include <QWidget>
++#include <QLabel>
++#include <QLayout>
++#include <QThreadPool>
  
- #include "../dialogs/ZLQtDialogManager.h"
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h patched/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h	2019-05-30 22:51:46.996966672 +0200
-@@ -22,11 +22,11 @@
+ #include "ZLQtDialogManager.h"
+ #include "ZLQtProgressDialog.h"
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h b/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtProgressDialog.h	2022-07-05 01:24:23.008036482 +0200
+@@ -22,12 +22,12 @@
  
  #include <string>
  
 -#include <QtGui/QWidget>
-+#include <QtWidgets/QWidget>
- #include <QtGui/QCursor>
+-#include <QtGui/QCursor>
 -#include <QtGui/QDialog>
 -#include <QtGui/QProgressBar>
 -#include <QtGui/QLabel>
-+#include <QtWidgets/QDialog>
-+#include <QtWidgets/QProgressBar>
-+#include <QtWidgets/QLabel>
- #include <QtCore/QRunnable>
+-#include <QtCore/QRunnable>
++#include <QWidget>
++#include <QCursor>
++#include <QDialog>
++#include <QProgressBar>
++#include <QLabel>
++#include <QRunnable>
  
  #include <ZLProgressDialog.h>
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp patched/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp	2019-05-30 22:51:46.996966672 +0200
-@@ -19,12 +19,12 @@
  
- #include <algorithm>
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp b/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.cpp	2022-07-05 01:24:37.972080408 +0200
+@@ -17,10 +17,10 @@
+  * 02110-1301, USA.
+  */
  
 -#include <QtGui/QSplitter>
--#include <QtGui/QVBoxLayout>
--#include <QtGui/QHBoxLayout>
 -#include <QtGui/QScrollBar>
- #include <QtGui/QResizeEvent>
- #include <QtCore/QDebug>
-+#include <QtWidgets/QSplitter>
-+#include <QtWidgets/QVBoxLayout>
-+#include <QtWidgets/QHBoxLayout>
-+#include <QtWidgets/QScrollBar>
+-#include <QtGui/QResizeEvent>
+-#include <QtGui/QToolBar>
++#include <QSplitter>
++#include <QScrollBar>
++#include <QResizeEvent>
++#include <QToolBar>
  
  #include <ZLFile.h>
  #include <ZLibrary.h>
-diff -Naur orig/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h patched/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h
---- orig/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h	2019-05-30 22:51:46.996966672 +0200
-@@ -24,12 +24,12 @@
- #include <QtCore/QSet>
- #include <QtCore/QMap>
+diff -Naur a/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h b/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h
+--- a/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/dialogs/ZLQtTreeDialog.h	2022-07-05 01:25:01.272148772 +0200
+@@ -20,14 +20,14 @@
+ #ifndef __ZLQTTREEDIALOG_H__
+ #define __ZLQTTREEDIALOG_H__
  
--#include <QtGui/QDialog>
+-#include <QtCore/QStack>
+-#include <QtCore/QSet>
+-#include <QtCore/QMap>
++#include <QStack>
++#include <QSet>
++#include <QMap>
+ 
 -#include <QtGui/QScrollArea>
--#include <QtGui/QPushButton>
 -#include <QtGui/QLabel>
 -#include <QtGui/QLineEdit>
 -#include <QtGui/QWidget>
-+#include <QtWidgets/QDialog>
-+#include <QtWidgets/QScrollArea>
-+#include <QtWidgets/QPushButton>
-+#include <QtWidgets/QLabel>
-+#include <QtWidgets/QLineEdit>
-+#include <QtWidgets/QWidget>
++#include <QScrollArea>
++#include <QLabel>
++#include <QLineEdit>
++#include <QWidget>
  
  #include <ZLTreeDialog.h>
  
-diff -Naur orig/zlibrary/ui/src/qt4/library/ZLibrary.cpp patched/zlibrary/ui/src/qt4/library/ZLibrary.cpp
---- orig/zlibrary/ui/src/qt4/library/ZLibrary.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/library/ZLibrary.cpp	2019-05-30 22:51:46.996966672 +0200
-@@ -19,7 +19,7 @@
+diff -Naur a/zlibrary/ui/src/qt4/image/ZLQtImageManager.cpp b/zlibrary/ui/src/qt4/image/ZLQtImageManager.cpp
+--- a/zlibrary/ui/src/qt4/image/ZLQtImageManager.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/image/ZLQtImageManager.cpp	2022-07-05 01:25:36.644252473 +0200
+@@ -17,9 +17,9 @@
+  * 02110-1301, USA.
+  */
  
- #include <QtCore/QTextCodec>
- #include <QtCore/QFile>
+-#include <QtCore/QDebug>
++#include <QDebug>
+ 
+-#include <QtGui/QPainter>
++#include <QPainter>
+ 
+ #include <ZLImage.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/image/ZLQtImageManager.h b/zlibrary/ui/src/qt4/image/ZLQtImageManager.h
+--- a/zlibrary/ui/src/qt4/image/ZLQtImageManager.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/image/ZLQtImageManager.h	2022-07-05 01:25:56.808311545 +0200
+@@ -22,10 +22,10 @@
+ 
+ #include <map>
+ 
+-#include <QtCore/QList>
+-#include <QtCore/QSize>
+-#include <QtGui/QImage>
+-#include <QtGui/QPixmap>
++#include <QList>
++#include <QSize>
++#include <QImage>
++#include <QPixmap>
+ 
+ #include <ZLImageManager.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/image/ZLQtImageUtils.cpp b/zlibrary/ui/src/qt4/image/ZLQtImageUtils.cpp
+--- a/zlibrary/ui/src/qt4/image/ZLQtImageUtils.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/image/ZLQtImageUtils.cpp	2022-07-05 01:26:10.416351391 +0200
+@@ -17,10 +17,10 @@
+  * 02110-1301, USA.
+  */
+ 
+-#include <QtCore/QBuffer>
+-#include <QtCore/QDebug>
+-#include <QtGui/QPainter>
+-#include <QtGui/QColor>
++#include <QBuffer>
++#include <QDebug>
++#include <QPainter>
++#include <QColor>
+ 
+ #include "../image/ZLQtImageManager.h"
+ 
+diff -Naur a/zlibrary/ui/src/qt4/image/ZLQtImageUtils.h b/zlibrary/ui/src/qt4/image/ZLQtImageUtils.h
+--- a/zlibrary/ui/src/qt4/image/ZLQtImageUtils.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/image/ZLQtImageUtils.h	2022-07-05 01:26:24.788393456 +0200
+@@ -20,8 +20,8 @@
+ #ifndef __ZLQTIMAGEUTILS_H__
+ #define __ZLQTIMAGEUTILS_H__
+ 
+-#include <QtCore/QUrl>
+-#include <QtGui/QPixmap>
++#include <QUrl>
++#include <QPixmap>
+ 
+ #include <ZLImage.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/library/ZLibrary.cpp b/zlibrary/ui/src/qt4/library/ZLibrary.cpp
+--- a/zlibrary/ui/src/qt4/library/ZLibrary.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/library/ZLibrary.cpp	2022-07-05 01:26:56.112485088 +0200
+@@ -17,13 +17,13 @@
+  * 02110-1301, USA.
+  */
+ 
+-#include <QtCore/QFile>
+-#include <QtCore/QTextCodec>
+-#include <QtCore/QUrl>
 -#include <QtGui/QApplication>
-+#include <QtWidgets/QApplication>
- #include <QtGui/QFileOpenEvent>
+-#include <QtGui/QDesktopServices>
+-#include <QtGui/QDesktopWidget>
+-#include <QtGui/QFileOpenEvent>
++#include <QFile>
++#include <QTextCodec>
++#include <QUrl>
++#include <QApplication>
++#include <QDesktopServices>
++#include <QDesktopWidget>
++#include <QFileOpenEvent>
  
  #include <ZLApplication.h>
-@@ -72,7 +72,7 @@
+ #include <ZLibrary.h>
+@@ -77,7 +77,7 @@
  void ZLQtLibraryImplementation::init(int &argc, char **&argv) {
  	new ZLQApplication(argc, argv);
  
@@ -364,32 +484,62 @@ diff -Naur orig/zlibrary/ui/src/qt4/library/ZLibrary.cpp patched/zlibrary/ui/src
  
  	ZLibrary::parseArguments(argc, argv);
  
-diff -Naur orig/zlibrary/ui/src/qt4/library/ZLQApplication.h patched/zlibrary/ui/src/qt4/library/ZLQApplication.h
---- orig/zlibrary/ui/src/qt4/library/ZLQApplication.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/library/ZLQApplication.h	2019-05-30 22:51:46.996966672 +0200
+diff -Naur a/zlibrary/ui/src/qt4/library/ZLQApplication.h b/zlibrary/ui/src/qt4/library/ZLQApplication.h
+--- a/zlibrary/ui/src/qt4/library/ZLQApplication.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/library/ZLQApplication.h	2022-07-05 01:27:10.228526357 +0200
 @@ -20,7 +20,7 @@
  #ifndef __ZLQAPPLICATION_H__
  #define __ZLQAPPLICATION_H__
  
 -#include <QtGui/QApplication>
-+#include <QtWidgets/QApplication>
++#include <QApplication>
  
  class ZLQApplication : public QApplication {
  
-diff -Naur orig/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp patched/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp
---- orig/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp	2019-05-30 22:51:46.996966672 +0200
-@@ -24,7 +24,9 @@
- #include <QtCore/QDir>
- #include <QtCore/QList>
- #include <QtCore/QTimer>
-+#include <QtCore/QUrlQuery>
+diff -Naur a/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp b/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp
+--- a/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp	2022-07-05 01:56:23.057740429 +0200
+@@ -17,22 +17,24 @@
+  * 02110-1301, USA.
+  */
  
-+#include <QtNetwork/QNetworkCookie>
- #include <QtNetwork/QNetworkRequest>
- #include <QtNetwork/QNetworkReply>
- #include <QtNetwork/QNetworkProxy>
-@@ -149,12 +151,12 @@
+-#include <QtCore/QVector>
+-#include <QtCore/QStringList>
+-#include <QtCore/QFile>
+-#include <QtCore/QEventLoop>
+-#include <QtCore/QDir>
+-#include <QtCore/QList>
+-#include <QtCore/QTimer>
+-
+-#include <QtNetwork/QNetworkRequest>
+-#include <QtNetwork/QNetworkReply>
+-#include <QtNetwork/QNetworkProxy>
+-#include <QtNetwork/QSslConfiguration>
+-#include <QtNetwork/QSslCertificate>
+-#include <QtNetwork/QAuthenticator>
++#include <QVector>
++#include <QStringList>
++#include <QFile>
++#include <QEventLoop>
++#include <QDir>
++#include <QList>
++#include <QTimer>
++#include <QUrlQuery>
++
++#include <QNetworkCookie>
++#include <QNetworkRequest>
++#include <QNetworkReply>
++#include <QNetworkProxy>
++#include <QSslConfiguration>
++#include <QSslCertificate>
++#include <QAuthenticator>
+ 
+-#include <QtCore/QDebug>
++#include <QDebug>
+ 
+ #include <ZLApplication.h>
+ #include <ZLStringUtil.h>
+@@ -150,12 +152,12 @@
  	QNetworkReply *reply = NULL;
  	if (!scope.request->postParameters().empty()) {
  		QByteArray data;
@@ -397,70 +547,109 @@ diff -Naur orig/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.cpp patched/zlibr
 +		QUrlQuery tmp;
  		typedef std::pair<std::string, std::string> string_pair;
  		foreach (const string_pair &pair, scope.request->postParameters()) {
- 			tmp.addQueryItem(QString::fromStdString(pair.first), QString::fromStdString(pair.second));
+ 			tmp.addQueryItem(::qtString(pair.first), ::qtString(pair.second));
  		}
 -		data = tmp.encodedQuery();
-+		data = tmp.query(QUrl::FullyEncoded).toUtf8(); //encodedQuery();
++		data = tmp.query(QUrl::FullyEncoded).toUtf8();
  		reply = const_cast<QNetworkAccessManager&>(myManager).post(networkRequest, data);
  	} else {
  		reply = const_cast<QNetworkAccessManager&>(myManager).get(networkRequest);
-diff -Naur orig/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp patched/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp
---- orig/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp	2019-05-30 22:51:46.996966672 +0200
+diff -Naur a/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.h b/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.h
+--- a/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/network/ZLQtNetworkManager.h	2022-07-05 01:42:16.759160193 +0200
+@@ -22,12 +22,12 @@
+ 
+ #include <ZLNetworkManager.h>
+ #include <ZLNetworkRequest.h>
+-#include <QtNetwork/QNetworkAccessManager>
+-#include <QtNetwork/QNetworkDiskCache>
+-#include <QtNetwork/QNetworkCookieJar>
+-#include <QtNetwork/QNetworkReply>
+-#include <QtNetwork/QSslError>
+-#include <QtCore/QTimer>
++#include <QNetworkAccessManager>
++#include <QNetworkDiskCache>
++#include <QNetworkCookieJar>
++#include <QNetworkReply>
++#include <QSslError>
++#include <QTimer>
+ 
+ class ZLQtNetworkCookieJar;
+ class QNetworkReply;
+diff -Naur a/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp b/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp
+--- a/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.cpp	2022-07-05 01:51:44.040897900 +0200
+@@ -1,7 +1,7 @@
+ #include <cmath>
+ #include <algorithm>
+ 
+-#include <QtGui/QPainter>
++#include <QPainter>
+ 
+ #include "QtWaitingSpinner.h"
+ 
 @@ -86,7 +86,7 @@
  }
  
  void QtWaitingSpinner::setRoundness(qreal roundness) {
--	myRoundness = std::max(0.0, std::min(100.0, roundness));
+-	myRoundness = std::max((qreal)0.0, std::min((qreal)100.0, roundness));
 +	myRoundness = std::max(static_cast<qreal>(0.0), std::min(static_cast<qreal>(100.0), roundness));
  }
  
  void QtWaitingSpinner::setColor(QColor color) {
-@@ -148,7 +148,7 @@
- 	qreal alphaDiff = color.alphaF() - (qreal)minAlphaF;
+@@ -149,7 +149,7 @@
  	qreal gradation = alphaDiff / (qreal)(distanceThreshold + 1);
  	qreal resultAlpha = color.alphaF() - gradation * distance;
--	resultAlpha = std::min(1.0, std::max(0.0, resultAlpha)); //if alpha is out of bound, force it to bounds
-+	resultAlpha = std::min(static_cast<qreal>(1.0), std::max(static_cast<qreal>(0.0), resultAlpha)); //if alpha is out of bound, force it to bounds
+ 	//if alpha is out of bound, force it to bounds
+-	resultAlpha = std::min((qreal)1.0, std::max((qreal)0.0, resultAlpha));
++	resultAlpha = std::min(static_cast<qreal>(1.0), std::max(static_cast<qreal>(0.0), resultAlpha));
  	color.setAlphaF(resultAlpha);
  	return color;
  }
-diff -Naur orig/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h patched/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h
---- orig/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h	2019-05-30 22:51:46.996966672 +0200
-@@ -3,7 +3,7 @@
+diff -Naur a/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h b/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h
+--- a/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/QtWaitingSpinner.h	2022-07-05 01:27:57.592664713 +0200
+@@ -1,10 +1,10 @@
+ #ifndef QTWAITINGSPINNER_H
+ #define QTWAITINGSPINNER_H
  
- #include <QtCore/QTimer>
+-#include <QtCore/QTimer>
++#include <QTimer>
  
 -#include <QtGui/QWidget>
-+#include <QtWidgets/QWidget>
- #include <QtGui/QColor>
+-#include <QtGui/QColor>
++#include <QWidget>
++#include <QColor>
  
  class QtWaitingSpinner : public QWidget {
-diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp patched/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp
---- orig/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp	2019-05-30 22:51:47.000966728 +0200
-@@ -17,14 +17,14 @@
+ 	Q_OBJECT
+diff -Naur a/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp b/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp
+--- a/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.cpp	2022-07-05 01:28:09.292698864 +0200
+@@ -17,13 +17,13 @@
   * 02110-1301, USA.
   */
  
 -#include <QtGui/QVBoxLayout>
 -#include <QtGui/QHBoxLayout>
- #include <QtGui/QPixmap>
- #include <QtGui/QPalette>
- #include <QtGui/QPainter>
- #include <QtGui/QPaintEvent>
+-#include <QtGui/QPixmap>
+-#include <QtGui/QPalette>
+-#include <QtGui/QPainter>
+-#include <QtGui/QPaintEvent>
 -#include <QtGui/QScrollBar>
- #include <QtCore/QTimer>
-+#include <QtWidgets/QVBoxLayout>
-+#include <QtWidgets/QHBoxLayout>
-+#include <QtWidgets/QScrollBar>
++#include <QVBoxLayout>
++#include <QHBoxLayout>
++#include <QPixmap>
++#include <QPalette>
++#include <QPainter>
++#include <QPaintEvent>
++#include <QScrollBar>
  
- #include <QtCore/QDebug>
- 
-diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h patched/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h
---- orig/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h	2019-05-30 22:51:47.000966728 +0200
+ #include <ZLibrary.h>
+ #include <ZLNetworkManager.h>
+diff -Naur a/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h b/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h
+--- a/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h	2022-07-05 01:28:21.628734861 +0200
 @@ -20,12 +20,12 @@
  #ifndef __ZLQTITEMSLISTWIDGET_H__
  #define __ZLQTITEMSLISTWIDGET_H__
@@ -471,19 +660,19 @@ diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtItemsListWidget.h patched/zlibrary/
 -#include <QtGui/QLabel>
 -#include <QtGui/QVBoxLayout>
 -#include <QtGui/QScrollArea>
-+#include <QtWidgets/QWidget>
-+#include <QtWidgets/QFrame>
-+#include <QtWidgets/QPushButton>
-+#include <QtWidgets/QLabel>
-+#include <QtWidgets/QVBoxLayout>
-+#include <QtWidgets/QScrollArea>
++#include <QWidget>
++#include <QFrame>
++#include <QPushButton>
++#include <QLabel>
++#include <QVBoxLayout>
++#include <QScrollArea>
  
  #include <ZLTreeTitledNode.h>
  
-diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp patched/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp
---- orig/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp	2019-05-30 22:51:47.000966728 +0200
-@@ -17,10 +17,10 @@
+diff -Naur a/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp b/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp
+--- a/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp	2022-07-05 01:28:37.332780669 +0200
+@@ -17,12 +17,12 @@
   * 02110-1301, USA.
   */
  
@@ -491,17 +680,20 @@ diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.cpp patched/zlibrary/
 -#include <QtGui/QHBoxLayout>
 -#include <QtGui/QScrollBar>
 -#include <QtGui/QGraphicsDropShadowEffect>
-+#include <QtWidgets/QVBoxLayout>
-+#include <QtWidgets/QHBoxLayout>
-+#include <QtWidgets/QScrollBar>
-+#include <QtWidgets/QGraphicsDropShadowEffect>
++#include <QVBoxLayout>
++#include <QHBoxLayout>
++#include <QScrollBar>
++#include <QGraphicsDropShadowEffect>
  
- #include <QtCore/QDebug>
+-#include <QtCore/QDebug>
++#include <QDebug>
  
-diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h patched/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h
---- orig/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h	2019-05-30 22:51:47.000966728 +0200
-@@ -20,11 +20,11 @@
+ #include <ZLNetworkManager.h>
+ #include <ZLStringUtil.h>
+diff -Naur a/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h b/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h
+--- a/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h	2022-07-05 01:28:52.788825735 +0200
+@@ -20,12 +20,12 @@
  #ifndef __ZLQTPREVIEWWIDGET_H__
  #define __ZLQTPREVIEWWIDGET_H__
  
@@ -510,58 +702,178 @@ diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtPreviewWidget.h patched/zlibrary/ui
 -#include <QtGui/QLabel>
 -#include <QtGui/QScrollArea>
 -#include <QtGui/QVBoxLayout>
-+#include <QtWidgets/QWidget>
-+#include <QtWidgets/QPushButton>
-+#include <QtWidgets/QLabel>
-+#include <QtWidgets/QScrollArea>
-+#include <QtWidgets/QVBoxLayout>
- #include <QtCore/QSet>
+-#include <QtCore/QSet>
++#include <QWidget>
++#include <QPushButton>
++#include <QLabel>
++#include <QScrollArea>
++#include <QVBoxLayout>
++#include <QSet>
  
  #include <ZLTreePageNode.h>
-diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp patched/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp
---- orig/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp	2019-05-30 22:51:47.000966728 +0200
-@@ -18,9 +18,9 @@
+ 
+diff -Naur a/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp b/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp
+--- a/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/ZLQtSearchField.cpp	2022-07-05 01:29:09.328873939 +0200
+@@ -17,10 +17,10 @@
+  * 02110-1301, USA.
   */
  
- #include <QtCore/QDebug>
+-#include <QtCore/QDebug>
 -#include <QtGui/QStyle>
 -#include <QtGui/QCompleter>
 -#include <QtGui/QStringListModel>
-+#include <QtCore/QStringListModel>
-+#include <QtWidgets/QStyle>
-+#include <QtWidgets/QCompleter>
++#include <QDebug>
++#include <QStringListModel>
++#include <QStyle>
++#include <QCompleter>
  
- #include <ZLibrary.h>
- #include <ZLFile.h>
-diff -Naur orig/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h patched/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h
---- orig/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h	2019-05-30 22:51:47.000966728 +0200
-@@ -21,8 +21,8 @@
+ #include <ZLResource.h>
+ #include <ZLOptions.h>
+diff -Naur a/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h b/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h
+--- a/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/tree/ZLQtSearchField.h	2022-07-05 01:29:22.652912762 +0200
+@@ -20,9 +20,9 @@
+ #ifndef __ZLQTSEARCHFIELD_H__
  #define __ZLQTSEARCHFIELD_H__
  
- #include <QtCore/QSet>
+-#include <QtCore/QSet>
 -#include <QtGui/QLabel>
 -#include <QtGui/QLineEdit>
-+#include <QtWidgets/QLabel>
-+#include <QtWidgets/QLineEdit>
++#include <QSet>
++#include <QLabel>
++#include <QLineEdit>
  
  #include "QtWaitingSpinner.h"
  #include "ZLQtItemsListWidget.h"
-diff -Naur orig/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp patched/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp
---- orig/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp	2019-05-30 22:51:47.000966728 +0200
-@@ -19,8 +19,8 @@
+diff -Naur a/zlibrary/ui/src/qt4/util/ZLQtGeometryOptions.cpp b/zlibrary/ui/src/qt4/util/ZLQtGeometryOptions.cpp
+--- a/zlibrary/ui/src/qt4/util/ZLQtGeometryOptions.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/util/ZLQtGeometryOptions.cpp	2022-07-05 01:31:28.981280171 +0200
+@@ -17,8 +17,8 @@
+  * 02110-1301, USA.
+  */
+ 
+-#include <QtGui/QApplication>
+-#include <QtGui/QDesktopWidget>
++#include <QApplication>
++#include <QDesktopWidget>
+ 
+ #include "ZLQtGeometryOptions.h"
+ 
+diff -Naur a/zlibrary/ui/src/qt4/util/ZLQtImageUtil.h b/zlibrary/ui/src/qt4/util/ZLQtImageUtil.h
+--- a/zlibrary/ui/src/qt4/util/ZLQtImageUtil.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/util/ZLQtImageUtil.h	2022-07-05 01:31:11.601229689 +0200
+@@ -20,7 +20,7 @@
+ #ifndef __ZLQTIMAGEUTIL_H__
+ #define __ZLQTIMAGEUTIL_H__
+ 
+-#include <QtGui/QPixmap>
++#include <QPixmap>
+ 
+ class ZLQtImageUtil {
+ 
+diff -Naur a/zlibrary/ui/src/qt4/util/ZLQtKeyUtil.cpp b/zlibrary/ui/src/qt4/util/ZLQtKeyUtil.cpp
+--- a/zlibrary/ui/src/qt4/util/ZLQtKeyUtil.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/util/ZLQtKeyUtil.cpp	2022-07-05 01:31:02.321202728 +0200
+@@ -19,7 +19,7 @@
+ 
+ #include <cctype>
+ 
+-#include <QtGui/QKeyEvent>
++#include <QKeyEvent>
+ 
+ #include <ZLUnicodeUtil.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/util/ZLQtMainWindow.cpp b/zlibrary/ui/src/qt4/util/ZLQtMainWindow.cpp
+--- a/zlibrary/ui/src/qt4/util/ZLQtMainWindow.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/util/ZLQtMainWindow.cpp	2022-07-05 01:30:49.421165237 +0200
+@@ -17,7 +17,7 @@
+  * 02110-1301, USA.
+  */
+ 
+-#include <QtGui/QToolBar>
++#include <QToolBar>
+ 
+ #include "ZLQtMainWindow.h"
+ 
+diff -Naur a/zlibrary/ui/src/qt4/util/ZLQtMainWindow.h b/zlibrary/ui/src/qt4/util/ZLQtMainWindow.h
+--- a/zlibrary/ui/src/qt4/util/ZLQtMainWindow.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/util/ZLQtMainWindow.h	2022-07-05 01:30:39.929137644 +0200
+@@ -22,7 +22,7 @@
+ 
+ #include <string>
+ 
+-#include <QtGui/QMainWindow>
++#include <QMainWindow>
+ 
+ #include <ZLOptions.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/util/ZLQtToolbarButton.h b/zlibrary/ui/src/qt4/util/ZLQtToolbarButton.h
+--- a/zlibrary/ui/src/qt4/util/ZLQtToolbarButton.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/util/ZLQtToolbarButton.h	2022-07-05 01:30:23.689090420 +0200
+@@ -20,8 +20,8 @@
+ #ifndef __ZLQTTOOLBARBUTTON_H__
+ #define __ZLQTTOOLBARBUTTON_H__
+ 
+-#include <QtGui/QPushButton>
+-#include <QtGui/QPixmap>
++#include <QPushButton>
++#include <QPixmap>
+ 
+ class QWidget;
+ 
+diff -Naur a/zlibrary/ui/src/qt4/util/ZLQtUtil.h b/zlibrary/ui/src/qt4/util/ZLQtUtil.h
+--- a/zlibrary/ui/src/qt4/util/ZLQtUtil.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/util/ZLQtUtil.h	2022-07-05 01:30:03.669032178 +0200
+@@ -20,7 +20,7 @@
+ #ifndef __ZLQTUTIL_H__
+ #define __ZLQTUTIL_H__
+ 
+-#include <QtCore/QString>
++#include <QString>
+ 
+ #include <ZLResource.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/view/ZLQtPaintContext.cpp b/zlibrary/ui/src/qt4/view/ZLQtPaintContext.cpp
+--- a/zlibrary/ui/src/qt4/view/ZLQtPaintContext.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/view/ZLQtPaintContext.cpp	2022-07-05 01:31:58.629366233 +0200
+@@ -17,11 +17,11 @@
+  * 02110-1301, USA.
+  */
+ 
+-#include <QtGui/QPainter>
+-#include <QtGui/QPixmap>
+-#include <QtGui/QFontMetrics>
+-#include <QtGui/QFontDatabase>
+-#include <QtGui/QImage>
++#include <QPainter>
++#include <QPixmap>
++#include <QFontMetrics>
++#include <QFontDatabase>
++#include <QImage>
+ 
+ #include <ZLImage.h>
+ 
+diff -Naur a/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp b/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp
+--- a/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp	2022-07-05 01:32:32.281463842 +0200
+@@ -19,11 +19,11 @@
  
  #include <algorithm>
  
 -#include <QtGui/QLayout>
 -#include <QtGui/QScrollBar>
-+#include <QtWidgets/QLayout>
-+#include <QtWidgets/QScrollBar>
- #include <QtGui/QPainter>
- #include <QtGui/QPixmap>
- #include <QtGui/QMouseEvent>
+-#include <QtGui/QPainter>
+-#include <QtGui/QPixmap>
+-#include <QtGui/QMouseEvent>
++#include <QLayout>
++#include <QScrollBar>
++#include <QPainter>
++#include <QPixmap>
++#include <QMouseEvent>
+ 
+ #include <ZLibrary.h>
+ #include <ZLLanguageUtil.h>
 @@ -185,11 +185,11 @@
  
  void ZLQtViewWidget::setScrollbarEnabled(ZLView::Direction direction, bool enabled) {
@@ -578,15 +890,15 @@ diff -Naur orig/zlibrary/ui/src/qt4/view/ZLQtViewWidget.cpp patched/zlibrary/ui/
  	}
  }
  
-diff -Naur orig/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h patched/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h
---- orig/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h	2012-11-30 13:41:25.000000000 +0100
-+++ patched/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h	2019-05-30 22:51:47.000966728 +0200
+diff -Naur a/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h b/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h
+--- a/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h	2012-12-24 05:00:26.000000000 +0100
++++ b/zlibrary/ui/src/qt4/view/ZLQtViewWidget.h	2022-07-05 01:32:35.705473769 +0200
 @@ -20,7 +20,7 @@
  #ifndef __ZLQTVIEWWIDGET_H__
  #define __ZLQTVIEWWIDGET_H__
  
 -#include <QtGui/QWidget>
-+#include <QtWidgets/QWidget>
++#include <QWidget>
  
  #include "../../../../core/src/view/ZLViewWidget.h"
  #include <ZLApplication.h>
