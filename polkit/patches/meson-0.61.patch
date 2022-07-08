@@ -1,0 +1,11 @@
+diff -Naur a/actions/meson.build b/actions/meson.build
+--- a/actions/meson.build	2021-09-07 18:16:03.000000000 +0200
++++ b/actions/meson.build	2022-07-08 18:18:08.556825371 +0200
+@@ -1,7 +1,6 @@
+ policy = 'org.freedesktop.policykit.policy'
+ 
+ i18n.merge_file(
+-  policy,
+   input: policy + '.in',
+   output: '@BASENAME@',
+   po_dir: po_dir,
