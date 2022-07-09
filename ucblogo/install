@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-export DESTDIR=$UB_INSTALLDIR
-make \
-	prefix=INFODIR=${UB_INSTALLDIR} \
-	INFODIR=${UB_INSTALLDIR}/usr/share/info \
-install
-
-cp -a ucblogo.png "$UB_INSTALLDIR"/usr/share/pixmaps
