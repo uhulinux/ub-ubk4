@@ -1,0 +1,26 @@
+#!/bin/sh -eux
+
+cd jre/lib/desktop/applications
+
+patch -i "$UB_SRCDIR"/patches/01desktop.patch.skip
+cd ../../../plugin/desktop
+patch -i "$UB_SRCDIR"/patches/02desktop.patch.skip
+cd ../../..
+
+mkdir -p "$UB_INSTALLDIR"/usr/lib/java
+cp -ar jre "$UB_INSTALLDIR"/usr/lib/java/
+
+# avoid man page conflict with other packages
+for i in $(find "$UB_INSTALLDIR"/usr/share/man -type f); do
+	mv "$i" "$i"java
+done
+
+# desktop
+mv "$UB_INSTALLDIR"/usr/lib/java/jre/lib/desktop/{applications,icons,mime} "$UB_INSTALLDIR"/usr/share/
+rm -Rf "$UB_INSTALLDIR"/usr/lib/java/jre/lib/desktop
+
+# fix permissions
+chmod -R a+rX,u+w,go-w "$UB_INSTALLDIR"
+
+# ffmpeg < 3
+rm -f "$UB_INSTALLDIR"/usr/lib/java/jre/lib/"$UB_ARCH"/libavplugin-*.so
