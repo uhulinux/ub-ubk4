@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
-python3 -m installer --destdir="$UB_INSTALLDIR" dist/*.whl
+export SETUPTOOLS_SCM_PRETEND_VERSION=$UB_VERSION
+python3 -m installer -d ${UB_INSTALLDIR} dist/*.whl
