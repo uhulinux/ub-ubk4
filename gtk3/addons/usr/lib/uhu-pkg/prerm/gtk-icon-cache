@@ -5,8 +5,8 @@ if [ ! -f /var/lib/uhu-pkg/gtk-icon-cache ]; then
 fi
 
 for i in /usr/share/icons/*; do
-	if [ -f "$i/index.theme" ]; then
-		rm -f "$i/index.theme"
+	if [ -f "$i/icon-theme.cache" ]; then
+		rm -f "$i/icon-theme.cache"
 	fi
 done
 	
