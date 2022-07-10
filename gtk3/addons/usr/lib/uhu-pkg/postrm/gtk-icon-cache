@@ -9,6 +9,10 @@ update_icon_cache ()
 		if [ -L "$i" -o ! -f "$i/index.theme" ]; then
 			continue
 		fi
+		if [ -f "$i/icon-theme.cache" ]; then
+			rm -f "$i/icon-theme.cache"
+			rmdir --ignore-fail-on-non-empty "$i"
+		fi
 		gtk-update-icon-cache -f -i -q "$i"
 	done
 	true > /var/lib/uhu-pkg/gtk-icon-cache

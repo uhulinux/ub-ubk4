@@ -7,6 +7,7 @@ fi
 for i in /usr/share/icons/*; do
 	if [ -f "$i/icon-theme.cache" ]; then
 		rm -f "$i/icon-theme.cache"
+		rmdir --ignore-fail-on-non-empty "$i"
 	fi
 done
 	
