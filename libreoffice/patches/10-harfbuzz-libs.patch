@@ -1,12 +1,12 @@
-diff -Naur orig/configure.ac patched/configure.ac
---- orig/configure.ac	2020-08-27 21:21:14.000000000 +0200
-+++ patched/configure.ac	2020-09-07 15:29:02.614679936 +0200
-@@ -10751,7 +10751,7 @@
-                          ["-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"],
-                          ["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2022-07-06 21:17:19.000000000 +0200
++++ b/configure.ac	2022-07-11 15:24:28.639554289 +0200
+@@ -10895,7 +10895,7 @@
  
--libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42],
-+libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42 harfbuzz >= 0.9.42],
-                          ["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],
-                          ["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
+ HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
+ HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"
+-libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42])
++libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.42 harfbuzz >= 0.9.42])
  
+ if test "$COM" = "MSC"; then # override the above
+     GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
