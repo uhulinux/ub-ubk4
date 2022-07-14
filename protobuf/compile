@@ -1,5 +1,9 @@
 #!/bin/sh -eux
 
-ub_compile
+ub_compile \
+    -Dprotobuf_BUILD_TESTS=OFF \
+    -DBUILD_SHARED_LIBS=ON
+
 cd python
+export PROTOC=../build/protoc
 python3 setup.py build
