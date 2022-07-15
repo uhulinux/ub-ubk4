@@ -1,4 +1,4 @@
 #!/bin/sh -eux
 
 export SETUPTOOLS_SCM_PRETEND_VERSION=$UB_VERSION
-python3 -c 'from setuptools import setup; setup()' build
+python3 -m build --wheel --no-isolation
