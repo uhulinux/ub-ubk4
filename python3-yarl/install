@@ -1,4 +1,3 @@
 #!/bin/sh -eux
 
-export YARL_NO_EXTENSIONS=True
-python3 setup.py install --root="$UB_INSTALLDIR"
+python3 -m installer -d ${UB_INSTALLDIR} dist/*.whl

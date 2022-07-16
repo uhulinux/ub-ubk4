@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+sed 's| .install-cython ||g' -i Makefile
+make cythonize
+python3 -m build --wheel --no-isolation
