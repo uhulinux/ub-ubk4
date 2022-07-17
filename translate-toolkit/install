@@ -1,6 +1,3 @@
 #!/bin/sh -eux
 
-python3 setup.py install \
-	--single-version-externally-managed \
-	--root ${UB_INSTALLDIR}/ \
-	--prefix /usr
+python -m installer --destdir="$UB_INSTALLDIR" dist/*.whl
