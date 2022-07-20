@@ -1,0 +1,36 @@
+diff -Naur a/autogen.sh b/autogen.sh
+--- a/autogen.sh	2021-03-01 15:32:14.000000000 +0100
++++ b/autogen.sh	2022-07-19 21:35:28.243186758 +0200
+@@ -1,7 +1,6 @@
+ #!/bin/sh
+ set -x -e
+ mkdir -p admin m4
+-gtkdocize --docdir docs/reference
+ libtoolize --force
+ autopoint -f
+ aclocal -Wall -I m4
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2021-03-01 15:32:14.000000000 +0100
++++ b/configure.ac	2022-07-19 21:33:30.254785787 +0200
+@@ -169,8 +169,6 @@
+      AC_MSG_RESULT([$enable_Werror])
+ fi
+ 
+-GTK_DOC_CHECK
+-
+-AC_CONFIG_FILES([Makefile po/Makefile.in docs/Makefile docs/reference/Makefile
++AC_CONFIG_FILES([Makefile po/Makefile.in
+ libuser.pc])
+ AC_OUTPUT
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2021-03-01 15:32:14.000000000 +0100
++++ b/Makefile.am	2022-07-19 21:34:48.659052419 +0200
+@@ -24,7 +24,7 @@
+ 	G_DEBUG=gc-friendly,resident-modules
+ 
+ ## Targets
+-SUBDIRS = po docs
++SUBDIRS = po
+ TESTS = tests/config_test.sh tests/fs_test tests/files_test tests/pwhash_test \
+ 	tests/utils_test
+ if LDAP

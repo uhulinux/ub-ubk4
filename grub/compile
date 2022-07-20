@@ -13,15 +13,15 @@ opts=" \
     --enable-grub-mount
     --with-grubdir=grub \
     --disable-werror \
-	--build=x86_64-linux-gnu \
-	--host=x86_64-linux-gnu \
+	--build=x86_64-unknown-linux-gnu \
+	--host=x86_64-unknown-linux-gnu \
  "
 
 export FREETYPE="pkg-config freetype2"
 export BUILD_FREETYPE="pkg-config freetype2"
 export GRUB_CONTRIB=grub-extras
 
-cp unifont-13.0.01.bdf grub/unifont.bdf
+cp unifont-14.0.04.bdf grub/unifont.bdf
 
 cp -r grub grub-bios
 cp -r grub grub-efi

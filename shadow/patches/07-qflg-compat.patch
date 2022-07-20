@@ -1,7 +1,15 @@
-diff -Naur orig/src/groupadd.c patched/src/groupadd.c
---- orig/src/groupadd.c	2018-10-24 05:37:21.000000000 +0200
-+++ patched/src/groupadd.c	2019-08-05 00:47:52.466011908 +0200
-@@ -388,13 +388,14 @@
+diff -Naur a/src/groupadd.c b/src/groupadd.c
+--- a/src/groupadd.c	2022-01-03 01:46:53.000000000 +0100
++++ b/src/groupadd.c	2022-07-16 16:08:15.496861961 +0200
+@@ -103,6 +103,7 @@
+ 	(void) fputs (_("  -o, --non-unique              allow to create groups with duplicate\n"
+ 	                "                                (non-unique) GID\n"), usageout);
+ 	(void) fputs (_("  -p, --password PASSWORD       use this encrypted password for the new group\n"), usageout);
++	(void) fputs (_("  -q, --quiet                   succeed quietly if user+uid already exists\n"), usageout);
+ 	(void) fputs (_("  -r, --system                  create a system account\n"), usageout);
+ 	(void) fputs (_("  -R, --root CHROOT_DIR         directory to chroot into\n"), usageout);
+ 	(void) fputs (_("  -P, --prefix PREFIX_DI        directory prefix\n"), usageout);
+@@ -381,6 +382,7 @@
  		{"key",        required_argument, NULL, 'K'},
  		{"non-unique", no_argument,       NULL, 'o'},
  		{"password",   required_argument, NULL, 'p'},
@@ -9,15 +17,16 @@ diff -Naur orig/src/groupadd.c patched/src/groupadd.c
  		{"system",     no_argument,       NULL, 'r'},
  		{"root",       required_argument, NULL, 'R'},
  		{"prefix",     required_argument, NULL, 'P'},
+@@ -388,7 +390,7 @@
  		{NULL, 0, NULL, '\0'}
  	};
  
--	while ((c = getopt_long (argc, argv, "fg:hK:op:rR:P:",
-+	while ((c = getopt_long (argc, argv, "fg:hK:op:qrR:P:",
+-	while ((c = getopt_long (argc, argv, "fg:hK:op:rR:P:U:",
++	while ((c = getopt_long (argc, argv, "fg:hK:op:qrR:P:U:",
  		                 long_options, NULL)) != -1) {
  		switch (c) {
  		case 'f':
-@@ -446,6 +447,9 @@
+@@ -440,6 +442,9 @@
  			pflg = true;
  			group_passwd = optarg;
  			break;
@@ -27,13 +36,13 @@ diff -Naur orig/src/groupadd.c patched/src/groupadd.c
  		case 'r':
  			rflg = true;
  			break;
-diff -Naur orig/src/groupdel.c patched/src/groupdel.c
---- orig/src/groupdel.c	2018-10-24 05:37:21.000000000 +0200
-+++ patched/src/groupdel.c	2019-08-05 00:47:52.466011908 +0200
-@@ -323,17 +323,20 @@
- 	int c;
+diff -Naur a/src/groupdel.c b/src/groupdel.c
+--- a/src/groupdel.c	2022-01-03 01:46:53.000000000 +0100
++++ b/src/groupdel.c	2022-07-16 16:03:21.748450469 +0200
+@@ -302,17 +302,20 @@
  	static struct option long_options[] = {
  		{"help", no_argument,       NULL, 'h'},
+ 		{"force", no_argument,      NULL, 'f'},
 +		{"quiet", no_argument,      NULL, 'q'},
  		{"root", required_argument, NULL, 'R'},
  		{"prefix", required_argument, NULL, 'P'},
@@ -52,9 +61,10 @@ diff -Naur orig/src/groupdel.c patched/src/groupdel.c
  		case 'R': /* no-op, handled in process_root_flag () */
  			break;
  		case 'P': /* no-op, handled in process_prefix_flag () */
---- orig/src/userdel.c	2019-05-04 07:38:23.000000000 +0200
-+++ patched/src/userdel.c	2019-08-05 00:47:52.466011908 +0200
-@@ -1030,6 +1030,7 @@
+diff -Naur a/src/userdel.c b/src/userdel.c
+--- a/src/userdel.c	2022-01-03 01:46:53.000000000 +0100
++++ b/src/userdel.c	2022-07-16 16:06:28.944697355 +0200
+@@ -1015,6 +1015,7 @@
  		static struct option long_options[] = {
  			{"force",        no_argument,       NULL, 'f'},
  			{"help",         no_argument,       NULL, 'h'},
@@ -62,13 +72,11 @@ diff -Naur orig/src/groupdel.c patched/src/groupdel.c
  			{"remove",       no_argument,       NULL, 'r'},
  			{"root",         required_argument, NULL, 'R'},
  			{"prefix",       required_argument, NULL, 'P'},
-@@ -1039,10 +1040,10 @@
- 			{NULL, 0, NULL, '\0'}
+@@ -1025,9 +1026,9 @@
  		};
  		while ((c = getopt_long (argc, argv,
--#ifdef WITH_SELINUX             
+ #ifdef WITH_SELINUX
 -		                         "fhrR:P:Z",
-+#ifdef WITH_SELINUX
 +		                         "fhqrR:P:Z",
  #else				/* !WITH_SELINUX */
 -		                         "fhrR:P:",
@@ -76,7 +84,7 @@ diff -Naur orig/src/groupdel.c patched/src/groupdel.c
  #endif				/* !WITH_SELINUX */
  		                         long_options, NULL)) != -1) {
  			switch (c) {
-@@ -1052,6 +1053,9 @@
+@@ -1037,6 +1038,9 @@
  			case 'h':
  				usage (E_SUCCESS);
  				break;

@@ -1,24 +1,80 @@
-diff -Naur orig/etc/useradd patched/etc/useradd
---- orig/etc/useradd	2018-10-10 18:19:12.000000000 +0200
-+++ patched/etc/useradd	2019-08-05 00:41:06.171943214 +0200
-@@ -1,5 +1,5 @@
- # useradd defaults file
--GROUP=1000
-+GROUP=999
- HOME=/home
- INACTIVE=-1
- EXPIRE=
-diff -Naur orig/src/useradd.c patched/src/useradd.c
---- orig/src/useradd.c	2019-05-04 07:38:23.000000000 +0200
-+++ patched/src/useradd.c	2019-08-05 00:41:06.171943214 +0200
-@@ -96,8 +96,8 @@
+diff -Naur a/etc/login.defs b/etc/login.defs
+--- a/etc/login.defs	2022-07-16 15:31:22.189399349 +0200
++++ b/etc/login.defs	2022-07-16 15:35:43.918492403 +0200
+@@ -238,7 +238,7 @@
+ UID_MIN			 1000
+ UID_MAX			60000
+ # System accounts
+-SYS_UID_MIN		  101
++SYS_UID_MIN		  1
+ SYS_UID_MAX		  999
+ # Extra per user uids
+ SUB_UID_MIN		   100000
+@@ -251,7 +251,7 @@
+ GID_MIN			 1000
+ GID_MAX			60000
+ # System accounts
+-SYS_GID_MIN		  101
++SYS_GID_MIN		  1
+ SYS_GID_MAX		  999
+ # Extra per user group ids
+ SUB_GID_MIN		   100000
+diff -Naur a/libmisc/find_new_gid.c b/libmisc/find_new_gid.c
+--- a/libmisc/find_new_gid.c	2022-01-03 01:46:53.000000000 +0100
++++ b/libmisc/find_new_gid.c	2022-07-16 15:41:25.447839878 +0200
+@@ -40,7 +40,7 @@
+ 		*preferred_min = (gid_t) 1;
+ 
+ 		/* Get the minimum ID range from login.defs or default to 101 */
+-		*min_id = (gid_t) getdef_ulong ("SYS_GID_MIN", 101UL);
++		*min_id = (gid_t) getdef_ulong ("SYS_GID_MIN", 1UL);
+ 
+ 		/*
+ 		 * If SYS_GID_MAX is unspecified, we should assume it to be one
+diff -Naur a/libmisc/find_new_uid.c b/libmisc/find_new_uid.c
+--- a/libmisc/find_new_uid.c	2022-01-03 01:46:53.000000000 +0100
++++ b/libmisc/find_new_uid.c	2022-07-16 15:43:12.736260846 +0200
+@@ -40,7 +40,7 @@
+ 		*preferred_min = (uid_t) 1;
+ 
+ 		/* Get the minimum ID range from login.defs or default to 101 */
+-		*min_id = (uid_t) getdef_ulong ("SYS_UID_MIN", 101UL);
++		*min_id = (uid_t) getdef_ulong ("SYS_UID_MIN", 1UL);
+ 
+ 		/*
+ 		 * If SYS_UID_MAX is unspecified, we should assume it to be one
+diff -Naur a/src/pwck.c b/src/pwck.c
+--- a/src/pwck.c	2022-01-03 01:46:53.000000000 +0100
++++ b/src/pwck.c	2022-07-16 15:40:19.335576025 +0200
+@@ -367,7 +367,7 @@
+ 	struct commonio_entry *pfe, *tpfe;
+ 	struct passwd *pwd;
+ 	struct spwd *spw;
+-	uid_t min_sys_id = (uid_t) getdef_ulong ("SYS_UID_MIN", 101UL);
++	uid_t min_sys_id = (uid_t) getdef_ulong ("SYS_UID_MIN", 1UL);
+ 	uid_t max_sys_id = (uid_t) getdef_ulong ("SYS_UID_MAX", 999UL);
+ 
+ 	/*
+diff -Naur a/src/useradd.c b/src/useradd.c
+--- a/src/useradd.c	2022-01-03 01:46:53.000000000 +0100
++++ b/src/useradd.c	2022-07-16 15:40:43.015670947 +0200
+@@ -79,8 +79,8 @@
  /*
   * These defaults are used if there is no defaults file.
   */
--static gid_t def_group = 100;
+-static gid_t def_group = 1000;
 -static const char *def_gname = "other";
 +static gid_t def_group = 999;
 +static const char *def_gname = "users";
  static const char *def_home = "/home";
- static const char *def_shell = "";
+ static const char *def_shell = "/bin/bash";
  static const char *def_template = SKEL_DIR;
+@@ -2409,7 +2409,7 @@
+ 	uid_t uid_min ;
+ 	uid_t uid_max ;
+ 	if (rflg) {
+-		uid_min = (uid_t)getdef_ulong("SYS_UID_MIN",101UL);
++		uid_min = (uid_t)getdef_ulong("SYS_UID_MIN",1UL);
+ 		uid_max = (uid_t)getdef_ulong("SYS_UID_MAX",getdef_ulong("UID_MIN",1000UL)-1);
+ 		if (uid_min <= uid_max) {
+ 			if (user_id < uid_min || user_id >uid_max)

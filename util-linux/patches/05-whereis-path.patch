@@ -1,19 +1,20 @@
-diff -Nur orig/misc-utils/whereis.c mod/misc-utils/whereis.c
---- orig/misc-utils/whereis.c	2019-04-09 13:13:15.000000000 +0200
-+++ mod/misc-utils/whereis.c	2019-05-14 16:44:48.348164770 +0200
-@@ -106,73 +106,19 @@
- 	"/usr/lib/" MULTIARCHTRIPLET,
+diff -Naur a/misc-utils/whereis.c b/misc-utils/whereis.c
+--- a/misc-utils/whereis.c	2022-01-06 14:52:17.000000000 +0100
++++ b/misc-utils/whereis.c	2022-07-16 16:43:39.624727281 +0200
+@@ -107,48 +107,21 @@
  	"/usr/local/lib/" MULTIARCHTRIPLET,
  #endif
--	"/usr/lib",
+ 	"/usr/lib",
+-	"/usr/lib32",
 -	"/usr/lib64",
--	"/etc",
--	"/usr/etc",
--	"/lib",
+ 	"/etc",
+ 	"/usr/etc",
+ 	"/lib",
+-	"/lib32",
 -	"/lib64",
--	"/usr/games",
--	"/usr/games/bin",
--	"/usr/games/lib",
+ 	"/usr/games",
+ 	"/usr/games/bin",
+ 	"/usr/games/lib",
 -	"/usr/emacs/etc",
 -	"/usr/lib/emacs/*/etc",
 -	"/usr/TeX/bin",
@@ -25,12 +26,12 @@ diff -Nur orig/misc-utils/whereis.c mod/misc-utils/whereis.c
 -	"/usr/bin/X11",
 -	"/usr/X11/bin",
 -	"/usr/X11R5/bin",
--
+ 
  	"/usr/local/bin",
  	"/usr/local/sbin",
--	"/usr/local/etc",
--	"/usr/local/lib",
--	"/usr/local/games",
+ 	"/usr/local/etc",
+ 	"/usr/local/lib",
+ 	"/usr/local/games",
 -	"/usr/local/games/bin",
 -	"/usr/local/emacs/etc",
 -	"/usr/local/TeX/bin",
@@ -39,19 +40,18 @@ diff -Nur orig/misc-utils/whereis.c mod/misc-utils/whereis.c
 -
 -	"/usr/contrib",
 -	"/usr/hosts",
--	"/usr/include",
--
++	
+ 	"/usr/include",
+ 
 -	"/usr/g++-include",
 -
 -	"/usr/ucb",
 -	"/usr/old",
 -	"/usr/new",
--	"/usr/local",
--	"/usr/libexec",
--	"/usr/share",
--
- 	"/opt/*/bin",
- 	NULL
+ 	"/usr/local",
+ 	"/usr/libexec",
+ 	"/usr/share",
+@@ -158,23 +131,13 @@
  };
  
  static const char *mandirs[] = {
@@ -61,7 +61,7 @@ diff -Nur orig/misc-utils/whereis.c mod/misc-utils/whereis.c
 -	"/usr/X11/man/*",
 -	"/usr/TeX/man/*",
 -	"/usr/interviews/man/mann",
--	"/usr/share/info",
+ 	"/usr/share/info",
  	NULL
  };
  

@@ -1,12 +1,16 @@
 #!/bin/sh -eux
 
+# --without-su: su comes from util-linux
+
 ub_configure \
 	--bindir=/usr/bin \
 	--sbindir=/usr/sbin \
 	--with-gnu-ld \
 	--with-libcrack \
 	--with-libpam \
+	--with-man \
 	--without-selinux \
+	--without-su \
 	--with-group-name-max-length=32
 
 make CFLAGS=-fPIC

@@ -1,6 +1,6 @@
-dirs=$(urllist http://web.mit.edu/kerberos/dist/krb5 | splitver '^([0-9.]+)$' | sort -Vr)
+dirs=$(urllist https://web.mit.edu/kerberos/dist/krb5 | splitver '^([0-9.]+)$' | sort -Vr)
 for dir in $dirs;do
-    ver=$(u2d http://web.mit.edu/kerberos/dist/krb5/"$dir"/ krb5-)
+    ver=$(u2d https://web.mit.edu/kerberos/dist/krb5/"$dir"/ krb5-)
     if [ "$ver" ];then
         echo $ver
         exit 0

@@ -2,15 +2,14 @@
 
 ## Disables because of conflicts:
 # kill - procps
-# login, nologin - shadow
+# login, nologin, newgrp - shadow
 
 ub_compile \
-    --bindir=/usr/bin \
-    --libdir=/usr/lib \
-    --sbindir=/usr/sbin \
+    -Dbuild-python=disabled \
+    \
+	-Dbuild-kill=disabled \
 	\
-	--disable-kill \
-	\
-	--disable-login \
-	--disable-nologin \
-	--disable-chfn-chsh
+	-Dbuild-login=disabled \
+	-Dbuild-nologin=disabled \
+	-Dbuild-newgrp=disabled \
+	-Dbuild-chfn-chsh=disabled

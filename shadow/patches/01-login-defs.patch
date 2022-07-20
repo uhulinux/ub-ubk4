@@ -1,7 +1,7 @@
-diff -Naur orig/etc/login.defs patched/etc/login.defs
---- orig/etc/login.defs	2016-02-18 02:04:01.134739579 +0100
-+++ patched/etc/login.defs	2017-06-26 17:53:22.346343686 +0200
-@@ -66,7 +66,7 @@
+diff -Naur a/etc/login.defs b/etc/login.defs
+--- a/etc/login.defs	2021-12-24 17:31:16.000000000 +0100
++++ b/etc/login.defs	2022-07-16 15:31:22.189399349 +0200
+@@ -75,7 +75,7 @@
  # a ":" delimited list of device names.  Root logins will be allowed only
  # from these devices.
  #
@@ -10,7 +10,7 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
  #CONSOLE	console:tty01:tty02:tty03:tty04
  
  #
-@@ -118,7 +118,7 @@
+@@ -127,7 +127,7 @@
  #   Directory where mailboxes reside, _or_ name of file, relative to the
  #   home directory.  If you _do_ define both, MAIL_DIR takes precedence.
  #
@@ -19,7 +19,7 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
  #MAIL_FILE	.mail
  
  #
-@@ -164,7 +164,7 @@
+@@ -173,7 +173,7 @@
  # set TTYPERM to either 622 or 600.
  #
  TTYGROUP	tty
@@ -28,7 +28,7 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
  
  #
  # Login configuration initializations:
-@@ -179,8 +179,8 @@
+@@ -188,8 +188,8 @@
  #
  # Prefix these values with "0" to get octal, "0x" to get hexadecimal.
  #
@@ -39,7 +39,7 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
  #ULIMIT		2097152
  
  # Default initial "umask" value used by login(1) on non-PAM enabled systems.
-@@ -202,7 +202,7 @@
+@@ -216,7 +216,7 @@
  #
  PASS_MAX_DAYS	99999
  PASS_MIN_DAYS	0
@@ -48,7 +48,7 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
  PASS_WARN_AGE	7
  
  #
-@@ -350,7 +350,7 @@
+@@ -396,7 +396,7 @@
  # Should login be allowed if we can't cd to the home directory?
  # Default is no.
  #
@@ -56,8 +56,8 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
 +DEFAULT_HOME	no
  
  #
- # If this file exists and is readable, login environment will be
-@@ -372,7 +372,7 @@
+ # The pwck(8) utility emits a warning for any system account with a home
+@@ -426,7 +426,7 @@
  #
  # This also enables userdel(8) to remove user groups if no members exist.
  #
@@ -66,7 +66,7 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
  
  #
  # If set to a non-zero number, the shadow utilities will make sure that
-@@ -391,7 +391,7 @@
+@@ -445,7 +445,7 @@
  # This option is overridden with the -M or -m flags on the useradd(8)
  # command-line.
  #
@@ -75,3 +75,12 @@ diff -Naur orig/etc/login.defs patched/etc/login.defs
  
  #
  # Force use shadow, even if shadow passwd & shadow group files are
+@@ -465,7 +465,7 @@
+ # Set to "yes" to prevent for all accounts
+ # Set to "superuser" to prevent for UID 0 / root (default)
+ # Set to "no" to not prevent for any account (dangerous, historical default)
+-PREVENT_NO_AUTH superuser
++PREVENT_NO_AUTH no
+ 
+ #
+ # Select the HMAC cryptography algorithm.
