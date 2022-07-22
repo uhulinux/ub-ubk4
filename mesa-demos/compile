@@ -1,12 +1,5 @@
 #!/bin/sh -eux
 
-mkdir build
-cd build
-cmake \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_INSTALL_BINDIR=/usr/bin \
-    -DCMAKE_DATAROOTDIR=/usr/share/mesa-demos \
-    -DCMAKE_DATADIR=/usr/share/mesa-demos/data \
-    -DCMAKE_MANDIR=/usr/share/man \
-..
-ub_make
+rm -f CMakeLists.txt
+
+ub_compile

@@ -1,0 +1,66 @@
+From f576a353638236775ecb4f4e8ba93cb1716fbe2d Mon Sep 17 00:00:00 2001
+From: Chris Robinson <chris.kcat@gmail.com>
+Date: Fri, 22 Jan 2021 08:53:44 -0800
+Subject: [PATCH] Don't bother checking for std::aligned_alloc
+
+---
+ CMakeLists.txt      | 17 -----------------
+ common/almalloc.cpp |  7 ++-----
+ config.h.in         |  3 ---
+ 3 files changed, 2 insertions(+), 25 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 651f84e89..1f3555086 100644
+@@ -534,13 +524,6 @@ if(HAVE_INTRIN_H)
+         }" HAVE_CPUID_INTRINSIC)
+ endif()
+ 
+-check_cxx_source_compiles("#include <cstdlib>
+-int main()
+-{
+-    void *ptr{std::aligned_alloc(alignof(int), sizeof(int))};
+-    std::free(ptr);
+-    return 0;
+-}" HAVE_STD_ALIGNED_ALLOC)
+ check_symbol_exists(posix_memalign   stdlib.h HAVE_POSIX_MEMALIGN)
+ check_symbol_exists(_aligned_malloc  malloc.h HAVE__ALIGNED_MALLOC)
+ check_symbol_exists(proc_pidpath     libproc.h HAVE_PROC_PIDPATH)
+diff --git a/common/almalloc.cpp b/common/almalloc.cpp
+index 4d7ff62c8..ad1dc6be0 100644
+--- a/common/almalloc.cpp
++++ b/common/almalloc.cpp
+@@ -18,10 +18,7 @@ void *al_malloc(size_t alignment, size_t size)
+     assert((alignment & (alignment-1)) == 0);
+     alignment = std::max(alignment, alignof(std::max_align_t));
+ 
+-#if defined(HAVE_STD_ALIGNED_ALLOC)
+-    size = (size+(alignment-1))&~(alignment-1);
+-    return std::aligned_alloc(alignment, size);
+-#elif defined(HAVE_POSIX_MEMALIGN)
++#if defined(HAVE_POSIX_MEMALIGN)
+     void *ret{};
+     if(posix_memalign(&ret, alignment, size) == 0)
+         return ret;
+@@ -53,7 +50,7 @@ void *al_calloc(size_t alignment, size_t size)
+ 
+ void al_free(void *ptr) noexcept
+ {
+-#if defined(HAVE_STD_ALIGNED_ALLOC) || defined(HAVE_POSIX_MEMALIGN)
++#if defined(HAVE_POSIX_MEMALIGN)
+     std::free(ptr);
+ #elif defined(HAVE__ALIGNED_MALLOC)
+     _aligned_free(ptr);
+diff --git a/config.h.in b/config.h.in
+index f7e1542e9..a28204eff 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -5,9 +5,6 @@
+ /* Define if HRTF data is embedded in the library */
+ #cmakedefine ALSOFT_EMBED_HRTF_DATA
+ 
+-/* Define if we have the std::aligned_alloc function */
+-#cmakedefine HAVE_STD_ALIGNED_ALLOC
+-
+ /* Define if we have the posix_memalign function */
+ #cmakedefine HAVE_POSIX_MEMALIGN
+ 

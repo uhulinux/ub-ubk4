@@ -1,3 +1,6 @@
 #!/bin/sh -eux
 
 make install DESTDIR="$UB_INSTALLDIR"
+
+# PowerShell script nem kell
+rm -f "$UB_INSTALLDIR"//usr/lib/node_modules/corepack/shims/*.ps1
