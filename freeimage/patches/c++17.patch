@@ -1,0 +1,628 @@
+diff -Naur a/Source/FreeImage/MultiPage.cpp b/Source/FreeImage/MultiPage.cpp
+--- a/Source/FreeImage/MultiPage.cpp	2016-08-08 12:11:16.000000000 +0200
++++ b/Source/FreeImage/MultiPage.cpp	2022-07-23 01:50:03.495848806 +0200
+@@ -271,8 +271,8 @@
+ 					}
+ 				}
+ 
+-				std::auto_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
+-				std::auto_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
++				std::unique_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
++				std::unique_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
+ 				header->m_filename = filename;
+ 				// io is default
+ 				header->node = node;
+@@ -337,8 +337,8 @@
+ 				PluginNode *node = list->FindNodeFromFIF(fif);
+ 			
+ 				if (node) {
+-					std::auto_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
+-					std::auto_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
++					std::unique_ptr<FIMULTIBITMAP> bitmap (new FIMULTIBITMAP);
++					std::unique_ptr<MULTIBITMAPHEADER> header (new MULTIBITMAPHEADER);
+ 					header->io = *io;
+ 					header->node = node;
+ 					header->fif = fif;
+diff -Naur a/Source/LibRawLite/libraw/libraw_datastream.h b/Source/LibRawLite/libraw/libraw_datastream.h
+--- a/Source/LibRawLite/libraw/libraw_datastream.h	2018-06-30 01:52:42.000000000 +0200
++++ b/Source/LibRawLite/libraw/libraw_datastream.h	2022-07-23 01:51:00.204032400 +0200
+@@ -112,14 +112,14 @@
+ };
+ 
+ #ifdef WIN32
+-template class DllDef std::auto_ptr<std::streambuf>;
++template class DllDef std::unique_ptr<std::streambuf>;
+ #endif
+ 
+ class DllDef LibRaw_file_datastream : public LibRaw_abstract_datastream
+ {
+ protected:
+-  std::auto_ptr<std::streambuf> f;       /* will close() automatically through dtor */
+-  std::auto_ptr<std::streambuf> saved_f; /* when *f is a subfile, *saved_f is the master file */
++  std::unique_ptr<std::streambuf> f;       /* will close() automatically through dtor */
++  std::unique_ptr<std::streambuf> saved_f; /* when *f is a subfile, *saved_f is the master file */
+   std::string filename;
+   INT64 _fsize;
+ #ifdef WIN32
+diff -Naur a/Source/LibRawLite/src/libraw_datastream.cpp b/Source/LibRawLite/src/libraw_datastream.cpp
+--- a/Source/LibRawLite/src/libraw_datastream.cpp	2018-06-30 01:52:42.000000000 +0200
++++ b/Source/LibRawLite/src/libraw_datastream.cpp	2022-07-23 01:58:06.825385195 +0200
+@@ -82,11 +82,11 @@
+       _fsize = st.st_size;
+ #endif
+ 
+-    std::auto_ptr<std::filebuf> buf(new std::filebuf());
++    std::unique_ptr<std::filebuf> buf(new std::filebuf());
+     buf->open(filename.c_str(), std::ios_base::in | std::ios_base::binary);
+     if (buf->is_open())
+     {
+-      f = buf;
++      f.reset(buf.release());
+     }
+   }
+ }
+@@ -99,11 +99,11 @@
+     struct _stati64 st;
+     if (!_wstati64(wfilename.c_str(), &st))
+       _fsize = st.st_size;
+-    std::auto_ptr<std::filebuf> buf(new std::filebuf());
++    std::unique_ptr<std::filebuf> buf(new std::filebuf());
+     buf->open(wfilename.c_str(), std::ios_base::in | std::ios_base::binary);
+     if (buf->is_open())
+     {
+-      f = buf;
++      f.reset(buf.release());
+     }
+   }
+ }
+@@ -222,18 +222,18 @@
+   LR_STREAM_CHK();
+   if (saved_f.get())
+     return EBUSY;
+-  saved_f = f;
+-  std::auto_ptr<std::filebuf> buf(new std::filebuf());
++  saved_f.reset(f.release());
++  std::unique_ptr<std::filebuf> buf(new std::filebuf());
+ 
+   buf->open(fn, std::ios_base::in | std::ios_base::binary);
+   if (!buf->is_open())
+   {
+-    f = saved_f;
++    f.reset(saved_f.release());
+     return ENOENT;
+   }
+   else
+   {
+-    f = buf;
++    f.reset(buf.release());
+   }
+ 
+   return 0;
+@@ -245,18 +245,18 @@
+   LR_STREAM_CHK();
+   if (saved_f.get())
+     return EBUSY;
+-  saved_f = f;
+-  std::auto_ptr<std::filebuf> buf(new std::filebuf());
++  saved_f.reset(f.release());
++  std::unique_ptr<std::filebuf> buf(new std::filebuf());
+ 
+   buf->open(fn, std::ios_base::in | std::ios_base::binary);
+   if (!buf->is_open())
+   {
+-    f = saved_f;
++    f.reset(saved_f.release());
+     return ENOENT;
+   }
+   else
+   {
+-    f = buf;
++    f.reset(buf.release());
+   }
+ 
+   return 0;
+@@ -267,7 +267,7 @@
+ {
+   if (!saved_f.get())
+     return;
+-  f = saved_f;
++  f.reset(saved_f.release());
+ }
+ 
+ #undef LR_STREAM_CHK
+diff -Naur a/Source/OpenEXR/Half/half.h b/Source/OpenEXR/Half/half.h
+--- a/Source/OpenEXR/Half/half.h	2017-11-18 15:00:24.000000000 +0100
++++ b/Source/OpenEXR/Half/half.h	2022-07-23 01:59:02.413562715 +0200
+@@ -459,7 +459,7 @@
+ 	// to do the float-to-half conversion.
+ 	//
+ 
+-	register int e = (x.i >> 23) & 0x000001ff;
++	int e = (x.i >> 23) & 0x000001ff;
+ 
+ 	e = _eLut[e];
+ 
+@@ -470,7 +470,7 @@
+ 	    // bits and combine it with the sign and exponent.
+ 	    //
+ 
+-	    register int m = x.i & 0x007fffff;
++	    int m = x.i & 0x007fffff;
+ 	    _h = e + ((m + 0x00000fff + ((m >> 13) & 1)) >> 13);
+ 	}
+ 	else
+diff -Naur a/Source/OpenEXR/IlmThread/IlmThread.cpp b/Source/OpenEXR/IlmThread/IlmThread.cpp
+--- a/Source/OpenEXR/IlmThread/IlmThread.cpp	2018-03-25 19:05:04.000000000 +0200
++++ b/Source/OpenEXR/IlmThread/IlmThread.cpp	2022-07-23 01:59:02.413562715 +0200
+@@ -62,7 +62,7 @@
+ }
+ 
+ 
+-Thread::~Thread ()
++Thread::~Thread () noexcept(false)
+ {
+     throw IEX_NAMESPACE::NoImplExc ("Threads not supported on this platform.");
+ }
+diff -Naur a/Source/OpenEXR/IlmThread/IlmThread.h b/Source/OpenEXR/IlmThread/IlmThread.h
+--- a/Source/OpenEXR/IlmThread/IlmThread.h	2017-11-18 15:00:24.000000000 +0100
++++ b/Source/OpenEXR/IlmThread/IlmThread.h	2022-07-23 01:59:02.413562715 +0200
+@@ -120,7 +120,7 @@
+   public:
+ 
+     Thread ();
+-    virtual ~Thread ();
++    virtual ~Thread () noexcept(false);
+ 
+     void		start ();
+     virtual void	run () = 0;
+diff -Naur a/Source/OpenEXR/Imath/ImathMatrix.h b/Source/OpenEXR/Imath/ImathMatrix.h
+--- a/Source/OpenEXR/Imath/ImathMatrix.h	2017-11-18 15:00:24.000000000 +0100
++++ b/Source/OpenEXR/Imath/ImathMatrix.h	2022-07-23 02:09:15.635546867 +0200
+@@ -263,16 +263,16 @@
+     //------------------------------------------------------------
+ 
+     const Matrix33 &    invert (bool singExc = false)
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+     Matrix33<T>         inverse (bool singExc = false) const
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+     const Matrix33 &    gjInvert (bool singExc = false)
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+     Matrix33<T>         gjInverse (bool singExc = false) const
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+ 
+     //------------------------------------------------
+@@ -637,16 +637,16 @@
+     //------------------------------------------------------------
+ 
+     const Matrix44 &    invert (bool singExc = false)
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+     Matrix44<T>         inverse (bool singExc = false) const
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+     const Matrix44 &    gjInvert (bool singExc = false)
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+     Matrix44<T>         gjInverse (bool singExc = false) const
+-                        throw (IEX_NAMESPACE::MathExc);
++                        noexcept(false);
+ 
+ 
+     //------------------------------------------------
+@@ -1430,7 +1430,7 @@
+ 
+ template <class T>
+ const Matrix33<T> &
+-Matrix33<T>::gjInvert (bool singExc) throw (IEX_NAMESPACE::MathExc)
++Matrix33<T>::gjInvert (bool singExc) noexcept(false)
+ {
+     *this = gjInverse (singExc);
+     return *this;
+@@ -1438,7 +1438,7 @@
+ 
+ template <class T>
+ Matrix33<T>
+-Matrix33<T>::gjInverse (bool singExc) const throw (IEX_NAMESPACE::MathExc)
++Matrix33<T>::gjInverse (bool singExc) const noexcept(false)
+ {
+     int i, j, k;
+     Matrix33 s;
+@@ -1542,7 +1542,7 @@
+ 
+ template <class T>
+ const Matrix33<T> &
+-Matrix33<T>::invert (bool singExc) throw (IEX_NAMESPACE::MathExc)
++Matrix33<T>::invert (bool singExc) noexcept(false)
+ {
+     *this = inverse (singExc);
+     return *this;
+@@ -1550,7 +1550,7 @@
+ 
+ template <class T>
+ Matrix33<T>
+-Matrix33<T>::inverse (bool singExc) const throw (IEX_NAMESPACE::MathExc)
++Matrix33<T>::inverse (bool singExc) const noexcept(false)
+ {
+     if (x[0][2] != 0 || x[1][2] != 0 || x[2][2] != 1)
+     {
+@@ -2527,11 +2527,11 @@
+                        const Matrix44<T> &b,
+                        Matrix44<T> &c)
+ {
+-    register const T * IMATH_RESTRICT ap = &a.x[0][0];
+-    register const T * IMATH_RESTRICT bp = &b.x[0][0];
+-    register       T * IMATH_RESTRICT cp = &c.x[0][0];
++    const T * IMATH_RESTRICT ap = &a.x[0][0];
++    const T * IMATH_RESTRICT bp = &b.x[0][0];
++          T * IMATH_RESTRICT cp = &c.x[0][0];
+ 
+-    register T a0, a1, a2, a3;
++    T a0, a1, a2, a3;
+ 
+     a0 = ap[0];
+     a1 = ap[1];
+@@ -2699,7 +2699,7 @@
+ 
+ template <class T>
+ const Matrix44<T> &
+-Matrix44<T>::gjInvert (bool singExc) throw (IEX_NAMESPACE::MathExc)
++Matrix44<T>::gjInvert (bool singExc) noexcept(false)
+ {
+     *this = gjInverse (singExc);
+     return *this;
+@@ -2707,7 +2707,7 @@
+ 
+ template <class T>
+ Matrix44<T>
+-Matrix44<T>::gjInverse (bool singExc) const throw (IEX_NAMESPACE::MathExc)
++Matrix44<T>::gjInverse (bool singExc) const noexcept(false)
+ {
+     int i, j, k;
+     Matrix44 s;
+@@ -2811,7 +2811,7 @@
+ 
+ template <class T>
+ const Matrix44<T> &
+-Matrix44<T>::invert (bool singExc) throw (IEX_NAMESPACE::MathExc)
++Matrix44<T>::invert (bool singExc) noexcept(false)
+ {
+     *this = inverse (singExc);
+     return *this;
+@@ -2819,7 +2819,7 @@
+ 
+ template <class T>
+ Matrix44<T>
+-Matrix44<T>::inverse (bool singExc) const throw (IEX_NAMESPACE::MathExc)
++Matrix44<T>::inverse (bool singExc) const noexcept(false)
+ {
+     if (x[0][3] != 0 || x[1][3] != 0 || x[2][3] != 0 || x[3][3] != 1)
+         return gjInverse(singExc);
+diff -Naur a/Source/OpenEXR/Imath/ImathVec.cpp b/Source/OpenEXR/Imath/ImathVec.cpp
+--- a/Source/OpenEXR/Imath/ImathVec.cpp	2017-11-18 15:00:24.000000000 +0100
++++ b/Source/OpenEXR/Imath/ImathVec.cpp	2022-07-23 01:59:02.413562715 +0200
+@@ -149,7 +149,7 @@
+ template <>
+ IMATH_EXPORT
+ const Vec2<short> &
+-Vec2<short>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec2<short>::normalizeExc () noexcept(false)
+ {
+     if ((x == 0) && (y == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -180,7 +180,7 @@
+ template <>
+ IMATH_EXPORT
+ Vec2<short>
+-Vec2<short>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec2<short>::normalizedExc () const noexcept(false)
+ {
+     if ((x == 0) && (y == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -225,7 +225,7 @@
+ template <>
+ IMATH_EXPORT
+ const Vec2<int> &
+-Vec2<int>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec2<int>::normalizeExc () noexcept(false)
+ {
+     if ((x == 0) && (y == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -256,7 +256,7 @@
+ template <>
+ IMATH_EXPORT
+ Vec2<int>
+-Vec2<int>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec2<int>::normalizedExc () const noexcept(false)
+ {
+     if ((x == 0) && (y == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -301,7 +301,7 @@
+ template <>
+ IMATH_EXPORT
+ const Vec3<short> &
+-Vec3<short>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec3<short>::normalizeExc () noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -332,7 +332,7 @@
+ template <>
+ IMATH_EXPORT
+ Vec3<short>
+-Vec3<short>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec3<short>::normalizedExc () const noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -377,7 +377,7 @@
+ template <>
+ IMATH_EXPORT
+ const Vec3<int> &
+-Vec3<int>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec3<int>::normalizeExc () noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -408,7 +408,7 @@
+ template <>
+ IMATH_EXPORT
+ Vec3<int>
+-Vec3<int>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec3<int>::normalizedExc () const noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -453,7 +453,7 @@
+ template <>
+ IMATH_EXPORT
+ const Vec4<short> &
+-Vec4<short>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec4<short>::normalizeExc () noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0) && (w == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -484,7 +484,7 @@
+ template <>
+ IMATH_EXPORT
+ Vec4<short>
+-Vec4<short>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec4<short>::normalizedExc () const noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0) && (w == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -529,7 +529,7 @@
+ template <>
+ IMATH_EXPORT
+ const Vec4<int> &
+-Vec4<int>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec4<int>::normalizeExc () noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0) && (w == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+@@ -560,7 +560,7 @@
+ template <>
+ IMATH_EXPORT
+ Vec4<int>
+-Vec4<int>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec4<int>::normalizedExc () const noexcept(false)
+ {
+     if ((x == 0) && (y == 0) && (z == 0) && (w == 0))
+         throw NullVecExc ("Cannot normalize null vector.");
+diff -Naur a/Source/OpenEXR/Imath/ImathVec.h b/Source/OpenEXR/Imath/ImathVec.h
+--- a/Source/OpenEXR/Imath/ImathVec.h	2017-11-18 15:00:24.000000000 +0100
++++ b/Source/OpenEXR/Imath/ImathVec.h	2022-07-23 01:59:02.413562715 +0200
+@@ -225,11 +225,11 @@
+     T			length2 () const;
+ 
+     const Vec2 &	normalize ();           // modifies *this
+-    const Vec2 &	normalizeExc () throw (IEX_NAMESPACE::MathExc);
++    const Vec2 &	normalizeExc () noexcept(false);
+     const Vec2 &	normalizeNonNull ();
+ 
+     Vec2<T>		normalized () const;	// does not modify *this
+-    Vec2<T>		normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++    Vec2<T>		normalizedExc () const noexcept(false);
+     Vec2<T>		normalizedNonNull () const;
+ 
+ 
+@@ -437,11 +437,11 @@
+     T			length2 () const;
+ 
+     const Vec3 &	normalize ();           // modifies *this
+-    const Vec3 &	normalizeExc () throw (IEX_NAMESPACE::MathExc);
++    const Vec3 &	normalizeExc () noexcept(false);
+     const Vec3 &	normalizeNonNull ();
+ 
+     Vec3<T>		normalized () const;	// does not modify *this
+-    Vec3<T>		normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++    Vec3<T>		normalizedExc () const noexcept(false);
+     Vec3<T>		normalizedNonNull () const;
+ 
+ 
+@@ -619,11 +619,11 @@
+     T               length2 () const;
+ 
+     const Vec4 &    normalize ();           // modifies *this
+-    const Vec4 &    normalizeExc () throw (IEX_NAMESPACE::MathExc);
++    const Vec4 &    normalizeExc () noexcept(false);
+     const Vec4 &    normalizeNonNull ();
+ 
+     Vec4<T>         normalized () const;	// does not modify *this
+-    Vec4<T>         normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++    Vec4<T>         normalizedExc () const noexcept(false);
+     Vec4<T>         normalizedNonNull () const;
+ 
+ 
+@@ -711,7 +711,7 @@
+ Vec2<short>::normalize ();
+ 
+ template <> const Vec2<short> &
+-Vec2<short>::normalizeExc () throw (IEX_NAMESPACE::MathExc);
++Vec2<short>::normalizeExc () noexcept(false);
+ 
+ template <> const Vec2<short> &
+ Vec2<short>::normalizeNonNull ();
+@@ -720,7 +720,7 @@
+ Vec2<short>::normalized () const;
+ 
+ template <> Vec2<short>
+-Vec2<short>::normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++Vec2<short>::normalizedExc () const noexcept(false);
+ 
+ template <> Vec2<short>
+ Vec2<short>::normalizedNonNull () const;
+@@ -735,7 +735,7 @@
+ Vec2<int>::normalize ();
+ 
+ template <> const Vec2<int> &
+-Vec2<int>::normalizeExc () throw (IEX_NAMESPACE::MathExc);
++Vec2<int>::normalizeExc () noexcept(false);
+ 
+ template <> const Vec2<int> &
+ Vec2<int>::normalizeNonNull ();
+@@ -744,7 +744,7 @@
+ Vec2<int>::normalized () const;
+ 
+ template <> Vec2<int>
+-Vec2<int>::normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++Vec2<int>::normalizedExc () const noexcept(false);
+ 
+ template <> Vec2<int>
+ Vec2<int>::normalizedNonNull () const;
+@@ -759,7 +759,7 @@
+ Vec3<short>::normalize ();
+ 
+ template <> const Vec3<short> &
+-Vec3<short>::normalizeExc () throw (IEX_NAMESPACE::MathExc);
++Vec3<short>::normalizeExc () noexcept(false);
+ 
+ template <> const Vec3<short> &
+ Vec3<short>::normalizeNonNull ();
+@@ -768,7 +768,7 @@
+ Vec3<short>::normalized () const;
+ 
+ template <> Vec3<short>
+-Vec3<short>::normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++Vec3<short>::normalizedExc () const noexcept(false);
+ 
+ template <> Vec3<short>
+ Vec3<short>::normalizedNonNull () const;
+@@ -783,7 +783,7 @@
+ Vec3<int>::normalize ();
+ 
+ template <> const Vec3<int> &
+-Vec3<int>::normalizeExc () throw (IEX_NAMESPACE::MathExc);
++Vec3<int>::normalizeExc () noexcept(false);
+ 
+ template <> const Vec3<int> &
+ Vec3<int>::normalizeNonNull ();
+@@ -792,7 +792,7 @@
+ Vec3<int>::normalized () const;
+ 
+ template <> Vec3<int>
+-Vec3<int>::normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++Vec3<int>::normalizedExc () const noexcept(false);
+ 
+ template <> Vec3<int>
+ Vec3<int>::normalizedNonNull () const;
+@@ -806,7 +806,7 @@
+ Vec4<short>::normalize ();
+ 
+ template <> const Vec4<short> &
+-Vec4<short>::normalizeExc () throw (IEX_NAMESPACE::MathExc);
++Vec4<short>::normalizeExc () noexcept(false);
+ 
+ template <> const Vec4<short> &
+ Vec4<short>::normalizeNonNull ();
+@@ -815,7 +815,7 @@
+ Vec4<short>::normalized () const;
+ 
+ template <> Vec4<short>
+-Vec4<short>::normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++Vec4<short>::normalizedExc () const noexcept(false);
+ 
+ template <> Vec4<short>
+ Vec4<short>::normalizedNonNull () const;
+@@ -830,7 +830,7 @@
+ Vec4<int>::normalize ();
+ 
+ template <> const Vec4<int> &
+-Vec4<int>::normalizeExc () throw (IEX_NAMESPACE::MathExc);
++Vec4<int>::normalizeExc () noexcept(false);
+ 
+ template <> const Vec4<int> &
+ Vec4<int>::normalizeNonNull ();
+@@ -839,7 +839,7 @@
+ Vec4<int>::normalized () const;
+ 
+ template <> Vec4<int>
+-Vec4<int>::normalizedExc () const throw (IEX_NAMESPACE::MathExc);
++Vec4<int>::normalizedExc () const noexcept(false);
+ 
+ template <> Vec4<int>
+ Vec4<int>::normalizedNonNull () const;
+@@ -1209,7 +1209,7 @@
+ 
+ template <class T>
+ const Vec2<T> &
+-Vec2<T>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec2<T>::normalizeExc () noexcept(false)
+ {
+     T l = length();
+ 
+@@ -1246,7 +1246,7 @@
+ 
+ template <class T>
+ Vec2<T>
+-Vec2<T>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec2<T>::normalizedExc () const noexcept(false)
+ {
+     T l = length();
+ 
+@@ -1701,7 +1701,7 @@
+ 
+ template <class T>
+ const Vec3<T> &
+-Vec3<T>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec3<T>::normalizeExc () noexcept(false)
+ {
+     T l = length();
+ 
+@@ -1740,7 +1740,7 @@
+ 
+ template <class T>
+ Vec3<T>
+-Vec3<T>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec3<T>::normalizedExc () const noexcept(false)
+ {
+     T l = length();
+ 
+@@ -2106,7 +2106,7 @@
+ 
+ template <class T>
+ const Vec4<T> &
+-Vec4<T>::normalizeExc () throw (IEX_NAMESPACE::MathExc)
++Vec4<T>::normalizeExc () noexcept(false)
+ {
+     T l = length();
+ 
+@@ -2147,7 +2147,7 @@
+ 
+ template <class T>
+ Vec4<T>
+-Vec4<T>::normalizedExc () const throw (IEX_NAMESPACE::MathExc)
++Vec4<T>::normalizedExc () const noexcept(false)
+ {
+     T l = length();
+ 

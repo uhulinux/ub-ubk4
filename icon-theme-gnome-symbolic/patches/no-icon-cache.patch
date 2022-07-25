@@ -1,0 +1,122 @@
+diff -Naur a/configure b/configure
+--- a/configure	2014-03-25 05:59:37.000000000 +0100
++++ b/configure	2022-07-24 15:00:54.539933369 +0200
+@@ -593,7 +593,6 @@
+ INKSCAPE
+ ICONTOOL_RENDER
+ GIT
+-GTK_UPDATE_ICON_CACHE
+ ICONMAP
+ render_sizes
+ SVGOUTDIR
+@@ -2640,50 +2639,6 @@
+ fi
+ 
+ 
+-# Extract the first word of "gtk-update-icon-cache", so it can be a program name with args.
+-set dummy gtk-update-icon-cache; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_path_GTK_UPDATE_ICON_CACHE+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  case $GTK_UPDATE_ICON_CACHE in
+-  [\\/]* | ?:[\\/]*)
+-  ac_cv_path_GTK_UPDATE_ICON_CACHE="$GTK_UPDATE_ICON_CACHE" # Let the user override the test with a path.
+-  ;;
+-  *)
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_path_GTK_UPDATE_ICON_CACHE="$as_dir/$ac_word$ac_exec_ext"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-  ;;
+-esac
+-fi
+-GTK_UPDATE_ICON_CACHE=$ac_cv_path_GTK_UPDATE_ICON_CACHE
+-if test -n "$GTK_UPDATE_ICON_CACHE"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GTK_UPDATE_ICON_CACHE" >&5
+-$as_echo "$GTK_UPDATE_ICON_CACHE" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-if test -z "$GTK_UPDATE_ICON_CACHE"; then
+-    as_fn_error $? "Could not find gtk-update-icon-cache" "$LINENO" 5
+-fi
+-
+ # need git, icontool, and inkscape for rendering
+ allow_rendering=yes
+ # Extract the first word of "git", so it can be a program name with args.
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2014-03-25 05:59:12.000000000 +0100
++++ b/configure.ac	2022-07-24 15:00:22.811870306 +0200
+@@ -47,11 +47,6 @@
+ fi
+ AC_SUBST(ICONMAP)
+ 
+-AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache)
+-if test -z "$GTK_UPDATE_ICON_CACHE"; then
+-    AC_MSG_ERROR([Could not find gtk-update-icon-cache])
+-fi
+-
+ # need git, icontool, and inkscape for rendering
+ allow_rendering=yes
+ AC_PATH_PROG([GIT], [git], [false])
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2014-03-06 22:38:08.000000000 +0100
++++ b/Makefile.am	2022-07-24 14:59:34.891774854 +0200
+@@ -19,9 +19,6 @@
+ 	fi
+ 
+ install-data-hook:
+-	if test -z "$(DESTDIR)" ; then \
+-		$(GTK_UPDATE_ICON_CACHE) -q $(DESTDIR)$(themedir); \
+-	fi
+ 
+ pkgconfigdir = $(datadir)/pkgconfig
+ pkgconfig_DATA = gnome-icon-theme-symbolic.pc
+diff -Naur a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2014-03-25 05:59:39.000000000 +0100
++++ b/Makefile.in	2022-07-24 15:00:03.107831091 +0200
+@@ -231,7 +231,6 @@
+ ECHO_N = @ECHO_N@
+ ECHO_T = @ECHO_T@
+ GIT = @GIT@
+-GTK_UPDATE_ICON_CACHE = @GTK_UPDATE_ICON_CACHE@
+ ICONMAP = @ICONMAP@
+ ICONTOOL_RENDER = @ICONTOOL_RENDER@
+ INKSCAPE = @INKSCAPE@
+@@ -823,9 +822,6 @@
+ 	fi
+ 
+ install-data-hook:
+-	if test -z "$(DESTDIR)" ; then \
+-		$(GTK_UPDATE_ICON_CACHE) -q $(DESTDIR)$(themedir); \
+-	fi
+ 
+ -include $(top_srcdir)/git.mk
+ 
+diff -Naur a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2014-03-25 05:59:39.000000000 +0100
++++ b/src/Makefile.in	2022-07-24 15:02:05.504073988 +0200
+@@ -119,7 +119,6 @@
+ ECHO_N = @ECHO_N@
+ ECHO_T = @ECHO_T@
+ GIT = @GIT@
+-GTK_UPDATE_ICON_CACHE = @GTK_UPDATE_ICON_CACHE@
+ ICONMAP = @ICONMAP@
+ ICONTOOL_RENDER = @ICONTOOL_RENDER@
+ INKSCAPE = @INKSCAPE@
