@@ -106,7 +106,7 @@ diff -Naur orig/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am patched/eps
  libEPSCommonLib_a_LIBADD = \
 -	/opt/lsb/$(LIBARCH)/libQtCore.so \
 -	/opt/lsb/$(LIBARCH)/libQtGui.so \
--	/opt/lsb/$(LIBARCH)/libpthread.so \
+-	/opt/lsb/$(LIBARCH)/libpthread.so.0 \
 -	/opt/lsb/$(LIBARCH)/libcupsimage.so \
 -	/opt/lsb/$(LIBARCH)/libcups.so \
 -   /opt/lsb/$(LIBARCH)/libQtNetwork.so
@@ -114,7 +114,7 @@ diff -Naur orig/epson-printer-utility-1.0.2/EPSCommonLib/Makefile.am patched/eps
 +	/usr/$(LIBARCH)/libQt5Gui.so \
 +	/usr/$(LIBARCH)/libQt5Widgets.so \
 +	/usr/$(LIBARCH)/libQt5Network.so \
-+	/usr/$(LIBARCH)/libpthread.so \
++	/usr/$(LIBARCH)/libpthread.so.0 \
 +	/usr/$(LIBARCH)/libcupsimage.so \
 +	/usr/$(LIBARCH)/libcups.so
  	
@@ -175,7 +175,7 @@ diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am patched/e
  __EPS_PREFIX__utility_LDADD = \
 -	/opt/lsb/$(LIBARCH)/libQtCore.so \
 -	/opt/lsb/$(LIBARCH)/libQtGui.so \
--	/opt/lsb/$(LIBARCH)/libpthread.so \
+-	/opt/lsb/$(LIBARCH)/libpthread.so.0 \
 -	/opt/lsb/$(LIBARCH)/libcupsimage.so \
 -	/opt/lsb/$(LIBARCH)/libcups.so \
 -   /opt/lsb/$(LIBARCH)/libQtNetwork.so \
@@ -183,7 +183,7 @@ diff -Naur orig/epson-printer-utility-1.0.2/PrinterUtility/Makefile.am patched/e
 +	/usr/$(LIBARCH)/libQt5Gui.so \
 +	/usr/$(LIBARCH)/libQt5Widgets.so \
 +	/usr/$(LIBARCH)/libQt5Network.so \
-+	/usr/$(LIBARCH)/libpthread.so \
++	/usr/$(LIBARCH)/libpthread.so.0 \
 +	/usr/$(LIBARCH)/libcupsimage.so \
 +	/usr/$(LIBARCH)/libcups.so \
  	../EPSCommonLib/libEPSCommonLib.a

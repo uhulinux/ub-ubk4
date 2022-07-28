@@ -1,0 +1,25 @@
+diff -Naur a/images/meson.build b/images/meson.build
+--- a/images/meson.build	2021-08-18 20:57:53.000000000 +0200
++++ b/images/meson.build	2022-07-27 13:21:13.352567165 +0200
+@@ -15,9 +15,3 @@
+ 
+ balsabitmapsdir = join_paths(get_option('datadir'), 'balsa', 'pixmaps')
+ install_data(balsa_imgs, install_dir : balsabitmapsdir)
+-
+-if gtk_update_icon_cache_program.found()
+-  gtk_update_icon_cache = gtk_update_icon_cache_program.path()
+-  icon_cache_dir = join_paths(get_option('prefix'), get_option('datadir'), 'balsa')
+-  run_command(gtk_update_icon_cache, '--ignore-theme-index', icon_cache_dir)
+-endif
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2021-08-18 20:57:53.000000000 +0200
++++ b/meson.build	2022-07-27 13:20:38.280485591 +0200
+@@ -482,8 +482,6 @@
+ balsa_data_prefix = join_paths(get_option('prefix'), get_option('datadir'), 'balsa')
+ add_global_arguments('-DBALSA_DATA_PREFIX="' + balsa_data_prefix + '"', language : 'c')
+ 
+-gtk_update_icon_cache_program = find_program('gtk-update-icon-cache')
+-
+ ###########################################################################
+ # Documentation and Testing requirements for libnetclient
+ ###########################################################################
