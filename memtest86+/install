@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
 mkdir -p "$UB_INSTALLDIR"/boot
+cd build64
 install -m 644 memtest.bin "$UB_INSTALLDIR"/boot/
+install -m 644 memtest.efi "$UB_INSTALLDIR"/boot/
