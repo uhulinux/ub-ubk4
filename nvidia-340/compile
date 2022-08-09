@@ -18,6 +18,9 @@ patch -Np1 < "$UB_SRCDIR"/patches/0004-kernel-5.10.patch.skip
 patch -Np1 < "$UB_SRCDIR"/patches/0005-kernel-5.11.patch.skip
 patch -Np1 < "$UB_SRCDIR"/patches/0006-kernel-5.14.patch.skip
 patch -Np1 < "$UB_SRCDIR"/patches/0007-kernel-5.15.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0008-kernel-5.16.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0009-kernel-5.17.patch.skip
+patch -Np1 < "$UB_SRCDIR"/patches/0010-kernel-5.18.patch.skip
 cd kernel
 make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
 export UB_MAKE_PROCS=1
