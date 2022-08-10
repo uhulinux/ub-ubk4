@@ -1,14 +1,33 @@
 diff -Naur a/Makefile b/Makefile
---- a/Makefile	2020-05-31 00:17:56.000000000 +0200
-+++ b/Makefile	2022-08-07 22:18:05.466576225 +0200
-@@ -32,8 +32,8 @@
+--- a/Makefile	2022-04-18 18:48:46.000000000 +0200
++++ b/Makefile	2022-08-10 19:05:12.737471684 +0200
+@@ -19,7 +19,7 @@
+ DNS=
+ 
+ # Build libpci as a shared library (yes/no; or local for testing; requires GCC)
+-SHARED=no
++SHARED=yes
+ 
+ # Use libkmod to resolve kernel modules on Linux (yes/no, default: detect)
+ LIBKMOD=
+@@ -32,9 +32,9 @@
  ABI_VERSION=.3
  
  # Installation directories
 -PREFIX=/usr/local
--SBINDIR=$(PREFIX)/sbin
 +PREFIX=/usr
+ BINDIR=$(PREFIX)/bin
+-SBINDIR=$(PREFIX)/sbin
 +SBINDIR=$(PREFIX)/bin
  SHAREDIR=$(PREFIX)/share
  IDSDIR=$(SHAREDIR)
  MANDIR:=$(shell if [ -d $(PREFIX)/share/man ] ; then echo $(PREFIX)/share/man ; else echo $(PREFIX)/man ; fi)
+@@ -128,7 +128,7 @@
+ 
+ distclean: clean
+ 
+-install: all
++install: all install-lib
+ # -c is ignored on Linux, but required on FreeBSD
+ 	$(DIRINSTALL) -m 755 $(DESTDIR)$(BINDIR) $(DESTDIR)$(SBINDIR) $(DESTDIR)$(IDSDIR) $(DESTDIR)$(MANDIR)/man8 $(DESTDIR)$(MANDIR)/man7 $(DESTDIR)/$(MANDIR)/man5
+ 	$(INSTALL) -c -m 755 $(STRIP) lspci$(EXEEXT) $(DESTDIR)$(LSPCIDIR)
