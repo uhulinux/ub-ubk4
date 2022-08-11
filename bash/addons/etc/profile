@@ -28,6 +28,11 @@ export XDG_DATA_DIRS=${XDG_DATA_DIRS:-/usr/share/}
 export XDG_CONFIG_DIRS=${XDG_CONFIG_DIRS:-/etc/xdg/}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/tmp/xdg-$USER}
 
+# Set default locale
+if [ -z $LANG ]; then
+export LANG="$(</etc/sysconfig/locale)"
+fi
+
 # /etc/bashrc-t és ~/.bashrc-t csak az interaktív shellek hajtják végre.
 if [ "${-//[^i]/}" != "" ]; then
 	if [ -r /etc/bashrc ]; then
