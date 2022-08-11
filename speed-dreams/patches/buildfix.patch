@@ -1,0 +1,270 @@
+diff -Naur a/src/libs/tgfclient/gui.cpp b/src/libs/tgfclient/gui.cpp
+--- a/src/libs/tgfclient/gui.cpp	2020-04-25 13:25:15.000000000 +0200
++++ b/src/libs/tgfclient/gui.cpp	2022-08-11 01:52:35.301607484 +0200
+@@ -43,7 +43,7 @@
+ 
+ #ifdef WIN32
+ PFNGLUSEPROGRAMOBJECTARBPROC glUseProgram = NULL;
+-PFNGLACTIVETEXTUREARBPROC   glActiveTextureARB ;
++PFNglActiveTexturePROC   glActiveTexture ;
+ #endif
+ 
+ 
+@@ -128,7 +128,7 @@
+ 
+ #ifdef WIN32
+ 	glUseProgram = (PFNGLUSEPROGRAMOBJECTARBPROC)wglGetProcAddress("glUseProgram");
+-    glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
++    glActiveTexture = (PFNglActiveTexturePROC)wglGetProcAddress("glActiveTexture");
+ #endif
+ 	gfctrlJoyInit(); // Not here ; done later on the fly, when really needed.
+ }
+@@ -265,7 +265,7 @@
+ 	tGfuiObject	*curObj;
+ 	
+ 	glUseProgram(0);
+-	glActiveTextureARB(GL_TEXTURE0);
++	glActiveTexture(GL_TEXTURE0);
+ 	glDisable(GL_DEPTH_TEST);
+ 	glDisable(GL_LIGHTING);
+ 	glDisable(GL_TEXTURE_2D);
+diff -Naur a/src/modules/graphic/ssggraph/grcarlight.cpp b/src/modules/graphic/ssggraph/grcarlight.cpp
+--- a/src/modules/graphic/ssggraph/grcarlight.cpp	2020-02-09 20:34:16.000000000 +0100
++++ b/src/modules/graphic/ssggraph/grcarlight.cpp	2022-08-11 01:55:13.070040458 +0200
+@@ -153,7 +153,7 @@
+ 	axis[2] = 1;
+ 
+ 	if (grMaxTextureUnits > 1) {
+-		glActiveTextureARB (GL_TEXTURE0_ARB);
++		glActiveTexture (GL_TEXTURE0_ARB);
+ 	}
+ 
+ 	sgMakeRotMat4(mat, ((float)rand()/(float)RAND_MAX)*45, axis);
+@@ -191,7 +191,7 @@
+ 	glDisable(GL_POLYGON_OFFSET_FILL);
+ 
+ 	if (grMaxTextureUnits > 1) {
+-		glActiveTextureARB (GL_TEXTURE0_ARB);
++		glActiveTexture (GL_TEXTURE0_ARB);
+ 	}
+ 
+ 	glMatrixMode(GL_TEXTURE);
+diff -Naur a/src/modules/graphic/ssggraph/grmain.cpp b/src/modules/graphic/ssggraph/grmain.cpp
+--- a/src/modules/graphic/ssggraph/grmain.cpp	2020-05-17 22:54:44.000000000 +0200
++++ b/src/modules/graphic/ssggraph/grmain.cpp	2022-08-11 01:55:03.418014048 +0200
+@@ -80,7 +80,7 @@
+ #ifdef WIN32
+ PFNGLMULTITEXCOORD2FARBPROC glMultiTexCoord2fARB = NULL;
+ PFNGLMULTITEXCOORD2FVARBPROC glMultiTexCoord2fvARB = NULL;
+-PFNGLACTIVETEXTUREARBPROC glActiveTextureARB = NULL;
++PFNglActiveTexturePROC glActiveTexture = NULL;
+ PFNGLCLIENTACTIVETEXTUREARBPROC glClientActiveTextureARB = NULL;
+ #endif
+ 
+@@ -106,7 +106,7 @@
+         // They are not declared in gl.h or any other header ;
+         // you can only get them through a call to wglGetProcAddress at run-time.
+         glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2fARB");
+-        glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
++        glActiveTexture = (PFNglActiveTexturePROC)wglGetProcAddress("glActiveTexture");
+         glClientActiveTextureARB = (PFNGLCLIENTACTIVETEXTUREARBPROC)wglGetProcAddress("glClientActiveTextureARB");
+         glMultiTexCoord2fvARB = (PFNGLMULTITEXCOORD2FVARBPROC)wglGetProcAddress("glMultiTexCoord2fvARB");
+ #endif
+diff -Naur a/src/modules/graphic/ssggraph/grmain.h b/src/modules/graphic/ssggraph/grmain.h
+--- a/src/modules/graphic/ssggraph/grmain.h	2020-02-09 20:34:16.000000000 +0100
++++ b/src/modules/graphic/ssggraph/grmain.h	2022-08-11 01:55:22.498066247 +0200
+@@ -38,7 +38,7 @@
+ // you can only get them through a call to wglGetProcAddress at run-time.
+ extern PFNGLMULTITEXCOORD2FARBPROC     glMultiTexCoord2fARB ;
+ extern PFNGLMULTITEXCOORD2FVARBPROC    glMultiTexCoord2fvARB;
+-extern PFNGLACTIVETEXTUREARBPROC       glActiveTextureARB ;
++extern PFNglActiveTexturePROC       glActiveTexture ;
+ extern PFNGLCLIENTACTIVETEXTUREARBPROC glClientActiveTextureARB ;
+ #endif
+ 
+diff -Naur a/src/modules/graphic/ssggraph/grmultitexstate.cpp b/src/modules/graphic/ssggraph/grmultitexstate.cpp
+--- a/src/modules/graphic/ssggraph/grmultitexstate.cpp	2020-02-09 20:34:16.000000000 +0100
++++ b/src/modules/graphic/ssggraph/grmultitexstate.cpp	2022-08-11 01:54:53.417986672 +0200
+@@ -22,7 +22,7 @@
+ #include <GL/gl.h>
+ #include <GL/glext.h>
+ ////// Multitexturing Info
+-extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB ;
++extern PFNglActiveTexturePROC glActiveTexture ;
+ #endif
+ 
+ #include <tgf.h>
+@@ -48,7 +48,7 @@
+ // Apply the texture state to the given texture unit GL_TEXTURE<nUnit>_ARB
+ void cgrMultiTexState::apply(GLint nUnit)
+ {
+-	glActiveTextureARB(nUnit);
++	glActiveTexture(nUnit);
+ 	glEnable(GL_TEXTURE_2D);
+ 	glBindTexture(GL_TEXTURE_2D, ssgSimpleState::getTextureHandle());
+ 	_fnTexScheme(); // There MUST be a texturing scheme function, so no need to check.
+diff -Naur a/src/modules/graphic/ssggraph/grvtxtable.cpp b/src/modules/graphic/ssggraph/grvtxtable.cpp
+--- a/src/modules/graphic/ssggraph/grvtxtable.cpp	2020-02-09 20:34:16.000000000 +0100
++++ b/src/modules/graphic/ssggraph/grvtxtable.cpp	2022-08-11 01:54:45.365964623 +0200
+@@ -201,7 +201,7 @@
+ 	}
+ 
+ 	if (grMaxTextureUnits > 1) {
+-		glActiveTextureARB(GL_TEXTURE0_ARB);
++		glActiveTexture(GL_TEXTURE0_ARB);
+ 	}
+ 
+ 	glEnable (GL_TEXTURE_2D);
+@@ -266,17 +266,17 @@
+ 
+ 	glPopClientAttrib ();
+ 	if (_mTexStates[0]) {
+-		glActiveTextureARB(GL_TEXTURE1_ARB);
++		glActiveTexture(GL_TEXTURE1_ARB);
+ 		glDisable(GL_TEXTURE_2D);
+ 	}
+ 
+ 	if (_mTexStates[1]) {
+-		glActiveTextureARB(GL_TEXTURE2_ARB);
++		glActiveTexture(GL_TEXTURE2_ARB);
+ 		glDisable(GL_TEXTURE_2D);
+ 	}
+ 
+ 	if (grMaxTextureUnits > 1) {
+-		glActiveTextureARB(GL_TEXTURE0_ARB);
++		glActiveTexture(GL_TEXTURE0_ARB);
+ 	}
+ 	
+ 	TRACE_GL("cgrVtxTable::draw_geometry_array: end");
+@@ -385,17 +385,17 @@
+ 	glEnd ();
+ 
+ 	if (_mTexStates[0]) {
+-		glActiveTextureARB(GL_TEXTURE1_ARB);
++		glActiveTexture(GL_TEXTURE1_ARB);
+ 		glDisable(GL_TEXTURE_2D);
+ 	}
+ 
+ 	if (_mTexStates[1]) {
+-		glActiveTextureARB(GL_TEXTURE2_ARB);
++		glActiveTexture(GL_TEXTURE2_ARB);
+ 		glDisable(GL_TEXTURE_2D);
+ 	}
+ 
+ 	if (grMaxTextureUnits > 1) {
+-		glActiveTextureARB(GL_TEXTURE0_ARB);
++		glActiveTexture(GL_TEXTURE0_ARB);
+ 	}
+ 	TRACE_GL("cgrVtxTableTrackPart::draw_geometry: end");
+ }
+@@ -480,7 +480,7 @@
+ 		axis[1] = 0;
+ 		axis[2] = 1;
+ 
+-		glActiveTextureARB(GL_TEXTURE2_ARB);
++		glActiveTexture(GL_TEXTURE2_ARB);
+ 		sgMakeRotMat4(mat, grCarInfo[_carIndex].envAngle, axis);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+@@ -492,7 +492,7 @@
+ 	if (_nTexMaps > 1 && grEnvState) {
+ 		grEnvState->apply(GL_TEXTURE1_ARB);
+ 	
+-		glActiveTextureARB(GL_TEXTURE1_ARB);
++		glActiveTexture(GL_TEXTURE1_ARB);
+ 		glEnable(GL_TEXTURE_2D);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+@@ -550,7 +550,7 @@
+ 	glEnd ();
+ 
+ 	if (_nTexMaps > 1 && grEnvState) {
+-		glActiveTextureARB(GL_TEXTURE1_ARB);
++		glActiveTexture(GL_TEXTURE1_ARB);
+ 		glDisable(GL_TEXTURE_2D);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+@@ -558,11 +558,11 @@
+ 	}
+ 	
+ 	if (_nTexMaps > 2 && grEnvShadowState) {
+-		glActiveTextureARB(GL_TEXTURE2_ARB);
++		glActiveTexture(GL_TEXTURE2_ARB);
+ 		glDisable(GL_TEXTURE_2D);
+ 	}
+ 	
+-	glActiveTextureARB(GL_TEXTURE0_ARB);
++	glActiveTexture(GL_TEXTURE0_ARB);
+ 
+ 	TRACE_GL("cgrVtxTableCarPart::draw_geometry: end");
+ }
+@@ -591,7 +591,7 @@
+ 		axis[1] = 0;
+ 		axis[2] = 1;
+ 
+-		glActiveTextureARB(GL_TEXTURE2_ARB);
++		glActiveTexture(GL_TEXTURE2_ARB);
+ 		sgMakeRotMat4(mat, grCarInfo[_carIndex].envAngle, axis);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+@@ -631,7 +631,7 @@
+ 		mat2[3][3] = 1;
+ 
+ 
+-		glActiveTextureARB(GL_TEXTURE3_ARB);
++		glActiveTexture(GL_TEXTURE3_ARB);
+ 		sgMakeRotMat4(mat, grCarInfo[_carIndex].envAngle, axis);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+@@ -649,7 +649,7 @@
+ 	if (_nTexMaps > 1 && grEnvState) {
+ 		grEnvState->apply(GL_TEXTURE1_ARB);
+ 		
+-		glActiveTextureARB(GL_TEXTURE1_ARB);
++		glActiveTexture(GL_TEXTURE1_ARB);
+ 		glEnable(GL_TEXTURE_2D);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+@@ -660,7 +660,7 @@
+ 		glMatrixMode(GL_MODELVIEW);
+ 	}
+ 
+-	glActiveTextureARB(GL_TEXTURE0_ARB);
++	glActiveTexture(GL_TEXTURE0_ARB);
+ 	glEnable(GL_TEXTURE_2D);
+ 
+ 	if (num_colours == 0) {
+@@ -725,14 +725,14 @@
+ 
+ 	glPopClientAttrib();
+ 	
+-	glActiveTextureARB(GL_TEXTURE1_ARB);
++	glActiveTexture(GL_TEXTURE1_ARB);
+ 	glDisable (GL_TEXTURE_2D);
+ 	glMatrixMode(GL_TEXTURE);
+ 	glLoadIdentity();
+ 	glMatrixMode(GL_MODELVIEW);
+ 
+ 	if (_nTexMaps > 2 && grEnvShadowState) {
+-		glActiveTextureARB(GL_TEXTURE2_ARB);
++		glActiveTexture(GL_TEXTURE2_ARB);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+ 		glMatrixMode(GL_MODELVIEW);
+@@ -740,14 +740,14 @@
+ 	}
+ 
+ 	if (_nTexMaps > 3 && grEnvShadowStateOnCars) {
+-		glActiveTextureARB(GL_TEXTURE3_ARB);
++		glActiveTexture(GL_TEXTURE3_ARB);
+ 		glMatrixMode(GL_TEXTURE);
+ 		glLoadIdentity();
+ 		glMatrixMode(GL_MODELVIEW);
+ 		glDisable(GL_TEXTURE_2D);
+ 	}
+ 
+-	glActiveTextureARB (GL_TEXTURE0_ARB);
++	glActiveTexture (GL_TEXTURE0_ARB);
+ 	
+ 	TRACE_GL("cgrVtxTableCarPart::draw_geometry_array");
+ }
