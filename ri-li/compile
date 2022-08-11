@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-mv configure.in configure.ac
-aclocal
-autoconf
-automake --add-missing
-export SUBDIRS="src data Sounds"
-ub_compile \
-	--datadir=/usr/share/games
