@@ -1,0 +1,27 @@
+#!/bin/sh -eux
+
+export CXXFLAGS='-std=gnu++11 -Wno-write-strings -fno-strict-aliasing -Wno-unused -Wno-unused-but-set-variable -Wno-unused-result -Wno-sign-compare -Wno-reorder -Wno-narrowing'
+export UB_MAKE_PROCS=1
+mkdir -p build/progs/common/{engine,linespec,uibase} build/utils/editing/acs
+cp progs/common/engine/* build/progs/common/engine/
+cp progs/common/linespec/*.vc build/progs/common/linespec/
+cp progs/common/uibase/*.vc build/progs/common/uibase/
+cp utils/editing/acs/* build/utils/editing/acs/
+progs="doom heretic hexen strife"
+for prog in $progs;do
+    mkdir -p build/progs/$prog/{game,cgame}
+    cp progs/"$prog"/game/*.vc build/progs/"$prog"/game/
+    cp progs/"$prog"/cgame/*.vc build/progs/"$prog"/cgame/
+done
+cd build
+    cmake \
+        -DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG \
+        -DCMAKE_CXX_FLAGS_DEBUG= \
+        -DWITH_OPENGL=Y \
+        -DDATADIR=share/games/vavoom\
+        -DWITH_SDL=Y \
+        -DWITH_LIBMAD:BOOL=OFF \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+    ..
+ub_compile

@@ -1,0 +1,12 @@
+diff -up vavoom-1.27/utils/glbsp/CMakeLists.txt~ vavoom-1.27/utils/glbsp/CMakeLists.txt
+--- vavoom-1.27/utils/glbsp/CMakeLists.txt~	2008-04-02 20:48:23.000000000 +0200
++++ vavoom-1.27/utils/glbsp/CMakeLists.txt	2008-04-02 20:48:23.000000000 +0200
+@@ -1,7 +1,7 @@
+ include_directories(${ZLIB_INCLUDE_DIR})
+ add_definitions(-DGLBSP_PLUGIN -DUNIX -DINLINE_G=inline)
+ 
+-add_library(glbsp
++add_library(glbsp STATIC
+ 	analyze.c
+ 	analyze.h
+ 	blockmap.c

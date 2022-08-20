@@ -1,0 +1,23 @@
+Subject: Add support for system iwad dirs
+Author: Hans de Goede <hdegoede@redhat.com>
+
+Make vavoom check /usr/share/games/doom and /usr/share/doom for wads
+when no iwaddir is specified on the commandline.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+diff -up vavoom-1.33/source/files.cpp~ vavoom-1.33/source/files.cpp
+--- vavoom-1.33/source/files.cpp~	2016-01-04 21:09:15.000000000 +0100
++++ vavoom-1.33/source/files.cpp	2016-01-04 21:16:04.440620918 +0100
+@@ -487,6 +487,12 @@ void FL_Init()
+ 		}
+ 	}
+ 
++	// If no dirs were specified look in the system default dir
++	if (IWadDirs.Num() == 0) {
++		IWadDirs.Append("/usr/share/games/doom");
++		IWadDirs.Append("/usr/share/doom");
++	}
++
+ 	AddGameDir("basev/common");
+ 
+ 	p = GArgs.CheckValue("-iwad");

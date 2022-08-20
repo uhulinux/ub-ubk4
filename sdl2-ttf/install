@@ -1,6 +1,5 @@
 #!/bin/sh -eux
 
 ub_install
-for i in `cat "$UB_SRCDIR"/doc`;do
-mv "$i".txt "$i"
-done
+
+rm -Rf ${UB_INSTALLDIR}/usr/share/licenses

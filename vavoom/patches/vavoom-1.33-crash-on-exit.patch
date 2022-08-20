@@ -1,0 +1,12 @@
+--- vavoom-1.33/source/vc_object.cpp~	2016-08-09 12:35:44.000000000 +0200
++++ vavoom-1.33/source/vc_object.cpp	2016-08-09 12:55:12.565307581 +0200
+@@ -187,7 +187,8 @@ void VObject::StaticExit()
+ 	GObjObjects.Clear();
+ 	GObjAvailable.Clear();
+ 	GObjInitialised = false;
+-	VMemberBase::StaticExit();
++	// This causes vavoom to crash on exit when build with -std=c++11
++	// VMemberBase::StaticExit();
+ }
+ 
+ //==========================================================================
