@@ -1,19 +1,27 @@
 #!/bin/sh -eux
 
-# export CFLAGS+="-Wno-error"
-
 ub_configure \
     --with-lib-path=/lib:/usr/lib:/usr/local/lib \
+    --enable-cet \
+    --enable-default-execstack=no \
+    --enable-deterministic-archives \
+    --enable-gold \
+    --enable-install-libiberty \
+    --enable-ld=default \
+    --enable-pgo-build=lto \
+    --enable-plugins \
+    --enable-relro \
+    --enable-targets=x86_64-pep,bpf-unknown-none \
+    --enable-threads \
+    --disable-gdb \
+    --disable-gdbserver \
+    --disable-jansson \
+    --disable-libdecnumber \
+    --disable-readline \
+    --disable-sim \
+    --disable-werror \
     --with-pic \
-    --with-system-zlib \
-	--enable-64-bit-bfd \
-	--enable-ld=default \
-	--enable-gold \
-	--enable-plugins \
-	--enable-deterministic-archives \
-	--enable-targets=x86_64-pep \
-	--disable-gdb \
-	--disable-werror
+    --with-system-zlib
 
 make configure-host
 make -e \

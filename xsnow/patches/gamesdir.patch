@@ -1,12 +1,24 @@
-diff -Nur orig/src/Makefile.am mod/src/Makefile.am
---- orig/src/Makefile.am	2020-12-05 13:09:59.000000000 +0100
-+++ mod/src/Makefile.am	2020-12-13 19:26:44.745012074 +0100
-@@ -19,7 +19,7 @@
- #-# 
- SUBDIRS = Pixmaps
+diff -Naur a/src/Makefile.am b/src/Makefile.am
+--- a/src/Makefile.am	2022-08-22 13:20:31.000000000 +0200
++++ b/src/Makefile.am	2022-08-23 22:30:44.537359290 +0200
+@@ -22,7 +22,7 @@
+ TOCC     = $(top_srcdir)/src/tocc.sh
+ TOASCII  = $(top_srcdir)/src/toascii.sh
  
 -gamesdir = $(exec_prefix)/games
 +gamesdir = $(exec_prefix)/bin
  games_PROGRAMS = xsnow
  
- xsnow_CPPFLAGS = $(XML_CFLAGS) $(GTK_CFLAGS) $(X11_CFLAGS) 
+ xsnow_CPPFLAGS = $(GTK_CFLAGS) $(X11_CFLAGS) $(GSL_CFLAGS)
+diff -Naur a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2022-08-22 13:20:31.000000000 +0200
++++ b/src/Makefile.in	2022-08-23 22:31:24.513476641 +0200
+@@ -609,7 +609,7 @@
+ SUBDIRS = Pixmaps
+ TOCC = $(top_srcdir)/src/tocc.sh
+ TOASCII = $(top_srcdir)/src/toascii.sh
+-gamesdir = $(exec_prefix)/games
++gamesdir = $(exec_prefix)/bin
+ xsnow_CPPFLAGS = $(GTK_CFLAGS) $(X11_CFLAGS) $(GSL_CFLAGS) \
+ 	$(am__append_1)
+ xsnow_LDADD = $(GTK_LIBS)   $(X11_LIBS)   $(GSL_LIBS)

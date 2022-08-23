@@ -1,8 +1,12 @@
 #!/bin/sh -eux
 
-sed -i 's/\r//g' filters/rcluncomp.py
-
 export QTDIR="/usr/lib/qt5"
 
+cd src
+rm -f autogen.sh # git checkout ylwrap
+aclocal
+libtoolize --copy
+automake --add-missing --force-missing --copy
+autoconf
 ub_compile \
 	--disable-webkit

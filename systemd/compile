@@ -5,25 +5,10 @@
 # libcurl: systemd-jornal-upload
 # -Ddefault-dnssec=no: a dnssec experimental
 
-_nameservers=(
-    # We use these public name services, ordered by their
-    # privacy policy (hopefully):
-    #  * Cloudflare (https://1.1.1.1/)
-    #  * Quad9 without filtering (https://www.quad9.net/)
-    #  * Google (https://developers.google.com/speed/public-dns/)
-    1.1.1.1
-    9.9.9.10
-    8.8.8.8
-    2606:4700:4700::1111
-    2620:fe::10
-    2001:4860:4860::8888
-)
-
 ub_compile \
+    -Dmode=release \
    	-Dsplit-usr=false \
 	-Dpamlibdir=/usr/lib/security \
-	-Dntp-servers=pool.ntp.org \
-	-Ddns-servers="${_nameservers[*]}" \
 	-Ddefault-dnssec=no \
 	-Dlink-udev-shared=true \
 	-Dlibcurl=false \
@@ -33,7 +18,9 @@ ub_compile \
 	-Dusers-gid=999 \
 	-Dsystem-uid-max=999 \
 	-Dsystem-gid-max=999 \
+	-Ddefault-locale="hu_HU.utf8" \
     -Dfirstboot=false \
 	-Dldconfig=false \
     -Dsysusers=false \
-    -Drpmmacrosdir=no
+    -Drpmmacrosdir=no \
+    -Dusers-gid=999

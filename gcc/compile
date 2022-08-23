@@ -20,27 +20,27 @@ SED=sed \
 	--infodir=/usr/share/info \
 	--mandir=/usr/share/man \
 	--enable-languages=c,c++,d,fortran,go,objc \
-	--enable-targets=all \
-	--enable-checking=release \
-	--enable-shared \
-	--enable-threads=posix \
-	--enable-gold \
-	--enable-ld=default \
-	--enable-lto \
-	--enable-plugin \
-	--enable-libmpx \
-	--enable-default-ssp \
-	--enable-tls \
-	--enable-install-libiberty \
-	--enable-cet \
-	--enable-libsanitizer \
-	--disable-multilib \
-	--disable-libssp \
-	--disable-libstdcxx-pch \
-	--disable-libunwind-exceptions \
-	--disable-werror \
-	--with-gnu-as \
-	--with-gnu-ld \
+    --enable-__cxa_atexit \
+    --enable-cet=auto \
+    --enable-checking=release \
+    --enable-clocale=gnu \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --enable-gnu-indirect-function \
+    --enable-gnu-unique-object \
+    --enable-libstdcxx-backtrace \
+    --enable-link-serialization=1 \
+    --enable-linker-build-id \
+    --enable-lto \
+    --enable-plugin \
+    --enable-shared \
+    --enable-threads=posix \
+    --disable-libssp \
+    --disable-libstdcxx-pch \
+    --disable-multilib \
+    --disable-werror \
+	--with-build-config=bootstrap-lto \
+	--with-linker-hash-style=gnu \
 	--with-system-zlib \
 	--with-tune=generic
 

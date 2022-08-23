@@ -1,17 +1,18 @@
 #!/bin/sh -eux
 
-make \
-	prefix="$UB_INSTALLDIR"/usr \
-	mandir="$UB_INSTALLDIR"/usr/share/man \
-	infodir="$UB_INSTALLDIR"/usr/share/info \
-	tooldir="$UB_INSTALLDIR"/usr \
+make DESTDIR="$UB_INSTALLDIR" \
+	prefix=/usr \
+	tooldir=/usr \
+	sysconfdir=/etc \
+	mandir=/usr/share/man \
+	infodir=/usr/share/info \
 	install
-make \
-	prefix="$UB_INSTALLDIR"/usr \
-	mandir="$UB_INSTALLDIR"/usr/share/man \
-	infodir="$UB_INSTALLDIR"/usr/share/info \
-	tooldir="$UB_INSTALLDIR"/usr \
-	install-info
+
+# Install PIC version of libiberty
+install -m644 libiberty/pic/libiberty.a "$UB_INSTALLDIR/usr/lib"
+
+# Remove unwanted files
+rm -f "$UB_INSTALLDIR"/usr/share/man/man1/{dlltool,windres,windmc}*
 
 cp -f include/plugin-api.h "$UB_INSTALLDIR"/usr/include/
 
@@ -20,11 +21,12 @@ rm -f "$UB_INSTALLDIR"/usr/lib/lib{bfd,opcodes}.so
 echo 'INPUT( /usr/lib/libbfd.a -liberty -lz -ldl )' > "$UB_INSTALLDIR"/usr/lib/libbfd.so
 echo 'INPUT( /usr/lib/libopcodes.a -lbfd )' > "$UB_INSTALLDIR"/usr/lib/libopcodes.so
 
-## create a "host" named link like in gcc
-ln -sf ar "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-ar
-ln -sf as "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-as
-ln -sf nm "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-nm
-ln -sf objcopy "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-objcopy
-ln -sf objdump "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-objdump
-ln -sf ranlib "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-ranlib
-ln -sf strip "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-strip
+# Create a "host" named link like in gcc
+host="x86_64-unknown-linux-gnu"
+ln -sf ar "$UB_INSTALLDIR"/usr/bin/"$host"-ar
+ln -sf as "$UB_INSTALLDIR"/usr/bin/"$host"-as
+ln -sf nm "$UB_INSTALLDIR"/usr/bin/"$host"-nm
+ln -sf objcopy "$UB_INSTALLDIR"/usr/bin/"$host"-objcopy
+ln -sf objdump "$UB_INSTALLDIR"/usr/bin/"$host"-objdump
+ln -sf ranlib "$UB_INSTALLDIR"/usr/bin/"$host"-ranlib
+ln -sf strip "$UB_INSTALLDIR"/usr/bin/"$host"-strip

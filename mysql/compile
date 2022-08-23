@@ -2,7 +2,11 @@
 
 export CFLAGS+="-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fPIC"
 
-ub_compile \
+mkdir build
+cd build
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX="/usr" \
 	-DMYSQL_MAINTAINER_MODE=OFF \
 	-DMYSQL_USE_BUNDLED_READLINE=OFF \
 	-DINSTALL_LAYOUT=DEB \
@@ -21,4 +25,6 @@ ub_compile \
 	-DEXTRA_CHARSETS=all \
 	-DWITH_TOKUDB=ON \
 	-DWITH_MROONGA=ON \
-	-DINSTALL_UNIX_ADDRDIR=/run/mysqld/mysqld.sock
+	-DINSTALL_UNIX_ADDRDIR=/run/mysqld/mysqld.sock \
+	..
+ub_make

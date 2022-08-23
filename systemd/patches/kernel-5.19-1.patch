@@ -1,0 +1,952 @@
+From 7d9a2c0aa61d72bc553da6b142b197e657a6559c Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sat, 11 Jun 2022 06:40:00 +0900
+Subject: [PATCH] basic/linux: update kernel headers to 5.19-rc1
+
+---
+ src/basic/linux/btrfs.h       | 133 ++++++++++++++++++++++++++++
+ src/basic/linux/btrfs_tree.h  |  20 ++---
+ src/basic/linux/can/netlink.h |  13 +++
+ src/basic/linux/if_addr.h     |   9 +-
+ src/basic/linux/if_bridge.h   |  18 ++++
+ src/basic/linux/if_ether.h    |   2 +
+ src/basic/linux/if_link.h     | 100 +++++++++++++++++++++
+ src/basic/linux/if_tunnel.h   |   4 +-
+ src/basic/linux/netlink.h     |   1 +
+ src/basic/linux/nl80211.h     | 162 +++++++++++++++++++++++++++++++---
+ src/basic/linux/rtnetlink.h   |  16 ++++
+ 11 files changed, 451 insertions(+), 27 deletions(-)
+
+diff --git a/src/basic/linux/btrfs.h b/src/basic/linux/btrfs.h
+index 66cfd7b94773..6a0442b388d4 100644
+--- a/src/basic/linux/btrfs.h
++++ b/src/basic/linux/btrfs.h
+@@ -309,6 +309,7 @@ struct btrfs_ioctl_fs_info_args {
+ #define BTRFS_FEATURE_INCOMPAT_METADATA_UUID	(1ULL << 10)
+ #define BTRFS_FEATURE_INCOMPAT_RAID1C34		(1ULL << 11)
+ #define BTRFS_FEATURE_INCOMPAT_ZONED		(1ULL << 12)
++#define BTRFS_FEATURE_INCOMPAT_EXTENT_TREE_V2	(1ULL << 13)
+ 
+ struct btrfs_ioctl_feature_flags {
+ 	__u64 compat_flags;
+@@ -868,6 +869,134 @@ struct btrfs_ioctl_get_subvol_rootref_args {
+ 		__u8 align[7];
+ };
+ 
++/*
++ * Data and metadata for an encoded read or write.
++ *
++ * Encoded I/O bypasses any encoding automatically done by the filesystem (e.g.,
++ * compression). This can be used to read the compressed contents of a file or
++ * write pre-compressed data directly to a file.
++ *
++ * BTRFS_IOC_ENCODED_READ and BTRFS_IOC_ENCODED_WRITE are essentially
++ * preadv/pwritev with additional metadata about how the data is encoded and the
++ * size of the unencoded data.
++ *
++ * BTRFS_IOC_ENCODED_READ fills the given iovecs with the encoded data, fills
++ * the metadata fields, and returns the size of the encoded data. It reads one
++ * extent per call. It can also read data which is not encoded.
++ *
++ * BTRFS_IOC_ENCODED_WRITE uses the metadata fields, writes the encoded data
++ * from the iovecs, and returns the size of the encoded data. Note that the
++ * encoded data is not validated when it is written; if it is not valid (e.g.,
++ * it cannot be decompressed), then a subsequent read may return an error.
++ *
++ * Since the filesystem page cache contains decoded data, encoded I/O bypasses
++ * the page cache. Encoded I/O requires CAP_SYS_ADMIN.
++ */
++struct btrfs_ioctl_encoded_io_args {
++	/* Input parameters for both reads and writes. */
++
++	/*
++	 * iovecs containing encoded data.
++	 *
++	 * For reads, if the size of the encoded data is larger than the sum of
++	 * iov[n].iov_len for 0 <= n < iovcnt, then the ioctl fails with
++	 * ENOBUFS.
++	 *
++	 * For writes, the size of the encoded data is the sum of iov[n].iov_len
++	 * for 0 <= n < iovcnt. This must be less than 128 KiB (this limit may
++	 * increase in the future). This must also be less than or equal to
++	 * unencoded_len.
++	 */
++	const struct iovec *iov;
++	/* Number of iovecs. */
++	unsigned long iovcnt;
++	/*
++	 * Offset in file.
++	 *
++	 * For writes, must be aligned to the sector size of the filesystem.
++	 */
++	__s64 offset;
++	/* Currently must be zero. */
++	__u64 flags;
++
++	/*
++	 * For reads, the following members are output parameters that will
++	 * contain the returned metadata for the encoded data.
++	 * For writes, the following members must be set to the metadata for the
++	 * encoded data.
++	 */
++
++	/*
++	 * Length of the data in the file.
++	 *
++	 * Must be less than or equal to unencoded_len - unencoded_offset. For
++	 * writes, must be aligned to the sector size of the filesystem unless
++	 * the data ends at or beyond the current end of the file.
++	 */
++	__u64 len;
++	/*
++	 * Length of the unencoded (i.e., decrypted and decompressed) data.
++	 *
++	 * For writes, must be no more than 128 KiB (this limit may increase in
++	 * the future). If the unencoded data is actually longer than
++	 * unencoded_len, then it is truncated; if it is shorter, then it is
++	 * extended with zeroes.
++	 */
++	__u64 unencoded_len;
++	/*
++	 * Offset from the first byte of the unencoded data to the first byte of
++	 * logical data in the file.
++	 *
++	 * Must be less than unencoded_len.
++	 */
++	__u64 unencoded_offset;
++	/*
++	 * BTRFS_ENCODED_IO_COMPRESSION_* type.
++	 *
++	 * For writes, must not be BTRFS_ENCODED_IO_COMPRESSION_NONE.
++	 */
++	__u32 compression;
++	/* Currently always BTRFS_ENCODED_IO_ENCRYPTION_NONE. */
++	__u32 encryption;
++	/*
++	 * Reserved for future expansion.
++	 *
++	 * For reads, always returned as zero. Users should check for non-zero
++	 * bytes. If there are any, then the kernel has a newer version of this
++	 * structure with additional information that the user definition is
++	 * missing.
++	 *
++	 * For writes, must be zeroed.
++	 */
++	__u8 reserved[64];
++};
++
++/* Data is not compressed. */
++#define BTRFS_ENCODED_IO_COMPRESSION_NONE 0
++/* Data is compressed as a single zlib stream. */
++#define BTRFS_ENCODED_IO_COMPRESSION_ZLIB 1
++/*
++ * Data is compressed as a single zstd frame with the windowLog compression
++ * parameter set to no more than 17.
++ */
++#define BTRFS_ENCODED_IO_COMPRESSION_ZSTD 2
++/*
++ * Data is compressed sector by sector (using the sector size indicated by the
++ * name of the constant) with LZO1X and wrapped in the format documented in
++ * fs/btrfs/lzo.c. For writes, the compression sector size must match the
++ * filesystem sector size.
++ */
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_4K 3
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_8K 4
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_16K 5
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_32K 6
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_64K 7
++#define BTRFS_ENCODED_IO_COMPRESSION_TYPES 8
++
++/* Data is not encrypted. */
++#define BTRFS_ENCODED_IO_ENCRYPTION_NONE 0
++#define BTRFS_ENCODED_IO_ENCRYPTION_TYPES 1
++
+ /* Error codes as returned by the kernel */
+ enum btrfs_err_code {
+ 	BTRFS_ERROR_DEV_RAID1_MIN_NOT_MET = 1,
+@@ -996,5 +1125,9 @@ enum btrfs_err_code {
+ 				struct btrfs_ioctl_ino_lookup_user_args)
+ #define BTRFS_IOC_SNAP_DESTROY_V2 _IOW(BTRFS_IOCTL_MAGIC, 63, \
+ 				struct btrfs_ioctl_vol_args_v2)
++#define BTRFS_IOC_ENCODED_READ _IOR(BTRFS_IOCTL_MAGIC, 64, \
++				    struct btrfs_ioctl_encoded_io_args)
++#define BTRFS_IOC_ENCODED_WRITE _IOW(BTRFS_IOCTL_MAGIC, 64, \
++				     struct btrfs_ioctl_encoded_io_args)
+ 
+ #endif /* _UAPI_LINUX_BTRFS_H */
+diff --git a/src/basic/linux/btrfs_tree.h b/src/basic/linux/btrfs_tree.h
+index e1c4c732aaba..d4117152d907 100644
+--- a/src/basic/linux/btrfs_tree.h
++++ b/src/basic/linux/btrfs_tree.h
+@@ -53,6 +53,9 @@
+ /* tracks free space in block groups. */
+ #define BTRFS_FREE_SPACE_TREE_OBJECTID 10ULL
+ 
++/* Holds the block group items for extent tree v2. */
++#define BTRFS_BLOCK_GROUP_TREE_OBJECTID 11ULL
++
+ /* device stats in the device tree */
+ #define BTRFS_DEV_STATS_OBJECTID 0ULL
+ 
+@@ -146,7 +149,9 @@
+ 
+ /*
+  * dir items are the name -> inode pointers in a directory.  There is one
+- * for every name in a directory.
++ * for every name in a directory.  BTRFS_DIR_LOG_ITEM_KEY is no longer used
++ * but it's still defined here for documentation purposes and to help avoid
++ * having its numerical value reused in the future.
+  */
+ #define BTRFS_DIR_LOG_ITEM_KEY  60
+ #define BTRFS_DIR_LOG_INDEX_KEY 72
+@@ -875,19 +880,6 @@ struct btrfs_dev_replace_item {
+ #define BTRFS_BLOCK_GROUP_RESERVED	(BTRFS_AVAIL_ALLOC_BIT_SINGLE | \
+ 					 BTRFS_SPACE_INFO_GLOBAL_RSV)
+ 
+-enum btrfs_raid_types {
+-	BTRFS_RAID_RAID10,
+-	BTRFS_RAID_RAID1,
+-	BTRFS_RAID_DUP,
+-	BTRFS_RAID_RAID0,
+-	BTRFS_RAID_SINGLE,
+-	BTRFS_RAID_RAID5,
+-	BTRFS_RAID_RAID6,
+-	BTRFS_RAID_RAID1C3,
+-	BTRFS_RAID_RAID1C4,
+-	BTRFS_NR_RAID_TYPES
+-};
+-
+ #define BTRFS_BLOCK_GROUP_TYPE_MASK	(BTRFS_BLOCK_GROUP_DATA |    \
+ 					 BTRFS_BLOCK_GROUP_SYSTEM |  \
+ 					 BTRFS_BLOCK_GROUP_METADATA)
+diff --git a/src/basic/linux/can/netlink.h b/src/basic/linux/can/netlink.h
+index 75b85c60efb2..02ec32d69474 100644
+--- a/src/basic/linux/can/netlink.h
++++ b/src/basic/linux/can/netlink.h
+@@ -137,6 +137,7 @@ enum {
+ 	IFLA_CAN_DATA_BITRATE_CONST,
+ 	IFLA_CAN_BITRATE_MAX,
+ 	IFLA_CAN_TDC,
++	IFLA_CAN_CTRLMODE_EXT,
+ 
+ 	/* add new constants above here */
+ 	__IFLA_CAN_MAX,
+@@ -166,6 +167,18 @@ enum {
+ 	IFLA_CAN_TDC_MAX = __IFLA_CAN_TDC - 1
+ };
+ 
++/*
++ * IFLA_CAN_CTRLMODE_EXT nest: controller mode extended parameters
++ */
++enum {
++	IFLA_CAN_CTRLMODE_UNSPEC,
++	IFLA_CAN_CTRLMODE_SUPPORTED,	/* u32 */
++
++	/* add new constants above here */
++	__IFLA_CAN_CTRLMODE,
++	IFLA_CAN_CTRLMODE_MAX = __IFLA_CAN_CTRLMODE - 1
++};
++
+ /* u16 termination range: 1..65535 Ohms */
+ #define CAN_TERMINATION_DISABLED 0
+ 
+diff --git a/src/basic/linux/if_addr.h b/src/basic/linux/if_addr.h
+index dfcf3ce0097f..1c392dd95a5e 100644
+--- a/src/basic/linux/if_addr.h
++++ b/src/basic/linux/if_addr.h
+@@ -33,8 +33,9 @@ enum {
+ 	IFA_CACHEINFO,
+ 	IFA_MULTICAST,
+ 	IFA_FLAGS,
+-	IFA_RT_PRIORITY,  /* u32, priority/metric for prefix route */
++	IFA_RT_PRIORITY,	/* u32, priority/metric for prefix route */
+ 	IFA_TARGET_NETNSID,
++	IFA_PROTO,		/* u8, address protocol */
+ 	__IFA_MAX,
+ };
+ 
+@@ -69,4 +70,10 @@ struct ifa_cacheinfo {
+ #define IFA_PAYLOAD(n) NLMSG_PAYLOAD(n,sizeof(struct ifaddrmsg))
+ #endif
+ 
++/* ifa_proto */
++#define IFAPROT_UNSPEC		0
++#define IFAPROT_KERNEL_LO	1	/* loopback */
++#define IFAPROT_KERNEL_RA	2	/* set by kernel from router announcement */
++#define IFAPROT_KERNEL_LL	3	/* link-local set by kernel */
++
+ #endif
+diff --git a/src/basic/linux/if_bridge.h b/src/basic/linux/if_bridge.h
+index 2711c3522010..a86a7e7b811f 100644
+--- a/src/basic/linux/if_bridge.h
++++ b/src/basic/linux/if_bridge.h
+@@ -122,6 +122,7 @@ enum {
+ 	IFLA_BRIDGE_VLAN_TUNNEL_INFO,
+ 	IFLA_BRIDGE_MRP,
+ 	IFLA_BRIDGE_CFM,
++	IFLA_BRIDGE_MST,
+ 	__IFLA_BRIDGE_MAX,
+ };
+ #define IFLA_BRIDGE_MAX (__IFLA_BRIDGE_MAX - 1)
+@@ -453,6 +454,21 @@ enum {
+ 
+ #define IFLA_BRIDGE_CFM_CC_PEER_STATUS_MAX (__IFLA_BRIDGE_CFM_CC_PEER_STATUS_MAX - 1)
+ 
++enum {
++	IFLA_BRIDGE_MST_UNSPEC,
++	IFLA_BRIDGE_MST_ENTRY,
++	__IFLA_BRIDGE_MST_MAX,
++};
++#define IFLA_BRIDGE_MST_MAX (__IFLA_BRIDGE_MST_MAX - 1)
++
++enum {
++	IFLA_BRIDGE_MST_ENTRY_UNSPEC,
++	IFLA_BRIDGE_MST_ENTRY_MSTI,
++	IFLA_BRIDGE_MST_ENTRY_STATE,
++	__IFLA_BRIDGE_MST_ENTRY_MAX,
++};
++#define IFLA_BRIDGE_MST_ENTRY_MAX (__IFLA_BRIDGE_MST_ENTRY_MAX - 1)
++
+ struct bridge_stp_xstats {
+ 	__u64 transition_blk;
+ 	__u64 transition_fwd;
+@@ -564,6 +580,7 @@ enum {
+ 	BRIDGE_VLANDB_GOPTS_MCAST_QUERIER,
+ 	BRIDGE_VLANDB_GOPTS_MCAST_ROUTER_PORTS,
+ 	BRIDGE_VLANDB_GOPTS_MCAST_QUERIER_STATE,
++	BRIDGE_VLANDB_GOPTS_MSTI,
+ 	__BRIDGE_VLANDB_GOPTS_MAX
+ };
+ #define BRIDGE_VLANDB_GOPTS_MAX (__BRIDGE_VLANDB_GOPTS_MAX - 1)
+@@ -759,6 +776,7 @@ struct br_mcast_stats {
+ enum br_boolopt_id {
+ 	BR_BOOLOPT_NO_LL_LEARN,
+ 	BR_BOOLOPT_MCAST_VLAN_SNOOPING,
++	BR_BOOLOPT_MST_ENABLE,
+ 	BR_BOOLOPT_MAX
+ };
+ 
+diff --git a/src/basic/linux/if_ether.h b/src/basic/linux/if_ether.h
+index c0c2f3ed5729..1d0bccc3fa54 100644
+--- a/src/basic/linux/if_ether.h
++++ b/src/basic/linux/if_ether.h
+@@ -86,8 +86,10 @@
+ 					 * over Ethernet
+ 					 */
+ #define ETH_P_PAE	0x888E		/* Port Access Entity (IEEE 802.1X) */
++#define ETH_P_PROFINET	0x8892		/* PROFINET			*/
+ #define ETH_P_REALTEK	0x8899          /* Multiple proprietary protocols */
+ #define ETH_P_AOE	0x88A2		/* ATA over Ethernet		*/
++#define ETH_P_ETHERCAT	0x88A4		/* EtherCAT			*/
+ #define ETH_P_8021AD	0x88A8          /* 802.1ad Service VLAN		*/
+ #define ETH_P_802_EX1	0x88B5		/* 802.1 Local Experimental 1.  */
+ #define ETH_P_PREAUTH	0x88C7		/* 802.11 Preauthentication */
+diff --git a/src/basic/linux/if_link.h b/src/basic/linux/if_link.h
+index eebd3894fe89..5f58dcfe2787 100644
+--- a/src/basic/linux/if_link.h
++++ b/src/basic/linux/if_link.h
+@@ -211,6 +211,9 @@ struct rtnl_link_stats {
+  * @rx_nohandler: Number of packets received on the interface
+  *   but dropped by the networking stack because the device is
+  *   not designated to receive packets (e.g. backup link in a bond).
++ *
++ * @rx_otherhost_dropped: Number of packets dropped due to mismatch
++ *   in destination MAC address.
+  */
+ struct rtnl_link_stats64 {
+ 	__u64	rx_packets;
+@@ -243,6 +246,23 @@ struct rtnl_link_stats64 {
+ 	__u64	rx_compressed;
+ 	__u64	tx_compressed;
+ 	__u64	rx_nohandler;
++
++	__u64	rx_otherhost_dropped;
++};
++
++/* Subset of link stats useful for in-HW collection. Meaning of the fields is as
++ * for struct rtnl_link_stats64.
++ */
++struct rtnl_hw_stats64 {
++	__u64	rx_packets;
++	__u64	tx_packets;
++	__u64	rx_bytes;
++	__u64	tx_bytes;
++	__u64	rx_errors;
++	__u64	tx_errors;
++	__u64	rx_dropped;
++	__u64	tx_dropped;
++	__u64	multicast;
+ };
+ 
+ /* The struct should be in sync with struct ifmap */
+@@ -347,6 +367,9 @@ enum {
+ 	 */
+ 	IFLA_PARENT_DEV_NAME,
+ 	IFLA_PARENT_DEV_BUS_NAME,
++	IFLA_GRO_MAX_SIZE,
++	IFLA_TSO_MAX_SIZE,
++	IFLA_TSO_MAX_SEGS,
+ 
+ 	__IFLA_MAX
+ };
+@@ -536,6 +559,7 @@ enum {
+ 	IFLA_BRPORT_MRP_IN_OPEN,
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT,
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_CNT,
++	IFLA_BRPORT_LOCKED,
+ 	__IFLA_BRPORT_MAX
+ };
+ #define IFLA_BRPORT_MAX (__IFLA_BRPORT_MAX - 1)
+@@ -711,7 +735,55 @@ enum ipvlan_mode {
+ #define IPVLAN_F_PRIVATE	0x01
+ #define IPVLAN_F_VEPA		0x02
+ 
++/* Tunnel RTM header */
++struct tunnel_msg {
++	__u8 family;
++	__u8 flags;
++	__u16 reserved2;
++	__u32 ifindex;
++};
++
+ /* VXLAN section */
++
++/* include statistics in the dump */
++#define TUNNEL_MSG_FLAG_STATS	0x01
++
++#define TUNNEL_MSG_VALID_USER_FLAGS TUNNEL_MSG_FLAG_STATS
++
++/* Embedded inside VXLAN_VNIFILTER_ENTRY_STATS */
++enum {
++	VNIFILTER_ENTRY_STATS_UNSPEC,
++	VNIFILTER_ENTRY_STATS_RX_BYTES,
++	VNIFILTER_ENTRY_STATS_RX_PKTS,
++	VNIFILTER_ENTRY_STATS_RX_DROPS,
++	VNIFILTER_ENTRY_STATS_RX_ERRORS,
++	VNIFILTER_ENTRY_STATS_TX_BYTES,
++	VNIFILTER_ENTRY_STATS_TX_PKTS,
++	VNIFILTER_ENTRY_STATS_TX_DROPS,
++	VNIFILTER_ENTRY_STATS_TX_ERRORS,
++	VNIFILTER_ENTRY_STATS_PAD,
++	__VNIFILTER_ENTRY_STATS_MAX
++};
++#define VNIFILTER_ENTRY_STATS_MAX (__VNIFILTER_ENTRY_STATS_MAX - 1)
++
++enum {
++	VXLAN_VNIFILTER_ENTRY_UNSPEC,
++	VXLAN_VNIFILTER_ENTRY_START,
++	VXLAN_VNIFILTER_ENTRY_END,
++	VXLAN_VNIFILTER_ENTRY_GROUP,
++	VXLAN_VNIFILTER_ENTRY_GROUP6,
++	VXLAN_VNIFILTER_ENTRY_STATS,
++	__VXLAN_VNIFILTER_ENTRY_MAX
++};
++#define VXLAN_VNIFILTER_ENTRY_MAX	(__VXLAN_VNIFILTER_ENTRY_MAX - 1)
++
++enum {
++	VXLAN_VNIFILTER_UNSPEC,
++	VXLAN_VNIFILTER_ENTRY,
++	__VXLAN_VNIFILTER_MAX
++};
++#define VXLAN_VNIFILTER_MAX	(__VXLAN_VNIFILTER_MAX - 1)
++
+ enum {
+ 	IFLA_VXLAN_UNSPEC,
+ 	IFLA_VXLAN_ID,
+@@ -743,6 +815,7 @@ enum {
+ 	IFLA_VXLAN_GPE,
+ 	IFLA_VXLAN_TTL_INHERIT,
+ 	IFLA_VXLAN_DF,
++	IFLA_VXLAN_VNIFILTER, /* only applicable with COLLECT_METADATA mode */
+ 	__IFLA_VXLAN_MAX
+ };
+ #define IFLA_VXLAN_MAX	(__IFLA_VXLAN_MAX - 1)
+@@ -776,6 +849,7 @@ enum {
+ 	IFLA_GENEVE_LABEL,
+ 	IFLA_GENEVE_TTL_INHERIT,
+ 	IFLA_GENEVE_DF,
++	IFLA_GENEVE_INNER_PROTO_INHERIT,
+ 	__IFLA_GENEVE_MAX
+ };
+ #define IFLA_GENEVE_MAX	(__IFLA_GENEVE_MAX - 1)
+@@ -821,6 +895,8 @@ enum {
+ 	IFLA_GTP_FD1,
+ 	IFLA_GTP_PDP_HASHSIZE,
+ 	IFLA_GTP_ROLE,
++	IFLA_GTP_CREATE_SOCKETS,
++	IFLA_GTP_RESTART_COUNT,
+ 	__IFLA_GTP_MAX,
+ };
+ #define IFLA_GTP_MAX (__IFLA_GTP_MAX - 1)
+@@ -858,6 +934,8 @@ enum {
+ 	IFLA_BOND_TLB_DYNAMIC_LB,
+ 	IFLA_BOND_PEER_NOTIF_DELAY,
+ 	IFLA_BOND_AD_LACP_ACTIVE,
++	IFLA_BOND_MISSED_MAX,
++	IFLA_BOND_NS_IP6_TARGET,
+ 	__IFLA_BOND_MAX,
+ };
+ 
+@@ -1154,6 +1232,17 @@ enum {
+ 
+ #define IFLA_STATS_FILTER_BIT(ATTR)	(1 << (ATTR - 1))
+ 
++enum {
++	IFLA_STATS_GETSET_UNSPEC,
++	IFLA_STATS_GET_FILTERS, /* Nest of IFLA_STATS_LINK_xxx, each a u32 with
++				 * a filter mask for the corresponding group.
++				 */
++	IFLA_STATS_SET_OFFLOAD_XSTATS_L3_STATS, /* 0 or 1 as u8 */
++	__IFLA_STATS_GETSET_MAX,
++};
++
++#define IFLA_STATS_GETSET_MAX (__IFLA_STATS_GETSET_MAX - 1)
++
+ /* These are embedded into IFLA_STATS_LINK_XSTATS:
+  * [IFLA_STATS_LINK_XSTATS]
+  * -> [LINK_XSTATS_TYPE_xxx]
+@@ -1171,10 +1260,21 @@ enum {
+ enum {
+ 	IFLA_OFFLOAD_XSTATS_UNSPEC,
+ 	IFLA_OFFLOAD_XSTATS_CPU_HIT, /* struct rtnl_link_stats64 */
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO,	/* HW stats info. A nest */
++	IFLA_OFFLOAD_XSTATS_L3_STATS,	/* struct rtnl_hw_stats64 */
+ 	__IFLA_OFFLOAD_XSTATS_MAX
+ };
+ #define IFLA_OFFLOAD_XSTATS_MAX (__IFLA_OFFLOAD_XSTATS_MAX - 1)
+ 
++enum {
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO_UNSPEC,
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO_REQUEST,		/* u8 */
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO_USED,		/* u8 */
++	__IFLA_OFFLOAD_XSTATS_HW_S_INFO_MAX,
++};
++#define IFLA_OFFLOAD_XSTATS_HW_S_INFO_MAX \
++	(__IFLA_OFFLOAD_XSTATS_HW_S_INFO_MAX - 1)
++
+ /* XDP section */
+ 
+ #define XDP_FLAGS_UPDATE_IF_NOEXIST	(1U << 0)
+diff --git a/src/basic/linux/if_tunnel.h b/src/basic/linux/if_tunnel.h
+index 7d9105533c7b..102119628ff5 100644
+--- a/src/basic/linux/if_tunnel.h
++++ b/src/basic/linux/if_tunnel.h
+@@ -176,8 +176,10 @@ enum {
+ #define TUNNEL_VXLAN_OPT	__cpu_to_be16(0x1000)
+ #define TUNNEL_NOCACHE		__cpu_to_be16(0x2000)
+ #define TUNNEL_ERSPAN_OPT	__cpu_to_be16(0x4000)
++#define TUNNEL_GTP_OPT		__cpu_to_be16(0x8000)
+ 
+ #define TUNNEL_OPTIONS_PRESENT \
+-		(TUNNEL_GENEVE_OPT | TUNNEL_VXLAN_OPT | TUNNEL_ERSPAN_OPT)
++		(TUNNEL_GENEVE_OPT | TUNNEL_VXLAN_OPT | TUNNEL_ERSPAN_OPT | \
++		TUNNEL_GTP_OPT)
+ 
+ #endif /* _UAPI_IF_TUNNEL_H_ */
+diff --git a/src/basic/linux/netlink.h b/src/basic/linux/netlink.h
+index 4c0cde075c27..855dffb4c1c3 100644
+--- a/src/basic/linux/netlink.h
++++ b/src/basic/linux/netlink.h
+@@ -72,6 +72,7 @@ struct nlmsghdr {
+ 
+ /* Modifiers to DELETE request */
+ #define NLM_F_NONREC	0x100	/* Do not delete recursively	*/
++#define NLM_F_BULK	0x200	/* Delete multiple objects	*/
+ 
+ /* Flags for ACK message */
+ #define NLM_F_CAPPED	0x100	/* request was capped */
+diff --git a/src/basic/linux/nl80211.h b/src/basic/linux/nl80211.h
+index 61cab81e920d..d9490e3062a7 100644
+--- a/src/basic/linux/nl80211.h
++++ b/src/basic/linux/nl80211.h
+@@ -11,7 +11,7 @@
+  * Copyright 2008 Jouni Malinen <jouni.malinen@atheros.com>
+  * Copyright 2008 Colin McCabe <colin@cozybit.com>
+  * Copyright 2015-2017	Intel Deutschland GmbH
+- * Copyright (C) 2018-2021 Intel Corporation
++ * Copyright (C) 2018-2022 Intel Corporation
+  *
+  * Permission to use, copy, modify, and/or distribute this software for any
+  * purpose with or without fee is hereby granted, provided that the above
+@@ -1232,6 +1232,11 @@
+  *	&NL80211_ATTR_FILS_NONCES - for FILS Nonces
+  *		(STA Nonce 16 bytes followed by AP Nonce 16 bytes)
+  *
++ * @NL80211_CMD_ASSOC_COMEBACK: notification about an association
++ *      temporal rejection with comeback. The event includes %NL80211_ATTR_MAC
++ *      to describe the BSSID address of the AP and %NL80211_ATTR_TIMEOUT to
++ *      specify the timeout value.
++ *
+  * @NL80211_CMD_MAX: highest used command number
+  * @__NL80211_CMD_AFTER_LAST: internal use
+  */
+@@ -1474,6 +1479,8 @@ enum nl80211_commands {
+ 
+ 	NL80211_CMD_SET_FILS_AAD,
+ 
++	NL80211_CMD_ASSOC_COMEBACK,
++
+ 	/* add new commands above here */
+ 
+ 	/* used to define NL80211_CMD_MAX below */
+@@ -2470,7 +2477,9 @@ enum nl80211_commands {
+  *	space supports external authentication. This attribute shall be used
+  *	with %NL80211_CMD_CONNECT and %NL80211_CMD_START_AP request. The driver
+  *	may offload authentication processing to user space if this capability
+- *	is indicated in the respective requests from the user space.
++ *	is indicated in the respective requests from the user space. (This flag
++ *	attribute deprecated for %NL80211_CMD_START_AP, use
++ *	%NL80211_ATTR_AP_SETTINGS_FLAGS)
+  *
+  * @NL80211_ATTR_NSS: Station's New/updated  RX_NSS value notified using this
+  *	u8 attribute. This is used with %NL80211_CMD_STA_OPMODE_CHANGED.
+@@ -2639,6 +2648,21 @@ enum nl80211_commands {
+  *	Mandatory parameter for the transmitting interface to enable MBSSID.
+  *	Optional for the non-transmitting interfaces.
+  *
++ * @NL80211_ATTR_RADAR_BACKGROUND: Configure dedicated offchannel chain
++ *	available for radar/CAC detection on some hw. This chain can't be used
++ *	to transmit or receive frames and it is bounded to a running wdev.
++ *	Background radar/CAC detection allows to avoid the CAC downtime
++ *	switching on a different channel during CAC detection on the selected
++ *	radar channel.
++ *
++ * @NL80211_ATTR_AP_SETTINGS_FLAGS: u32 attribute contains ap settings flags,
++ *	enumerated in &enum nl80211_ap_settings_flags. This attribute shall be
++ *	used with %NL80211_CMD_START_AP request.
++ *
++ * @NL80211_ATTR_EHT_CAPABILITY: EHT Capability information element (from
++ *	association request when used with NL80211_CMD_NEW_STATION). Can be set
++ *	only if %NL80211_STA_FLAG_WME is set.
++ *
+  * @NUM_NL80211_ATTR: total number of nl80211_attrs available
+  * @NL80211_ATTR_MAX: highest attribute number currently defined
+  * @__NL80211_ATTR_AFTER_LAST: internal use
+@@ -3145,6 +3169,14 @@ enum nl80211_attrs {
+ 	NL80211_ATTR_MBSSID_CONFIG,
+ 	NL80211_ATTR_MBSSID_ELEMS,
+ 
++	NL80211_ATTR_RADAR_BACKGROUND,
++
++	NL80211_ATTR_AP_SETTINGS_FLAGS,
++
++	NL80211_ATTR_EHT_CAPABILITY,
++
++	NL80211_ATTR_DISABLE_EHT,
++
+ 	/* add attributes here, update the policy in nl80211.c */
+ 
+ 	__NL80211_ATTR_AFTER_LAST,
+@@ -3200,6 +3232,8 @@ enum nl80211_attrs {
+ #define NL80211_HE_MAX_CAPABILITY_LEN           54
+ #define NL80211_MAX_NR_CIPHER_SUITES		5
+ #define NL80211_MAX_NR_AKM_SUITES		2
++#define NL80211_EHT_MIN_CAPABILITY_LEN          13
++#define NL80211_EHT_MAX_CAPABILITY_LEN          51
+ 
+ #define NL80211_MIN_REMAIN_ON_CHANNEL_TIME	10
+ 
+@@ -3227,7 +3261,7 @@ enum nl80211_attrs {
+  *	and therefore can't be created in the normal ways, use the
+  *	%NL80211_CMD_START_P2P_DEVICE and %NL80211_CMD_STOP_P2P_DEVICE
+  *	commands to create and destroy one
+- * @NL80211_IF_TYPE_OCB: Outside Context of a BSS
++ * @NL80211_IFTYPE_OCB: Outside Context of a BSS
+  *	This mode corresponds to the MIB variable dot11OCBActivated=true
+  * @NL80211_IFTYPE_NAN: NAN device interface type (not a netdev)
+  * @NL80211_IFTYPE_MAX: highest interface type number currently defined
+@@ -3368,6 +3402,56 @@ enum nl80211_he_ru_alloc {
+ 	NL80211_RATE_INFO_HE_RU_ALLOC_2x996,
+ };
+ 
++/**
++ * enum nl80211_eht_gi - EHT guard interval
++ * @NL80211_RATE_INFO_EHT_GI_0_8: 0.8 usec
++ * @NL80211_RATE_INFO_EHT_GI_1_6: 1.6 usec
++ * @NL80211_RATE_INFO_EHT_GI_3_2: 3.2 usec
++ */
++enum nl80211_eht_gi {
++	NL80211_RATE_INFO_EHT_GI_0_8,
++	NL80211_RATE_INFO_EHT_GI_1_6,
++	NL80211_RATE_INFO_EHT_GI_3_2,
++};
++
++/**
++ * enum nl80211_eht_ru_alloc - EHT RU allocation values
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_26: 26-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_52: 52-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_52P26: 52+26-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_106: 106-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_106P26: 106+26 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_242: 242-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_484: 484-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_484P242: 484+242 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_996: 996-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_996P484: 996+484 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_996P484P242: 996+484+242 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_2x996: 2x996-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_2x996P484: 2x996+484 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_3x996: 3x996-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_3x996P484: 3x996+484 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_4x996: 4x996-tone RU allocation
++ */
++enum nl80211_eht_ru_alloc {
++	NL80211_RATE_INFO_EHT_RU_ALLOC_26,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_52,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_52P26,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_106,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_106P26,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_242,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_484P242,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_996,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_996P484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_996P484P242,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_2x996,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_2x996P484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_3x996,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_3x996P484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_4x996,
++};
++
+ /**
+  * enum nl80211_rate_info - bitrate information
+  *
+@@ -3407,6 +3491,13 @@ enum nl80211_he_ru_alloc {
+  * @NL80211_RATE_INFO_HE_DCM: HE DCM value (u8, 0/1)
+  * @NL80211_RATE_INFO_RU_ALLOC: HE RU allocation, if not present then
+  *	non-OFDMA was used (u8, see &enum nl80211_he_ru_alloc)
++ * @NL80211_RATE_INFO_320_MHZ_WIDTH: 320 MHz bitrate
++ * @NL80211_RATE_INFO_EHT_MCS: EHT MCS index (u8, 0-15)
++ * @NL80211_RATE_INFO_EHT_NSS: EHT NSS value (u8, 1-8)
++ * @NL80211_RATE_INFO_EHT_GI: EHT guard interval identifier
++ *	(u8, see &enum nl80211_eht_gi)
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC: EHT RU allocation, if not present then
++ *	non-OFDMA was used (u8, see &enum nl80211_eht_ru_alloc)
+  * @__NL80211_RATE_INFO_AFTER_LAST: internal use
+  */
+ enum nl80211_rate_info {
+@@ -3428,6 +3519,11 @@ enum nl80211_rate_info {
+ 	NL80211_RATE_INFO_HE_GI,
+ 	NL80211_RATE_INFO_HE_DCM,
+ 	NL80211_RATE_INFO_HE_RU_ALLOC,
++	NL80211_RATE_INFO_320_MHZ_WIDTH,
++	NL80211_RATE_INFO_EHT_MCS,
++	NL80211_RATE_INFO_EHT_NSS,
++	NL80211_RATE_INFO_EHT_GI,
++	NL80211_RATE_INFO_EHT_RU_ALLOC,
+ 
+ 	/* keep last */
+ 	__NL80211_RATE_INFO_AFTER_LAST,
+@@ -3738,13 +3834,20 @@ enum nl80211_mpath_info {
+  *     capabilities IE
+  * @NL80211_BAND_IFTYPE_ATTR_HE_CAP_PPE: HE PPE thresholds information as
+  *     defined in HE capabilities IE
+- * @NL80211_BAND_IFTYPE_ATTR_MAX: highest band HE capability attribute currently
+- *     defined
+  * @NL80211_BAND_IFTYPE_ATTR_HE_6GHZ_CAPA: HE 6GHz band capabilities (__le16),
+  *	given for all 6 GHz band channels
+  * @NL80211_BAND_IFTYPE_ATTR_VENDOR_ELEMS: vendor element capabilities that are
+  *	advertised on this band/for this iftype (binary)
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MAC: EHT MAC capabilities as in EHT
++ *	capabilities element
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PHY: EHT PHY capabilities as in EHT
++ *	capabilities element
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MCS_SET: EHT supported NSS/MCS as in EHT
++ *	capabilities element
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PPE: EHT PPE thresholds information as
++ *	defined in EHT capabilities element
+  * @__NL80211_BAND_IFTYPE_ATTR_AFTER_LAST: internal use
++ * @NL80211_BAND_IFTYPE_ATTR_MAX: highest band attribute currently defined
+  */
+ enum nl80211_band_iftype_attr {
+ 	__NL80211_BAND_IFTYPE_ATTR_INVALID,
+@@ -3756,6 +3859,10 @@ enum nl80211_band_iftype_attr {
+ 	NL80211_BAND_IFTYPE_ATTR_HE_CAP_PPE,
+ 	NL80211_BAND_IFTYPE_ATTR_HE_6GHZ_CAPA,
+ 	NL80211_BAND_IFTYPE_ATTR_VENDOR_ELEMS,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MAC,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PHY,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MCS_SET,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PPE,
+ 
+ 	/* keep last */
+ 	__NL80211_BAND_IFTYPE_ATTR_AFTER_LAST,
+@@ -3900,6 +4007,10 @@ enum nl80211_wmm_rule {
+  *	on this channel in current regulatory domain.
+  * @NL80211_FREQUENCY_ATTR_16MHZ: 16 MHz operation is allowed
+  *	on this channel in current regulatory domain.
++ * @NL80211_FREQUENCY_ATTR_NO_320MHZ: any 320 MHz channel using this channel
++ *	as the primary or any of the secondary channels isn't possible
++ * @NL80211_FREQUENCY_ATTR_NO_EHT: EHT operation is not allowed on this channel
++ *	in current regulatory domain.
+  * @NL80211_FREQUENCY_ATTR_MAX: highest frequency attribute number
+  *	currently defined
+  * @__NL80211_FREQUENCY_ATTR_AFTER_LAST: internal use
+@@ -3936,6 +4047,8 @@ enum nl80211_frequency_attr {
+ 	NL80211_FREQUENCY_ATTR_4MHZ,
+ 	NL80211_FREQUENCY_ATTR_8MHZ,
+ 	NL80211_FREQUENCY_ATTR_16MHZ,
++	NL80211_FREQUENCY_ATTR_NO_320MHZ,
++	NL80211_FREQUENCY_ATTR_NO_EHT,
+ 
+ 	/* keep last */
+ 	__NL80211_FREQUENCY_ATTR_AFTER_LAST,
+@@ -4134,6 +4247,7 @@ enum nl80211_sched_scan_match_attr {
+  * @NL80211_RRF_NO_80MHZ: 80MHz operation not allowed
+  * @NL80211_RRF_NO_160MHZ: 160MHz operation not allowed
+  * @NL80211_RRF_NO_HE: HE operation not allowed
++ * @NL80211_RRF_NO_320MHZ: 320MHz operation not allowed
+  */
+ enum nl80211_reg_rule_flags {
+ 	NL80211_RRF_NO_OFDM		= 1<<0,
+@@ -4152,6 +4266,7 @@ enum nl80211_reg_rule_flags {
+ 	NL80211_RRF_NO_80MHZ		= 1<<15,
+ 	NL80211_RRF_NO_160MHZ		= 1<<16,
+ 	NL80211_RRF_NO_HE		= 1<<17,
++	NL80211_RRF_NO_320MHZ		= 1<<18,
+ };
+ 
+ #define NL80211_RRF_PASSIVE_SCAN	NL80211_RRF_NO_IR
+@@ -4649,6 +4764,8 @@ enum nl80211_key_mode {
+  * @NL80211_CHAN_WIDTH_4: 4 MHz OFDM channel
+  * @NL80211_CHAN_WIDTH_8: 8 MHz OFDM channel
+  * @NL80211_CHAN_WIDTH_16: 16 MHz OFDM channel
++ * @NL80211_CHAN_WIDTH_320: 320 MHz channel, the %NL80211_ATTR_CENTER_FREQ1
++ *	attribute must be provided as well
+  */
+ enum nl80211_chan_width {
+ 	NL80211_CHAN_WIDTH_20_NOHT,
+@@ -4664,6 +4781,7 @@ enum nl80211_chan_width {
+ 	NL80211_CHAN_WIDTH_4,
+ 	NL80211_CHAN_WIDTH_8,
+ 	NL80211_CHAN_WIDTH_16,
++	NL80211_CHAN_WIDTH_320,
+ };
+ 
+ /**
+@@ -5555,7 +5673,7 @@ enum nl80211_iface_limit_attrs {
+  *	=> allows 8 of AP/GO that can have BI gcd >= min gcd
+  *
+  *	numbers = [ #{STA} <= 2 ], channels = 2, max = 2
+- *	=> allows two STAs on different channels
++ *	=> allows two STAs on the same or on different channels
+  *
+  *	numbers = [ #{STA} <= 1, #{P2P-client,P2P-GO} <= 3 ], max = 4
+  *	=> allows a STA plus three P2P interfaces
+@@ -5600,7 +5718,7 @@ enum nl80211_if_combination_attrs {
+  * @NL80211_PLINK_ESTAB: mesh peer link is established
+  * @NL80211_PLINK_HOLDING: mesh peer link is being closed or cancelled
+  * @NL80211_PLINK_BLOCKED: all frames transmitted from this mesh
+- *	plink are discarded
++ *	plink are discarded, except for authentication frames
+  * @NUM_NL80211_PLINK_STATES: number of peer link states
+  * @MAX_NL80211_PLINK_STATES: highest numerical value of plink states
+  */
+@@ -5737,13 +5855,15 @@ enum nl80211_tdls_operation {
+ 	NL80211_TDLS_DISABLE_LINK,
+ };
+ 
+-/*
++/**
+  * enum nl80211_ap_sme_features - device-integrated AP features
+- * Reserved for future use, no bits are defined in
+- * NL80211_ATTR_DEVICE_AP_SME yet.
++ * @NL80211_AP_SME_SA_QUERY_OFFLOAD: SA Query procedures offloaded to driver
++ *	when user space indicates support for SA Query procedures offload during
++ *	"start ap" with %NL80211_AP_SETTINGS_SA_QUERY_OFFLOAD_SUPPORT.
++ */
+ enum nl80211_ap_sme_features {
++	NL80211_AP_SME_SA_QUERY_OFFLOAD		= 1 << 0,
+ };
+- */
+ 
+ /**
+  * enum nl80211_feature_flags - device/driver features
+@@ -6051,6 +6171,9 @@ enum nl80211_feature_flags {
+  *	frames. Userspace has to share FILS AAD details to the driver by using
+  *	@NL80211_CMD_SET_FILS_AAD.
+  *
++ * @NL80211_EXT_FEATURE_RADAR_BACKGROUND: Device supports background radar/CAC
++ *	detection.
++ *
+  * @NUM_NL80211_EXT_FEATURES: number of extended features.
+  * @MAX_NL80211_EXT_FEATURES: highest extended feature index.
+  */
+@@ -6117,6 +6240,7 @@ enum nl80211_ext_feature_index {
+ 	NL80211_EXT_FEATURE_PROT_RANGE_NEGO_AND_MEASURE,
+ 	NL80211_EXT_FEATURE_BSS_COLOR,
+ 	NL80211_EXT_FEATURE_FILS_CRYPTO_OFFLOAD,
++	NL80211_EXT_FEATURE_RADAR_BACKGROUND,
+ 
+ 	/* add new features before the definition below */
+ 	NUM_NL80211_EXT_FEATURES,
+@@ -7462,4 +7586,20 @@ enum nl80211_mbssid_config_attributes {
+ 	NL80211_MBSSID_CONFIG_ATTR_MAX = __NL80211_MBSSID_CONFIG_ATTR_LAST - 1,
+ };
+ 
++/**
++ * enum nl80211_ap_settings_flags - AP settings flags
++ *
++ * @NL80211_AP_SETTINGS_EXTERNAL_AUTH_SUPPORT: AP supports external
++ *	authentication.
++ * @NL80211_AP_SETTINGS_SA_QUERY_OFFLOAD_SUPPORT: Userspace supports SA Query
++ *	procedures offload to driver. If driver advertises
++ *	%NL80211_AP_SME_SA_QUERY_OFFLOAD in AP SME features, userspace shall
++ *	ignore SA Query procedures and validations when this flag is set by
++ *	userspace.
++ */
++enum nl80211_ap_settings_flags {
++	NL80211_AP_SETTINGS_EXTERNAL_AUTH_SUPPORT	= 1 << 0,
++	NL80211_AP_SETTINGS_SA_QUERY_OFFLOAD_SUPPORT	= 1 << 1,
++};
++
+ #endif /* __LINUX_NL80211_H */
+diff --git a/src/basic/linux/rtnetlink.h b/src/basic/linux/rtnetlink.h
+index 5888492a5257..83849a37db5b 100644
+--- a/src/basic/linux/rtnetlink.h
++++ b/src/basic/linux/rtnetlink.h
+@@ -146,6 +146,8 @@ enum {
+ #define RTM_NEWSTATS RTM_NEWSTATS
+ 	RTM_GETSTATS = 94,
+ #define RTM_GETSTATS RTM_GETSTATS
++	RTM_SETSTATS,
++#define RTM_SETSTATS RTM_SETSTATS
+ 
+ 	RTM_NEWCACHEREPORT = 96,
+ #define RTM_NEWCACHEREPORT RTM_NEWCACHEREPORT
+@@ -185,6 +187,13 @@ enum {
+ 	RTM_GETNEXTHOPBUCKET,
+ #define RTM_GETNEXTHOPBUCKET	RTM_GETNEXTHOPBUCKET
+ 
++	RTM_NEWTUNNEL = 120,
++#define RTM_NEWTUNNEL	RTM_NEWTUNNEL
++	RTM_DELTUNNEL,
++#define RTM_DELTUNNEL	RTM_DELTUNNEL
++	RTM_GETTUNNEL,
++#define RTM_GETTUNNEL	RTM_GETTUNNEL
++
+ 	__RTM_MAX,
+ #define RTM_MAX		(((__RTM_MAX + 3) & ~3) - 1)
+ };
+@@ -754,6 +763,12 @@ enum rtnetlink_groups {
+ #define RTNLGRP_NEXTHOP		RTNLGRP_NEXTHOP
+ 	RTNLGRP_BRVLAN,
+ #define RTNLGRP_BRVLAN		RTNLGRP_BRVLAN
++	RTNLGRP_MCTP_IFADDR,
++#define RTNLGRP_MCTP_IFADDR	RTNLGRP_MCTP_IFADDR
++	RTNLGRP_TUNNEL,
++#define RTNLGRP_TUNNEL		RTNLGRP_TUNNEL
++	RTNLGRP_STATS,
++#define RTNLGRP_STATS		RTNLGRP_STATS
+ 	__RTNLGRP_MAX
+ };
+ #define RTNLGRP_MAX	(__RTNLGRP_MAX - 1)
+@@ -802,6 +817,7 @@ enum {
+ #define RTEXT_FILTER_MRP	(1 << 4)
+ #define RTEXT_FILTER_CFM_CONFIG	(1 << 5)
+ #define RTEXT_FILTER_CFM_STATUS	(1 << 6)
++#define RTEXT_FILTER_MST	(1 << 7)
+ 
+ /* End of information exported to user level */
+ 
