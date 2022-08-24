@@ -6,7 +6,7 @@ CXX="ccache clang++ -march=k8 -m64"
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/thunderbird/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
 export PYTHON=/usr/bin/python3
-export MACH_USE_SYSTEM_PYTHON=1
+export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
 : > .mozconfig
 cat > .mozconfig << _EOF_

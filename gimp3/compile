@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
 ub_compile \
-    --without-vala
-#   -Dcheck-update=false \
-#	-Dpython=always \
-#	-Dgtk-doc=false
+    -Dcheck-update=no \
+    -Dappdata-test=disabled \
+	-Dgi-docgen=disabled \
+	-Dg-ir-doc=false \
+	-Dvala-plugins=disabled

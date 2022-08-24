@@ -3,7 +3,7 @@
 cd "$UB_OBJECTDIR"
 
 export PYTHON=/usr/bin/python3
-export MACH_USE_SYSTEM_PYTHON=1
+export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 DESTDIR="$UB_INSTALLDIR" "$UB_COMPILEDIR"/mach install
 
 rm -f "$UB_INSTALLDIR"/usr/lib/thunderbird/thunderbird
