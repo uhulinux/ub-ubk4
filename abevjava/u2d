@@ -1,1 +1,1 @@
-urllist 'https://www.nav.gov.hu/nav/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/abevjava_install.html' | splitver '^abevjava_install-([0-9]+\.[0-9]+(\.[0-9]+)?)-.*\.rpm' | sort -V | tail -n 1
+_geturl https://nav.gov.hu/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/javakitolto | grep 'ÁNYK v' | sed -r "s/\s+ÁNYK\s+v//"
