@@ -1,0 +1,88 @@
+From da4cae559595c6e775dfdde5e32dde3a1eff775f Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 26 Jul 2022 20:03:12 +0900
+Subject: [PATCH] home: drop conflicted headers
+
+Fixes #24117.
+---
+ src/basic/missing_fs.h    | 5 +++++
+ src/home/homework-cifs.c  | 5 +++++
+ src/home/homework-luks.c  | 1 -
+ src/home/homework-mount.c | 2 ++
+ src/home/homework.h       | 3 ++-
+ 5 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/src/basic/missing_fs.h b/src/basic/missing_fs.h
+index 0cacd49bcff7..6638d7696221 100644
+--- a/src/basic/missing_fs.h
++++ b/src/basic/missing_fs.h
+@@ -64,3 +64,8 @@
+ #ifndef FS_PROJINHERIT_FL
+ #define FS_PROJINHERIT_FL 0x20000000
+ #endif
++
++/* linux/fscrypt.h */
++#ifndef FS_KEY_DESCRIPTOR_SIZE
++#define FS_KEY_DESCRIPTOR_SIZE 8
++#endif
+diff --git a/src/home/homework-cifs.c b/src/home/homework-cifs.c
+index 728a92260cfd..e79def3daec7 100644
+--- a/src/home/homework-cifs.c
++++ b/src/home/homework-cifs.c
+@@ -1,5 +1,10 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ 
++#include <sys/mount.h>
++#if WANT_LINUX_FS_H
++#include <linux/fs.h>
++#endif
++
+ #include "dirent-util.h"
+ #include "fd-util.h"
+ #include "fileio.h"
+diff --git a/src/home/homework-luks.c b/src/home/homework-luks.c
+index 0108ab54075f..5f3e79a67aad 100644
+--- a/src/home/homework-luks.c
++++ b/src/home/homework-luks.c
+@@ -4,7 +4,6 @@
+ #include <poll.h>
+ #include <sys/file.h>
+ #include <sys/ioctl.h>
+-#include <sys/mount.h>
+ #include <sys/xattr.h>
+ 
+ #if HAVE_VALGRIND_MEMCHECK_H
+diff --git a/src/home/homework-mount.c b/src/home/homework-mount.c
+index e71e8cd85381..a9c793c42943 100644
+--- a/src/home/homework-mount.c
++++ b/src/home/homework-mount.c
+@@ -2,7 +2,9 @@
+ 
+ #include <sched.h>
+ #include <sys/mount.h>
++#if WANT_LINUX_FS_H
+ #include <linux/fs.h>
++#endif
+ 
+ #include "alloc-util.h"
+ #include "fd-util.h"
+diff --git a/src/home/homework.h b/src/home/homework.h
+index 882a3f500b3b..b27c31d56bab 100644
+--- a/src/home/homework.h
++++ b/src/home/homework.h
+@@ -1,13 +1,14 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ #pragma once
+ 
+-#include <linux/fs.h>
+ #include <sys/vfs.h>
+ 
+ #include "sd-id128.h"
+ 
++#include "cryptsetup-util.h"
+ #include "homework-password-cache.h"
+ #include "loop-util.h"
++#include "missing_fs.h" /* for FS_KEY_DESCRIPTOR_SIZE, do not include linux/fs.h */
+ #include "missing_keyctl.h"
+ #include "missing_syscall.h"
+ #include "user-record.h"
