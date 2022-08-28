@@ -1,5 +1,3 @@
 #!/bin/sh -eux
 
-export PYTHON=python3
-ub_compile
-ub_install
+python3 setup.py install --root="$UB_INSTALLDIR" --optimize=1 --skip-build
