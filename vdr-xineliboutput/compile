@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+sed -ri 's/(\s|-)opengl(\s|$)/\1gl\2/g' configure
+make \
+	VIDEODIR=/var/vdr/video \
+	CONFDIR=/etc/vdr \
+	BINDIR=/usr/bin \
+	VDRINCDIR=/usr/include \
+	LIBDIR=/usr/lib/vdr \
+all i18n

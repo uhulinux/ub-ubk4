@@ -1,0 +1,6 @@
+for dirs in `sflist xine xine-ui | sort -Vr`;do
+if [ "$(sflist xine xine-ui/$dirs | grep tar)" ];then
+    echo $dirs
+    exit
+fi
+done

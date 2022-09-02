@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+ub_install
+
+rm -rf "$UB_INSTALLDIR"/usr/share/doc
+rm -f "$UB_INSTALLDIR"/usr/bin/{xine-bugreport,xine-check}
+rm -f "$UB_INSTALLDIR"/usr/share/man/{,de}/man1/{xine-bugreport.1,xine-check.1}
+
+#nouveau vdpau bug workaround
+mv "$UB_INSTALLDIR"/usr/bin/xine "$UB_INSTALLDIR"/usr/bin/xine.bin

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+opts=''
+if [ "$(/sbin/lsmod | grep nouveau)" ];then
+opts='-V xv'
+fi
+xine.bin $opts "$@"

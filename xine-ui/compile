@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+cp -a src/xitk/xine-toolkit/README doc/README.xitk
+autoreconf -vif
+ub_compile \
+	--enable-vdr-keys
