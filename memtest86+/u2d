@@ -1,1 +1,1 @@
-u2d https://github.com/memtest86plus/memtest86plus/tags v
+urllist https://github.com/memtest86plus/memtest86plus/tags/ | grep ^v | grep tar | sort -V | tail -1 | sed s/v//g | sed s/\.tar.*// | sed s/-/~/
