@@ -8,14 +8,17 @@ nemo-image-converter
 nemo-preview
 nemo-repairer
 nemo-seahorse
-nemo-share
-nemo-terminal"
+nemo-share"
 
 for progs in ${extensions};do
 cd $progs
 ub_install
 cd ..
 done
+
+cd nemo-terminal
+python3 setup.py install --root="$UB_INSTALLDIR"
+cd ..
 
 cp nemo-image-converter/build/src/libnemo-image-converter.so ${UB_INSTALLDIR}/usr/lib/nemo/extensions-3.0/libnemo-image-converter.so
 pythonok="

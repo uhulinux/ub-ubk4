@@ -8,11 +8,14 @@ nemo-image-converter
 nemo-preview
 nemo-repairer
 nemo-seahorse
-nemo-share
-nemo-terminal"
+nemo-share"
 
 for progs in ${extensions}; do
 cd $progs
 ub_compile
 cd ..
 done
+
+cd nemo-terminal
+python3 setup.py build
+cd ..
