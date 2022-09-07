@@ -3,7 +3,7 @@
 ub_install
 
 # Move libs to /usr/lib, except the .so symlinks
-for f in ${UB_INSTALLDIR}/usr/lib/ffmpeg4.3/*; do
+for f in ${UB_INSTALLDIR}/usr/lib/ffmpeg4.4/*; do
     if [[ $f == *.so ]]; then
         ln -srf -- ${UB_INSTALLDIR}/usr/lib/"$(readlink "$f")" "$f"
     elif [[ ! -d $f ]]; then

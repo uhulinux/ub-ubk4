@@ -3,7 +3,7 @@
 # előre generált felesleges Makefile-k törlése
 find . -iname Makefile -delete
 
-cd epson-printer-utility-1.0.2
+cd epson-printer-utility-${UB_VERSION}
 libtoolize --force
 autoreconf -vif
 ub_configure
@@ -19,10 +19,6 @@ cd ..
 
 ub_make
 
-cd ../epson-backend-1.0.1
-rm -f m4/*
-libtoolize --force
+cd ../epson-backend-${UB_VERSION}
 autoreconf -vif
-ub_configure
-ub_make clean
-ub_make
+ub_compile

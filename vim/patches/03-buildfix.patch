@@ -1,0 +1,41 @@
+From 8f7116caddc6f0725cf1211407d97645c4eb7b65 Mon Sep 17 00:00:00 2001
+From: Bram Moolenaar <Bram@vim.org>
+Date: Sun, 4 Sep 2022 18:22:16 +0100
+Subject: [PATCH] Revert part of patch merged twice
+
+---
+ src/vim9cmds.c | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/src/vim9cmds.c b/src/vim9cmds.c
+index 33e9be981cf4..c294d70a8519 100644
+--- a/src/vim9cmds.c
++++ b/src/vim9cmds.c
+@@ -1705,27 +1705,6 @@ get_defer_var_idx(cctx_T *cctx)
+     return dfunc->df_defer_var_idx;
+ }
+ 
+-/*
+- * Get the local variable index for deferred function calls.
+- * Reserve it when not done already.
+- * Returns zero for failure.
+- */
+-    int
+-get_defer_var_idx(cctx_T *cctx)
+-{
+-    dfunc_T	*dfunc = ((dfunc_T *)def_functions.ga_data)
+-					       + cctx->ctx_ufunc->uf_dfunc_idx;
+-    if (dfunc->df_defer_var_idx == 0)
+-    {
+-	lvar_T *lvar = reserve_local(cctx, (char_u *)"@defer@", 7,
+-							    TRUE, &t_list_any);
+-	if (lvar == NULL)
+-	    return 0;
+-	dfunc->df_defer_var_idx = lvar->lv_idx + 1;
+-    }
+-    return dfunc->df_defer_var_idx;
+-}
+-
+ /*
+  * Compile "defer func(arg)".
+  */
