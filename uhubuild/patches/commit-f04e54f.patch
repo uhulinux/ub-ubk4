@@ -1,0 +1,33 @@
+From f04e54fa9f929c21755a65a653bde0d0af25b26f Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Wed, 7 Sep 2022 22:10:07 +0200
+Subject: u2dgnome javítás
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/src/uhubuild-u2d.sh b/src/uhubuild-u2d.sh
+index 64bdd04..7827f31 100644
+--- a/src/uhubuild-u2d.sh
++++ b/src/uhubuild-u2d.sh
+@@ -129,8 +129,8 @@ function sflist() {
+ 
+ # sourceforge subdirs
+ function sflistd() {
+-subdir=$(sflist $1 $2 | splitver '^([0-9.]+)$' | sort -V | tail -n 1)
+-sflist $1 $2/$subdir | parsever | sort -V | tail -n 1
++    subdir=$(sflist $1 $2 | splitver '^([0-9.]+)$' | sort -V | tail -n 1)
++    sflist $1 $2/$subdir | parsever | sort -V | tail -n 1
+ }
+ 
+ # script for gnome projects
+@@ -139,7 +139,7 @@ function u2dgnome {
+ 	unstable="$2"
+ 	reg="02468";
+ 	if [ -n "${unstable:-}" ]; then
+-		reg="0-9"
++		u2dsubdir "https://download.gnome.org/sources/$project/"
+ 	fi
+     ver="$(urllist "https://download.gnome.org/sources/$project/" | grep -E '^[0-9.]+['$reg'](\.[0-9.])?$' | sort -V | tail -n 1)"
+ 	u2d "https://download.gnome.org/sources/$project/$ver/"
