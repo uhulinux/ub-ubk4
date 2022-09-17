@@ -1,0 +1,42 @@
+diff -Naur a/configure b/configure
+--- a/configure	2022-09-02 18:10:20.000000000 +0200
++++ b/configure	2022-09-17 22:36:41.046761600 +0200
+@@ -15029,7 +15029,7 @@
+ 
+   GTK_DATADIR=""
+   if test "$have_gtk" = yes; then
+-    GTK_DATADIR=`$pkg_config --variable=prefix gtk+-2.0`
++    GTK_DATADIR=`$pkg_config --variable=prefix gtk+-3.0`
+     GTK_DATADIR="$GTK_DATADIR/share"
+   fi
+ 
+@@ -20144,7 +20144,7 @@
+ if test -n "$GTK_DATADIR" ; then
+   PO_DATADIR="$GTK_DATADIR"
+ elif test "$have_gtk" = yes; then
+-  PO_DATADIR=`$pkg_config --variable=prefix gtk+-2.0`
++  PO_DATADIR=`$pkg_config --variable=prefix gtk+-3.0`
+   PO_DATADIR="$PO_DATADIR/share"
+ fi
+ 
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2022-09-02 18:10:15.000000000 +0200
++++ b/configure.ac	2022-09-17 22:36:00.034679465 +0200
+@@ -2822,7 +2822,7 @@
+ 
+   GTK_DATADIR=""
+   if test "$have_gtk" = yes; then
+-    GTK_DATADIR=`$pkg_config --variable=prefix gtk+-2.0`
++    GTK_DATADIR=`$pkg_config --variable=prefix gtk+-3.0`
+     GTK_DATADIR="$GTK_DATADIR/share"
+   fi
+ 
+@@ -4282,7 +4282,7 @@
+ if test -n "$GTK_DATADIR" ; then
+   PO_DATADIR="$GTK_DATADIR"
+ elif test "$have_gtk" = yes; then
+-  PO_DATADIR=`$pkg_config --variable=prefix gtk+-2.0`
++  PO_DATADIR=`$pkg_config --variable=prefix gtk+-3.0`
+   PO_DATADIR="$PO_DATADIR/share"
+ fi
+ 
