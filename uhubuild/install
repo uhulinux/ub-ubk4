@@ -9,6 +9,9 @@ rmdir "${UB_INSTALLDIR}"/usr/lib/uhubuild/helpers
 mv "${UB_INSTALLDIR}"/usr/lib/uhubuild/build/* "${UB_INSTALLDIR}"/usr/bin/
 rmdir "${UB_INSTALLDIR}"/usr/lib/uhubuild/build
 
+mv "${UB_INSTALLDIR}"/usr/lib/uhubuild/dl/* "${UB_INSTALLDIR}"/usr/bin/
+rmdir "${UB_INSTALLDIR}"/usr/lib/uhubuild/dl
+
 mkdir -p "${UB_INSTALLDIR}/usr/share/uhubuild"
 cp -a config words "${UB_INSTALLDIR}/usr/share/uhubuild/"
 
