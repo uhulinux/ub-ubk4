@@ -1,9 +1,5 @@
 #!/bin/sh -eux
 
-# don't override cmake shipped CMakeSystemSpecificInformation.cmake and break on cmake 3.24+
-# https://gitlab.kitware.com/cmake/cmake/-/commit/42f7e397894c5132b4706f478e62ce5d648119c1
-rm cmake_modules/CMakeSystemSpecificInformation.cmake
-
 export QTDIR=/usr/lib/qt5
 export PKG_CONFIG_PATH='/usr/lib/ffmpeg4.4/pkgconfig'
 mkdir -p build
