@@ -1,1 +1,1 @@
-echo "91.7.1"
+urllist "http://ftp.mozilla.org/pub/firefox/releases/" | grep -E '^91' | grep 'esr' | sort -V | tail -n 1 | sed -e 's/esr//'
