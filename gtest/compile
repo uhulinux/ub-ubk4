@@ -1,14 +1,9 @@
 #!/bin/sh -eux
 
-cd googletest
-sed -r "s|(Version:) .+|\1 ${UB_VERSION}|" -i gtest.pc.in
 ub_compile \
 	-DBUILD_SHARED_LIBS=ON \
+	-DBUILD_GMOCK=ON \
 	-DCMAKE_SKIP_BUILD_RPATH=TRUE \
 	-DPYTHON_EXECUTABLE=/usr/bin/python3 \
 	-Dgtest_build_tests=ON \
 	-Dgtest_disable_pthreads=OFF
-
-cd ../googlemock
-ub_compile \
-    -DBUILD_SHARED_LIBS=ON

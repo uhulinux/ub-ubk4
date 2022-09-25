@@ -31,9 +31,9 @@ cp "$UB_SRCDIR"/config/config."$ARCH" arch/x86/configs/"$ARCH"_defconfig
 
 # diff -u <(grep -v '^#' .config|sort) <(grep -v '^#' arch/x86/configs/"$ARCH"_defconfig|sort)
 
-make oldconfig
+make olddefconfig
 # make prepare
-yes "" | make config >/dev/null
+# yes "" | make config >/dev/null
 
 make ARCH="$ARCH" -j"$NUMCPUS" scripts
 make ARCH="$ARCH" -j"$NUMCPUS" bzImage

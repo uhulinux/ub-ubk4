@@ -3,9 +3,12 @@
 # ha BUILD_SHARED_LIBS=ON:
 # LLVM_BUILD_LLVM_DYLIB=OFF / LLVM_LINK_LLVM_DYLIB=OFF
 # másképp nem működik
+triple=$(gcc -dumpmachine)
 
 cd llvm
 ub_compile \
+    -DLLVM_HOST_TRIPLE=$triple \
+    -DLLVM_DEFAULT_TARGET_TRIPLE=$triple \
 	-DBUILD_SHARED_LIBS=OFF \
 	-DLLVM_BUILD_LLVM_DYLIB=ON \
 	-DLLVM_LINK_LLVM_DYLIB=ON \

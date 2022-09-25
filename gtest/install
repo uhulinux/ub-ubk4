@@ -1,19 +1,15 @@
 #!/bin/sh -eux
 
+ub_install
+
 cd googletest
-ub_install
-cp build/lib/*so ${UB_INSTALLDIR}/usr/lib/
+install -Dm 644 cmake/* -t "${UB_INSTALLDIR}/usr/src/googletest/cmake"
+install -Dm 644 src/* -t "${UB_INSTALLDIR}/usr/src/googletest/src"
+install -Dm 644 CMakeLists.txt -t "${UB_INSTALLDIR}/usr/src/googletest"
+
 cd ../googlemock
-ub_install
-cd ..
+install -Dm 644 cmake/* -t "${UB_INSTALLDIR}/usr/src/gmock/cmake"
+install -Dm 644 src/* -t "${UB_INSTALLDIR}/usr/src/gmock/src"
+install -Dm 644 CMakeLists.txt -t "${UB_INSTALLDIR}/usr/src/gmock"
 
-mkdir -p ${UB_INSTALLDIR}/usr/src/{gtest/src,gmock/src}
-mkdir -p ${UB_INSTALLDIR}/usr/src/gtest/cmake
-
-cp googletest/cmake/* ${UB_INSTALLDIR}/usr/src/gtest/cmake
-cp googletest/src/* ${UB_INSTALLDIR}/usr/src/gtest/src/
-cp CMakeLists.txt ${UB_INSTALLDIR}/usr/src/gtest/src/
-cp googlemock/src/* ${UB_INSTALLDIR}/usr/src/gmock/src/
-
-#undorító duplikátum a synergy-nek!
-cp googlemock/src/* ${UB_INSTALLDIR}/usr/src/gmock/
+sed -i 's|src/||' "${UB_INSTALLDIR}/usr/src/gmock/src/gmock-all.cc"
