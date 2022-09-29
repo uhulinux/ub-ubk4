@@ -1,14 +1,14 @@
 #!/bin/sh -eux
 
-lacdir=${UB_INSTALLDIR}/usr/share/games/lac
+lacdir=${UB_INSTALLDIR}/usr/share/lac
 desktopdir=${UB_INSTALLDIR}/usr/share/applications
 pixmapdir=${UB_INSTALLDIR}/usr/share/pixmaps
 CONFIG_DIR=$lacdir
 mkdir -p $lacdir/bin $desktopdir $pixmapdir
 
 cp -r bin/{music,textures,sounds,models} $lacdir/
-cp bin/Release/Lac08p79 $lacdir/bin/
-chmod +x $lacdir/bin/Lac08p79
+cp bin/Release/Lac08p83 $lacdir/bin/
+chmod +x $lacdir/bin/Lac08p83
 cp lac.png $pixmapdir/
 cp lac.desktop $desktopdir/
 cp LacControls*.txt $CONFIG_DIR/

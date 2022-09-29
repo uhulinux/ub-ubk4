@@ -1,2 +1,1 @@
-url=$(_geturl https://linux.softpedia.com/downloadTag/extract%20archive | grep RAR | grep https | sed s/.*https/https/g | tail -n 1)
-_geturl $url | grep rarlinux | sed s/.*rarlinux-x64-// | sed s/\.tar.*//
+u2d http://archive.ubuntu.com/ubuntu/pool/multiverse/r/rar/ rar_ .orig
