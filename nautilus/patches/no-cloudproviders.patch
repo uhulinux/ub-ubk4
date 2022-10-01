@@ -1,0 +1,256 @@
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2022-09-18 00:37:20.000000000 +0200
++++ b/meson.build	2022-09-30 23:11:39.112180712 +0200
+@@ -121,7 +121,6 @@
+ endif
+ tracker_sparql = dependency('tracker-sparql-3.0')
+ xml = dependency('libxml-2.0', version: '>= 2.7.8')
+-cloudproviders = dependency('cloudproviders', version: '>= 0.3.1')
+ gi_docgen = find_program('gi-docgen', required: get_option('docs'))
+ 
+ ####################
+diff -Naur a/src/gtk/nautilusgtkplacessidebar.c b/src/gtk/nautilusgtkplacessidebar.c
+--- a/src/gtk/nautilusgtkplacessidebar.c	2022-09-18 00:37:20.000000000 +0200
++++ b/src/gtk/nautilusgtkplacessidebar.c	2022-09-30 23:10:57.076072315 +0200
+@@ -27,7 +27,9 @@
+ #include "nautilus-enum-types.h"
+ 
+ #include <gio/gio.h>
++#ifdef HAVE_CLOUDPROVIDERS
+ #include <cloudproviders.h>
++#endif
+ 
+ #include "nautilusgtkplacessidebarprivate.h"
+ #include "nautilusgtksidebarrowprivate.h"
+@@ -109,8 +111,10 @@
+ 
+   GActionGroup *row_actions;
+ 
++#ifdef HAVE_CLOUDPROVIDERS
+   CloudProvidersCollector *cloud_manager;
+   GList *unready_accounts;
++#endif
+ 
+   GVolumeMonitor    *volume_monitor;
+   GtkSettings       *gtk_settings;
+@@ -395,7 +399,11 @@
+            GDrive                      *drive,
+            GVolume                     *volume,
+            GMount                      *mount,
++#ifdef HAVE_CLOUDPROVIDERS
+            CloudProvidersAccount       *cloud_provider_account,
++#else
++           gpointer                    *cloud_provider_account,
++#endif
+            const int                    index,
+            const char                  *tooltip)
+ {
+@@ -435,7 +443,9 @@
+                       "drive", drive,
+                       "volume", volume,
+                       "mount", mount,
++#ifdef HAVE_CLOUDPROVIDERS
+                       "cloud-provider-account", cloud_provider_account,
++#endif
+                       NULL);
+ 
+   eject_button = nautilus_gtk_sidebar_row_get_eject_button (NAUTILUS_GTK_SIDEBAR_ROW (row));
+@@ -852,6 +862,8 @@
+     }
+ }
+ 
++#ifdef HAVE_CLOUDPROVIDERS
++
+ static gboolean
+ create_cloud_provider_account_row (NautilusGtkPlacesSidebar      *sidebar,
+                                    CloudProvidersAccount *account)
+@@ -929,6 +941,8 @@
+       }
+ }
+ 
++#endif
++
+ static void
+ update_places (NautilusGtkPlacesSidebar *sidebar)
+ {
+@@ -949,10 +963,12 @@
+   GList *network_mounts, *network_volumes;
+   GIcon *new_bookmark_icon;
+   GtkWidget *child;
++#ifdef HAVE_CLOUDPROVIDERS
+   GList *cloud_providers;
+   GList *cloud_providers_accounts;
+   CloudProvidersAccount *cloud_provider_account;
+   CloudProvidersProvider *cloud_provider;
++#endif
+ 
+   /* save original selection */
+   selected = gtk_list_box_get_selected_row (GTK_LIST_BOX (sidebar->list_box));
+@@ -1057,6 +1073,7 @@
+   add_application_shortcuts (sidebar);
+ 
+   /* Cloud providers */
++#ifdef HAVE_CLOUDPROVIDERS
+   cloud_providers = cloud_providers_collector_get_providers (sidebar->cloud_manager);
+   for (l = sidebar->unready_accounts; l != NULL; l = l->next)
+     {
+@@ -1091,6 +1108,7 @@
+ 
+         }
+     }
++#endif
+ 
+   /* go through all connected drives */
+   drives = g_volume_monitor_get_connected_drives (sidebar->volume_monitor);
+@@ -3184,6 +3202,7 @@
+     sidebar->popover = NULL;
+ }
+ 
++#ifdef HAVE_CLOUDPROVIDERS
+ static void
+ build_popup_menu_using_gmenu (NautilusGtkSidebarRow *row)
+ {
+@@ -3249,6 +3268,7 @@
+       g_object_unref (cloud_provider_account);
+     }
+ }
++#endif
+ 
+ /* Constructs the popover for the sidebar row if needed */
+ static void
+@@ -3269,7 +3289,6 @@
+   gboolean show_properties;
+   g_autoptr (GFile) trash = NULL;
+   gboolean is_trash;
+-  CloudProvidersAccount *cloud_provider_account;
+ 
+   g_object_get (row,
+                 "place-type", &type,
+@@ -3293,6 +3312,9 @@
+       is_trash = FALSE;
+     }
+ 
++#ifdef HAVE_CLOUDPROVIDERS
++  CloudProvidersAccount *cloud_provider_account;
++
+   g_object_get (row, "cloud-provider-account", &cloud_provider_account, NULL);
+ 
+   if (cloud_provider_account)
+@@ -3300,6 +3322,7 @@
+       build_popup_menu_using_gmenu (row);
+        return;
+     }
++#endif
+ 
+   action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "remove");
+   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == NAUTILUS_GTK_PLACES_BOOKMARK));
+@@ -3970,11 +3993,13 @@
+   sidebar->show_desktop = show_desktop;
+ 
+   /* Cloud providers */
++#ifdef HAVE_CLOUDPROVIDERS
+   sidebar->cloud_manager = cloud_providers_collector_dup_singleton ();
+   g_signal_connect_swapped (sidebar->cloud_manager,
+                             "providers-changed",
+                             G_CALLBACK (update_places),
+                             sidebar);
++#endif
+ 
+   /* populate the sidebar */
+   update_places (sidebar);
+@@ -4091,7 +4116,9 @@
+ nautilus_gtk_places_sidebar_dispose (GObject *object)
+ {
+   NautilusGtkPlacesSidebar *sidebar;
++#ifdef HAVE_CLOUDPROVIDERS
+   GList *l;
++#endif
+ 
+   sidebar = NAUTILUS_GTK_PLACES_SIDEBAR (object);
+ 
+@@ -4155,6 +4182,7 @@
+ 
+   g_clear_handle_id (&sidebar->hover_timer_id, g_source_remove);
+ 
++#ifdef HAVE_CLOUDPROVIDERS
+   for (l = sidebar->unready_accounts; l != NULL; l = l->next)
+     {
+         g_signal_handlers_disconnect_by_data (l->data, sidebar);
+@@ -4172,6 +4200,7 @@
+       g_object_unref (sidebar->cloud_manager);
+       sidebar->cloud_manager = NULL;
+     }
++#endif
+ 
+   G_OBJECT_CLASS (nautilus_gtk_places_sidebar_parent_class)->dispose (object);
+ }
+diff -Naur a/src/gtk/nautilusgtksidebarrow.c b/src/gtk/nautilusgtksidebarrow.c
+--- a/src/gtk/nautilusgtksidebarrow.c	2022-09-18 00:37:20.000000000 +0200
++++ b/src/gtk/nautilusgtksidebarrow.c	2022-09-30 23:10:57.080072325 +0200
+@@ -26,7 +26,9 @@
+ /* For section and place type enums */
+ #include "nautilusgtkplacessidebarprivate.h"
+ 
++#ifdef HAVE_CLOUDPROVIDERS
+ #include <cloudproviders.h>
++#endif
+ 
+ struct _NautilusGtkSidebarRow
+ {
+@@ -83,6 +85,8 @@
+ 
+ static GParamSpec *properties [LAST_PROP];
+ 
++#ifdef HAVE_CLOUDPROVIDERS
++
+ static void
+ cloud_row_update (NautilusGtkSidebarRow *self)
+ {
+@@ -124,6 +128,8 @@
+     g_object_unref (end_icon);
+ }
+ 
++#endif
++
+ static void
+ nautilus_gtk_sidebar_row_get_property (GObject    *object,
+                               guint       prop_id,
+@@ -322,6 +328,7 @@
+       break;
+ 
+     case PROP_CLOUD_PROVIDER_ACCOUNT:
++#ifdef HAVE_CLOUDPROVIDERS
+       if (self->cloud_provider_account != NULL)
+         g_signal_handlers_disconnect_by_data (self->cloud_provider_account, self);
+ 
+@@ -336,6 +343,7 @@
+           g_signal_connect_swapped (self->cloud_provider_account, "notify::status-details",
+                                     G_CALLBACK (cloud_row_update), self);
+         }
++#endif
+       break;
+ 
+     case PROP_PLACEHOLDER:
+@@ -464,9 +472,11 @@
+   g_clear_object (&self->drive);
+   g_clear_object (&self->volume);
+   g_clear_object (&self->mount);
++#ifdef HAVE_CLOUDPROVIDERS
+   if (self->cloud_provider_account != NULL)
+     g_signal_handlers_disconnect_by_data (self->cloud_provider_account, self);
+   g_clear_object (&self->cloud_provider_account);
++#endif
+ 
+   G_OBJECT_CLASS (nautilus_gtk_sidebar_row_parent_class)->finalize (object);
+ }
+diff -Naur a/src/meson.build b/src/meson.build
+--- a/src/meson.build	2022-09-18 00:37:20.000000000 +0200
++++ b/src/meson.build	2022-09-30 23:11:56.448225393 +0200
+@@ -279,7 +279,6 @@
+   selinux,
+   tracker_sparql,
+   xml,
+-  cloudproviders,
+ ]
+ 
+ libnautilus = static_library(
