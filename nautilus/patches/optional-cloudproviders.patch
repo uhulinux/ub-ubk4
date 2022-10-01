@@ -1,17 +1,42 @@
 diff -Naur a/meson.build b/meson.build
 --- a/meson.build	2022-09-18 00:37:20.000000000 +0200
-+++ b/meson.build	2022-09-30 23:11:39.112180712 +0200
-@@ -121,7 +121,6 @@
++++ b/meson.build	2022-10-01 16:20:41.427872530 +0200
+@@ -121,7 +121,7 @@
  endif
  tracker_sparql = dependency('tracker-sparql-3.0')
  xml = dependency('libxml-2.0', version: '>= 2.7.8')
 -cloudproviders = dependency('cloudproviders', version: '>= 0.3.1')
++cloudproviders = dependency('cloudproviders', version: '>= 0.3.1', required: get_option('cloudproviders'))
  gi_docgen = find_program('gi-docgen', required: get_option('docs'))
  
  ####################
+@@ -163,6 +163,7 @@
+ conf.set('ENABLE_PACKAGEKIT', get_option('packagekit'))
+ conf.set('ENABLE_PROFILING', get_option('profiling'))
+ conf.set('HAVE_SELINUX', get_option('selinux'))
++conf.set('HAVE_CLOUDPROVIDERS', get_option('cloudproviders'))
+ 
+ #############################################################
+ # config.h dependency, add to target dependencies if needed #
+diff -Naur a/meson_options.txt b/meson_options.txt
+--- a/meson_options.txt	2022-09-18 00:37:20.000000000 +0200
++++ b/meson_options.txt	2022-10-01 16:18:41.131349789 +0200
+@@ -38,6 +38,12 @@
+   value: false,
+   description: 'Enable SELinux context support in file properties dialog',
+ )
++option(
++  'cloudproviders',
++  type: 'boolean',
++  value: false,
++  description: 'Enable cloudproviders support',
++)
+ ################
+ # End features #
+ ################
 diff -Naur a/src/gtk/nautilusgtkplacessidebar.c b/src/gtk/nautilusgtkplacessidebar.c
 --- a/src/gtk/nautilusgtkplacessidebar.c	2022-09-18 00:37:20.000000000 +0200
-+++ b/src/gtk/nautilusgtkplacessidebar.c	2022-09-30 23:10:57.076072315 +0200
++++ b/src/gtk/nautilusgtkplacessidebar.c	2022-10-01 16:24:09.176748774 +0200
 @@ -27,7 +27,9 @@
  #include "nautilus-enum-types.h"
  
@@ -186,7 +211,7 @@ diff -Naur a/src/gtk/nautilusgtkplacessidebar.c b/src/gtk/nautilusgtkplacessideb
  }
 diff -Naur a/src/gtk/nautilusgtksidebarrow.c b/src/gtk/nautilusgtksidebarrow.c
 --- a/src/gtk/nautilusgtksidebarrow.c	2022-09-18 00:37:20.000000000 +0200
-+++ b/src/gtk/nautilusgtksidebarrow.c	2022-09-30 23:10:57.080072325 +0200
++++ b/src/gtk/nautilusgtksidebarrow.c	2022-10-01 16:24:09.180748790 +0200
 @@ -26,7 +26,9 @@
  /* For section and place type enums */
  #include "nautilusgtkplacessidebarprivate.h"
@@ -243,14 +268,3 @@ diff -Naur a/src/gtk/nautilusgtksidebarrow.c b/src/gtk/nautilusgtksidebarrow.c
  
    G_OBJECT_CLASS (nautilus_gtk_sidebar_row_parent_class)->finalize (object);
  }
-diff -Naur a/src/meson.build b/src/meson.build
---- a/src/meson.build	2022-09-18 00:37:20.000000000 +0200
-+++ b/src/meson.build	2022-09-30 23:11:56.448225393 +0200
-@@ -279,7 +279,6 @@
-   selinux,
-   tracker_sparql,
-   xml,
--  cloudproviders,
- ]
- 
- libnautilus = static_library(
