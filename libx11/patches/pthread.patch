@@ -1,0 +1,61 @@
+From 1f8fd7ff1cf688ec1d3b34397c6d58110bb0cae5 Mon Sep 17 00:00:00 2001
+From: Alan Coopersmith <alan.coopersmith@oracle.com>
+Date: Mon, 26 Sep 2022 16:01:40 -0700
+Subject: [PATCH] If thread-safety-constructor is enabled, link against
+ pthreads not stubs
+
+Only really makes a difference if pthreads is not in libc.
+
+Fixes: #162
+
+Signed-off-by: Alan Coopersmith <alan.coopersmith@oracle.com>
+Reviewed-by: Adam Jackson <ajax@redhat.com>
+---
+ configure.ac    | 11 ++++++++---
+ src/Makefile.am |  1 +
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 11188fb2..31fe60b3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -222,9 +222,6 @@ xyes)
+ 	;;
+ esac
+ 
+-AC_CHECK_LIB(c, pthread_self, [thrstubs="no"], [thrstubs="yes"])
+-AM_CONDITIONAL(THRSTUBS, test x$thrstubs = xyes)
+-
+ # XXX incomplete, please fill this in
+ if test x$xthreads = xyes ; then
+     case $host_os in
+@@ -245,6 +242,14 @@ fi
+ AC_SUBST(XTHREADLIB)
+ AC_SUBST(XTHREAD_CFLAGS)
+ 
++if test "x$USE_THREAD_SAFETY_CONSTRUCTOR" = "xyes"; then
++   USE_THREAD_LIBS="$XTHREADLIB"
++fi
++AC_SUBST(USE_THREAD_LIBS)
++
++AC_CHECK_LIB(c, pthread_self, [thrstubs="no"], [thrstubs="yes"], [$USE_THREAD_LIBS])
++AM_CONDITIONAL(THRSTUBS, test x$thrstubs = xyes)
++
+ AC_CHECK_FUNC(poll, [AC_DEFINE(USE_POLL, 1, [poll() function is available])], )
+ 
+ #
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 634b75f9..b2752d9b 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -371,6 +371,7 @@ libX11_la_LIBADD = \
+ 	$(USE_I18N_LIBS) \
+ 	$(USE_XCMS_LIBS) \
+ 	$(USE_XKB_LIBS) \
++	$(USE_THREAD_LIBS) \
+ 	$(X11_LIBS)
+ 
+ preprocess: $(patsubst %.c,%.ii,$(libX11_la_SOURCES))
+-- 
+GitLab
+
