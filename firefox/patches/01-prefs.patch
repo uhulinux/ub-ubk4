@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2022-06-23 09:08:33.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2022-07-03 16:47:25.043833113 +0200
+--- a/browser/app/profile/firefox.js	2022-10-07 17:40:07.000000000 +0200
++++ b/browser/app/profile/firefox.js	2022-10-09 21:16:33.184467882 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -33,7 +33,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -262,7 +269,7 @@
+@@ -265,7 +272,7 @@
  pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -42,7 +42,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -355,7 +362,7 @@
+@@ -362,7 +369,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -51,7 +51,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -465,7 +472,7 @@
+@@ -479,7 +486,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -60,7 +60,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -1045,7 +1052,7 @@
+@@ -1061,7 +1068,7 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
@@ -69,7 +69,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  pref("intl.regional_prefs.use_os_locales", false);
  
-@@ -1829,9 +1836,7 @@
+@@ -1848,9 +1855,7 @@
  pref("dom.storage_access.enabled", true);
  
  // Enable URL query stripping in Nightly.
