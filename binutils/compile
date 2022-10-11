@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
+export LDFLAGS=" -Wl,-dynamic-linker,/usr/lib/ld-linux-x86-64.so.2 "
+
 ub_configure \
     --with-lib-path=/lib:/usr/lib:/usr/local/lib \
     --enable-cet \
