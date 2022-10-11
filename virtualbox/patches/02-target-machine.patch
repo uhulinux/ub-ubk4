@@ -1,7 +1,7 @@
-diff -Naur orig/configure patched/configure
---- orig/configure	2019-12-31 17:48:58.830536369 +0100
-+++ patched/configure	2019-12-31 17:50:10.863595230 +0100
-@@ -401,12 +401,12 @@
+diff -Naur a/configure b/configure
+--- a/configure	2022-10-11 20:15:14.413300199 +0200
++++ b/configure	2022-10-11 20:21:25.634512132 +0200
+@@ -423,11 +423,11 @@
    esac
    [ -z "$TARGET_MACHINE" ] && TARGET_MACHINE=$BUILD_MACHINE
    [ -z "$TARGET_CPU"     ] && TARGET_CPU=$BUILD_CPU
@@ -10,14 +10,13 @@ diff -Naur orig/configure patched/configure
 +  DEVDIR_BIN="$DEVDIR/$OS.$TARGET_MACHINE/bin"
 +  log_success "Determined build machine: $OS.$TARGET_MACHINE, target machine: $OS.$TARGET_MACHINE"
  
-   echo "BUILD_PLATFORM=\"$OS\"" >> $ENV
-   echo "export BUILD_PLATFORM" >> $ENV
--  echo "BUILD_PLATFORM_ARCH=\"$BUILD_MACHINE\"" >> $ENV
-+  echo "BUILD_PLATFORM_ARCH=\"$TARGET_MACHINE\"" >> $ENV
-   echo "export BUILD_PLATFORM_ARCH" >> $ENV
-   echo "BUILD_TARGET=\"$OS\"" >> $ENV
-   echo "export BUILD_TARGET" >> $ENV
-@@ -462,14 +462,14 @@
+   echo "KBUILD_HOST=\"$OS\"" >> $ENV
+-  echo "KBUILD_HOST_ARCH=\"$BUILD_MACHINE\"" >> $ENV
++  echo "KBUILD_HOST_ARCH=\"$TARGET_MACHINE\"" >> $ENV
+   echo "KBUILD_TARGET=\"$OS\"" >> $ENV
+   echo "KBUILD_TARGET_ARCH=\"$TARGET_MACHINE\"" >> $ENV
+   echo "KBUILD_TARGET_CPU=\"$TARGET_CPU\"" >> $ENV
+@@ -491,14 +491,14 @@
        else
          log_success "found version $cc_ver"
        fi
@@ -34,7 +33,7 @@ diff -Naur orig/configure patched/configure
          [ -z "$CC64"  ] && CC64="$CC -m64"
          [ -z "$CXX64" ] && CXX64="$CXX -m64"
        fi
-@@ -527,7 +527,7 @@
+@@ -556,7 +556,7 @@
          fi
        fi
        # Solaris sports a 32-bit gcc/g++.
@@ -43,7 +42,7 @@ diff -Naur orig/configure patched/configure
          [ "$CC" = "gcc" ] && CC="gcc -m64"
          [ "$CXX" = "g++" ] && CXX="g++ -m64"
        fi
-@@ -1861,8 +1861,8 @@
+@@ -1935,8 +1935,8 @@
  check_kbuild()
  {
    test_header kBuild
@@ -51,19 +50,10 @@ diff -Naur orig/configure patched/configure
 -    KBUILDDIR_BIN="$KBUILDDIR/bin/$OS.$BUILD_MACHINE"
 +  if which_wrapper "$KBUILDDIR/bin/$OS.$TARGET_MACHINE/kmk" > /dev/null; then
 +    KBUILDDIR_BIN="$KBUILDDIR/bin/$OS.$TARGET_MACHINE"
-     echo "PATH_KBUILD=\"`cd $KBUILDDIR ; pwd`\"" >> $ENV
-     echo "export PATH_KBUILD" >> $ENV
-     echo "PATH_DEVTOOLS=\"$DEVDIR\"" >> $ENV
-@@ -1883,7 +1883,7 @@
-     echo "export PATH" >> $ENV
-     echo "unset path_kbuild_bin path_dev_bin" >> $ENV
-     KBUILD_SED="$KBUILDDIR_BIN/kmk_sed"
--  elif [ "$OS.$BUILD_MACHINE" = "darwin.amd64" ]; then
-+  elif [ "$OS.$TARGET_MACHINE" = "darwin.amd64" ]; then
-     # Currently there are no amd64 kBuild bins. So use the x86 variant in any case.
-     KBUILDDIR_BIN="$KBUILDDIR/bin/$OS.x86"
-     echo "PATH_KBUILD=\"`cd $KBUILDDIR ; pwd`\"" >> $ENV
-@@ -2096,8 +2096,8 @@
+ 
+     echo "KBUILD_PATH=\"`cd $KBUILDDIR ; pwd`\"" >> $ENV
+     echo "KBUILD_DEVTOOLS=\"$DEVDIR\"" >> $ENV
+@@ -2160,8 +2160,8 @@
      ;;
      *) eval "wineprefixcreate() { true ; }" ;; # now created automatically
    esac
@@ -74,7 +64,7 @@ diff -Naur orig/configure patched/configure
    echo "export WINEPREFIX" >> $ENV
    rm -rf $WINEPREFIX
    mkdir -p $WINEPREFIX
-@@ -2897,7 +2897,7 @@
+@@ -2969,7 +2969,7 @@
      check_libcap
    fi
    check_compiler_h
