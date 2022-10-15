@@ -1,0 +1,34 @@
+diff -Naur a/build/moz.configure/init.configure b/build/moz.configure/init.configure
+--- a/build/moz.configure/init.configure	2022-08-24 21:55:10.000000000 +0200
++++ b/build/moz.configure/init.configure	2022-10-15 05:51:27.246461989 +0200
+@@ -267,11 +267,6 @@
+             die('The PYTHON environment variable does not contain '
+                 'a valid path. Cannot find %s', python)
+         python = found_python
+-        try:
+-            version = python_executable_version(python).version
+-        except Exception as e:
+-            raise FatalCheckError(
+-                'could not determine version of given PYTHON: %s' % e)
+     else:
+         python = sys.executable
+ 
+diff -Naur a/configure.py b/configure.py
+--- a/configure.py	2022-08-24 21:55:10.000000000 +0200
++++ b/configure.py	2022-10-15 05:55:30.435529421 +0200
+@@ -14,8 +14,13 @@
+ 
+ 
+ base_dir = os.path.abspath(os.path.dirname(__file__))
+-sys.path.insert(0, os.path.join(base_dir, 'python', 'mozbuild'))
+-sys.path.insert(0, os.path.join(base_dir, 'third_party', 'python', 'six'))
++sys.path.insert(0, os.path.join(base_dir, "python", "mach"))
++sys.path.insert(0, os.path.join(base_dir, "python", "mozboot"))
++sys.path.insert(0, os.path.join(base_dir, "python", "mozbuild"))
++sys.path.insert(0, os.path.join(base_dir, "testing", "mozbase", "mozfile"))
++sys.path.insert(0, os.path.join(base_dir, "third_party", "python", "packaging"))
++sys.path.insert(0, os.path.join(base_dir, "third_party", "python", "pyparsing"))
++sys.path.insert(0, os.path.join(base_dir, "third_party", "python", "six"))
+ from mozbuild.configure import (
+     ConfigureSandbox,
+     TRACE,

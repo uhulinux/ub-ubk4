@@ -6,7 +6,7 @@ CXX="ccache clang++ -march=k8 -m64"
 export RUSTFLAGS="-Cdebuginfo=0 -Cembed-bitcode=yes"
 export LDFLAGS="-Wl,-rpath,/usr/lib/seamonkey/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
 export PYTHON=/usr/bin/python2
-export MACH_USE_SYSTEM_PYTHON=1
+export PYTHON3=/usr/bin/python3
 
 : > .mozconfig
 cat > .mozconfig << _EOF_

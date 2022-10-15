@@ -1,9 +1,10 @@
 #!/bin/sh -eux
 
+export PYTHON=/usr/bin/python2
+export PYTHON3=/usr/bin/python3
+
 cd "$UB_OBJECTDIR"
 
-export PYTHON=/usr/bin/python2
-export MACH_USE_SYSTEM_PYTHON=1
 DESTDIR="$UB_INSTALLDIR" "$UB_COMPILEDIR"/mach install
 
 rm -f "$UB_INSTALLDIR"/usr/lib/seamonkey/seamonkey

@@ -1,0 +1,49 @@
+could not determine version of given PYTHON: global name 'python_executable_version' is not defined
+
+diff -Naur a/build/moz.configure/init.configure b/build/moz.configure/init.configure
+--- a/build/moz.configure/init.configure	2022-08-24 21:55:10.000000000 +0200
++++ b/build/moz.configure/init.configure	2022-10-15 03:37:13.460745342 +0200
+@@ -200,6 +200,7 @@
+ 
+ 
+ @depends('PYTHON', check_build_environment, mozconfig, '--help')
++@imports(_from='__builtin__', _import='Exception')
+ @imports('os')
+ @imports('sys')
+ @imports('subprocess')
+@@ -267,11 +268,11 @@
+             die('The PYTHON environment variable does not contain '
+                 'a valid path. Cannot find %s', python)
+         python = found_python
+-        try:
+-            version = python_executable_version(python).version
+-        except Exception as e:
+-            raise FatalCheckError(
+-                'could not determine version of given PYTHON: %s' % e)
++        # try:
++        #    version = python_executable_version(python).version
++        # except Exception as e:
++        #    raise FatalCheckError(
++        #        'could not determine version of given PYTHON: %s' % e)
+     else:
+         python = sys.executable
+ 
+diff -Naur a/configure.py b/configure.py
+--- a/configure.py	2022-08-24 21:55:10.000000000 +0200
++++ b/configure.py	2022-10-15 02:51:25.714154696 +0200
+@@ -14,8 +14,13 @@
+ 
+ 
+ base_dir = os.path.abspath(os.path.dirname(__file__))
+-sys.path.insert(0, os.path.join(base_dir, 'python', 'mozbuild'))
+-sys.path.insert(0, os.path.join(base_dir, 'third_party', 'python', 'six'))
++sys.path.insert(0, os.path.join(base_dir, "python", "mach"))
++sys.path.insert(0, os.path.join(base_dir, "python", "mozboot"))
++sys.path.insert(0, os.path.join(base_dir, "python", "mozbuild"))
++sys.path.insert(0, os.path.join(base_dir, "testing", "mozbase", "mozfile"))
++sys.path.insert(0, os.path.join(base_dir, "third_party", "python", "packaging"))
++sys.path.insert(0, os.path.join(base_dir, "third_party", "python", "pyparsing"))
++sys.path.insert(0, os.path.join(base_dir, "third_party", "python", "six"))
+ from mozbuild.configure import (
+     ConfigureSandbox,
+     TRACE,
