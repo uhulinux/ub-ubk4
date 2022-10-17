@@ -9,4 +9,6 @@ git clone https://gitlab.gnome.org/GNOME/libglnx.git
 git clone https://github.com/mendsley/bsdiff.git
 
 NOCONFIGURE=1 ./autogen.sh
-ub_compile
+ub_compile \
+	--with-curl \
+	--without-soup
