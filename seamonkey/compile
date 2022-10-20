@@ -8,8 +8,6 @@ export LDFLAGS="-Wl,-rpath,/usr/lib/seamonkey/ -Wl,--no-keep-memory -Wl,-z,relro
 export PYTHON=/usr/bin/python2
 export PYTHON3=/usr/bin/python3
 
-env | grep 'PYTHON'
-
 : > .mozconfig
 cat > .mozconfig << _EOF_
 mk_add_options MOZ_OBJDIR=$UB_OBJECTDIR
