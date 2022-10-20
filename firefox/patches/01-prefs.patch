@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2022-10-07 17:40:07.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2022-10-09 21:16:33.184467882 +0200
+--- a/browser/app/profile/firefox.js	2022-10-10 18:05:24.000000000 +0200
++++ b/browser/app/profile/firefox.js	2022-10-20 17:35:05.721947704 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -42,7 +42,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -362,7 +369,7 @@
+@@ -358,7 +365,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -51,7 +51,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -479,7 +486,7 @@
+@@ -476,7 +483,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -60,15 +60,18 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -1061,7 +1068,7 @@
+@@ -1058,9 +1065,9 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
 -pref("browser.backspace_action", 2);
 +pref("browser.backspace_action", 0);
  
- pref("intl.regional_prefs.use_os_locales", false);
+-pref("intl.regional_prefs.use_os_locales", false);
++pref("intl.regional_prefs.use_os_locales", true);
  
+ // this will automatically enable inline spellchecking (if it is available) for
+ // editable elements in HTML
 @@ -1848,9 +1855,7 @@
  pref("dom.storage_access.enabled", true);
  
