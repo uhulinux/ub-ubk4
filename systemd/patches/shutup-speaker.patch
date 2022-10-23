@@ -1,0 +1,12 @@
+diff -Naur a/src/shared/utmp-wtmp.c b/src/shared/utmp-wtmp.c
+--- a/src/shared/utmp-wtmp.c	2022-05-21 15:23:41.000000000 +0200
++++ b/src/shared/utmp-wtmp.c	2022-10-23 18:17:12.283167250 +0200
+@@ -360,7 +360,7 @@
+         }
+ 
+         if (asprintf(&text,
+-                     "\a\r\n"
++                     "\r\n"
+                      "Broadcast message from %s@%s%s%s (%s):\r\n\r\n"
+                      "%s\r\n\r\n",
+                      un ?: username, hn,

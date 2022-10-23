@@ -1,0 +1,1669 @@
+diff -Naur a/src/basic/linux/btrfs.h b/src/basic/linux/btrfs.h
+--- a/src/basic/linux/btrfs.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/btrfs.h	2022-10-23 18:12:33.146034695 +0200
+@@ -309,6 +309,7 @@
+ #define BTRFS_FEATURE_INCOMPAT_METADATA_UUID	(1ULL << 10)
+ #define BTRFS_FEATURE_INCOMPAT_RAID1C34		(1ULL << 11)
+ #define BTRFS_FEATURE_INCOMPAT_ZONED		(1ULL << 12)
++#define BTRFS_FEATURE_INCOMPAT_EXTENT_TREE_V2	(1ULL << 13)
+ 
+ struct btrfs_ioctl_feature_flags {
+ 	__u64 compat_flags;
+@@ -868,6 +869,134 @@
+ 		__u8 align[7];
+ };
+ 
++/*
++ * Data and metadata for an encoded read or write.
++ *
++ * Encoded I/O bypasses any encoding automatically done by the filesystem (e.g.,
++ * compression). This can be used to read the compressed contents of a file or
++ * write pre-compressed data directly to a file.
++ *
++ * BTRFS_IOC_ENCODED_READ and BTRFS_IOC_ENCODED_WRITE are essentially
++ * preadv/pwritev with additional metadata about how the data is encoded and the
++ * size of the unencoded data.
++ *
++ * BTRFS_IOC_ENCODED_READ fills the given iovecs with the encoded data, fills
++ * the metadata fields, and returns the size of the encoded data. It reads one
++ * extent per call. It can also read data which is not encoded.
++ *
++ * BTRFS_IOC_ENCODED_WRITE uses the metadata fields, writes the encoded data
++ * from the iovecs, and returns the size of the encoded data. Note that the
++ * encoded data is not validated when it is written; if it is not valid (e.g.,
++ * it cannot be decompressed), then a subsequent read may return an error.
++ *
++ * Since the filesystem page cache contains decoded data, encoded I/O bypasses
++ * the page cache. Encoded I/O requires CAP_SYS_ADMIN.
++ */
++struct btrfs_ioctl_encoded_io_args {
++	/* Input parameters for both reads and writes. */
++
++	/*
++	 * iovecs containing encoded data.
++	 *
++	 * For reads, if the size of the encoded data is larger than the sum of
++	 * iov[n].iov_len for 0 <= n < iovcnt, then the ioctl fails with
++	 * ENOBUFS.
++	 *
++	 * For writes, the size of the encoded data is the sum of iov[n].iov_len
++	 * for 0 <= n < iovcnt. This must be less than 128 KiB (this limit may
++	 * increase in the future). This must also be less than or equal to
++	 * unencoded_len.
++	 */
++	const struct iovec *iov;
++	/* Number of iovecs. */
++	unsigned long iovcnt;
++	/*
++	 * Offset in file.
++	 *
++	 * For writes, must be aligned to the sector size of the filesystem.
++	 */
++	__s64 offset;
++	/* Currently must be zero. */
++	__u64 flags;
++
++	/*
++	 * For reads, the following members are output parameters that will
++	 * contain the returned metadata for the encoded data.
++	 * For writes, the following members must be set to the metadata for the
++	 * encoded data.
++	 */
++
++	/*
++	 * Length of the data in the file.
++	 *
++	 * Must be less than or equal to unencoded_len - unencoded_offset. For
++	 * writes, must be aligned to the sector size of the filesystem unless
++	 * the data ends at or beyond the current end of the file.
++	 */
++	__u64 len;
++	/*
++	 * Length of the unencoded (i.e., decrypted and decompressed) data.
++	 *
++	 * For writes, must be no more than 128 KiB (this limit may increase in
++	 * the future). If the unencoded data is actually longer than
++	 * unencoded_len, then it is truncated; if it is shorter, then it is
++	 * extended with zeroes.
++	 */
++	__u64 unencoded_len;
++	/*
++	 * Offset from the first byte of the unencoded data to the first byte of
++	 * logical data in the file.
++	 *
++	 * Must be less than unencoded_len.
++	 */
++	__u64 unencoded_offset;
++	/*
++	 * BTRFS_ENCODED_IO_COMPRESSION_* type.
++	 *
++	 * For writes, must not be BTRFS_ENCODED_IO_COMPRESSION_NONE.
++	 */
++	__u32 compression;
++	/* Currently always BTRFS_ENCODED_IO_ENCRYPTION_NONE. */
++	__u32 encryption;
++	/*
++	 * Reserved for future expansion.
++	 *
++	 * For reads, always returned as zero. Users should check for non-zero
++	 * bytes. If there are any, then the kernel has a newer version of this
++	 * structure with additional information that the user definition is
++	 * missing.
++	 *
++	 * For writes, must be zeroed.
++	 */
++	__u8 reserved[64];
++};
++
++/* Data is not compressed. */
++#define BTRFS_ENCODED_IO_COMPRESSION_NONE 0
++/* Data is compressed as a single zlib stream. */
++#define BTRFS_ENCODED_IO_COMPRESSION_ZLIB 1
++/*
++ * Data is compressed as a single zstd frame with the windowLog compression
++ * parameter set to no more than 17.
++ */
++#define BTRFS_ENCODED_IO_COMPRESSION_ZSTD 2
++/*
++ * Data is compressed sector by sector (using the sector size indicated by the
++ * name of the constant) with LZO1X and wrapped in the format documented in
++ * fs/btrfs/lzo.c. For writes, the compression sector size must match the
++ * filesystem sector size.
++ */
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_4K 3
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_8K 4
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_16K 5
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_32K 6
++#define BTRFS_ENCODED_IO_COMPRESSION_LZO_64K 7
++#define BTRFS_ENCODED_IO_COMPRESSION_TYPES 8
++
++/* Data is not encrypted. */
++#define BTRFS_ENCODED_IO_ENCRYPTION_NONE 0
++#define BTRFS_ENCODED_IO_ENCRYPTION_TYPES 1
++
+ /* Error codes as returned by the kernel */
+ enum btrfs_err_code {
+ 	BTRFS_ERROR_DEV_RAID1_MIN_NOT_MET = 1,
+@@ -996,5 +1125,9 @@
+ 				struct btrfs_ioctl_ino_lookup_user_args)
+ #define BTRFS_IOC_SNAP_DESTROY_V2 _IOW(BTRFS_IOCTL_MAGIC, 63, \
+ 				struct btrfs_ioctl_vol_args_v2)
++#define BTRFS_IOC_ENCODED_READ _IOR(BTRFS_IOCTL_MAGIC, 64, \
++				    struct btrfs_ioctl_encoded_io_args)
++#define BTRFS_IOC_ENCODED_WRITE _IOW(BTRFS_IOCTL_MAGIC, 64, \
++				     struct btrfs_ioctl_encoded_io_args)
+ 
+ #endif /* _UAPI_LINUX_BTRFS_H */
+diff -Naur a/src/basic/linux/btrfs_tree.h b/src/basic/linux/btrfs_tree.h
+--- a/src/basic/linux/btrfs_tree.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/btrfs_tree.h	2022-10-23 18:12:33.146034695 +0200
+@@ -53,6 +53,9 @@
+ /* tracks free space in block groups. */
+ #define BTRFS_FREE_SPACE_TREE_OBJECTID 10ULL
+ 
++/* Holds the block group items for extent tree v2. */
++#define BTRFS_BLOCK_GROUP_TREE_OBJECTID 11ULL
++
+ /* device stats in the device tree */
+ #define BTRFS_DEV_STATS_OBJECTID 0ULL
+ 
+@@ -146,7 +149,9 @@
+ 
+ /*
+  * dir items are the name -> inode pointers in a directory.  There is one
+- * for every name in a directory.
++ * for every name in a directory.  BTRFS_DIR_LOG_ITEM_KEY is no longer used
++ * but it's still defined here for documentation purposes and to help avoid
++ * having its numerical value reused in the future.
+  */
+ #define BTRFS_DIR_LOG_ITEM_KEY  60
+ #define BTRFS_DIR_LOG_INDEX_KEY 72
+@@ -875,19 +880,6 @@
+ #define BTRFS_BLOCK_GROUP_RESERVED	(BTRFS_AVAIL_ALLOC_BIT_SINGLE | \
+ 					 BTRFS_SPACE_INFO_GLOBAL_RSV)
+ 
+-enum btrfs_raid_types {
+-	BTRFS_RAID_RAID10,
+-	BTRFS_RAID_RAID1,
+-	BTRFS_RAID_DUP,
+-	BTRFS_RAID_RAID0,
+-	BTRFS_RAID_SINGLE,
+-	BTRFS_RAID_RAID5,
+-	BTRFS_RAID_RAID6,
+-	BTRFS_RAID_RAID1C3,
+-	BTRFS_RAID_RAID1C4,
+-	BTRFS_NR_RAID_TYPES
+-};
+-
+ #define BTRFS_BLOCK_GROUP_TYPE_MASK	(BTRFS_BLOCK_GROUP_DATA |    \
+ 					 BTRFS_BLOCK_GROUP_SYSTEM |  \
+ 					 BTRFS_BLOCK_GROUP_METADATA)
+diff -Naur a/src/basic/linux/can/netlink.h b/src/basic/linux/can/netlink.h
+--- a/src/basic/linux/can/netlink.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/can/netlink.h	2022-10-23 18:12:33.146034695 +0200
+@@ -137,6 +137,7 @@
+ 	IFLA_CAN_DATA_BITRATE_CONST,
+ 	IFLA_CAN_BITRATE_MAX,
+ 	IFLA_CAN_TDC,
++	IFLA_CAN_CTRLMODE_EXT,
+ 
+ 	/* add new constants above here */
+ 	__IFLA_CAN_MAX,
+@@ -166,6 +167,18 @@
+ 	IFLA_CAN_TDC_MAX = __IFLA_CAN_TDC - 1
+ };
+ 
++/*
++ * IFLA_CAN_CTRLMODE_EXT nest: controller mode extended parameters
++ */
++enum {
++	IFLA_CAN_CTRLMODE_UNSPEC,
++	IFLA_CAN_CTRLMODE_SUPPORTED,	/* u32 */
++
++	/* add new constants above here */
++	__IFLA_CAN_CTRLMODE,
++	IFLA_CAN_CTRLMODE_MAX = __IFLA_CAN_CTRLMODE - 1
++};
++
+ /* u16 termination range: 1..65535 Ohms */
+ #define CAN_TERMINATION_DISABLED 0
+ 
+diff -Naur a/src/basic/linux/if_addr.h b/src/basic/linux/if_addr.h
+--- a/src/basic/linux/if_addr.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/if_addr.h	2022-10-23 18:12:33.150034712 +0200
+@@ -33,8 +33,9 @@
+ 	IFA_CACHEINFO,
+ 	IFA_MULTICAST,
+ 	IFA_FLAGS,
+-	IFA_RT_PRIORITY,  /* u32, priority/metric for prefix route */
++	IFA_RT_PRIORITY,	/* u32, priority/metric for prefix route */
+ 	IFA_TARGET_NETNSID,
++	IFA_PROTO,		/* u8, address protocol */
+ 	__IFA_MAX,
+ };
+ 
+@@ -69,4 +70,10 @@
+ #define IFA_PAYLOAD(n) NLMSG_PAYLOAD(n,sizeof(struct ifaddrmsg))
+ #endif
+ 
++/* ifa_proto */
++#define IFAPROT_UNSPEC		0
++#define IFAPROT_KERNEL_LO	1	/* loopback */
++#define IFAPROT_KERNEL_RA	2	/* set by kernel from router announcement */
++#define IFAPROT_KERNEL_LL	3	/* link-local set by kernel */
++
+ #endif
+diff -Naur a/src/basic/linux/if_bridge.h b/src/basic/linux/if_bridge.h
+--- a/src/basic/linux/if_bridge.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/if_bridge.h	2022-10-23 18:12:33.150034712 +0200
+@@ -122,6 +122,7 @@
+ 	IFLA_BRIDGE_VLAN_TUNNEL_INFO,
+ 	IFLA_BRIDGE_MRP,
+ 	IFLA_BRIDGE_CFM,
++	IFLA_BRIDGE_MST,
+ 	__IFLA_BRIDGE_MAX,
+ };
+ #define IFLA_BRIDGE_MAX (__IFLA_BRIDGE_MAX - 1)
+@@ -453,6 +454,21 @@
+ 
+ #define IFLA_BRIDGE_CFM_CC_PEER_STATUS_MAX (__IFLA_BRIDGE_CFM_CC_PEER_STATUS_MAX - 1)
+ 
++enum {
++	IFLA_BRIDGE_MST_UNSPEC,
++	IFLA_BRIDGE_MST_ENTRY,
++	__IFLA_BRIDGE_MST_MAX,
++};
++#define IFLA_BRIDGE_MST_MAX (__IFLA_BRIDGE_MST_MAX - 1)
++
++enum {
++	IFLA_BRIDGE_MST_ENTRY_UNSPEC,
++	IFLA_BRIDGE_MST_ENTRY_MSTI,
++	IFLA_BRIDGE_MST_ENTRY_STATE,
++	__IFLA_BRIDGE_MST_ENTRY_MAX,
++};
++#define IFLA_BRIDGE_MST_ENTRY_MAX (__IFLA_BRIDGE_MST_ENTRY_MAX - 1)
++
+ struct bridge_stp_xstats {
+ 	__u64 transition_blk;
+ 	__u64 transition_fwd;
+@@ -564,6 +580,7 @@
+ 	BRIDGE_VLANDB_GOPTS_MCAST_QUERIER,
+ 	BRIDGE_VLANDB_GOPTS_MCAST_ROUTER_PORTS,
+ 	BRIDGE_VLANDB_GOPTS_MCAST_QUERIER_STATE,
++	BRIDGE_VLANDB_GOPTS_MSTI,
+ 	__BRIDGE_VLANDB_GOPTS_MAX
+ };
+ #define BRIDGE_VLANDB_GOPTS_MAX (__BRIDGE_VLANDB_GOPTS_MAX - 1)
+@@ -759,6 +776,7 @@
+ enum br_boolopt_id {
+ 	BR_BOOLOPT_NO_LL_LEARN,
+ 	BR_BOOLOPT_MCAST_VLAN_SNOOPING,
++	BR_BOOLOPT_MST_ENABLE,
+ 	BR_BOOLOPT_MAX
+ };
+ 
+diff -Naur a/src/basic/linux/if_ether.h b/src/basic/linux/if_ether.h
+--- a/src/basic/linux/if_ether.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/if_ether.h	2022-10-23 18:12:33.150034712 +0200
+@@ -86,8 +86,10 @@
+ 					 * over Ethernet
+ 					 */
+ #define ETH_P_PAE	0x888E		/* Port Access Entity (IEEE 802.1X) */
++#define ETH_P_PROFINET	0x8892		/* PROFINET			*/
+ #define ETH_P_REALTEK	0x8899          /* Multiple proprietary protocols */
+ #define ETH_P_AOE	0x88A2		/* ATA over Ethernet		*/
++#define ETH_P_ETHERCAT	0x88A4		/* EtherCAT			*/
+ #define ETH_P_8021AD	0x88A8          /* 802.1ad Service VLAN		*/
+ #define ETH_P_802_EX1	0x88B5		/* 802.1 Local Experimental 1.  */
+ #define ETH_P_PREAUTH	0x88C7		/* 802.11 Preauthentication */
+diff -Naur a/src/basic/linux/if_link.h b/src/basic/linux/if_link.h
+--- a/src/basic/linux/if_link.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/if_link.h	2022-10-23 18:12:33.150034712 +0200
+@@ -211,6 +211,9 @@
+  * @rx_nohandler: Number of packets received on the interface
+  *   but dropped by the networking stack because the device is
+  *   not designated to receive packets (e.g. backup link in a bond).
++ *
++ * @rx_otherhost_dropped: Number of packets dropped due to mismatch
++ *   in destination MAC address.
+  */
+ struct rtnl_link_stats64 {
+ 	__u64	rx_packets;
+@@ -243,6 +246,23 @@
+ 	__u64	rx_compressed;
+ 	__u64	tx_compressed;
+ 	__u64	rx_nohandler;
++
++	__u64	rx_otherhost_dropped;
++};
++
++/* Subset of link stats useful for in-HW collection. Meaning of the fields is as
++ * for struct rtnl_link_stats64.
++ */
++struct rtnl_hw_stats64 {
++	__u64	rx_packets;
++	__u64	tx_packets;
++	__u64	rx_bytes;
++	__u64	tx_bytes;
++	__u64	rx_errors;
++	__u64	tx_errors;
++	__u64	rx_dropped;
++	__u64	tx_dropped;
++	__u64	multicast;
+ };
+ 
+ /* The struct should be in sync with struct ifmap */
+@@ -347,6 +367,9 @@
+ 	 */
+ 	IFLA_PARENT_DEV_NAME,
+ 	IFLA_PARENT_DEV_BUS_NAME,
++	IFLA_GRO_MAX_SIZE,
++	IFLA_TSO_MAX_SIZE,
++	IFLA_TSO_MAX_SEGS,
+ 
+ 	__IFLA_MAX
+ };
+@@ -536,6 +559,7 @@
+ 	IFLA_BRPORT_MRP_IN_OPEN,
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT,
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_CNT,
++	IFLA_BRPORT_LOCKED,
+ 	__IFLA_BRPORT_MAX
+ };
+ #define IFLA_BRPORT_MAX (__IFLA_BRPORT_MAX - 1)
+@@ -711,7 +735,55 @@
+ #define IPVLAN_F_PRIVATE	0x01
+ #define IPVLAN_F_VEPA		0x02
+ 
++/* Tunnel RTM header */
++struct tunnel_msg {
++	__u8 family;
++	__u8 flags;
++	__u16 reserved2;
++	__u32 ifindex;
++};
++
+ /* VXLAN section */
++
++/* include statistics in the dump */
++#define TUNNEL_MSG_FLAG_STATS	0x01
++
++#define TUNNEL_MSG_VALID_USER_FLAGS TUNNEL_MSG_FLAG_STATS
++
++/* Embedded inside VXLAN_VNIFILTER_ENTRY_STATS */
++enum {
++	VNIFILTER_ENTRY_STATS_UNSPEC,
++	VNIFILTER_ENTRY_STATS_RX_BYTES,
++	VNIFILTER_ENTRY_STATS_RX_PKTS,
++	VNIFILTER_ENTRY_STATS_RX_DROPS,
++	VNIFILTER_ENTRY_STATS_RX_ERRORS,
++	VNIFILTER_ENTRY_STATS_TX_BYTES,
++	VNIFILTER_ENTRY_STATS_TX_PKTS,
++	VNIFILTER_ENTRY_STATS_TX_DROPS,
++	VNIFILTER_ENTRY_STATS_TX_ERRORS,
++	VNIFILTER_ENTRY_STATS_PAD,
++	__VNIFILTER_ENTRY_STATS_MAX
++};
++#define VNIFILTER_ENTRY_STATS_MAX (__VNIFILTER_ENTRY_STATS_MAX - 1)
++
++enum {
++	VXLAN_VNIFILTER_ENTRY_UNSPEC,
++	VXLAN_VNIFILTER_ENTRY_START,
++	VXLAN_VNIFILTER_ENTRY_END,
++	VXLAN_VNIFILTER_ENTRY_GROUP,
++	VXLAN_VNIFILTER_ENTRY_GROUP6,
++	VXLAN_VNIFILTER_ENTRY_STATS,
++	__VXLAN_VNIFILTER_ENTRY_MAX
++};
++#define VXLAN_VNIFILTER_ENTRY_MAX	(__VXLAN_VNIFILTER_ENTRY_MAX - 1)
++
++enum {
++	VXLAN_VNIFILTER_UNSPEC,
++	VXLAN_VNIFILTER_ENTRY,
++	__VXLAN_VNIFILTER_MAX
++};
++#define VXLAN_VNIFILTER_MAX	(__VXLAN_VNIFILTER_MAX - 1)
++
+ enum {
+ 	IFLA_VXLAN_UNSPEC,
+ 	IFLA_VXLAN_ID,
+@@ -743,6 +815,7 @@
+ 	IFLA_VXLAN_GPE,
+ 	IFLA_VXLAN_TTL_INHERIT,
+ 	IFLA_VXLAN_DF,
++	IFLA_VXLAN_VNIFILTER, /* only applicable with COLLECT_METADATA mode */
+ 	__IFLA_VXLAN_MAX
+ };
+ #define IFLA_VXLAN_MAX	(__IFLA_VXLAN_MAX - 1)
+@@ -776,6 +849,7 @@
+ 	IFLA_GENEVE_LABEL,
+ 	IFLA_GENEVE_TTL_INHERIT,
+ 	IFLA_GENEVE_DF,
++	IFLA_GENEVE_INNER_PROTO_INHERIT,
+ 	__IFLA_GENEVE_MAX
+ };
+ #define IFLA_GENEVE_MAX	(__IFLA_GENEVE_MAX - 1)
+@@ -821,6 +895,8 @@
+ 	IFLA_GTP_FD1,
+ 	IFLA_GTP_PDP_HASHSIZE,
+ 	IFLA_GTP_ROLE,
++	IFLA_GTP_CREATE_SOCKETS,
++	IFLA_GTP_RESTART_COUNT,
+ 	__IFLA_GTP_MAX,
+ };
+ #define IFLA_GTP_MAX (__IFLA_GTP_MAX - 1)
+@@ -858,6 +934,8 @@
+ 	IFLA_BOND_TLB_DYNAMIC_LB,
+ 	IFLA_BOND_PEER_NOTIF_DELAY,
+ 	IFLA_BOND_AD_LACP_ACTIVE,
++	IFLA_BOND_MISSED_MAX,
++	IFLA_BOND_NS_IP6_TARGET,
+ 	__IFLA_BOND_MAX,
+ };
+ 
+@@ -1154,6 +1232,17 @@
+ 
+ #define IFLA_STATS_FILTER_BIT(ATTR)	(1 << (ATTR - 1))
+ 
++enum {
++	IFLA_STATS_GETSET_UNSPEC,
++	IFLA_STATS_GET_FILTERS, /* Nest of IFLA_STATS_LINK_xxx, each a u32 with
++				 * a filter mask for the corresponding group.
++				 */
++	IFLA_STATS_SET_OFFLOAD_XSTATS_L3_STATS, /* 0 or 1 as u8 */
++	__IFLA_STATS_GETSET_MAX,
++};
++
++#define IFLA_STATS_GETSET_MAX (__IFLA_STATS_GETSET_MAX - 1)
++
+ /* These are embedded into IFLA_STATS_LINK_XSTATS:
+  * [IFLA_STATS_LINK_XSTATS]
+  * -> [LINK_XSTATS_TYPE_xxx]
+@@ -1171,10 +1260,21 @@
+ enum {
+ 	IFLA_OFFLOAD_XSTATS_UNSPEC,
+ 	IFLA_OFFLOAD_XSTATS_CPU_HIT, /* struct rtnl_link_stats64 */
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO,	/* HW stats info. A nest */
++	IFLA_OFFLOAD_XSTATS_L3_STATS,	/* struct rtnl_hw_stats64 */
+ 	__IFLA_OFFLOAD_XSTATS_MAX
+ };
+ #define IFLA_OFFLOAD_XSTATS_MAX (__IFLA_OFFLOAD_XSTATS_MAX - 1)
+ 
++enum {
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO_UNSPEC,
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO_REQUEST,		/* u8 */
++	IFLA_OFFLOAD_XSTATS_HW_S_INFO_USED,		/* u8 */
++	__IFLA_OFFLOAD_XSTATS_HW_S_INFO_MAX,
++};
++#define IFLA_OFFLOAD_XSTATS_HW_S_INFO_MAX \
++	(__IFLA_OFFLOAD_XSTATS_HW_S_INFO_MAX - 1)
++
+ /* XDP section */
+ 
+ #define XDP_FLAGS_UPDATE_IF_NOEXIST	(1U << 0)
+diff -Naur a/src/basic/linux/if_tunnel.h b/src/basic/linux/if_tunnel.h
+--- a/src/basic/linux/if_tunnel.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/if_tunnel.h	2022-10-23 18:12:33.150034712 +0200
+@@ -176,8 +176,10 @@
+ #define TUNNEL_VXLAN_OPT	__cpu_to_be16(0x1000)
+ #define TUNNEL_NOCACHE		__cpu_to_be16(0x2000)
+ #define TUNNEL_ERSPAN_OPT	__cpu_to_be16(0x4000)
++#define TUNNEL_GTP_OPT		__cpu_to_be16(0x8000)
+ 
+ #define TUNNEL_OPTIONS_PRESENT \
+-		(TUNNEL_GENEVE_OPT | TUNNEL_VXLAN_OPT | TUNNEL_ERSPAN_OPT)
++		(TUNNEL_GENEVE_OPT | TUNNEL_VXLAN_OPT | TUNNEL_ERSPAN_OPT | \
++		TUNNEL_GTP_OPT)
+ 
+ #endif /* _UAPI_IF_TUNNEL_H_ */
+diff -Naur a/src/basic/linux/netlink.h b/src/basic/linux/netlink.h
+--- a/src/basic/linux/netlink.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/netlink.h	2022-10-23 18:12:33.150034712 +0200
+@@ -72,6 +72,7 @@
+ 
+ /* Modifiers to DELETE request */
+ #define NLM_F_NONREC	0x100	/* Do not delete recursively	*/
++#define NLM_F_BULK	0x200	/* Delete multiple objects	*/
+ 
+ /* Flags for ACK message */
+ #define NLM_F_CAPPED	0x100	/* request was capped */
+diff -Naur a/src/basic/linux/nl80211.h b/src/basic/linux/nl80211.h
+--- a/src/basic/linux/nl80211.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/nl80211.h	2022-10-23 18:12:33.150034712 +0200
+@@ -11,7 +11,7 @@
+  * Copyright 2008 Jouni Malinen <jouni.malinen@atheros.com>
+  * Copyright 2008 Colin McCabe <colin@cozybit.com>
+  * Copyright 2015-2017	Intel Deutschland GmbH
+- * Copyright (C) 2018-2021 Intel Corporation
++ * Copyright (C) 2018-2022 Intel Corporation
+  *
+  * Permission to use, copy, modify, and/or distribute this software for any
+  * purpose with or without fee is hereby granted, provided that the above
+@@ -1232,6 +1232,11 @@
+  *	&NL80211_ATTR_FILS_NONCES - for FILS Nonces
+  *		(STA Nonce 16 bytes followed by AP Nonce 16 bytes)
+  *
++ * @NL80211_CMD_ASSOC_COMEBACK: notification about an association
++ *      temporal rejection with comeback. The event includes %NL80211_ATTR_MAC
++ *      to describe the BSSID address of the AP and %NL80211_ATTR_TIMEOUT to
++ *      specify the timeout value.
++ *
+  * @NL80211_CMD_MAX: highest used command number
+  * @__NL80211_CMD_AFTER_LAST: internal use
+  */
+@@ -1474,6 +1479,8 @@
+ 
+ 	NL80211_CMD_SET_FILS_AAD,
+ 
++	NL80211_CMD_ASSOC_COMEBACK,
++
+ 	/* add new commands above here */
+ 
+ 	/* used to define NL80211_CMD_MAX below */
+@@ -2470,7 +2477,9 @@
+  *	space supports external authentication. This attribute shall be used
+  *	with %NL80211_CMD_CONNECT and %NL80211_CMD_START_AP request. The driver
+  *	may offload authentication processing to user space if this capability
+- *	is indicated in the respective requests from the user space.
++ *	is indicated in the respective requests from the user space. (This flag
++ *	attribute deprecated for %NL80211_CMD_START_AP, use
++ *	%NL80211_ATTR_AP_SETTINGS_FLAGS)
+  *
+  * @NL80211_ATTR_NSS: Station's New/updated  RX_NSS value notified using this
+  *	u8 attribute. This is used with %NL80211_CMD_STA_OPMODE_CHANGED.
+@@ -2639,6 +2648,21 @@
+  *	Mandatory parameter for the transmitting interface to enable MBSSID.
+  *	Optional for the non-transmitting interfaces.
+  *
++ * @NL80211_ATTR_RADAR_BACKGROUND: Configure dedicated offchannel chain
++ *	available for radar/CAC detection on some hw. This chain can't be used
++ *	to transmit or receive frames and it is bounded to a running wdev.
++ *	Background radar/CAC detection allows to avoid the CAC downtime
++ *	switching on a different channel during CAC detection on the selected
++ *	radar channel.
++ *
++ * @NL80211_ATTR_AP_SETTINGS_FLAGS: u32 attribute contains ap settings flags,
++ *	enumerated in &enum nl80211_ap_settings_flags. This attribute shall be
++ *	used with %NL80211_CMD_START_AP request.
++ *
++ * @NL80211_ATTR_EHT_CAPABILITY: EHT Capability information element (from
++ *	association request when used with NL80211_CMD_NEW_STATION). Can be set
++ *	only if %NL80211_STA_FLAG_WME is set.
++ *
+  * @NUM_NL80211_ATTR: total number of nl80211_attrs available
+  * @NL80211_ATTR_MAX: highest attribute number currently defined
+  * @__NL80211_ATTR_AFTER_LAST: internal use
+@@ -3145,6 +3169,14 @@
+ 	NL80211_ATTR_MBSSID_CONFIG,
+ 	NL80211_ATTR_MBSSID_ELEMS,
+ 
++	NL80211_ATTR_RADAR_BACKGROUND,
++
++	NL80211_ATTR_AP_SETTINGS_FLAGS,
++
++	NL80211_ATTR_EHT_CAPABILITY,
++
++	NL80211_ATTR_DISABLE_EHT,
++
+ 	/* add attributes here, update the policy in nl80211.c */
+ 
+ 	__NL80211_ATTR_AFTER_LAST,
+@@ -3200,6 +3232,8 @@
+ #define NL80211_HE_MAX_CAPABILITY_LEN           54
+ #define NL80211_MAX_NR_CIPHER_SUITES		5
+ #define NL80211_MAX_NR_AKM_SUITES		2
++#define NL80211_EHT_MIN_CAPABILITY_LEN          13
++#define NL80211_EHT_MAX_CAPABILITY_LEN          51
+ 
+ #define NL80211_MIN_REMAIN_ON_CHANNEL_TIME	10
+ 
+@@ -3227,7 +3261,7 @@
+  *	and therefore can't be created in the normal ways, use the
+  *	%NL80211_CMD_START_P2P_DEVICE and %NL80211_CMD_STOP_P2P_DEVICE
+  *	commands to create and destroy one
+- * @NL80211_IF_TYPE_OCB: Outside Context of a BSS
++ * @NL80211_IFTYPE_OCB: Outside Context of a BSS
+  *	This mode corresponds to the MIB variable dot11OCBActivated=true
+  * @NL80211_IFTYPE_NAN: NAN device interface type (not a netdev)
+  * @NL80211_IFTYPE_MAX: highest interface type number currently defined
+@@ -3369,6 +3403,56 @@
+ };
+ 
+ /**
++ * enum nl80211_eht_gi - EHT guard interval
++ * @NL80211_RATE_INFO_EHT_GI_0_8: 0.8 usec
++ * @NL80211_RATE_INFO_EHT_GI_1_6: 1.6 usec
++ * @NL80211_RATE_INFO_EHT_GI_3_2: 3.2 usec
++ */
++enum nl80211_eht_gi {
++	NL80211_RATE_INFO_EHT_GI_0_8,
++	NL80211_RATE_INFO_EHT_GI_1_6,
++	NL80211_RATE_INFO_EHT_GI_3_2,
++};
++
++/**
++ * enum nl80211_eht_ru_alloc - EHT RU allocation values
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_26: 26-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_52: 52-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_52P26: 52+26-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_106: 106-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_106P26: 106+26 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_242: 242-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_484: 484-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_484P242: 484+242 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_996: 996-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_996P484: 996+484 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_996P484P242: 996+484+242 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_2x996: 2x996-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_2x996P484: 2x996+484 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_3x996: 3x996-tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_3x996P484: 3x996+484 tone RU allocation
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC_4x996: 4x996-tone RU allocation
++ */
++enum nl80211_eht_ru_alloc {
++	NL80211_RATE_INFO_EHT_RU_ALLOC_26,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_52,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_52P26,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_106,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_106P26,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_242,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_484P242,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_996,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_996P484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_996P484P242,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_2x996,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_2x996P484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_3x996,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_3x996P484,
++	NL80211_RATE_INFO_EHT_RU_ALLOC_4x996,
++};
++
++/**
+  * enum nl80211_rate_info - bitrate information
+  *
+  * These attribute types are used with %NL80211_STA_INFO_TXRATE
+@@ -3407,6 +3491,13 @@
+  * @NL80211_RATE_INFO_HE_DCM: HE DCM value (u8, 0/1)
+  * @NL80211_RATE_INFO_RU_ALLOC: HE RU allocation, if not present then
+  *	non-OFDMA was used (u8, see &enum nl80211_he_ru_alloc)
++ * @NL80211_RATE_INFO_320_MHZ_WIDTH: 320 MHz bitrate
++ * @NL80211_RATE_INFO_EHT_MCS: EHT MCS index (u8, 0-15)
++ * @NL80211_RATE_INFO_EHT_NSS: EHT NSS value (u8, 1-8)
++ * @NL80211_RATE_INFO_EHT_GI: EHT guard interval identifier
++ *	(u8, see &enum nl80211_eht_gi)
++ * @NL80211_RATE_INFO_EHT_RU_ALLOC: EHT RU allocation, if not present then
++ *	non-OFDMA was used (u8, see &enum nl80211_eht_ru_alloc)
+  * @__NL80211_RATE_INFO_AFTER_LAST: internal use
+  */
+ enum nl80211_rate_info {
+@@ -3428,6 +3519,11 @@
+ 	NL80211_RATE_INFO_HE_GI,
+ 	NL80211_RATE_INFO_HE_DCM,
+ 	NL80211_RATE_INFO_HE_RU_ALLOC,
++	NL80211_RATE_INFO_320_MHZ_WIDTH,
++	NL80211_RATE_INFO_EHT_MCS,
++	NL80211_RATE_INFO_EHT_NSS,
++	NL80211_RATE_INFO_EHT_GI,
++	NL80211_RATE_INFO_EHT_RU_ALLOC,
+ 
+ 	/* keep last */
+ 	__NL80211_RATE_INFO_AFTER_LAST,
+@@ -3738,13 +3834,20 @@
+  *     capabilities IE
+  * @NL80211_BAND_IFTYPE_ATTR_HE_CAP_PPE: HE PPE thresholds information as
+  *     defined in HE capabilities IE
+- * @NL80211_BAND_IFTYPE_ATTR_MAX: highest band HE capability attribute currently
+- *     defined
+  * @NL80211_BAND_IFTYPE_ATTR_HE_6GHZ_CAPA: HE 6GHz band capabilities (__le16),
+  *	given for all 6 GHz band channels
+  * @NL80211_BAND_IFTYPE_ATTR_VENDOR_ELEMS: vendor element capabilities that are
+  *	advertised on this band/for this iftype (binary)
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MAC: EHT MAC capabilities as in EHT
++ *	capabilities element
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PHY: EHT PHY capabilities as in EHT
++ *	capabilities element
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MCS_SET: EHT supported NSS/MCS as in EHT
++ *	capabilities element
++ * @NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PPE: EHT PPE thresholds information as
++ *	defined in EHT capabilities element
+  * @__NL80211_BAND_IFTYPE_ATTR_AFTER_LAST: internal use
++ * @NL80211_BAND_IFTYPE_ATTR_MAX: highest band attribute currently defined
+  */
+ enum nl80211_band_iftype_attr {
+ 	__NL80211_BAND_IFTYPE_ATTR_INVALID,
+@@ -3756,6 +3859,10 @@
+ 	NL80211_BAND_IFTYPE_ATTR_HE_CAP_PPE,
+ 	NL80211_BAND_IFTYPE_ATTR_HE_6GHZ_CAPA,
+ 	NL80211_BAND_IFTYPE_ATTR_VENDOR_ELEMS,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MAC,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PHY,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_MCS_SET,
++	NL80211_BAND_IFTYPE_ATTR_EHT_CAP_PPE,
+ 
+ 	/* keep last */
+ 	__NL80211_BAND_IFTYPE_ATTR_AFTER_LAST,
+@@ -3900,6 +4007,10 @@
+  *	on this channel in current regulatory domain.
+  * @NL80211_FREQUENCY_ATTR_16MHZ: 16 MHz operation is allowed
+  *	on this channel in current regulatory domain.
++ * @NL80211_FREQUENCY_ATTR_NO_320MHZ: any 320 MHz channel using this channel
++ *	as the primary or any of the secondary channels isn't possible
++ * @NL80211_FREQUENCY_ATTR_NO_EHT: EHT operation is not allowed on this channel
++ *	in current regulatory domain.
+  * @NL80211_FREQUENCY_ATTR_MAX: highest frequency attribute number
+  *	currently defined
+  * @__NL80211_FREQUENCY_ATTR_AFTER_LAST: internal use
+@@ -3936,6 +4047,8 @@
+ 	NL80211_FREQUENCY_ATTR_4MHZ,
+ 	NL80211_FREQUENCY_ATTR_8MHZ,
+ 	NL80211_FREQUENCY_ATTR_16MHZ,
++	NL80211_FREQUENCY_ATTR_NO_320MHZ,
++	NL80211_FREQUENCY_ATTR_NO_EHT,
+ 
+ 	/* keep last */
+ 	__NL80211_FREQUENCY_ATTR_AFTER_LAST,
+@@ -4134,6 +4247,7 @@
+  * @NL80211_RRF_NO_80MHZ: 80MHz operation not allowed
+  * @NL80211_RRF_NO_160MHZ: 160MHz operation not allowed
+  * @NL80211_RRF_NO_HE: HE operation not allowed
++ * @NL80211_RRF_NO_320MHZ: 320MHz operation not allowed
+  */
+ enum nl80211_reg_rule_flags {
+ 	NL80211_RRF_NO_OFDM		= 1<<0,
+@@ -4152,6 +4266,7 @@
+ 	NL80211_RRF_NO_80MHZ		= 1<<15,
+ 	NL80211_RRF_NO_160MHZ		= 1<<16,
+ 	NL80211_RRF_NO_HE		= 1<<17,
++	NL80211_RRF_NO_320MHZ		= 1<<18,
+ };
+ 
+ #define NL80211_RRF_PASSIVE_SCAN	NL80211_RRF_NO_IR
+@@ -4649,6 +4764,8 @@
+  * @NL80211_CHAN_WIDTH_4: 4 MHz OFDM channel
+  * @NL80211_CHAN_WIDTH_8: 8 MHz OFDM channel
+  * @NL80211_CHAN_WIDTH_16: 16 MHz OFDM channel
++ * @NL80211_CHAN_WIDTH_320: 320 MHz channel, the %NL80211_ATTR_CENTER_FREQ1
++ *	attribute must be provided as well
+  */
+ enum nl80211_chan_width {
+ 	NL80211_CHAN_WIDTH_20_NOHT,
+@@ -4664,6 +4781,7 @@
+ 	NL80211_CHAN_WIDTH_4,
+ 	NL80211_CHAN_WIDTH_8,
+ 	NL80211_CHAN_WIDTH_16,
++	NL80211_CHAN_WIDTH_320,
+ };
+ 
+ /**
+@@ -5555,7 +5673,7 @@
+  *	=> allows 8 of AP/GO that can have BI gcd >= min gcd
+  *
+  *	numbers = [ #{STA} <= 2 ], channels = 2, max = 2
+- *	=> allows two STAs on different channels
++ *	=> allows two STAs on the same or on different channels
+  *
+  *	numbers = [ #{STA} <= 1, #{P2P-client,P2P-GO} <= 3 ], max = 4
+  *	=> allows a STA plus three P2P interfaces
+@@ -5600,7 +5718,7 @@
+  * @NL80211_PLINK_ESTAB: mesh peer link is established
+  * @NL80211_PLINK_HOLDING: mesh peer link is being closed or cancelled
+  * @NL80211_PLINK_BLOCKED: all frames transmitted from this mesh
+- *	plink are discarded
++ *	plink are discarded, except for authentication frames
+  * @NUM_NL80211_PLINK_STATES: number of peer link states
+  * @MAX_NL80211_PLINK_STATES: highest numerical value of plink states
+  */
+@@ -5737,13 +5855,15 @@
+ 	NL80211_TDLS_DISABLE_LINK,
+ };
+ 
+-/*
++/**
+  * enum nl80211_ap_sme_features - device-integrated AP features
+- * Reserved for future use, no bits are defined in
+- * NL80211_ATTR_DEVICE_AP_SME yet.
++ * @NL80211_AP_SME_SA_QUERY_OFFLOAD: SA Query procedures offloaded to driver
++ *	when user space indicates support for SA Query procedures offload during
++ *	"start ap" with %NL80211_AP_SETTINGS_SA_QUERY_OFFLOAD_SUPPORT.
++ */
+ enum nl80211_ap_sme_features {
++	NL80211_AP_SME_SA_QUERY_OFFLOAD		= 1 << 0,
+ };
+- */
+ 
+ /**
+  * enum nl80211_feature_flags - device/driver features
+@@ -6051,6 +6171,9 @@
+  *	frames. Userspace has to share FILS AAD details to the driver by using
+  *	@NL80211_CMD_SET_FILS_AAD.
+  *
++ * @NL80211_EXT_FEATURE_RADAR_BACKGROUND: Device supports background radar/CAC
++ *	detection.
++ *
+  * @NUM_NL80211_EXT_FEATURES: number of extended features.
+  * @MAX_NL80211_EXT_FEATURES: highest extended feature index.
+  */
+@@ -6117,6 +6240,7 @@
+ 	NL80211_EXT_FEATURE_PROT_RANGE_NEGO_AND_MEASURE,
+ 	NL80211_EXT_FEATURE_BSS_COLOR,
+ 	NL80211_EXT_FEATURE_FILS_CRYPTO_OFFLOAD,
++	NL80211_EXT_FEATURE_RADAR_BACKGROUND,
+ 
+ 	/* add new features before the definition below */
+ 	NUM_NL80211_EXT_FEATURES,
+@@ -7462,4 +7586,20 @@
+ 	NL80211_MBSSID_CONFIG_ATTR_MAX = __NL80211_MBSSID_CONFIG_ATTR_LAST - 1,
+ };
+ 
++/**
++ * enum nl80211_ap_settings_flags - AP settings flags
++ *
++ * @NL80211_AP_SETTINGS_EXTERNAL_AUTH_SUPPORT: AP supports external
++ *	authentication.
++ * @NL80211_AP_SETTINGS_SA_QUERY_OFFLOAD_SUPPORT: Userspace supports SA Query
++ *	procedures offload to driver. If driver advertises
++ *	%NL80211_AP_SME_SA_QUERY_OFFLOAD in AP SME features, userspace shall
++ *	ignore SA Query procedures and validations when this flag is set by
++ *	userspace.
++ */
++enum nl80211_ap_settings_flags {
++	NL80211_AP_SETTINGS_EXTERNAL_AUTH_SUPPORT	= 1 << 0,
++	NL80211_AP_SETTINGS_SA_QUERY_OFFLOAD_SUPPORT	= 1 << 1,
++};
++
+ #endif /* __LINUX_NL80211_H */
+diff -Naur a/src/basic/linux/rtnetlink.h b/src/basic/linux/rtnetlink.h
+--- a/src/basic/linux/rtnetlink.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/linux/rtnetlink.h	2022-10-23 18:12:33.150034712 +0200
+@@ -146,6 +146,8 @@
+ #define RTM_NEWSTATS RTM_NEWSTATS
+ 	RTM_GETSTATS = 94,
+ #define RTM_GETSTATS RTM_GETSTATS
++	RTM_SETSTATS,
++#define RTM_SETSTATS RTM_SETSTATS
+ 
+ 	RTM_NEWCACHEREPORT = 96,
+ #define RTM_NEWCACHEREPORT RTM_NEWCACHEREPORT
+@@ -185,6 +187,13 @@
+ 	RTM_GETNEXTHOPBUCKET,
+ #define RTM_GETNEXTHOPBUCKET	RTM_GETNEXTHOPBUCKET
+ 
++	RTM_NEWTUNNEL = 120,
++#define RTM_NEWTUNNEL	RTM_NEWTUNNEL
++	RTM_DELTUNNEL,
++#define RTM_DELTUNNEL	RTM_DELTUNNEL
++	RTM_GETTUNNEL,
++#define RTM_GETTUNNEL	RTM_GETTUNNEL
++
+ 	__RTM_MAX,
+ #define RTM_MAX		(((__RTM_MAX + 3) & ~3) - 1)
+ };
+@@ -754,6 +763,12 @@
+ #define RTNLGRP_NEXTHOP		RTNLGRP_NEXTHOP
+ 	RTNLGRP_BRVLAN,
+ #define RTNLGRP_BRVLAN		RTNLGRP_BRVLAN
++	RTNLGRP_MCTP_IFADDR,
++#define RTNLGRP_MCTP_IFADDR	RTNLGRP_MCTP_IFADDR
++	RTNLGRP_TUNNEL,
++#define RTNLGRP_TUNNEL		RTNLGRP_TUNNEL
++	RTNLGRP_STATS,
++#define RTNLGRP_STATS		RTNLGRP_STATS
+ 	__RTNLGRP_MAX
+ };
+ #define RTNLGRP_MAX	(__RTNLGRP_MAX - 1)
+@@ -802,6 +817,7 @@
+ #define RTEXT_FILTER_MRP	(1 << 4)
+ #define RTEXT_FILTER_CFM_CONFIG	(1 << 5)
+ #define RTEXT_FILTER_CFM_STATUS	(1 << 6)
++#define RTEXT_FILTER_MST	(1 << 7)
+ 
+ /* End of information exported to user level */
+ 
+diff -Naur a/src/basic/missing_fs.h b/src/basic/missing_fs.h
+--- a/src/basic/missing_fs.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/basic/missing_fs.h	2022-10-23 18:12:44.898082792 +0200
+@@ -64,3 +64,8 @@
+ #ifndef FS_PROJINHERIT_FL
+ #define FS_PROJINHERIT_FL 0x20000000
+ #endif
++
++/* linux/fscrypt.h */
++#ifndef FS_KEY_DESCRIPTOR_SIZE
++#define FS_KEY_DESCRIPTOR_SIZE 8
++#endif
+diff -Naur a/src/home/homework-cifs.c b/src/home/homework-cifs.c
+--- a/src/home/homework-cifs.c	2022-05-21 15:23:41.000000000 +0200
++++ b/src/home/homework-cifs.c	2022-10-23 18:12:44.902082808 +0200
+@@ -1,5 +1,10 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ 
++#include <sys/mount.h>
++#if WANT_LINUX_FS_H
++#include <linux/fs.h>
++#endif
++
+ #include "dirent-util.h"
+ #include "fd-util.h"
+ #include "fileio.h"
+diff -Naur a/src/home/homework.h b/src/home/homework.h
+--- a/src/home/homework.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/home/homework.h	2022-10-23 18:12:44.902082808 +0200
+@@ -1,13 +1,14 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ #pragma once
+ 
+-#include <linux/fs.h>
+ #include <sys/vfs.h>
+ 
+ #include "sd-id128.h"
+ 
++#include "cryptsetup-util.h"
+ #include "homework-password-cache.h"
+ #include "loop-util.h"
++#include "missing_fs.h" /* for FS_KEY_DESCRIPTOR_SIZE, do not include linux/fs.h */
+ #include "missing_keyctl.h"
+ #include "missing_syscall.h"
+ #include "user-record.h"
+diff -Naur a/src/home/homework-luks.c b/src/home/homework-luks.c
+--- a/src/home/homework-luks.c	2022-05-21 15:23:41.000000000 +0200
++++ b/src/home/homework-luks.c	2022-10-23 18:12:44.902082808 +0200
+@@ -4,7 +4,6 @@
+ #include <poll.h>
+ #include <sys/file.h>
+ #include <sys/ioctl.h>
+-#include <sys/mount.h>
+ #include <sys/xattr.h>
+ 
+ #if HAVE_VALGRIND_MEMCHECK_H
+diff -Naur a/src/home/homework-mount.c b/src/home/homework-mount.c
+--- a/src/home/homework-mount.c	2022-05-21 15:23:41.000000000 +0200
++++ b/src/home/homework-mount.c	2022-10-23 18:12:44.902082808 +0200
+@@ -2,7 +2,9 @@
+ 
+ #include <sched.h>
+ #include <sys/mount.h>
++#if WANT_LINUX_FS_H
+ #include <linux/fs.h>
++#endif
+ 
+ #include "alloc-util.h"
+ #include "fd-util.h"
+diff -Naur a/src/shared/linux/bpf.h b/src/shared/linux/bpf.h
+--- a/src/shared/linux/bpf.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/shared/linux/bpf.h	2022-10-23 18:12:40.578065115 +0200
+@@ -330,6 +330,8 @@
+  *			*ctx_out*, *data_in* and *data_out* must be NULL.
+  *			*repeat* must be zero.
+  *
++ *		BPF_PROG_RUN is an alias for BPF_PROG_TEST_RUN.
++ *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+  *		is set appropriately.
+@@ -995,6 +997,7 @@
+ 	BPF_SK_REUSEPORT_SELECT,
+ 	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
+ 	BPF_PERF_EVENT,
++	BPF_TRACE_KPROBE_MULTI,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+@@ -1009,6 +1012,8 @@
+ 	BPF_LINK_TYPE_NETNS = 5,
+ 	BPF_LINK_TYPE_XDP = 6,
+ 	BPF_LINK_TYPE_PERF_EVENT = 7,
++	BPF_LINK_TYPE_KPROBE_MULTI = 8,
++	BPF_LINK_TYPE_STRUCT_OPS = 9,
+ 
+ 	MAX_BPF_LINK_TYPE,
+ };
+@@ -1111,6 +1116,16 @@
+  */
+ #define BPF_F_SLEEPABLE		(1U << 4)
+ 
++/* If BPF_F_XDP_HAS_FRAGS is used in BPF_PROG_LOAD command, the loaded program
++ * fully support xdp frags.
++ */
++#define BPF_F_XDP_HAS_FRAGS	(1U << 5)
++
++/* link_create.kprobe_multi.flags used in LINK_CREATE command for
++ * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
++ */
++#define BPF_F_KPROBE_MULTI_RETURN	(1U << 0)
++
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * the following extensions:
+  *
+@@ -1225,6 +1240,8 @@
+ 
+ /* If set, run the test on the cpu specified by bpf_attr.test.cpu */
+ #define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
++/* If set, XDP frames will be transmitted after processing */
++#define BPF_F_TEST_XDP_LIVE_FRAMES	(1U << 1)
+ 
+ /* type for BPF_ENABLE_STATS */
+ enum bpf_stats_type {
+@@ -1342,8 +1359,10 @@
+ 			/* or valid module BTF object fd or 0 to attach to vmlinux */
+ 			__u32		attach_btf_obj_fd;
+ 		};
+-		__u32		:32;		/* pad */
++		__u32		core_relo_cnt;	/* number of bpf_core_relo */
+ 		__aligned_u64	fd_array;	/* array of FDs */
++		__aligned_u64	core_relos;
++		__u32		core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
+ 	};
+ 
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+@@ -1384,6 +1403,7 @@
+ 		__aligned_u64	ctx_out;
+ 		__u32		flags;
+ 		__u32		cpu;
++		__u32		batch_size;
+ 	} test;
+ 
+ 	struct { /* anonymous struct used by BPF_*_GET_*_ID */
+@@ -1463,6 +1483,22 @@
+ 				 */
+ 				__u64		bpf_cookie;
+ 			} perf_event;
++			struct {
++				__u32		flags;
++				__u32		cnt;
++				__aligned_u64	syms;
++				__aligned_u64	addrs;
++				__aligned_u64	cookies;
++			} kprobe_multi;
++			struct {
++				/* this is overlaid with the target_btf_id above. */
++				__u32		target_btf_id;
++				/* black box user-provided value passed through
++				 * to BPF program at the execution time and
++				 * accessible through bpf_get_attach_cookie() BPF helper
++				 */
++				__u64		cookie;
++			} tracing;
+ 		};
+ 	} link_create;
+ 
+@@ -1744,7 +1780,7 @@
+  * 		if the maximum number of tail calls has been reached for this
+  * 		chain of programs. This limit is defined in the kernel by the
+  * 		macro **MAX_TAIL_CALL_CNT** (not accessible to user space),
+- * 		which is currently set to 32.
++ *		which is currently set to 33.
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
+  *
+@@ -1773,6 +1809,8 @@
+  * 		0 on success, or a negative error in case of failure.
+  *
+  * u64 bpf_get_current_pid_tgid(void)
++ * 	Description
++ * 		Get the current pid and tgid.
+  * 	Return
+  * 		A 64-bit integer containing the current tgid and pid, and
+  * 		created as such:
+@@ -1780,6 +1818,8 @@
+  * 		*current_task*\ **->pid**.
+  *
+  * u64 bpf_get_current_uid_gid(void)
++ * 	Description
++ * 		Get the current uid and gid.
+  * 	Return
+  * 		A 64-bit integer containing the current GID and UID, and
+  * 		created as such: *current_gid* **<< 32 \|** *current_uid*.
+@@ -2254,6 +2294,8 @@
+  * 		The 32-bit hash.
+  *
+  * u64 bpf_get_current_task(void)
++ * 	Description
++ * 		Get the current task.
+  * 	Return
+  * 		A pointer to the current task struct.
+  *
+@@ -2284,8 +2326,8 @@
+  * 	Return
+  * 		The return value depends on the result of the test, and can be:
+  *
+- *		* 0, if current task belongs to the cgroup2.
+- *		* 1, if current task does not belong to the cgroup2.
++ *		* 1, if current task belongs to the cgroup2.
++ *		* 0, if current task does not belong to the cgroup2.
+  * 		* A negative error code, if an error occurred.
+  *
+  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
+@@ -2367,6 +2409,8 @@
+  * 		indicate that the hash is outdated and to trigger a
+  * 		recalculation the next time the kernel tries to access this
+  * 		hash or when the **bpf_get_hash_recalc**\ () helper is called.
++ * 	Return
++ * 		void.
+  *
+  * long bpf_get_numa_node_id(void)
+  * 	Description
+@@ -2464,6 +2508,8 @@
+  * 		A 8-byte long unique number or 0 if *sk* is NULL.
+  *
+  * u32 bpf_get_socket_uid(struct sk_buff *skb)
++ * 	Description
++ * 		Get the owner UID of the socked associated to *skb*.
+  * 	Return
+  * 		The owner UID of the socket associated to *skb*. If the socket
+  * 		is **NULL**, or if it is not a full socket (i.e. if it is a
+@@ -2973,8 +3019,8 @@
+  *
+  * 			# sysctl kernel.perf_event_max_stack=<new value>
+  * 	Return
+- * 		A non-negative value equal to or less than *size* on success,
+- * 		or a negative error in case of failure.
++ * 		The non-negative copied *buf* length equal to or less than
++ * 		*size* on success, or a negative error in case of failure.
+  *
+  * long bpf_skb_load_bytes_relative(const void *skb, u32 offset, void *to, u32 len, u32 start_header)
+  * 	Description
+@@ -3238,6 +3284,9 @@
+  * 		The id is returned or 0 in case the id could not be retrieved.
+  *
+  * u64 bpf_get_current_cgroup_id(void)
++ * 	Description
++ * 		Get the current cgroup id based on the cgroup within which
++ * 		the current task is running.
+  * 	Return
+  * 		A 64-bit integer containing the current cgroup id based
+  * 		on the cgroup within which the current task is running.
+@@ -4277,8 +4326,8 @@
+  *
+  *			# sysctl kernel.perf_event_max_stack=<new value>
+  *	Return
+- *		A non-negative value equal to or less than *size* on success,
+- *		or a negative error in case of failure.
++ * 		The non-negative copied *buf* length equal to or less than
++ * 		*size* on success, or a negative error in case of failure.
+  *
+  * long bpf_load_hdr_opt(struct bpf_sock_ops *skops, void *searchby_res, u32 len, u64 flags)
+  *	Description
+@@ -4938,6 +4987,268 @@
+  *		**-ENOENT** if symbol is not found.
+  *
+  *		**-EPERM** if caller does not have permission to obtain kernel address.
++ *
++ * long bpf_find_vma(struct task_struct *task, u64 addr, void *callback_fn, void *callback_ctx, u64 flags)
++ *	Description
++ *		Find vma of *task* that contains *addr*, call *callback_fn*
++ *		function with *task*, *vma*, and *callback_ctx*.
++ *		The *callback_fn* should be a static function and
++ *		the *callback_ctx* should be a pointer to the stack.
++ *		The *flags* is used to control certain aspects of the helper.
++ *		Currently, the *flags* must be 0.
++ *
++ *		The expected callback signature is
++ *
++ *		long (\*callback_fn)(struct task_struct \*task, struct vm_area_struct \*vma, void \*callback_ctx);
++ *
++ *	Return
++ *		0 on success.
++ *		**-ENOENT** if *task->mm* is NULL, or no vma contains *addr*.
++ *		**-EBUSY** if failed to try lock mmap_lock.
++ *		**-EINVAL** for invalid **flags**.
++ *
++ * long bpf_loop(u32 nr_loops, void *callback_fn, void *callback_ctx, u64 flags)
++ *	Description
++ *		For **nr_loops**, call **callback_fn** function
++ *		with **callback_ctx** as the context parameter.
++ *		The **callback_fn** should be a static function and
++ *		the **callback_ctx** should be a pointer to the stack.
++ *		The **flags** is used to control certain aspects of the helper.
++ *		Currently, the **flags** must be 0. Currently, nr_loops is
++ *		limited to 1 << 23 (~8 million) loops.
++ *
++ *		long (\*callback_fn)(u32 index, void \*ctx);
++ *
++ *		where **index** is the current index in the loop. The index
++ *		is zero-indexed.
++ *
++ *		If **callback_fn** returns 0, the helper will continue to the next
++ *		loop. If return value is 1, the helper will skip the rest of
++ *		the loops and return. Other return values are not used now,
++ *		and will be rejected by the verifier.
++ *
++ *	Return
++ *		The number of loops performed, **-EINVAL** for invalid **flags**,
++ *		**-E2BIG** if **nr_loops** exceeds the maximum number of loops.
++ *
++ * long bpf_strncmp(const char *s1, u32 s1_sz, const char *s2)
++ *	Description
++ *		Do strncmp() between **s1** and **s2**. **s1** doesn't need
++ *		to be null-terminated and **s1_sz** is the maximum storage
++ *		size of **s1**. **s2** must be a read-only string.
++ *	Return
++ *		An integer less than, equal to, or greater than zero
++ *		if the first **s1_sz** bytes of **s1** is found to be
++ *		less than, to match, or be greater than **s2**.
++ *
++ * long bpf_get_func_arg(void *ctx, u32 n, u64 *value)
++ *	Description
++ *		Get **n**-th argument (zero based) of the traced function (for tracing programs)
++ *		returned in **value**.
++ *
++ *	Return
++ *		0 on success.
++ *		**-EINVAL** if n >= arguments count of traced function.
++ *
++ * long bpf_get_func_ret(void *ctx, u64 *value)
++ *	Description
++ *		Get return value of the traced function (for tracing programs)
++ *		in **value**.
++ *
++ *	Return
++ *		0 on success.
++ *		**-EOPNOTSUPP** for tracing programs other than BPF_TRACE_FEXIT or BPF_MODIFY_RETURN.
++ *
++ * long bpf_get_func_arg_cnt(void *ctx)
++ *	Description
++ *		Get number of arguments of the traced function (for tracing programs).
++ *
++ *	Return
++ *		The number of arguments of the traced function.
++ *
++ * int bpf_get_retval(void)
++ *	Description
++ *		Get the syscall's return value that will be returned to userspace.
++ *
++ *		This helper is currently supported by cgroup programs only.
++ *	Return
++ *		The syscall's return value.
++ *
++ * int bpf_set_retval(int retval)
++ *	Description
++ *		Set the syscall's return value that will be returned to userspace.
++ *
++ *		This helper is currently supported by cgroup programs only.
++ *	Return
++ *		0 on success, or a negative error in case of failure.
++ *
++ * u64 bpf_xdp_get_buff_len(struct xdp_buff *xdp_md)
++ *	Description
++ *		Get the total size of a given xdp buff (linear and paged area)
++ *	Return
++ *		The total size of a given xdp buffer.
++ *
++ * long bpf_xdp_load_bytes(struct xdp_buff *xdp_md, u32 offset, void *buf, u32 len)
++ *	Description
++ *		This helper is provided as an easy way to load data from a
++ *		xdp buffer. It can be used to load *len* bytes from *offset* from
++ *		the frame associated to *xdp_md*, into the buffer pointed by
++ *		*buf*.
++ *	Return
++ *		0 on success, or a negative error in case of failure.
++ *
++ * long bpf_xdp_store_bytes(struct xdp_buff *xdp_md, u32 offset, void *buf, u32 len)
++ *	Description
++ *		Store *len* bytes from buffer *buf* into the frame
++ *		associated to *xdp_md*, at *offset*.
++ *	Return
++ *		0 on success, or a negative error in case of failure.
++ *
++ * long bpf_copy_from_user_task(void *dst, u32 size, const void *user_ptr, struct task_struct *tsk, u64 flags)
++ *	Description
++ *		Read *size* bytes from user space address *user_ptr* in *tsk*'s
++ *		address space, and stores the data in *dst*. *flags* is not
++ *		used yet and is provided for future extensibility. This helper
++ *		can only be used by sleepable programs.
++ *	Return
++ *		0 on success, or a negative error in case of failure. On error
++ *		*dst* buffer is zeroed out.
++ *
++ * long bpf_skb_set_tstamp(struct sk_buff *skb, u64 tstamp, u32 tstamp_type)
++ *	Description
++ *		Change the __sk_buff->tstamp_type to *tstamp_type*
++ *		and set *tstamp* to the __sk_buff->tstamp together.
++ *
++ *		If there is no need to change the __sk_buff->tstamp_type,
++ *		the tstamp value can be directly written to __sk_buff->tstamp
++ *		instead.
++ *
++ *		BPF_SKB_TSTAMP_DELIVERY_MONO is the only tstamp that
++ *		will be kept during bpf_redirect_*().  A non zero
++ *		*tstamp* must be used with the BPF_SKB_TSTAMP_DELIVERY_MONO
++ *		*tstamp_type*.
++ *
++ *		A BPF_SKB_TSTAMP_UNSPEC *tstamp_type* can only be used
++ *		with a zero *tstamp*.
++ *
++ *		Only IPv4 and IPv6 skb->protocol are supported.
++ *
++ *		This function is most useful when it needs to set a
++ *		mono delivery time to __sk_buff->tstamp and then
++ *		bpf_redirect_*() to the egress of an iface.  For example,
++ *		changing the (rcv) timestamp in __sk_buff->tstamp at
++ *		ingress to a mono delivery time and then bpf_redirect_*()
++ *		to sch_fq@phy-dev.
++ *	Return
++ *		0 on success.
++ *		**-EINVAL** for invalid input
++ *		**-EOPNOTSUPP** for unsupported protocol
++ *
++ * long bpf_ima_file_hash(struct file *file, void *dst, u32 size)
++ *	Description
++ *		Returns a calculated IMA hash of the *file*.
++ *		If the hash is larger than *size*, then only *size*
++ *		bytes will be copied to *dst*
++ *	Return
++ *		The **hash_algo** is returned on success,
++ *		**-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
++ *		invalid arguments are passed.
++ *
++ * void *bpf_kptr_xchg(void *map_value, void *ptr)
++ *	Description
++ *		Exchange kptr at pointer *map_value* with *ptr*, and return the
++ *		old value. *ptr* can be NULL, otherwise it must be a referenced
++ *		pointer which will be released when this helper is called.
++ *	Return
++ *		The old value of kptr (which can be NULL). The returned pointer
++ *		if not NULL, is a reference which must be released using its
++ *		corresponding release function, or moved into a BPF map before
++ *		program exit.
++ *
++ * void *bpf_map_lookup_percpu_elem(struct bpf_map *map, const void *key, u32 cpu)
++ * 	Description
++ * 		Perform a lookup in *percpu map* for an entry associated to
++ * 		*key* on *cpu*.
++ * 	Return
++ * 		Map value associated to *key* on *cpu*, or **NULL** if no entry
++ * 		was found or *cpu* is invalid.
++ *
++ * struct mptcp_sock *bpf_skc_to_mptcp_sock(void *sk)
++ *	Description
++ *		Dynamically cast a *sk* pointer to a *mptcp_sock* pointer.
++ *	Return
++ *		*sk* if casting is valid, or **NULL** otherwise.
++ *
++ * long bpf_dynptr_from_mem(void *data, u32 size, u64 flags, struct bpf_dynptr *ptr)
++ *	Description
++ *		Get a dynptr to local memory *data*.
++ *
++ *		*data* must be a ptr to a map value.
++ *		The maximum *size* supported is DYNPTR_MAX_SIZE.
++ *		*flags* is currently unused.
++ *	Return
++ *		0 on success, -E2BIG if the size exceeds DYNPTR_MAX_SIZE,
++ *		-EINVAL if flags is not 0.
++ *
++ * long bpf_ringbuf_reserve_dynptr(void *ringbuf, u32 size, u64 flags, struct bpf_dynptr *ptr)
++ *	Description
++ *		Reserve *size* bytes of payload in a ring buffer *ringbuf*
++ *		through the dynptr interface. *flags* must be 0.
++ *
++ *		Please note that a corresponding bpf_ringbuf_submit_dynptr or
++ *		bpf_ringbuf_discard_dynptr must be called on *ptr*, even if the
++ *		reservation fails. This is enforced by the verifier.
++ *	Return
++ *		0 on success, or a negative error in case of failure.
++ *
++ * void bpf_ringbuf_submit_dynptr(struct bpf_dynptr *ptr, u64 flags)
++ *	Description
++ *		Submit reserved ring buffer sample, pointed to by *data*,
++ *		through the dynptr interface. This is a no-op if the dynptr is
++ *		invalid/null.
++ *
++ *		For more information on *flags*, please see
++ *		'bpf_ringbuf_submit'.
++ *	Return
++ *		Nothing. Always succeeds.
++ *
++ * void bpf_ringbuf_discard_dynptr(struct bpf_dynptr *ptr, u64 flags)
++ *	Description
++ *		Discard reserved ring buffer sample through the dynptr
++ *		interface. This is a no-op if the dynptr is invalid/null.
++ *
++ *		For more information on *flags*, please see
++ *		'bpf_ringbuf_discard'.
++ *	Return
++ *		Nothing. Always succeeds.
++ *
++ * long bpf_dynptr_read(void *dst, u32 len, struct bpf_dynptr *src, u32 offset)
++ *	Description
++ *		Read *len* bytes from *src* into *dst*, starting from *offset*
++ *		into *src*.
++ *	Return
++ *		0 on success, -E2BIG if *offset* + *len* exceeds the length
++ *		of *src*'s data, -EINVAL if *src* is an invalid dynptr.
++ *
++ * long bpf_dynptr_write(struct bpf_dynptr *dst, u32 offset, void *src, u32 len)
++ *	Description
++ *		Write *len* bytes from *src* into *dst*, starting from *offset*
++ *		into *dst*.
++ *	Return
++ *		0 on success, -E2BIG if *offset* + *len* exceeds the length
++ *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
++ *		is a read-only dynptr.
++ *
++ * void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len)
++ *	Description
++ *		Get a pointer to the underlying dynptr data.
++ *
++ *		*len* must be a statically known value. The returned data slice
++ *		is invalidated whenever the dynptr is invalidated.
++ *	Return
++ *		Pointer to the underlying dynptr data, NULL if the dynptr is
++ *		read-only, if the dynptr is invalid, or if the offset and length
++ *		is out of bounds.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5120,6 +5431,30 @@
+ 	FN(trace_vprintk),		\
+ 	FN(skc_to_unix_sock),		\
+ 	FN(kallsyms_lookup_name),	\
++	FN(find_vma),			\
++	FN(loop),			\
++	FN(strncmp),			\
++	FN(get_func_arg),		\
++	FN(get_func_ret),		\
++	FN(get_func_arg_cnt),		\
++	FN(get_retval),			\
++	FN(set_retval),			\
++	FN(xdp_get_buff_len),		\
++	FN(xdp_load_bytes),		\
++	FN(xdp_store_bytes),		\
++	FN(copy_from_user_task),	\
++	FN(skb_set_tstamp),		\
++	FN(ima_file_hash),		\
++	FN(kptr_xchg),			\
++	FN(map_lookup_percpu_elem),     \
++	FN(skc_to_mptcp_sock),		\
++	FN(dynptr_from_mem),		\
++	FN(ringbuf_reserve_dynptr),	\
++	FN(ringbuf_submit_dynptr),	\
++	FN(ringbuf_discard_dynptr),	\
++	FN(dynptr_read),		\
++	FN(dynptr_write),		\
++	FN(dynptr_data),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+@@ -5309,6 +5644,15 @@
+ 	__u64 :64;			\
+ } __attribute__((aligned(8)))
+ 
++enum {
++	BPF_SKB_TSTAMP_UNSPEC,
++	BPF_SKB_TSTAMP_DELIVERY_MONO,	/* tstamp has mono delivery time */
++	/* For any BPF_SKB_TSTAMP_* that the bpf prog cannot handle,
++	 * the bpf prog should handle it like BPF_SKB_TSTAMP_UNSPEC
++	 * and try to deduce it by ingress, egress or skb->sk->sk_clockid.
++	 */
++};
++
+ /* user accessible mirror of in-kernel sk_buff.
+  * new fields can only be added to the end of this structure
+  */
+@@ -5349,7 +5693,8 @@
+ 	__u32 gso_segs;
+ 	__bpf_md_ptr(struct bpf_sock *, sk);
+ 	__u32 gso_size;
+-	__u32 :32;		/* Padding, future use. */
++	__u8  tstamp_type;
++	__u32 :24;		/* Padding, future use. */
+ 	__u64 hwtstamp;
+ };
+ 
+@@ -5363,6 +5708,10 @@
+ 	__u8 tunnel_ttl;
+ 	__u16 tunnel_ext;	/* Padding, future use. */
+ 	__u32 tunnel_label;
++	union {
++		__u32 local_ipv4;
++		__u32 local_ipv6[4];
++	};
+ };
+ 
+ /* user accessible mirror of in-kernel xfrm_state.
+@@ -5414,7 +5763,8 @@
+ 	__u32 src_ip4;
+ 	__u32 src_ip6[4];
+ 	__u32 src_port;		/* host byte order */
+-	__u32 dst_port;		/* network byte order */
++	__be16 dst_port;	/* network byte order */
++	__u16 :16;		/* zero padding */
+ 	__u32 dst_ip4;
+ 	__u32 dst_ip6[4];
+ 	__u32 state;
+@@ -6256,6 +6606,11 @@
+ 	__u64 :64;
+ } __attribute__((aligned(8)));
+ 
++struct bpf_dynptr {
++	__u64 :64;
++	__u64 :64;
++} __attribute__((aligned(8)));
++
+ struct bpf_sysctl {
+ 	__u32	write;		/* Sysctl is being read (= 0) or written (= 1).
+ 				 * Allows 1,2,4-byte read, but no write.
+@@ -6292,10 +6647,12 @@
+ 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
+ 	__u32 remote_ip4;	/* Network byte order */
+ 	__u32 remote_ip6[4];	/* Network byte order */
+-	__u32 remote_port;	/* Network byte order */
++	__be16 remote_port;	/* Network byte order */
++	__u16 :16;		/* Zero padding */
+ 	__u32 local_ip4;	/* Network byte order */
+ 	__u32 local_ip6[4];	/* Network byte order */
+ 	__u32 local_port;	/* Host byte order */
++	__u32 ingress_ifindex;		/* The arriving interface. Determined by inet_iif. */
+ };
+ 
+ /*
+@@ -6328,4 +6685,78 @@
+ 	BTF_F_ZERO	=	(1ULL << 3),
+ };
+ 
++/* bpf_core_relo_kind encodes which aspect of captured field/type/enum value
++ * has to be adjusted by relocations. It is emitted by llvm and passed to
++ * libbpf and later to the kernel.
++ */
++enum bpf_core_relo_kind {
++	BPF_CORE_FIELD_BYTE_OFFSET = 0,      /* field byte offset */
++	BPF_CORE_FIELD_BYTE_SIZE = 1,        /* field size in bytes */
++	BPF_CORE_FIELD_EXISTS = 2,           /* field existence in target kernel */
++	BPF_CORE_FIELD_SIGNED = 3,           /* field signedness (0 - unsigned, 1 - signed) */
++	BPF_CORE_FIELD_LSHIFT_U64 = 4,       /* bitfield-specific left bitshift */
++	BPF_CORE_FIELD_RSHIFT_U64 = 5,       /* bitfield-specific right bitshift */
++	BPF_CORE_TYPE_ID_LOCAL = 6,          /* type ID in local BPF object */
++	BPF_CORE_TYPE_ID_TARGET = 7,         /* type ID in target kernel */
++	BPF_CORE_TYPE_EXISTS = 8,            /* type existence in target kernel */
++	BPF_CORE_TYPE_SIZE = 9,              /* type size in bytes */
++	BPF_CORE_ENUMVAL_EXISTS = 10,        /* enum value existence in target kernel */
++	BPF_CORE_ENUMVAL_VALUE = 11,         /* enum value integer value */
++};
++
++/*
++ * "struct bpf_core_relo" is used to pass relocation data form LLVM to libbpf
++ * and from libbpf to the kernel.
++ *
++ * CO-RE relocation captures the following data:
++ * - insn_off - instruction offset (in bytes) within a BPF program that needs
++ *   its insn->imm field to be relocated with actual field info;
++ * - type_id - BTF type ID of the "root" (containing) entity of a relocatable
++ *   type or field;
++ * - access_str_off - offset into corresponding .BTF string section. String
++ *   interpretation depends on specific relocation kind:
++ *     - for field-based relocations, string encodes an accessed field using
++ *       a sequence of field and array indices, separated by colon (:). It's
++ *       conceptually very close to LLVM's getelementptr ([0]) instruction's
++ *       arguments for identifying offset to a field.
++ *     - for type-based relocations, strings is expected to be just "0";
++ *     - for enum value-based relocations, string contains an index of enum
++ *       value within its enum type;
++ * - kind - one of enum bpf_core_relo_kind;
++ *
++ * Example:
++ *   struct sample {
++ *       int a;
++ *       struct {
++ *           int b[10];
++ *       };
++ *   };
++ *
++ *   struct sample *s = ...;
++ *   int *x = &s->a;     // encoded as "0:0" (a is field #0)
++ *   int *y = &s->b[5];  // encoded as "0:1:0:5" (anon struct is field #1,
++ *                       // b is field #0 inside anon struct, accessing elem #5)
++ *   int *z = &s[10]->b; // encoded as "10:1" (ptr is used as an array)
++ *
++ * type_id for all relocs in this example will capture BTF type id of
++ * `struct sample`.
++ *
++ * Such relocation is emitted when using __builtin_preserve_access_index()
++ * Clang built-in, passing expression that captures field address, e.g.:
++ *
++ * bpf_probe_read(&dst, sizeof(dst),
++ *		  __builtin_preserve_access_index(&src->a.b.c));
++ *
++ * In this case Clang will emit field relocation recording necessary data to
++ * be able to find offset of embedded `a.b.c` field within `src` struct.
++ *
++ * [0] https://llvm.org/docs/LangRef.html#getelementptr-instruction
++ */
++struct bpf_core_relo {
++	__u32 insn_off;
++	__u32 type_id;
++	__u32 access_str_off;
++	enum bpf_core_relo_kind kind;
++};
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
+diff -Naur a/src/shared/linux/dm-ioctl.h b/src/shared/linux/dm-ioctl.h
+--- a/src/shared/linux/dm-ioctl.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/shared/linux/dm-ioctl.h	2022-10-23 18:12:40.578065115 +0200
+@@ -288,7 +288,7 @@
+ #define DM_VERSION_MAJOR	4
+ #define DM_VERSION_MINOR	27
+ #define DM_VERSION_PATCHLEVEL	0
+-#define DM_VERSION_EXTRA	"-ioctl (2021-03-22)"
++#define DM_VERSION_EXTRA	"-ioctl (2022-02-22)"
+ 
+ /* Status bits */
+ #define DM_READONLY_FLAG	(1 << 0) /* In/Out */
+diff -Naur a/src/shared/linux/ethtool.h b/src/shared/linux/ethtool.h
+--- a/src/shared/linux/ethtool.h	2022-05-21 15:23:41.000000000 +0200
++++ b/src/shared/linux/ethtool.h	2022-10-23 18:12:40.582065131 +0200
+@@ -235,6 +235,7 @@
+ 	ETHTOOL_RX_COPYBREAK,
+ 	ETHTOOL_TX_COPYBREAK,
+ 	ETHTOOL_PFC_PREVENTION_TOUT, /* timeout in msecs */
++	ETHTOOL_TX_COPYBREAK_BUF_SIZE,
+ 	/*
+ 	 * Add your fresh new tunable attribute above and remember to update
+ 	 * tunable_strings[] in net/ethtool/common.c
+@@ -1694,6 +1695,7 @@
+ 	ETHTOOL_LINK_MODE_400000baseCR4_Full_BIT	 = 89,
+ 	ETHTOOL_LINK_MODE_100baseFX_Half_BIT		 = 90,
+ 	ETHTOOL_LINK_MODE_100baseFX_Full_BIT		 = 91,
++	ETHTOOL_LINK_MODE_10baseT1L_Full_BIT		 = 92,
+ 	/* must be last entry */
+ 	__ETHTOOL_LINK_MODE_MASK_NBITS
+ };
