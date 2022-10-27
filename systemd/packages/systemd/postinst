@@ -3,4 +3,6 @@
 systemd-machine-id-setup
 journalctl --update-catalog
 systemctl enable getty@tty1.service remote-fs.target
+if [ ! -L /etc/systemd/system/display-manager.service ]; then
 systemctl set-default multi-user.target
+fi
