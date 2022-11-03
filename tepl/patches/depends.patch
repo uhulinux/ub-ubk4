@@ -1,0 +1,13 @@
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2022-11-02 22:54:50.000000000 +0100
++++ b/meson.build	2022-11-03 23:06:52.240562578 +0100
+@@ -37,8 +37,7 @@
+ ]
+ tepl_private_deps = [
+   dependency('icu-uc'),
+-  dependency('icu-i18n'),
+-  dependency('gsettings-desktop-schemas')
++  dependency('icu-i18n')
+ ]
+ TEPL_DEPS = [TEPL_PUBLIC_DEPS, tepl_private_deps]
+ 
