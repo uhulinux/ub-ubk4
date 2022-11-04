@@ -4,5 +4,7 @@ if [ -e /etc/sddm.conf ]; then
 rm -f /etc/sddm.conf
 fi
 
+if [ ! -L /etc/systemd/system/display-manager.service ]; then
 systemctl -f enable sddm
 systemctl set-default graphical.target
+fi

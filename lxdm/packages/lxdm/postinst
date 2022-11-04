@@ -1,4 +1,6 @@
 #!/bin/bash
 
+if [ ! -L /etc/systemd/system/display-manager.service ]; then
 systemctl -f enable lxdm
 systemctl set-default graphical.target
+fi

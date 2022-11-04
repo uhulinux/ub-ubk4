@@ -1,5 +1,7 @@
 #!/bin/bash
 
+if [ ! -L /etc/systemd/system/display-manager.service ]; then
 systemctl -f enable gdm
 systemctl set-default graphical.target
 usermod -G gdm,video gdm
+fi
