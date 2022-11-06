@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl -s stop sddm
+systemctl -f disable sddm
+systemctl set-default multi-user.target

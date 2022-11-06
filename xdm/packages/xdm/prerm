@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl -s stop xdm
+systemctl -f disable xdm
+systemctl set-default multi-user.target

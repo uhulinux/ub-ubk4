@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl -s stop gdm
+systemctl -f disable gdm
+systemctl set-default multi-user.target

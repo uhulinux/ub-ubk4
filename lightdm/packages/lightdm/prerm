@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl -s stop lightdm
+systemctl -f disable lightdm
+systemctl set-default multi-user.target

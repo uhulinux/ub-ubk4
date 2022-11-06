@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl -s stop lxdm
+systemctl -f disable lxdm
+systemctl set-default multi-user.target
