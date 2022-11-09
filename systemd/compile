@@ -21,6 +21,13 @@ ub_compile \
 	-Ddefault-locale="hu_HU.utf8" \
     -Dfirstboot=false \
 	-Dldconfig=false \
-    -Dsysusers=false \
+    -Dsysusers=true \
     -Drpmmacrosdir=no \
+    -Dadm-gid=3 \
+    -Daudio-gid=50 \
+    -Dlp-gid=7 \
+    -Dsystemd-journal-gid=225 \
+    -Dtty-gid=5 \
+    -Dvideo-gid=51 \
+    -Dwheel-gid=10 \
     -Dusers-gid=999
