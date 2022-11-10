@@ -1,0 +1,31 @@
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2022-11-07 08:44:41.000000000 +0100
++++ b/meson.build	2022-11-11 00:27:39.236925504 +0100
+@@ -372,20 +372,14 @@
+ schema_conf = configuration_data()
+ schema_conf.set('GETTEXT_PACKAGE', 'libnma')
+ 
+-foreach schema : [
+-  'org.gnome.nm-applet.eap.gschema.xml',
++schema = 'org.gnome.nm-applet.eap.gschema.xml'
+ 
+-  # This one belongs to nm-applet.
+-  # Kept here for now to avoid breaking on upgrades.
+-  'org.gnome.nm-applet.gschema.xml'
+-]
+-  configure_file(
+-    input: schema + '.in',
+-    output: schema,
+-    install_dir: join_paths(nma_datadir, 'glib-2.0', 'schemas'),
+-    configuration: schema_conf,
+-  )
+-endforeach
++configure_file(
++  input: schema + '.in',
++  output: schema,
++  install_dir: join_paths(nma_datadir, 'glib-2.0', 'schemas'),
++  configuration: schema_conf,
++)
+ 
+ config = 'config.h'
+ 
