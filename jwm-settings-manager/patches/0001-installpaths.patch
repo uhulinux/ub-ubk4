@@ -1,0 +1,45 @@
+From 95703ce1e329a751084064753e6de9c4318467b0 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 17:26:22 +0200
+Subject: fltk-libs & installpaths correction
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 98a5653..ea2d19d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,8 +59,6 @@ if(result)
+ 	## Because Launchpad's build system is really weird!
+     MESSAGE("Using Debian based release")
+ 	FIND_PACKAGE(FLTK REQUIRED NO_MODULE)
+-else()
+-	 FIND_PACKAGE(FLTK REQUIRED)
+ endif()
+ FIND_PACKAGE(X11 REQUIRED)
+ 
+@@ -174,7 +172,7 @@ add_executable(${PROJECT_NAME} src/jsm.cpp)
+ add_executable(fltk-mouse fltk/jwm-mouse.cxx)
+ add_executable(desktop-file-editor fltk/desktop-file-editor.cxx)
+ ## Linker settings
+-set(ALL_LIBS JSM ${X11_LIBRARIES} ${X11_X11_LIB} ${X11_Xpm_LIB} ${FLTK_LIBRARIES})
++set(ALL_LIBS JSM ${X11_LIBRARIES} ${X11_X11_LIB} ${X11_Xpm_LIB} fltk fltk_images)
+ ## Because Launchpad's build system is really weird!
+ if(result)
+ 	set(ALL_LIBS ${ALL_LIBS} fltk_SHARED fltk_images_SHARED)
+diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
+index d06f306..6221abe 100644
+--- a/data/CMakeLists.txt
++++ b/data/CMakeLists.txt
+@@ -24,9 +24,9 @@ install (FILES pb_JWM DESTINATION share/jwm-settings-manager)
+ install(FILES icons/jwm-settings-manager.png icons/jwm-settings-manager.xpm DESTINATION share/pixmaps)
+ 
+ # install all icons to our own icon directory
+-install(FILES ${ICONS} DESTINATION usr/share/icons/hicolor/scalable/apps)
+-install(FILES ${ICONS_PNG} DESTINATION usr/share/icons/hicolor/48x48/apps)
+-install(FILES ${ICONS_XPM} DESTINATION usr/share/pixmaps)
++install(FILES ${ICONS} DESTINATION share/icons/hicolor/scalable/apps)
++install(FILES ${ICONS_PNG} DESTINATION share/icons/hicolor/48x48/apps)
++install(FILES ${ICONS_XPM} DESTINATION share/pixmaps)
+ 
+ # install ALL desktop files into /usr/share/applications
+ install(FILES ${APPS} DESTINATION share/applications)

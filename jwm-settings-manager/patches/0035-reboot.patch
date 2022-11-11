@@ -1,0 +1,18 @@
+From 2ed0b8aeaf5e73c9d5c7a775e5183d09859b1d49 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 21:36:31 +0200
+Subject: systemctl reboot
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index cb86894..3919165 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -71,6 +71,7 @@ set(RESTART_ICON "view-refresh")
+ set(SHUTERDOWN "<Separator/>
+ 	<Restart label=\"JWM újraindítás\" icon=\"${RESTART_ICON}\"/>
+ 	<Exit icon=\"${LOGOUT_ICON}\" label=\"Kilépés\" confirm=\"true\" />
++	<Program label=\"Gép újraindítás\" icon=\"${RESTART_ICON}\">systemctl reboot</Program>
+ 	<Program icon=\"${SHUTDOWN_ICON}\" label=\"${SHUTDOWN_NAME}\">${SHUTDOWN_PROGRAM}</Program>")
+ ## MAIN MENU
+ set(JWM_ROOT_NUM "2")

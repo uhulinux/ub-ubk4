@@ -1,0 +1,66 @@
+From 844b7e7cabb14f65ec6e96be4fb91a85f6e6666d Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 20:59:39 +0200
+Subject: =?UTF-8?q?kikapcsol=C3=A1si=20cuccok?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 650c9f7..cf356eb 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -12,9 +12,8 @@ set (VOL_UP "exec:amixer Master 5%+")
+ set (VOL_DOWN "exec:amixer Master 5%-")
+ set (VOL_MUTE "exec:amixer Master toggle")
+ set (LOGOUT_PROGRAM "torios-exit")
+-set (TZ_PROG "xterm -e 'sudo dpkg-reconfigure tzdata'")
+ set (CAL_PROG "torios-calendar")
+-set (RESTART_PROGRAM "torios-reboot")
++set (RESTART_PROGRAM "systemctl reboot")
+ 
+ ## menu programs
+ set(PLACES_MENU_FILE "$HOME/.config/placesmenu")
+@@ -55,7 +54,6 @@ set(CLOCK_MENU "<!-- Clock Menu-->
+         <Program icon=\"time\" label=\"Clock Settings\">${JSM} --clock-settings</Program>
+          <Separator/>
+         <Program icon=\"calendar\" label=\"Calendar\">${OLD_CLOCK}</Program>
+-        <Program icon=\"time\" label=\"Timezone Settings\">${TZ_PROG}</Program>
+     </RootMenu>")
+ 
+ ## Panel Edit
+@@ -74,15 +72,15 @@ set(EDIT_MENU "    <RootMenu onroot=\"m\">
+     </RootMenu>")
+ ## SHUTDOWN MENU
+ set(SHUTDOWN_ROOT "root:9")
+-set(SHUTDOWN_NAME "Shutdown")
+-set(SHUTDOWN_ICON "system-shutdown")
++set(SHUTDOWN_NAME "Kikapcsolás")
++set(SHUTDOWN_ICON "process-stop")
+ set(SHUTDOWN_PROGRAM "${JSM} --halt")
+-set(LOGOUT_ICON "system-logout")
+-set(RESTART_ICON "system-restart")
++set(LOGOUT_ICON "application-exit")
++set(RESTART_ICON "view-refresh")
+ 
+ set(SHUTERDOWN "<Separator/>
+ 	<Restart label=\"Reload Desktop\" icon=\"${RESTART_ICON}\"/>
+-	<Program icon=\"${SHUTDOWN_ICON}\" label=\"Shutdown Computer\">${SHUTDOWN_PROGRAM}</Program>")
++	<Program icon=\"${SHUTDOWN_ICON}\" label=\"Kikapcsolás\">${SHUTDOWN_PROGRAM}</Program>")
+ 
+ ## MAIN MENU
+ set(SEARCH_PROG "zlocate")
+@@ -217,9 +215,9 @@ ${JWM_ROOT_MENU}
+     <Include>${APPMENU_FILE}</Include>
+     <!--Shudown Menu-->
+     <RootMenu height=\"0\" onroot=\"9\">
+-        <Program icon=\"${SHUTDOWN_ICON}\" label=\"Shutdown Menu\">${SHUTDOWN_PROGRAM}</Program>
+-        <Program icon=\"${RESTART_ICON}\" label=\"Restart Computer\">${RESTART_PROGRAM}</Program>
+-        <Restart label=\"Reload Desktop\" icon=\"${RESTART_ICON}\"/>
++        <Program icon=\"${SHUTDOWN_ICON}\" label=\"Kikapcsolás\">${SHUTDOWN_PROGRAM}</Program>
++        <Program icon=\"${RESTART_ICON}\" label=\"Újraindítás\">${RESTART_PROGRAM}</Program>
++        <Restart label=\"JWM újraindítás\" icon=\"${RESTART_ICON}\"/>
+     </RootMenu>
+         <!--Places Menu-->
+     <Include>$HOME/.config/placesmenu</Include>

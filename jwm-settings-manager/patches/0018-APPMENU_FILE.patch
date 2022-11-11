@@ -1,0 +1,19 @@
+From d42a8dc29f093115e6d659eb0a6e89c382ca5a98 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 22:21:08 +0200
+Subject: APPMENU_FILE nincs
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index ac6b5c7..3758c09 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -16,7 +16,7 @@ set (RESTART_PROGRAM "systemctl reboot")
+ ## menu programs
+ set(PLACES_MENU_FILE "$HOME/.config/placesmenu")
+ set(PLACES_INCLUDE "exec:/usr/bin/jwm-places")
+-set(APPMENU_FILE "$HOME/.cache/jwm-menu.cache")
++set(APPMENU_FILE "exec:xdgmenumaker -n -i -f jwm")
+ set(JWM_MENU "exec:xdgmenumaker -n -i -f jwm")
+ 
+ ##Startup commands

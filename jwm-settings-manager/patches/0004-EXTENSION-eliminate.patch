@@ -1,0 +1,137 @@
+From 832cd42ba1078b262be75123bf6b7aca1969fd8a Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Mon, 30 Jul 2018 17:50:10 +0200
+Subject: EXTENSION felesleges
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index cc7734d..55f40f9 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -2,13 +2,12 @@
+ #####################################################################################
+ 
+ ## DEFAULT PROGRAMS
+-set(EXTENTION "svg")
+ set(JSM "jwm-settings-manager")
+ set (brightUP "exec:torios-gamma up")
+ set (brightDown "exec:torios-gamma down")
+ set (MENU_WEB_PROG "x-www-browser")
+ set (WEB_PROG "exec:${MENU_WEB_PROG}")
+-set (STARTPAGE_ICON "browser.${EXTENTION}")
++set (STARTPAGE_ICON "browser")
+ set (SYS_MONITOR "exec:torios-runchecker xterm htop")
+ set (SCREEN_SHOT "exec:screenie")
+ set (RUN_DIALOG "exec:zrun")
+@@ -69,33 +68,33 @@ set(OLD_CLOCK_TAG "<Clock format=\"${CLOCK_FORMAT}\">${OLD_CLOCK}</Clock>")
+ set(CLOCK_TAG "<Clock format=\"${CLOCK_FORMAT}\">${CLOCK}</Clock>")
+ set(CLOCK_MENU "<!-- Clock Menu-->
+     <RootMenu height=\"0\" onroot=\"c\">
+-        <Program icon=\"time.${EXTENTION}\" label=\"Clock Settings\">${JSM} --clock-settings</Program>
++        <Program icon=\"time\" label=\"Clock Settings\">${JSM} --clock-settings</Program>
+          <Separator/>
+-        <Program icon=\"calendar.${EXTENTION}\" label=\"Calendar\">${OLD_CLOCK}</Program>
+-        <Program icon=\"time.${EXTENTION}\" label=\"Timezone Settings\">${TZ_PROG}</Program>
++        <Program icon=\"calendar\" label=\"Calendar\">${OLD_CLOCK}</Program>
++        <Program icon=\"time\" label=\"Timezone Settings\">${TZ_PROG}</Program>
+     </RootMenu>")
+ 
+ ## Panel Edit
+ set(EDIT_PANEL_ROOT "root:p")
+ set(EDIT_PANEL "    <RootMenu onroot=\"p\">
+-	<Program icon=\"jsm-panel.${EXTENTION}\" label=\"Edit Panel\">${JSM} --panel</Program>
+-	<Program icon=\"add.${EXTENTION}\" label=\"Add new items\">${JSM} --shortcuts</Program>
++	<Program icon=\"jsm-panel\" label=\"Edit Panel\">${JSM} --panel</Program>
++	<Program icon=\"add\" label=\"Add new items\">${JSM} --shortcuts</Program>
+     </RootMenu>")
+ 
+ ## Menu Edit
+ set(EDIT_MENU_ROOT "root:m")
+ set(EDIT_MENU "    <RootMenu onroot=\"m\">
+-	<Program icon=\"reload.${EXTENTION}\" label=\"Update Menus\">update-menus</Program>
+-	<Program icon=\"jsm-panel.${EXTENTION}\" label=\"Edit Menu\">${JSM} --menu</Program>
+-	<Program icon=\"jsm-panel.${EXTENTION}\" label=\"Edit Panel\">${JSM} --panel</Program>
++	<Program icon=\"reload\" label=\"Update Menus\">update-menus</Program>
++	<Program icon=\"jsm-panel\" label=\"Edit Menu\">${JSM} --menu</Program>
++	<Program icon=\"jsm-panel\" label=\"Edit Panel\">${JSM} --panel</Program>
+     </RootMenu>")
+ ## SHUTDOWN MENU
+ set(SHUTDOWN_ROOT "root:9")
+ set(SHUTDOWN_NAME "Shutdown")
+-set(SHUTDOWN_ICON "system-shutdown.${EXTENTION}")
++set(SHUTDOWN_ICON "system-shutdown")
+ set(SHUTDOWN_PROGRAM "${JSM} --halt")
+-set(LOGOUT_ICON "system-logout.${EXTENTION}")
+-set(RESTART_ICON "system-restart.${EXTENTION}")
++set(LOGOUT_ICON "system-logout")
++set(RESTART_ICON "system-restart")
+ 
+ set(SHUTERDOWN "<Separator/>
+ 	<Restart label=\"Reload Desktop\" icon=\"${RESTART_ICON}\"/>
+@@ -121,12 +120,12 @@ set(MENU_ICON "/usr/share/pixmaps/distributor-logo.png")
+ 
+ set(JWM_ROOT_MENU "<RootMenu onroot=\"${JWM_ROOT_NUM}\">
+         <Include>${JWM_MENU}</Include>
+-        <Menu label=\"About ToriOS\" icon=\"help-about.${EXTENTION}\" height=\"0\">
+-           <Program label=\"Help\" icon=\"help.${EXTENTION}\">${MANUAL}</Program>
+-           <Program label=\"Launchpad\" icon=\"launchpad.${EXTENTION}\">${MENU_WEB_PROG} ${LP}</Program>
+-           <Program label=\"G+\" icon=\"googleplus.${EXTENTION}\">${MENU_WEB_PROG} ${GPLUS}</Program>
+-           <Program label=\"Facebook\" icon=\"facebook.${EXTENTION}\">${MENU_WEB_PROG} ${FACEB}</Program>
+-           <Program label=\"Twitter\" icon=\"twitter.${EXTENTION}\">${MENU_WEB_PROG} ${TWITTER}</Program>
++        <Menu label=\"About ToriOS\" icon=\"help-about\" height=\"0\">
++           <Program label=\"Help\" icon=\"help\">${MANUAL}</Program>
++           <Program label=\"Launchpad\" icon=\"launchpad\">${MENU_WEB_PROG} ${LP}</Program>
++           <Program label=\"G+\" icon=\"googleplus\">${MENU_WEB_PROG} ${GPLUS}</Program>
++           <Program label=\"Facebook\" icon=\"facebook\">${MENU_WEB_PROG} ${FACEB}</Program>
++           <Program label=\"Twitter\" icon=\"twitter\">${MENU_WEB_PROG} ${TWITTER}</Program>
+            <Program label=\"About Us\" icon=\"${MENU_ICON}\">${ABOUT_PROG}</Program>
+         </Menu>
+         ${SHUTERDOWN}
+@@ -140,7 +139,7 @@ set(PLACES_NUM "7")
+ set(PLACES_ROOT "root:${PLACES_NUM}")
+ set(PLACES_NAME "Places")
+ 
+-set(PLACES_ICON "folder.${EXTENTION}")
++set(PLACES_ICON "folder")
+ set(PLACES_MENU "    <RootMenu onroot=\"${PLACES_NUM}\">
+         <Include>${PLACES_INCLUDE}</Include>
+     </RootMenu>")
+@@ -153,11 +152,11 @@ ${PLACES_MENU}")
+ set (ROOT_MENU "root:${JWM_ROOT_NUM}")
+ ## Mouse MENU
+ set(MOUSE_MENU "<RootMenu height=\"0\" onroot=\"3\">
+-		<Program icon=\"folder-home.${EXTENTION}\" label=\"Home\">xdg-open ~/</Program>
+-		<Program icon=\"${JSM}.${EXTENTION}\" label=\"Settings\">${JSM}</Program>
+-		<Program icon=\"add.${EXTENTION}\" label=\"Add new items to Desktop\">desktop-file-editor</Program>
+-		<Program icon=\"preferences-desktop-wallpaper.${EXTENTION}\" label=\"Change Desktop Background\">${JSM} --desktop</Program>
+-		<Dynamic label=\"Apps\" icon=\"torios-logo.${EXTENTION}\" border=\"false\">exec:jwm-menu||jwm-menu-bash</Dynamic>
++		<Program icon=\"folder-home\" label=\"Home\">xdg-open ~/</Program>
++		<Program icon=\"${JSM}\" label=\"Settings\">${JSM}</Program>
++		<Program icon=\"add\" label=\"Add new items to Desktop\">desktop-file-editor</Program>
++		<Program icon=\"preferences-desktop-wallpaper\" label=\"Change Desktop Background\">${JSM} --desktop</Program>
++		<Dynamic label=\"Apps\" icon=\"torios-logo\" border=\"false\">exec:jwm-menu||jwm-menu-bash</Dynamic>
+ 	</RootMenu>")
+ 
+ ## window corners override in individual files
+@@ -205,7 +204,7 @@ set(GNOME_MENUS_LIST "<!-- NOTE, if you hand edit this root:5 is the app menu an
+     <Include>$HOME/.config/gnomesystem</Include>")
+ set (GNOME_SYS_ROOT "root:8")
+ set (GNOME_SYS_NAME "System")
+-set (GNOME_SYS_ICON "applications-system.${EXTENTION}")
++set (GNOME_SYS_ICON "applications-system")
+ 
+ ## GNOME TRAYS ############
+ set (SHOW_DESK_ICON "preferences-system-hotcorners.png")
+@@ -257,9 +256,9 @@ ${JWM_ROOT_MENU}
+     <Include>$HOME/.config/placesmenu</Include>
+     <!-- Mouse Menu-->
+     <RootMenu height=\"16\" onroot=\"2\">
+-        <Program icon=\"folder-home.${EXTENTION}\" label=\"Home\">xdg-open ~/</Program>
+-        <Program icon=\"jwm-settings-manager.${EXTENTION}\" label=\"Settings\">jwm-settings-manager</Program>
+-        <Program icon=\"preferences-desktop-wallpaper.${EXTENTION}\" label=\"Change Desktop Background\">jwm-settings-manager --desktop</Program>
++        <Program icon=\"folder-home\" label=\"Home\">xdg-open ~/</Program>
++        <Program icon=\"jwm-settings-manager\" label=\"Settings\">jwm-settings-manager</Program>
++        <Program icon=\"preferences-desktop-wallpaper\" label=\"Change Desktop Background\">jwm-settings-manager --desktop</Program>
+     </RootMenu>
+     ${CLOCK_MENU}")
+ 

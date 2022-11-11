@@ -1,0 +1,58 @@
+From ef95877b31ac869a9c18aed9f9eebdf66d9a7a9c Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 06:28:22 +0200
+Subject: =?UTF-8?q?popup:=20alkalmaz=C3=A1sok?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 9347ed6..c6f16c2 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -89,7 +89,7 @@ set(JWM_ROOT_MENU "<RootMenu onroot=\"${JWM_ROOT_NUM}\">
+         ${SHUTERDOWN}
+     </RootMenu>")
+ set(TORI_ROOT "${JWM_ROOT}")
+-set(MENU_NAME "Apps")
++
+ 
+ 
+ ## PLACES MENU
+@@ -124,7 +124,7 @@ set(W_HEIGHT "20")
+ ## PANEL CONFIGURATIONS
+ ## THE NORMAL CONFIG used in Default, Ambiance and Live
+ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+-        <TrayButton label=\"${MENU_NAME}\" icon=\"${MENU_ICON}\" border=\"false\">
++        <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">
+             <Button mask=\"1\">${JWM_ROOT}</Button>
+             <Button mask=\"23\">${EDIT_MENU_ROOT}</Button>
+         </TrayButton>
+@@ -141,7 +141,7 @@ ${TRAYbuttonForTray}
+     </Tray>")
+ ### OLD STYLE 2.2.2 configs
+ set (OLD_DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+-        <TrayButton label=\"${MENU_NAME}\" icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
++        <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+         <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Pager labeled=\"true\"/>
+         <TaskList maxwidth=\"256\"/>
+@@ -163,7 +163,7 @@ set (GNOME_SYS_ICON "applications-system")
+ ## GNOME TRAYS ############
+ set (SHOW_DESK_ICON "preferences-system-hotcorners.png")
+ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+-        <TrayButton label=\"${MENU_NAME}\" icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
++        <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+ 	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+         <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Spacer/>
+@@ -177,7 +177,7 @@ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width
+         <Pager labeled=\"false\"/>
+     </Tray>")
+ set (OLD_GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+-        <TrayButton label=\"${MENU_NAME}\" icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
++        <TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+ 	<TrayButton label=\"${GNOME_SYS_NAME}\" icon=\"${GNOME_SYS_ICON}\" border=\"false\">${GNOME_SYS_ROOT}</TrayButton>
+         <TrayButton label=\"${PLACES_NAME}\" icon=\"${PLACES_ICON}\" border=\"false\">${PLACES_ROOT}</TrayButton>
+         <Spacer/>

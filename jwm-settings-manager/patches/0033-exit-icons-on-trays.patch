@@ -1,0 +1,81 @@
+From 056ae963adb262c7ae10f6f3fb0c33e3a2d395ab Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 18:57:53 +0200
+Subject: =?UTF-8?q?kil=C3=A9p=C3=A9si=20tray=20ikonok?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/Bassem/CMakeLists.txt b/data/themes/Bassem/CMakeLists.txt
+index 11f44c2..d7ff192 100644
+--- a/data/themes/Bassem/CMakeLists.txt
++++ b/data/themes/Bassem/CMakeLists.txt
+@@ -3,11 +3,11 @@
+ set(THIS_THEME "Bassem")
+ #####################################################################################
+ set (TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+-<TrayButton icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
++<TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+         <Spacer/>
+         ${CLOCK_TAG}
+         <Spacer/>
+-        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
++        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"application-exit\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+     </Tray>
+     <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"bottom\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <Pager labeled=\"true\"/>
+@@ -17,11 +17,11 @@ set (TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" h
+         <Dock/>
+     </Tray>")
+ set (OLD_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+-<TrayButton icon=\"${MENU_ICON}\" border=\"false\">${TORI_ROOT}</TrayButton>
++<TrayButton icon=\"${MENU_ICON}\" border=\"false\" popup=\"Programok\">${TORI_ROOT}</TrayButton>
+         <Spacer/>
+         ${OLD_CLOCK_TAG}
+         <Spacer/>
+-        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
++        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"application-exit\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+     </Tray>
+     <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"bottom\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+         <Pager labeled=\"true\"/>
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 41b55db..050c637 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -129,7 +129,7 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+         <Dock/>
+         <Swallow name=\"xload\" width=\"64\">xload -nolabel -bg DimGrey -fg Grey -hl DarkGrey</Swallow>
+         ${CLOCK_TAG}
+-        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
++        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"application-exit\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+     </Tray>")
+ ### OLD STYLE 2.2.2 configs
+ set (OLD_DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+@@ -140,7 +140,7 @@ set (OLD_DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" w
+         <Dock/>
+         <Swallow name=\"xload\" width=\"64\">xload -nolabel -bg DimGrey -fg Grey -hl DarkGrey</Swallow>
+         ${OLD_CLOCK_TAG}
+-        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
++        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"application-exit\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+     </Tray>")
+ 
+ ## 'GNOME' MENUS
+@@ -160,7 +160,7 @@ set (GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" width
+         <Spacer/>
+         <Dock/>
+          ${CLOCK_TAG}
+-        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
++        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"application-exit\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+     </Tray>
+     <Tray x=\"0\" y=\"-1\" height=\"34\" autohide=\"false\" valign=\"bottom\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+ 	<TrayButton icon=\"${SHOW_DESK_ICON}\" border=\"false\">showdesktop</TrayButton>
+@@ -174,7 +174,7 @@ set (OLD_GNOME_TRAY "    <Tray height=\"34\" autohide=\"false\" valign=\"top\" w
+         <Spacer/>
+         <Dock/>
+          ${OLD_CLOCK_TAG}
+-        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
++        <TrayButton popup=\"${SHUTDOWN_NAME}\" icon=\"application-exit\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+     </Tray>
+     <Tray x=\"0\" y=\"-1\" height=\"34\" autohide=\"false\" valign=\"bottom\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">
+ 	<TrayButton icon=\"${SHOW_DESK_ICON}\" border=\"false\">showdesktop</TrayButton>

@@ -1,0 +1,19 @@
+From fdbb3a52f54156cf444be4b77d070f4fd427f880 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Wed, 1 Aug 2018 06:41:21 +0200
+Subject: poweroff
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 3919165..b780d05 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -64,7 +64,7 @@ set(EDIT_MENU "    <RootMenu onroot=\"m\">
+ set(SHUTDOWN_ROOT "root:9")
+ set(SHUTDOWN_NAME "Kikapcsolás")
+ set(SHUTDOWN_ICON "process-stop")
+-set(SHUTDOWN_PROGRAM "${JSM} --halt")
++set(SHUTDOWN_PROGRAM "systemctl poweroff")
+ set(LOGOUT_ICON "application-exit")
+ set(RESTART_ICON "view-refresh")
+ 

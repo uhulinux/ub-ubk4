@@ -1,0 +1,32 @@
+From a1e783746c87dc8fbe63a3a2bc7aac153d70f530 Mon Sep 17 00:00:00 2001
+From: attus <attus@enterpriseforever.com>
+Date: Tue, 31 Jul 2018 07:08:13 +0200
+Subject: =?UTF-8?q?f=C5=91panelre=20shutdown=20men=C3=BC?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+
+diff --git a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+index 4e4a314..697cc91 100644
+--- a/data/themes/CMakeLists.txt
++++ b/data/themes/CMakeLists.txt
+@@ -71,8 +71,8 @@ set(RESTART_ICON "view-refresh")
+ 
+ set(SHUTERDOWN "<Separator/>
+ 	<Restart label=\"JWM újraindítás\" icon=\"${RESTART_ICON}\"/>
+-	<Program icon=\"${SHUTDOWN_ICON}\" label=\"Kikapcsolás\">${SHUTDOWN_PROGRAM}</Program>")
+-
++	<Program icon=\"${SHUTDOWN_ICON}\" label=\"${SHUTDOWN_NAME}\">${SHUTDOWN_PROGRAM}</Program>
++	<Exit icon=\"${LOGOUT_ICON}\" label="Kilépés" confirm="true" />)
+ ## MAIN MENU
+ set(TRAYbuttonForTray "<TrayButton popup=\"Szoftver telepítő\" icon=\"synaptic\" border=\"false\">
+           <Button mask=\"1\">exec:synaptic</Button>
+@@ -138,6 +138,7 @@ set (DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width
+ ${TRAYbuttonForTray}
+         <Swallow name=\"xload\" width=\"64\">xload -nolabel -bg DimGrey -fg Grey -hl DarkGrey</Swallow>
+         ${CLOCK_TAG}
++        <TrayButton label=\"${SHUTDOWN_NAME}\" icon=\"${SHUTDOWN_ICON}\" border=\"false\">${SHUTDOWN_ROOT}</TrayButton>
+     </Tray>")
+ ### OLD STYLE 2.2.2 configs
+ set (OLD_DEFAULT_TRAY "    <Tray x=\"0\" y=\"-1\" height=\"34\" valign=\"top\" width=\"0\" halign=\"fixed\" layout=\"horizontal\">

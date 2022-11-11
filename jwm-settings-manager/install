@@ -1,0 +1,18 @@
+#!/bin/sh -eux
+
+ub_install
+
+# A cmake valamiért nem installálja a témákat, csak a CMakeFiles fájlokat, ezért kézzel lábbal csinálom.
+# Hülye vagyok a CMake cucchoz...
+
+rm -rf ${UB_INSTALLDIR}/usr/share/jwm-settings-manager/themes
+themes="Ambiance Bassem Default LightGnome2 DarkGnome2 Numix"
+for i in $themes;do
+    mkdir -p ${UB_INSTALLDIR}/usr/share/jwm-settings-manager/themes/$i
+    cp build/data/themes/$i/$i ${UB_INSTALLDIR}/usr/share/jwm-settings-manager/themes/$i/$i
+done
+
+#A jwm szállítja az egyetlen jó témát, A Default más itt, ezért átnevezem a legyártottat.
+
+cd ${UB_INSTALLDIR}/usr/share/jwm-settings-manager/themes/Default/
+mv Default Default.jsm
