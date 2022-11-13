@@ -1,6 +1,6 @@
 diff -Nur orig/util/startfluxbox.in mod/util/startfluxbox.in
---- orig/util/startfluxbox.in	2018-09-30 09:03:17.000000000 +0200
-+++ mod/util/startfluxbox.in	2018-10-01 18:38:07.207466721 +0200
+--- orig/util/startfluxbox.in	2022-11-13 19:54:28.000000000 +0100
++++ mod/util/startfluxbox.in	2022-11-13 20:59:31.282844456 +0100
 @@ -23,6 +23,13 @@
      shift
  done
@@ -15,38 +15,42 @@ diff -Nur orig/util/startfluxbox.in mod/util/startfluxbox.in
  if [ -x "$startup" ]; then
      exec "$startup"
  elif [ -r "$startup" ]; then
-@@ -30,6 +37,7 @@
- else
+@@ -31,6 +38,7 @@
      if [ ! -d $fluxdir ]; then
          mkdir -p "$fluxdir/backgrounds" "$fluxdir/styles" "$fluxdir/pixmaps"
-+        ln -sf /usr/share/backgrounds/UHU/* "$fluxdir/backgrounds/"
      fi
++    ln -sf /usr/share/backgrounds/UHU/* "$fluxdir/backgrounds/"
      if [ ! -r "$startup" ]; then
          ( cat << EOF
-@@ -40,11 +48,16 @@
+ #!/bin/sh
+@@ -40,11 +48,20 @@
  # Lines starting with a '#' are ignored.
  
  # Change your keymap:
 -xmodmap "$HOME/.Xmodmap"
--
 +# xmodmap "$HOME/.Xmodmap"
-+#
+ 
  # Applications you want to run with fluxbox.
  # MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
  #
-+# Start policykit agent
-+lxpolkit &
-+#
-+#xscreensaver &
++# polkit ügynökök, ki kell választani azt, amelyik van. Csak egy lehet!
++# /usr/libexec/lxpolkit &
++# /usr/libexec/polkit-gnome-authentication-agent-1 &
++# /usr/libexec/polkit-mate-authentication-agent-1 &
++# /usr/lib/libexec/polkit-kde-authentication-agent-1
++
++# képernyővédő
++# xscreensaver &
 +#
  # unclutter -idle 2 &
  # wmnd &
  # wmsmixer -w &
-@@ -58,6 +71,7 @@
- # exec @pkgprefix@fluxbox@pkgsuffix@ -log "$fluxdir/log"
+@@ -59,6 +76,8 @@
  EOF
      ) > "$startup"
-+    fluxbox-xdg-menu --with-icons --with-backgrounds
      fi
++    fluxbox-xdg-menu --with-icons --with-backgrounds
      chmod 644 "$startup"
      exec sh "$startup"
+ fi
++
