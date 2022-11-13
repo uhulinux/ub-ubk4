@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
-autoreconf -vif
+#autoreconf -vif
+export PKG_CONFIG_PATH='/usr/lib/ffmpeg4.4/pkgconfig'
 ub_compile \
     --disable-sse \
     --disable-sse2 \
@@ -25,4 +26,4 @@ ub_compile \
     --enable-alsa \
     --enable-libmpeg2 \
     --enable-libmpeg2convert \
-    --disable-ffmpeg
+    --enable-ffmpeg
