@@ -1,0 +1,24 @@
+diff -Naur a/gsearchtool/help/Makefile.am b/gsearchtool/help/Makefile.am
+--- a/gsearchtool/help/Makefile.am	2022-11-11 22:39:21.000000000 +0100
++++ b/gsearchtool/help/Makefile.am	2022-11-15 00:31:33.747521798 +0100
+@@ -22,7 +22,7 @@
+ 
+ if USE_NLS
+ # Add linguas to be ignored, e.g. IGNORE_HELP_LINGUAS = pt ca de es fr
+-IGNORE_HELP_LINGUAS = pt
++IGNORE_HELP_LINGUAS = pt uk
+ HELP_LINGUAS = $(if $(IGNORE_HELP_LINGUAS), \
+ 	$(filter-out $(IGNORE_HELP_LINGUAS),$(subst /,,$(dir $(wildcard */*.po)))), \
+ 	$(subst /,,$(dir $(wildcard */*.po))) )
+diff -Naur a/gsearchtool/help/Makefile.in b/gsearchtool/help/Makefile.in
+--- a/gsearchtool/help/Makefile.in	2022-11-11 22:39:31.000000000 +0100
++++ b/gsearchtool/help/Makefile.in	2022-11-15 00:31:41.547548758 +0100
+@@ -353,7 +353,7 @@
+ HELP_MEDIA = figures/mate-search-tool_window.png
+ 
+ # Add linguas to be ignored, e.g. IGNORE_HELP_LINGUAS = pt ca de es fr
+-@USE_NLS_TRUE@IGNORE_HELP_LINGUAS = pt
++@USE_NLS_TRUE@IGNORE_HELP_LINGUAS = pt uk
+ @USE_NLS_FALSE@HELP_LINGUAS = 
+ @USE_NLS_TRUE@HELP_LINGUAS = $(if $(IGNORE_HELP_LINGUAS), \
+ @USE_NLS_TRUE@	$(filter-out $(IGNORE_HELP_LINGUAS),$(subst /,,$(dir $(wildcard */*.po)))), \

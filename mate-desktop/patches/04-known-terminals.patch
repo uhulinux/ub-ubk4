@@ -1,7 +1,7 @@
-diff -Naur orig/libmate-desktop/mate-desktop-utils.c patched/libmate-desktop/mate-desktop-utils.c
---- orig/libmate-desktop/mate-desktop-utils.c	2015-04-05 19:22:23.000000000 +0200
-+++ patched/libmate-desktop/mate-desktop-utils.c	2015-04-06 21:07:04.651455849 +0200
-@@ -132,30 +132,33 @@
+diff -Naur a/libmate-desktop/mate-desktop-utils.c b/libmate-desktop/mate-desktop-utils.c
+--- a/libmate-desktop/mate-desktop-utils.c	2022-11-11 20:48:24.000000000 +0100
++++ b/libmate-desktop/mate-desktop-utils.c	2022-11-14 22:57:49.140794658 +0100
+@@ -130,30 +130,21 @@
  		term_argv = g_new0 (char *, 3);
  
  		check = g_find_program_in_path ("mate-terminal");
@@ -35,19 +35,7 @@ diff -Naur orig/libmate-desktop/mate-desktop-utils.c patched/libmate-desktop/mat
 +		if (check == NULL)
 +			check = g_find_program_in_path ("lxterminal");
 +		if (check == NULL)
-+			check = g_find_program_in_path ("eterm");
-+		if (check == NULL)
-+			check = g_find_program_in_path ("roxterm");
-+		if (check == NULL)
 +			check = g_find_program_in_path ("sakura");
-+		if (check == NULL)
-+			check = g_find_program_in_path ("nxterm");
-+		if (check == NULL)
-+			check = g_find_program_in_path ("color-xterm");
-+		if (check == NULL)
-+			check = g_find_program_in_path ("rxvt");
-+		if (check == NULL)
-+			check = g_find_program_in_path ("dtterm");
 +		if (check == NULL) {
 +			g_warning (_("Cannot find a terminal, using "
 +				     "xterm, even if it may not work"));
