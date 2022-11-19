@@ -1,9 +1,0 @@
-#!/bin/bash --
-
-echo q | asciiview -kbddriver stdin -driver stdout "$@" | \
-awk '
-	BEGIN	{ part = 0; }
-	/\014/	{ part++; next; }
-	//	{ if (part == 2) print $0; }
-'
-
