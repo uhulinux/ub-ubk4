@@ -1,15 +1,19 @@
 #!/bin/sh
 
-# csatolási hitelesítők
+# csatolási hitelesítők. Csak 1 lehet, Nélküle nem megy az azonosító ablak.
 
-# lxde
 #/usr/libexec/lxpolkit &
-
-# mate
 #/usr/libexec/polkit-mate-authentication-agent-1 &
-
-# gnome
 #/usr/libexec/polkit-gnome-authentication-agent-1 &
-
-# kde
 #/usr/lib/libexec/polkit-kde-authentication-agent-1 &
+
+#network applet
+#sleep 1 &&
+#nm-applet &
+
+#bluetooth applet
+#sleep 1 &&
+#blueman-applet &!
+
+#screensaver
+#xscreensaver -nosplash &
