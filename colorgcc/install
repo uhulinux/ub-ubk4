@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-cp colorgcc.pl "$UB_INSTALLDIR"/usr/bin/colorgcc
-mkdir -p ${UB_INSTALLDIR}/etc/colorgcc
-cp colorgccrc.txt ${UB_INSTALLDIR}/etc/colorgcc/colorgccrc
-mkdir -p ${UB_INSTALLDIR}/usr/lib/colorgcc/bin
-for i in cc c++ gcc g++ gcj; do
-    ln -s /usr/bin/colorgcc ${UB_INSTALLDIR}/usr/lib/colorgcc/bin/${i}
-done

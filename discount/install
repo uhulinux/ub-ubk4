@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-make DESTDIR=$UB_INSTALLDIR \
-	install.everything
-
-mv -f "$UB_INSTALLDIR"/usr/bin/markdown "$UB_INSTALLDIR"/usr/bin/discount
-ln -s markdown.1 "$UB_INSTALLDIR"/usr/share/man/man1/discount.1
-rm -rf "$UB_INSTALLDIR"/usr/lib/include
-rm -rf "$UB_INSTALLDIR"/usr/lib/pkgconfig
