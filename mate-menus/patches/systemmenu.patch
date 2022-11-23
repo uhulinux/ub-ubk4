@@ -1,6 +1,30 @@
-diff -Naur orig/layout/mate-settings.menu patched/layout/mate-settings.menu
---- orig/layout/mate-settings.menu	2014-01-19 22:20:59.000000000 +0100
-+++ patched/layout/mate-settings.menu	2014-10-01 00:46:17.212242503 +0200
+diff -Naur a/layout/mate-preferences-categories.menu b/layout/mate-preferences-categories.menu
+--- a/layout/mate-preferences-categories.menu	2022-11-11 20:20:39.000000000 +0100
++++ b/layout/mate-preferences-categories.menu	2022-11-23 20:57:15.987107920 +0100
+@@ -40,12 +40,6 @@
+         <Not><Category>System</Category></Not>
+         <Not><Category>Security</Category></Not>
+       </And>
+-      <And>
+-        <Category>Settings</Category>
+-        <Category>Qt</Category>
+-        <Not><Category>System</Category></Not>
+-        <Not><Category>Security</Category></Not>
+-      </And>
+     </Include>
+   </Menu>
+ 
+@@ -95,7 +89,6 @@
+         <Not><Category>HardwareSettings</Category></Not>
+         <Not><Category>Security</Category></Not>
+         <Not><Category>Archiving</Category></Not>
+-        <Not><Category>Qt</Category></Not>
+         <Not><Category>X-MATE-NetworkSettings</Category></Not>
+         <Not><Category>X-GNOME-NetworkSettings</Category></Not>
+         <Not><Category>X-MATE-PersonalSettings</Category></Not>
+diff -Naur a/layout/mate-settings.menu b/layout/mate-settings.menu
+--- a/layout/mate-settings.menu	2022-11-11 20:20:39.000000000 +0100
++++ b/layout/mate-settings.menu	2022-11-23 20:54:10.890299908 +0100
 @@ -28,8 +28,36 @@
          <Category>Settings</Category>
          <Not>
