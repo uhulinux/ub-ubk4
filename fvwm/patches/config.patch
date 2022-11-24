@@ -1,0 +1,20 @@
+diff -Nur orig/default-config/config mod/default-config/config
+--- orig/default-config/config	2022-10-20 21:10:04.000000000 +0200
++++ mod/default-config/config	2022-11-24 17:41:11.869701208 +0100
+@@ -60,6 +60,16 @@
+ + I Module FvwmButtons RightPanel
+ + I Module FvwmEvent EventNewDesk
+ 
++# Polkit ügynök. Csak egy lehet a telepítettek közül!
++#+ I Test (Init) Exec /usr/libexec/polkit-mate-authentication-agent-1
++#+ I Test (Init) Exec /usr/libexec/lxpolkit
++#+ I Test (Init) Exec /usr/libexec/polkit-gnome-authentication-agent-1
++#+ I Test (Init) Exec /usr/libexec/polkit-mate-authentication-agent-1
++#+ I Test (Init) Exec /usr/lib/libexec/polkit-kde-authentication-agent-1
++
++# képernyővédő
++#+ I Test (Init) Exec xscreensaver
++
+ # Function to set background when fvwm starts
+ DestroyFunc InitBackground
+ AddToFunc InitBackground
