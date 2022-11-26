@@ -1,17 +1,34 @@
 diff -Nur orig/data/start mod/data/start
 --- orig/data/start	2021-12-03 20:13:43.000000000 +0100
-+++ mod/data/start	2022-11-13 14:02:29.901356585 +0100
-@@ -16,3 +16,13 @@
++++ mod/data/start	2022-11-26 16:02:03.693204979 +0100
+@@ -16,3 +16,30 @@
  # There's probably a few other good uses for it, too. I mainly pushed for it
  # because when I was doing fluxbox's docs, people used to complain that there
  # wasn't one, and I wanted to avoid that for pekwm. ;) --eyez
 +
-+#panel
-+pekwm_panel &
-+#háttérkép
-+#pekwm_bg Image /usr/share/backgrounds/UHU/ubk4.png#scaled &
-+#polkit ügynökök, ki kell választani azt, amelyik van. Csak egy lehet!
++# panelek
++#pekwm_panel &
++fbpanel &
++#mate-panel &
++#lxpanel &
++#gnome-panel &
++#xfce4-panel &
++
++# rendszertálcák
++#trayer &
++#tint2 &
++
++# háttérkép
++pekwm_bg Image /usr/share/backgrounds/UHU/ubk4.png#scaled &
++
++# polkit ügynökök, ki kell választani azt, amelyik van. Csak egy lehet!
 +#/usr/libexec/lxpolkit
 +#/usr/libexec/polkit-gnome-authentication-agent-1 &
-+#/usr/libexec/polkit-mate-authentication-agent-1 &
++/usr/libexec/polkit-mate-authentication-agent-1 &
 +#/usr/lib/libexec/polkit-kde-authentication-agent-1
++
++# képernyővédő
++#xscreensaver &
++
++# nm-applet a panelekre, ha nincs ott
++nm-applet &
