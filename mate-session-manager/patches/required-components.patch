@@ -1,0 +1,12 @@
+diff -Naur a/data/org.mate.session.gschema.xml.in b/data/org.mate.session.gschema.xml.in
+--- a/data/org.mate.session.gschema.xml.in	2022-11-11 21:03:15.000000000 +0100
++++ b/data/org.mate.session.gschema.xml.in	2022-11-26 21:29:52.029975507 +0100
+@@ -37,7 +37,7 @@
+       <description>List of applications that are part of the default session.</description>
+     </key>
+     <key name="required-components-list" type="as">
+-      <default>[ 'windowmanager', 'panel', 'filemanager', 'dock' ]</default>
++      <default>[ 'windowmanager', 'panel', 'filemanager' ]</default>
+       <summary>Required session components</summary>
+       <description>List of components that are required as part of the session. (Each element names a key under "/org/mate/desktop/session/required_components"). The Startup Applications preferences tool will not normally allow users to remove a required component from the session, and the session manager will automatically add the required components back to the session at login time if they do get removed.</description>
+     </key>
