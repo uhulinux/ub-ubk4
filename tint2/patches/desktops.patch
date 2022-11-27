@@ -1,0 +1,53 @@
+diff -Nur orig/src/tint2conf/tint2conf.desktop mod/src/tint2conf/tint2conf.desktop
+--- orig/src/tint2conf/tint2conf.desktop	2021-12-04 10:46:45.000000000 +0100
++++ mod/src/tint2conf/tint2conf.desktop	2022-11-27 21:20:00.333332787 +0100
+@@ -21,7 +21,7 @@
+ Name[fr]=Gestionnaire du panneau tint2
+ Name[gl]=Xestor de paneis
+ Name[he]=מנהל הלוח
+-Name[hu]=Panelkezelő
++Name[hu]=Tint2 beállító
+ Name[id]=Manajer Panel
+ Name[it]=Gestore dei pannelli
+ Name[ja]=パネルマネージャ
+@@ -73,7 +73,7 @@
+ GenericName[fr]=Gestionnaire de panneau
+ GenericName[gl]=Xestor de paneis
+ GenericName[he]=מנהל הלוח
+-GenericName[hu]=Panelkezelő
++GenericName[hu]=Tint2 beállító
+ GenericName[id]=Manajer Panel
+ GenericName[it]=Gestore dei pannelli
+ GenericName[ja]=パネルマネージャ
+diff -Nur orig/tint2.desktop mod/tint2.desktop
+--- orig/tint2.desktop	2021-12-04 10:46:45.000000000 +0100
++++ mod/tint2.desktop	2022-11-27 21:13:38.431552415 +0100
+@@ -4,7 +4,7 @@
+ 
+ Name=Tint2
+ 
+-GenericName=Panel
++GenericName=Tint2 Panel
+ GenericName[am]=ፓነል
+ GenericName[ar]=الشريط
+ GenericName[ast]=Panel
+@@ -24,7 +24,7 @@
+ GenericName[fr]=Panneau
+ GenericName[gl]=Panel
+ GenericName[he]=לוח
+-GenericName[hu]=Panel
++GenericName[hu]=Tint2 rendszertálca
+ GenericName[id]=Panel
+ GenericName[it]=Pannello
+ GenericName[ja]=パネル
+@@ -57,8 +57,10 @@
+ Comment[fr]=Panel léger
+ Comment[pl]=Lekki panel
+ Comment[ru]=Легковесная панель
++Comment[hu]=Könnyed rendszertálca X ablakkezelőkhöz
+ 
+ Exec=tint2
+ Icon=tint2
+ Terminal=false
++NotShowIn=GNOME;KDE;LXDE;MATE;LXQt;XFCE;Cinnamon;
+ Categories=System;
