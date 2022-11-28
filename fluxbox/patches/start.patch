@@ -1,6 +1,6 @@
 diff -Nur orig/util/startfluxbox.in mod/util/startfluxbox.in
 --- orig/util/startfluxbox.in	2022-11-13 19:54:28.000000000 +0100
-+++ mod/util/startfluxbox.in	2022-11-13 20:59:31.282844456 +0100
++++ mod/util/startfluxbox.in	2022-11-28 16:18:56.876873519 +0100
 @@ -23,6 +23,13 @@
      shift
  done
@@ -15,42 +15,74 @@ diff -Nur orig/util/startfluxbox.in mod/util/startfluxbox.in
  if [ -x "$startup" ]; then
      exec "$startup"
  elif [ -r "$startup" ]; then
-@@ -31,6 +38,7 @@
-     if [ ! -d $fluxdir ]; then
-         mkdir -p "$fluxdir/backgrounds" "$fluxdir/styles" "$fluxdir/pixmaps"
-     fi
-+    ln -sf /usr/share/backgrounds/UHU/* "$fluxdir/backgrounds/"
-     if [ ! -r "$startup" ]; then
-         ( cat << EOF
- #!/bin/sh
-@@ -40,11 +48,20 @@
+@@ -40,22 +47,63 @@
  # Lines starting with a '#' are ignored.
  
  # Change your keymap:
 -xmodmap "$HOME/.Xmodmap"
-+# xmodmap "$HOME/.Xmodmap"
++#xmodmap "$HOME/.Xmodmap"
++
++# Applications you want to run with fluxbox.
++# MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
++#
++#!/bin/sh
++#
++# fluxbox startup-script:
++#
++# Lines starting with a '#' are ignored.
++
++# Change your keymap:
++# xmodmap "~/.Xmodmap"
  
  # Applications you want to run with fluxbox.
  # MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
  #
-+# polkit ügynökök, ki kell választani azt, amelyik van. Csak egy lehet!
-+# /usr/libexec/lxpolkit &
-+# /usr/libexec/polkit-gnome-authentication-agent-1 &
-+# /usr/libexec/polkit-mate-authentication-agent-1 &
-+# /usr/lib/libexec/polkit-kde-authentication-agent-1
+-# unclutter -idle 2 &
+-# wmnd &
+-# wmsmixer -w &
+-# idesk &
++
++# polkit ügynökök, ki kell választani egyet a hitelesítő ablak felbukkanásához.
++#/usr/libexec/lxpolkit &
++#/usr/libexec/polkit-gnome-authentication-agent-1 &
++/usr/libexec/polkit-mate-authentication-agent-1 &
++#/usr/lib/libexec/polkit-kde-authentication-agent-1
++
++# hálótzat figyelő. # A nagy panelek után kell rakni.
++sleep 1 &&
++nm-applet &
++
++# panelek
++#tint2 & # Beálítása a ~/.config/tint2/tint2rc fájlban történhet
++#bmpanel2 &
++# Nagy panelek
++#mate-panel &
++#gnome-panel &
++#xfce4-panel &
++#lxpanel &
 +
 +# képernyővédő
-+# xscreensaver &
-+#
- # unclutter -idle 2 &
- # wmnd &
- # wmsmixer -w &
-@@ -59,6 +76,8 @@
++xscreensaver &
++
++# ikonok a háttérre (https://wiki.archlinux.org/title/Idesk)
++#idesk &
++
++# egyebek
++#unclutter -idle 2 &
++#wmnd &
++#wmsmixer -w &
++
++# ha a megjelenített háttér nem megfelelő
++#feh --bg-scale ~/.fluxbox/backgrounds/ubk4.png &
+ 
+ # And last but not least we start fluxbox.
+ # Because it is the last app you have to run it with ''exec'' before it.
+ 
+-exec @pkgprefix@fluxbox@pkgsuffix@
++exec fluxbox
+ # or if you want to keep a log:
+-# exec @pkgprefix@fluxbox@pkgsuffix@ -log "$fluxdir/log"
++#exec fluxbox -log ~/fluxbox/fluxbox/log"
  EOF
      ) > "$startup"
      fi
-+    fluxbox-xdg-menu --with-icons --with-backgrounds
-     chmod 644 "$startup"
-     exec sh "$startup"
- fi
-+

@@ -1,34 +1,47 @@
 diff -Nur orig/data/start mod/data/start
 --- orig/data/start	2021-12-03 20:13:43.000000000 +0100
-+++ mod/data/start	2022-11-26 16:02:03.693204979 +0100
-@@ -16,3 +16,30 @@
++++ mod/data/start	2022-11-28 15:28:42.607784528 +0100
+@@ -16,3 +16,43 @@
  # There's probably a few other good uses for it, too. I mainly pushed for it
  # because when I was doing fluxbox's docs, people used to complain that there
  # wasn't one, and I wanted to avoid that for pekwm. ;) --eyez
 +
-+# panelek
-+#pekwm_panel &
-+fbpanel &
-+#mate-panel &
-+#lxpanel &
-+#gnome-panel &
-+#xfce4-panel &
-+
-+# rendszertálcák
-+#trayer &
-+#tint2 &
-+
-+# háttérkép
-+pekwm_bg Image /usr/share/backgrounds/UHU/ubk4.png#scaled &
-+
-+# polkit ügynökök, ki kell választani azt, amelyik van. Csak egy lehet!
-+#/usr/libexec/lxpolkit
++# polkit ügynökök, ki kell választani egyet a hitelesítő ablak felbukkanásához.
++#/usr/libexec/lxpolkit &
 +#/usr/libexec/polkit-gnome-authentication-agent-1 &
 +/usr/libexec/polkit-mate-authentication-agent-1 &
 +#/usr/lib/libexec/polkit-kde-authentication-agent-1
 +
++# panelek
++#pekwm_panel &
++#bmpanel2
++
++# Nagy panelek
++mate-panel &
++#gnome-panel &
++#xfce4-panel &
++#lxpanel &
++
++# rendszertálcák
++#fbpanel &
++#tint2 & # Beálítása a ~/.config/tint2/tint2rc fájlban történhet
++
 +# képernyővédő
 +#xscreensaver &
 +
-+# nm-applet a panelekre, ha nincs ott
++# ikonok a háttérre (https://wiki.archlinux.org/title/Idesk)
++#idesk &
++
++# nm-applet a panelekre és rendszertálcákra, ha nincs ott
 +nm-applet &
++
++# egyebek
++#unclutter -idle 2 &
++#wmnd &
++#wmsmixer -w &
++
++# háttérkép
++pekwm_bg Image /usr/share/backgrounds/UHU/ubk4.png#scaled &
++
++# ha a megjelenített háttér nem megfelelő
++#feh --bg-scale ~/usr/share/backgrounds/UHU/ubk4.png &
