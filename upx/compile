@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
-export UPX_UCLDIR=$UB_WORKDIR/ucl-1.03
+git clone -b upx-vendor https://github.com/upx/upx-vendor-doctest.git vendor/doctest
+git clone -b upx-vendor https://github.com/upx/upx-vendor-lzma-sdk.git vendor/lzma-sdk
+git clone -b upx-vendor https://github.com/upx/upx-vendor-ucl.git vendor/ucl
+git clone -b upx-vendor https://github.com/upx/upx-vendor-zlib.git vendor/zlib
 
-ub_make all
+ub_compile
