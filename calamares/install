@@ -1,6 +1,40 @@
 #!/bin/sh -eux
 
 ub_install
+
+# https://github.com/calamares/calamares/commit/8f72d2541f241ef5a1f4bc945bdc908e7dbe9fdd
+modules=(
+bootloader
+chrootcfg
+displaymanager
+dracut
+finished
+fstab
+grubcfg
+hwclock
+keyboard
+locale
+localecfg
+machineid
+mount
+netinstall
+networkcfg
+packages
+partition
+summary
+umount
+users
+welcome
+)
+
+mkdir -p $UB_INSTALLDIR/usr/share/calamares/modules
+for module in ${modules[@]}; do
+if [ -f src/modules/$module/$module.conf ]; then
+    cp src/modules/$module/$module.conf $UB_INSTALLDIR/usr/share/calamares/modules/$module.conf
+fi
+done
+
+cp settings.conf $UB_INSTALLDIR/usr/share/calamares/settings.conf
 cp $UB_INSTALLDIR/usr/share/calamares/settings.conf $UB_INSTALLDIR/usr/share/calamares/settings.conf.net
 cp $UB_INSTALLDIR/usr/share/calamares/modules/welcome.conf $UB_INSTALLDIR/usr/share/calamares/modules/welcome.conf.net
 cp $UB_INSTALLDIR/usr/share/calamares/modules/packages.conf $UB_INSTALLDIR/usr/share/calamares/modules/packages.conf.net
