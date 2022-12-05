@@ -1,0 +1,12 @@
+diff -Nur orig/remote.c mod/remote.c
+--- orig/remote.c	2015-09-20 01:45:12.000000000 +0200
++++ mod/remote.c	2022-12-05 20:33:54.939611229 +0100
+@@ -796,7 +796,7 @@
+ 
+ #ifdef REMOTE_FEATURE_LIRC
+             case 'l':
+-                new cLircRemote(devnam[i]); // use vdr's lirc code
++                cLircRemote::NewLircRemote(devnam[i]); // use vdr's lirc code
+                 break;
+ #endif
+ #ifdef REMOTE_FEATURE_LIRCOLD
