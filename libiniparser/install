@@ -1,0 +1,8 @@
+#!/bin/sh -eux
+
+# ub_install
+
+mkdir -p $UB_INSTALLDIR/usr/include/iniparser
+cp src/*.h $UB_INSTALLDIR/usr/include/iniparser/
+cp libiniparser.so.1 $UB_INSTALLDIR/usr/lib/
+ln -s libiniparser.so.1 $UB_INSTALLDIR/usr/lib/libiniparser.so
