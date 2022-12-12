@@ -1,0 +1,10 @@
+diff -Naur orig/Makefile patched/Makefile
+--- orig/Makefile	2020-10-15 22:09:16.711260760 +0200
++++ patched/Makefile	2020-10-15 22:09:46.503399264 +0200
+@@ -1,5 +1,5 @@
+ CC=gcc -Wall -ansi -pedantic
+-CFLAGS=-g `sdl-config --cflags --libs` -Wall -ansi -pedantic -lSDL_image -lm
++CFLAGS=-g `sdl-config --cflags --libs` -Wall -ansi -pedantic -fcommon -lSDL_image -lm
+ SRC=main.c graphics.c SFont.c alien.c weapons.c music.c
+ TARGET=SDLInvaders
+ 

@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+scoredir="$UB_INSTALLDIR"/var/games/SDLInvaders
+datadir="$UB_INSTALLDIR"/usr/share/games/SDLInvaders
+prg="$UB_INSTALLDIR"/usr/bin/SDLInvaders
+install -d "$scoredir" "$datadir"
+install -o root --group=users --mode=0664 data/highscores "$scoredir"/
+cp -r data "$datadir"/
+rm data/highscores
+cp SDLInvaders "$datadir"/SDLInvadersprg
+echo "#!/bin/bash" > "$prg"
+echo "cd /usr/share/games/SDLInvaders" >> "$prg"
+echo "./SDLInvadersprg" >> "$prg"
+chmod +x "$prg"
