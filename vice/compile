@@ -1,18 +1,9 @@
 #!/bin/sh -eux
 
-./autogen.sh
-./configure \
-	--prefix=/usr \
-	--enable-ethernet \
+autoreconf -vif
+ub_compile \
 	--disable-external-ffmpeg \
-	--enable-lame \
-	--disable-static-lame \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
-	--mandir=/usr/share/man \
-	--infodir=/usr/share/info \
 	--libdir=/usr/lib \
 	--enable-x64 \
-	--disable-optimization \
+	--enable-arch=no \
 	--disable-pdf-docs
-ub_make
