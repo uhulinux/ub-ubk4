@@ -1,7 +1,7 @@
-diff -Naur orig/data/xfce/Makefile.am patched/data/xfce/Makefile.am
---- orig/data/xfce/Makefile.am	2017-04-14 10:27:44.000000000 +0200
-+++ patched/data/xfce/Makefile.am	2020-12-01 02:58:59.749235223 +0100
-@@ -24,19 +24,67 @@
+diff -Naur a/data/xfce/Makefile.am b/data/xfce/Makefile.am
+--- a/data/xfce/Makefile.am	2022-10-30 11:45:03.000000000 +0100
++++ b/data/xfce/Makefile.am	2022-12-15 17:14:39.357532028 +0100
+@@ -24,20 +24,68 @@
  directorydir = $(datadir)/desktop-directories
  directory_in_files =							\
  	xfce-accessories.directory.in					\
@@ -58,6 +58,7 @@ diff -Naur orig/data/xfce/Makefile.am patched/data/xfce/Makefile.am
  	xfce-office.directory.in					\
  	xfce-other.directory.in						\
  	xfce-personal.directory.in					\
+ 	xfce-science.directory.in					\
  	xfce-screensavers.directory.in					\
  	xfce-settings.directory.in					\
 -	xfce-system.directory.in
@@ -70,10 +71,10 @@ diff -Naur orig/data/xfce/Makefile.am patched/data/xfce/Makefile.am
  
  directory_DATA = $(directory_in_files:.directory.in=.directory)
  @INTLTOOL_DIRECTORY_RULE@
-diff -Naur orig/data/xfce/Makefile.in patched/data/xfce/Makefile.in
---- orig/data/xfce/Makefile.in	2020-11-09 10:56:31.000000000 +0100
-+++ patched/data/xfce/Makefile.in	2020-12-01 02:58:59.749235223 +0100
-@@ -385,19 +385,68 @@
+diff -Naur a/data/xfce/Makefile.in b/data/xfce/Makefile.in
+--- a/data/xfce/Makefile.in	2022-12-15 09:41:19.000000000 +0100
++++ b/data/xfce/Makefile.in	2022-12-15 17:18:22.514134283 +0100
+@@ -376,20 +376,69 @@
  directorydir = $(datadir)/desktop-directories
  directory_in_files = \
  	xfce-accessories.directory.in					\
@@ -131,6 +132,7 @@ diff -Naur orig/data/xfce/Makefile.in patched/data/xfce/Makefile.in
  	xfce-office.directory.in					\
  	xfce-other.directory.in						\
  	xfce-personal.directory.in					\
+ 	xfce-science.directory.in					\
  	xfce-screensavers.directory.in					\
  	xfce-settings.directory.in					\
 -	xfce-system.directory.in
@@ -143,9 +145,9 @@ diff -Naur orig/data/xfce/Makefile.in patched/data/xfce/Makefile.in
  
  directory_DATA = $(directory_in_files:.directory.in=.directory)
  EXTRA_DIST = \
-diff -Naur orig/data/xfce/xfce-accessories-sub-archiving.directory.in patched/data/xfce/xfce-accessories-sub-archiving.directory.in
---- orig/data/xfce/xfce-accessories-sub-archiving.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-archiving.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-archiving.directory.in b/data/xfce/xfce-accessories-sub-archiving.directory.in
+--- a/data/xfce/xfce-accessories-sub-archiving.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-archiving.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Archiving
@@ -154,27 +156,27 @@ diff -Naur orig/data/xfce/xfce-accessories-sub-archiving.directory.in patched/da
 +Comment[hu]=Adat archiváló/visszaállító eszköz
 +Icon=package-x-generic
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-accessories-sub-calculator.directory.in patched/data/xfce/xfce-accessories-sub-calculator.directory.in
---- orig/data/xfce/xfce-accessories-sub-calculator.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-calculator.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-calculator.directory.in b/data/xfce/xfce-accessories-sub-calculator.directory.in
+--- a/data/xfce/xfce-accessories-sub-calculator.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-calculator.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=Calculator
 +Name[hu]=Számológép
 +Icon=accessories-calculator
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-accessories-sub-clock.directory.in patched/data/xfce/xfce-accessories-sub-clock.directory.in
---- orig/data/xfce/xfce-accessories-sub-clock.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-clock.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-clock.directory.in b/data/xfce/xfce-accessories-sub-clock.directory.in
+--- a/data/xfce/xfce-accessories-sub-clock.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-clock.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=Clock
 +Name[hu]=Óra
 +Icon=applications-accessories
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-accessories-sub-compression.directory.in patched/data/xfce/xfce-accessories-sub-compression.directory.in
---- orig/data/xfce/xfce-accessories-sub-compression.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-compression.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-compression.directory.in b/data/xfce/xfce-accessories-sub-compression.directory.in
+--- a/data/xfce/xfce-accessories-sub-compression.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-compression.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Compression
@@ -183,18 +185,18 @@ diff -Naur orig/data/xfce/xfce-accessories-sub-compression.directory.in patched/
 +Comment[hu]=Tömörített adatokat/archívumokat kezelő eszköz
 +Icon=package-x-generic
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-accessories-sub-filetool.directory.in patched/data/xfce/xfce-accessories-sub-filetool.directory.in
---- orig/data/xfce/xfce-accessories-sub-filetool.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-filetool.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-filetool.directory.in b/data/xfce/xfce-accessories-sub-filetool.directory.in
+--- a/data/xfce/xfce-accessories-sub-filetool.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-filetool.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=File tool
 +Name[hu]=Fájlkezelő eszköz
 +Icon=system-file-manager
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-accessories-sub-telephonytool.directory.in patched/data/xfce/xfce-accessories-sub-telephonytool.directory.in
---- orig/data/xfce/xfce-accessories-sub-telephonytool.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-telephonytool.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-telephonytool.directory.in b/data/xfce/xfce-accessories-sub-telephonytool.directory.in
+--- a/data/xfce/xfce-accessories-sub-telephonytool.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-telephonytool.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Telephony tool
@@ -203,9 +205,9 @@ diff -Naur orig/data/xfce/xfce-accessories-sub-telephonytool.directory.in patche
 +Comment[hu]=Segédeszköz telefonáláshoz; tárcsázás, PBX kezelése, ...
 +Icon=call-start
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-accessories-sub-texteditor.directory.in patched/data/xfce/xfce-accessories-sub-texteditor.directory.in
---- orig/data/xfce/xfce-accessories-sub-texteditor.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-texteditor.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-texteditor.directory.in b/data/xfce/xfce-accessories-sub-texteditor.directory.in
+--- a/data/xfce/xfce-accessories-sub-texteditor.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-texteditor.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Text editor
@@ -214,9 +216,9 @@ diff -Naur orig/data/xfce/xfce-accessories-sub-texteditor.directory.in patched/d
 +Comment[hu]=Szöveg szerkesztése
 +Icon=accessories-text-editor
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-accessories-sub-texttool.directory.in patched/data/xfce/xfce-accessories-sub-texttool.directory.in
---- orig/data/xfce/xfce-accessories-sub-texttool.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-accessories-sub-texttool.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-accessories-sub-texttool.directory.in b/data/xfce/xfce-accessories-sub-texttool.directory.in
+--- a/data/xfce/xfce-accessories-sub-texttool.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-accessories-sub-texttool.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Text tool
@@ -225,9 +227,9 @@ diff -Naur orig/data/xfce/xfce-accessories-sub-texttool.directory.in patched/dat
 +Comment[hu]=Szöveg kezelő eszköz
 +Icon=accessories-text-editor
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-applications.menu patched/data/xfce/xfce-applications.menu
---- orig/data/xfce/xfce-applications.menu	2020-05-25 22:32:47.000000000 +0200
-+++ patched/data/xfce/xfce-applications.menu	2020-12-01 03:03:26.249756146 +0100
+diff -Naur a/data/xfce/xfce-applications.menu b/data/xfce/xfce-applications.menu
+--- a/data/xfce/xfce-applications.menu	2022-10-30 11:45:03.000000000 +0100
++++ b/data/xfce/xfce-applications.menu	2022-12-15 17:11:06.917147141 +0100
 @@ -33,6 +33,9 @@
          <Include>
              <Category>Settings</Category>
@@ -321,10 +323,11 @@ diff -Naur orig/data/xfce/xfce-applications.menu patched/data/xfce/xfce-applicat
          <Directory>xfce-games.directory</Directory>
          <Include>
 -            <Category>Game</Category>
+-        </Include>
 +      	  <And>
 +			<Category>Game</Category>
 +          </And>
-         </Include>
++        </Include>
 +	    <Exclude>
 +			<Category>ActionGame</Category>
 +			<Category>AdventureGame</Category>
@@ -639,7 +642,7 @@ diff -Naur orig/data/xfce/xfce-applications.menu patched/data/xfce/xfce-applicat
      </Menu>
  
      <Menu>
-@@ -138,16 +499,55 @@
+@@ -146,16 +507,55 @@
          <Name>System</Name>
          <Directory>xfce-system.directory</Directory>
          <Include>
@@ -698,9 +701,9 @@ diff -Naur orig/data/xfce/xfce-applications.menu patched/data/xfce/xfce-applicat
      </Menu>
  
      <Menu>
-diff -Naur orig/data/xfce/xfce-games-sub-action.directory.in patched/data/xfce/xfce-games-sub-action.directory.in
---- orig/data/xfce/xfce-games-sub-action.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-action.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-action.directory.in b/data/xfce/xfce-games-sub-action.directory.in
+--- a/data/xfce/xfce-games-sub-action.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-action.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Action
@@ -709,9 +712,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-action.directory.in patched/data/xfce/x
 +Comment[hu]=Akciójáték
 +Icon=weather-storm
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-adventure.directory.in patched/data/xfce/xfce-games-sub-adventure.directory.in
---- orig/data/xfce/xfce-games-sub-adventure.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-adventure.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-adventure.directory.in b/data/xfce/xfce-games-sub-adventure.directory.in
+--- a/data/xfce/xfce-games-sub-adventure.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-adventure.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Adventure
@@ -720,9 +723,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-adventure.directory.in patched/data/xfc
 +Comment[hu]=Kalandjáték
 +Icon=applications-games
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-arcade.directory.in patched/data/xfce/xfce-games-sub-arcade.directory.in
---- orig/data/xfce/xfce-games-sub-arcade.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-arcade.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-arcade.directory.in b/data/xfce/xfce-games-sub-arcade.directory.in
+--- a/data/xfce/xfce-games-sub-arcade.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-arcade.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Arcade
@@ -731,9 +734,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-arcade.directory.in patched/data/xfce/x
 +Comment[hu]=Ügyességi játék
 +Icon=gnome-joystick
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-blocks.directory.in patched/data/xfce/xfce-games-sub-blocks.directory.in
---- orig/data/xfce/xfce-games-sub-blocks.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-blocks.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-blocks.directory.in b/data/xfce/xfce-games-sub-blocks.directory.in
+--- a/data/xfce/xfce-games-sub-blocks.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-blocks.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Blocks
@@ -742,9 +745,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-blocks.directory.in patched/data/xfce/x
 +Comment[hu]=Potyogó blokkok játék (pl. tetris)
 +Icon=gnome-gnometris
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-board.directory.in patched/data/xfce/xfce-games-sub-board.directory.in
---- orig/data/xfce/xfce-games-sub-board.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-board.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-board.directory.in b/data/xfce/xfce-games-sub-board.directory.in
+--- a/data/xfce/xfce-games-sub-board.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-board.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Board
@@ -753,9 +756,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-board.directory.in patched/data/xfce/xf
 +Comment[hu]=Táblajáték
 +Icon=applications-boardgames
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-card.directory.in patched/data/xfce/xfce-games-sub-card.directory.in
---- orig/data/xfce/xfce-games-sub-card.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-card.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-card.directory.in b/data/xfce/xfce-games-sub-card.directory.in
+--- a/data/xfce/xfce-games-sub-card.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-card.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Card
@@ -764,9 +767,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-card.directory.in patched/data/xfce/xfc
 +Comment[hu]=Kártyajáték
 +Icon=applications-cardgames
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-kids.directory.in patched/data/xfce/xfce-games-sub-kids.directory.in
---- orig/data/xfce/xfce-games-sub-kids.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-kids.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-kids.directory.in b/data/xfce/xfce-games-sub-kids.directory.in
+--- a/data/xfce/xfce-games-sub-kids.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-kids.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Kids
@@ -775,9 +778,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-kids.directory.in patched/data/xfce/xfc
 +Comment[hu]=Játék gyerekeknek
 +Icon=gnome-amusements
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-logic.directory.in patched/data/xfce/xfce-games-sub-logic.directory.in
---- orig/data/xfce/xfce-games-sub-logic.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-logic.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-logic.directory.in b/data/xfce/xfce-games-sub-logic.directory.in
+--- a/data/xfce/xfce-games-sub-logic.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-logic.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Logic
@@ -786,18 +789,18 @@ diff -Naur orig/data/xfce/xfce-games-sub-logic.directory.in patched/data/xfce/xf
 +Comment[hu]=Logikai játék
 +Icon=system-run
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-roleplaying.directory.in patched/data/xfce/xfce-games-sub-roleplaying.directory.in
---- orig/data/xfce/xfce-games-sub-roleplaying.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-roleplaying.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-roleplaying.directory.in b/data/xfce/xfce-games-sub-roleplaying.directory.in
+--- a/data/xfce/xfce-games-sub-roleplaying.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-roleplaying.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=Role playing
 +Name[hu]=Szerepjáték
 +Icon=stock_person
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-simulation.directory.in patched/data/xfce/xfce-games-sub-simulation.directory.in
---- orig/data/xfce/xfce-games-sub-simulation.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-simulation.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-simulation.directory.in b/data/xfce/xfce-games-sub-simulation.directory.in
+--- a/data/xfce/xfce-games-sub-simulation.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-simulation.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Simulation
@@ -806,9 +809,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-simulation.directory.in patched/data/xf
 +Comment[hu]=Szimulációs játék
 +Icon=applications-games
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-sports.directory.in patched/data/xfce/xfce-games-sub-sports.directory.in
---- orig/data/xfce/xfce-games-sub-sports.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-sports.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-sports.directory.in b/data/xfce/xfce-games-sub-sports.directory.in
+--- a/data/xfce/xfce-games-sub-sports.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-sports.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Sports
@@ -817,9 +820,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-sports.directory.in patched/data/xfce/x
 +Comment[hu]=Sport játék
 +Icon=stock_scores
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-games-sub-strategy.directory.in patched/data/xfce/xfce-games-sub-strategy.directory.in
---- orig/data/xfce/xfce-games-sub-strategy.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-games-sub-strategy.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-games-sub-strategy.directory.in b/data/xfce/xfce-games-sub-strategy.directory.in
+--- a/data/xfce/xfce-games-sub-strategy.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-games-sub-strategy.directory.in	2022-12-15 17:11:06.917147141 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Strategy
@@ -828,9 +831,9 @@ diff -Naur orig/data/xfce/xfce-games-sub-strategy.directory.in patched/data/xfce
 +Comment[hu]=Stratégiai játék
 +Icon=applications-games
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in patched/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in
---- orig/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in b/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in
+--- a/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Sound & Video editing
@@ -839,9 +842,9 @@ diff -Naur orig/data/xfce/xfce-multimedia-sub-audiovideoediting.directory.in pat
 +Comment[hu]=Hang/videó fájlokat szerkesztő alkalmazások
 +Icon=video-x-generic
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-discburning.directory.in patched/data/xfce/xfce-multimedia-sub-discburning.directory.in
---- orig/data/xfce/xfce-multimedia-sub-discburning.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-discburning.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-discburning.directory.in b/data/xfce/xfce-multimedia-sub-discburning.directory.in
+--- a/data/xfce/xfce-multimedia-sub-discburning.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-discburning.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Disc burning
@@ -850,9 +853,9 @@ diff -Naur orig/data/xfce/xfce-multimedia-sub-discburning.directory.in patched/d
 +Comment[hu]=Optikai lemez író alkalmazások
 +Icon=drive-optical
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-midi.directory.in patched/data/xfce/xfce-multimedia-sub-midi.directory.in
---- orig/data/xfce/xfce-multimedia-sub-midi.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-midi.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-midi.directory.in b/data/xfce/xfce-multimedia-sub-midi.directory.in
+--- a/data/xfce/xfce-multimedia-sub-midi.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-midi.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=MIDI
@@ -861,18 +864,18 @@ diff -Naur orig/data/xfce/xfce-multimedia-sub-midi.directory.in patched/data/xfc
 +Comment[hu]=MIDI kezelő alkalmazások
 +Icon=applications-multimedia
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-mixer.directory.in patched/data/xfce/xfce-multimedia-sub-mixer.directory.in
---- orig/data/xfce/xfce-multimedia-sub-mixer.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-mixer.directory.in	2020-12-01 02:58:59.749235223 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-mixer.directory.in b/data/xfce/xfce-multimedia-sub-mixer.directory.in
+--- a/data/xfce/xfce-multimedia-sub-mixer.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-mixer.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=Mixer
 +Name[hu]=Mixer
 +Icon=multimedia-volume-control
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-music.directory.in patched/data/xfce/xfce-multimedia-sub-music.directory.in
---- orig/data/xfce/xfce-multimedia-sub-music.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-music.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-music.directory.in b/data/xfce/xfce-multimedia-sub-music.directory.in
+--- a/data/xfce/xfce-multimedia-sub-music.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-music.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Music
@@ -881,9 +884,9 @@ diff -Naur orig/data/xfce/xfce-multimedia-sub-music.directory.in patched/data/xf
 +Comment[hu]=Zenei program
 +Icon=audio-x-generic
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-player.directory.in patched/data/xfce/xfce-multimedia-sub-player.directory.in
---- orig/data/xfce/xfce-multimedia-sub-player.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-player.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-player.directory.in b/data/xfce/xfce-multimedia-sub-player.directory.in
+--- a/data/xfce/xfce-multimedia-sub-player.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-player.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Player
@@ -892,9 +895,9 @@ diff -Naur orig/data/xfce/xfce-multimedia-sub-player.directory.in patched/data/x
 +Comment[hu]=Hang/videó fájlok lejátszása
 +Icon=video-x-generic
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-recorder.directory.in patched/data/xfce/xfce-multimedia-sub-recorder.directory.in
---- orig/data/xfce/xfce-multimedia-sub-recorder.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-recorder.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-recorder.directory.in b/data/xfce/xfce-multimedia-sub-recorder.directory.in
+--- a/data/xfce/xfce-multimedia-sub-recorder.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-recorder.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Recorder
@@ -903,27 +906,27 @@ diff -Naur orig/data/xfce/xfce-multimedia-sub-recorder.directory.in patched/data
 +Comment[hu]=Hang/videó fájlokat felvevő alkalmazás
 +Icon=media-record
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-sequencer.directory.in patched/data/xfce/xfce-multimedia-sub-sequencer.directory.in
---- orig/data/xfce/xfce-multimedia-sub-sequencer.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-sequencer.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-sequencer.directory.in b/data/xfce/xfce-multimedia-sub-sequencer.directory.in
+--- a/data/xfce/xfce-multimedia-sub-sequencer.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-sequencer.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=Sequencer
 +Name[hu]=Sequencer
 +Icon=applications-multimedia
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-tuner.directory.in patched/data/xfce/xfce-multimedia-sub-tuner.directory.in
---- orig/data/xfce/xfce-multimedia-sub-tuner.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-tuner.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-tuner.directory.in b/data/xfce/xfce-multimedia-sub-tuner.directory.in
+--- a/data/xfce/xfce-multimedia-sub-tuner.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-tuner.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=Tuner
 +Name[hu]=Tuner
 +Icon=applications-multimedia
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-multimedia-sub-tv.directory.in patched/data/xfce/xfce-multimedia-sub-tv.directory.in
---- orig/data/xfce/xfce-multimedia-sub-tv.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-multimedia-sub-tv.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-multimedia-sub-tv.directory.in b/data/xfce/xfce-multimedia-sub-tv.directory.in
+--- a/data/xfce/xfce-multimedia-sub-tv.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-multimedia-sub-tv.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=TV
@@ -932,9 +935,9 @@ diff -Naur orig/data/xfce/xfce-multimedia-sub-tv.directory.in patched/data/xfce/
 +Comment[hu]=TV alkalmazások
 +Icon=video-display
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-chat.directory.in patched/data/xfce/xfce-network-sub-chat.directory.in
---- orig/data/xfce/xfce-network-sub-chat.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-chat.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-chat.directory.in b/data/xfce/xfce-network-sub-chat.directory.in
+--- a/data/xfce/xfce-network-sub-chat.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-chat.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Chat
@@ -943,9 +946,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-chat.directory.in patched/data/xfce/x
 +Comment[hu]=Chat kliens
 +Icon=user-available
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-dialup.directory.in patched/data/xfce/xfce-network-sub-dialup.directory.in
---- orig/data/xfce/xfce-network-sub-dialup.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-dialup.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-dialup.directory.in b/data/xfce/xfce-network-sub-dialup.directory.in
+--- a/data/xfce/xfce-network-sub-dialup.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-dialup.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Dial-up
@@ -954,9 +957,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-dialup.directory.in patched/data/xfce
 +Comment[hu]=Tárcsázó program
 +Icon=modem
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-email.directory.in patched/data/xfce/xfce-network-sub-email.directory.in
---- orig/data/xfce/xfce-network-sub-email.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-email.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-email.directory.in b/data/xfce/xfce-network-sub-email.directory.in
+--- a/data/xfce/xfce-network-sub-email.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-email.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Email
@@ -965,9 +968,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-email.directory.in patched/data/xfce/
 +Comment[hu]=E-mail kliens
 +Icon=mail-send
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-feed.directory.in patched/data/xfce/xfce-network-sub-feed.directory.in
---- orig/data/xfce/xfce-network-sub-feed.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-feed.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-feed.directory.in b/data/xfce/xfce-network-sub-feed.directory.in
+--- a/data/xfce/xfce-network-sub-feed.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-feed.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Feed
@@ -976,9 +979,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-feed.directory.in patched/data/xfce/x
 +Comment[hu]=RSS, podcast és más, feliratkozás-alapú tartalom
 +Icon=applications-internet
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-filetransfer.directory.in patched/data/xfce/xfce-network-sub-filetransfer.directory.in
---- orig/data/xfce/xfce-network-sub-filetransfer.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-filetransfer.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-filetransfer.directory.in b/data/xfce/xfce-network-sub-filetransfer.directory.in
+--- a/data/xfce/xfce-network-sub-filetransfer.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-filetransfer.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=File transfer
@@ -987,9 +990,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-filetransfer.directory.in patched/dat
 +Comment[hu]=Eszköz fájlátvitelhez (pl. FTP)
 +Icon=emblem-downloads
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-hamradio.directory.in patched/data/xfce/xfce-network-sub-hamradio.directory.in
---- orig/data/xfce/xfce-network-sub-hamradio.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-hamradio.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-hamradio.directory.in b/data/xfce/xfce-network-sub-hamradio.directory.in
+--- a/data/xfce/xfce-network-sub-hamradio.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-hamradio.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=HAM radio
@@ -998,9 +1001,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-hamradio.directory.in patched/data/xf
 +Comment[hu]=Programok amatőr rádiózáshoz
 +Icon=applications-internet
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-instantmessaging.directory.in patched/data/xfce/xfce-network-sub-instantmessaging.directory.in
---- orig/data/xfce/xfce-network-sub-instantmessaging.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-instantmessaging.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-instantmessaging.directory.in b/data/xfce/xfce-network-sub-instantmessaging.directory.in
+--- a/data/xfce/xfce-network-sub-instantmessaging.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-instantmessaging.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Instant messaging
@@ -1009,18 +1012,18 @@ diff -Naur orig/data/xfce/xfce-network-sub-instantmessaging.directory.in patched
 +Comment[hu]=Azonnali üzenetküldő kliens
 +Icon=user-available
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-ircclient.directory.in patched/data/xfce/xfce-network-sub-ircclient.directory.in
---- orig/data/xfce/xfce-network-sub-ircclient.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-ircclient.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-ircclient.directory.in b/data/xfce/xfce-network-sub-ircclient.directory.in
+--- a/data/xfce/xfce-network-sub-ircclient.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-ircclient.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=IRC client
 +Name[hu]=IRC kliens
 +Icon=user-available
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-news.directory.in patched/data/xfce/xfce-network-sub-news.directory.in
---- orig/data/xfce/xfce-network-sub-news.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-news.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-news.directory.in b/data/xfce/xfce-network-sub-news.directory.in
+--- a/data/xfce/xfce-network-sub-news.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-news.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=News
@@ -1029,9 +1032,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-news.directory.in patched/data/xfce/x
 +Comment[hu]=Hírolvasó
 +Icon=internet-news-reader
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-p2p.directory.in patched/data/xfce/xfce-network-sub-p2p.directory.in
---- orig/data/xfce/xfce-network-sub-p2p.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-p2p.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-p2p.directory.in b/data/xfce/xfce-network-sub-p2p.directory.in
+--- a/data/xfce/xfce-network-sub-p2p.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-p2p.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=P2P
@@ -1040,9 +1043,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-p2p.directory.in patched/data/xfce/xf
 +Comment[hu]=P2P program
 +Icon=emblem-downloads
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-remoteaccess.directory.in patched/data/xfce/xfce-network-sub-remoteaccess.directory.in
---- orig/data/xfce/xfce-network-sub-remoteaccess.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-remoteaccess.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-remoteaccess.directory.in b/data/xfce/xfce-network-sub-remoteaccess.directory.in
+--- a/data/xfce/xfce-network-sub-remoteaccess.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-remoteaccess.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Remote access
@@ -1051,9 +1054,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-remoteaccess.directory.in patched/dat
 +Comment[hu]=A számítógép távoli elérése
 +Icon=preferences-desktop-remote-desktop
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-telephony.directory.in patched/data/xfce/xfce-network-sub-telephony.directory.in
---- orig/data/xfce/xfce-network-sub-telephony.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-telephony.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-telephony.directory.in b/data/xfce/xfce-network-sub-telephony.directory.in
+--- a/data/xfce/xfce-network-sub-telephony.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-telephony.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Telephony
@@ -1062,9 +1065,9 @@ diff -Naur orig/data/xfce/xfce-network-sub-telephony.directory.in patched/data/x
 +Comment[hu]=Telefonálás számítógépen keresztül
 +Icon=call-start
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-videoconference.directory.in patched/data/xfce/xfce-network-sub-videoconference.directory.in
---- orig/data/xfce/xfce-network-sub-videoconference.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-videoconference.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-videoconference.directory.in b/data/xfce/xfce-network-sub-videoconference.directory.in
+--- a/data/xfce/xfce-network-sub-videoconference.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-videoconference.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Video conference
@@ -1073,18 +1076,18 @@ diff -Naur orig/data/xfce/xfce-network-sub-videoconference.directory.in patched/
 +Comment[hu]=Videókonferencia program
 +Icon=camera-web
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-network-sub-webbrowser.directory.in patched/data/xfce/xfce-network-sub-webbrowser.directory.in
---- orig/data/xfce/xfce-network-sub-webbrowser.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-network-sub-webbrowser.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-network-sub-webbrowser.directory.in b/data/xfce/xfce-network-sub-webbrowser.directory.in
+--- a/data/xfce/xfce-network-sub-webbrowser.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-network-sub-webbrowser.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=Web browser
 +Name[hu]=Webböngésző
 +Icon=web-browser
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-system-sub-emulator.directory.in patched/data/xfce/xfce-system-sub-emulator.directory.in
---- orig/data/xfce/xfce-system-sub-emulator.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-system-sub-emulator.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-system-sub-emulator.directory.in b/data/xfce/xfce-system-sub-emulator.directory.in
+--- a/data/xfce/xfce-system-sub-emulator.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-system-sub-emulator.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Emulator
@@ -1093,18 +1096,18 @@ diff -Naur orig/data/xfce/xfce-system-sub-emulator.directory.in patched/data/xfc
 +Comment[hu]=Más platform emulátora
 +Icon=applications-system
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-system-sub-filemanager.directory.in patched/data/xfce/xfce-system-sub-filemanager.directory.in
---- orig/data/xfce/xfce-system-sub-filemanager.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-system-sub-filemanager.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-system-sub-filemanager.directory.in b/data/xfce/xfce-system-sub-filemanager.directory.in
+--- a/data/xfce/xfce-system-sub-filemanager.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-system-sub-filemanager.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,5 @@
 +[Desktop Entry]
 +_Name=File manager
 +Name[hu]=Fájlkezelő
 +Icon=system-file-manager
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-system-sub-filesystem.directory.in patched/data/xfce/xfce-system-sub-filesystem.directory.in
---- orig/data/xfce/xfce-system-sub-filesystem.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-system-sub-filesystem.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-system-sub-filesystem.directory.in b/data/xfce/xfce-system-sub-filesystem.directory.in
+--- a/data/xfce/xfce-system-sub-filesystem.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-system-sub-filesystem.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Filesystem
@@ -1113,9 +1116,9 @@ diff -Naur orig/data/xfce/xfce-system-sub-filesystem.directory.in patched/data/x
 +Comment[hu]=Fájlrendszer-kezelő eszköz
 +Icon=applications-system
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-system-sub-monitor.directory.in patched/data/xfce/xfce-system-sub-monitor.directory.in
---- orig/data/xfce/xfce-system-sub-monitor.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-system-sub-monitor.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-system-sub-monitor.directory.in b/data/xfce/xfce-system-sub-monitor.directory.in
+--- a/data/xfce/xfce-system-sub-monitor.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-system-sub-monitor.directory.in	2022-12-15 17:11:06.921147150 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Monitor
@@ -1124,9 +1127,9 @@ diff -Naur orig/data/xfce/xfce-system-sub-monitor.directory.in patched/data/xfce
 +Comment[hu]=Erőforrás vagy aktivitás figyelő alkalmazás
 +Icon=utilities-system-monitor
 +Type=Directory
-diff -Naur orig/data/xfce/xfce-system-sub-terminalemulator.directory.in patched/data/xfce/xfce-system-sub-terminalemulator.directory.in
---- orig/data/xfce/xfce-system-sub-terminalemulator.directory.in	1970-01-01 01:00:00.000000000 +0100
-+++ patched/data/xfce/xfce-system-sub-terminalemulator.directory.in	2020-12-01 02:58:59.753235231 +0100
+diff -Naur a/data/xfce/xfce-system-sub-terminalemulator.directory.in b/data/xfce/xfce-system-sub-terminalemulator.directory.in
+--- a/data/xfce/xfce-system-sub-terminalemulator.directory.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/xfce/xfce-system-sub-terminalemulator.directory.in	2022-12-15 17:11:06.925147159 +0100
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +_Name=Terminal emulator
@@ -1135,10 +1138,10 @@ diff -Naur orig/data/xfce/xfce-system-sub-terminalemulator.directory.in patched/
 +Comment[hu]=Terminálemulátor alkalmazás
 +Icon=utilities-terminal
 +Type=Directory
-diff -Naur orig/po/POTFILES.in patched/po/POTFILES.in
---- orig/po/POTFILES.in	2017-04-14 10:27:44.000000000 +0200
-+++ patched/po/POTFILES.in	2020-12-01 02:58:59.753235231 +0100
-@@ -1,17 +1,66 @@
+diff -Naur a/po/POTFILES.in b/po/POTFILES.in
+--- a/po/POTFILES.in	2022-10-30 11:45:04.000000000 +0100
++++ b/po/POTFILES.in	2022-12-15 17:22:58.958907349 +0100
+@@ -1,11 +1,55 @@
  data/xfce/xfce-accessories.directory.in
 +data/xfce/xfce-accessories-sub-archiving.directory.in
 +data/xfce/xfce-accessories-sub-calculator.directory.in
@@ -1163,7 +1166,7 @@ diff -Naur orig/po/POTFILES.in patched/po/POTFILES.in
 +data/xfce/xfce-games-sub-roleplaying.directory.in	
 +data/xfce/xfce-games-sub-simulation.directory.in	
 +data/xfce/xfce-games-sub-sports.directory.in	
-+data/xfce/xfce-games-sub-strategy.directory.in	
++data/xfce/xfce-games-sub-strategy.directory.in
  data/xfce/xfce-graphics.directory.in
  data/xfce/xfce-hardware.directory.in
  data/xfce/xfce-multimedia.directory.in
@@ -1194,6 +1197,7 @@ diff -Naur orig/po/POTFILES.in patched/po/POTFILES.in
  data/xfce/xfce-office.directory.in
  data/xfce/xfce-other.directory.in
  data/xfce/xfce-personal.directory.in
+@@ -13,6 +57,11 @@
  data/xfce/xfce-screensavers.directory.in
  data/xfce/xfce-settings.directory.in
  data/xfce/xfce-system.directory.in
