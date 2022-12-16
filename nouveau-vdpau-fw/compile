@@ -1,0 +1,7 @@
+#!/bin/bash -eux
+
+forras="NVIDIA-Linux-x86-${UB_VERSION}"
+#kicsomagolás és belépés
+chmod +x $forras.run
+./"$forras".run -x
+python3 extract_firmware.py
