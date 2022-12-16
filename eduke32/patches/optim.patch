@@ -1,0 +1,12 @@
+diff -Nur orig/Common.mak mod/Common.mak
+--- orig/Common.mak	2022-10-26 22:02:16.000000000 +0200
++++ mod/Common.mak	2022-12-15 08:57:46.138566667 +0100
+@@ -540,7 +540,7 @@
+ 
+ 
+ ##### Optimizations
+-
++OPTOPT := -mtune=generic
+ ifndef OPTOPT
+     ifeq ($(findstring x86_64, $(IMPLICIT_ARCH)),x86_64)
+         ifeq ($(findstring x86_64h, $(IMPLICIT_ARCH)),x86_64h)
