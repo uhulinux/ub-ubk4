@@ -27,17 +27,12 @@ rm -Rf ${UB_INSTALLDIR}/lib/firmware/{Makefile,configure,README*,*.txt,*.py}
 
 # ütközések törlése
 # az if [ -f $i ] kell, mert a dpkg -L listázza a "/."-t is, ami hibát okoz
-for i in $(dpkg -L alsa-firmware bluez-firmware kernel microcodectl); do
+for i in $(dpkg -L kernel); do
 	if [ -f $i ]; then
 		rm -rf ${UB_INSTALLDIR}/$i
 	fi
 done
 
-for i in $(dpkg -L acx-fw broadcom-fw ipw2100-fw ipw2200-fw nouveau-vdpau-fw zd1211-fw); do
-	if [ -f $i ]; then
-		rm -rf ${UB_INSTALLDIR}/$i
-	fi
-done
 # ez mégis bennmaradt
 rm -rf ${UB_INSTALLDIR}/yamaha
 # üres könyvtárak törlése
