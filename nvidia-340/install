@@ -11,6 +11,7 @@ vendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
 pixmapdir="$UB_INSTALLDIR"/usr/share/pixmaps/
 shnvdir="$UB_INSTALLDIR"/usr/share/nvidia
 vdpaudir=$cellibdir/vdpau
+fwdir="$UB_INSTALLDIR"/lib/firmware/nouveau
 
 #könyvtárgyártás
 mkdir -p "$cellibdir"/nvidia \
@@ -21,8 +22,13 @@ mkdir -p "$cellibdir"/nvidia \
 	"$vendordir" \
 	"$pixmapdir" \
 	"$shnvdir" \
-	"$vdpaudir"
+	"$vdpaudir" \
+	"$fwdir"
 
+# firmware
+cp -a nv1* nv8* nv9* nva* nvc* nvd* nve* nvf* vuc-* "$fwdir"/
+
+# nvidia-settings
 cd nvsett
 export NV_USE_BUNDLED_LIBJANSSON=0
 export PREFIX=/usr
