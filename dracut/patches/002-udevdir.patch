@@ -1,9 +1,9 @@
-diff -Naur orig/dracut.sh patched/dracut.sh
---- orig/dracut.sh	2020-03-04 11:43:22.000000000 +0100
-+++ patched/dracut.sh	2020-03-16 21:42:42.905434228 +0100
-@@ -1733,6 +1733,8 @@
+diff -Naur a/dracut.sh b/dracut.sh
+--- a/dracut.sh	2022-12-24 17:49:27.000000000 +0100
++++ b/dracut.sh	2022-12-26 03:49:54.706503759 +0100
+@@ -1869,6 +1869,8 @@
  
- [[ -d "$dracutsysrootdir$systemdportableconfdir" ]] || systemdportableconfdir=${systemdsystemconfdir}/portable
+ [[ -d "$dracutsysrootdir$systemdportableconfdir" ]] || systemdportableconfdir=${systemdutilconfdir}/portable
  
 +udevdir=/usr/lib/udev
 +

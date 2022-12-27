@@ -1,5 +1,9 @@
 #!/bin/sh -eux
 
+if [ ! -f .dist-version ]; then
+echo "$UB_VERSION" > .dist-version
+fi
+
 ub_compile \
 	--disable-shared \
 	--enable-dselect \

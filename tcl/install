@@ -15,13 +15,13 @@ chmod -x "$UB_INSTALLDIR"/usr/lib/*.a
 sed -e "s#${UB_COMPILEDIR}/unix#/usr/lib#" -i ${UB_INSTALLDIR}/usr/lib/tclConfig.sh
 sed -e "s#${UB_COMPILEDIR}#/usr/include#" -i ${UB_INSTALLDIR}/usr/lib/tclConfig.sh
 
-tdbcver=tdbc1.1.3
+tdbcver=tdbc1.1.5
 sed -e "s#${UB_COMPILEDIR}/unix/pkgs/$tdbcver#/usr/lib/$tdbcver#" -i ${UB_INSTALLDIR}/usr/lib/$tdbcver/tdbcConfig.sh
 sed -e "s#${UB_COMPILEDIR}/pkgs/$tdbcver/generic#/usr/include#" -i ${UB_INSTALLDIR}/usr/lib/$tdbcver/tdbcConfig.sh
 sed -e "s#${UB_COMPILEDIR}/pkgs/$tdbcver/library#/usr/lib/tcl$UB_VERSION%.*}#" -i ${UB_INSTALLDIR}/usr/lib/$tdbcver/tdbcConfig.sh
 sed -e "s#${UB_COMPILEDIR}/pkgs/$tdbcver#/usr/include#" -i ${UB_INSTALLDIR}/usr/lib/$tdbcver/tdbcConfig.sh
 
-itclver=itcl4.2.2
+itclver=itcl4.2.3
 sed -e "s#${UB_COMPILEDIR}/unix/pkgs/$itclver#/usr/lib/$itclver#" -i ${UB_INSTALLDIR}/usr/lib/$itclver/itclConfig.sh
 sed -e "s#${UB_COMPILEDIR}/pkgs/$itclver/generic#/usr/include#" -i ${UB_INSTALLDIR}/usr/lib/$itclver/itclConfig.sh
 sed -e "s#${UB_COMPILEDIR}/pkgs/$itclver#/usr/include#" -i ${UB_INSTALLDIR}/usr/lib/$itclver/itclConfig.sh
