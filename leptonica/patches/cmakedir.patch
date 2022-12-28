@@ -1,12 +1,12 @@
 diff -Naur a/CMakeLists.txt b/CMakeLists.txt
---- a/CMakeLists.txt	2021-09-22 23:23:41.000000000 +0200
-+++ b/CMakeLists.txt	2022-08-13 17:05:38.696001931 +0200
-@@ -57,7 +57,7 @@
-     option(SYM_LINK "Create symlink leptonica -> lept on UNIX" OFF)
- endif()
+--- a/CMakeLists.txt	2022-12-20 22:54:49.000000000 +0100
++++ b/CMakeLists.txt	2022-12-27 22:52:21.561113825 +0100
+@@ -60,7 +60,7 @@
+ option(OPENJPEG_SUPPORT "Build with OpenJPEG support" ON)
  
--set(leptonica_INSTALL_CMAKE_DIR "lib/cmake/leptonica"
-+set(leptonica_INSTALL_CMAKE_DIR "lib/cmake/Leptonica"
+ set(leptonica_INSTALL_CMAKE_DIR
+-    "lib/cmake/leptonica"
++    "lib/cmake/Leptonica"
      CACHE STRING "Install destination for CMake package files")
  
  if(NOT SW_BUILD)
