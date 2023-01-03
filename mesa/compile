@@ -3,26 +3,27 @@
 # vulkan-overlay-layer: https://github.com/KhronosGroup/glslang
 
 ub_compile \
-    -Dplatforms=x11,wayland \
-    -Ddri3=enabled \
-    -Dgallium-extra-hud=true \
-    -Dgallium-vdpau=enabled \
-    -Dgallium-va=enabled \
-    -Dgallium-xa=enabled \
-    -Dgallium-nine=true \
-    -Dgallium-opencl=icd \
+	-Dplatforms=x11,wayland \
+	-Ddri3=enabled \
+	-Dgallium-extra-hud=true \
+	-Dgallium-vdpau=enabled \
+	-Dgallium-va=enabled \
+	-Dgallium-xa=enabled \
+	-Dgallium-nine=true \
+	-Dgallium-opencl=icd \
 	-Dgallium-omx=bellagio \
-    -Dvulkan-drivers=amd,intel \
-    -Dvulkan-layers=device-select,intel-nullhw,overlay \
-    -Dgles1=disabled \
-    -Dgles2=enabled \
+	-Dvulkan-drivers=amd,intel \
+	-Dvulkan-layers=device-select,intel-nullhw,overlay \
+	-Dgles1=disabled \
+	-Dgles2=enabled \
 	-Dgbm=enabled \
 	-Dglx=dri \
-    -Degl=enabled \
+	-Degl=enabled \
 	-Dglvnd=true \
 	-Dllvm=enabled \
 	-Dlibunwind=enabled \
 	-Dlmsensors=enabled \
 	-Dtools=all \
 	-Db_ndebug=true \
-	-Db_lto=true
+	-Db_lto=true \
+	-Dvideo-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc
