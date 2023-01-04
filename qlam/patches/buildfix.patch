@@ -1,0 +1,12 @@
+diff -Naur a/src/application.cpp b/src/application.cpp
+--- a/src/application.cpp	2023-01-02 16:14:10.000000000 +0100
++++ b/src/application.cpp	2023-01-02 18:54:16.967434194 +0100
+@@ -120,7 +120,7 @@
+ 			path = QDir::toNativeSeparators(settings()->databasePath()).toLocal8Bit();
+ 		}
+ 
+-		int ret = cl_load(path.data(), m_scanEngine, &sigs, CL_DB_STDOPT); // NOLINT(hicpp-signed-bitwise)
++		cl_error_t ret = cl_load(path.data(), m_scanEngine, &sigs, CL_DB_STDOPT); // NOLINT(hicpp-signed-bitwise)
+ 
+ 		if(CL_SUCCESS != ret) {
+ 			qDebug() << "failed to load databases:" << cl_strerror(ret);
