@@ -1,6 +1,22 @@
 #!/bin/sh -eux
 
-cd build-w
-ub_install
-cd ../build-x
-ub_install
+#ub_install
+
+_components=(
+    'kodi-eventclients-common'
+    'kodi-eventclients-ps3'
+    'kodi-eventclients-kodi-send'
+    'kodi'
+    'kodi-bin'
+    'kodi-tools-texturepacker'
+    'kodi-addon-dev'
+    'kodi-eventclients-dev'
+
+)
+
+cd build
+for _cmp in ${_components[@]}; do
+    DESTDIR="$UB_INSTALLDIR" /usr/bin/cmake \
+    -DCMAKE_INSTALL_COMPONENT="$_cmp" \
+    -P cmake_install.cmake
+done
