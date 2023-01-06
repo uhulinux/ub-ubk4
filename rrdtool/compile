@@ -1,17 +1,9 @@
 #!/bin/sh -eux
 
-# workaround for perl 5.10, see https://bugzilla.redhat.com/show_bug.cgi?id=441359
-perl -pi.orig -e 's|1.299907080300|1.29990708|' bindings/perl-shared/RRDs.pm bindings/perl-piped/RRDp.pm
-
 ub_configure \
-	--enable-tcl-site \
-	--enable-perl \
-	--enable-perl-site-install \
-	--disable-python
+	--disable-tcl-site \
+	--disable-perl \
+	--disable-python \
+	--disable-ruby \
+	--disable-examples
 ub_make LIBS+="-lglib-2.0"
-
-cd bindings/perl-piped
-ub_compile
-
-cd ../perl-shared
-ub_compile

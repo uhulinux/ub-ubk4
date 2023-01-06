@@ -1,8 +1,7 @@
-diff -Naur docbook-xsl-1.79.1-orig/Makefile docbook-xsl-1.79.1/Makefile
---- docbook-xsl-1.79.1-orig/Makefile	2014-02-24 21:04:27.000000000 +0100
-+++ docbook-xsl-1.79.1/Makefile	2016-02-15 20:47:15.714134725 +0100
-@@ -1,93 +1,53 @@
--# $Id: Makefile.tests 9909 2014-02-24 19:40:27Z bobstayton $
+diff -Naur a/Makefile b/Makefile
+--- a/Makefile	2016-12-09 23:39:10.000000000 +0100
++++ b/Makefile	2023-01-06 20:59:36.409357028 +0100
+@@ -1,96 +1,53 @@
 -#
 -# This makefile does a "smoketest" of stylesheets for various
 -# output formats in the DocBook XSL Stylesheets release package.
@@ -43,7 +42,11 @@ diff -Naur docbook-xsl-1.79.1-orig/Makefile docbook-xsl-1.79.1/Makefile
 -# SMOKETEST_CLEAN_TARGET; e.g. "make check SMOKETEST_CLEAN_TARGET=''"
 -SMOKETEST_CLEAN_TARGET=smoketest-clean
 -
--check: smoketest-make-tmp-dir smoketest-normal smoketest-normal-profile smoketest-chunk smoketest-chunk-profile smoketest-man smoketest-man-profile smoketest-two-profile $(SMOKETEST_CLEAN_TARGET)
+-check: tests smoketest-make-tmp-dir smoketest-normal smoketest-normal-profile smoketest-chunk smoketest-chunk-profile smoketest-man smoketest-man-profile smoketest-two-profile $(SMOKETEST_CLEAN_TARGET)
+-
+-.PHONY: tests
+-tests:
+-	$(MAKE) -C tests
 -
 -smoketest-make-tmp-dir:
 -	$(RM) -r $(TMP_OUTPUT_DIR)
@@ -97,7 +100,7 @@ diff -Naur docbook-xsl-1.79.1-orig/Makefile docbook-xsl-1.79.1/Makefile
  
 -smoketest-clean:
 -	$(RM) -r $(TMP_OUTPUT_DIR)
-+install: install-xsl install-img install-extensions install-misc install-epub
++install: install-xsl install-img install-misc
  
 +install-xsl:
 +	mkdir -p $(DESTDIR)/{common,eclipse,fo,html,htmlhelp/doc,javahelp,lib,template,xhtml,xhtml-1_1,manpages,profiling,highlighting,roundtrip,website}
