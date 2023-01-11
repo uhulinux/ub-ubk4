@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2022-10-10 18:05:24.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2022-10-20 17:35:05.721947704 +0200
+--- a/browser/app/profile/firefox.js	2023-01-04 21:34:56.000000000 +0100
++++ b/browser/app/profile/firefox.js	2023-01-10 23:11:45.473749867 +0100
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -26,7 +26,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
 @@ -146,7 +153,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
- // getAppUpdateAutoEnabled from UpdateUtils.jsm should be used.
+ // getAppUpdateAutoEnabled from UpdateUtils.sys.mjs should be used.
  #ifndef XP_WIN
 -  pref("app.update.auto", true);
 +  pref("app.update.auto", false);
@@ -51,7 +51,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -476,7 +483,7 @@
+@@ -484,7 +491,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -60,7 +60,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -1058,9 +1065,9 @@
+@@ -1072,9 +1079,9 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
@@ -72,7 +72,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // this will automatically enable inline spellchecking (if it is available) for
  // editable elements in HTML
-@@ -1848,9 +1855,7 @@
+@@ -1864,9 +1871,7 @@
  pref("dom.storage_access.enabled", true);
  
  // Enable URL query stripping in Nightly.

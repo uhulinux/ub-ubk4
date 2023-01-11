@@ -4,7 +4,9 @@ ub_install
 
 rm -rf "$UB_INSTALLDIR"/usr/share/doc
 rm -f "$UB_INSTALLDIR"/usr/bin/{xine-bugreport,xine-check}
-rm -f "$UB_INSTALLDIR"/usr/share/man/{,de}/man1/{xine-bugreport.1,xine-check.1}
+rm -f "$UB_INSTALLDIR"/usr/share/man/man1/{xine-bugreport.1,xine-check.1}
+rm -f "$UB_INSTALLDIR"/usr/share/man/*/man1/{xine-bugreport.1,xine-check.1}
+rm -Rf "$UB_INSTALLDIR"/usr/share/man/es
 
 #nouveau vdpau bug workaround
 mv "$UB_INSTALLDIR"/usr/bin/xine "$UB_INSTALLDIR"/usr/bin/xine.bin
