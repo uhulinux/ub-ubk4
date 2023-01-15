@@ -1,8 +1,14 @@
 #!/bin/sh -eux
 
-export CFLAGS="-DHAVE_G_FILE_QUERY_FILE_TYPE"
+if [ ! -d .git ]; then
+git clone https://github.com/xmms2/xmms2-tutorial.git doc/tutorial
+git clone https://github.com/xmms2/s4 src/lib/s4
+else
+git submodule update --init --recursive
+fi
+
 waf configure \
 	--prefix=/usr \
 	--with-default-output-plugin=pulse \
-	--without-optionals=python
+	--without-optionals=perl,python,ruby
 waf build
