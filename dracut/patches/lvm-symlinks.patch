@@ -1,0 +1,37 @@
+From 1de8d75b54dc5ee53cf5d94a939335cc4ff5ad49 Mon Sep 17 00:00:00 2001
+From: Valentin Lefebvre <valentin.lefebvre@suse.com>
+Date: Mon, 19 Dec 2022 14:23:23 +0100
+Subject: [PATCH] feat(lvm): install lvm commands symlinks
+
+It will install for convenience, lvm's core commands tools.
+
+Lvm package installs all of them as symlink to the binary,
+and they are universally used without `lvm` command. If someone
+is reaching for these tools in the initrd it's probably because
+something is wrong, and so the admin may be stressed or flustered
+and may not connect that "lvm" as a command does everything they
+need. So recreating a familiar environment during the emergency
+shell will really help them.
+
+Signed-off-by: Valentin Lefebvre <valentin.lefebvre@suse.com>
+---
+ modules.d/90lvm/module-setup.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/modules.d/90lvm/module-setup.sh b/modules.d/90lvm/module-setup.sh
+index 7622e4b47..2218869cd 100755
+--- a/modules.d/90lvm/module-setup.sh
++++ b/modules.d/90lvm/module-setup.sh
+@@ -50,6 +50,12 @@ installkernel() {
+ install() {
+     inst_multiple lvm grep
+ 
++    # install lvm commands symlinks useful for emergency shell
++    _lvm_bin=$(find_binary lvm)
++    while read -r -d '' file; do
++        inst "${file}"
++    done < <(find -L /sbin -maxdepth 1 -samefile "$_lvm_bin" -print0)
++
+     if [[ $hostonly_cmdline == "yes" ]]; then
+         local _lvmconf
+         _lvmconf=$(cmdline)
