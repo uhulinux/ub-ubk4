@@ -1,19 +1,49 @@
-diff -Naur orig/ld/emulparams/elf_x86_64.sh patched/ld/emulparams/elf_x86_64.sh
---- orig/ld/emulparams/elf_x86_64.sh	2018-01-13 14:31:16.000000000 +0100
-+++ patched/ld/emulparams/elf_x86_64.sh	2018-04-26 03:30:21.040799523 +0200
-@@ -40,7 +40,7 @@
+diff -Naur a/ld/emulparams/elf32_x86_64.sh b/ld/emulparams/elf32_x86_64.sh
+--- a/ld/emulparams/elf32_x86_64.sh	2022-07-08 11:46:48.000000000 +0200
++++ b/ld/emulparams/elf32_x86_64.sh	2023-01-21 01:26:25.867754974 +0100
+@@ -49,8 +49,12 @@
+ 	LIBPATH_SUFFIX_SKIP=64
+ 	;;
+       *64*)
+-	LIBPATH_SUFFIX=64
++	LIBPATH_SUFFIX=
++	ELF_INTERPRETER_NAME=\"/usr/lib/ld-linux-x86-64.so.2\"
+ 	;;
+     esac
+     ;;
+ esac
++
++LIBPATH_SUFFIX=
++ELF_INTERPRETER_NAME=\"/usr/lib/ld-linux-x86-64.so.2\"
+diff -Naur a/ld/emulparams/elf_x86_64.sh b/ld/emulparams/elf_x86_64.sh
+--- a/ld/emulparams/elf_x86_64.sh	2022-07-08 11:46:48.000000000 +0200
++++ b/ld/emulparams/elf_x86_64.sh	2023-01-21 01:17:26.050851733 +0100
+@@ -46,7 +46,8 @@
    x86_64*-linux*|i[3-7]86-*-linux-*)
      case "$EMULATION_NAME" in
        *64*)
 -	LIBPATH_SUFFIX=64
 +	LIBPATH_SUFFIX=
++	ELF_INTERPRETER_NAME=\"/usr/lib/ld-linux-x86-64.so.2\"
  	PARSE_AND_LIST_OPTIONS_BNDPLT='
    fprintf (file, _("\
    -z bndplt                   Always generate BND prefix in PLT entries\n"));
-@@ -59,3 +59,6 @@
+@@ -65,3 +66,6 @@
      ELF_INTERPRETER_NAME=\"/lib/amd64/ld.so.1\"
    ;;
  esac
 +
 +LIBPATH_SUFFIX=
 +ELF_INTERPRETER_NAME=\"/usr/lib/ld-linux-x86-64.so.2\"
+diff -Naur a/ld/ldelf.c b/ld/ldelf.c
+--- a/ld/ldelf.c	2022-07-08 11:46:48.000000000 +0200
++++ b/ld/ldelf.c	2023-01-21 01:22:33.791358473 +0100
+@@ -546,7 +546,7 @@
+ 		  switch (elfsize)
+ 		    {
+ 		    case 32: replacement = "lib"; break;
+-		    case 64: replacement = "lib64"; break;
++		    case 64: replacement = "lib"; break;
+ 		    default:
+ 		      abort ();
+ 		    }
