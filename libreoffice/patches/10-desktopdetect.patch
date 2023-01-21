@@ -1,0 +1,41 @@
+diff -Naur a/vcl/source/app/salplug.cxx b/vcl/source/app/salplug.cxx
+--- a/vcl/source/app/salplug.cxx	2023-01-12 22:06:06.000000000 +0100
++++ b/vcl/source/app/salplug.cxx	2023-01-21 02:38:06.399442250 +0100
+@@ -219,6 +219,9 @@
+ #if ENABLE_GTK3
+         "gtk3",
+ #endif
++#if ENABLE_GTK4
++        "gtk4",
++#endif
+ #if ENABLE_GEN
+         "gen",
+ #endif
+@@ -324,6 +327,9 @@
+ #if ENABLE_GTK3
+         "gtk3",
+ #endif
++#if ENABLE_GTK4
++        "gtk4",
++#endif
+ #if ENABLE_KF5
+         "kf5",
+ #endif
+diff -Naur a/vcl/unx/generic/desktopdetect/desktopdetector.cxx b/vcl/unx/generic/desktopdetect/desktopdetector.cxx
+--- a/vcl/unx/generic/desktopdetect/desktopdetector.cxx	2023-01-12 22:06:06.000000000 +0100
++++ b/vcl/unx/generic/desktopdetect/desktopdetector.cxx	2023-01-21 02:22:19.989761883 +0100
+@@ -166,6 +166,14 @@
+                 return DESKTOP_UNITY;
+             else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "gnome" ) )
+                 return DESKTOP_GNOME;
++            else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "gnome-wayland" ) )
++                return DESKTOP_GNOME;
++            else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "mate" ) )
++                return DESKTOP_MATE;
++            else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "xfce" ) )
++                return DESKTOP_XFCE;
++            else if (rCurrentDesktopStr.equalsIgnoreAsciiCase("plasma5") || rCurrentDesktopStr.equalsIgnoreAsciiCase("plasma"))
++                return DESKTOP_PLASMA5;
+             else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "lxqt" ) )
+                 return DESKTOP_LXQT;
+         }
