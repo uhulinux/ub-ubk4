@@ -1,6 +1,6 @@
 diff -Naur a/ld/emulparams/elf32_x86_64.sh b/ld/emulparams/elf32_x86_64.sh
---- a/ld/emulparams/elf32_x86_64.sh	2022-07-08 11:46:48.000000000 +0200
-+++ b/ld/emulparams/elf32_x86_64.sh	2023-01-21 01:26:25.867754974 +0100
+--- a/ld/emulparams/elf32_x86_64.sh	2023-01-14 01:00:00.000000000 +0100
++++ b/ld/emulparams/elf32_x86_64.sh	2023-01-22 17:21:35.217291007 +0100
 @@ -49,8 +49,12 @@
  	LIBPATH_SUFFIX_SKIP=64
  	;;
@@ -16,8 +16,8 @@ diff -Naur a/ld/emulparams/elf32_x86_64.sh b/ld/emulparams/elf32_x86_64.sh
 +LIBPATH_SUFFIX=
 +ELF_INTERPRETER_NAME=\"/usr/lib/ld-linux-x86-64.so.2\"
 diff -Naur a/ld/emulparams/elf_x86_64.sh b/ld/emulparams/elf_x86_64.sh
---- a/ld/emulparams/elf_x86_64.sh	2022-07-08 11:46:48.000000000 +0200
-+++ b/ld/emulparams/elf_x86_64.sh	2023-01-21 01:17:26.050851733 +0100
+--- a/ld/emulparams/elf_x86_64.sh	2023-01-14 01:00:00.000000000 +0100
++++ b/ld/emulparams/elf_x86_64.sh	2023-01-22 17:21:03.089234529 +0100
 @@ -46,7 +46,8 @@
    x86_64*-linux*|i[3-7]86-*-linux-*)
      case "$EMULATION_NAME" in
@@ -25,10 +25,10 @@ diff -Naur a/ld/emulparams/elf_x86_64.sh b/ld/emulparams/elf_x86_64.sh
 -	LIBPATH_SUFFIX=64
 +	LIBPATH_SUFFIX=
 +	ELF_INTERPRETER_NAME=\"/usr/lib/ld-linux-x86-64.so.2\"
- 	PARSE_AND_LIST_OPTIONS_BNDPLT='
-   fprintf (file, _("\
-   -z bndplt                   Always generate BND prefix in PLT entries\n"));
-@@ -65,3 +66,6 @@
+ 	;;
+     esac
+     ;;
+@@ -55,3 +56,6 @@
      ELF_INTERPRETER_NAME=\"/lib/amd64/ld.so.1\"
    ;;
  esac
@@ -36,8 +36,8 @@ diff -Naur a/ld/emulparams/elf_x86_64.sh b/ld/emulparams/elf_x86_64.sh
 +LIBPATH_SUFFIX=
 +ELF_INTERPRETER_NAME=\"/usr/lib/ld-linux-x86-64.so.2\"
 diff -Naur a/ld/ldelf.c b/ld/ldelf.c
---- a/ld/ldelf.c	2022-07-08 11:46:48.000000000 +0200
-+++ b/ld/ldelf.c	2023-01-21 01:22:33.791358473 +0100
+--- a/ld/ldelf.c	2023-01-14 01:00:00.000000000 +0100
++++ b/ld/ldelf.c	2023-01-22 17:21:35.217291007 +0100
 @@ -546,7 +546,7 @@
  		  switch (elfsize)
  		    {
