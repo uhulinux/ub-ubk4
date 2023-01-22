@@ -1,0 +1,18 @@
+diff -Naur a/build/moz.configure/init.configure b/build/moz.configure/init.configure
+--- a/build/moz.configure/init.configure	2022-11-02 21:12:02.000000000 +0100
++++ b/build/moz.configure/init.configure	2023-01-21 22:51:10.167763317 +0100
+@@ -337,10 +337,10 @@
+             'is in your PATH or define PYTHON to point to a Python 2.7 '
+             'executable.')
+ 
+-    if version < (2, 7, 0):
+-        raise FatalCheckError(
+-            'Python 2.7 is required to build; '
+-            '%s is Python %d.%d' % (python, version[0], version[1]))
++#    if version < (2, 7, 0):
++#        raise FatalCheckError(
++#            'Python 2.7 is required to build; '
++#            '%s is Python %d.%d' % (python, version[0], version[1]))
+ 
+     log.debug("python2: found executable: %r" % python)
+ 
