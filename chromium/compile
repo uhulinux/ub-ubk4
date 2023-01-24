@@ -34,6 +34,8 @@ is_official_build=true
 clang_use_chrome_plugins=false
 fatal_linker_warnings=false
 treat_warnings_as_errors=false
+disable_fieldtrial_testing_config=true
+blink_enable_generated_code_formatting=false
 ffmpeg_branding=\"Chrome\"
 proprietary_codecs=true
 rtc_use_pipewire=true
@@ -48,7 +50,8 @@ enable_hangout_services_extension=false
 use_custom_libcxx=false
 use_gnome_keyring=false
 use_kerberos=false
-use_system_libffi=true
+use_system_libwayland=true
+use_system_wayland_scanner=true
 gtk_version=3
 icu_use_data_file=false
 ")
@@ -93,4 +96,4 @@ gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
 gn args --list $outdir > $outdir/gn-args-full.list
 
 # ninja
-LC_ALL=C ninja -j 2 -C $outdir -v pdf chrome chrome_sandbox chromedriver
+LC_ALL=C ninja -j 2 -C $outdir -v pdf chrome chrome_sandbox chromedriver.unstripped
