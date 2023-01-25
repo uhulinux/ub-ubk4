@@ -1,0 +1,5 @@
+#!/bin/sh -eux
+
+sed s%INSTALL\_ROOT%UB\_INSTALLDIR% -i Makefile
+sed s%opt/radiotray-qt%usr% -i Makefile
+make install
