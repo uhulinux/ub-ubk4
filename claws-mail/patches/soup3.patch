@@ -7,13 +7,13 @@ diff -Naur a/configure b/configure
      if test -n "$PKG_CONFIG" && \
 -    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0 >= 2.18.0\""; } >&5
 -  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0 >= 2.18.0") 2>&5
-+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1 >= 2.18.0\""; } >&5
-+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1 >= 2.18.0") 2>&5
++    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1 >= 2.33.2\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1 >= 2.33.2") 2>&5
    ac_status=$?
    printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
    test $ac_status = 0; }; then
 -  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.0 >= 2.18.0" 2>/dev/null`
-+  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.1 >= 2.18.0" 2>/dev/null`
++  pkg_cv_WEBKIT_CFLAGS=`$PKG_CONFIG --cflags "webkit2gtk-4.1 >= 2.33.2" 2>/dev/null`
  		      test "x$?" != "x0" && pkg_failed=yes
  else
    pkg_failed=yes
@@ -23,13 +23,13 @@ diff -Naur a/configure b/configure
      if test -n "$PKG_CONFIG" && \
 -    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.0 >= 2.18.0\""; } >&5
 -  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.0 >= 2.18.0") 2>&5
-+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1 >= 2.18.0\""; } >&5
-+  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1 >= 2.18.0") 2>&5
++    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"webkit2gtk-4.1 >= 2.33.2\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "webkit2gtk-4.1 >= 2.33.2") 2>&5
    ac_status=$?
    printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
    test $ac_status = 0; }; then
 -  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.0 >= 2.18.0" 2>/dev/null`
-+  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.1 >= 2.18.0" 2>/dev/null`
++  pkg_cv_WEBKIT_LIBS=`$PKG_CONFIG --libs "webkit2gtk-4.1 >= 2.33.2" 2>/dev/null`
  		      test "x$?" != "x0" && pkg_failed=yes
  else
    pkg_failed=yes
@@ -38,10 +38,10 @@ diff -Naur a/configure b/configure
  fi
          if test $_pkg_short_errors_supported = yes; then
 -	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "webkit2gtk-4.0 >= 2.18.0" 2>&1`
-+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "webkit2gtk-4.1 >= 2.18.0" 2>&1`
++	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "webkit2gtk-4.1 >= 2.33.2" 2>&1`
          else
 -	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "webkit2gtk-4.0 >= 2.18.0" 2>&1`
-+	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "webkit2gtk-4.1 >= 2.18.0" 2>&1`
++	        WEBKIT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "webkit2gtk-4.1 >= 2.33.2" 2>&1`
          fi
  	# Put the nasty error message in config.log where it belongs
  	echo "$WEBKIT_PKG_ERRORS" >&5
@@ -228,7 +228,7 @@ diff -Naur a/configure.ac b/configure.ac
  
  dnl webkit *********************************************************************
 -PKG_CHECK_MODULES(WEBKIT, webkit2gtk-4.0 >= 2.18.0, HAVE_WEBKIT=yes, HAVE_WEBKIT=no)
-+PKG_CHECK_MODULES(WEBKIT, webkit2gtk-4.1 >= 2.18.0, HAVE_WEBKIT=yes, HAVE_WEBKIT=no)
++PKG_CHECK_MODULES(WEBKIT, webkit2gtk-4.1 >= 2.33.2, HAVE_WEBKIT=yes, HAVE_WEBKIT=no)
  AC_SUBST(WEBKIT_LIBS)
  AC_SUBST(WEBKIT_CFLAGS)
  
