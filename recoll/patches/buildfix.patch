@@ -1,0 +1,21 @@
+diff -Naur a/src/autogen.sh b/src/autogen.sh
+--- a/src/autogen.sh	2023-01-23 10:09:17.000000000 +0100
++++ b/src/autogen.sh	2023-02-04 02:02:44.758977311 +0100
+@@ -18,5 +18,3 @@
+ 
+ automake --add-missing --force-missing --copy
+ autoconf
+-# Our ylwrap gets clobbered by the above.
+-git checkout ylwrap
+diff -Naur a/src/qtgui/recoll.pro.in b/src/qtgui/recoll.pro.in
+--- a/src/qtgui/recoll.pro.in	2023-01-23 10:09:17.000000000 +0100
++++ b/src/qtgui/recoll.pro.in	2023-02-04 02:03:33.555048795 +0100
+@@ -376,7 +376,7 @@
+ }
+ 
+ unix:!macx {
+-QMAKE_CXXFLAGS += -std=c++11
++QMAKE_CXXFLAGS += -std=c++17
+ 
+ VPATH = @srcdir@
+ 
