@@ -1,8 +1,3 @@
 #!/bin/sh -eux
 
-for bin in evolvotron{,_mutate,_render}; do
-	cp -a $bin/$bin "$UB_INSTALLDIR"/usr/bin/$bin
-done
-cp man/man1/* "$UB_INSTALLDIR"/usr/share/man/man1/
-mkdir -p "$UB_INSTALLDIR"/usr/share/doc/evolvotron
-cp evolvotron.html "$UB_INSTALLDIR"/usr/share/doc/evolvotron/
+make INSTALL_ROOT="$UB_INSTALLDIR" install
