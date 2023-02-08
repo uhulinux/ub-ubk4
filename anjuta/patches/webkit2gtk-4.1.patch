@@ -1,0 +1,32 @@
+diff -Naur a/configure b/configure
+--- a/configure	2019-09-08 20:32:47.000000000 +0200
++++ b/configure	2023-02-08 19:25:04.636192076 +0100
+@@ -18647,7 +18647,7 @@
+ $as_echo "#define HAVE_WEBKIT2 1" >>confdefs.h
+ 
+ 			;;
+-		*webkit2gtk-4.0*)
++		*webkit2gtk-4.1*)
+ 
+ $as_echo "#define HAVE_WEBKIT2 1" >>confdefs.h
+ 
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2019-09-08 19:33:57.000000000 +0200
++++ b/configure.ac	2023-02-08 20:23:34.714292036 +0100
+@@ -92,7 +92,6 @@
+    AC_MSG_ERROR([C++ Compiler required to compile Anjuta]))
+ AM_PROG_CC_C_O
+ 
+-GNOME_COMPILE_WARNINGS([yes])
+ AM_CFLAGS="$AM_CFLAGS $WARN_CFLAGS"
+ AM_CXXFLAGS="$AM_CXXFLAGS $WARN_CXXFLAGS"
+ 
+@@ -246,7 +245,7 @@
+ 		*webkit2gtk-3.0*)
+ 			AC_DEFINE([HAVE_WEBKIT2], [1], [Defined if devhelp is built against webkitgtk2])
+ 			;;
+-		*webkit2gtk-4.0*)
++		*webkit2gtk-4.1*)
+ 			AC_DEFINE([HAVE_WEBKIT2], [1], [Defined if devhelp is built against webkitgtk2])
+ 			;;
+ 		esac
