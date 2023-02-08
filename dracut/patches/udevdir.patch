@@ -1,0 +1,12 @@
+diff -Naur a/dracut.sh b/dracut.sh
+--- a/dracut.sh	2022-12-24 17:49:27.000000000 +0100
++++ b/dracut.sh	2023-02-08 02:59:30.018183506 +0100
+@@ -1782,6 +1782,8 @@
+ 
+ [[ -d $dracutsysrootdir$dbussystemservicesconfdir ]] || dbussystemservicesconfdir=${dbusconfdir}/system-services
+ 
++udevdir=/usr/lib/udev
++
+ [[ -d $dracutsysrootdir$udevdir ]] \
+     || udevdir="$(pkg-config udev --variable=udevdir 2> /dev/null)"
+ if ! [[ -d $dracutsysrootdir$udevdir ]]; then

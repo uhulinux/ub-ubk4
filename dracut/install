@@ -3,8 +3,8 @@
 ub_install
 echo "DRACUT_VERSION=${UB_VERSION}" > $UB_INSTALLDIR/usr/lib/dracut/dracut-version.sh
 # szükségtelen modulok eltávolítása
-noneeded="00bootchart 00dash 01fips 35network-legacy 50gensplash 80cms 81cio_ignore \
-91zipl 95dasd 95dasd_mod 95dasd_rules 95dcssblk 95qeth_rules 95zfcp 95zfcp_rules 95znet"
+noneeded="00dash 01fips 80cms 81cio_ignore 91zipl 95dasd 95dasd_mod \
+95dasd_rules 95dcssblk 95qeth_rules 95zfcp 95zfcp_rules 95znet"
 for dirs in $noneeded;do
 rm -rf $UB_INSTALLDIR/usr/lib/dracut/modules.d/$dirs
 done
