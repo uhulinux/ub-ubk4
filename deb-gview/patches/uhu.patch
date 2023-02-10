@@ -1,0 +1,78 @@
+diff -Naur a/desktop/deb-gview.desktop.in.in b/desktop/deb-gview.desktop.in.in
+--- a/desktop/deb-gview.desktop.in.in	2023-01-11 15:38:50.000000000 +0100
++++ b/desktop/deb-gview.desktop.in.in	2023-02-04 01:03:39.251804759 +0100
+@@ -1,9 +1,11 @@
+ [Desktop Entry]
+ _Name=Debian Package Viewer
+ _Comment=Debian package file viewer
++Name[hu]=deb-gview
++Comment[hu]=Debian csomag megjelenítő
+ _Keywords=deb;debian;view;open;
+ Exec=deb-gview
+-Icon=deb-gview.xpm
++Icon=deb-gview
+ Terminal=false
+ Categories=Development;Building;GNOME;
+ Type=Application
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2023-01-11 15:38:50.000000000 +0100
++++ b/Makefile.am	2023-02-04 01:04:33.968018898 +0100
+@@ -5,7 +5,7 @@
+ 
+ man_MANS=$(PACKAGE).1
+ 
+-DB2MAN = /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
++DB2MAN = /usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
+ XP = xsltproc -''-nonet -''-param man.charmap.use.subset "0"
+ 
+ deb_gviewdocdir = ${prefix}/share/doc/deb-gview
+diff -Naur a/src/callbacks.c b/src/callbacks.c
+--- a/src/callbacks.c	2023-01-11 15:38:50.000000000 +0100
++++ b/src/callbacks.c	2023-02-04 01:05:34.708259574 +0100
+@@ -64,6 +64,11 @@
+ 			"/var/cache/apt/archives");
+ 	}
+ 	filter = gtk_file_filter_new ();
++	gtk_file_filter_set_name (filter, _("UHU-Linux csomagok *.uhu"));
++	gtk_file_filter_add_pattern (filter, 
++		"*.uhu");
++	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER(chooser), filter);
++	filter = gtk_file_filter_new ();
+ 	gtk_file_filter_set_name (filter, _("Debian package files *.deb"));
+ 	gtk_file_filter_add_pattern (filter, 
+ 		"*.deb");
+diff -Naur a/src/dvarchive.c b/src/dvarchive.c
+--- a/src/dvarchive.c	2023-01-11 15:38:50.000000000 +0100
++++ b/src/dvarchive.c	2023-02-04 01:05:34.708259574 +0100
+@@ -185,6 +185,23 @@
+ 				dv_new_window (debfile);
+ 			}
+ 		}
++		else
++		{
++			debline = g_strrstr (changes_file[c], ".uhu");
++			if (debline)
++			{
++				GFile * debfile;
++				gchar * partial;
++				if (!g_str_has_suffix (debline, ".uhu"))
++					continue;
++				debfile = NULL;
++				partial = g_strstrip (g_strrstr (changes_file[c], " "));
++				debname = g_strconcat(chgpath, "/", partial, NULL);
++				debfile = g_file_new_for_uri (debname);
++				if (g_str_has_suffix (debname, ".uhu"))
++					dv_new_window (debfile);
++			}
++		}
+ 	}
+ }
+ 
+@@ -327,6 +344,7 @@
+ 	filename = g_file_get_uri (deb->ghandle);
+ 	if ((!g_str_has_suffix(filename, ".deb")) &&
+ 		(!g_str_has_suffix(filename, ".udeb")) &&
++		(!g_str_has_suffix(filename, ".uhu")) &&
+ 		(!g_str_has_suffix(filename, ".tdeb"))) {
+ 		return;
+ 	}

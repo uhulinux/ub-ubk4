@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
-export  CMAKE_PREFIX_PATH=/usr/lib/qt5
 ub_compile \
 	-DUSE_QT5=On \
 	-DWITH_DOC=OFF \
+	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
     -DCMAKE_INSTALL_LIBDIR=lib

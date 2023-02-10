@@ -3,9 +3,6 @@
 if [ -z "$(ls -A subprojects/gvc)" ]; then
 git clone https://gitlab.gnome.org/GNOME/libgnome-volume-control.git subprojects/gvc
 fi
-if [ -z "$(ls -A subprojects/translations)" ]; then
-git clone https://github.com/getsolus/budgie-translations.git subprojects/translations
-fi
 
 ub_compile \
 	-Dwith-gtk-doc=false
