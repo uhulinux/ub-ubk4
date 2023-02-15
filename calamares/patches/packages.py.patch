@@ -1,7 +1,7 @@
 diff -Naur a/src/modules/packages/main.py b/src/modules/packages/main.py
---- a/src/modules/packages/main.py	2022-03-21 15:19:44.000000000 +0100
-+++ b/src/modules/packages/main.py	2022-03-21 20:16:29.117713687 +0100
-@@ -172,11 +172,11 @@
+--- a/src/modules/packages/main.py	2022-08-24 21:38:31.000000000 +0200
++++ b/src/modules/packages/main.py	2023-02-15 12:18:42.698678350 +0100
+@@ -172,11 +172,13 @@
          NOTE: exceptions are expected to leave this method, to indicate
                failure of the installation.
          """
@@ -10,6 +10,8 @@ diff -Naur a/src/modules/packages/main.py b/src/modules/packages/main.py
 -        else:
 -            for package in package_list:
 -                self.install_package(package, from_local=from_local)
++        global completed_packages
++        
 +        for package in entry[key]:
 +            pkgman.install_package(package)
 +            completed_packages = completed_packages + 1
@@ -18,9 +20,12 @@ diff -Naur a/src/modules/packages/main.py b/src/modules/packages/main.py
  
      def operation_try_install(self, package_list):
          """
-@@ -195,6 +195,9 @@
+@@ -194,7 +196,12 @@
+         """
          # we make a separate package manager call for each package so a
          # single failing package won't stop all of them
++        global completed_packages
++        
          for package in package_list:
 +            completed_packages = completed_packages + 1
 +            libcalamares.job.setprogress(completed_packages * 1.0 / total_packages)
@@ -28,7 +33,7 @@ diff -Naur a/src/modules/packages/main.py b/src/modules/packages/main.py
              try:
                  self.install_package(package)
              except subprocess.CalledProcessError:
-@@ -263,6 +266,7 @@
+@@ -263,6 +270,7 @@
  
      def install(self, pkgs, from_local=False):
          check_target_env_call(["apt-get", "-q", "-y", "install"] + pkgs)
