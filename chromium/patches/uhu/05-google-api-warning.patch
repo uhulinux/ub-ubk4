@@ -1,7 +1,7 @@
-diff -Naur orig/chrome/browser/ui/startup/infobar_utils.cc patched/chrome/browser/ui/startup/infobar_utils.cc
---- orig/chrome/browser/ui/startup/infobar_utils.cc	2022-02-01 01:41:44.000000000 +0100
-+++ patched/chrome/browser/ui/startup/infobar_utils.cc	2022-02-02 11:47:01.728138583 +0100
-@@ -15,7 +15,6 @@
+diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/startup/infobar_utils.cc
+--- a/chrome/browser/ui/startup/infobar_utils.cc	2023-02-01 19:43:13.328595600 +0100
++++ b/chrome/browser/ui/startup/infobar_utils.cc	2023-02-10 23:42:23.262949183 +0100
+@@ -16,7 +16,6 @@
  #include "chrome/browser/ui/startup/automation_infobar_delegate.h"
  #include "chrome/browser/ui/startup/bad_flags_prompt.h"
  #include "chrome/browser/ui/startup/default_browser_prompt.h"
@@ -9,17 +9,17 @@ diff -Naur orig/chrome/browser/ui/startup/infobar_utils.cc patched/chrome/browse
  #include "chrome/browser/ui/startup/obsolete_system_infobar_delegate.h"
  #include "chrome/browser/ui/startup/startup_browser_creator.h"
  #include "chrome/browser/ui/startup/startup_types.h"
-@@ -24,7 +23,6 @@
+@@ -25,7 +24,6 @@
  #include "components/infobars/content/content_infobar_manager.h"
  #include "components/prefs/pref_service.h"
  #include "content/public/common/content_switches.h"
 -#include "google_apis/google_api_keys.h"
  
- namespace {
- bool ShouldShowBadFlagsSecurityWarnings() {
-@@ -113,9 +111,6 @@
-     infobars::ContentInfoBarManager* infobar_manager =
-         infobars::ContentInfoBarManager::FromWebContents(web_contents);
+ #if BUILDFLAG(GOOGLE_CHROME_FOR_TESTING_BRANDING)
+ #include "chrome/browser/ui/startup/chrome_for_testing_infobar_delegate.h"
+@@ -125,9 +123,6 @@
+     if (show_bad_flags_security_warnings)
+       chrome::ShowBadFlagsPrompt(web_contents);
  
 -    if (!google_apis::HasAPIKeyConfigured())
 -      GoogleApiKeysInfoBarDelegate::Create(infobar_manager);
