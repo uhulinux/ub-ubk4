@@ -1,7 +1,7 @@
-diff -Naur orig/configure patched/configure
---- orig/configure	2021-08-02 03:56:20.000000000 +0200
-+++ patched/configure	2021-08-02 23:04:55.290212192 +0200
-@@ -6267,7 +6267,7 @@
+diff -Naur a/configure b/configure
+--- a/configure	2023-01-15 22:23:09.000000000 +0100
++++ b/configure	2023-02-19 00:59:10.631863907 +0100
+@@ -6580,7 +6580,7 @@
  
  
  
@@ -10,11 +10,11 @@ diff -Naur orig/configure patched/configure
  
  if test -n "$ac_tool_prefix"; then
    # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
-diff -Naur orig/doc/diffutils.info patched/doc/diffutils.info
---- orig/doc/diffutils.info	2021-08-02 03:56:25.000000000 +0200
-+++ patched/doc/diffutils.info	2021-08-02 23:04:55.294212203 +0200
+diff -Naur a/doc/diffutils.info b/doc/diffutils.info
+--- a/doc/diffutils.info	2023-01-15 22:23:16.000000000 +0100
++++ b/doc/diffutils.info	2023-02-19 01:05:22.220940505 +0100
 @@ -1866,6 +1866,15 @@
- or 'cp -sR').  Before editing a file in the copy for the first time, you
+ or ‘cp -sR’).  Before editing a file in the copy for the first time, you
  should break the link and replace it with a regular copy.
  
 +   In UHU-Linux, `diff' was modified to assume that two files are the
@@ -26,12 +26,12 @@ diff -Naur orig/doc/diffutils.info patched/doc/diffutils.info
 +reverted by setting the `DIFF_DONT_CHEAT' environment variable to any
 +value.
 +
-    You can also affect the performance of GNU 'diff' by giving it
+    You can also affect the performance of GNU ‘diff’ by giving it
  options that change the way it compares files.  Performance has more
  than one dimension.  These options improve one aspect of performance at
-diff -Naur orig/man/diff.1 patched/man/diff.1
---- orig/man/diff.1	2021-08-02 03:56:25.000000000 +0200
-+++ patched/man/diff.1	2021-08-02 23:04:55.294212203 +0200
+diff -Naur a/man/diff.1 b/man/diff.1
+--- a/man/diff.1	2023-01-15 22:23:16.000000000 +0100
++++ b/man/diff.1	2023-02-19 00:59:10.635863919 +0100
 @@ -235,6 +235,24 @@
  If \fB\-\-from\-file\fR or \fB\-\-to\-file\fR is given, there are no restrictions on FILE(s).
  If a FILE is '\-', read standard input.
@@ -57,10 +57,10 @@ diff -Naur orig/man/diff.1 patched/man/diff.1
  .SH AUTHOR
  Written by Paul Eggert, Mike Haertel, David Hayes,
  Richard Stallman, and Len Tower.
-diff -Naur orig/src/diff.c patched/src/diff.c
---- orig/src/diff.c	2021-06-12 07:50:55.000000000 +0200
-+++ patched/src/diff.c	2021-08-02 23:08:19.210768329 +0200
-@@ -105,7 +105,11 @@
+diff -Naur a/src/diff.c b/src/diff.c
+--- a/src/diff.c	2023-01-02 02:18:33.000000000 +0100
++++ b/src/diff.c	2023-02-19 00:59:10.635863919 +0100
+@@ -104,7 +104,11 @@
  /* Report files compared that are the same (-s).
     Normally nothing is output when that happens.  */
  static bool report_identical_files;
@@ -73,7 +73,7 @@ diff -Naur orig/src/diff.c patched/src/diff.c
  static char const shortopts[] =
  "0123456789abBcC:dD:eEfF:hHiI:lL:nNpPqrsS:tTuU:vwW:x:X:yZ";
  
-@@ -659,6 +663,7 @@
+@@ -701,6 +705,7 @@
          }
        prev = c;
      }
@@ -81,7 +81,7 @@ diff -Naur orig/src/diff.c patched/src/diff.c
  
    if (colors_style == AUTO)
      {
-@@ -1274,9 +1279,11 @@
+@@ -1323,9 +1328,11 @@
    else if ((same_files
              = (cmp.file[0].desc != NONEXISTENT
                 && cmp.file[1].desc != NONEXISTENT
@@ -95,10 +95,10 @@ diff -Naur orig/src/diff.c patched/src/diff.c
             && no_diff_means_no_output)
      {
        /* The two named files are actually the same physical file.
-diff -Naur orig/src/system.h patched/src/system.h
---- orig/src/system.h	2021-01-02 02:37:49.000000000 +0100
-+++ patched/src/system.h	2021-08-02 23:04:55.294212203 +0200
-@@ -229,6 +229,17 @@
+diff -Naur a/src/system.h b/src/system.h
+--- a/src/system.h	2023-01-02 02:18:33.000000000 +0100
++++ b/src/system.h	2023-02-19 00:59:10.635863919 +0100
+@@ -207,4 +207,15 @@
      && (s)->st_ctime == (t)->st_ctime)
  #endif
  
@@ -114,5 +114,3 @@ diff -Naur orig/src/system.h patched/src/system.h
 +#endif
 +
  #define STREQ(a, b) (strcmp (a, b) == 0)
- 
- #ifndef FALLTHROUGH
