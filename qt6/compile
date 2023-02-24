@@ -1,9 +1,10 @@
 #!/bin/sh -eux
 
-# https://doc.qt.io/qt-6/whatsnew60.html#removed-modules-in-qt-6-0
+procs=$(grep ^processor /proc/cpuinfo | wc -l)
+jobs=$(($procs / 2))
 
 export LDFLAGS=" -Wl,--no-keep-memory "
-export NINJAFLAGS=" -j2 "
+export NINJAFLAGS=" -j$jobs "
 
 ub_compile \
     -G Ninja \

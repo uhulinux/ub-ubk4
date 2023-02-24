@@ -9,9 +9,12 @@ mv catapult qtwebengine/src/3rdparty/chromium/third_party
 
 cd $UB_OBJECTDIR
 
+procs=$(grep ^processor /proc/cpuinfo | wc -l)
+jobs=$(($procs / 2))
+
 export LD_LIBRARY_PATH="$(pwd)"/lib
 export LDFLAGS=" -Wl,--no-keep-memory "
-export NINJAFLAGS=" -j2 "
+export NINJAFLAGS=" -j$jobs "
 
 $UB_COMPILEDIR/configure \
 	-prefix /usr/lib/qt5 \
