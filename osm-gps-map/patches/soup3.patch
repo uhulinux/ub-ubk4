@@ -1,0 +1,547 @@
+diff -Naur a/configure b/configure
+--- a/configure	2021-02-07 15:16:40.000000000 +0100
++++ b/configure	2023-02-27 17:27:42.347318227 +0100
+@@ -672,8 +672,8 @@
+ OS_WIN32_TRUE
+ GTHREAD_LIBS
+ GTHREAD_CFLAGS
+-SOUP24_LIBS
+-SOUP24_CFLAGS
++SOUP30_LIBS
++SOUP30_CFLAGS
+ CAIRO_LIBS
+ CAIRO_CFLAGS
+ GTK_LIBS
+@@ -836,8 +836,8 @@
+ GTK_LIBS
+ CAIRO_CFLAGS
+ CAIRO_LIBS
+-SOUP24_CFLAGS
+-SOUP24_LIBS
++SOUP30_CFLAGS
++SOUP30_LIBS
+ GTHREAD_CFLAGS
+ GTHREAD_LIBS
+ GTKDOC_DEPS_CFLAGS
+@@ -1524,9 +1524,9 @@
+   CAIRO_CFLAGS
+               C compiler flags for CAIRO, overriding pkg-config
+   CAIRO_LIBS  linker flags for CAIRO, overriding pkg-config
+-  SOUP24_CFLAGS
+-              C compiler flags for SOUP24, overriding pkg-config
+-  SOUP24_LIBS linker flags for SOUP24, overriding pkg-config
++  SOUP30_CFLAGS
++              C compiler flags for SOUP30, overriding pkg-config
++  SOUP30_LIBS linker flags for SOUP30, overriding pkg-config
+   GTHREAD_CFLAGS
+               C compiler flags for GTHREAD, overriding pkg-config
+   GTHREAD_LIBS
+@@ -12719,19 +12719,19 @@
+ fi
+ 
+ pkg_failed=no
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsoup-2.4" >&5
+-$as_echo_n "checking for libsoup-2.4... " >&6; }
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsoup-3.0" >&5
++$as_echo_n "checking for libsoup-3.0... " >&6; }
+ 
+-if test -n "$SOUP24_CFLAGS"; then
+-    pkg_cv_SOUP24_CFLAGS="$SOUP24_CFLAGS"
++if test -n "$SOUP30_CFLAGS"; then
++    pkg_cv_SOUP30_CFLAGS="$SOUP30_CFLAGS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-2.4\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "libsoup-2.4") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-3.0\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "libsoup-3.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_SOUP24_CFLAGS=`$PKG_CONFIG --cflags "libsoup-2.4" 2>/dev/null`
++  pkg_cv_SOUP30_CFLAGS=`$PKG_CONFIG --cflags "libsoup-3.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -12739,16 +12739,16 @@
+  else
+     pkg_failed=untried
+ fi
+-if test -n "$SOUP24_LIBS"; then
+-    pkg_cv_SOUP24_LIBS="$SOUP24_LIBS"
++if test -n "$SOUP30_LIBS"; then
++    pkg_cv_SOUP30_LIBS="$SOUP30_LIBS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-2.4\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "libsoup-2.4") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-3.0\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "libsoup-3.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_SOUP24_LIBS=`$PKG_CONFIG --libs "libsoup-2.4" 2>/dev/null`
++  pkg_cv_SOUP30_LIBS=`$PKG_CONFIG --libs "libsoup-3.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -12769,22 +12769,22 @@
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        SOUP24_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsoup-2.4" 2>&1`
++	        SOUP30_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsoup-3.0" 2>&1`
+         else
+-	        SOUP24_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsoup-2.4" 2>&1`
++	        SOUP30_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsoup-3.0" 2>&1`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+-	echo "$SOUP24_PKG_ERRORS" >&5
++	echo "$SOUP30_PKG_ERRORS" >&5
+ 
+-	as_fn_error $? "Package requirements (libsoup-2.4) were not met:
++	as_fn_error $? "Package requirements (libsoup-3.0) were not met:
+ 
+-$SOUP24_PKG_ERRORS
++$SOUP30_PKG_ERRORS
+ 
+ Consider adjusting the PKG_CONFIG_PATH environment variable if you
+ installed software in a non-standard prefix.
+ 
+-Alternatively, you may set the environment variables SOUP24_CFLAGS
+-and SOUP24_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables SOUP30_CFLAGS
++and SOUP30_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details." "$LINENO" 5
+ elif test $pkg_failed = untried; then
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+@@ -12795,15 +12795,15 @@
+ is in your PATH or set the PKG_CONFIG environment variable to the full
+ path to pkg-config.
+ 
+-Alternatively, you may set the environment variables SOUP24_CFLAGS
+-and SOUP24_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables SOUP30_CFLAGS
++and SOUP30_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details.
+ 
+ To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+ See \`config.log' for more details" "$LINENO" 5; }
+ else
+-	SOUP24_CFLAGS=$pkg_cv_SOUP24_CFLAGS
+-	SOUP24_LIBS=$pkg_cv_SOUP24_LIBS
++	SOUP30_CFLAGS=$pkg_cv_SOUP30_CFLAGS
++	SOUP30_LIBS=$pkg_cv_SOUP30_LIBS
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+ 
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2021-02-07 15:15:43.000000000 +0100
++++ b/configure.ac	2023-02-27 17:26:06.483086495 +0100
+@@ -25,7 +25,7 @@
+ PKG_CHECK_MODULES(GLIB,     [glib-2.0 >= 2.16])
+ PKG_CHECK_MODULES(GTK,      [gtk+-3.0 >= 3.0])
+ PKG_CHECK_MODULES(CAIRO,    [cairo >= 1.8])
+-PKG_CHECK_MODULES(SOUP24,   [libsoup-2.4])
++PKG_CHECK_MODULES(SOUP30,   [libsoup-3.0])
+ 
+ # The mapviewer demo also calls g_thread_init, so it needs to link against
+ # libgthread-2.0.
+diff -Naur a/docs/Makefile.in b/docs/Makefile.in
+--- a/docs/Makefile.in	2021-02-07 15:16:41.000000000 +0100
++++ b/docs/Makefile.in	2023-02-27 17:35:53.084533151 +0100
+@@ -274,8 +274,8 @@
+ SED = @SED@
+ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+-SOUP24_CFLAGS = @SOUP24_CFLAGS@
+-SOUP24_LIBS = @SOUP24_LIBS@
++SOUP30_CFLAGS = @SOUP30_CFLAGS@
++SOUP30_LIBS = @SOUP30_LIBS@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+ _GI_EXP_DATADIR = @_GI_EXP_DATADIR@
+diff -Naur a/docs/reference/Makefile.am b/docs/reference/Makefile.am
+--- a/docs/reference/Makefile.am	2021-02-07 15:15:43.000000000 +0100
++++ b/docs/reference/Makefile.am	2023-02-27 17:24:59.994927111 +0100
+@@ -71,12 +71,12 @@
+ 	$(GLIB_CFLAGS) \
+ 	$(GTK_CFLAGS) \
+ 	$(CAIRO_CFLAGS) \
+-	$(SOUP24_CFLAGS)
++	$(SOUP30_CFLAGS)
+ GTKDOC_LIBS=$(top_builddir)/src/libosmgpsmap-1.0.la \
+ 	$(GLIB_LIBS) \
+ 	$(GTK_LIBS) \
+ 	$(CAIRO_LIBS) \
+-	$(SOUP24_LIBS)
++	$(SOUP30_LIBS)
+ 
+ # This includes the standard gtk-doc make rules, copied by gtkdocize.
+ include $(top_srcdir)/gtk-doc.make
+diff -Naur a/docs/reference/Makefile.in b/docs/reference/Makefile.in
+--- a/docs/reference/Makefile.in	2021-02-07 15:16:41.000000000 +0100
++++ b/docs/reference/Makefile.in	2023-02-27 17:36:05.660564809 +0100
+@@ -239,8 +239,8 @@
+ SED = @SED@
+ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+-SOUP24_CFLAGS = @SOUP24_CFLAGS@
+-SOUP24_LIBS = @SOUP24_LIBS@
++SOUP30_CFLAGS = @SOUP30_CFLAGS@
++SOUP30_LIBS = @SOUP30_LIBS@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+ _GI_EXP_DATADIR = @_GI_EXP_DATADIR@
+@@ -371,13 +371,13 @@
+ 	$(GLIB_CFLAGS) \
+ 	$(GTK_CFLAGS) \
+ 	$(CAIRO_CFLAGS) \
+-	$(SOUP24_CFLAGS)
++	$(SOUP30_CFLAGS)
+ 
+ GTKDOC_LIBS = $(top_builddir)/src/libosmgpsmap-1.0.la \
+ 	$(GLIB_LIBS) \
+ 	$(GTK_LIBS) \
+ 	$(CAIRO_LIBS) \
+-	$(SOUP24_LIBS)
++	$(SOUP30_LIBS)
+ 
+ @GTK_DOC_USE_LIBTOOL_FALSE@GTKDOC_CC = $(CC) $(INCLUDES) $(GTKDOC_DEPS_CFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ @GTK_DOC_USE_LIBTOOL_TRUE@GTKDOC_CC = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(INCLUDES) $(GTKDOC_DEPS_CFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+diff -Naur a/examples/Makefile.am b/examples/Makefile.am
+--- a/examples/Makefile.am	2021-02-07 15:15:43.000000000 +0100
++++ b/examples/Makefile.am	2023-02-27 17:24:59.994927111 +0100
+@@ -4,13 +4,13 @@
+     $(GLIB_CFLAGS)          \
+     $(GTK_CFLAGS)           \
+     $(CAIRO_CFLAGS)         \
+-    $(SOUP24_CFLAGS)
++    $(SOUP30_CFLAGS)
+ 
+ OSMGPSMAP_LIBS =            \
+     $(GLIB_LIBS)            \
+     $(GTK_LIBS)             \
+     $(CAIRO_LIBS)           \
+-    $(SOUP24_LIBS)
++    $(SOUP30_LIBS)
+ 
+ ## Demo Application
+ noinst_PROGRAMS = mapviewer polygon editable_track
+diff -Naur a/examples/Makefile.in b/examples/Makefile.in
+--- a/examples/Makefile.in	2021-02-07 15:16:41.000000000 +0100
++++ b/examples/Makefile.in	2023-02-27 17:36:17.928595714 +0100
+@@ -292,8 +292,8 @@
+ SED = @SED@
+ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+-SOUP24_CFLAGS = @SOUP24_CFLAGS@
+-SOUP24_LIBS = @SOUP24_LIBS@
++SOUP30_CFLAGS = @SOUP30_CFLAGS@
++SOUP30_LIBS = @SOUP30_LIBS@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+ _GI_EXP_DATADIR = @_GI_EXP_DATADIR@
+@@ -355,13 +355,13 @@
+     $(GLIB_CFLAGS)          \
+     $(GTK_CFLAGS)           \
+     $(CAIRO_CFLAGS)         \
+-    $(SOUP24_CFLAGS)
++    $(SOUP30_CFLAGS)
+ 
+ OSMGPSMAP_LIBS = \
+     $(GLIB_LIBS)            \
+     $(GTK_LIBS)             \
+     $(CAIRO_LIBS)           \
+-    $(SOUP24_LIBS)
++    $(SOUP30_LIBS)
+ 
+ mapviewer_SOURCES = \
+     mapviewer.c
+diff -Naur a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2021-02-07 15:16:41.000000000 +0100
++++ b/Makefile.in	2023-02-27 17:35:41.248503382 +0100
+@@ -328,8 +328,8 @@
+ SED = @SED@
+ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+-SOUP24_CFLAGS = @SOUP24_CFLAGS@
+-SOUP24_LIBS = @SOUP24_LIBS@
++SOUP30_CFLAGS = @SOUP30_CFLAGS@
++SOUP30_LIBS = @SOUP30_LIBS@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+ _GI_EXP_DATADIR = @_GI_EXP_DATADIR@
+diff -Naur a/osmgpsmap-1.0.pc.in b/osmgpsmap-1.0.pc.in
+--- a/osmgpsmap-1.0.pc.in	2021-02-07 15:15:43.000000000 +0100
++++ b/osmgpsmap-1.0.pc.in	2023-02-27 17:28:33.163441912 +0100
+@@ -6,6 +6,6 @@
+ Name: @PACKAGE_NAME@
+ Description: Moving map widget using openstreet map data
+ Version: @PACKAGE_VERSION@
+-Requires: gtk+-3.0 libsoup-2.4
++Requires: gtk+-3.0 libsoup-3.0
+ Libs: -L${libdir} -losmgpsmap-1.0
+ Cflags: -I${includedir}/osmgpsmap-1.0
+diff -Naur a/src/Makefile.am b/src/Makefile.am
+--- a/src/Makefile.am	2021-02-07 15:15:43.000000000 +0100
++++ b/src/Makefile.am	2023-02-27 17:24:59.994927111 +0100
+@@ -5,13 +5,13 @@
+ 	$(GLIB_CFLAGS)          \
+ 	$(GTK_CFLAGS)           \
+ 	$(CAIRO_CFLAGS)         \
+-    $(SOUP24_CFLAGS)
++    $(SOUP30_CFLAGS)
+ 
+ OSMGPSMAP_LIBS =            \
+     $(GLIB_LIBS)            \
+     $(GTK_LIBS)             \
+     $(CAIRO_LIBS)           \
+-    $(SOUP24_LIBS)
++    $(SOUP30_LIBS)
+ 
+ ## Shared library
+ libosmgpsmap_1_0_la_CFLAGS =    \
+diff -Naur a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2021-02-07 15:16:42.000000000 +0100
++++ b/src/Makefile.in	2023-02-27 17:36:29.936625980 +0100
+@@ -330,8 +330,8 @@
+ SED = @SED@
+ SET_MAKE = @SET_MAKE@
+ SHELL = @SHELL@
+-SOUP24_CFLAGS = @SOUP24_CFLAGS@
+-SOUP24_LIBS = @SOUP24_LIBS@
++SOUP30_CFLAGS = @SOUP30_CFLAGS@
++SOUP30_LIBS = @SOUP30_LIBS@
+ STRIP = @STRIP@
+ VERSION = @VERSION@
+ _GI_EXP_DATADIR = @_GI_EXP_DATADIR@
+@@ -394,13 +394,13 @@
+ 	$(GLIB_CFLAGS)          \
+ 	$(GTK_CFLAGS)           \
+ 	$(CAIRO_CFLAGS)         \
+-    $(SOUP24_CFLAGS)
++    $(SOUP30_CFLAGS)
+ 
+ OSMGPSMAP_LIBS = \
+     $(GLIB_LIBS)            \
+     $(GTK_LIBS)             \
+     $(CAIRO_LIBS)           \
+-    $(SOUP24_LIBS)
++    $(SOUP30_LIBS)
+ 
+ libosmgpsmap_1_0_la_CFLAGS = \
+     $(WARN_CFLAGS)          \
+diff -Naur a/src/osm-gps-map-widget.c b/src/osm-gps-map-widget.c
+--- a/src/osm-gps-map-widget.c	2021-02-07 15:15:43.000000000 +0100
++++ b/src/osm-gps-map-widget.c	2023-02-27 17:32:30.016025266 +0100
+@@ -150,15 +150,6 @@
+ #define MAX_DOWNLOAD_TILES          10000
+ #define DOT_RADIUS                  4.0
+ 
+-#ifndef SOUP_CHECK_VERSION
+-// SOUP_CHECK_VERSION was introduced only in 2.42
+-#define SOUP_CHECK_VERSION(x, y, z) false
+-#endif
+-
+-#if !SOUP_CHECK_VERSION(2, 42, 0)
+-#define SOUP_OLD_SESSION
+-#endif
+-
+ struct _OsmGpsMapPrivate
+ {
+     GHashTable *tile_queue;
+@@ -324,7 +315,7 @@
+  */
+ static gchar    *replace_string(const gchar *src, const gchar *from, const gchar *to);
+ static gchar    *replace_map_uri(OsmGpsMap *map, const gchar *uri, int zoom, int x, int y);
+-static void     osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpointer user_data);
++static void     osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, gpointer user_data);
+ static void     osm_gps_map_download_tile (OsmGpsMap *map, int zoom, int x, int y, gboolean redraw);
+ static GdkPixbuf* osm_gps_map_render_tile_upscaled (OsmGpsMap *map, GdkPixbuf *tile, int tile_zoom, int zoom, int x, int y);
+ 
+@@ -740,12 +731,10 @@
+     }
+ }
+ 
+-#define MSG_RESPONSE_BODY(a)    ((a)->response_body->data)
+-#define MSG_RESPONSE_LEN(a)     ((a)->response_body->length)
+ #define MSG_RESPONSE_LEN_FORMAT "%"G_GOFFSET_FORMAT
+ 
+ static void
+-osm_gps_map_tile_download_complete (SoupSession *session, SoupMessage *msg, gpointer user_data)
++osm_gps_map_tile_download_complete (SoupSession *session, GAsyncResult *result, gpointer user_data)
+ {
+     FILE *file;
+     OsmTileDownload *dl = (OsmTileDownload *)user_data;
+@@ -753,15 +742,23 @@
+     OsmGpsMapPrivate *priv = map->priv;
+     gboolean file_saved = FALSE;
+ 
+-    if (SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
++    GError *error = NULL;
++    SoupMessage *msg = soup_session_get_async_result_message(session, result);
++    SoupStatus soup_status = soup_message_get_status(msg);
++    GBytes *body = soup_session_send_and_read_finish (session, result, &error);
++
++    GCancellable *cancellable = (GCancellable *)g_hash_table_lookup(priv->tile_queue, dl->uri);
++    g_object_unref (cancellable);
++
++    if (SOUP_STATUS_IS_SUCCESSFUL (soup_status)) {
+         /* save tile into cachedir if one has been specified */
+         if (priv->cache_dir) {
+             if (g_mkdir_with_parents(dl->folder,0700) == 0) {
+                 file = g_fopen(dl->filename, "wb");
+                 if (file != NULL) {
+-                    fwrite (MSG_RESPONSE_BODY(msg), 1, MSG_RESPONSE_LEN(msg), file);
++                    fwrite (g_bytes_get_data(body, NULL), 1, g_bytes_get_size(body), file);
+                     file_saved = TRUE;
+-                    g_debug("Wrote "MSG_RESPONSE_LEN_FORMAT" bytes to %s", MSG_RESPONSE_LEN(msg), dl->filename);
++                    g_debug("Wrote "MSG_RESPONSE_LEN_FORMAT" bytes to %s", g_bytes_get_size(body), dl->filename);
+                     fclose (file);
+ 
+                 }
+@@ -786,7 +783,7 @@
+                 /* parse file directly from memory */
+                 if (extension) {
+                     loader = gdk_pixbuf_loader_new_with_type (extension+1, NULL);
+-                    if (!gdk_pixbuf_loader_write (loader, (unsigned char*)MSG_RESPONSE_BODY(msg), MSG_RESPONSE_LEN(msg), NULL))
++                    if (!gdk_pixbuf_loader_write (loader, (unsigned char*)g_bytes_get_data(body, NULL), g_bytes_get_size(body), NULL))
+                     {
+                         g_warning("Error: Decoding of image failed");
+                     }
+@@ -824,21 +821,21 @@
+         g_free(dl->filename);
+         g_free(dl);
+     } else {
+-        if ((msg->status_code == SOUP_STATUS_NOT_FOUND) || (msg->status_code == SOUP_STATUS_FORBIDDEN)) {
++        if ((soup_status == SOUP_STATUS_NOT_FOUND) || (soup_status == SOUP_STATUS_FORBIDDEN)) {
+             g_hash_table_insert(priv->missing_tiles, dl->uri, NULL);
+             g_hash_table_remove(priv->tile_queue, dl->uri);
+             g_object_notify(G_OBJECT(map), "tiles-queued");
+-        } else if (msg->status_code == SOUP_STATUS_CANCELLED) {
++        } else if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+             /* called as application exit or after osm_gps_map_download_cancel_all */
+             g_hash_table_remove(priv->tile_queue, dl->uri);
+             g_object_notify(G_OBJECT(map), "tiles-queued");
+         } else {
+-            g_warning("Error downloading tile: %d - %s", msg->status_code, msg->reason_phrase);
+-            dl->ttl--;
+-            if (dl->ttl) {
+-                soup_session_requeue_message(session, msg);
+-                return;
+-            }
++            g_warning("Error downloading tile: %d - %s", soup_status, soup_status_get_phrase(soup_status));
++            //dl->ttl--;
++            //if (dl->ttl) {
++            //    soup_session_requeue_message(session, msg);
++            //    return;
++            //}
+ 
+             g_hash_table_remove(priv->tile_queue, dl->uri);
+             g_object_notify(G_OBJECT(map), "tiles-queued");
+@@ -888,21 +885,26 @@
+             if (priv->is_google) {
+                 //Set maps.google.com as the referrer
+                 g_debug("Setting Google Referrer");
+-                soup_message_headers_append(msg->request_headers, "Referer", "http://maps.google.com/");
++                soup_message_headers_append(soup_message_get_request_headers(msg), "Referer", "http://maps.google.com/");
+                 //For google satelite also set the appropriate cookie value
+                 if (priv->uri_format & URI_HAS_Q) {
+                     const char *cookie = g_getenv("GOOGLE_COOKIE");
+                     if (cookie) {
+                         g_debug("Adding Google Cookie");
+-                        soup_message_headers_append(msg->request_headers, "Cookie", cookie);
++                        soup_message_headers_append(soup_message_get_request_headers(msg), "Cookie", cookie);
+                     }
+                 }
+             }
+ 
+-            g_hash_table_insert (priv->tile_queue, dl->uri, msg);
++            GCancellable *cancellable = g_cancellable_new ();
++            g_hash_table_insert (priv->tile_queue, dl->uri, cancellable);
+             g_object_notify (G_OBJECT (map), "tiles-queued");
+             /* the soup session unrefs the message when the download finishes */
+-            soup_session_queue_message (priv->soup_session, msg, osm_gps_map_tile_download_complete, dl);
++            soup_session_send_and_read_async(priv->soup_session, msg,
++                                    G_PRIORITY_DEFAULT,
++                                    cancellable,
++                                    (GAsyncReadyCallback)osm_gps_map_tile_download_complete,
++                                    dl);
+         } else {
+             g_warning("Could not create soup message");
+             g_free(dl->uri);
+@@ -1680,18 +1682,8 @@
+ 
+ 
+     /* set the user agent */
+-#ifdef SOUP_OLD_SESSION
+-    // libsoup pre 2.42.0 had explicit syn/async session
+-    priv->soup_session =
+-        soup_session_async_new_with_options(SOUP_SESSION_USER_AGENT,
+-                                            USER_AGENT, NULL);
+-#else
+-    // lisoup since 2.42.0 has universal session, only methods can be sync/async
+-    // and we use async
+-    priv->soup_session =
+-        soup_session_new_with_options(SOUP_SESSION_USER_AGENT,
+-                                            USER_AGENT, NULL);
+-#endif
++    priv->soup_session = soup_session_new ();
++    soup_session_set_user_agent (priv->soup_session, USER_AGENT);
+ 
+     /* Hash table which maps tile d/l URIs to SoupMessage requests, the hashtable
+        must free the key, the soup session unrefs the message */
+@@ -1922,10 +1914,10 @@
+                 g_debug("Setting proxy server: %s", priv->proxy_uri);
+ 
+                 GValue val = {0};
+-                SoupURI* uri = soup_uri_new(priv->proxy_uri);
+-                g_value_init(&val, SOUP_TYPE_URI);
++                GUri* uri = g_uri_parse(priv->proxy_uri, SOUP_HTTP_URI_FLAGS, NULL);
++                g_value_init(&val, G_TYPE_URI);
+                 g_value_take_boxed(&val, uri);
+-                g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_PROXY_URI,&val);
++                g_object_set_property(G_OBJECT(priv->soup_session),"proxy-resolver",&val);
+ 
+             } else {
+                 g_free(priv->proxy_uri);
+@@ -1945,7 +1937,7 @@
+                 priv->user_agent = NULL;
+                 g_value_set_string (&full_user_agent, USER_AGENT);
+             }
+-            g_object_set_property(G_OBJECT(priv->soup_session),SOUP_SESSION_USER_AGENT, &full_user_agent);
++            g_object_set_property(G_OBJECT(priv->soup_session),"user-agent", &full_user_agent);
+             break;
+         case PROP_TILE_CACHE_DIR:
+             if ( g_value_get_string(value) ) {
+@@ -2987,9 +2979,9 @@
+ }
+ 
+ static void
+-cancel_message (char *key, SoupMessage *value, SoupSession *user_data)
++cancel_message (char *key, GCancellable *cancellable, void *userdata)
+ {
+-    soup_session_cancel_message (user_data, value, SOUP_STATUS_CANCELLED);
++    g_cancellable_cancel(cancellable);
+ }
+ 
+ /**
+@@ -2997,7 +2989,7 @@
+  * @map: a #OsmGpsMap widget
+  *
+  * Cancels all tiles currently being downloaded. Typically used if you wish to
+- * cacel a large number of tiles queued using osm_gps_map_download_maps()
++ * cancel a large number of tiles queued using osm_gps_map_download_maps()
+  *
+  * Since: 0.7.0
+  **/
+@@ -3005,7 +2997,7 @@
+ osm_gps_map_download_cancel_all (OsmGpsMap *map)
+ {
+     OsmGpsMapPrivate *priv = map->priv;
+-    g_hash_table_foreach (priv->tile_queue, (GHFunc)cancel_message, priv->soup_session);
++    g_hash_table_foreach (priv->tile_queue, (GHFunc)cancel_message, NULL);
+ }
+ 
+ /**

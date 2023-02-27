@@ -7,6 +7,9 @@ if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 15 ]; the
 	exit 1
 fi
 
+procs=$(grep ^processor /proc/cpuinfo | wc -l)
+jobs=$(($procs / 2))
+
 # gcc-vel sokkal gyorsabb a build, mivel használja a ccache-t
 # linkelni viszont az lld-vel kell (use_lld=true), a többi elszáll
 export CC=gcc
@@ -95,4 +98,4 @@ gn gen $outdir -v --args=" ${_flags[@]} " --script-executable=/usr/bin/python3
 gn args --list $outdir > $outdir/gn-args-full.list
 
 # ninja
-LC_ALL=C ninja -j 2 -C $outdir -v pdf chrome chrome_sandbox chromedriver.unstripped
+LC_ALL=C ninja -j $jobs -C $outdir -v pdf chrome chrome_sandbox chromedriver.unstripped
