@@ -1,3 +1,11 @@
 #!/bin/sh -eux
 
-make INSTALL_ROOT="$UB_INSTALLDIR" install
+install -m 755 evolvotron/evolvotron $UB_INSTALLDIR/usr/bin
+install -m 755 evolvotron_mutate/evolvotron_mutate $UB_INSTALLDIR/usr/bin
+install -m 755 evolvotron_render/evolvotron_render $UB_INSTALLDIR/usr/bin
+install -m 644 man/man1/evolvotron.1 $UB_INSTALLDIR/usr/share/man/man1
+install -m 644 man/man1/evolvotron_mutate.1 $UB_INSTALLDIR/usr/share/man/man1
+install -m 644 man/man1/evolvotron_render.1 $UB_INSTALLDIR/usr/share/man/man1
+install -D -m 644 dist/icon-48.png $UB_INSTALLDIR/usr/share/icons/hicolor/48x48/apps/evolvotron.png
+install -D -m 644 dist/icon-128.png $UB_INSTALLDIR/usr/share/icons/hicolor/128x128/apps/evolvotron.png
+install -D -m 644 dist/evolvotron.desktop $UB_INSTALLDIR/usr/share/applications/evolvotron.desktop
