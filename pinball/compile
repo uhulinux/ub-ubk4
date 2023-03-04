@@ -1,7 +1,5 @@
 #!/bin/sh -eux
 
 touch README
-autoreconf -vif
-export UB_MAKEPROCS=1
-./configure --prefix=/usr --disable-sdltest
-make -j1
+ub_compile \
+	--disable-sdltest
