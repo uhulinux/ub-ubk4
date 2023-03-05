@@ -1,10 +1,5 @@
 #!/bin/sh -eux
 
-export \
-    QXMLEDIT_INST_DIR="/usr/bin" \
-    QXMLEDIT_INST_LIB_DIR="/usr/lib" \
-    QXMLEDIT_INST_INCLUDE_DIR="/usr/include/qxmledit" \
-    QXMLEDIT_INST_DATA_DIR="/usr/share/qxmledit" \
-    QXMLEDIT_INST_DOC_DIR="/usr/share/doc/qxmledit"
-qmake
+export QXMLEDIT_INST_AVOID_PRECOMP_HEADERS=Y
+qmake "CONFIG+=release"
 ub_compile

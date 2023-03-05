@@ -4,3 +4,4 @@ export DESTDIR=${UB_INSTALLDIR}/usr
 mkdir -p ${DESTDIR}/include/unrar
 cp dll.hpp ${DESTDIR}/include/unrar/
 make DESTDIR=${DESTDIR} install-unrar install-lib
+rm -rf ${UB_INSTALLDIR}/usr/include

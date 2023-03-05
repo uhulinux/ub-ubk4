@@ -1,0 +1,78 @@
+diff -Naur a/src/cconfig.pri b/src/cconfig.pri
+--- a/src/cconfig.pri	2023-01-30 19:45:57.000000000 +0100
++++ b/src/cconfig.pri	2023-03-04 15:51:35.533536719 +0100
+@@ -44,7 +44,7 @@
+     INST_DATA_DIR=$$QXMLEDIT_INST_DATA_DIR
+ }
+ isEmpty(INST_DATA_DIR) {
+-    INST_DATA_DIR = /opt/qxmledit
++    INST_DATA_DIR = /usr/share/qxmledit
+ }
+ message("Inst data dir $$INST_DATA_DIR")
+ 
+@@ -54,7 +54,7 @@
+     INST_METAINFO_DIR=$$QXMLEDIT_INST_METAINFO_DIR
+ }
+ isEmpty(INST_METAINFO_DIR) {
+-    INST_METAINFO_DIR = /opt/qxmledit
++    INST_METAINFO_DIR = /usr/share/metainfo
+ }
+ 
+ # enabling
+@@ -79,7 +79,7 @@
+     INST_DESKTOPINFO_DIR=$$QXMLEDIT_INST_DESKTOPINFO_DIR
+ }
+ isEmpty(INST_DESKTOPINFO_DIR) {
+-    INST_DESKTOPINFO_DIR = /opt/qxmledit
++    INST_DESKTOPINFO_DIR = /usr/share/applications
+ }
+ 
+ # enabling
+@@ -104,7 +104,7 @@
+     INST_ICON_DIR=$$QXMLEDIT_INST_ICON_DIR
+ }
+ isEmpty(INST_ICON_DIR) {
+-    INST_ICON_DIR = $$INST_DATA_DIR
++    INST_ICON_DIR = /usr/share/pixmaps
+ }
+ message("Inst icon dir $$INST_ICON_DIR")
+ # enabling
+@@ -128,7 +128,7 @@
+     INST_DIR=$$QXMLEDIT_INST_DIR
+ }
+ isEmpty(INST_DIR) {
+-    INST_DIR = /opt/qxmledit
++    INST_DIR = /usr/bin
+ }
+ message("Inst dir $$INST_DIR")
+ 
+@@ -140,7 +140,7 @@
+ }
+ 
+ isEmpty(INST_DOC_DIR) {
+-    INST_DOC_DIR = /opt/qxmledit
++    INST_DOC_DIR = /usr/share/doc/qxmledit
+ }
+ message("Inst doc dir $$INST_DOC_DIR")
+ 
+@@ -166,7 +166,7 @@
+ }
+ 
+ isEmpty(INST_LIB_DIR) {
+-    INST_LIB_DIR = /opt/qxmledit
++    INST_LIB_DIR = /usr/lib
+ }
+ 
+ message("Inst lib dir $$INST_LIB_DIR")
+diff -Naur a/src/QXmlEditWidget.pro b/src/QXmlEditWidget.pro
+--- a/src/QXmlEditWidget.pro	2023-01-30 19:45:57.000000000 +0100
++++ b/src/QXmlEditWidget.pro	2023-03-04 15:44:10.700042328 +0100
+@@ -811,7 +811,7 @@
+ 
+ unix {
+     target.path = $$INST_LIB_DIR
+-    INSTALLS += target translationsfiles libinclude
++    INSTALLS += target translationsfiles
+ }
+ 
+ RESOURCES += risorse.qrc
