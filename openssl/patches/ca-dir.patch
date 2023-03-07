@@ -1,19 +1,19 @@
-diff -Nur orig/apps/CA.pl.in mod/apps/CA.pl.in
---- orig/apps/CA.pl.in	2017-05-25 14:46:17.000000000 +0200
-+++ mod/apps/CA.pl.in	2017-09-10 16:26:30.809420754 +0200
-@@ -33,7 +33,7 @@
+diff -Naur a/apps/CA.pl.in b/apps/CA.pl.in
+--- a/apps/CA.pl.in	2023-02-07 14:43:33.000000000 +0100
++++ b/apps/CA.pl.in	2023-03-05 20:10:04.250285301 +0100
+@@ -29,7 +29,7 @@
  my $PKCS12 = "$openssl pkcs12";
  
- # default openssl.cnf file has setup as per the following
+ # Default values for various configuration settings.
 -my $CATOP = "./demoCA";
 +my $CATOP = "/etc/ssl";
  my $CAKEY = "cakey.pem";
  my $CAREQ = "careq.pem";
  my $CACERT = "cacert.pem";
-diff -Nur orig/apps/openssl.cnf mod/apps/openssl.cnf
---- orig/apps/openssl.cnf	2017-05-25 14:46:18.000000000 +0200
-+++ mod/apps/openssl.cnf	2017-09-10 16:27:39.357320042 +0200
-@@ -39,7 +39,7 @@
+diff -Naur a/apps/openssl.cnf b/apps/openssl.cnf
+--- a/apps/openssl.cnf	2023-02-07 14:43:33.000000000 +0100
++++ b/apps/openssl.cnf	2023-03-05 20:08:57.914784053 +0100
+@@ -79,7 +79,7 @@
  ####################################################################
  [ CA_default ]
  
@@ -22,7 +22,7 @@ diff -Nur orig/apps/openssl.cnf mod/apps/openssl.cnf
  certs		= $dir/certs		# Where the issued certs are kept
  crl_dir		= $dir/crl		# Where the issued crl are kept
  database	= $dir/index.txt	# database index file.
-@@ -323,7 +323,7 @@
+@@ -309,7 +309,7 @@
  [ tsa_config1 ]
  
  # These are used by the TSA reply generation only.

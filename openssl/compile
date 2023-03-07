@@ -10,12 +10,11 @@ ub_replace -O3 -O2 Configure
 	--libdir=lib \
 	--openssldir=/etc/ssl \
 	linux-x86_64 \
+	shared enable-ktls \
 	enable-ec_nistp_64_gcc_128 \
 	shared \
-	no-sse2 \
-	-Wa,--noexecstack \
-	no-ssl3-method \
-	zlib-dynamic
+	zlib-dynamic \
+	-Wa,--noexecstack
 
-make depend
-make
+ub_make depend
+ub_make
