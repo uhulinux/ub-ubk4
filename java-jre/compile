@@ -1,0 +1,29 @@
+#!/bin/sh -eux
+
+_CFLAGS=" -O2"
+_CXXFLAGS=" -O2"
+_LDFLAGS=" -Wl,--as-needed"
+
+bash configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --sharedstatedir=/var \
+    --with-boot-jdk=./bootjdk \
+    --with-version-pre="" \
+    --with-version-opt="" \
+    --with-stdc++lib=dynamic \
+    --with-extra-cflags="${_CFLAGS}" \
+    --with-extra-cxxflags="${_CXXFLAGS}" \
+    --with-extra-ldflags="${_LDFLAGS}" \
+    --with-libjpeg=system \
+    --with-giflib=system \
+    --with-libpng=system \
+    --with-lcms=system \
+    --with-zlib=system \
+    --with-jvm-features=zgc \
+    --enable-unlimited-crypto \
+    --enable-ccache \
+    --disable-warnings-as-errors \
+    --with-num-cores=${UB_MAKE_PROCS}
+
+make images legacy-jre-image

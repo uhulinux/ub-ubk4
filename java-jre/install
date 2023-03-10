@@ -1,26 +1,12 @@
 #!/bin/sh -eux
 
-cd jre/lib/desktop/applications
+mkdir -p ${UB_INSTALLDIR}/usr/lib/java
 
-patch -i "$UB_SRCDIR"/patches/01desktop.patch.skip
-cd ../../../plugin/desktop
-patch -i "$UB_SRCDIR"/patches/02desktop.patch.skip
-cd ../../..
+cd ${UB_COMPILEDIR}/build/linux-x86_64-server-release/images
 
-mkdir -p "$UB_INSTALLDIR"/usr/lib/java
-cp -ar jre "$UB_INSTALLDIR"/usr/lib/java/
+mv jre ${UB_INSTALLDIR}/usr/lib/java/
 
-# avoid man page conflict with other packages
-for i in $(find "$UB_INSTALLDIR"/usr/share/man -type f); do
-	mv "$i" "$i"java
-done
+find ${UB_INSTALLDIR}/usr -iname '*.debuginfo' -delete
+find ${UB_INSTALLDIR}/usr -iname '*.so' -exec chmod +x {} \;
 
-# desktop
-mv "$UB_INSTALLDIR"/usr/lib/java/jre/lib/desktop/{applications,icons,mime} "$UB_INSTALLDIR"/usr/share/
-rm -Rf "$UB_INSTALLDIR"/usr/lib/java/jre/lib/desktop
-
-# fix permissions
-chmod -R a+rX,u+w,go-w "$UB_INSTALLDIR"
-
-# ffmpeg < 3
-rm -f "$UB_INSTALLDIR"/usr/lib/java/jre/lib/"$UB_ARCH"/libavplugin-*.so
+ln -s ${UB_INSTALLDIR}/usr/lib/java/jre/bin/java ${UB_INSTALLDIR}/usr/bin/java
