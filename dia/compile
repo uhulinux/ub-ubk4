@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-iconv -f WINDOWS-1252 -t UTF8 doc/en/usage-layers.xml > usage-layers.xml.UTF-8
-mv usage-layers.xml.UTF-8 doc/en/usage-layers.xml
-ub_compile \
-	--disable-gnome \
-	--enable-db2html
