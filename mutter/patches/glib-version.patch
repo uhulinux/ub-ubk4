@@ -1,0 +1,101 @@
+diff -Naur a/cogl/cogl/cogl-dma-buf-handle.c b/cogl/cogl/cogl-dma-buf-handle.c
+--- a/cogl/cogl/cogl-dma-buf-handle.c	2023-03-19 11:55:05.000000000 +0100
++++ b/cogl/cogl/cogl-dma-buf-handle.c	2023-03-19 20:44:50.517974450 +0100
+@@ -36,7 +36,6 @@
+ 
+ #include <errno.h>
+ #include <gio/gio.h>
+-#include <glib/gstdio.h>
+ #include <linux/dma-buf.h>
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
+@@ -96,7 +95,8 @@
+   if (dmabuf_handle->destroy_func)
+     g_clear_pointer (&dmabuf_handle->user_data, dmabuf_handle->destroy_func);
+ 
+-  g_clear_fd (&dmabuf_handle->dmabuf_fd, NULL);
++  if (dmabuf_handle->dmabuf_fd != -1)
++    close (dmabuf_handle->dmabuf_fd);
+ 
+   g_free (dmabuf_handle);
+ }
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2023-03-19 11:55:05.000000000 +0100
++++ b/meson.build	2023-03-19 20:37:08.744799564 +0100
+@@ -16,7 +16,7 @@
+ lcms2_req = '>= 2.6'
+ colord_req = '>= 1.4.5'
+ fribidi_req = '>= 1.0.0'
+-glib_req = '>= 2.75.1'
++glib_req = '>= 2.74.1'
+ gi_req = '>= 0.9.5'
+ graphene_req = '>= 1.10.2'
+ gtk3_req = '>= 3.19.8'
+diff -Naur a/src/backends/native/meta-drm-buffer-dumb.c b/src/backends/native/meta-drm-buffer-dumb.c
+--- a/src/backends/native/meta-drm-buffer-dumb.c	2023-03-19 11:55:05.000000000 +0100
++++ b/src/backends/native/meta-drm-buffer-dumb.c	2023-03-19 20:44:50.521974459 +0100
+@@ -27,7 +27,6 @@
+ 
+ #include <drm_fourcc.h>
+ #include <gio/gio.h>
+-#include <glib/gstdio.h>
+ #include <xf86drm.h>
+ #include <fcntl.h>
+ #include <sys/mman.h>
+@@ -344,7 +343,8 @@
+   };
+   drmIoctl (fd, DRM_IOCTL_MODE_DESTROY_DUMB, &destroy_arg);
+ 
+-  g_clear_fd (&buffer_dumb->dmabuf_fd, NULL);
++  if (buffer_dumb->dmabuf_fd != -1)
++    close (buffer_dumb->dmabuf_fd);
+ }
+ 
+ static void
+diff -Naur a/src/wayland/meta-wayland-dma-buf.c b/src/wayland/meta-wayland-dma-buf.c
+--- a/src/wayland/meta-wayland-dma-buf.c	2023-03-19 11:55:05.000000000 +0100
++++ b/src/wayland/meta-wayland-dma-buf.c	2023-03-19 20:44:50.521974459 +0100
+@@ -40,7 +40,6 @@
+ #include "wayland/meta-wayland-dma-buf.h"
+ 
+ #include <drm_fourcc.h>
+-#include <glib/gstdio.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+@@ -1790,7 +1789,10 @@
+   int i;
+ 
+   for (i = 0; i < META_WAYLAND_DMA_BUF_MAX_FDS; i++)
+-    g_clear_fd (&dma_buf->fds[i], NULL);
++    {
++      if (dma_buf->fds[i] != -1)
++        close (dma_buf->fds[i]);
++    }
+ 
+   G_OBJECT_CLASS (meta_wayland_dma_buf_buffer_parent_class)->finalize (object);
+ }
+diff -Naur a/src/wayland/meta-xwayland.c b/src/wayland/meta-xwayland.c
+--- a/src/wayland/meta-xwayland.c	2023-03-19 11:55:05.000000000 +0100
++++ b/src/wayland/meta-xwayland.c	2023-03-19 20:44:50.521974459 +0100
+@@ -29,7 +29,6 @@
+ #include <errno.h>
+ #include <glib-unix.h>
+ #include <glib.h>
+-#include <glib/gstdio.h>
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+@@ -250,7 +249,11 @@
+       g_free (filename);
+       filename = NULL;
+ 
+-      g_clear_fd (&fd, NULL);
++      if (fd >= 0)
++        {
++          close (fd);
++          fd = -1;
++        }
+     }
+ 
+   *filename_out = filename;
