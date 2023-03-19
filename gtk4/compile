@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
-rm -f subprojects/{gtk-doc,libsass,sassc}.wrap
+# rm -f subprojects/{gtk-doc,libsass,sassc}.wrap
+rm -f subprojects/gtk-doc.wrap
 
 ub_compile \
     -Dx11-backend=true \
@@ -12,6 +13,7 @@ ub_compile \
 	-Dgtk_doc=false \
 	-Dman-pages=false \
 	-Ddemos=true \
+	-Dintrospection=enabled \
 	-Dbuild-examples=false \
 	-Dbuild-tests=false \
-	-Dinstall-tests=false
+	-Dbuild-testsuite=false
