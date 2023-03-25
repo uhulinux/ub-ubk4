@@ -1,7 +1,7 @@
 diff -Naur a/CMakeLists.txt b/CMakeLists.txt
---- a/CMakeLists.txt	2022-12-18 03:20:21.000000000 +0100
-+++ b/CMakeLists.txt	2022-12-18 20:25:11.840689379 +0100
-@@ -665,7 +665,7 @@
+--- a/CMakeLists.txt	2023-03-11 23:58:01.000000000 +0100
++++ b/CMakeLists.txt	2023-03-20 23:25:05.748064361 +0100
+@@ -675,7 +675,7 @@
  )
  
  
@@ -10,7 +10,7 @@ diff -Naur a/CMakeLists.txt b/CMakeLists.txt
  
  # ############################################################
  
-@@ -803,19 +803,6 @@
+@@ -823,19 +823,6 @@
  # it contains post-install actions to execute.
  add_subdirectory(cmake)
  
@@ -18,7 +18,7 @@ diff -Naur a/CMakeLists.txt b/CMakeLists.txt
 -
 -if (BUILDING_FROM_VCS)
 -    add_custom_target(ChangeLog ALL
--        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2022-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+-        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2023-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
 -        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 -    )
 -    install(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
