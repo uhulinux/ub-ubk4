@@ -1,6 +1,8 @@
 #!/usr/bin/env dl
 
-# http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+jdk-${UB_VERSION}.tar.gz jdk17u-jdk-${UB_VERSION/+/-}/
+	https://github.com/openjdk/jdk17u/archive/refs/tags/
 
-jdk-${UB_VERSION/.0./u}-linux-x64.tar.gz jdk1.${UB_VERSION/.0./.0_}/
-	http://download.ubk.hu/src/java/
+# https://jdk.java.net/archive/
+openjdk-17.0.2_linux-x64_bin.tar.gz	jdk-17.0.2/ :bootjdk
+    https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz

@@ -6,11 +6,8 @@ fi
 
 ub_compile \
     -DCMAKE_INSTALL_LIBDIR=/usr/lib \
-    -DCMAKE_INSTALL_SYSCONFDIR=/usr/etc \
+    -DCMAKE_INSTALL_FULL_SYSCONFDIR=/etc \
     -DWITH_AQBANKING=OFF \
 	-DWITH_PYTHON=ON \
     -DCOMPILE_GSCHEMAS=OFF \
     -DGTEST_ROOT=gtest
-
-cd gnucash-docs
-ub_compile

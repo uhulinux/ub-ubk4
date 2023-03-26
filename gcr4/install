@@ -1,0 +1,6 @@
+#!/bin/sh -eux
+
+ub_install
+
+# we have to delete this file because uhubuild does not like the paths in Exec line
+rm -rf "$UB_INSTALLDIR"/usr/share/applications/gcr-prompter.desktop

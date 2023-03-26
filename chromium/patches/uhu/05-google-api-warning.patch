@@ -1,6 +1,6 @@
 diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/startup/infobar_utils.cc
---- a/chrome/browser/ui/startup/infobar_utils.cc	2023-02-01 19:43:13.328595600 +0100
-+++ b/chrome/browser/ui/startup/infobar_utils.cc	2023-02-10 23:42:23.262949183 +0100
+--- a/chrome/browser/ui/startup/infobar_utils.cc	2023-03-07 22:58:39.456540600 +0100
++++ b/chrome/browser/ui/startup/infobar_utils.cc	2023-03-11 19:44:21.844349906 +0100
 @@ -16,7 +16,6 @@
  #include "chrome/browser/ui/startup/automation_infobar_delegate.h"
  #include "chrome/browser/ui/startup/bad_flags_prompt.h"
@@ -15,11 +15,11 @@ diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/star
  #include "content/public/common/content_switches.h"
 -#include "google_apis/google_api_keys.h"
  
- #if BUILDFLAG(GOOGLE_CHROME_FOR_TESTING_BRANDING)
+ #if BUILDFLAG(CHROME_FOR_TESTING)
  #include "chrome/browser/ui/startup/chrome_for_testing_infobar_delegate.h"
-@@ -125,9 +123,6 @@
-     if (show_bad_flags_security_warnings)
-       chrome::ShowBadFlagsPrompt(web_contents);
+@@ -133,9 +131,6 @@
+     infobars::ContentInfoBarManager* infobar_manager =
+         infobars::ContentInfoBarManager::FromWebContents(web_contents);
  
 -    if (!google_apis::HasAPIKeyConfigured())
 -      GoogleApiKeysInfoBarDelegate::Create(infobar_manager);

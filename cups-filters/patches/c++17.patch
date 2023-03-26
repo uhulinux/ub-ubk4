@@ -1,0 +1,15 @@
+diff -Naur a/filter/pdftoraster.cxx b/filter/pdftoraster.cxx
+--- a/filter/pdftoraster.cxx	2022-08-24 14:39:01.000000000 +0200
++++ b/filter/pdftoraster.cxx	2023-03-20 23:11:19.225130392 +0100
+@@ -2148,7 +2148,11 @@
+ /* For compatibility with g++ >= 4.7 compilers _GLIBCXX_THROW
+  *  should be used as a guard, otherwise use traditional definition */
+ #ifndef _GLIBCXX_THROW
++#if __cplusplus < 201703L
+ #define _GLIBCXX_THROW throw
++#else
++#define _GLIBCXX_THROW(x) noexcept(false)
++#endif
+ #endif
+ 
+ void * operator new(size_t size) _GLIBCXX_THROW (std::bad_alloc)

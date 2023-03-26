@@ -5,9 +5,4 @@ make \
 	MANDIR=/usr/share/man \
 	install
 
-rm "$UB_INSTALLDIR"/usr/share/man/man1/passwd.1
-rm "$UB_INSTALLDIR"/usr/share/man/man1/rand.1
-#rm "$UB_INSTALLDIR"/usr/share/man/man3/err.3
-#rm "$UB_INSTALLDIR"/usr/share/man/man3/rand.3
-
 find "$UB_INSTALLDIR"/usr/lib -print0 | xargs -r0 chmod u+w

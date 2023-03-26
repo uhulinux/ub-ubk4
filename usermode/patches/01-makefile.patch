@@ -1,16 +1,24 @@
-diff -Nur orig/Makefile.am mod/Makefile.am
---- orig/Makefile.am	2018-02-22 16:58:15.000000000 +0100
-+++ mod/Makefile.am	2018-06-05 12:50:52.570846916 +0200
-@@ -35,12 +35,6 @@
- noinst_LIBRARIES = liblib.a
- 
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2021-05-04 19:26:03.000000000 +0200
++++ b/Makefile.am	2023-03-15 21:44:02.958078210 +0100
+@@ -47,7 +47,7 @@
  install-data-local: userinfo.desktop usermount.desktop userpasswd.desktop
--	mkdir -p $(DESTDIR)$(datadir)/applications
--	for i in userinfo.desktop usermount.desktop userpasswd.desktop; do \
+ 	mkdir -p $(DESTDIR)$(datadir)/applications
+ 	for i in userinfo.desktop usermount.desktop userpasswd.desktop; do \
 -		desktop-file-install --vendor=$(VENDOR)			   \
--			--dir=$(DESTDIR)$(datadir)/applications		   \
--			$(top_builddir)/$$i;				   \
--	done
- 
- uninstall-local:
- 	-rm -f $(DESTDIR)$(datadir)/applications/$(VENDOR)-userinfo.desktop   \
++		desktop-file-install 			   \
+ 			--dir=$(DESTDIR)$(datadir)/applications		   \
+ 			$(top_builddir)/$$i;				   \
+ 	done
+diff -Naur a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2021-05-04 23:30:46.000000000 +0200
++++ b/Makefile.in	2023-03-15 21:44:41.354176746 +0100
+@@ -1531,7 +1531,7 @@
+ @GTK_TRUE@install-data-local: userinfo.desktop usermount.desktop userpasswd.desktop
+ @GTK_TRUE@	mkdir -p $(DESTDIR)$(datadir)/applications
+ @GTK_TRUE@	for i in userinfo.desktop usermount.desktop userpasswd.desktop; do \
+-@GTK_TRUE@		desktop-file-install --vendor=$(VENDOR)			   \
++@GTK_TRUE@		desktop-file-install 			   \
+ @GTK_TRUE@			--dir=$(DESTDIR)$(datadir)/applications		   \
+ @GTK_TRUE@			$(top_builddir)/$$i;				   \
+ @GTK_TRUE@	done
