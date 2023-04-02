@@ -7,28 +7,32 @@ opts=" \
     --mandir=/usr/share/man \
     --infodir=/usr/share/info \
     --disable-silent-rules \
-    --enable-device-mapper \
-    --enable-grub-mkfont \
-    --enable-nls \
-    --enable-grub-mount
-    --with-grubdir=grub \
     --disable-werror \
-	--build=x86_64-unknown-linux-gnu \
-	--host=x86_64-unknown-linux-gnu \
+    --enable-cache-stats \
+    --enable-device-mapper \
+    --enable-nls \
+    --enable-grub-mkfont \
+    --enable-grub-mount \
+    --with-bootdir="/boot" \
+    --with-grubdir=grub \
  "
 
 export FREETYPE="pkg-config freetype2"
 export BUILD_FREETYPE="pkg-config freetype2"
 export GRUB_CONTRIB=grub-extras
 
-cp unifont-14.0.04.bdf grub/unifont.bdf
+cp unifont-15.0.01.bdf grub/unifont.bdf
 
 cp -r grub grub-bios
 cp -r grub grub-efi
 cp -r grub-extras grub-bios/
 
 cd grub-bios
+if [ -d .git ]; then
+./bootstrap
+else
 ./autogen.sh
+fi
 ./configure \
 	$opts \
 	--enable-efiemu \
@@ -38,7 +42,11 @@ cd grub-bios
 make -j2
 
 cd ../grub-efi
+if [ -d .git ]; then
+./bootstrap
+else
 ./autogen.sh
+fi
 ./configure \
 	$opts \
 	--disable-efiemu \
@@ -48,7 +56,11 @@ cd ../grub-efi
 make -j2
 
 cd ../grub
+if [ -d .git ]; then
+./bootstrap
+else
 ./autogen.sh
+fi
 ./configure \
 	$opts \
 	--enable-grub-emu-usb=no \

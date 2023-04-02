@@ -1,11 +1,6 @@
 #!/bin/sh -eux
 
-#scons install DESTDIR="${UB_INSTALLDIR}/sbin"
 ub_install
 
-install -m 644 dump/dumpexfat.8 "${UB_INSTALLDIR}/usr/share/man/man8/"
-install -m 644 fsck/exfatfsck.8 "${UB_INSTALLDIR}/usr/share/man/man8/"
-ln -s exfatfsck.8 "${UB_INSTALLDIR}/usr/share/man/man8/fsck.exfat.8"
-install -m 644 label/exfatlabel.8 "${UB_INSTALLDIR}/usr/share/man/man8/"
-install -m 644 mkfs/mkexfatfs.8 "${UB_INSTALLDIR}/usr/share/man/man8/"
-ln -s mkexfatfs.8 "${UB_INSTALLDIR}/usr/share/man/man8/mkfs.exfat.8"
+# for kpmcore
+ln -s mkfs.exfat ${UB_INSTALLDIR}/usr/sbin/mkexfatfs

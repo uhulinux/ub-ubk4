@@ -3,47 +3,11 @@
 ub_install
 
 # https://github.com/calamares/calamares/commit/8f72d2541f241ef5a1f4bc945bdc908e7dbe9fdd
-modules=(
-bootloader
-chrootcfg
-displaymanager
-dracut
-finished
-fsresizer
-fstab
-grubcfg
-hwclock
-initcpio
-initramfs
-interactiveterminal
-keyboard
-locale
-localecfg
-machineid
-mount
-netinstall
-networkcfg
-packagechooser
-packages
-partition
-rawfs
-removeuser
-summary
-umount
-unpackfs
-users
-usersq
-welcome
-)
-
 mkdir -p $UB_INSTALLDIR/usr/share/calamares/modules
-for module in ${modules[@]}; do
-if [ -f src/modules/$module/$module.conf ]; then
-    cp src/modules/$module/$module.conf $UB_INSTALLDIR/usr/share/calamares/modules/$module.conf
-fi
-done
 
+find $UB_COMPILEDIR/build/src/modules -name "*.conf" -exec cp {} $UB_INSTALLDIR/usr/share/calamares/modules \;
 cp settings.conf $UB_INSTALLDIR/usr/share/calamares/settings.conf
+
 cp $UB_INSTALLDIR/usr/share/calamares/settings.conf $UB_INSTALLDIR/usr/share/calamares/settings.conf.net
 cp $UB_INSTALLDIR/usr/share/calamares/modules/welcome.conf $UB_INSTALLDIR/usr/share/calamares/modules/welcome.conf.net
 cp $UB_INSTALLDIR/usr/share/calamares/modules/packages.conf $UB_INSTALLDIR/usr/share/calamares/modules/packages.conf.net

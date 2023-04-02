@@ -4,6 +4,7 @@ make configure
 ub_configure \
     --sbindir=/usr/sbin \
 	--enable-readline \
-	--enable-static
+	--enable-static \
+	--disable-lib64
 
-ub_make PKG_ROOT_SBIN_DIR="/usr/bin" PKG_ROOT_LIB_DIR="/usr/lib"
+ub_make PKG_ROOT_SBIN_DIR="/usr/bin" PKG_ROOT_LIB_DIR="/usr/lib" PKG_USER=root PKG_GROUP=root

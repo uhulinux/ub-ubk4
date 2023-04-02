@@ -5,3 +5,11 @@ ub_install install_system_dirs
 ub_install install_systemd_units
 ub_install install_systemd_generators
 ub_install install_tmpfiles_configuration
+
+mkdir -p ${UB_INSTALLDIR}/usr/lib/systemd/system/sockets.target.wants
+mkdir -p ${UB_INSTALLDIR}/usr/lib/systemd/system/sysinit.target.wants
+
+ln -sf ../dm-event.socket ${UB_INSTALLDIR}/usr/lib/systemd/system/sockets.target.wants/dm-event.socket
+ln -sf ../lvm2-lvmpolld.socket ${UB_INSTALLDIR}/usr/lib/systemd/system/sysinit.target.wants/lvm2-lvmpolld.socket
+ln -sf ../lvm2-monitor.service ${UB_INSTALLDIR}/usr/lib/systemd/system/sysinit.target.wants/lvm2-monitor.service
+ln -sf ../blk-availability.service ${UB_INSTALLDIR}/usr/lib/systemd/system/sysinit.target.wants/blk-availability.service
