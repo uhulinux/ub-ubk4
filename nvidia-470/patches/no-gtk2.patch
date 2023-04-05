@@ -1,20 +1,24 @@
-diff -Nur orig/settings/src/Makefile mod/settings/src/Makefile
---- orig/settings/src/Makefile	2021-07-20 19:35:01.000000000 +0200
-+++ mod/settings/src/Makefile	2021-11-05 17:54:54.630774395 +0100
-@@ -130,7 +130,6 @@
+diff -Naur a/settings/src/Makefile b/settings/src/Makefile
+--- a/settings/src/Makefile	2023-02-24 04:51:35.000000000 +0100
++++ b/settings/src/Makefile	2023-04-05 21:06:49.329756825 +0200
+@@ -255,18 +255,14 @@
  
- GTK2LIB_NAME = libnvidia-gtk2.so
- GTK2LIB_DIR  = $(OUTPUTDIR)/gtk2
--GTK2LIB = $(OUTPUTDIR)/$(GTK2LIB_NAME)
- GTK2LIB_SONAME = $(GTK2LIB_NAME).$(NVIDIA_SETTINGS_VERSION)
+ .PHONY: all install NVIDIA_SETTINGS_install clean clobber
  
- ifdef BUILD_GTK3LIB
-@@ -274,8 +273,6 @@
+-all: $(NVIDIA_SETTINGS) $(GTK2LIB) $(GTK3LIB)
++all: $(NVIDIA_SETTINGS) $(GTK3LIB)
  
- NVIDIA_GTKLIB_install: $(GTK2LIB) $(GTK3LIB)
+ install: NVIDIA_SETTINGS_install NVIDIA_GTKLIB_install
+ 
+-NVIDIA_GTKLIB_install: $(GTK2LIB) $(GTK3LIB)
++NVIDIA_GTKLIB_install: $(GTK3LIB)
  	$(MKDIR) $(LIBDIR)
 -	$(INSTALL) $(INSTALL_LIB_ARGS) $(GTK2LIB) \
 -	    $(LIBDIR)/$(GTK2LIB_SONAME)
- ifdef BUILD_GTK3LIB
+-ifdef BUILD_GTK3LIB
  	$(INSTALL) $(INSTALL_LIB_ARGS) $(GTK3LIB) \
  	    $(LIBDIR)/$(GTK3LIB_SONAME)
+-endif
+ 
+ NVIDIA_SETTINGS_install: $(NVIDIA_SETTINGS)
+ 	$(MKDIR) $(BINDIR)

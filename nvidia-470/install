@@ -59,9 +59,6 @@ alprogi persistenced
 mv	settings/doc/nvidia-settings.desktop "$desktopdir"/
 mv	settings/doc/nvidia-settings.png "$pixmapdir"/
 
-# felesleges gtk libek
-rm libnvidia-gtk*
-
 #kernelmodulok
 cp kernel/*.ko "$moduldir"/
 
@@ -106,7 +103,7 @@ mv *.so.* "$cellibdir"/
 # glvnd
 mv 10_nvidia.json "$glvnddir"/
 
-# wailand, vulcan
+# wayland, vulcan
 mv 10_nvidia_wayland.json $egldir/
 mv nvidia_icd.json $vulcandir/
 mv nvidia_layers.json $vulcanlayerdir/
@@ -121,8 +118,8 @@ mv nvidia-application-profiles-* $profilesdir/
 
 # firmware
 mv firmware/gsp.bin $firmwaredir
-#libxnvctrl
 
+#libxnvctrl
 cd settings/src/libXNVCtrl
 mkdir -p "${UB_INSTALLDIR}"/usr/{include/NVCtrl,lib/pkgconfig}
 cp nv_control.h NVCtrl{,Lib}.h "${UB_INSTALLDIR}"/usr/include/NVCtrl/
@@ -143,9 +140,12 @@ EOF
 
 sed -i -e "s/%version%/$UB_VERSION/" "${UB_INSTALLDIR}"/usr/lib/pkgconfig/libXNVCtrl.pc
 
-#linkgyártások
 cd "$cellibdir"
 
+# no gtk2 (nvidia-settings)
+rm -f libnvidia-gtk2*
+
+#linkgyártások
 for i in `ls -1 libnv*`;do
 lib=$(echo $i | sed s/\.${UB_VERSION}//g)
 solink=$(echo $lib | sed s/so\..*/so/)
