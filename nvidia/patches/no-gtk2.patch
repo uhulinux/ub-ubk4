@@ -1,0 +1,12 @@
+diff -Naur a/settings/src/Makefile b/settings/src/Makefile
+--- a/settings/src/Makefile	2023-03-16 21:27:30.000000000 +0100
++++ b/settings/src/Makefile	2023-04-05 20:46:09.178185542 +0200
+@@ -51,7 +51,7 @@
+ endif
+ 
+ ifndef GTK2_AVAILABLE
+-  GTK2_AVAILABLE := $(shell $(PKG_CONFIG) --exists gtk+-2.0 && echo 1)
++  GTK2_AVAILABLE := $(shell $(PKG_CONFIG) --exists gtk+-2.0 && echo 0)
+ endif
+ 
+ ifeq (1,$(GTK2_AVAILABLE))
