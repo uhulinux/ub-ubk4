@@ -1,0 +1,37 @@
+From d486706f3e9f7eefa4d44cd5ace34eeaf7ba2ceb Mon Sep 17 00:00:00 2001
+From: Alexander Kernozhitsky <sh200105@mail.ru>
+Date: Thu, 21 Mar 2019 23:10:54 +0100
+Subject: [PATCH] Prevent crashing Apper on
+ PackageModel::clearSelectedNotPresent()
+
+Summary:
+m_checkedPackages.erase() is called, but the iterator is not increased, therefore on the next iteration we use an invalid iterator
+
+BUG: 405433
+BUG: 401461
+BUG: 402170
+
+Test Plan: I just rebuilt Apper, ran it and installed the updates with it. The bug does not appear.
+
+Reviewers: dantti, apol
+
+Reviewed By: dantti
+
+Differential Revision: https://phabricator.kde.org/D19951
+---
+ libapper/PackageModel.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libapper/PackageModel.cpp b/libapper/PackageModel.cpp
+index 1ff2a04e..ac058585 100644
+--- a/libapper/PackageModel.cpp
++++ b/libapper/PackageModel.cpp
+@@ -491,7 +491,7 @@ void PackageModel::clearSelectedNotPresent()
+ 
+         if (notFound) {
+             // Uncheck the package If it's not in the model
+-            m_checkedPackages.erase(it);
++            it = m_checkedPackages.erase(it);
+             uncheckPackageLogic(package.packageID);
+         } else {
+             ++it;
