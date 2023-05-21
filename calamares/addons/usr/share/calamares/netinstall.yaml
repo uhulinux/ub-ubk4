@@ -1,836 +1,659 @@
-- name: "Base vegyes"
-  description: "Base vegyes"
+- name: "Alaprendszer"
+  description: "Az UBK alaprendszer csomagjai amelyek nélkülözhetetlenek"
   critical: false
-  selected: false
-  packages:
-    - qt5
-    - gtk3
-
+  selected: true
+  immutable: true
   subgroups:
-    -   name: "Konsole"
-        description: "Konsole vegyes"
-        critical: false
-        selected: false
-        packages:
-        - antiword
-        - bchunk
-        - open-iscsi
-        - pv
-        - ytalk
-
-- name: "Base unsorted"
-  description: "Base unsorted"
-  critical: false
-  selected: true
-  subgroups:
-
-    -   name: "Artwork"
-        description: "Base artwork"
+    -   name: "Fájlrendszer"
+        description: "Fájlrendszer specifikus csomagok"
         critical: false
         selected: true
+        immutable: true
         packages:
-        - fonts-unicode
-
-    -   name: "tools"
-        description: "Base tools"
+          - gvfs
+          - nfs-utils
+          - exfat-utils
+          - fuse-smbnetfs
+          - fuse-sshfs
+    -   name: "Hálózat"
+        description: "Hálózati kapcsolat kiépítéséhez szükséges csomagok"
         critical: false
         selected: true
+        immutable: true
         packages:
-        - xbindkeys
-        - xdg-user-dirs-gtk
-
-    -   name: "Filesystems"
-        description: "Base filesystems"
+          - networkmanager-openvpn
+          - networkmanager-pptp
+          - bluez
+          - bluez-hcidump
+          - wvdial
+          - usb-modeswitch
+    -   name: "Nyomtatók és szkennerek"
+        description: "Nyomtatáshoz és szkenneléshez szükséges csomagok"
         critical: false
         selected: true
+        immutable: true
         packages:
-        - gparted
-        - gptfdisk
-        - gvfs
-        - nfs-utils
-        - nrg2iso
-        - smartmontools
-
-    -   name: "systemtools"
-        description: "Base systemtools"
+          - exif
+          - xsane
+          - imagemagick
+          - jpeg-turbo-tools
+          - sane-frontends
+          - simple-scan
+          - foomatic-db
+          - foomatic-db-engine
+          - gutenprint
+          - ghostscript
+          - hplip
+          - system-config-printer
+    -   name: "Csomagkezelés"
+        description: "Csomagkezeléshez szükséges csomagok"
         critical: false
         selected: true
+        immutable: true
         packages:
-        - numlockx
-        - pcmciautils
-        - sysklogd
-
-    -   name: "internet + connections"
-        description: "Base internet + connections"
+          - dselect
+          - synaptic
+          - gtk-stock-icons
+    -   name: "Elengedheteten egyéb rendszereszközök"
+        description: "Elengedhetetlen rendszereszközök kategorizálatlanul"
         critical: false
         selected: true
+        immutable: true
         packages:
-        - curlftpfs
-        - bluez
-        - bluez-hcidump
-        - apache
-        - fuse-smbnetfs
-        - fuse-sshfs
-        - tigervnc
-        - networkmanager-openvpn
-        - networkmanager-pptp
-        - nmap
-        - opensshd
-        - openvpn
-        - rdesktop
-        - wvdial
-        - usb-modeswitch
-        - x11vnc
-
-- name: "Graphics"
-  description: "Graphics"
-  critical: false
-  selected: true
-  packages:
-    - exif
-    - xsane
-    - gimp3
-    - imagemagick
-    - jpeg-turbo-tools
-    - gphoto2
-    - sane-frontends
-    - simple-scan
-
-- name: "Printing"
-  description: "Printing"
-  critical: false
-  selected: true
-  packages:
-    - foomatic-db
-    - foomatic-db-engine
-    - gutenprint
-    - ghostscript
-    - hplip
-    - system-config-printer
-
-- name: "Package managers"
-  description: "Package managers"
-  critical: false
-  selected: true
-  packages:
-    - dselect
-    - synaptic
-    - gtk-stock-icons
-
-- name: "X-org base"
-  description: "X-org base"
-  critical: false
-  selected: true
-  subgroups:
-
-    -   name: "X-org base"
-        description: "X-org base"
+          - fonts-unicode
+          - xbindkeys
+          - xdg-user-dirs-gtk
+          - xdgmenumaker
+          - numlockx
+          - pcmciautils
+          - sysklogd
+          - nano
+    -   name: "X szerver"
+        description: "Elengedhetetlen csomagok grafikus környezetekhez"
         critical: false
         selected: true
+        immutable: true
         packages:
-        - x.org-server
-        - xinit
-        - libxv
-        - xauth
-        subgroups:
-
-        -   name: "X-org fonts, themes"
-            description: "X-org base fonts, themes"
-            critical: false
-            selected: true
-            packages:
-            - fonts-x.org-base
-            - fonts-x.org-iso-10646
-            - fonts-x.org-iso-8859-1
-            - fonts-x.org-other
-            - fonts-x.org-ttf
-            - fonts-x.org-type1
-            - cursor-theme-x.org
-            - x.org-bitmaps
-
-        -   name: "X-org inputs"
-            description: "X-org input drivers"
-            critical: false
-            selected: true
-            packages:
-            - x.org-input-evdev
-            - x.org-input-synaptics
-            - libevdev
-            - mtdev
-
-        -   name: "X-org video drivers"
-            description: "X-org base video drivers"
-            critical: false
-            selected: true
-            packages:
-            - x.org-video-amdgpu
-            - x.org-video-i810
-            - x.org-video-vesa
-            - x.org-video-openchrome
-
-        -   name: "X-org base utils"
-            description: "X-org base base utils"
-            critical: false
-            selected: true
-            packages:
-            - x.org-font-utils
-            - x.org-utils
-            - xcb-util
-            - xcb-util-image
-            - xcb-util-keysyms
-            - xcb-util-renderutil
-            - xcb-util-wm
-            - xkb-utils
-            - xkeyboard-config
-
-        -   name: "X-org base apps"
-            description: "X-org base base applications"
-            critical: false
-            selected: true
-            packages:
-            - xterm
-
-    -   name: "Xorg old drivers"
-        description: "Xorg old drivers"
-        critical: false
-        selected: false
-        packages:
-        - x.org-input-vmmouse
-        - x.org-input-void
-        - x.org-video-dummy
-        - x.org-video-fbdev
-        - x.org-video-sisusb
-        - x.org-video-voodoo
-
-- name: "Window managers"
-  description: "Simple window managers"
+          - x.org-server
+          - xinit
+          - libxv
+          - xauth
+          - fonts-x.org-base
+          - fonts-x.org-iso-10646
+          - fonts-x.org-iso-8859-1
+          - fonts-x.org-other
+          - fonts-x.org-ttf
+          - fonts-x.org-type1
+          - cursor-theme-x.org
+          - x.org-bitmaps
+          - x.org-input-evdev
+          - x.org-input-synaptics
+          - libevdev
+          - mtdev
+          - x.org-video-amdgpu
+          - x.org-video-i810
+          - x.org-video-vesa
+          - x.org-video-openchrome
+          - x.org-font-utils
+          - x.org-utils
+          - xcb-util
+          - xcb-util-image
+          - xcb-util-keysyms
+          - xcb-util-renderutil
+          - xcb-util-wm
+          - xkb-utils
+          - xkeyboard-config
+          - x.org-input-vmmouse
+          - x.org-input-void
+          - x.org-video-dummy
+          - x.org-video-fbdev
+          - x.org-video-sisusb
+          - x.org-video-voodoo
+- name: "Asztali környezet"
+  description: "Általánosan használt asztali környezetek"
   critical: false
   selected: false
   subgroups:
-
-    -   name: "Icewm"
-        description: "Icewm windowmanager"
-        critical: false
-        selected: false
-        subgroups:
-
-            -   name: "Icewm base"
-                description:    "Icewm base packages"
-                critical: false
-                selected: false
-                packages:
-                - icewm
-                - slim
-                - icon-theme-gnome
-
-            -   name: "Icewm-themes"
-                description: "Icewm extra themes"
-                critical: false
-                selected: false
-                packages:
-                - icewm-theme-silverxp
-                - icewm-theme-win95
-                - icewm-theme-winxp
-                - icewm-theme-winxp-new
-
-    -   name: "Openbox"
-        description: "Openbox windowmanager"
-        critical: false
-        selected: false
-        packages:
-        - openbox
-        - openbox-menu
-        - slim
-
-    -   name: "Fluxbox"
-        description: "Fluxbox windowmanager"
-        critical: false
-        selected: false
-        packages:
-        - fluxbox
-        - slim
-
-    -   name: "Pekwm"
-        description: "Pekwm windowmanager"
-        critical: false
-        selected: false
-        packages:
-        - pekwm
-        - pekwm-themes
-        - slim
-
-    -   name: "WindowMaker"
-        description: "Windowmaker windowmanager"
-        critical: false
-        selected: false
-        packages:
-        - windowmaker
-        - slim
-
-- name: "Light desktops"
-  description: "Simple desktops"
-  critical: false
-  selected: false
-  subgroups:
-
-    -   name: "Lumina"
-        description: "Lumina DE"
-        critical: false
-        selected: false
-        packages:
-        - lumina
-        - sddm
-
-    -   name: "Enlightenment"
-        description: "enlightenment DE"
-        critical: false
-        selected: false
-        packages:
-        - enlightenment
-        - slim
-
-    -   name: "LXDE"
-        description: "Lxde desktop"
-        critical: false
-        selected: false
-        subgroups:
-
-            -   name: "LXDE base"
-                description: "LXDE base packages"
-                critical: false
-                selected: false
-                packages:
-                -   lxde
-
-    -   name: "LXQT"
-        description: "Lxqt desktop"
-        critical: false
-        selected: false
-        subgroups:
-
-            -   name: "LXQT base"
-                description: "LXQT base packages"
-                critical: false
-                selected: false
-                packages:
-                - lxqt
-                - sddm
-
-- name: "Big Desktops"
-  description: "Desktop environments"
-  critical: false
-  selected: false
-  subgroups:
-
     -   name: "Mate"
-        description: "Mate desktop"
+        description: "Az UBK által alapértelmezésként szállított asztali környezet"
+        selected: true
         critical: false
-        selected: false
-        subgroups:
-
-            -   name: "MATE base"
-                description: "MATE base packages"
-                critical: false
-                selected: false
-                packages:
-                - mate
-                - lightdm
-                - lightdm-qt5-greeter
-                
-    -   name: "Xfce"
-        description: "Xfce desktop"
-        critical: false
-        selected: false
         packages:
-        - xfce
-        - atril
-        - lightdm
-        - lightdm-gtk-greeter
-
+          - mate
+          - lightdm
+          - lightdm-qt5-greeter
+    -   name: "XFCE"
+        description: "Az XFCE asztali környezet"
+        selected: false
+        critical: false
+        packages:
+          - xfce
+          - atril
+          - lightdm
+          - lightdm-gtk-greeter
     -   name: "KDE"
-        description: "KDE Plasma desktop"
-        critical: false
+        description: "Modern, Windows-szerű asztali környezet"
         selected: false
-        subgroups:
-
-            -   name: "Plasma base"
-                description: "Plasma base packages"
-                critical: false
-                selected: false
-                packages:
-                - kde
-                - sddm
-
-            -   name: "KDE apps"
-                description: "KDE applications"
-                critical: false
-                selected: false
-                packages:
-                - kde
-                - kde-apps
-                - sddm
-
-            -   name: "KDE apps-pim"
-                description: "KDE pim applications"
-                critical: false
-                selected: false
-                packages:
-                - kde
-                - sddm
-                - kde-apps-pim
-
-    -   name: "Budgie"
-        description: "Budgie desktop"
         critical: false
-        selected: false
         packages:
-        - budgie-desktop
-        - gnome-terminal
-        - gdm
-
+          - kde
+          - sddm
+          - kde-apps
+          - kde-apps-pim
     -   name: "Gnome"
-        description: "Gnome desktop"
+        description: "Gnome asztali környezet"
+        selected: false
         critical: false
+        packages:
+          - gnome-core
+          - gnome-apps
+          - gnomeradio
+          - gnome-extra
+          - gdm
+    -   name: "Budgie"
+        description: "Budgie asztali környezet"
+        selected: false
+        critical: false
+        packages:
+          - budgie-desktop
+          - gnome-terminal
+          - gdm
+    -   name: "Lumina"
+        description: "Lumina asztali környezet"
+        selected: false
+        critical: false
+        packages:
+          - lumina
+          - lumina-calculator
+          - lumina-pdf
+          - sddm
+    -   name: "Enlightenment"
+        description: "Enlightenment asztali környezet"
+        selected: false
+        critical: false
+        packages:
+          - enlightenment
+          - slim
+    -   name: "LXDE"
+        description: "LXDE asztali környezet"
+        selected: false
+        critical: false
+        packages:
+          - lxde
+          - sddm
+    -   name: "LXQt"
+        description: "LXQt asztali környezet"
+        selected: false
+        critical: false
+        packages:
+          - lxqt
+          - sddm
+- name: "Ablakkezelők"
+  description: "Ha minimalista asztali környezetet keresel"
+  selected: false
+  critical: false
+  subgroups:
+    -   name: "IceWM"
+        description: "IceWM ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - icewm
+          - slim
+          - icon-theme-gnome
+          - icewm-theme-silverxp
+          - icewm-theme-win95
+          - icewm-theme-winxp
+          - icewm-theme-winxp-new
+    -   name: "Openbox"
+        description: "Openbox ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - openbox
+          - openbox-menu
+          - slim
+    -   name: "Fluxbox"
+        description: "Fluxbox ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - fluxbox
+          - slim
+    -   name: "PekWM"
+        description: "PekWM ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - pekwm
+          - pekwm-themes
+          - slim
+    -   name: "WindowMaker"
+        description: "WindowMaker ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - windowmaker
+          - slim
+    -   name: "i3"
+        description: "i3 ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - i3-wm
+          - lightdm
+          - lightdm-gtk-greeter
+    -   name: "dwm"
+        description: "dwm ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - dwm
+          - slim
+    -   name: "fvwm"
+        description: "F ablakkezelő"
+        selected: false
+        critical: false
+        packages:
+          - fvwm
+          - fvwm-crystal
+          - slim
+    -   name: "Joe's Window Manager"
+        description: "Ablakkezelő elsősorban régebbi gépekhez"
+        selected: false
+        critical: false
+        packages:
+          - jwm
+          - jwm-settings-manager
+          - slim
+- name: "Iroda"
+  description: "Irodai szoftverek"
+  selected: false
+  critical: false
+  subgroups:
+    -   name: "LibreOffice"
+        description: "Népszerű, nyílt forráskódú MS Office klón"
+        selected: true
+        subgroups:
+          -   name: "lo-hid"
+              hidden: true
+              selected: true
+              packages:
+               - libreoffice
+    -   name: "ÁNYK (abevjava)"
+        description: "Általános nyomtatványkitöltő"
+        selected: true
+        subgroups:
+          -   name: "abev-hid"
+              hidden: true
+              selected: true
+              packages:
+               - abevjava
+    -   name: "Scribus"
+        description: "Kiadványszerkesztő"
         selected: false
         subgroups:
-
-            -   name: "Gnome full"
-                description: "Gnome full desktop"
-                critical: false
-                selected: false
-                packages:
-                - gnome
-
-            -   name: "Gnome core"
-                description: "Gnome base packages"
-                critical: false
-                selected: false
-                packages:
-                - gnome-core
-
-            -   name: "Gnome apps"
-                description: "Gnome applications"
-                critical: false
-                selected: false
-                packages:
-                - gnome-core
-                - gnome-apps
-                - gnomeradio
-
-            -   name: "Gnome extra"
-                description: "Games extra applications"
-                critical: false
-                selected: false
-                packages:
-                - gnome-core
-                - gnome-extra
-                - gnomeradio
-
-- name: "Display Managers"
-  description: "Graphical Display Managers"
-  critical: false
-  selected: false
-  subgroups:
-
-    -   name: "sddm"
-        description: "QT5 Display Manager"
-        critical: false
-        selected: false
-        packages:
-        - sddm
-        - sddm-config-editor
-
-    -   name: "lightdm"
-        description: "GTK Light Display Manager"
-        critical: false
-        selected: false
-        packages:
-        - lightdm
-        - lightdm-gtk-greeter
-        - lightdm-gtk-greeter-settings
-        - lightdm-qt5-greeter
-
-    -   name: "slim"
-        description: "GTK Simple Display Manager"
-        critical: false
-        selected: false
-        packages:
-        - slim
-        - slim-themes
-
-    -   name: "gdm"
-        description: "Gnome Display Manager"
-        critical: false
-        selected: false
-        packages:
-        - gdm
-
-- name: "Office"
-  description: "Office apps"
-  critical: false
-  selected: false
-  packages:
-    - libreoffice
-    - scribus
-    - abevjava
-    - abiword
-    - gnucash
-    - efax-gtk
-
--   name:   "Internet apps"
-    description:    "Internet appications"
-    critical:   false
-    selected:   false
-    subgroups:
-
-    -   name:   "Browsers"
-        description:    "Internet browsers"
-        critical:   false
-        selected:   false
-        packages:
-        -   firefox
-        -   opera
-        -   chromium
-        -   otter
-        -   falkon
-        -   epiphany
-
-    -   name:   "Email"
-        description:    "Internet mail"
-        critical:   false
-        selected:   false
-        packages:
-        -   thunderbird
-        -   balsa
-        -   claws-mail
-        -   kmail
-        -   evolution
-
-    -   name:   "File transfer"
-        description:    "File transfer"
-        critical:   false
-        selected:   false
-        packages:
-        -   gftp
-        -   filezilla
-
-    -   name:   "Other"
-        description:    "Other internet applications"
-        critical:   false
-        selected:   false
-        packages:
-        -   pidgin
-        -   seamonkey
-
-- name: "Multimedia"
-  description: "Multimedia apps"
-  critical: false
-  selected: false
-  subgroups:
-
-    -   name: "Video & audio players"
-        description: "Video & audio players"
-        critical: false
-        selected: false
-        packages:
-        - ffmpeg
-        - mplayer
-        - smplayer
-        - smtube
-        - vlc
-        - kaffeine
-        - kodi
-        - xine-ui
-
-    -   name: "Youtube players & downloaders"
-        description: "Youtube players & downloaders"
-        critical: false
-        selected: false
-        packages:
-        - minitube
-        - smtube
-        - youtube-dl
-
-    -   name: "Audio players"
-        description: "Audio players"
-        critical: false
-        selected: false
-        packages:
-        - playmidi
-        - exaile
-        - rhythmbox
-        - xmms2
-        - deadbeef
-        - aqualung
-        - audacious
-        - mpg123
-        - radiotray
-
-    -   name: "Editors"
-        description: "Video & audio editors"
-        critical: false
-        selected: false
-        packages:
-        - avidemux
-        - handbrake
-        - lives
-        - lmms
-        - canorus
-        - devede
-        - dvdstyler
-        - dvdauthor
-        - mkvtoolnix
-
-    -   name: "TV"
-        description: "Analog & DVB TV players"
-        critical: false
+          -   name: "scribus-hid"
+              hidden: true
+              selected: true
+              packages:
+               - scribus
+    -   name: "AbiWord"
+        description: "Grafikus szövegszerkesztő"
         selected: false
         subgroups:
-
-        -   name: "Analog TV player"
-            description: "Analog TV players"
-            critical: false
-            selected: false
-            packages:
-            - tvtime
-            - xawtv
-
-        -   name: "DVB"
-            description: "DVB players"
-            critical: false
-            selected: false
-            packages:
-            - kaffeine
-            subgroups:
-
-            -   name: "VDR"
-                description: "Video Disk Recorder"
-                critical: false
-                selected: false
-                subgroups:
-
-                -   name: "VDR base"
-                    description: "VDR base packages"
-                    critical: false
-                    selected: false
+          -   name: "aw-hid"
+              hidden: true
+              selected: true
+              packages:
+               - abiword
+    -   name: "GNUCash"
+        description: "Otthoni használatra szánt könyvelő program"
+        selected: false
+        subgroups:
+          -   name: "gcash-hid"
+              hidden: true
+              selected: true
+              packages:
+               - gnucash
+    -   name: "EFax-GTK"
+        description: "Grafikus felület az efax programhoz"
+        selected: false
+        subgroups:
+          -   name: "efaxgtk-hid"
+              hidden: true
+              selected: true
+              packages:
+               - efax-gtk
+- name: "Internet"
+  description: "Internet elérést, emailezést biztosító szoftverek"
+  subgroups:
+    -   name: "Böngészők"
+        description: "Webböngészők"
+        selected: false
+        critical: false
+        subgroups:
+          -   name: "Firefox"
+              selected: true
+              description: "Firefox webböngésző Mozilla alapokon"
+              subgroups:
+                -   name: "ff-hid"
+                    hidden: true
+                    selected: true
                     packages:
-                    - vdr
-
-                -   name: "VDR plugins"
-                    description: "VDR plugins"
-                    critical: false
-                    selected: false
+                      - firefox
+          -   name: "Opera"
+              selected: false
+              description: "Népszerű és gyors böngésző Chromium/WebKit alapokon"
+              subgroups:
+                -   name: "opera-hid"
+                    hidden: true
+                    selected: true
                     packages:
-                    - vdr-dvbapi
-                    - vdr-epgfixer
-                    - vdr-femon
-                    - vdr-live
-                    - vdr-osdteletext
-                    - vdr-plugin-chanman
-                    - vdr-plugin-channellists
-                    - vdr-plugin-sc
-                    - vdr-plugin-streamdev
-                    - vdr-plugin-zappilot
-                    - vdr-remote
-                    - vdr-screenshot
-                    - vdr-plugin-tvguide
-                    - vdr-plugin-tvguideng
-                    - vdr-xine
-                    - vdr-xineliboutput
-                    - kodi-addon-pvr-vnsi
-
-                -   name: "VDR tools"
-                    description: "VDR tools"
-                    critical: false
-                    selected: false
+                      - opera
+          -   name: "Chromium"
+              selected: false
+              description: "Népszerű és gyors böngésző "
+              subgroups:
+                -   name: "chrom-hid"
+                    hidden: true
+                    selected: true
                     packages:
-                    - w-scan
-                    - vdrctl
-                    - oscam
+                      - chromium
+          -   name: "Otter"
+              selected: false
+              description: "Qt5-ös webböngésző"
+              subgroups:
+                -   name: "otter-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - otter
+          -   name: "Falkon"
+              selected: false
+              description: "Qt5-ös webböngésző, a Qupzilla utódja"
+              subgroups:
+                -   name: "qup-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - falkon
+          -   name: "Seamonkey"
+              selected: false
+              description: "Teljeskörű internetes alkalmazáscsomag"
+              subgroups:
+                -   name: "seam-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - seamonkey
+    -   name: "Levelező- és üzenet küldő kliensek"
+        description: "E-mailezéshez és gyors üzenetezésre használt programok"
+        selected: false
+        critical: false
+        subgroups:
+          -   name: "Thunderbird"
+              selected: true
+              description: "Thunderbird e-mail kliens Mozilla alapokon"
+              subgroups:
+                -   name: "tb-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - thunderbird
+          -   name: "Balsa"
+              selected: false
+              description: "Könnyen kezelhető, szép felülettel és sok funkcióval rendelkező levelezőprogram"
+              subgroups:
+                -   name: "balsa-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - balsa
+          -   name: "Claws"
+              selected: false
+              description: "Nagy tudású levelező kliens"
+              subgroups:
+                -   name: "claws-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - claws-mail
+                      - claws-mail-plugin-bogofilter
+                      - claws-mail-plugin-spamreport
+                      - claws-mail-plugin-tnefparse
+                      - claws-mail-themes
+                      - claws-mail-tools
+          -   name: "Evolution"
+              selected: false
+              description: "Sokoldalú, grafikus e-mail kliens, sok kiegészítő funkcióval"
+              subgroups:
+                -   name: "evo-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - evolution
+                      - evolution-ews
+          -   name: "Pidgin"
+              selected: false
+              description: "Csevejkliens"
+              subgroups:
+                -   name: "pidgin-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - pidgin
+                      - pidgin-libnotify
+                      - skype4pidgin
 
-- name: "Editors"
-  description: "Editors"
-  critical: false
+    -   name: "FTP kliensek"
+        description: "Alkalmazások amelyekkel távoli kiszolgálókra kapcsolódva fájlokat tölthetünk le és fel"
+        subgroups:
+          -   name: "gftp"
+              selected: false
+              description: "Grafikus FTP kliens"
+              subgroups:
+                -   name: "gftp-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - gftp
+          -   name: "FileZilla"
+              selected: true
+              description: "Modern grafikus FTP kliens"
+              subgroups:
+                -   name: "fz-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - filezilla
+- name: "Multimédia"
+  description: "Média fájlok fogyasztására szánt programok"
   selected: false
-  packages:
-    - leafpad
-    - mousepad
-    - emacs
-    - nano
-    - yudit
-
-- name: "Filemanagers"
-  description: "Filemanagers"
   critical: false
+  subgroups:
+    -   name: "Videólejátszók"
+        description: "Videó fájlok lejátszására szánt programok"
+        subgroups:
+          -   name: "VLC"
+              description: "Videólejátszó és -sugárzó"
+              selected: true
+              subgroups:
+                -   name: "vlc-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - vlc
+          -   name: "ffmpeg"
+              description: "Video fájl feldolgozó"
+              selected: true
+              subgroups:
+                -   name: "ffm-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - ffmpeg
+          -   name: "mplayer"
+              description: "Magyar fejlesztésű sokoldalú video lejátszó (MPEG, Divx stb.)"
+              selected: false
+              subgroups:
+                -   name: "mplay-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - mplayer
+          -   name: "smplayer"
+              description: "mplayer alapú videólejátszó KDE-hez"
+              selected: false
+              subgroups:
+                -   name: "smplay-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - smplayer
+          -   name: "smtube"
+              description: "YouTube videó nézegető"
+              selected: false
+              subgroups:
+                -   name: "smtube-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - smtube
+          -   name: "Kaffeine"
+              description: "KDE multimédia lejátszó"
+              selected: false
+              subgroups:
+                -   name: "kaf-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - kaffeine
+          -   name: "Kodi"
+              description: "Média lejátszó"
+              selected: false
+              subgroups:
+                -   name: "kodi-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - kodi
+                      - kodi-addon-pvr-vnsi
+                      - vdr-plugin-vnsiserver
+          -   name: "xine-ui"
+              description: "Videólejátszó program"
+              selected: false
+              subgroups:
+                -   name: "xineui-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - xine-ui
+    -   name: "Zenelejátszók"
+        description: "Audió fájlok lejátszására szánt programok"
+        selected: false
+        critical: false
+        subgroups:
+          -   name: "Audacious"
+              description: "Klasszikus zenelejátszó"
+              selected: true
+              subgroups:
+                -   name: "auda-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - audacious
+          -   name: "Exaile"
+              description: "Zenék rendszerezése és lejátszása"
+              selected: false
+              subgroups:
+                -   name: "exa-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - exaile
+          -   name: "Rhythmbox"
+              description: "Zenelejátszó és rendszerező alkalmazás GNOME-hoz"
+              selected: false
+              subgroups:
+                -   name: "rhythm-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - rhythmbox
+          -   name: "XMMS2"
+              description: "X multimédia hang lejátszó (mp3, wav stb.)"
+              selected: false
+              subgroups:
+                -   name: "xmms-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - xmms2
+          -   name: "deadbeef"
+              description: "Foobar2000-szerű zenelejátszó"
+              selected: false
+              subgroups:
+                -   name: "deadbeef-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - deadbeef
+          -   name: "Aqualung"
+              description: "Szünetmentes Gtk-alapú hanglejátszó"
+              selected: false
+              subgroups:
+                -   name: "aqualung-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - aqualung
+          -   name: "mpg123"
+              description: "Konzolos MP3-lejátszó"
+              selected: false
+              subgroups:
+                -   name: "mpg-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - mpg123
+          -   name: "radiotray"
+              description: "Internetes rádió"
+              selected: false
+              subgroups:
+                -   name: "radiotray-hid"
+                    hidden: true
+                    selected: true
+                    packages:
+                      - radiotray
+    -   name: "YouTube letöltők és -játszók"
+        description: "YouTube videók letöltésére és -játszására szánt programok"
+        selected: false
+        critical: false
+        packages:
+          - minitube
+          - smtube
+          - youtube-dl
+    -   name: "Hang- és videószerkesztők"
+        description: "Hang- és videófájlok szerkesztésére szánt programok"
+        selected: false
+        critical: false
+        packages:
+          - avidemux
+          - handbrake
+          - lives
+          - lmms
+          - canorus
+          - devede
+          - dvdstyler
+          - dvdauthor
+          - mkvtoolnix
+- name: "Szövegszerkesztők"
+  description: "Szövegszerkesztők"
   selected: false
+  critical: false
   packages:
     - gentoo
     - worker
     - emelfm2
     - eaglemode
-
-- name: "Games"
-  description: "Games"
-  critical: false
-  selected: false
-  subgroups:
-
-    -   name: "RTS games"
-        description: "Real Time Strategie games"
-        critical: false
-        selected: false
-        packages:
-            - 0ad
-            - widelands
-            - dark-oberon
-            - lincity
-            - lincity-ng
-            - megaglest
-            - opendungeons
-            - simutrans
-
-    -   name: "Strategie games"
-        description: "Non Real Time Strategie games"
-        critical: false
-        selected: false
-        packages:
-            - deflektor
-            - fillets
-            - freeciv
-            - wesnoth
-        
-    -   name: "FPS games"
-        description: "First Person Shooters"
-        critical: false
-        selected: false
-        packages:
-            - d1x-rebirth
-            - d2x-rebirth
-            - darkplaces
-            - eduke32
-            - gzdoom
-            - prboom
-            - quake2
-            - sauerbraten
-            - smokinguns
-            - vavoom
-            - wolf4sdl
-            - zdoom
-            
-    -   name: "Shooter games"
-        description: "Shooters"
-        critical: false
-        selected: false
-        packages:
-            - barrage
-            - chromium-bsu
-            - criticalmass
-            - frozen-bubble
-            - komi
-            - powermanga
-            - westbang
-        
-    -   name: "Solid 3d games"
-        description: "Solid 3d games"
-        critical: false
-        selected: false
-        packages:
-            - alien8
-            - hoh
-        
-    -   name: "Action games"
-        description: "Action games"
-        critical: false
-        selected: false
-        packages:
-            - blobwars
-            - clonekeen
-            - digger
-            - heroes
-            - humphrey
-            - jumpnbump
-            - lbreakout
-            - moon-buggy
-            - neverball
-            - njam
-            - pinball
-            - pingus
-            - rocksndiamonds
-            - sdl-ball
-            - supertux
-            - tomatoes
-            - toppler
-            - trackballs
-            - tsc
-            - vorton
-            - worminator-3
-            - xrick
-            
-    -   name: "Simulation games"
-        description: "Simulators"
-        critical: false
-        selected: false
-        packages:
-            - caph
-            - cave9
-            - gnubik
-            - gtklife
-            - oolite
-            - rubix
-    
-    -   name: "War games"
-        description: "War games"
-        critical: false
-        selected: false
-        packages:
-            - bzflag
-            - dangerdeep
-        
-    -   name: "Board games"
-        description: "Board games"
-        critical: false
-        selected: false
-        packages:
-            - chessx
-            - dreamchess
-            - fairymax
-            - gnuchess
-            - gshogi
-            - lmarbles
-            - ltris
-            - pychess
-            - ri-li
-            - tetzle
-            - vitetris
-            - xye
-            - zaz
-        
-    -   name: "Card games"
-        description: "Card games"
-        critical: false
-        selected: false
-        packages:
-            - pysolfc
-
-        
-    -   name: "Sport games"
-        description: "Sport games"
-        critical: false
-        selected: false
-        packages:
-            - etracer
-            - foobillard+
-            - miniracer
-            - stuntrally
-            - supertuxkart
-            - torcs
-            - trigger-rally
-            - tuxracer
-            - ultimatestunts
-    
-    -   name: "Kids games"
-        description: "games for children"
-        critical: false
-        selected: false
-        packages:
-            - gcompris
