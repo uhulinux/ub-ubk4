@@ -1,1 +1,1 @@
-urllist http://ntp.org/downloads.html | grep "ntp-" | grep -v "ntp-dev-" | grep -v "md5" | sed -e "s/ntp-//" -e "s/.tar.*//" | sort -V | tail -n1
+urllist https://ntp.org/downloads | grep 'ntp-4' | grep 'tar.gz$' | sed -e 's/ntp-//' -e 's/\.tar\.gz//'
