@@ -1,5 +1,5 @@
 #!/bin/sh -eux
 
 cd src
-ub_configure --enable-plugin
-make PLUGIN_DIR="/usr/lib/rp-pppoe" all rp-pppoe.so
+ub_configure --enable-plugin=/usr/include/pppd
+ub_make PLUGIN_PATH=rp-pppoe.so PLUGIN_DIR="/usr/lib/rp-pppoe"
