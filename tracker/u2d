@@ -1,7 +1,1 @@
-for dir in $(urllist https://ftp.acc.umu.se/pub/GNOME/sources/tracker/ | grep -E '^[3-9]' | sort -Vr);do
-ver=$(u2d https://ftp.acc.umu.se/pub/GNOME/sources/tracker/$dir)
-if [ $ver ];then
-    echo $ver
-    exit
-fi
-done
+u2d https://gitlab.gnome.org/GNOME/tracker/-/tags/
