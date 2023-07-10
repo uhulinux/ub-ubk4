@@ -19,6 +19,8 @@ mv $outdir/libGLESv2.so "$UB_INSTALLDIR"/usr/lib/chromium/
 # SwiftShader ICD
 mv $outdir/libvk_swiftshader.so "$UB_INSTALLDIR"/usr/lib/chromium/
 mv $outdir/vk_swiftshader_icd.json "$UB_INSTALLDIR"/usr/lib/chromium/
+# libvulkan
+mv $outdir/libvulkan.so.1 "$UB_INSTALLDIR"/usr/lib/chromium/
 
 if [ -f $outdir/icudtl.dat ]; then
 mv $outdir/icudtl.dat "$UB_INSTALLDIR"/usr/lib/chromium/

@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2023-01-04 21:34:56.000000000 +0100
-+++ b/browser/app/profile/firefox.js	2023-01-10 23:11:45.473749867 +0100
+--- a/browser/app/profile/firefox.js	2023-06-29 19:34:04.000000000 +0200
++++ b/browser/app/profile/firefox.js	2023-07-05 00:38:49.750329730 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -24,7 +24,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -146,7 +153,7 @@
+@@ -143,7 +150,7 @@
  // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
  // getAppUpdateAutoEnabled from UpdateUtils.sys.mjs should be used.
  #ifndef XP_WIN
@@ -33,7 +33,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  #endif
  
  // If set to true, the Update Service will apply updates in the background
-@@ -265,7 +272,7 @@
+@@ -262,7 +269,7 @@
  pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -42,7 +42,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -358,7 +365,7 @@
+@@ -361,7 +368,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -51,7 +51,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -484,7 +491,7 @@
+@@ -500,7 +507,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -60,7 +60,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // If changed to true, copying the entire URL from the location bar will put the
  // human readable (percent-decoded) URL on the clipboard.
-@@ -1072,9 +1079,9 @@
+@@ -1103,9 +1110,9 @@
  // 0 goes Back/Forward
  // 1 act like PgUp/PgDown
  // 2 and other values, nothing
@@ -72,12 +72,13 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // this will automatically enable inline spellchecking (if it is available) for
  // editable elements in HTML
-@@ -1864,9 +1871,7 @@
+@@ -1904,10 +1911,8 @@
  pref("dom.storage_access.enabled", true);
  
- // Enable URL query stripping in Nightly.
+ // Enable URL query stripping and strip on share in Nightly.
 -#ifdef NIGHTLY_BUILD
  pref("privacy.query_stripping.enabled", true);
+ pref("privacy.query_stripping.strip_on_share.enabled", true);
 -#endif
  
  pref("browser.contentblocking.cryptomining.preferences.ui.enabled", true);
