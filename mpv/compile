@@ -1,15 +1,14 @@
 #!/bin/sh -eux
 
-#chmod +x waf-2.0.9
-
-waf configure \
-	--prefix=/usr \
-	--confdir=/etc/mpv \
-	--enable-cdda \
-	--enable-dvb \
-	--enable-dvdnav \
-	--enable-libarchive \
-	--enable-libmpv-shared \
-	--disable-build-date \
-
-waf build
+ub_compile \
+    -Dlibmpv=true \
+    -Dbuild-date=false \
+    -Dcdda=enabled \
+    -Ddvbin=enabled \
+    -Ddvdnav=enabled \
+    -Dlibarchive=enabled \
+    -Degl-wayland=enabled \
+    -Degl-x11=enabled \
+    -Dgl-x11=enabled \
+    -Dwayland=enabled \
+    -Dx11=enabled
