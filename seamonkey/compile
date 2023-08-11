@@ -3,10 +3,9 @@
 CC="ccache clang -march=k8 -m64"
 CXX="ccache clang++ -march=k8 -m64"
 
-export RUSTFLAGS="-Cdebuginfo=0 -Cembed-bitcode=yes"
+export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/seamonkey/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
-export PYTHON=/usr/bin/python2
-export PYTHON3=/usr/bin/python3
+export PYTHON=/usr/bin/python3
 
 : > .mozconfig
 cat > .mozconfig << _EOF_
@@ -16,18 +15,11 @@ ac_add_options --enable-application=comm/suite
 ac_add_options --enable-release
 ac_add_options --enable-official-branding
 ac_add_options --enable-optimize="-O2"
-ac_add_options --with-system-bz2
-ac_add_options --with-system-icu
-ac_add_options --with-system-jpeg
-ac_add_options --with-system-libvpx
-ac_add_options --with-system-nss
-ac_add_options --with-system-nspr
-ac_add_options --with-system-png
-ac_add_options --with-system-zlib
-ac_add_options --without-system-libevent
-ac_add_options --enable-system-hunspell
-ac_add_options --enable-startup-notification
+ac_add_options --enable-crashreporter
 ac_add_options --enable-default-toolkit=cairo-gtk3
+ac_add_options --enable-bundled-fonts
+ac_add_options --enable-rust-simd
+ac_add_options --enable-linker=lld
 ac_add_options --disable-crashreporter
 ac_add_options --disable-clang-plugin
 ac_add_options --disable-debug
@@ -38,8 +30,15 @@ ac_add_options --disable-tests
 ac_add_options --disable-strip
 ac_add_options --disable-install-strip
 ac_add_options --disable-elf-hack
-ac_add_options --host=x86_64-unknown-linux-gnu
-ac_add_options --target=x86_64-unknown-linux-gnu
+ac_add_options --with-unsigned-addon-scopes=app,system
+ac_add_options --with-system-icu
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-libvpx
+ac_add_options --with-system-nss
+ac_add_options --with-system-nspr
+ac_add_options --with-system-png
+ac_add_options --with-system-zlib
+ac_add_options --without-system-libevent
 _EOF_
 
 "$UB_COMPILEDIR"/mach build

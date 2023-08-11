@@ -1,5 +1,0 @@
-for i in $(urllist http://www.python.org/ftp/python/ | grep ^2.7);do
-tag=$(urllist http://www.python.org/ftp/python/$i/ | splitver '^Python-([0-9.]+).tar.xz$')
-veg=$(echo -e "$veg"'\n'"$tag")
-done
-echo "$veg" | sort -V | tail -n 1
