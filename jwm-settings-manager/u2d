@@ -1,6 +1,1 @@
-string=$(curl -k -s https://github.com/attuska/jwm-settings-manager/blob/main/CMakeLists.txt)
-vermaj=$(echo "$string" | grep VERMAJ | grep -E ';[0-9]' | sed 's/.*".\&quot\;//g' | sed s/\&quo.*//g)
-vermin=$(echo "$string" | grep VERMIN | grep -E ';[0-9]' | sed 's/.*".\&quot\;//g' | sed s/\&quo.*//g)
-verrev=$(echo "$string" | grep VERREV | grep -E ';[0-9]' | sed 's/.*".\&quot\;//g' | sed s/\&quo.*//g)
-echo $vermaj.$vermin.$verrev
-#u2d https://github.com/attuska/jwm-settings-manager/tags/ v
+echo 2.4.0
