@@ -1,28 +1,8 @@
-From edb46574d4686c59e80569ba236d537097dcdd0e Mon Sep 17 00:00:00 2001
-From: Kevin Brace <kevinbrace@gmx.com>
-Date: Fri, 28 Feb 2020 17:42:54 -0800
-Subject: Fix for GCC 10 activating stricter check for extern variables /
- structs
-
-GCC 10 now activates -fno-common option by default.  This results in
-link time errors.  Since GCC 10 is still not officially released, this
-link time behavior was reproduced on older GCC releases by adding
--fno-common option manually to the generated code compilation script.
-
-Suggested-by: Xavier Bachelot <xavier@bachelot.org>
-Signed-off-by: Kevin Brace <kevinbrace@gmx.com>
----
- src/via_driver.h | 4 ++--
- src/via_sii164.h | 2 +-
- src/via_vt1632.h | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/src/via_driver.h b/src/via_driver.h
-index b01229d..bfad2ee 100644
---- a/src/via_driver.h
-+++ b/src/via_driver.h
-@@ -361,8 +361,8 @@ void viaSetupDefaultOptions(ScrnInfoPtr pScrn);
- void viaProcessOptions(ScrnInfoPtr pScrn);
+diff -Naur a/src/via_driver.h b/src/via_driver.h
+--- a/src/via_driver.h	2017-02-26 07:28:58.000000000 +0100
++++ b/src/via_driver.h	2023-08-02 19:52:23.578157389 +0200
+@@ -394,8 +394,8 @@
+ 
  
  /* In via_display.c. */
 -const xf86CrtcFuncsRec iga1_crtc_funcs;
@@ -32,31 +12,27 @@ index b01229d..bfad2ee 100644
  
  /* In via_exa.c. */
  Bool viaInitExa(ScreenPtr pScreen);
-diff --git a/src/via_sii164.h b/src/via_sii164.h
-index 1a402aa..250ac75 100644
---- a/src/via_sii164.h
-+++ b/src/via_sii164.h
-@@ -51,7 +51,7 @@ typedef struct _viaSiI164 {
+diff -Naur a/src/via_sii164.h b/src/via_sii164.h
+--- a/src/via_sii164.h	2017-02-27 00:53:37.000000000 +0100
++++ b/src/via_sii164.h	2023-08-02 19:52:51.550263302 +0200
+@@ -47,7 +47,7 @@
  } viaSiI164Rec, *viaSiI164RecPtr;
  
  
 -const xf86OutputFuncsRec via_sii164_funcs;
 +extern const xf86OutputFuncsRec via_sii164_funcs;
  
- Bool viaSiI164Probe(ScrnInfoPtr pScrn, I2CBusPtr pI2CBus);
- void viaSiI164Init(ScrnInfoPtr pScrn);
-diff --git a/src/via_vt1632.h b/src/via_vt1632.h
-index 4f93f6c..61dada1 100644
---- a/src/via_vt1632.h
-+++ b/src/via_vt1632.h
-@@ -51,7 +51,7 @@ typedef struct _VIAVT1632 {
+ Bool viaSiI164Init(ScrnInfoPtr pScrn, I2CBusPtr pI2CBus);
+ 
+diff -Naur a/src/via_vt1632.h b/src/via_vt1632.h
+--- a/src/via_vt1632.h	2017-01-06 04:33:01.000000000 +0100
++++ b/src/via_vt1632.h	2023-08-02 19:53:07.126322262 +0200
+@@ -44,7 +44,7 @@
  } viaVT1632Rec, *viaVT1632RecPtr;
  
  
 -const xf86OutputFuncsRec via_vt1632_funcs;
 +extern const xf86OutputFuncsRec via_vt1632_funcs;
  
- Bool viaVT1632Probe(ScrnInfoPtr pScrn, I2CBusPtr pI2CBus);
- void viaVT1632Init(ScrnInfoPtr pScrn);
--- 
-cgit v1.2.1
+ Bool viaVT1632Init(ScrnInfoPtr pScrn, I2CBusPtr pI2CBus);
+ 

@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
 aclocal
+libtoolize
 autoconf
-UB_UPDATELIBTOOL=1 ub_compile \
+ub_compile \
 	--disable-rpath \
 	--disable-assembly
