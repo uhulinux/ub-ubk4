@@ -1,12 +1,12 @@
-diff -Naur orig/misc/syntax/Syntax.in patched/misc/syntax/Syntax.in
---- orig/misc/syntax/Syntax.in	2019-06-16 19:49:31.000000000 +0200
-+++ patched/misc/syntax/Syntax.in	2019-06-30 21:22:26.499875682 +0200
-@@ -31,7 +31,7 @@
+diff -Naur a/misc/syntax/Syntax.in b/misc/syntax/Syntax.in
+--- a/misc/syntax/Syntax.in	2023-08-06 15:26:05.000000000 +0200
++++ b/misc/syntax/Syntax.in	2023-08-18 17:27:36.976728940 +0200
+@@ -45,7 +45,7 @@
  file ..\*\\.e$ Eiffel\sSource\sFile
  include eiffel.syntax
  
--file ..\*\\.(diff|rej|patch)$ Diff\sOutput ^(diff|Index:)\s
-+file ..\*\\.(diff|rej|patch|skip)$ Diff\sOutput ^(diff|Index:)\s
+-file ..\*\\.(diff|rej|patch)|COMMIT_EDITMSG$ Diff\sOutput ^(diff|Index:)\s
++file ..\*\\.(diff|rej|patch|skip)|COMMIT_EDITMSG$ Diff\sOutput ^(diff|Index:)\s
  include diff.syntax
  
  file ..\*\\.lsm$ LSM\sFile
