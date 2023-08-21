@@ -1,0 +1,43 @@
+diff --git a/components/bookmarks/common/url_load_stats.h b/components/bookmarks/common/url_load_stats.h
+index b4d975b896bfac5..b5ddece1fb35362 100644
+--- a/components/bookmarks/common/url_load_stats.h
++++ b/components/bookmarks/common/url_load_stats.h
+@@ -5,6 +5,7 @@
+ #ifndef COMPONENTS_BOOKMARKS_COMMON_URL_LOAD_STATS_H_
+ #define COMPONENTS_BOOKMARKS_COMMON_URL_LOAD_STATS_H_
+ 
++#include <cstddef>
+ #include <cstdint>
+ #include <vector>
+ 
+@@ -51,4 +52,4 @@ struct UrlLoadStats {
+ 
+ }  // namespace bookmarks
+ 
+-#endif  // COMPONENTS_BOOKMARKS_COMMON_URL_LOAD_STATS_H_
+\ No newline at end of file
++#endif  // COMPONENTS_BOOKMARKS_COMMON_URL_LOAD_STATS_H_
+diff --git a/chrome/browser/ui/profile_view_utils.h b/chrome/browser/ui/profile_view_utils.h
+index 4aa53f094c2d5d..5a7250f3876106 100644
+--- a/chrome/browser/ui/profile_view_utils.h
++++ b/chrome/browser/ui/profile_view_utils.h
+@@ -7,6 +7,7 @@
+ 
+ #include <string>
+ #include <utility>
++#include <vector>
+ 
+ class Profile;
+ class ProfileAttributesEntry;
+diff --git a/third_party/blink/renderer/core/paint/object_paint_properties_sparse.h b/third_party/blink/renderer/core/paint/object_paint_properties_sparse.h
+index 8bb1639676cd63..79c60feca04566 100644
+--- a/third_party/blink/renderer/core/paint/object_paint_properties_sparse.h
++++ b/third_party/blink/renderer/core/paint/object_paint_properties_sparse.h
+@@ -8,6 +8,7 @@
+ #include <array>
+ #include <memory>
+ #include <utility>
++#include <variant>
+ 
+ #include "base/dcheck_is_on.h"
+ #include "base/memory/ptr_util.h"
