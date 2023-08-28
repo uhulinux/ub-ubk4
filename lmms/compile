@@ -1,14 +1,18 @@
 #!/bin/sh -eux
 
-git clone https://github.com/Lukas-W/qt5-x11embed.git src/3rdparty/qt5-x11embed
-git clone https://github.com/KDE/extra-cmake-modules.git src/3rdparty/qt5-x11embed/3rdparty/ECM
 git clone https://github.com/rampantpixels/rpmalloc.git src/3rdparty/rpmalloc/rpmalloc
 cd src/3rdparty/rpmalloc/rpmalloc
 git checkout e8b3be9
 cd -
 
 ub_compile \
-	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
-	-USE=vst \
-	-DWANT_QT5=ON \
-	-DWANT_CARLA=OFF
+    -DWANT_SDL:BOOL=OFF \
+    -DWANT_PORTAUDIO:BOOL=OFF \
+    -DWANT_CAPS:BOOL=OFF \
+    -DWANT_CARLA=OFF \
+    -DWANT_TAP:BOOL=OFF \
+    -DWANT_CALF:BOOL=OFF \
+    -DWANT_QT5:BOOL=ON \
+    -DWANT_VST:BOOL=OFF \
+    -DWANT_VST_NOWINE:BOOL=ON \
+    -Wno-dev
