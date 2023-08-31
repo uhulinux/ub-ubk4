@@ -1,1 +1,1 @@
-urllist https://www.fosshub.com/Avidemux.html | grep tar.gz | sed s/.*_// | sed s/\\.tar.*//
+sflist avidemux avidemux  | grep ^[0-9] | grep -E '\.[0-9]$' | sort -V | tail -n 1
