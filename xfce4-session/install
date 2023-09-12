@@ -1,7 +1,10 @@
 #!/bin/sh -eux
 
 ub_install
+
 mkdir -p ${UB_INSTALLDIR}/etc/xdg/autostart
 cp /usr/share/applications/polkit-gnome-authentication-agent-1.desktop \
  ${UB_INSTALLDIR}/etc/xdg/autostart/xfce-polkit-gnome-authentication-agent-1.desktop
 sed s/=GNOME/=XFCE/ -i ${UB_INSTALLDIR}/etc/xdg/autostart/xfce-polkit-gnome-authentication-agent-1.desktop
+
+rm -f ${UB_INSTALLDIR}/etc/xdg/autostart/xscreensaver.desktop
