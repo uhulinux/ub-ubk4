@@ -1,0 +1,48 @@
+From 52279e5f01a3f6e592a4acc4f7bedd0395538104 Mon Sep 17 00:00:00 2001
+From: Natanael Copa <ncopa@alpinelinux.org>
+Date: Wed, 20 May 2020 16:27:57 +0200
+Subject: [PATCH] Add support for meson build
+
+---
+ meson.build | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 meson.build
+
+diff --git a/meson.build b/meson.build
+new file mode 100644
+index 0000000..06bb285
+--- /dev/null
++++ b/meson.build
+@@ -0,0 +1,32 @@
++project('xfce-polkit', 'c', version : '0.3.0')
++
++prefix = get_option('prefix')
++libexecdir = join_paths(prefix, get_option('libexecdir'))
++sysconfdir = join_paths(prefix, get_option('sysconfdir'))
++autostartdir = join_paths(sysconfdir, 'xdg', 'autostart')
++
++deps = [
++  dependency('glib-2.0'),
++  dependency('libxfce4ui-2'),
++  dependency('polkit-agent-1'),
++]
++
++sources = files([
++  'src/xfce-polkit.c',
++  'src/xfce-polkit-listener.c',
++])
++
++executable('xfce-polkit', sources,
++  dependencies: deps,
++  install: true,
++  install_dir: libexecdir
++)
++
++desktopconf = configuration_data()
++desktopconf.set('xfce_polkit_libexecdir', libexecdir)
++configure_file(
++  input: 'xfce-polkit.desktop.in',
++  output: 'xfce-polkit.desktop',
++  configuration: desktopconf,
++  install_dir: autostartdir
++)

@@ -1,0 +1,18 @@
+From 4f9f6b66a3f5fcef49563efe4b04de050fa86e33 Mon Sep 17 00:00:00 2001
+From: paledega <38860643+paledega@users.noreply.github.com>
+Date: Sun, 11 Oct 2020 11:33:48 +0000
+Subject: [PATCH] Fix conflict with lxpolkit on lxde
+
+---
+ xfce-polkit.desktop.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/xfce-polkit.desktop.in b/xfce-polkit.desktop.in
+index dd9f09c..2121740 100644
+--- a/xfce-polkit.desktop.in
++++ b/xfce-polkit.desktop.in
+@@ -5,3 +5,4 @@ Comment=Policykit Authentication Agent
+ Exec=@xfce_polkit_libexecdir@/xfce-polkit
+ Icon=gtk-dialog-authentication
+ NotShowIn=GNOME;KDE;
++OnlyShowIn=XFCE;
