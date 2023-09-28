@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
-ub_install
+ub_install install-data
+mkdir -p ${UB_INSTALLDIR}/usr/share/pixmaps
+mv ${UB_INSTALLDIR}/usr/share/icons/hicolor/apps/ltris.png ${UB_INSTALLDIR}/usr/share/pixmaps/
