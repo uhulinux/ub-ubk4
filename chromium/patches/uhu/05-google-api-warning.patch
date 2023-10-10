@@ -1,15 +1,15 @@
 diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/startup/infobar_utils.cc
---- a/chrome/browser/ui/startup/infobar_utils.cc	2023-03-07 22:58:39.456540600 +0100
-+++ b/chrome/browser/ui/startup/infobar_utils.cc	2023-03-11 19:44:21.844349906 +0100
-@@ -16,7 +16,6 @@
- #include "chrome/browser/ui/startup/automation_infobar_delegate.h"
+--- a/chrome/browser/ui/startup/infobar_utils.cc	2023-09-16 04:06:19.815588700 +0200
++++ b/chrome/browser/ui/startup/infobar_utils.cc	2023-09-17 18:21:41.311574099 +0200
+@@ -17,7 +17,6 @@
  #include "chrome/browser/ui/startup/bad_flags_prompt.h"
+ #include "chrome/browser/ui/startup/bidding_and_auction_consented_debugging_infobar_delegate.h"
  #include "chrome/browser/ui/startup/default_browser_prompt.h"
 -#include "chrome/browser/ui/startup/google_api_keys_infobar_delegate.h"
  #include "chrome/browser/ui/startup/obsolete_system_infobar_delegate.h"
  #include "chrome/browser/ui/startup/startup_browser_creator.h"
  #include "chrome/browser/ui/startup/startup_types.h"
-@@ -25,7 +24,6 @@
+@@ -26,7 +25,6 @@
  #include "components/infobars/content/content_infobar_manager.h"
  #include "components/prefs/pref_service.h"
  #include "content/public/common/content_switches.h"
@@ -17,7 +17,7 @@ diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/star
  
  #if BUILDFLAG(CHROME_FOR_TESTING)
  #include "chrome/browser/ui/startup/chrome_for_testing_infobar_delegate.h"
-@@ -133,9 +131,6 @@
+@@ -139,9 +137,6 @@
      infobars::ContentInfoBarManager* infobar_manager =
          infobars::ContentInfoBarManager::FromWebContents(web_contents);
  
