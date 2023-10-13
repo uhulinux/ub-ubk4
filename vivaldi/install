@@ -1,0 +1,12 @@
+#!/bin/sh -eux
+
+mkdir -p ${UB_INSTALLDIR}/usr/share/{xfce4,appdata}
+cp -r opt/vivaldi ${UB_INSTALLDIR}/usr/lib
+cp -r usr ${UB_INSTALLDIR}/
+# install icons
+for res in 16 22 24 32 48 64 128 256; do
+    mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${res}x${res}/apps
+    install -Dm644 "${UB_INSTALLDIR}/usr/lib/vivaldi/product_logo_${res}.png" \
+    "${UB_INSTALLDIR}/usr/share/icons/hicolor/${res}x${res}/apps/vivaldi.png"
+done
+rm ${UB_INSTALLDIR}/usr/bin/vivaldi-stable
