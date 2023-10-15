@@ -1,0 +1,22 @@
+diff -Nur orig/driver/xscreensaver.desktop.in mod/driver/xscreensaver.desktop.in
+--- orig/driver/xscreensaver.desktop.in	2023-08-02 21:17:40.000000000 +0200
++++ mod/driver/xscreensaver.desktop.in	2023-10-15 09:27:41.546181049 +0200
+@@ -5,5 +5,6 @@
+ _Name=XScreenSaver
+ _Comment=XScreenSaver daemon: screen saver and locker
+ Type=Application
+-Categories=Screensaver;Security;GNOME;GTK;KDE;Motif;Qt
++Categories=Security;GNOME;GTK;KDE;Motif;Qt
+ Terminal=false
++NotShowIn=KDE;GNOME;MATE
+diff -Nur orig/driver/xscreensaver-settings.desktop.in mod/driver/xscreensaver-settings.desktop.in
+--- orig/driver/xscreensaver-settings.desktop.in	2023-08-02 21:16:05.000000000 +0200
++++ mod/driver/xscreensaver-settings.desktop.in	2023-10-15 09:31:57.122071702 +0200
+@@ -5,5 +5,6 @@
+ _Name=XScreenSaver Settings
+ _Comment=Change screensaver properties
+ Type=Application
+-Categories=Settings;DesktopSettings;Screensaver;Security;GNOME;GTK;KDE;Motif;Qt;X-GNOME-Settings-Panel;X-GNOME-SystemSettings;X-Unity-Settings-Panel;X-XFCE-SettingsDialog;X-XFCE-SystemSettings
++Categories=Settings;DesktopSettings;Security;GNOME;GTK;KDE;Motif;Qt;X-GNOME-Settings-Panel;X-GNOME-SystemSettings;X-Unity-Settings-Panel;X-XFCE-SettingsDialog;X-XFCE-SystemSettings
+ Terminal=false
++NotShowIn=KDE;GNOME;MATE
