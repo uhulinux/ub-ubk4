@@ -1,13 +1,19 @@
 #!/bin/sh -eux
 
 git clone https://github.com/eranif/ctags.git ctags
-git clone https://github.com/eranif/dbgd.git wxdap
-git clone https://github.com/jbeder/yaml-cpp yaml-cpp
+git clone https://github.com/eranif/wxdap.git wxdap
+git clone https://github.com/jbeder/yaml-cpp.git yaml-cpp
+git clone https://github.com/eranif/cc-wrapper.git cc-wrapper
+git clone https://github.com/eranif/tinyjson.git cc-wrapper/tinyjson
+git clone https://github.com/cubicdaiya/dtl.git dtl
+
+cd wxdap
+git checkout e5c7d35
+cd ..
+
 cd yaml-cpp
 git checkout 1b50109
+cd ..
 
-cd -
-
-export CXXFLAGS=" -fno-devirtualize"
 ub_compile \
     -DCMAKE_INSTALL_LIBDIR=lib

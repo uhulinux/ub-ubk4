@@ -1,0 +1,25 @@
+diff -Naur a/qttools/src/designer/src/plugins/CMakeLists.txt b/qttools/src/designer/src/plugins/CMakeLists.txt
+--- a/qttools/src/designer/src/plugins/CMakeLists.txt	2023-03-28 16:23:12.000000000 +0200
++++ b/qttools/src/designer/src/plugins/CMakeLists.txt	2023-04-12 15:49:30.657974704 +0200
+@@ -7,6 +7,3 @@
+ if(TARGET Qt::AxContainer AND WIN32)
+     add_subdirectory(activeqt)
+ endif()
+-if(TARGET Qt::QuickWidgets)
+-    add_subdirectory(qquickwidget)
+-endif()
+diff -Naur a/qtwebengine/src/webenginewidgets/CMakeLists.txt b/qtwebengine/src/webenginewidgets/CMakeLists.txt
+--- a/qtwebengine/src/webenginewidgets/CMakeLists.txt	2023-03-28 21:45:02.000000000 +0200
++++ b/qtwebengine/src/webenginewidgets/CMakeLists.txt	2023-04-12 15:50:37.954112391 +0200
+@@ -1,11 +1,6 @@
+ # Copyright (C) 2022 The Qt Company Ltd.
+ # SPDX-License-Identifier: BSD-3-Clause
+ 
+-if(TARGET Qt::Designer)
+-    add_subdirectory(plugins/qwebengineview)
+-else()
+-    message(WARNING "Qt tools Designer is required to compile designer plugin")
+-endif()
+ qt_internal_add_module(WebEngineWidgets
+     SOURCES
+         api/qtwebenginewidgetsglobal.h

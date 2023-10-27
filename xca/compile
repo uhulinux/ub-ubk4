@@ -1,7 +1,3 @@
 #!/bin/sh -eux
 
-export QT_CFLAGS+=" -fPIC -std=c++11"
-export QMAKE_CXXFLAGS+=" -std=c++11"
-./bootstrap
-ub_compile \
-	--with-qt=/usr/lib/qt5
+ub_compile

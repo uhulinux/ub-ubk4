@@ -1,7 +1,7 @@
 diff -Naur a/src/cmp.c b/src/cmp.c
---- a/src/cmp.c	2023-01-02 02:18:33.000000000 +0100
-+++ b/src/cmp.c	2023-02-19 01:08:00.537368435 +0100
-@@ -328,12 +328,15 @@
+--- a/src/cmp.c	2023-05-20 11:17:26.000000000 +0200
++++ b/src/cmp.c	2023-05-23 22:01:43.644132257 +0200
+@@ -343,12 +343,15 @@
  
    /* If only a return code is needed,
       and if both input descriptors are associated with plain files,
@@ -10,9 +10,9 @@ diff -Naur a/src/cmp.c b/src/cmp.c
       and if more bytes will be compared than are in the smaller file.  */
  
    if (comparison_type == type_status
-       && S_ISREG (stat_buf[0].st_mode)
--      && S_ISREG (stat_buf[1].st_mode))
-+      && S_ISREG (stat_buf[1].st_mode)
+       && 0 <= stat_buf[0].st_size && S_ISREG (stat_buf[0].st_mode)
+-      && 0 <= stat_buf[1].st_size && S_ISREG (stat_buf[1].st_mode))
++      && 0 <= stat_buf[1].st_size && S_ISREG (stat_buf[1].st_mode)
 +      && stat_buf[0].st_size > 0
 +      && stat_buf[1].st_size > 0)
      {

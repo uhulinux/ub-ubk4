@@ -1,7 +1,7 @@
 diff -Naur a/configure b/configure
---- a/configure	2023-01-15 22:23:09.000000000 +0100
-+++ b/configure	2023-02-19 00:59:10.631863907 +0100
-@@ -6580,7 +6580,7 @@
+--- a/configure	2023-05-21 10:51:17.000000000 +0200
++++ b/configure	2023-05-23 21:43:26.891392101 +0200
+@@ -6623,7 +6623,7 @@
  
  
  
@@ -11,9 +11,9 @@ diff -Naur a/configure b/configure
  if test -n "$ac_tool_prefix"; then
    # Extract the first word of "${ac_tool_prefix}ranlib", so it can be a program name with args.
 diff -Naur a/doc/diffutils.info b/doc/diffutils.info
---- a/doc/diffutils.info	2023-01-15 22:23:16.000000000 +0100
-+++ b/doc/diffutils.info	2023-02-19 01:05:22.220940505 +0100
-@@ -1866,6 +1866,15 @@
+--- a/doc/diffutils.info	2023-05-21 10:51:23.000000000 +0200
++++ b/doc/diffutils.info	2023-05-23 21:43:26.891392101 +0200
+@@ -1867,6 +1867,15 @@
  or ‘cp -sR’).  Before editing a file in the copy for the first time, you
  should break the link and replace it with a regular copy.
  
@@ -30,8 +30,8 @@ diff -Naur a/doc/diffutils.info b/doc/diffutils.info
  options that change the way it compares files.  Performance has more
  than one dimension.  These options improve one aspect of performance at
 diff -Naur a/man/diff.1 b/man/diff.1
---- a/man/diff.1	2023-01-15 22:23:16.000000000 +0100
-+++ b/man/diff.1	2023-02-19 00:59:10.635863919 +0100
+--- a/man/diff.1	2023-05-21 10:51:23.000000000 +0200
++++ b/man/diff.1	2023-05-23 21:43:26.891392101 +0200
 @@ -235,6 +235,24 @@
  If \fB\-\-from\-file\fR or \fB\-\-to\-file\fR is given, there are no restrictions on FILE(s).
  If a FILE is '\-', read standard input.
@@ -58,12 +58,12 @@ diff -Naur a/man/diff.1 b/man/diff.1
  Written by Paul Eggert, Mike Haertel, David Hayes,
  Richard Stallman, and Len Tower.
 diff -Naur a/src/diff.c b/src/diff.c
---- a/src/diff.c	2023-01-02 02:18:33.000000000 +0100
-+++ b/src/diff.c	2023-02-19 00:59:10.635863919 +0100
-@@ -104,7 +104,11 @@
- /* Report files compared that are the same (-s).
-    Normally nothing is output when that happens.  */
- static bool report_identical_files;
+--- a/src/diff.c	2023-05-20 11:17:26.000000000 +0200
++++ b/src/diff.c	2023-05-23 21:45:25.779947162 +0200
+@@ -107,7 +107,11 @@
+ 
+ /* Do not treat directories specially.  */
+ static bool no_directory;
 -
 +
 +/* Cheat: assume that files with same size and timestamp and other stuff
@@ -73,7 +73,7 @@ diff -Naur a/src/diff.c b/src/diff.c
  static char const shortopts[] =
  "0123456789abBcC:dD:eEfF:hHiI:lL:nNpPqrsS:tTuU:vwW:x:X:yZ";
  
-@@ -701,6 +705,7 @@
+@@ -712,6 +716,7 @@
          }
        prev = c;
      }
@@ -81,7 +81,7 @@ diff -Naur a/src/diff.c b/src/diff.c
  
    if (colors_style == AUTO)
      {
-@@ -1323,9 +1328,11 @@
+@@ -1346,9 +1351,11 @@
    else if ((same_files
              = (cmp.file[0].desc != NONEXISTENT
                 && cmp.file[1].desc != NONEXISTENT
@@ -96,9 +96,9 @@ diff -Naur a/src/diff.c b/src/diff.c
      {
        /* The two named files are actually the same physical file.
 diff -Naur a/src/system.h b/src/system.h
---- a/src/system.h	2023-01-02 02:18:33.000000000 +0100
-+++ b/src/system.h	2023-02-19 00:59:10.635863919 +0100
-@@ -207,4 +207,15 @@
+--- a/src/system.h	2023-02-19 19:04:39.000000000 +0100
++++ b/src/system.h	2023-05-23 21:43:26.895392120 +0200
+@@ -205,4 +205,15 @@
      && (s)->st_ctime == (t)->st_ctime)
  #endif
  

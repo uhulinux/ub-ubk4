@@ -1,38 +1,19 @@
-diff -Naur orig/Makefile.am patched/Makefile.am
---- orig/Makefile.am	2011-05-18 21:01:01.000000000 +0200
-+++ patched/Makefile.am	2019-08-10 20:37:07.831729925 +0200
-@@ -7,11 +7,11 @@
+diff -Naur a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2023-10-10 18:33:54.000000000 +0200
++++ b/Makefile.am	2023-10-26 12:42:40.659233812 +0200
+@@ -9,11 +9,11 @@
  tempfile_SOURCES = tempfile.c
  ischroot_SOURCES = ischroot.c
  
--bin_SCRIPTS = which savelog
-+bin_SCRIPTS = savelog
+-dist_bin_SCRIPTS = which.debianutils savelog
++dist_bin_SCRIPTS = savelog
  
--sbin_SCRIPTS = installkernel add-shell remove-shell
-+sbin_SCRIPTS = add-shell remove-shell
+-dist_sbin_SCRIPTS = installkernel add-shell remove-shell update-shells
++dist_sbin_SCRIPTS = add-shell remove-shell update-shells
  
- man_MANS = run-parts.8 \
+ dist_man_MANS = run-parts.8 \
 -	   installkernel.8 savelog.8 \
--	   tempfile.1 which.1 add-shell.8 \
+-	   tempfile.1 which.debianutils.1 add-shell.8 \
 +	   savelog.8 \
 +	   tempfile.1 add-shell.8 \
- 	   remove-shell.8 ischroot.1
-diff -Naur orig/Makefile.in patched/Makefile.in
---- orig/Makefile.in	2018-05-15 13:59:24.000000000 +0200
-+++ patched/Makefile.in	2019-08-10 20:40:46.045897716 +0200
-@@ -356,11 +356,11 @@
- run_parts_SOURCES = run-parts.c
- tempfile_SOURCES = tempfile.c
- ischroot_SOURCES = ischroot.c
--bin_SCRIPTS = which savelog
--sbin_SCRIPTS = installkernel add-shell remove-shell
-+bin_SCRIPTS = savelog
-+sbin_SCRIPTS = add-shell remove-shell
- man_MANS = run-parts.8 \
--	   installkernel.8 savelog.8 \
--	   tempfile.1 which.1 add-shell.8 \
-+	   savelog.8 \
-+	   tempfile.1 add-shell.8 \
- 	   remove-shell.8 ischroot.1
- 
- all: all-recursive
+ 	   remove-shell.8 update-shells.8 ischroot.1
