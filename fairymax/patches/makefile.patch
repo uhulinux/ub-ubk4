@@ -1,16 +1,10 @@
-diff -Naur ORIG/Makefile UHU/Makefile
---- ORIG/Makefile	2010-01-22 17:50:50.000000000 +0100
-+++ UHU/Makefile	2011-06-26 22:47:10.616000042 +0200
-@@ -18,9 +18,9 @@
- 	$(CC) $(CFLAGS) -DINI_FILE=\"/usr/share/games/fairymax/qmax.ini\" maxqi.c -o maxqi
- 
- install: ${ALL} ${srcdir}/data/*
--	cp -u ${srcdir}/fairymax $(DESTDIR)/usr/games
--	cp -u ${srcdir}/shamax $(DESTDIR)/usr/games
--	cp -u ${srcdir}/maxqi $(DESTDIR)/usr/games
-+	cp -u ${srcdir}/fairymax $(DESTDIR)/usr/bin/
-+	cp -u ${srcdir}/shamax $(DESTDIR)/usr/bin/
-+	cp -u ${srcdir}/maxqi $(DESTDIR)/usr/bin/
- 	install -d -m0755 $(DESTDIR)/usr/share/games/fairymax
- 	cp -u ${srcdir}/data/* $(DESTDIR)/usr/share/games/fairymax
- 	install -d -m0755 $(DESTDIR)/usr/share/man/man6
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2023-11-07 17:41:56.563673686 +0100
++++ mod/Makefile	2023-11-07 17:46:53.789029828 +0100
+@@ -1,5 +1,5 @@
+ srcdir = .
+-prefix = /usr/local
++prefix = /usr
+ bindir = $(prefix)/bin
+ mandir = $(prefix)/share/man
+ datadir = $(prefix)/share
