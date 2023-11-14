@@ -1,0 +1,21 @@
+diff -Nur orig/configure.in mod/configure.in
+--- orig/configure.in	2006-07-16 03:48:18.000000000 +0200
++++ mod/configure.in	2023-11-14 08:48:48.569936834 +0100
+@@ -35,8 +35,6 @@
+ AM_CONDITIONAL(APPLE,test "x$TARGET" = xAPPLE)
+ AM_CONDITIONAL(WIN32,test "x$TARGET" = xWIN32)
+ 
+-CFLAGS=""
+-CXXFLAGS=""
+ 
+ if test "x$GCC" = xyes; then
+    CFLAGS="$CFLAGS -W -Wall"
+@@ -99,7 +97,7 @@
+ else
+     LIBS="-L/usr/local/lib -L/usr/X11R6/lib $LIBS"
+     CXXFLAGS="$CXXFLAGS -I/usr/X11R6/include"
+-	AC_CHECK_LIB(png12, main,, AC_MSG_ERROR(libpng is needed))
++	AC_CHECK_LIB(png16, main,, AC_MSG_ERROR(libpng is needed))
+ 	AC_CHECK_LIB(z, main,, AC_MSG_ERROR(libz is needed))
+ 	if test "x$TARGET" = xUNIX; then
+ 	    if test "x$enable_dyngl" = xoff; then
