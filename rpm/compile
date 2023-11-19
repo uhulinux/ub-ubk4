@@ -1,22 +1,11 @@
 #!/bin/sh -eux
 
-# workaround for old 'sort' command lines in sqlite
-export _POSIX2_VERSION=199209
-
-# use external libs
-#rm -rf file
-#rm -rf popt
-#rm -rf sqlite
-#rm -rf zlib
-
-export LUA_CFLAGS=$(pkg-config --cflags lua53)
-export LUA_LIBS=$(pkg-config --libs lua53)
-ub_compile \
-	--disable-db1 \
-	--enable-v5-packages=yes \
-	--with-external-db \
-	--enable-sqlite3 \
-	--with-gnu-ld \
-	--without-selinux \
-	--enable-python \
-	CPPFLAGS="-I/usr/include/nspr4 -I/usr/include/nss3"
+mkdir -p build
+cd build
+cmake \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_INSTALL_PREFIX="/usr" \
+	-DWITH_SELINUX=OFF \
+	-DWITH_INTERNAL_OPENPGP=ON \
+	..
+ub_make
