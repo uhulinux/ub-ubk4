@@ -1,1 +1,3 @@
-u2d https://download.blender.org/source/
+dir=$(urllist https://ftp.halifax.rwth-aachen.de/blender/release/ | grep Blender[0-9] | sort -V | tail -n 1)
+echo $dir
+urllist https://ftp.halifax.rwth-aachen.de/blender/release/$dir/ | grep tar | sort -V | tail -n 1 | sed s/blender-// | sed s/-linux.*//
