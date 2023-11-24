@@ -1,7 +1,7 @@
 diff -Naur orig/src/mainwindow.c patched/src/mainwindow.c
 --- orig/src/mainwindow.c	2020-02-11 14:08:20.000000000 +0100
 +++ patched/src/mainwindow.c	2020-02-24 20:49:13.770743595 +0100
-@@ -1446,7 +1446,7 @@
+@@ -1441,7 +1441,7 @@
  
  	/* main window */
  	window = GTK_WIDGET(gtkut_window_new(GTK_WINDOW_TOPLEVEL, "mainwindow"));
@@ -10,7 +10,7 @@ diff -Naur orig/src/mainwindow.c patched/src/mainwindow.c
  	gtk_window_set_resizable(GTK_WINDOW(window), TRUE);
  #ifdef GENERIC_UMPC
  	prefs_common.layout_mode = SMALL_LAYOUT;
-@@ -2610,9 +2610,9 @@
+@@ -2612,9 +2612,9 @@
  			   : _("none"));
  
  	if (cur_account)
@@ -25,7 +25,7 @@ diff -Naur orig/src/mainwindow.c patched/src/mainwindow.c
 diff -Naur orig/src/prefs_common.c patched/src/prefs_common.c
 --- orig/src/prefs_common.c	2019-01-08 06:41:04.000000000 +0100
 +++ patched/src/prefs_common.c	2020-02-24 20:49:13.770743595 +0100
-@@ -819,6 +819,8 @@
+@@ -820,6 +820,8 @@
  	{"layout_mode", "5", &prefs_common.layout_mode, P_INT,
  	 NULL, NULL, NULL},
  #endif
@@ -37,7 +37,7 @@ diff -Naur orig/src/prefs_common.c patched/src/prefs_common.c
 diff -Naur orig/src/prefs_common.h patched/src/prefs_common.h
 --- orig/src/prefs_common.h	2019-01-08 06:41:11.000000000 +0100
 +++ patched/src/prefs_common.h	2020-02-24 20:49:13.770743595 +0100
-@@ -405,6 +405,7 @@
+@@ -407,6 +407,7 @@
  	gboolean immediate_exec;
  	SelectOnEntry select_on_entry;
  	gboolean show_tooltips;

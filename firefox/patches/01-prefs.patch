@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2023-06-29 19:34:04.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2023-07-05 00:38:49.750329730 +0200
+--- a/browser/app/profile/firefox.js	2023-11-16 18:42:50.000000000 +0100
++++ b/browser/app/profile/firefox.js	2023-11-20 23:39:23.528328945 +0100
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -14,7 +14,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.hiddenWindowChromeURL", "chrome://browser/content/hiddenWindowMac.xhtml");
  
  // Enables some extra Extension System Logging (can reduce performance)
-@@ -56,7 +62,8 @@
+@@ -53,7 +59,8 @@
  
  // Disable add-ons that are not installed by the user in all scopes by default.
  // See the SCOPE constants in AddonManager.jsm for values to use here.
@@ -24,16 +24,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -143,7 +150,7 @@
- // should no longer be used directly. Instead, getAppUpdateAutoEnabled and
- // getAppUpdateAutoEnabled from UpdateUtils.sys.mjs should be used.
- #ifndef XP_WIN
--  pref("app.update.auto", true);
-+  pref("app.update.auto", false);
- #endif
- 
- // If set to true, the Update Service will apply updates in the background
-@@ -262,7 +269,7 @@
+@@ -266,7 +273,7 @@
  pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -42,7 +33,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -361,7 +368,7 @@
+@@ -372,7 +379,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -51,35 +42,33 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -500,7 +507,7 @@
+@@ -516,7 +523,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
 -pref("browser.urlbar.trimURLs", true);
 +pref("browser.urlbar.trimURLs", false);
  
- // If changed to true, copying the entire URL from the location bar will put the
- // human readable (percent-decoded) URL on the clipboard.
-@@ -1103,9 +1110,9 @@
- // 0 goes Back/Forward
- // 1 act like PgUp/PgDown
+ pref("browser.urlbar.trimHttps", false);
+ 
+@@ -1158,7 +1165,7 @@
  // 2 and other values, nothing
--pref("browser.backspace_action", 2);
-+pref("browser.backspace_action", 0);
+ pref("browser.backspace_action", 2);
  
 -pref("intl.regional_prefs.use_os_locales", false);
 +pref("intl.regional_prefs.use_os_locales", true);
  
  // this will automatically enable inline spellchecking (if it is available) for
  // editable elements in HTML
-@@ -1904,10 +1911,8 @@
- pref("dom.storage_access.enabled", true);
+@@ -1916,10 +1923,8 @@
  
- // Enable URL query stripping and strip on share in Nightly.
+ pref("dom.storage_access.frame_only", true);
+ 
+-// Enable URL query stripping in Nightly.
 -#ifdef NIGHTLY_BUILD
++// Enable URL query stripping.
  pref("privacy.query_stripping.enabled", true);
- pref("privacy.query_stripping.strip_on_share.enabled", true);
 -#endif
  
- pref("browser.contentblocking.cryptomining.preferences.ui.enabled", true);
- pref("browser.contentblocking.fingerprinting.preferences.ui.enabled", true);
+ // Enable Strip on Share by default on desktop
+ pref("privacy.query_stripping.strip_on_share.enabled", true);
