@@ -1,17 +1,73 @@
 #!/bin/bash
 
-cd /usr/share/mesa-demos/objviewer
-for i in `ls -1 *.obj`;do
-echo objview $i
+nemmenek='
+fplight (GL_NV_vertex_program)
+paltex (GL_EXT_paletted_texture)
+vao_demo (GL_APPLE_vertex_array_object)
+'
+benchmark='
+gltestperf
+'
+demos='
+arbfplight
+arbfslight
+arbocclude
+arbocclude2
+bounce
+clearspd
+copypix
+cubemap
+cuberender
+dinoshade
+dissolve
+drawpix
+engine
+fbo_firecube
+fbotexture
+fire
+fogcoord
+fslight
+gamma
+gearbox
+gears
+geartrain
+gloss
+ipers
+isosurf
+lodbias
+morph3d
+multiarb
+pixeltest
+pointblast
+projtex
+ray
+readpix
+reflect
+renormal
+shadowtex
+singlebuffer
+spectex
+spriteblast
+stex3d
+teapot
+terrain
+tessdemo
+texcyl
+texenv
+textures
+trispd
+tunnel
+tunnel2
+winpos
+'
+
+cd /usr/lib/mesademos/bin/
+echo kilépés a demo ablak becsukásával
+echo Ctrl+c-re a demósorozat megszakad
 read -n 1 -s
-./objview $i
-done
-cd /usr/share/mesa-demos/demos
-for i in `ls -1 ` ;do
-if [ ! "$i" == "gltestperf" ];then
-echo $i
+for i in $demos ;do
+echo a következő demó $i
 read -n 1 -s
 ./$i
-fi
 done
 cd -

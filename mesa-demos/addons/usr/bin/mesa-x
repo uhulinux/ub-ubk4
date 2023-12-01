@@ -1,0 +1,45 @@
+#!/bin/bash
+
+nemlepki='
+glsync
+'
+parameteres='
+glxpbdemo (Usage: glxpbdemo width height imgfile Where imgfile is a ppm file)
+glxsnoop (Usage: glxsnoop [-display dpy] windowID)
+manywin (Usage: manywin [-s] numWindows)
+pbdemo (Usage:pbdemo width height imgfile Where imgfile is a ppm file)
+'
+nemjo="
+glxpixmap (Error: glXCreateContext failed)
+overlay (Couldn't get an overlay visual. Your hardware probably doesn't support framebuffer overlay planes.)
+"
+xdemos='
+glthreads
+glxcontexts
+glxdemo
+glxgears
+glxgears_fbconfig
+glxgears_pixmap
+glxheads
+glxswapcontrol
+multictx
+offset
+shape
+sharedtex
+sharedtex_mt
+texture_from_pixmap
+wincopy
+xfont
+xrotfontdemo
+'
+
+cd /usr/lib/mesademos/bin/
+echo kilépés a demo ablak becsukásával
+echo Ctrl+c-re a demósorozat megszakad
+read -n 1 -s
+for i in $xdemos ;do
+echo a következő demó $i
+read -n 1 -s
+./$i
+done
+cd -

@@ -2,6 +2,23 @@
 
 ub_install
 
-mv icon.png ${UB_INSTALLDIR}/usr/share/pixmaps/mesa-demos.png
-mkdir -p $UB_INSTALLDIR/usr/share/man/man1
-cp debian/*.1 $UB_INSTALLDIR/usr/share/man/man1/
+utils='
+glxgears
+eglinfo
+es2_info
+glxinfo
+glinfo
+pbinfo
+'
+demodir=${UB_INSTALLDIR}/usr/lib/mesademos/
+objviewdir=${demodir}/objview
+mkdir -p $objviewdir
+cp src/objviewer/*.rgb src/objviewer/*.obj src/objviewer/*.mtl $objviewdir/
+cp build/src/objviewer/objview $objviewdir/
+
+for i in $utils;do
+cp ${demodir}/bin/$i ${UB_INSTALLDIR}/usr/bin/
+done
+
+cd src/glsl
+cp *.frag *.vert *.geom *.glsl *.shtest ${demodir}/bin/

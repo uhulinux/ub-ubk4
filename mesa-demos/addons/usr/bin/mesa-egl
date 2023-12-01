@@ -1,0 +1,30 @@
+#!/bin/bash
+
+nemjo="
+eglgears_wayland ()
+egltri_wayland ()
+es2gears_wayland ()
+xeglthreads (Sorry, this program wasn't compiled with PTHREADS defined)
+"
+wayland='
+'
+eglprogs='
+eglgears_x11
+egltri_x11
+es2gears_x11
+es2tri
+xeglgears
+'
+szotlan='
+peglgears
+'
+cd /usr/lib/mesademos/bin/
+echo kilépés a demo ablak becsukásával
+echo Ctrl+c-re a demósorozat megszakad
+read -n 1 -s
+for i in $eglprogs ;do
+echo a következő demó $i
+read -n 1 -s
+./$i
+done
+cd -
