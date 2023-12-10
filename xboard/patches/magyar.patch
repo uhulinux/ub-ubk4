@@ -1,7 +1,7 @@
 diff -Nur orig/po/hu.po mod/po/hu.po
 --- orig/po/hu.po	1970-01-01 01:00:00.000000000 +0100
-+++ mod/po/hu.po	2023-12-09 13:51:14.314621129 +0100
-@@ -0,0 +1,3140 @@
++++ mod/po/hu.po	2023-12-10 09:27:53.072462932 +0100
+@@ -0,0 +1,3142 @@
 +# SOME DESCRIPTIVE TITLE.
 +# Copyright (C) YEAR Free Software Foundation, Inc.
 +# This file is distributed under the same license as the GNU xboard package.
@@ -12,7 +12,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +"Project-Id-Version: GNU xboard 4.9.1\n"
 +"Report-Msgid-Bugs-To: bug-xboard@gnu.org\n"
 +"POT-Creation-Date: 2016-07-31 20:45-0700\n"
-+"PO-Revision-Date: 2023-12-09 13:51+0100\n"
++"PO-Revision-Date: 2023-12-10 09:27+0100\n"
 +"Last-Translator: \n"
 +"Language-Team: \n"
 +"Language: hu\n"
@@ -86,7 +86,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +#: backend.c:1078
 +#, c-format
 +msgid "bad searchTime option %s"
-+msgstr "%s rossz keresőidő opció"
++msgstr "%s rossz kereső idő opció"
 +
 +#: backend.c:1184
 +#, c-format
@@ -100,7 +100,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: backend.c:1457
 +msgid "Starting chess program"
-+msgstr "Sakk program indítás"
++msgstr "Sakk motor indítás"
 +
 +#: backend.c:1480
 +msgid "Bad game file"
@@ -131,7 +131,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: backend.c:1584
 +msgid "Can't have a match with no chess programs"
-+msgstr "Nincs parti sakkprogramok nélkül"
++msgstr "Nincs parti sakkmotor nélkül"
 +
 +#: backend.c:1638
 +#, c-format
@@ -270,7 +270,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: backend.c:5301
 +msgid "You cannot do this while you are playing or observing"
-+msgstr "Ez játék vagy megfigyelés közben nem lehet"
++msgstr "Ezt játék vagy megfigyelés közben nem lehet tenni"
 +
 +#: backend.c:6363
 +msgid "Recompile to support this BOARD_RANKS or BOARD_FILES!"
@@ -297,7 +297,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: backend.c:6920
 +msgid "Displayed position is not current"
-+msgstr "A megjelenített pozíció nem aktuális"
++msgstr "A megjelenített állás nem aktuális"
 +
 +#: backend.c:7123
 +msgid "rights granted"
@@ -364,12 +364,12 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +#: backend.c:9452
 +#, c-format
 +msgid "Illegal move \"%s\" (rejected by %s chess program)"
-+msgstr "\"%s\" illegális lépés (%s sakkprogram elutasította)"
++msgstr "\"%s\" illegális lépés (%s sakkmotor elutasította)"
 +
 +#: backend.c:9483
 +#, c-format
 +msgid "Failed to start %s chess program %s on %s: %s\n"
-+msgstr "Nem sikerült elindítani a %s sakkprogramot %s : %s: %s\n"
++msgstr "Nem sikerült elindítani a %s sakkmotort %s : %s: %s\n"
 +
 +#: backend.c:9504
 +#, c-format
@@ -383,7 +383,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +"from %s chess program"
 +msgstr ""
 +"Illegális javasolt lépés „%s”\n"
-+"%s sakkprogramtól"
++"%s sakkmotortól"
 +
 +#: backend.c:9684
 +msgid "Machine accepts your draw offer"
@@ -433,11 +433,11 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: backend.c:11008
 +msgid "Waiting for first chess program"
-+msgstr "Az első sakkprogramra várás"
++msgstr "Az első sakkmotorra várás"
 +
 +#: backend.c:11013 backend.c:14996
 +msgid "Waiting for second chess program"
-+msgstr "A második sakkprogramra várás"
++msgstr "A második sakkmotorra várás"
 +
 +#: backend.c:11062
 +msgid "Could not write on tourney file"
@@ -691,7 +691,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +#: backend.c:14446
 +#, c-format
 +msgid "No unfinished games\n"
-+msgstr "Nincs befejezetlen parti\n"
++msgstr "Nincs nyitott parti\n"
 +
 +#: backend.c:14448
 +#, c-format
@@ -728,7 +728,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +#: backend.c:15017
 +#, c-format
 +msgid "Starting %s chess program"
-+msgstr "A(z) %s sakkprogram indítása"
++msgstr "A(z) %s sakkmotor indítása"
 +
 +#: backend.c:15045 backend.c:16238
 +msgid ""
@@ -823,17 +823,17 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +#: backend.c:16889 backend.c:16920
 +#, c-format
 +msgid "%s program exits in draw position (%s)"
-+msgstr "A(z) %s program kilép húzásnál (%s)"
++msgstr "A(z) %s motor kilép a húzásnál (%s)"
 +
 +#: backend.c:16915
 +#, c-format
 +msgid "Error: %s chess program (%s) exited unexpectedly"
-+msgstr "Hiba: %s sakkprogram (%s) váratlanul kilépett"
++msgstr "Hiba: %s sakkmotor (%s) váratlanul kilépett"
 +
 +#: backend.c:16933
 +#, c-format
 +msgid "Error reading from %s chess program (%s)"
-+msgstr "Hiba a(z) %s sakkprogram olvasásakor (%s)"
++msgstr "Hiba a(z) %s sakkmotor olvasásakor (%s)"
 +
 +#: backend.c:17365
 +#, c-format
@@ -1059,19 +1059,19 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:425
 +msgid "Play Move(s) of Clicked PV (Analysis)"
-+msgstr ""
++msgstr "A kattintott PV lejátszási mozgása(i) (elemzés)"
 +
 +#: dialogs.c:426 dialogs.c:627 menus.c:766
 +msgid "Ponder Next Move"
-+msgstr ""
++msgstr "A következő lépés megfontolandó"
 +
 +#: dialogs.c:427
 +msgid "Popup Exit Messages"
-+msgstr ""
++msgstr "Előugró kilépési üzenetek"
 +
 +#: dialogs.c:428 menus.c:768
 +msgid "Popup Move Errors"
-+msgstr ""
++msgstr "Előugró lépés hibák"
 +
 +#: dialogs.c:429
 +msgid "Scores in Move List"
@@ -1079,35 +1079,35 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:430
 +msgid "Show Coordinates"
-+msgstr ""
++msgstr "Koordinátákat mutat"
 +
 +#: dialogs.c:431
 +msgid "Show Target Squares"
-+msgstr ""
++msgstr "Cél négyzeteket muta"
 +
 +#: dialogs.c:432
 +msgid "Sticky Windows"
-+msgstr ""
++msgstr "Ragadós ablakok"
 +
 +#: dialogs.c:433 menus.c:771
 +msgid "Test Legality"
-+msgstr ""
++msgstr "Törvényességi teszt"
 +
 +#: dialogs.c:434
 +msgid "Top-Level Dialogs"
-+msgstr ""
++msgstr "Csúcsszintű párbeszédpanelek"
 +
 +#: dialogs.c:435
 +msgid "Flash Moves (0 = no flashing):"
-+msgstr ""
++msgstr "Mozgások villogása (0 = nincs villogás):"
 +
 +#: dialogs.c:436
 +msgid "Flash Rate (high = fast):"
-+msgstr ""
++msgstr "Villogási ütem (high = gyors):"
 +
 +#: dialogs.c:437
 +msgid "Animation Speed (high = slow):"
-+msgstr ""
++msgstr "Animáció sebesség (high = lassú):"
 +
 +#: dialogs.c:438
 +msgid "Zoom factor in Evaluation Graph:"
@@ -1115,7 +1115,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:458
 +msgid "Normal"
-+msgstr ""
++msgstr "Normál"
 +
 +#: dialogs.c:459
 +msgid "Makruk"
@@ -1306,35 +1306,35 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:628
 +msgid "Maximum Number of CPUs per Engine:"
-+msgstr ""
++msgstr "CPU-k maximális száma motoronként:"
 +
 +#: dialogs.c:629
 +msgid "Polygot Directory:"
-+msgstr ""
++msgstr "Polygot mappa:"
 +
 +#: dialogs.c:630
 +msgid "Hash-Table Size (MB):"
-+msgstr ""
++msgstr "Hash tábla méret (MB):"
 +
 +#: dialogs.c:631
 +msgid "EGTB Path:"
-+msgstr ""
++msgstr "EGBT útvonal:"
 +
 +#: dialogs.c:632
 +msgid "EGTB Cache Size (MB):"
-+msgstr ""
++msgstr "EGBT gyorsító tár méret (MB):"
 +
 +#: dialogs.c:633
 +msgid "Use GUI Book"
-+msgstr ""
++msgstr "GUI könyv használata"
 +
 +#: dialogs.c:634
 +msgid "Opening-Book Filename:"
-+msgstr ""
++msgstr "Könyv fájlnyitáshoz a név:"
 +
 +#: dialogs.c:635
 +msgid "Book Depth (moves):"
-+msgstr ""
++msgstr "Könyv mélység (lépés):"
 +
 +#: dialogs.c:636
 +msgid "Book Variety (0) vs. Strength (100):"
@@ -1378,7 +1378,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:661
 +msgid "Draw after N Moves Total:"
-+msgstr ""
++msgstr "Döntetlen összesen N lépés után:"
 +
 +#: dialogs.c:662
 +msgid "Win / Loss Threshold:"
@@ -2023,11 +2023,11 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:1607
 +msgid "pick fixed"
-+msgstr ""
++msgstr "választás rögzítve"
 +
 +#: dialogs.c:1624
 +msgid "New Shuffle Game"
-+msgstr ""
++msgstr "Új shuffle parti"
 +
 +#: dialogs.c:1671
 +msgid "Clocks (requires restart):"
@@ -2107,44 +2107,44 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:1794
 +msgid "Divide entered times by 60"
-+msgstr ""
++msgstr "Beírt idők osztása 60-al"
 +
 +#: dialogs.c:1795
 +msgid "Moves per session:"
-+msgstr ""
++msgstr "Mozgásszám menetenként:"
 +
 +#: dialogs.c:1796
 +msgid "Initial time (min):"
-+msgstr ""
++msgstr "Induló idő (perc)"
 +
 +#: dialogs.c:1797
 +msgid "Increment or max (sec/move):"
-+msgstr ""
++msgstr "Lépték vagy max (mp/lépés)"
 +
 +#: dialogs.c:1798
 +msgid "Time-Odds factors:"
-+msgstr ""
++msgstr "Időbeli esélytényezők:"
 +
 +#: dialogs.c:1799
 +msgid "Engine #1"
-+msgstr ""
++msgstr "Motor #1"
 +
 +#: dialogs.c:1800
 +msgid "Engine #2 / Human"
-+msgstr ""
++msgstr "Motor #2 / Emberi"
 +
 +#: dialogs.c:1841 dialogs.c:1844 dialogs.c:1849 dialogs.c:1850
 +#: gtk/xoptions.c:183
 +msgid "Unused"
-+msgstr ""
++msgstr "Nem használt"
 +
 +#: dialogs.c:1859
 +msgid "Changing time control during a game is not implemented"
-+msgstr ""
++msgstr "Az időbeállítás játék közben nem lehetséges"
 +
 +#: dialogs.c:1896
 +msgid "Error writing to chess program"
-+msgstr ""
++msgstr "Hiba a sakkmotor írásnál"
 +
 +#: dialogs.c:1964 gtk/xoptions.c:1811 xaw/xoptions.c:1341
 +msgid "Cancel"
@@ -2152,43 +2152,43 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:1969 dialogs.c:2724 dialogs.c:2728
 +msgid "King"
-+msgstr ""
++msgstr "Király"
 +
 +#: dialogs.c:1972
 +msgid "Captain"
-+msgstr ""
++msgstr "Kapitány"
 +
 +#: dialogs.c:1973
 +msgid "Lieutenant"
-+msgstr ""
++msgstr "Hadnagy"
 +
 +#: dialogs.c:1974
 +msgid "General"
-+msgstr ""
++msgstr "Tábornok"
 +
 +#: dialogs.c:1975
 +msgid "Warlord"
-+msgstr ""
++msgstr "Hadvezér"
 +
 +#: dialogs.c:1977 dialogs.c:2723 dialogs.c:2727 dialogs.c:2746
 +msgid "Knight"
-+msgstr ""
++msgstr "Lovag"
 +
 +#: dialogs.c:1978 dialogs.c:2723 dialogs.c:2727 dialogs.c:2746
 +msgid "Bishop"
-+msgstr ""
++msgstr "Püspök"
 +
 +#: dialogs.c:1979 dialogs.c:2723 dialogs.c:2727 dialogs.c:2746
 +msgid "Rook"
-+msgstr ""
++msgstr "Bástya"
 +
 +#: dialogs.c:1983 dialogs.c:2725 dialogs.c:2729
 +msgid "Archbishop"
-+msgstr ""
++msgstr "Érsek"
 +
 +#: dialogs.c:1984 dialogs.c:2725 dialogs.c:2729
 +msgid "Chancellor"
-+msgstr ""
++msgstr "Kancellár"
 +
 +#: dialogs.c:1986 dialogs.c:2724 dialogs.c:2728 dialogs.c:2746
 +msgid "Queen"
@@ -2196,7 +2196,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: dialogs.c:1988
 +msgid "Lion"
-+msgstr ""
++msgstr "Oroszlán"
 +
 +#: dialogs.c:1992
 +msgid "Defer"
@@ -2432,7 +2432,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +#: gtk/xboard.c:1000 xaw/xboard.c:1083
 +#, c-format
 +msgid "Failed to open file '%s'\n"
-+msgstr ""
++msgstr "A(z) '%s' fájlt megnyitása sikertelen\n"
 +
 +#: gtk/xboard.c:1015 xaw/xboard.c:1092
 +msgid "Recompile with larger BOARD_RANKS or BOARD_FILES to support this size"
@@ -2465,7 +2465,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: gtk/xboard.c:1963 xaw/xboard.c:2007
 +msgid "Can't open temp file"
-+msgstr ""
++msgstr "Ideiglenes fájl nem nyitható"
 +
 +#: gtk/xboard.c:2495
 +msgid "Failed to open file"
@@ -2473,7 +2473,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: gtk/xoptions.c:1188
 +msgid "*** Board window shows preview of selection ***"
-+msgstr ""
++msgstr "*** Táblaablak a kiválasztás előnézetét mutatja ***"
 +
 +#: gtk/xoptions.c:1537
 +msgid "Browse"
@@ -2485,11 +2485,11 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: menus.c:136
 +msgid "Load game file name?"
-+msgstr ""
++msgstr "Betöltendő partifájl neve?"
 +
 +#: menus.c:183
 +msgid "Load position file name?"
-+msgstr ""
++msgstr "Betöltendő állásfájl neve?"
 +
 +#: menus.c:189 menus.c:601
 +msgid "Save game file name?"
@@ -2501,7 +2501,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: menus.c:355
 +msgid " (with Zippy code)"
-+msgstr ""
++msgstr "(zippy kóddal)"
 +
 +#: menus.c:360
 +#, c-format
@@ -2775,7 +2775,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: menus.c:701
 +msgid "Call Flag"
-+msgstr ""
++msgstr "Hívás jelzés"
 +
 +#: menus.c:702
 +msgid "Draw"
@@ -2903,15 +2903,15 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: menus.c:757
 +msgid "Flash Moves"
-+msgstr ""
++msgstr "Villogó lépéesek"
 +
 +#: menus.c:759
 +msgid "Highlight Dragging"
-+msgstr ""
++msgstr "Húzások kiemeltek"
 +
 +#: menus.c:762
 +msgid "Highlight With Arrow"
-+msgstr ""
++msgstr "Kiemelés nyilakkal"
 +
 +#: menus.c:763
 +msgid "Move Sound"
@@ -2919,15 +2919,15 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: menus.c:765
 +msgid "Periodic Updates"
-+msgstr ""
++msgstr "Periódikus frissítés"
 +
 +#: menus.c:767
 +msgid "Popup Exit Message"
-+msgstr ""
++msgstr "Felbukkanó kilépési üzenet"
 +
 +#: menus.c:769
 +msgid "Show Coords"
-+msgstr ""
++msgstr "Koordináták létszanak"
 +
 +#: menus.c:770
 +msgid "Hide Thinking"
@@ -3015,6 +3015,8 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +"Mismatch of STRIDE in nengineoutput.c\n"
 +"Change and recompile!"
 +msgstr ""
++"Nem egyezik a STRIDE a nengineoutput.c-ben\n"
++"Változtatni kell és újrafordítani!"
 +
 +#: nevalgraph.c:69
 +msgid "Evaluation graph"
@@ -3022,11 +3024,11 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: nevalgraph.c:69
 +msgid "Blunder graph"
-+msgstr ""
++msgstr "Baklövési grafikon"
 +
 +#: nevalgraph.c:107
 +msgid "Blunder"
-+msgstr ""
++msgstr "Baklövés"
 +
 +#: nevalgraph.c:107
 +msgid "Eval"
@@ -3034,7 +3036,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: ngamelist.c:87
 +msgid "find position"
-+msgstr ""
++msgstr "állás keresés"
 +
 +#: ngamelist.c:88
 +msgid "narrow"
@@ -3050,11 +3052,11 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: ngamelist.c:91
 +msgid "next"
-+msgstr ""
++msgstr "következő"
 +
 +#: ngamelist.c:92
 +msgid "close"
-+msgstr ""
++msgstr "zár"
 +
 +#: ngamelist.c:116
 +msgid "No game selected"
@@ -3071,11 +3073,11 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: ngamelist.c:211
 +msgid "previous page"
-+msgstr ""
++msgstr "előző lap"
 +
 +#: ngamelist.c:214
 +msgid "next page"
-+msgstr ""
++msgstr "következő lap"
 +
 +#: ngamelist.c:217
 +msgid "no games matched your request"
@@ -3092,7 +3094,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +
 +#: nhistory.c:109
 +msgid "Move list"
-+msgstr "Lépéslista"
++msgstr "Lépés lista"
 +
 +#: usystem.c:223
 +#, c-format
@@ -3144,7 +3146,7 @@ diff -Nur orig/po/hu.po mod/po/hu.po
 +msgstr "Shift"
 diff -Nur orig/po/LINGUAS mod/po/LINGUAS
 --- orig/po/LINGUAS	2016-08-01 05:53:21.000000000 +0200
-+++ mod/po/LINGUAS	2023-12-08 08:12:21.000000000 +0100
++++ mod/po/LINGUAS	2023-12-08 08:12:21.451310180 +0100
 @@ -1,3 +1,3 @@
  # whitespace separated list of translated languages goes below
  # note: zh translations are untested; xboard fails to create a fontset for them
