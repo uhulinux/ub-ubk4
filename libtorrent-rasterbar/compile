@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
+git clone https://github.com/arvidn/libsimulator.git simulation/libsimulator
 git clone https://github.com/arvidn/try_signal.git deps/try_signal
+git clone https://github.com/paullouisageneau/boost-asio-gnutls.git deps/asio-gnutls
+
 ub_compile \
     -Dpython-bindings=ON
