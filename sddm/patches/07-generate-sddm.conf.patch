@@ -1,16 +1,16 @@
 diff -Nur sddm-0.18.0/src/daemon/CMakeLists.txt sddm-0.18.0.patched/src/daemon/CMakeLists.txt
 --- sddm-0.18.0/src/daemon/CMakeLists.txt	2018-07-18 12:31:40.000000000 +0200
 +++ sddm-0.18.0.patched/src/daemon/CMakeLists.txt	2018-08-11 09:30:58.935503388 +0200
-@@ -76,3 +76,12 @@
+@@ -77,3 +77,12 @@
  endif()
 
  install(TARGETS sddm DESTINATION "${CMAKE_INSTALL_BINDIR}")
 +
 +# Generate and install the default config file
-+add_custom_command(COMMAND sddm --example-config > "${CMAKE_BINARY_DIR}/default.conf"
-+    OUTPUT "${CMAKE_BINARY_DIR}/default.conf"
++add_custom_command(COMMAND sddm --example-config > "${CMAKE_BINARY_DIR}/sddm.conf"
++    OUTPUT "${CMAKE_BINARY_DIR}/sddm.conf"
 +    COMMENT "Generate default sddm configuration file"
 +    DEPENDS sddm
 +)
-+add_custom_target(generate_config_file ALL DEPENDS "${CMAKE_BINARY_DIR}/default.conf")
-+install(FILES "${CMAKE_BINARY_DIR}/default.conf" DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}/sddm.conf.d/")
++add_custom_target(generate_config_file ALL DEPENDS "${CMAKE_BINARY_DIR}/sddm.conf")
++install(FILES "${CMAKE_BINARY_DIR}/sddm.conf" DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}/sddm.conf.d/")
