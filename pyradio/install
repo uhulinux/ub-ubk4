@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
-python3 setup.py install --root=$UB_INSTALLDIR --skip-build
+ub_install
 mkdir -p $UB_INSTALLDIR/usr/share/{applications,pixmaps}
 cp devel/pyradio.desktop $UB_INSTALLDIR/usr/share/applications/
 cp devel/pyradio.png $UB_INSTALLDIR/usr/share/pixmaps/
-cp pyradio{,_rb,_server}.1 "$UB_INSTALLDIR/usr/share/man/man1"
+mv docs/pyradio{,_rb,_server,_rec}.1 "$UB_INSTALLDIR/usr/share/man/man1"
