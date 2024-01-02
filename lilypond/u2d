@@ -1,1 +1,2 @@
-u2d http://lilypond.org/source.hu.html
+dir=$(urllist http://lilypond.org/download/sources/ | grep ^v | sort -V | tail -n 1)
+u2d http://lilypond.org/download/sources/$dir/ lilypond-
