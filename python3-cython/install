@@ -1,3 +1,7 @@
 #!/bin/sh -eux
 
-python3 setup.py install --root="$UB_INSTALLDIR"
+python3 -m installer --destdir="$UB_INSTALLDIR" dist/*.whl
+for f in cygdb cython cythonize; do
+    mv "$UB_INSTALLDIR"/usr/bin/$f "$UB_INSTALLDIR"/usr/bin/${f}3
+    ln -s ${f}3 "$UB_INSTALLDIR"/usr/bin/$f
+  done
