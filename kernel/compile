@@ -29,11 +29,7 @@ ub_replace "^EXTRAVERSION =[\t ]*\(\.\([0-9]\+\)\)*.*" "EXTRAVERSION = \1-${VERS
 cp "$UB_SRCDIR"/config/config."$ARCH" .config
 cp "$UB_SRCDIR"/config/config."$ARCH" arch/x86/configs/"$ARCH"_defconfig
 
-# diff -u <(grep -v '^#' .config|sort) <(grep -v '^#' arch/x86/configs/"$ARCH"_defconfig|sort)
-
 make olddefconfig
-# make prepare
-# yes "" | make config >/dev/null
 
 make ARCH="$ARCH" -j"$NUMCPUS" scripts
 make ARCH="$ARCH" -j"$NUMCPUS" bzImage
@@ -51,16 +47,8 @@ ln -s "$bzimage-$VERSION" "$UB_OBJECTDIR/boot/$bzimage.$ARCH"
 # modules
 make \
 	INSTALL_PATH="$UB_OBJECTDIR/boot" \
-	INSTALL_MOD_PATH="$UB_OBJECTDIR" \
+	INSTALL_MOD_PATH="$UB_OBJECTDIR/usr" \
 	modules_install
-
-# check module licenses
-[  -d  "$UB_OBJECTDIR"/lib/modules/"$VERSION" ]
-echo "checking for missing or incorrect license tags..."
-( find $UB_OBJECTDIR/lib/modules/$VERSION -name '*.ko' | xargs /sbin/modinfo -l | \
-	grep -E -v 'GPL( v2)?$|Dual BSD/GPL$|Dual MPL/GPL$|GPL and additional rights$' ) && \
-	echo "error: there are modules without license tag. please fix."
-#	exit 1
 
 # check module symbols
 if depmod -nea -b "$UB_OBJECTDIR" -F "$UB_OBJECTDIR"/boot/System.map "$VERSION" 2>&1 | grep "^WARNING:"; then
@@ -90,19 +78,19 @@ cp -av arch/x86/include/asm/. "$UB_OBJECTDIR"/usr/src/linux/include/asm/
 cp -a --parents arch/x86/include "$UB_OBJECTDIR"/usr/src/linux/
 
 if [ -s Module.markers ]; then
-  cp Module.markers $UB_OBJECTDIR/lib/modules/$VERSION/build
+  cp Module.markers $UB_OBJECTDIR/usr/lib/modules/$VERSION/build
 fi
 if [ -d arch/$ARCH/scripts ]; then
-	cp -a arch/$ARCH/scripts $UB_OBJECTDIR/lib/modules/$VERSION/build/arch/$ARCH/ || :
+	cp -a arch/$ARCH/scripts $UB_OBJECTDIR/usr/lib/modules/$VERSION/build/arch/$ARCH/ || :
 fi
 if [ -f arch/$ARCH/*lds ]; then
-	cp -a arch/$ARCH/*lds $UB_OBJECTDIR/lib/modules/$VERSION/build/arch/$ARCH/ || :
+	cp -a arch/$ARCH/*lds $UB_OBJECTDIR/usr/lib/modules/$VERSION/build/arch/$ARCH/ || :
 fi
 
-rm -f $UB_OBJECTDIR/lib/modules/$VERSION/build
-ln -sf ../../../usr/src/linux-$VERSION $UB_OBJECTDIR/lib/modules/$VERSION/build
-rm $UB_OBJECTDIR/lib/modules/$VERSION/source
-ln -sf ../../../usr/src/linux-$VERSION $UB_OBJECTDIR/lib/modules/$VERSION/source
+rm -f $UB_OBJECTDIR/usr/lib/modules/$VERSION/build
+ln -sf /usr/src/linux-$VERSION $UB_OBJECTDIR/usr/lib/modules/$VERSION/build
+rm $UB_OBJECTDIR/usr/lib/modules/$VERSION/source
+ln -sf /usr/src/linux-$VERSION $UB_OBJECTDIR//usr/lib/modules/$VERSION/source
 
 # add objtool for external module building and enabled VALIDATION_STACK option
 cp $UB_COMPILEDIR/tools/objtool/objtool $UB_OBJECTDIR/usr/src/linux-$VERSION/tools/objtool/
@@ -124,7 +112,7 @@ find "$UB_OBJECTDIR/usr/src/linux-$VERSION/" -name "*.cmd" -print0 | xargs -r0 r
 rm -f "$UB_OBJECTDIR"/usr/src/linux/include/linux/mISDN*
 
 # System.map
-cp -a System.map "$UB_OBJECTDIR/lib/modules/$VERSION/"
+cp -a System.map "$UB_OBJECTDIR/usr/lib/modules/$VERSION/"
 
 # bzImage symlink
 ln -s "$bzimage.$ARCH" "$UB_OBJECTDIR/boot/$bzimage"

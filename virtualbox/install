@@ -6,9 +6,9 @@ source ./env.sh
 cd ./out/linux.amd64/release/bin/src
 make \
 	DESTDIR="$UB_INSTALLDIR" \
-	INSTALL_MOD_PATH="$UB_INSTALLDIR" \
-	KERN_DIR="$(echo /lib/modules/*.x86_64/build)" \
-	MODULE_DIR="${UB_INSTALLDIR}`ls -1d /lib/modules/*.x86_64`/kernel/drivers/misc/" \
+	INSTALL_MOD_PATH="$UB_INSTALLDIR"/usr \
+	KERN_DIR="$(echo /usr/lib/modules/*.x86_64/build)" \
+	MODULE_DIR="${UB_INSTALLDIR}`ls -1d /usr/lib/modules/*.x86_64`/kernel/drivers/misc/" \
 	install
 
 # install the other files

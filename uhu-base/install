@@ -6,8 +6,17 @@ ln -s /proc/self/mounts "$UB_INSTALLDIR"/etc/mtab
 mkdir -p "$UB_INSTALLDIR"/var/spool
 ln -s ../mail "$UB_INSTALLDIR"/var/spool/mail
 
-rm -rf "$UB_INSTALLDIR"/sbin
-ln -sf usr/sbin "$UB_INSTALLDIR"/sbin
-
+if [ -d "$UB_INSTALLDIR"/bin ]; then
 rm -rf "$UB_INSTALLDIR"/bin
+fi
 ln -sf usr/bin "$UB_INSTALLDIR"/bin
+
+if [ -d "$UB_INSTALLDIR"/lib ]; then
+rm -rf "$UB_INSTALLDIR"/lib
+fi
+ln -sf usr/lib "$UB_INSTALLDIR"/lib
+
+if [ -d "$UB_INSTALLDIR"/sbin ]; then
+rm -rf "$UB_INSTALLDIR"/sbin
+fi
+ln -sf usr/sbin "$UB_INSTALLDIR"/sbin

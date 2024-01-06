@@ -1,14 +1,10 @@
 #!/bin/bash -eux
 
-# FIRMWAREDIR="/lib/firmware"
-# mkdir -p ${UB_INSTALLDIR}${FIRMWAREDIR}
-# ./linux-firmware/copy-firmware.sh $(UB_INSTALLDIR)$(FIRMWAREDIR)
+make -C linux-firmware DESTDIR=${UB_INSTALLDIR} FIRMWAREDIR=/usr/lib/firmware install
 
-make -C linux-firmware DESTDIR=${UB_INSTALLDIR} install
+cp -a dvb-firmware/* ${UB_INSTALLDIR}/usr/lib/firmware
 
-cp -a dvb-firmware/* ${UB_INSTALLDIR}/lib/firmware
-
-rm -Rf ${UB_INSTALLDIR}/lib/firmware/.git
+rm -Rf ${UB_INSTALLDIR}/usr/lib/firmware/.git
 
 docdir=${UB_INSTALLDIR}/usr/share/doc/Packages/linux-firmware
 mkdir -p ${docdir}
@@ -19,11 +15,11 @@ mv linux-firmware/README* ${docdir}/
 mv linux-firmware/WHENCE ${docdir}/
 mv dvb-firmware/LICENCE* ${docdir}/
 mv dvb-firmware/license-*.txt ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/dvb-*.fw.license.txt ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/LICENCE* ${docdir}/
-mv ${UB_INSTALLDIR}/lib/firmware/license*.txt ${docdir}/
+mv ${UB_INSTALLDIR}/usr/lib/firmware/dvb-*.fw.license.txt ${docdir}/
+mv ${UB_INSTALLDIR}/usr/lib/firmware/LICENCE* ${docdir}/
+mv ${UB_INSTALLDIR}/usr/lib/firmware/license*.txt ${docdir}/
 
-rm -Rf ${UB_INSTALLDIR}/lib/firmware/{Makefile,configure,README*,*.txt,*.py}
+rm -Rf ${UB_INSTALLDIR}/usr/lib/firmware/{Makefile,configure,README*,*.txt,*.py}
 
 # üres könyvtárak törlése
 find ${UB_INSTALLDIR} -type d -empty -delete

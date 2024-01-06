@@ -1,8 +1,8 @@
 #!/bin/bash -eux
 
-KVER="$(ls -1 /lib/modules | grep x86_64)"
+KVER="$(ls -1 /usr/lib/modules | grep x86_64)"
 #célkönyvtárak
-moduldir="$UB_INSTALLDIR"/lib/modules/"$KVER"/kernel/drivers/video
+moduldir="$UB_INSTALLDIR"/usr/lib/modules/"$KVER"/kernel/drivers/video
 cellibdir="$UB_INSTALLDIR"/usr/lib
 xmoduldir="$cellibdir"/xorg/modules
 desktopdir="$UB_INSTALLDIR"/usr/share/applications
@@ -11,7 +11,7 @@ vendordir="$UB_INSTALLDIR"/etc/OpenCL/vendors
 pixmapdir="$UB_INSTALLDIR"/usr/share/pixmaps/
 shnvdir="$UB_INSTALLDIR"/usr/share/nvidia
 vdpaudir=$cellibdir/vdpau
-fwdir="$UB_INSTALLDIR"/lib/firmware/nouveau
+fwdir="$UB_INSTALLDIR"/usr/lib/firmware/nouveau
 
 #könyvtárgyártás
 mkdir -p "$cellibdir"/nvidia \

@@ -7,8 +7,8 @@ function alprogi {
     cd -
 }
 #előkészület
-KVER="$(ls -1 /lib/modules | grep x86_64)"
-moduldir="$UB_COMPILEDIR/lib/modules/"$KVER"/kernel/drivers/video"
+KVER="$(ls -1 /usr/lib/modules | grep x86_64)"
+moduldir="$UB_COMPILEDIR/usr/lib/modules/"$KVER"/kernel/drivers/video"
 mkdir -p $moduldir
 forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
 #kicsomagolás és belépés

@@ -1,9 +1,9 @@
 #!/bin/bash -eux
 
 #előkészület
-KVER="$(ls -1 /lib/modules | grep x86_64)"
+KVER="$(ls -1 /usr/lib/modules | grep x86_64)"
 forras="NVIDIA-Linux-x86_64-${UB_VERSION}-no-compat32"
-moduldir="$UB_COMPILEDIR/lib/modules/"$KVER"/kernel/drivers"
+moduldir="$UB_COMPILEDIR/usr/lib/modules/"$KVER"/kernel/drivers"
 mkdir -p $moduldir
 #kicsomagolás és belépés
 chmod +x $forras.run

@@ -9,7 +9,7 @@ EOF
 ./configure \
 	--target-arch=amd64 \
 	--target-cpu=k8 \
-	--with-linux="$(echo /lib/modules/*.x86_64/build/)" \
+	--with-linux="$(echo /usr/lib/modules/*.x86_64/build/)" \
 	--disable-hardening \
 	--disable-java \
 	--disable-docs \
@@ -24,4 +24,4 @@ cd ./out/linux.amd64/release/bin/src
 # The variable KERN_DIR must be a kernel build folder and
 # end with /build without a trailing slash, or KERN_VER must be set.
 ub_make \
-	KERN_DIR="$(echo /lib/modules/*.x86_64/build)"
+	KERN_DIR="$(echo /usr/lib/modules/*.x86_64/build)"

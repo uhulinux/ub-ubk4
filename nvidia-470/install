@@ -8,13 +8,13 @@ function alprogi {
     cd -
 }
 
-KVER="$(ls -1 /lib/modules | grep x86_64)"
+KVER="$(ls -1 /usr/lib/modules | grep x86_64)"
 
 #célkönyvtárak
 cellibdir="$UB_INSTALLDIR"/usr/lib
 celbindir="$UB_INSTALLDIR"/usr/bin
 etcdir="$UB_INSTALLDIR"/etc
-moduldir="$UB_INSTALLDIR"/lib/modules/"$KVER"/kernel/drivers/video
+moduldir="$UB_INSTALLDIR"/usr/lib/modules/"$KVER"/kernel/drivers/video
 xmoduldir="$cellibdir"/xorg/modules
 sharedir="$UB_INSTALLDIR"/usr/share
 desktopdir="$sharedir"/applications
@@ -26,7 +26,7 @@ vulcandir="$etcdir"/vulcan/icd.d
 xconfdir="$sharedir"/X11/x.org.conf.d
 glvnddir="$sharedir"/glvnd/egl_vendor.d
 vdpaudir=$cellibdir/vdpau
-firmwaredir="$UB_INSTALLDIR"/lib/firmware
+firmwaredir="$UB_INSTALLDIR"/usr/lib/firmware
 profilesdir=$sharedir/nvidia
 vulcanlayerdir=$etcdir/vulcan/implicit_layer.d
 
