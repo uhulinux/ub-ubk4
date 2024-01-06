@@ -1,0 +1,52 @@
+diff -Nur orig/DisplayChannel.h mod/DisplayChannel.h
+--- orig/DisplayChannel.h	2016-03-27 13:12:43.000000000 +0200
++++ mod/DisplayChannel.h	2024-01-06 17:18:08.758064900 +0100
+@@ -49,7 +49,7 @@
+    int old_width;
+    int old_height;
+    int OSDHeight;
+-   eAspectRatio old_ar;
++   eVideoFormat old_ar;
+    int LastSignalStrength;
+    int LastSignalQuality; 
+    int setchannel_x;
+diff -Nur orig/DisplayReplay.h mod/DisplayReplay.h
+--- orig/DisplayReplay.h	2011-12-04 11:55:51.000000000 +0100
++++ mod/DisplayReplay.h	2024-01-06 17:20:42.238765194 +0100
+@@ -62,7 +62,7 @@
+    cString rectitle;
+    int old_width;
+    int old_height;
+-   eAspectRatio old_ar;
++   eVideoFormat old_ar;
+ 
+    cCharScroll *TitleScroll;
+    int MailIconState; // 0 = no icon, 1 = no mail, 2 = new mail
+diff -Nur orig/videostatus.h mod/videostatus.h
+--- orig/videostatus.h	2011-10-03 15:28:41.000000000 +0200
++++ mod/videostatus.h	2024-01-06 17:20:07.270605573 +0100
+@@ -28,13 +28,13 @@
+    ar16_9,
+    ar221_1,
+    arHD
+-} eAspectRatio;
++} eVideoFormat;
+ 
+ struct cVideoInfo
+ {
+    int width;       // in pixels
+    int height;      // in pixels
+-   eAspectRatio aspectratio; // aspect ratio
++   eVideoFormat aspectratio; // aspect ratio
+ };
+ 
+ class cVideoStatus : public cThread
+@@ -44,7 +44,7 @@
+    cCondWait Wait;
+    int height;
+    int width;
+-   eAspectRatio aspectratio;
++   eVideoFormat aspectratio;
+    virtual void Action(void);
+ public:
+    cVideoStatus(void);
