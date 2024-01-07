@@ -1,7 +1,7 @@
 diff -Naur a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
 --- a/clang/lib/Driver/ToolChains/Linux.cpp	2022-09-20 08:05:50.000000000 +0200
 +++ b/clang/lib/Driver/ToolChains/Linux.cpp	2022-09-23 04:06:14.928079481 +0200
-@@ -174,7 +174,7 @@
+@@ -206,7 +206,7 @@
    if (Triple.getArch() == llvm::Triple::riscv32)
      return "lib32";
  
@@ -10,7 +10,7 @@ diff -Naur a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains
  }
  
  Linux::Linux(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
-@@ -546,7 +546,7 @@
+@@ -588,7 +588,7 @@
    case llvm::Triple::x86_64: {
      bool X32 = Triple.isX32();
  

@@ -1,0 +1,14 @@
+diff --git a/Makefile.am b/Makefile.am
+index 13dfc63..5c5603a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -311,6 +311,9 @@ libtool: $(ltmain_sh) $(config_status) $(dotversion)
+ 
+ include libltdl/ltdl.mk
+ 
++libltdl_libltdl_la_CPPFLAGS += $(CUSTOM_LTDL_CFLAGS)
++libltdl_libltdl_la_LDFLAGS  += $(CUSTOM_LTDL_LDFLAGS)
++
+ lt_aclocal_m4	= $(srcdir)/$(ltdl_dir)/aclocal.m4
+ lt_config_h_in	= $(srcdir)/$(ltdl_dir)/config-h.in
+ lt_configure	= $(srcdir)/$(ltdl_dir)/configure

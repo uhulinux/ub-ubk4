@@ -1,21 +1,15 @@
 #!/bin/sh -eux
 
-# ada, brig, jit, objcp
+# ada, d, go, jit, objcp
 
 cd "$UB_OBJECTDIR"
-
-arch="x86_64-unknown-linux-gnu"
 
 OPT_FLAGS="-m64 -O2 -mtune=generic"
 
 export CFLAGS="$OPT_FLAGS"
 export CXXFLAGS="$OPT_FLAGS"
-SED=sed \
 
 "$UB_COMPILEDIR"/configure \
-    --build=$arch \
-    --host=$arch \
-    --target=$arch \
 	--prefix=/usr \
 	--infodir=/usr/share/info \
 	--mandir=/usr/share/man \

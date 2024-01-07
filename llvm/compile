@@ -22,9 +22,9 @@ ub_compile \
 	-DLLVM_CCACHE_BUILD=ON \
 	-DLLVM_ENABLE_ASSERTIONS=OFF \
 	-DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
-	-DLLVM_ENABLE_PROJECTS="clang;compiler-rt;lld" \
+	-DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;;compiler-rt;lld" \
+	-DLLVM_INCLUDE_EXAMPLES=OFF \
 	-DLLVM_INCLUDE_TESTS=OFF \
 	-DLLVM_TARGETS_TO_BUILD="AMDGPU;X86" \
-	-DLLVM_TOOL_LIBCXX_BUILD=OFF \
     -DFFI_INCLUDE_DIR=$(pkg-config --variable=includedir libffi) \
 	-DFFI_LIBRARY_DIR=$(pkg-config --cflags-only-I libffi)
