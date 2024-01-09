@@ -8,7 +8,7 @@ export NINJAFLAGS=" -j$jobs "
 
 ub_compile \
     -G Ninja \
-	-DQT_QMAKE_TARGET_MKSPEC=linux-g++-64 \
+	-DQT_QMAKE_TARGET_MKSPEC=linux-g++ \
 	-DCMAKE_INSTALL_PREFIX=/usr \
     -DINSTALL_ARCHDATADIR=lib/qt6 \
     -DINSTALL_BINDIR=lib/qt6/bin \
@@ -25,45 +25,46 @@ ub_compile \
 	\
 	-DCMAKE_BUILD_TYPE=Release \
 	-DBUILD_SHARED_LIBS=ON \
-	-DQT_USE_CCACHE=ON \
 	-DBUILD_WITH_PCH=OFF \
-	-DINPUT_journald=yes \
-	-DINPUT_qml_debug=yes \
-    -DINPUT_reduce_relocations=yes \
-    -DINPUT_rpath=no \
+	-DQT_USE_CCACHE=ON \
+    -DQT_FEATURE_rpath=OFF \
+    -DQT_FEATURE_clang=ON \
+	-DQT_FEATURE_journald=ON \
+	-DQT_FEATURE_qml_debug=ON \
+    -DQT_FEATURE_reduce_relocations=ON \
 	\
 	-DQT_BUILD_EXAMPLES=FALSE \
 	-DQT_BUILD_TESTS=FALSE \
 	-DBUILD_qtwebengine=ON \
 	-DBUILD_qttranslations=ON \
 	\
-	-DINPUT_accessibility=yes \
+	-DQT_FEATURE_accessibility=ON \
 	\
-	-DINPUT_sql_sqlite=yes \
+	-DQT_FEATURE_sql_sqlite=ON \
 	\
 	-DINPUT_freetype=system \
 	-DINPUT_harfbuzz=system \
 	-DINPUT_libjpeg=system \
 	-DINPUT_libpng=system \
 	-DINPUT_pcre=system \
-	-DINPUT_system_sqlite=yes \
-	-DINPUT_system_zlib=yes \
+	-DQT_FEATURE_system_sqlite=ON \
+	-DQT_FEATURE_system_zlib=ON \
 	\
 	-DINPUT_dbus=linked \
 	-DINPUT_openssl=linked \
-	-DINPUT_ssl=yes \
+	-DQT_FEATURE_ssl=ON \
 	\
-    -DINPUT_cups=yes \
-    -DINPUT_glib=yes \
-    -DINPUT_gtk3=yes \
-    -DINPUT_opengl=yes \
-    -DINPUT_linuxfb=no \
-    -DINPUT_eglfs=yes \
-    -DINPUT_kms=no \
-    -DINPUT_libproxy=no \
+    -DQT_FEATURE_cups=ON \
+    -DQT_FEATURE_glib=ON \
+    -DQT_FEATURE_gtk3=ON \
+    -DQT_FEATURE_opengl=ON \
+    -DQT_FEATURE_linuxfb=OFF \
+    -DQT_FEATURE_eglfs=ON \
+    -DQT_FEATURE_kms=OFF \
+    -DQT_FEATURE_libproxy=OFF \
 	\
-    -DINPUT_fontconfig=yes \
-    -DINPUT_evdev=yes \
-    -DINPUT_mtdev=yes \
-    -DINPUT_libinput=yes \
-    -DINPUT_tslib=yes
+    -DQT_FEATURE_fontconfig=ON \
+    -DQT_FEATURE_evdev=ON \
+    -DQT_FEATURE_mtdev=ON \
+    -DQT_FEATURE_libinput=ON \
+    -DQT_FEATURE_tslib=ON

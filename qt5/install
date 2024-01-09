@@ -4,6 +4,11 @@ cd $UB_OBJECTDIR
 
 make INSTALL_ROOT="$UB_INSTALLDIR" install
 
+ln -s ../lib/qt5/bin/moc "$UB_INSTALLDIR"/usr/bin/moc-qt5
+ln -s ../lib/qt5/bin/qmake "$UB_INSTALLDIR"/usr/bin/qmake-qt5
+ln -s ../lib/qt5/bin/rcc "$UB_INSTALLDIR"/usr/bin/rcc-qt5
+ln -s ../lib/qt5/bin/uic "$UB_INSTALLDIR"/usr/bin/uic-qt5
+
 # Drop QMAKE_PRL_BUILD_DIR because reference the build dir
 find "$UB_INSTALLDIR/usr/lib" -type f -name '*.prl' \
 	-exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
