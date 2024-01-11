@@ -1,9 +1,19 @@
 #!/bin/sh -eux
 
-# patchset: https://github.com/stha09/chromium-patches
+# patchset: https://gitlab.com/Matt.Jolly/chromium-patches
 
-if [ $((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024))) -lt 15 ]; then
-	echo "At least 15 GB free space is required!"
+freespace=$((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024)))
+
+rm -Rf third_party/llvm* # 1400M
+rm -Rf third_party/rust-src # 3600M
+
+if [ -d third_party/rust-src -a -d third_party/llvm ]; then
+    if [ $freespace -lt 23 ]; then
+	    echo "At least 23 GB free space is required!"
+	    exit 1
+	fi
+elif [ $freespace -lt 18 ]; then
+	echo "At least 18 GB free space is required!"
 	exit 1
 fi
 
@@ -12,18 +22,22 @@ jobs=$(($procs / 2))
 
 # gcc-vel sokkal gyorsabb a build, mivel használja a ccache-t
 # linkelni viszont az lld-vel kell (use_lld=true), a többi elszáll
-export CC=gcc
-export CXX=g++
-export AR=ar
-export NM=nm
-# export CC=clang
-# export CXX=clang++
-# export AR=llvm-ar
+# export CC=gcc
+# export CXX=g++
+# export AR=ar
 # export NM=nm
+export CC=clang
+export CXX=clang++
+export AR=llvm-ar
+export NM=nm
 
 # ccache
 export CCACHE_CPP2=yes
 export CCACHE_SLOPPINESS=time_macros
+
+# qt5, qt6 path
+export PATH="$PATH:/usr/lib/qt5/bin"
+export PATH="$PATH:/usr/lib/qt6/libexec"
 
 _flags=("
 custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
@@ -31,7 +45,7 @@ host_toolchain=\"//build/toolchain/linux/unbundle:default\"
 is_debug=false
 cc_wrapper=\"ccache\"
 clang_base_path=\"/usr\"
-is_clang=false
+is_clang=true
 is_cfi=false
 is_official_build=true
 clang_use_chrome_plugins=false
@@ -44,6 +58,7 @@ proprietary_codecs=true
 rtc_use_pipewire=true
 use_gold=false
 use_lld=true
+use_pulseaudio=true
 use_sysroot=false
 symbol_level=0
 enable_linux_installer=false
@@ -51,23 +66,49 @@ enable_nacl=false
 enable_widevine=true
 enable_hangout_services_extension=false
 enable_rust=false
-use_custom_libcxx=false
+use_custom_libcxx=true
 use_kerberos=false
+use_system_freetype=true
+use_system_harfbuzz=true
+use_system_lcms2=true
+use_system_libdrm=true
 use_system_libffi=true
-gtk_version=3
+use_system_libjpeg=true
+use_system_libpng=true
+use_qt=true
+use_qt6=true
+moc_qt5_path=\"/usr/lib/qt5/bin/\"
+moc_qt6_path=\"/usr/lib/qt6/libexec/\"
+gtk_version=4
 icu_use_data_file=false
 ")
 
 # rendszerből használadó libek
 _syslibs=(
-    flac
-    icu
-    libdrm
-    libevent
-    libjpeg
-    libpng
-    libwebp
+	fontconfig
+	freetype
+	harfbuzz-ng
+	icu
+	libdrm
+	libevent
+	libjpeg
+	libpng
+	libwebp
+	libxml
+	libxslt
 )
+for _lib in $_syslibs libjpeg_turbo; do
+	find . -type f -path "*third_party/$_lib/*" \
+   	\! -path "*third_party/$_lib/chromium/*" \
+	\! -path "*third_party/$_lib/google/*" \
+	\! -path './base/third_party/icu/*' \
+	\! -path './third_party/libxml/*' \
+	\! -path './third_party/pdfium/third_party/freetype/include/pstables.h' \
+	\! -path './third_party/harfbuzz-ng/utils/hb_scoped.h' \
+	\! -path './third_party/crashpad/crashpad/third_party/zlib/zlib_crashpad.h' \
+   	\! -regex '.*\.\(gn\|gni\|isolate\|py\)' \
+	-delete
+done
 
 outdir="../object"
 
