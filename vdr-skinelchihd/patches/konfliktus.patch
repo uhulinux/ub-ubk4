@@ -1,0 +1,43 @@
+diff -Nur orig/displaychannel.h mod/displaychannel.h
+--- orig/displaychannel.h	2021-01-07 11:42:29.080711665 +0100
++++ mod/displaychannel.h	2024-01-13 17:36:40.222537679 +0100
+@@ -41,7 +41,7 @@
+    cString lastdate;
+    bool changed, hasVideo;
+    int old_width, old_height, OSDHeight;
+-   eAspectRatio old_ar;
++   eVideoFormat old_ar;
+    int LastSignalStrength, LastSignalQuality; 
+    int presentLastOffset, followingLastOffset;
+    cPixmap *pmBG, *pmLogo, *pmChannelNameBg, *pmChDateTime, *pmVideoSize, *pmSymbols, *pmMessageBG;
+diff -Nur orig/displayreplay.h mod/displayreplay.h
+--- orig/displayreplay.h	2021-01-05 16:42:32.818326059 +0100
++++ mod/displayreplay.h	2024-01-13 17:36:40.222537679 +0100
+@@ -43,7 +43,7 @@
+    cString rectitle;
+    int old_width;
+    int old_height;
+-   eAspectRatio old_ar;
++   eVideoFormat old_ar;
+ 
+    int Gap;
+    int SymbolGap;
+diff -Nur orig/vdrstatus.h mod/vdrstatus.h
+--- orig/vdrstatus.h	2021-01-05 17:49:25.750519884 +0100
++++ mod/vdrstatus.h	2024-01-13 17:36:40.222537679 +0100
+@@ -36,13 +36,13 @@
+    ar16_9,
+    arHD,
+    arUHD
+-} eAspectRatio;
++} eVideoFormat;
+ 
+ struct cVideoInfo
+ {
+    int width;       // in pixels
+    int height;      // in pixels
+-   eAspectRatio aspectratio; // aspect ratio
++   eVideoFormat aspectratio; // aspect ratio
+ };
+ 
+ 
