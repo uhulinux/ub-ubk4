@@ -1,0 +1,37 @@
+diff -Nur orig/src/gpk-enum.c mod/src/gpk-enum.c
+--- orig/src/gpk-enum.c	2024-01-14 13:29:07.454394312 +0100
++++ mod/src/gpk-enum.c	2024-01-14 13:41:10.839956980 +0100
+@@ -147,7 +147,7 @@
+ 
+ static const PkEnumMatch enum_group_icon_name[] = {
+ 	{PK_GROUP_ENUM_UNKNOWN,			"help-browser"},	/* fall though value */
+-	{PK_GROUP_ENUM_ACCESSIBILITY,		"preferences-desktop-accessibility"},
++	{PK_GROUP_ENUM_ACCESSIBILITY,		"user-desktop"},
+ 	{PK_GROUP_ENUM_ACCESSORIES,		"applications-utilities"},
+ 	{PK_GROUP_ENUM_ADMIN_TOOLS,		"system-lock-screen"},
+ 	{PK_GROUP_ENUM_COLLECTIONS,		"pk-collection-installed"},
+@@ -163,19 +163,19 @@
+ 	{PK_GROUP_ENUM_GAMES,			"applications-games"},
+ 	{PK_GROUP_ENUM_GRAPHICS,		"applications-graphics"},
+ 	{PK_GROUP_ENUM_INTERNET,		"applications-internet"},
+-	{PK_GROUP_ENUM_LEGACY,			"media-floppy"},
+-	{PK_GROUP_ENUM_LOCALIZATION,		"preferences-desktop-locale"},
+-	{PK_GROUP_ENUM_MAPS,			"applications-multimedia"},
++	{PK_GROUP_ENUM_LEGACY,			"applications-development"},
++	{PK_GROUP_ENUM_LOCALIZATION,		"user-desktop"},
++	{PK_GROUP_ENUM_MAPS,			"applications-office"},
+ 	{PK_GROUP_ENUM_MULTIMEDIA,		"applications-multimedia"},
+ 	{PK_GROUP_ENUM_NETWORK,			"network-wired"},
+ 	{PK_GROUP_ENUM_OFFICE,			"applications-office"},
+ 	{PK_GROUP_ENUM_OTHER,			"applications-other"},
+-	{PK_GROUP_ENUM_POWER_MANAGEMENT,	"battery"},
++	{PK_GROUP_ENUM_POWER_MANAGEMENT,	"user-desktop"},
+ 	{PK_GROUP_ENUM_PROGRAMMING,		"applications-development"},
+ 	{PK_GROUP_ENUM_PUBLISHING,		"accessories-dictionary"},
+ 	{PK_GROUP_ENUM_REPOS,			"x-package-repository"},
+ 	{PK_GROUP_ENUM_SCIENCE,			"applications-science"},
+-	{PK_GROUP_ENUM_SECURITY,		"network-wireless-encrypted"},
++	{PK_GROUP_ENUM_SECURITY,		"applications-other"},
+ 	{PK_GROUP_ENUM_SERVERS,			"network-server"},
+ 	{PK_GROUP_ENUM_SYSTEM,			"applications-system"},
+ 	{PK_GROUP_ENUM_VIRTUALIZATION,		"computer"},
