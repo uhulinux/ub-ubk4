@@ -8,7 +8,6 @@ sed -i DisplayChannel.c \
 sed -e "s:INCLUDES += -I\$(VDRINCDIR):INCLUDES += -I\$(VDRINCDIR)/include:" \
 	-i Makefile
 sed -e "s:auto_ptr:unique_ptr:" -i services/epgsearch_services.h
-export CXX=g++
 make	CONFDIR=/etc/vdr/ \
 	VIDEODIR=/var/vdr/video \
 	HAVE_IMAGEMAGICK=0
