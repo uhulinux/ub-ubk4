@@ -15,10 +15,8 @@ rm -f "$UB_INSTALLDIR"/usr/lib/libstdc++*.py
 
 # create cc-rs compatible symlinks
 # https://github.com/rust-lang/cc-rs/blob/main/src/lib.rs#L2950-L2952
-host="x86_64-unknown-linux-gnu"
 for binary in {cc,c++,g++,gcc,gcc-ar,gcc-nm,gcc-ranlib}; do
     ln -s /usr/bin/${binary} "$UB_INSTALLDIR"/usr/bin/x86_64-linux-gnu-${binary}
-    ln -sf ${binary} "$UB_INSTALLDIR"/usr/bin/"$host"-${binary}
 done
 
 ln -s ../../usr/bin/cpp "$UB_INSTALLDIR"/usr/lib/cpp
