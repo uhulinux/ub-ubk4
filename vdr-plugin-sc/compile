@@ -1,10 +1,9 @@
 #!/bin/sh -eux
 
 mkdir -p "$UB_INSTALLDIR/usr/lib/vdr"
-make USEFSH=1 \
+ub_compile USEFSH=1 \
   VIDEODIR=/var/vdr/video \
   CONFDIR=/etc/vdr/ \
-  PREFIX=/usr \
   MANDIR=/usr/share/man \
   DESTDIR=$UB_INSTALLDIR \
   INCDIR=/usr/include/vdr \
