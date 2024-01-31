@@ -7,13 +7,6 @@ fi
 
 ccache --max-size=12G
 
-# átpakolunk az /src alá mindent, mert
-# ott fogja keresni a letöltött forráscsomagokat
-# if [ ! -d src ]; then
-# mkdir src
-# fi
-# mv *.{gz,zip,bz2,xz} src/
-
 # ha van a distro-configs alatt megfelelő tartalmú .conf fájl, ekkor az
 # ./autogen.sh --with-distro=<conffile> is használható
 # a LibreOfficeUHU.conf fájlhoz
@@ -31,17 +24,18 @@ ccache --max-size=12G
     --with-lang="en-GB hu" \
     --with-vendor=ubk.hu \
     --with-help \
-    --with-fonts \
     --with-external-tar=src \
     --with-system-libs \
     --with-system-headers \
     --with-myspell-dicts \
     --with-external-dict-dir=/usr/share/hunspell \
+    --without-fonts \
     --without-java \
     --without-system-jars \
     --without-system-abseil \
     --without-system-bluez \
     --without-system-box2d \
+    --without-system-clucene \
     --without-system-dragonbox \
     --without-system-frozen \
     --without-system-libabw \
@@ -64,25 +58,25 @@ ccache --max-size=12G
     --without-system-mythes \
     --without-system-orcus \
     --without-system-poppler \
+    --without-system-redland \
     --without-system-xmlsec \
+    --without-system-zxcvbn \
     --without-system-zxing \
     --disable-coinmp \
     --disable-dbgutil \
     --disable-debug \
     --disable-odk \
     --disable-firebird-sdbc \
+    --disable-postgresql-sdbc \
     --disable-skia \
     --enable-avahi \
     --enable-fetch-external \
     --enable-gstreamer-1-0 \
-    --enable-postgresql-sdbc \
     --enable-python \
     --enable-ext-nlpsolver \
     --enable-gio \
     --enable-gtk3 \
-    --enable-gtk3-kde5 \
     --enable-gtk4 \
-    --enable-kf5 \
     --enable-qt5 \
     --enable-qt6 \
     --disable-pdfimport \
