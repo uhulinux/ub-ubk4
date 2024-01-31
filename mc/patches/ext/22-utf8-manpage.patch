@@ -1,7 +1,7 @@
-diff -Naur orig/misc/ext.d/text.sh.in patched/misc/ext.d/text.sh.in
---- orig/misc/ext.d/text.sh.in	2019-06-16 19:49:31.000000000 +0200
-+++ patched/misc/ext.d/text.sh.in	2019-06-30 21:10:49.171566894 +0200
-@@ -54,7 +54,7 @@
+diff -Naur a/misc/ext.d/text.sh.in b/misc/ext.d/text.sh.in
+--- a/misc/ext.d/text.sh.in	2024-01-20 20:34:38.000000000 +0100
++++ b/misc/ext.d/text.sh.in	2024-01-27 18:42:46.893673769 +0100
+@@ -57,7 +57,7 @@
              cat "${MC_EXT_FILENAME}"
              ;;
          *)
@@ -10,7 +10,7 @@ diff -Naur orig/misc/ext.d/text.sh.in patched/misc/ext.d/text.sh.in
              ;;
          esac
          ;;
-@@ -62,10 +62,10 @@
+@@ -65,10 +65,10 @@
          pod2man "${MC_EXT_FILENAME}" | nroff @MAN_FLAGS@ @MANDOC@
          ;;
      nroff.me)
@@ -21,9 +21,9 @@ diff -Naur orig/misc/ext.d/text.sh.in patched/misc/ext.d/text.sh.in
 -        nroff @MAN_FLAGS@ -ms "${MC_EXT_FILENAME}"
 +        groff-utf8 -P-c -Tutf8 -ms "${MC_EXT_FILENAME}"
          ;;
-     man.gz|man.bz|man.bz2|man.lz|man.lz4|man.lzma|man.xz|man.zst)
+     man.gz|man.bz|man.bz2|man.lz|man.lz4|man.lzma|man.lzo|man.xz|man.zst)
          case "${MC_EXT_FILENAME}" in
-@@ -100,8 +100,7 @@
+@@ -103,8 +103,7 @@
              cat "${MC_EXT_FILENAME}"
              ;;
          *)
@@ -33,7 +33,7 @@ diff -Naur orig/misc/ext.d/text.sh.in patched/misc/ext.d/text.sh.in
              ;;
          esac | ${pager}
          ;;
-@@ -109,10 +108,10 @@
+@@ -112,10 +111,10 @@
          pod2man "${MC_EXT_FILENAME}" | nroff @MAN_FLAGS@ @MANDOC@ | ${pager}
          ;;
      nroff.me)
@@ -42,11 +42,11 @@ diff -Naur orig/misc/ext.d/text.sh.in patched/misc/ext.d/text.sh.in
          ;;
      nroff.ms)
 -        nroff @MAN_FLAGS@ -ms "${MC_EXT_FILENAME}" | ${pager}
-+        groff-utf8 -P-c -Tutf8 -me "${MC_EXT_FILENAME}" | ${pager}
++        groff-utf8 -P-c -Tutf8 -ms "${MC_EXT_FILENAME}" | ${pager}
          ;;
-     man.gz|man.bz|man.bz2|man.lz|man.lz4|man.lzma|man.xz|man.zst)
+     man.gz|man.bz|man.bz2|man.lz|man.lz4|man.lzma|man.lzo|man.xz|man.zst)
          case "${MC_EXT_FILENAME}" in
-@@ -120,7 +119,7 @@
+@@ -123,7 +122,7 @@
              ${unpacker} "${MC_EXT_FILENAME}"
              ;;
          *)

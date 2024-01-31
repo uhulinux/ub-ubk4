@@ -1,6 +1,6 @@
 diff -Naur a/misc/ext.d/package.sh b/misc/ext.d/package.sh
---- a/misc/ext.d/package.sh	2023-01-01 19:39:31.000000000 +0100
-+++ b/misc/ext.d/package.sh	2023-01-22 12:47:38.646944607 +0100
+--- a/misc/ext.d/package.sh	2024-01-20 20:34:38.000000000 +0100
++++ b/misc/ext.d/package.sh	2024-01-27 18:46:35.214214485 +0100
 @@ -24,7 +24,7 @@
          $RPM -qivlp --scripts "${MC_EXT_FILENAME}"
          ;;
@@ -11,14 +11,14 @@ diff -Naur a/misc/ext.d/package.sh b/misc/ext.d/package.sh
      debd)
          dpkg -s `echo "${MC_EXT_BASENAME}" | sed 's/\([0-9a-z.-]*\).*/\1/'`
 diff -Naur a/misc/mc.ext.ini.in b/misc/mc.ext.ini.in
---- a/misc/mc.ext.ini.in	2023-01-22 12:37:26.309810997 +0100
-+++ b/misc/mc.ext.ini.in	2023-01-22 12:49:22.951135910 +0100
-@@ -390,7 +390,7 @@
+--- a/misc/mc.ext.ini.in	2024-01-20 20:34:38.000000000 +0100
++++ b/misc/mc.ext.ini.in	2024-01-27 18:45:33.938072932 +0100
+@@ -405,7 +405,7 @@
  View=%view{ascii} @EXTHELPERSDIR@/package.sh view rpm
  
  [deb]
--Regex=\.u?deb$
-+Regex=\.(u?deb|uhu)$
+-Regex=\\.u?deb$
++Regex=\\.(u?deb|uhu)$
  Open=%cd %p/deb://
  View=%view{ascii} @EXTHELPERSDIR@/package.sh view deb
  

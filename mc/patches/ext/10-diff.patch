@@ -1,12 +1,12 @@
 diff -Naur a/misc/mc.ext.ini.in b/misc/mc.ext.ini.in
---- a/misc/mc.ext.ini.in	2023-01-01 19:39:31.000000000 +0100
-+++ b/misc/mc.ext.ini.in	2023-01-22 12:37:26.309810997 +0100
-@@ -345,7 +345,7 @@
+--- a/misc/mc.ext.ini.in	2024-01-20 20:34:38.000000000 +0100
++++ b/misc/mc.ext.ini.in	2024-01-27 18:35:27.856557360 +0100
+@@ -360,7 +360,7 @@
  View=%view{ascii} @EXTHELPERSDIR@/archive.sh view 7z
  
  [patch]
--Regex=\.(diff|patch)$
-+Regex=\.(diff|patch|skip)$
+-Regex=\\.(diff|patch)$
++Regex=\\.(diff|patch|skip)$
  Open=%cd %p/patchfs://
  View=%view{ascii} @EXTHELPERSDIR@/misc.sh view cat
  
