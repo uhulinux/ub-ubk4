@@ -1,0 +1,53 @@
+From 4d0cbef509fcd8fe3b7b7caea6accd1c436fb413 Mon Sep 17 00:00:00 2001
+From: rezso <rezso@rezso.net>
+Date: Wed, 31 Jan 2024 00:50:22 +0100
+Subject: u2d: add u2dkde
+
+
+diff --git a/src/uhubuild-u2d.sh b/src/uhubuild-u2d.sh
+index 9b14170..62ca3b4 100644
+--- a/src/uhubuild-u2d.sh
++++ b/src/uhubuild-u2d.sh
+@@ -106,12 +106,6 @@ function u2dsrc {
+     done
+ }
+ 
+-# kdeapps project
+-function kdeapp {
+-    # u2dsrc https://download.kde.org/stable/applications/ $1
+-    u2dsrc https://download.kde.org/stable/release-service/ $1
+-}
+-
+ # list sourceforge project files
+ function sflist() {
+ 	project="$1"
+@@ -179,6 +173,21 @@ function u2dxfce {
+     urllist https://archive.xfce.org/src/$subdir/$project/"$ver/" | splitver '^'$project'-([0-9.]+).tar.(gz|bz2|xz)$' | sort -V | tail -n 1
+ }
+ 
++# script for kde
++function u2dkde {
++	subdir="$1" #frameworks, plasma vagy app
++	project="$2"
++	unstable="$3"
++	reg="stable";
++	if [ -n "${unstable:-}" ]; then
++		reg="unstable"
++	fi
++	if [ $subdir == "app" ]; then
++	u2dsrc https://download.kde.org/$reg/release-service/ $project
++	else
++    u2dsubdir https://download.kde.org/$reg/$subdir/ $project-
++    fi
++}
+ 
+ # script for perl modules
+ function u2dcpan() {
+@@ -193,7 +202,6 @@ function u2dcpan() {
+ # script for python modules
+ function u2dpypi() {
+ 	project="$1"
+-	# urllist "https://pypi.python.org/simple/$project/" | sed 's/#.*//' | parsever | sort -V | tail -n 1
+ 	urllist "https://pypi.org/project/$project/" | sed 's/#.*//' | parsever | sort -V | tail -n 1
+ }
+ 
