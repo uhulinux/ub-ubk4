@@ -1,14 +1,31 @@
 #!/bin/bash -eux
 
+sed -i "s/blend/k8/g" configure
+sed -i "s/lib64/lib/g" configure
+
 cat <<'EOF'>> LocalConfig.kmk
 VBOX_WITH_TESTCASES :=
 VBOX_WITH_TESTSUITE :=
+VBOX_WITH_VALIDATIONKIT :=
+# no legacy X.org - use system xorg and gl headers
+VBOX_USE_SYSTEM_XORG_HEADERS = 1
+VBOX_NO_LEGACY_XORG_X11 = 1
+# do not fail on warning
+VBOX_GCC_WERR =
+VBOX_GCC_WARN =
+# fix gsoap missing zlib include and produce errors with --as-needed
+VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
+# no update request. update are handled via package manager
+VBOX_WITH_UPDATE_REQUEST := 0
+# build shared library
+VBOX_GUI_WITH_SHARED_LIBRARY = 1
+# disable experimental cloud infrastructure integration
+VBOX_WITH_CLOUD_NET :=
 EOF
 
 # --disable-vmmraw: disable building 32-bit guest additions iso
 ./configure \
 	--target-arch=amd64 \
-	--target-cpu=k8 \
 	--with-linux="$(echo /usr/lib/modules/*.x86_64/build/)" \
 	--disable-hardening \
 	--disable-java \

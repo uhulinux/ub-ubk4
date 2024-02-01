@@ -1,0 +1,106 @@
+diff -Naur a/linux-user/ioctls.h b/linux-user/ioctls.h
+--- a/linux-user/ioctls.h	2024-01-29 20:13:22.000000000 +0100
++++ b/linux-user/ioctls.h	2024-02-01 16:52:22.155609857 +0100
+@@ -96,7 +96,9 @@
+      IOCTL(BLKROGET, IOC_R, MK_PTR(TYPE_INT))
+      IOCTL(BLKRRPART, 0, TYPE_NULL)
+      IOCTL(BLKGETSIZE, IOC_R, MK_PTR(TYPE_ULONG))
++#ifdef BLKGETSIZE64
+      IOCTL(BLKGETSIZE64, IOC_R, MK_PTR(TYPE_ULONGLONG))
++#endif
+      IOCTL(BLKFLSBUF, 0, TYPE_NULL)
+      IOCTL(BLKRASET, 0, TYPE_INT)
+      IOCTL(BLKRAGET, IOC_R, MK_PTR(TYPE_LONG))
+@@ -105,15 +107,33 @@
+      IOCTL_SPECIAL(BLKPG, IOC_W, do_ioctl_blkpg,
+                    MK_PTR(MK_STRUCT(STRUCT_blkpg_ioctl_arg)))
+ 
++#ifdef BLKDISCARD
+      IOCTL(BLKDISCARD, IOC_W, MK_PTR(MK_ARRAY(TYPE_ULONGLONG, 2)))
++#endif
++#ifdef BLKIOMIN
+      IOCTL(BLKIOMIN, IOC_R, MK_PTR(TYPE_INT))
++#endif
++#ifdef BLKIOOPT
+      IOCTL(BLKIOOPT, IOC_R, MK_PTR(TYPE_INT))
++#endif
++#ifdef BLKALIGNOFF
+      IOCTL(BLKALIGNOFF, IOC_R, MK_PTR(TYPE_INT))
++#endif
++#ifdef BLKPBSZGET
+      IOCTL(BLKPBSZGET, IOC_R, MK_PTR(TYPE_INT))
++#endif
++#ifdef BLKDISCARDZEROES
+      IOCTL(BLKDISCARDZEROES, IOC_R, MK_PTR(TYPE_INT))
++#endif
++#ifdef BLKSECDISCARD
+      IOCTL(BLKSECDISCARD, IOC_W, MK_PTR(MK_ARRAY(TYPE_ULONGLONG, 2)))
++#endif
++#ifdef BLKROTATIONAL
+      IOCTL(BLKROTATIONAL, IOC_R, MK_PTR(TYPE_SHORT))
++#endif
++#ifdef BLKZEROOUT
+      IOCTL(BLKZEROOUT, IOC_W, MK_PTR(MK_ARRAY(TYPE_ULONGLONG, 2)))
++#endif
+ 
+      IOCTL(FDMSGON, 0, TYPE_NULL)
+      IOCTL(FDMSGOFF, 0, TYPE_NULL)
+@@ -129,13 +149,17 @@
+      IOCTL(FDTWADDLE, 0, TYPE_NULL)
+      IOCTL(FDEJECT, 0, TYPE_NULL)
+ 
++#ifdef FIBMAP
+      IOCTL(FIBMAP, IOC_W | IOC_R, MK_PTR(TYPE_LONG))
++#endif
+ #ifdef FICLONE
+      IOCTL(FICLONE, IOC_W, TYPE_INT)
+      IOCTL(FICLONERANGE, IOC_W, MK_PTR(MK_STRUCT(STRUCT_file_clone_range)))
+ #endif
+ 
++#ifdef FIGETBSZ
+      IOCTL(FIGETBSZ, IOC_R, MK_PTR(TYPE_LONG))
++#endif
+ #ifdef CONFIG_FIEMAP
+      IOCTL_SPECIAL(FS_IOC_FIEMAP, IOC_W | IOC_R, do_ioctl_fs_ioc_fiemap,
+                    MK_PTR(MK_STRUCT(STRUCT_fiemap)))
+diff -Naur a/linux-user/syscall.c b/linux-user/syscall.c
+--- a/linux-user/syscall.c	2024-01-29 20:13:22.000000000 +0100
++++ b/linux-user/syscall.c	2024-02-01 16:26:28.386504275 +0100
+@@ -98,7 +98,25 @@
+ #include <linux/soundcard.h>
+ #include <linux/kd.h>
+ #include <linux/mtio.h>
++
++#ifdef HAVE_SYS_MOUNT_FSCONFIG
++/*
++ * glibc >= 2.36 linux/mount.h conflicts with sys/mount.h,
++ * which in turn prevents use of linux/fs.h. So we have to
++ * define the constants ourselves for now.
++ */
++#define FS_IOC_GETFLAGS                _IOR('f', 1, long)
++#define FS_IOC_SETFLAGS                _IOW('f', 2, long)
++#define FS_IOC_GETVERSION              _IOR('v', 1, long)
++#define FS_IOC_SETVERSION              _IOW('v', 2, long)
++#define FS_IOC_FIEMAP                  _IOWR('f', 11, struct fiemap)
++#define FS_IOC32_GETFLAGS              _IOR('f', 1, int)
++#define FS_IOC32_SETFLAGS              _IOW('f', 2, int)
++#define FS_IOC32_GETVERSION            _IOR('v', 1, int)
++#define FS_IOC32_SETVERSION            _IOW('v', 2, int)
++#else
+ #include <linux/fs.h>
++#endif
+ #include <linux/fd.h>
+ #if defined(CONFIG_FIEMAP)
+ #include <linux/fiemap.h>
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2024-01-29 20:13:22.000000000 +0100
++++ b/meson.build	2024-02-01 16:28:05.750887168 +0100
+@@ -2352,6 +2352,8 @@
+                      cc.has_header_symbol('getopt.h', 'optreset'))
+ config_host_data.set('HAVE_IPPROTO_MPTCP',
+                      cc.has_header_symbol('netinet/in.h', 'IPPROTO_MPTCP'))
++config_host_data.set('HAVE_SYS_MOUNT_FSCONFIG',
++                     cc.has_header_symbol('sys/mount.h', 'FSCONFIG_SET_FLAG'))
+ 
+ # has_member
+ config_host_data.set('HAVE_SIGEV_NOTIFY_THREAD_ID',
