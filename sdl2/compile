@@ -1,10 +1,10 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
-
 ub_compile \
-	--disable-arts --disable-esd --disable-nas \
-	--enable-alsa --enable-pulseaudio-shared \
-	--enable-video-wayland \
-	--disable-rpath \
-	--enable-video-opengl
+	-DSDL_ARTS=OFF \
+	-DSDL_ESD=OFF \
+	-DSDL_NAS=OFF \
+	-DSDL_ALSA=ON \
+	-DSDL_PULSEAUDIO=ON \
+	-DSDL_PULSEAUDIO_SHARED=ON \
+	-DSDL_RPATH=OFF
