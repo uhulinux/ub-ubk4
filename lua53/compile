@@ -2,6 +2,6 @@
 
 make \
     MYCFLAGS="-fPIC -DLUA_COMPAT_5_2 -DLUA_COMPAT_5_1" \
-    TO_BIN='lua5.3 luac5.3' \
-    TO_LIB="liblua5.3.a liblua5.3.so liblua5.3.so.5.3 liblua5.3.so.$UB_VERSION" \
+    TO_BIN="lua${UB_VERSION_HEAD2} luac${UB_VERSION_HEAD2}" \
+    TO_LIB="liblua${UB_VERSION_HEAD2}.a liblua${UB_VERSION_HEAD2}.so liblua${UB_VERSION_HEAD2}.so.${UB_VERSION_HEAD2} liblua${UB_VERSION_HEAD2}.so.$UB_VERSION" \
 linux
