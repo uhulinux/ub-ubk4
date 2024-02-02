@@ -3,18 +3,22 @@
 if [ -d .git ]; then
 git submodule update --init
 else
-git clone https://github.com/moneymanagerex/LuaGlue.git 3rd/LuaGlue
-git clone https://github.com/moneymanagerex/html-template.git 3rd/cgitemplate
-git clone https://github.com/FVANCOP/ChartNew.js 3rd/ChartNew.js
 git clone https://github.com/moneymanagerex/database database
+git clone https://github.com/moneymanagerex/general-reports general-reports
+git clone https://github.com/moneymanagerex/html-template.git 3rd/cgitemplate
+git clone https://github.com/moneymanagerex/LuaGlue.git 3rd/LuaGlue
+git clone https://github.com/moneymanagerex/themes.git themes
+
+git clone https://github.com/apexcharts/apexcharts.js.git 3rd/apexcharts.js
+git clone https://github.com/FVANCOP/ChartNew.js 3rd/ChartNew.js
+git clone https://github.com/lua/lua.git 3rd/lua
 git clone https://github.com/Tencent/rapidjson 3rd/rapidjson
 git clone https://github.com/utelle/wxsqlite3.git 3rd/wxsqlite3
-git clone https://github.com/lua/lua.git 3rd/lua
-git clone https://github.com/apexcharts/apexcharts.js.git 3rd/apexcharts.js
-git clone https://github.com/sammycage/lunasvg.git 3rd/lunasvg
-git clone https://github.com/moneymanagerex/themes.git themes
+
 git clone https://github.com/fmtlib/fmt 3rd/fmt
-git clone https://github.com/moneymanagerex/general-reports general-reports
+cd 3rd/fmt
+git checkout b6f4cea
+cd -
 fi
 
 export LIBS="-lpthread -lm -ldl"
