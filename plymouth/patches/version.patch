@@ -1,0 +1,12 @@
+diff -Naur a/scripts/generate-version.sh b/scripts/generate-version.sh
+--- a/scripts/generate-version.sh	2024-01-04 22:08:14.000000000 +0100
++++ b/scripts/generate-version.sh	2024-01-30 21:35:19.884641296 +0100
+@@ -7,7 +7,7 @@
+ 
+ # If it's not from a git checkout, assume it's from a tarball
+ if ! git rev-parse --is-inside-git-dir > /dev/null 2>&1; then
+-    VERSION_FROM_DIR_NAME=$(basename "$CWD" | sed -n 's/^plymouth-\([^-]*\)$/\1/p')
++    VERSION_FROM_DIR_NAME=$UB_VERSION
+ 
+     if [ -n "$VERSION_FROM_DIR_NAME" ]; then
+         echo "$VERSION_FROM_DIR_NAME"

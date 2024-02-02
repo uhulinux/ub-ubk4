@@ -15,17 +15,17 @@ opts=" \
     --enable-grub-mount \
     --with-bootdir="/boot" \
     --with-grubdir=grub \
- "
+"
 
 export FREETYPE="pkg-config freetype2"
 export BUILD_FREETYPE="pkg-config freetype2"
-export GRUB_CONTRIB=grub-extras
 
-cp unifont-15.0.01.bdf grub/unifont.bdf
+cp unifont-15.1.04.bdf grub/unifont.bdf
+
+touch grub/grub-core/extra_deps.lst
 
 cp -r grub grub-bios
 cp -r grub grub-efi
-cp -r grub-extras grub-bios/
 
 cd grub-bios
 if [ -d .git ]; then

@@ -1,8 +1,6 @@
 #!/bin/sh -eux
 
-sed -i -e 's/3.14.0/3.12.0/g' configure
-
 ub_compile \
-	--enable-systemd-integration \
-	--with-release-file=/etc/os-release \
-	--with-shutdown-tty=/dev/tty63
+	-Drelease-file=/etc/os-release \
+	-Dshutdown-tty=/dev/tty63 \
+	-Dsystemd-integration=true

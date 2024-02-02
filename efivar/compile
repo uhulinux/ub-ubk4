@@ -1,4 +1,10 @@
 #!/bin/sh -eux
 
 sed 's|-rpath,$(TOPDIR)/src|-rpath,$(libdir)|g' -i "src/test/Makefile"
-make libdir="/usr/lib/" bindir="/usr/bin/" mandir="/usr/share/man/" includedir="/usr/include/" V=1 -j1
+make \
+    libdir="/usr/lib/" \
+    bindir="/usr/bin/" \
+    mandir="/usr/share/man/" \
+    includedir="/usr/include/" \
+    ENABLE_DOCS=0 \
+    V=1 -j1

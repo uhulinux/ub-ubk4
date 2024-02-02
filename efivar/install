@@ -1,3 +1,10 @@
 #!/bin/sh -eux
 
-make -j1 V=1 DESTDIR="${UB_INSTALLDIR}/" libdir="/usr/lib/" bindir="/usr/bin/" mandir="/usr/share/man/" includedir="/usr/include/" install
+make \
+    DESTDIR="${UB_INSTALLDIR}/" \
+    libdir="/usr/lib/" \
+    bindir="/usr/bin/" \
+    mandir="/usr/share/man/" \
+    includedir="/usr/include/" \
+    ENABLE_DOCS=0 \
+    V=1 -j1 install

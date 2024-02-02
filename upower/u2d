@@ -1,2 +1,1 @@
-echo "0.99.17"
-# urllist https://gitlab.freedesktop.org/upower/upower/-/tags/ v
+urllist https://gitlab.freedesktop.org/upower/upower/-/tags/ | grep "upower-v" | grep "gz" | sed -e 's/upower-v//' -e 's/\.tar\.gz//' | sort -V | tail -n1
