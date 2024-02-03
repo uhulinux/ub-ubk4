@@ -1,19 +1,55 @@
 #!/bin/sh -eux
 
+cellibdir=${UB_INSTALLDIR}/usr/lib
+pcdir=${cellibdir}/pkgconfig
+celbindir=${UB_INSTALLDIR}/usr/bin
+mkdir -p $pcdir
+V=${UB_VERSION_HEAD2}
+R=${UB_VERSION}
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/lua${V}
+
 make \
-    TO_BIN='lua5.2 luac5.2' \
-    TO_LIB="liblua5.2.a liblua5.2.so liblua5.2.so.5.2 liblua5.2.so.$UB_VERSION" \
+    TO_BIN='lua${V} luac${V}' \
+    TO_LIB="liblua${V}.a liblua${V}.so liblua${V}.so.${V} liblua${V}.so.$R" \
     INSTALL_DATA='cp -d' \
     INSTALL_TOP="$UB_INSTALLDIR"/usr \
-    INSTALL_INC="$UB_INSTALLDIR"/usr/include/lua5.2 \
+    INSTALL_INC="$UB_INSTALLDIR"/usr/include/lua${V} \
     INSTALL_MAN="$UB_INSTALLDIR"/usr/share/man/man1 \
 install
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
-ln -sf lua52.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua5.2.pc
-ln -sf lua52.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua-5.2.pc
+ln -sf lua52.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua${V}.pc
+ln -sf lua52.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua-${V}.pc
 
 mv doc ${UB_INSTALLDIR}/usr/share/doc/lua52
 cd "$UB_INSTALLDIR"/usr/share/man/man1
-mv lua.1 lua5.2.1
-mv luac.1 luac5.2.1
+mv lua.1 lua${V}.1
+mv luac.1 luac${V}.1
+
+cat > ${pcdir}/lua52.pc <<EOF
+
+V=${UB_VERSION_HEAD2}
+R=${UB_VERSION}
+
+prefix=/usr
+INSTALL_BIN=${prefix}/bin
+INSTALL_INC=${prefix}/include
+INSTALL_LIB=${prefix}/lib
+INSTALL_MAN=${prefix}/man/man1
+INSTALL_LMOD=${prefix}/share/lua/${V}
+INSTALL_CMOD=${prefix}/lib/lua/${V}
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/lua${V}
+
+Name: Lua
+Description: An Extensible Extension Language
+Version: ${R}
+Requires:
+Libs: -L${libdir} -llua${V} -lm
+Cflags: -I${includedir}
+
+EOF
