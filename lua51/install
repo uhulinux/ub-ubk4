@@ -1,22 +1,48 @@
 #!/bin/sh -eux
 
+cellibdir=${UB_INSTALLDIR}/usr/lib
+pcdir=${cellibdir}/pkgconfig
+celbindir=${UB_INSTALLDIR}/usr/bin
+mkdir -p $pcdir
+
 make \
-    TO_BIN='lua5.1 luac5.1' \
-    TO_LIB="liblua5.1.a liblua5.1.so liblua5.1.so.5.1 liblua5.1.so.$UB_VERSION" \
+    TO_BIN='lua${UB_VERSION_HEAD2} luac${UB_VERSION_HEAD2}' \
+    TO_LIB="liblua${UB_VERSION_HEAD2}.a liblua${UB_VERSION_HEAD2}.so liblua${UB_VERSION_HEAD2}.so.${UB_VERSION_HEAD2} liblua${UB_VERSION_HEAD2}.so.$UB_VERSION" \
     INSTALL_DATA='cp -d' \
     INSTALL_TOP="$UB_INSTALLDIR"/usr \
-    INSTALL_INC="$UB_INSTALLDIR"/usr/include/lua5.1 \
+    INSTALL_INC="$UB_INSTALLDIR"/usr/include/lua${UB_VERSION_HEAD2} \
     INSTALL_MAN="$UB_INSTALLDIR"/usr/share/man/man1 \
 install
 
-mkdir -p "$UB_INSTALLDIR"/usr/lib/pkgconfig
-cp etc/lua.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua51.pc
-ln -sf lua51.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua5.1.pc
-ln -sf lua51.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua-5.1.pc
+mkdir -p ${pcdir}
+#cp etc/lua.pc "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua51.pc
+ln -sf lua51.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua${UB_VERSION_HEAD2}.pc
+ln -sf lua51.pc  "$UB_INSTALLDIR"/usr/lib/pkgconfig/lua-${UB_VERSION_HEAD2}.pc
 
 cd "$UB_INSTALLDIR"/usr/share/man/man1
-mv lua.1 lua5.1.1
-mv luac.1 luac5.1.1
+mv lua.1 lua${UB_VERSION_HEAD2}.1
+mv luac.1 luac${UB_VERSION_HEAD2}.1
 
-ln -sf lua5.1 "$UB_INSTALLDIR"/usr/bin/lua
-ln -sf luac5.1 "$UB_INSTALLDIR"/usr/bin/luac
+#ln -sf lua${UB_VERSION_HEAD2} "$UB_INSTALLDIR"/usr/bin/lua
+#ln -sf luac${UB_VERSION_HEAD2} "$UB_INSTALLDIR"/usr/bin/luac
+
+cat > ${pcdir}/lua51.pc <<EOF
+
+INSTALL_BIN=/usr/bin
+INSTALL_INC=/usr/include
+INSTALL_LIB=/usr/lib
+INSTALL_MAN=/usr/man/man1
+INSTALL_LMOD=/usr/share/lua/${UB_VERSION_HEAD2}
+INSTALL_CMOD=/usr/lib/lua/${UB_VERSION_HEAD2}
+exec_prefix=/usr
+libdir=/usr/lib
+includedir=usr/include/lua${UB_VERSION_HEAD2}
+
+Name: Lua
+Description: An Extensible Extension Language
+Version: ${UB_VERSION}
+Requires:
+Libs: -L/usr/lib -llua${UB_VERSION_HEAD2} -lm
+Cflags: -I/usr/include/lua${UB_VERSION_HEAD2}
+
+EOF
