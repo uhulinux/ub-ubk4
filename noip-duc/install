@@ -1,3 +1,27 @@
 #!/bin/sh -eux
 
-cp noip2 "$UB_INSTALLDIR"/usr/bin/
+cp target/release/noip-duc "$UB_INSTALLDIR"/usr/bin/
+cp debian/service "$UB_INSTALLDIR"/usr/lib/systemd/system/noip-duc.service
+mkdir -p "${UB_INSTALLDIR}"/etc/defaults
+cat <<'EOF' > "${UB_INSTALLDIR}"/etc/defaults/noup-duc
+## /etc/defaults/noip-duc (Debian) or /etc/sysconfig/noip-duc (RedHat, Suse)
+## or anywhere you like.
+NOIP_USERNAME=
+NOIP_PASSWORD=
+
+## Comma separated list of hostnames and group names
+NOIP_HOSTNAMES=
+
+## Less common options
+#NOIP_CHECK_INTERVAL=5m
+#NOIP_EXEC_ON_CHANGE=
+#NOIP_HTTP_TIMEOUT=10s
+## ip methods: aws, http, http-port-8245, static:<IP>
+#NOIP_IP_METHOD=dns,http,http-port-8245
+#NOIP_LOG_LEVEL=info
+
+## Daemon options should not be set if using systemd. They only apply when `--daemon` is used.
+#NOIP_DAEMON_GROUP=
+#NOIP_DAEMON_PID_FILE=
+#NOIP_DAEMON_USER=
+EOF

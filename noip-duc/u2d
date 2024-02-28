@@ -1,1 +1,1 @@
-_geturl http://www.noip.com/download?page=linux | grep 'Stable version' | sed -e 's/.* Stable version //'
+geturl http://www.noip.com/download?page=linux | grep tar.gz | sed s%.*_%% | sed s%\.tar.*%%
