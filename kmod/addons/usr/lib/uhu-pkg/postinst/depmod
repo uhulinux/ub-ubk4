@@ -6,10 +6,10 @@ if [ "$1" == "kmod" -o "$1" == "+" ]; then
 	find /var/lib/dpkg/info/ -name "*.list" -print0 | xargs -r0 cat --
 else
 	cat /var/lib/dpkg/info/"$1".list
-fi | grep -Ex '/lib/modules(/[^/]+)+\.ko' | cut -d/ -f4 | sort -u | while read version; do
-	if [ -d "/lib/modules/$version" ]; then
-		if [ -f "/lib/modules/$version/System.map" ]; then
-			depmod -a "$version" -F "/lib/modules/$version/System.map"
+fi | grep -Ex '/usr/lib/modules(/[^/]+)+\.ko' | cut -d/ -f4 | sort -u | while read version; do
+	if [ -d "/usr/lib/modules/$version" ]; then
+		if [ -f "/usr/lib/modules/$version/System.map" ]; then
+			depmod -a "$version" -F "/usr/lib/modules/$version/System.map"
 		elif [ -f "/boot/System.map-$version" ]; then
 			depmod -a "$version" -F "/boot/System.map-$version"
 		elif [ -f "/boot/System.map" ]; then
