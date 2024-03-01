@@ -1,0 +1,209 @@
+diff -Naur a/libkmod/libkmod.c b/libkmod/libkmod.c
+--- a/libkmod/libkmod.c	2023-06-09 19:45:55.000000000 +0200
++++ b/libkmod/libkmod.c	2024-03-01 04:52:10.673970949 +0100
+@@ -209,7 +209,7 @@
+ 	return 0;
+ }
+ 
+-static const char *dirname_default_prefix = "/lib/modules";
++static const char *dirname_default_prefix = "/usr/lib/modules";
+ 
+ static char *get_kernel_release(const char *dirname)
+ {
+@@ -265,7 +265,7 @@
+ /**
+  * kmod_new:
+  * @dirname: what to consider as linux module's directory, if NULL
+- *           defaults to /lib/modules/`uname -r`. If it's relative,
++ *           defaults to /usr/lib/modules/`uname -r`. If it's relative,
+  *           it's treated as relative to the current working directory.
+  *           Otherwise, give an absolute dirname.
+  * @config_paths: ordered array of paths (directories or files) where
+diff -Naur a/man/depmod.d.xml b/man/depmod.d.xml
+--- a/man/depmod.d.xml	2022-04-02 06:44:15.000000000 +0200
++++ b/man/depmod.d.xml	2024-03-01 04:52:10.673970949 +0100
+@@ -69,7 +69,7 @@
+         </term>
+         <listitem>
+           <para>
+-            This allows you to specify the order in which /lib/modules
++            This allows you to specify the order in which /usr/lib/modules
+             (or other configured module location) subdirectories will
+             be processed by <command>depmod</command>. Directories are
+             listed in order, with the highest priority given to the
+@@ -100,7 +100,7 @@
+             <command>depmod</command> command. It is possible to
+             specify one kernel or all kernels using the * wildcard.
+             <replaceable>modulesubdirectory</replaceable> is the
+-            name of the subdirectory under /lib/modules (or other
++            name of the subdirectory under /usr/lib/modules (or other
+             module location) where the target module is installed.
+           </para>
+           <para>
+@@ -109,7 +109,7 @@
+             specifying the following command: "override kmod * extra".
+             This will ensure that any matching module name installed
+             under the <command>extra</command> subdirectory within
+-            /lib/modules (or other module location) will take priority
++            /usr/lib/modules (or other module location) will take priority
+             over any likenamed module already provided by the kernel.
+           </para>
+         </listitem>
+diff -Naur a/man/depmod.xml b/man/depmod.xml
+--- a/man/depmod.xml	2023-02-08 18:59:23.000000000 +0100
++++ b/man/depmod.xml	2024-03-01 04:52:10.673970949 +0100
+@@ -80,7 +80,7 @@
+     </para>
+     <para> <command>depmod</command> creates a list of module dependencies by
+       reading each module under
+-      <filename>/lib/modules/</filename><replaceable>version</replaceable> and
++      <filename>/usr/lib/modules/</filename><replaceable>version</replaceable> and
+       determining what symbols it exports and what symbols it needs.  By
+       default, this list is written to <filename>modules.dep</filename>, and a
+       binary hashed version named <filename>modules.dep.bin</filename>, in the
+@@ -141,7 +141,7 @@
+         <listitem>
+           <para>
+             If your modules are not currently in the (normal) directory
+-            <filename>/lib/modules/</filename><replaceable>version</replaceable>,
++            <filename>/usr/lib/modules/</filename><replaceable>version</replaceable>,
+             but in a staging area, you can specify a
+             <replaceable>basedir</replaceable> which is prepended to the
+             directory name.  This <replaceable>basedir</replaceable> is
+diff -Naur a/man/modinfo.xml b/man/modinfo.xml
+--- a/man/modinfo.xml	2014-03-19 11:54:39.000000000 +0100
++++ b/man/modinfo.xml	2024-03-01 04:52:10.673970949 +0100
+@@ -54,7 +54,7 @@
+       <command>modinfo</command> extracts information from the Linux Kernel
+       modules given on the command line.  If the module name is not a filename,
+       then the
+-      <filename>/lib/modules/</filename><replaceable>version</replaceable>
++      <filename>/usr/lib/modules/</filename><replaceable>version</replaceable>
+       directory is searched, as is also done by
+       <citerefentry><refentrytitle>modprobe</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+       when loading kernel modules.
+diff -Naur a/man/modprobe.xml b/man/modprobe.xml
+--- a/man/modprobe.xml	2023-01-14 01:48:02.000000000 +0100
++++ b/man/modprobe.xml	2024-03-01 04:52:10.673970949 +0100
+@@ -78,7 +78,7 @@
+       is no difference between _ and - in module names (automatic
+       underscore conversion is performed).
+       <command>modprobe</command> looks in the module directory
+-      <filename>/lib/modules/`uname -r`</filename> for all
++      <filename>/usr/lib/modules/`uname -r`</filename> for all
+       the modules and other files, except for the optional
+       configuration files in the
+       <filename>/etc/modprobe.d</filename> directory
+diff -Naur a/man/modules.dep.xml b/man/modules.dep.xml
+--- a/man/modules.dep.xml	2020-10-19 18:12:53.000000000 +0200
++++ b/man/modules.dep.xml	2024-03-01 04:52:10.673970949 +0100
+@@ -34,8 +34,8 @@
+   </refnamediv>
+ 
+   <refsynopsisdiv>
+-    <para><filename>/lib/modules/modules.dep</filename></para>
+-    <para><filename>/lib/modules/modules.dep.bin</filename></para>
++    <para><filename>/usr/lib/modules/modules.dep</filename></para>
++    <para><filename>/usr/lib/modules/modules.dep.bin</filename></para>
+   </refsynopsisdiv>
+ 
+   <refsect1><title>DESCRIPTION</title>
+@@ -43,7 +43,7 @@
+       <filename>modules.dep.bin</filename> is a binary file generated by
+       <command>depmod</command> listing the dependencies for
+       every module in the directories under
+-      <filename>/lib/modules/</filename><replaceable>version</replaceable>.
++      <filename>/usr/lib/modules/</filename><replaceable>version</replaceable>.
+       It is used by kmod tools such as <command>modprobe</command> and
+       libkmod.
+     </para>
+diff -Naur a/tools/depmod.c b/tools/depmod.c
+--- a/tools/depmod.c	2023-05-30 21:54:12.000000000 +0200
++++ b/tools/depmod.c	2024-03-01 04:52:10.673970949 +0100
+@@ -910,7 +910,7 @@
+ struct mod {
+ 	struct kmod_module *kmod;
+ 	char *path;
+-	const char *relpath; /* path relative to '$ROOT/lib/modules/$VER/' */
++	const char *relpath; /* path relative to '$ROOT/usr/lib/modules/$VER/' */
+ 	char *uncrelpath; /* same as relpath but ending in .ko */
+ 	struct kmod_list *info_list;
+ 	struct kmod_list *dep_sym_list;
+@@ -3023,11 +3023,11 @@
+ 	}
+ 
+ 	cfg.dirnamelen = snprintf(cfg.dirname, PATH_MAX,
+-				  "%s/lib/modules/%s",
++				  "%s/usr/lib/modules/%s",
+ 				  root ?: "", cfg.kversion);
+ 
+ 	cfg.outdirnamelen = snprintf(cfg.outdirname, PATH_MAX,
+-				     "%s/lib/modules/%s",
++				     "%s/lib/modules/%s",
+ 				     out_root ?: (root ?: ""), cfg.kversion);
+ 
+ 	if (optind == argc)
+diff -Naur a/tools/modinfo.c b/tools/modinfo.c
+--- a/tools/modinfo.c	2022-02-21 05:58:11.000000000 +0100
++++ b/tools/modinfo.c	2024-03-01 04:52:10.673970949 +0100
+@@ -367,7 +367,7 @@
+ 		"\t-m, --modname               Handle argument as module name instead of alias or filename\n"
+ 		"\t-F, --field=FIELD           Print only provided FIELD\n"
+ 		"\t-k, --set-version=VERSION   Use VERSION instead of `uname -r`\n"
+-		"\t-b, --basedir=DIR           Use DIR as filesystem root for /lib/modules\n"
++		"\t-b, --basedir=DIR           Use DIR as filesystem root for /usr/lib/modules\n"
+ 		"\t-V, --version               Show version\n"
+ 		"\t-h, --help                  Show this help\n",
+ 		program_invocation_short_name);
+@@ -462,7 +462,7 @@
+ 			}
+ 			kversion = u.release;
+ 		}
+-		snprintf(dirname_buf, sizeof(dirname_buf), "%s/lib/modules/%s",
++		snprintf(dirname_buf, sizeof(dirname_buf), "%s/usr/lib/modules/%s",
+ 			 root, kversion);
+ 		dirname = dirname_buf;
+ 	}
+diff -Naur a/tools/modprobe.c b/tools/modprobe.c
+--- a/tools/modprobe.c	2023-04-19 00:50:27.000000000 +0200
++++ b/tools/modprobe.c	2024-03-01 04:52:10.673970949 +0100
+@@ -142,7 +142,7 @@
+ 		"\t-n, --show                  Same as --dry-run\n"
+ 
+ 		"\t-C, --config=FILE           Use FILE instead of default search paths\n"
+-		"\t-d, --dirname=DIR           Use DIR as filesystem root for /lib/modules\n"
++		"\t-d, --dirname=DIR           Use DIR as filesystem root for /usr/lib/modules\n"
+ 		"\t-S, --set-version=VERSION   Use VERSION instead of `uname -r`\n"
+ 
+ 		"\t-s, --syslog                print to syslog, not stderr\n"
+@@ -999,7 +999,7 @@
+ 			kversion = u.release;
+ 		}
+ 		snprintf(dirname_buf, sizeof(dirname_buf),
+-				"%s/lib/modules/%s", root,
++				"%s/usr/lib/modules/%s", root,
+ 				kversion);
+ 		dirname = dirname_buf;
+ 	}
+diff -Naur a/tools/static-nodes.c b/tools/static-nodes.c
+--- a/tools/static-nodes.c	2017-04-11 17:32:28.000000000 +0200
++++ b/tools/static-nodes.c	2024-03-01 04:52:10.673970949 +0100
+@@ -212,15 +212,15 @@
+ 		goto finish;
+ 	}
+ 
+-	snprintf(modules, sizeof(modules), "/lib/modules/%s/modules.devname", kernel.release);
++	snprintf(modules, sizeof(modules), "/usr/lib/modules/%s/modules.devname", kernel.release);
+ 	in = fopen(modules, "re");
+ 	if (in == NULL) {
+ 		if (errno == ENOENT) {
+-			fprintf(stderr, "Warning: /lib/modules/%s/modules.devname not found - ignoring\n",
++			fprintf(stderr, "Warning: /usr/lib/modules/%s/modules.devname not found - ignoring\n",
+ 				kernel.release);
+ 			ret = EXIT_SUCCESS;
+ 		} else {
+-			fprintf(stderr, "Error: could not open /lib/modules/%s/modules.devname - %m\n",
++			fprintf(stderr, "Error: could not open /usr/lib/modules/%s/modules.devname - %m\n",
+ 				kernel.release);
+ 			ret = EXIT_FAILURE;
+ 		}

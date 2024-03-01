@@ -1,6 +1,9 @@
 #!/bin/sh -eux
 
 ub_compile \
+    --libdir=/usr/lib \
+	--with-rootlibdir=/usr/lib \
+	--with-module-directory=/usr/lib/modules \
 	--with-zlib \
 	--with-xz \
-	--libdir=/usr/lib
+	--with-zstd
