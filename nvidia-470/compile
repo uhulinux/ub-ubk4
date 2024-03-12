@@ -19,7 +19,7 @@ rm -f $forras.run
 rm -rf $forras
 cd kernel
 patch -Np1 < "$UB_SRCDIR"/patches/drm-detection.skip
-make IGNORE_CC_MISMATCH=yes SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
+make CC=gcc SYSSRC=/usr/src/linux-$KVER KERNEL_UNAME="$KVER" MODULE_ROOT=$moduldir module
 cd ..
 export NV_USE_BUNDLED_LIBJANSSON=0
 alprogi settings
