@@ -8,6 +8,7 @@ fi
 ln -sf /usr/lib/nvidia/libglx.so.* /usr/lib/xorg/modules/extensions/libglx.so
 #
 ldconfig
+depmod -a
 #nouveau blacklist a grub kernelsorba
 #sed 's/GRUB_CMDLINE_LINUX="/GRUB_CMDLINE_LINUX="module_blacklist=nouveau /' -i /etc/default/grub
 #grub-mkconfig -o /boot/grub/grub.cfg

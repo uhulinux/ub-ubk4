@@ -2,6 +2,6 @@
 
 ln -sf /usr/lib/xorg/modules/extensions/libglx.so.xorg /usr/lib/xorg/modules/extensions/libglx.so
 ldconfig
-depmod
+depmod -a
 # esetleges gdm szemét eltávolítása és a wayland sessionok engedélyezése a gdm-ben
 # rm -f /var/run/gdm/custom.conf
