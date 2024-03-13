@@ -1,7 +1,4 @@
 #!/bin/sh -eux
 
-ub_compile \
-	--enable-client=gtk3 \
-	--enable-fcmp=gtk3 \
-	--enable-fcdb=sqlite3 \
-	--enable-aimodules
+ub_configure
+ub_make
