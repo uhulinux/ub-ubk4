@@ -2,3 +2,5 @@
 
 python3 setup.py install --root=$UB_INSTALLDIR
 rm -f ${UB_INSTALLDIR}/usr/share/doc/gramps/{A*,C*,F*,I*,L*,N*,R*,T*}
+site_packages=$(python -c "import site; print(site.getsitepackages()[0])")
+echo -n '/usr/share' >"$UB_INSTALLDIR"/${site_packages}/gramps/gen/utils/resource-path
