@@ -1,13 +1,20 @@
 #!/bin/sh -eux
 
-# completions
-python3 __main__.py + complete setup bash | install -Dm644 /dev/stdin "${UB_INSTALLDIR}"/usr/share/bash-completion/completions/kitty
-python3 __main__.py + complete setup fish | install -Dm644 /dev/stdin "${UB_INSTALLDIR}"/usr/share/fish/vendor_completions.d/kitty.fish
-python3 __main__.py + complete setup zsh
-install -Dm644 /dev/stdin "${UB_INSTALLDIR}"/usr/share/zsh/site-functions/_kitty
-
-cd linux-package
-cp -r * "${UB_INSTALLDIR}"/usr/
-cd -
-mkdir -p "${UB_INSTALLDIR}"/usr/share/doc/Packages/kitty
-tic -x -o "$UB_INSTALLDIR/usr/share/terminfo" terminfo/kitty.terminfo
+cp -r bin $UB_INSTALLDIR/usr/
+cp -r share/* $UB_INSTALLDIR/usr/share
+cucc='
+kitty
+kitty-extensions
+cacert.pem
+libcrypt.so.2
+libcrypto.so.1.1
+libffi.so.7
+libiconv.so.2
+libpython3.11.so.1.0
+libssl.so.1.1
+'
+for i in ${cucc};do
+cp -r lib/$i $UB_INSTALLDIR/usr/lib
+done
+# nem kell html doksi
+rm -rf $UB_INSTALLDIR/usr/share/doc
