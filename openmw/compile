@@ -1,16 +1,7 @@
 #!/bin/sh -eux
 
-mkdir build
-cd build
-export PKG_CONFIG_LIBDIR=/usr/lib/ffmpeg4.4/pkgconfig
-cmake \
-	-DCMAKE_BUILD_TYPE=Release \
-	-DCMAKE_INSTALL_PREFIX="/usr" \
-	-DDESIRED_QT_VERSION=5 \
+ub_compile \
 	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
 	-DUSE_LUAJIT=TRUE \
-	-DUSE_SYSTEM_TINYXML=ON \
 	-DOPENMW_USE_SYSTEM_BULLET=OFF \
-	-DOPENMW_USE_SYSTEM_MYGUI=OFF \
-    ..
-ub_make
+	-DOPENMW_USE_SYSTEM_MYGUI=OFF
