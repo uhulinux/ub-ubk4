@@ -1,1 +1,1 @@
-urllist http://fox-toolkit.org/ftp/ | grep fox-1.6.*.tar.gz | parsever | sort -V | tail -n 1
+urllist https://github.com/devinsmith/fox/tags/ | grep -E '^v1\.6' | grep tar | sed s/v// | sed s/\.tar.*//
