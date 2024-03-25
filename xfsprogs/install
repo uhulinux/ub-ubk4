@@ -1,4 +1,14 @@
 #!/bin/sh -eux
 
-make DIST_ROOT="$UB_INSTALLDIR" PKG_ROOT_SBIN_DIR="/usr/bin" PKG_ROOT_LIB_DIR="/usr/lib" install
-make DIST_ROOT="$UB_INSTALLDIR" PKG_ROOT_SBIN_DIR="/usr/bin" PKG_ROOT_LIB_DIR="/usr/lib" install-dev
+make DIST_ROOT="$UB_INSTALLDIR" \
+    PKG_ROOT_SBIN_DIR="/usr/bin" \
+    PKG_ROOT_LIB_DIR="/usr/lib" \
+    PKG_USER=root \
+    PKG_GROUP=root \
+    install
+make DIST_ROOT="$UB_INSTALLDIR" \
+    PKG_ROOT_SBIN_DIR="/usr/bin" \
+    PKG_ROOT_LIB_DIR="/usr/lib" \
+    PKG_USER=root \
+    PKG_GROUP=root \
+    install-dev
