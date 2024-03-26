@@ -1,5 +1,0 @@
-#!/bin/sh -eux
-
-runhaskell Setup configure -O --enable-shared --enable-executable-dynamic --disable-library-vanilla \
-        --ghc-option='-dynload=deploy' --prefix=/usr --datasubdir=happy
-runhaskell Setup build
