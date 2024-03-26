@@ -1,1 +1,2 @@
-u2d https://download.savannah.gnu.org/releases/freetype/
+#u2d https://download.savannah.gnu.org/releases/freetype/
+urllist https://github.com/freetype/freetype/tags/ | grep tar | sed s/\.tar.*// | grep ^VER | sed s/VER-//g | sed s/-/\./g | sort -V | tail -n 1
