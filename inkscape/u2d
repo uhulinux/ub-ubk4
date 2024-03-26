@@ -1,1 +1,1 @@
-urllist https://gitlab.com/inkscape/inkscape/-/tags | grep tar.bz2 | sed -e 's/inkscape-INKSCAPE_//g' | tr '_' '.' | sed -e 's/.tar.*//' | grep -v [A-Z] | sort -V | tail -n 1
+urllist https://gitlab.com/inkscape/inkscape/-/tags | sed s/_/./g | grep -E '^INKSCAPE' | sed s/INKSCAPE\.//g | sort -V | tail -n 1
