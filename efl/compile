@@ -9,8 +9,11 @@ ub_compile \
 	-Dfb=true \
 	-Dbuild-examples=false \
 	-Dbuild-tests=false \
-	-Devas-loaders-disabler=json,avif,heif \
-    -Ddrm=true
+	-Devas-loaders-disabler=,json,avif,jxl \
+	-Dglib=true \
+    -Ddrm=true \
+    -Ddocs=false \
+    -Dlua-interpreter=lua
 
 for size in 16 24 32 48 64; do
     convert data/elementary/desktop/elementary.png -resize ${size}x${size} data/elementary/desktop/elementary_${size}.png
