@@ -1,0 +1,22 @@
+## Leírás: A 3.0 pysolfc-ben hiányoznak a Ishido és a Puzzle kártyakészletek a 3.0-ás kártyakészletből, ezért a progi hibaablakkal kezd. Átmenetileg letiltom a kártyakészletek meglétének ellenőrzését, hogy ez a figyelmeztető ablak ne jelenjen meg.
+--- orig/pysollib/main.py	2024-03-31 04:37:02.000000000 +0200
++++ mod/pysollib/main.py	2024-04-02 11:59:51.570895221 +0200
+@@ -326,18 +326,6 @@
+     if app.cardset_manager.len() == 0:
+         fatal_no_cardsets(app)
+         return 3
+-    missing = app.cardset_manager.identify_missing_cardsets()
+-    if len(missing) > 0:
+-        error_text = \
+-            _('''PySol cannot find cardsets of the following types:''')
+-        error_text += "\n\n"
+-        for missingtype in missing:
+-            error_text += missingtype + "\n"
+-        error_text += _('''
+-This may make games that use those types of cardsets unplayable. Please
+-ensure that your Cardsets package is up to date.''')
+-        MfxMessageDialog(top, title=_("Cardset error"), text=error_text,
+-                         bitmap="error")
+     if not cardset:
+         MfxMessageDialog(top, title=_("Cardset error"),
+                          text=_('''
