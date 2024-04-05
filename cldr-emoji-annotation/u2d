@@ -1,1 +1,1 @@
-u2d https://github.com/unicode-org/cldr/tags/ release-
+urllist https://github.com/unicode-org/cldr/tags/ | grep release- | sed s/-[a-b].*// | sed s/release-// | sort -V | tail -n 1
