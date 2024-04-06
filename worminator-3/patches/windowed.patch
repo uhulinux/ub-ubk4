@@ -1,0 +1,12 @@
+diff -Nur orig/Worminator.c mod/Worminator.c
+--- orig/Worminator.c	2024-04-06 13:42:58.253449558 +0200
++++ mod/Worminator.c	2024-04-06 13:41:34.421533744 +0200
+@@ -2837,7 +2837,7 @@
+ 	TRUE);
+ wormy_config.show_laser_sight = get_config_int("Options", "show_laser_sight", 
+ 	TRUE);
+-wormy_config.run_windowed = get_config_int("Options", "run_windowed", FALSE);
++wormy_config.run_windowed = get_config_int("Options", "run_windowed", TRUE);
+ wormy_config.enable_FSAA = get_config_int("Options", "enable_FSAA", FALSE);
+ 
+ speed_counter = 0;
