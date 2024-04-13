@@ -1,2 +1,1 @@
-rev=$(urllist https://trac.streamboard.tv/oscam/browser#trunk | grep rev= | sed s/.*=// | sed /zip/d | sort -V | tail -n 1)
-echo 1.20~r$rev
+urllist https://git.streamboard.tv/common/oscam/-/tags | grep -E '^[0-9]\.' | sort -V | tail -n1
