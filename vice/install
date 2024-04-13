@@ -1,10 +1,12 @@
 #!/bin/sh -eux
 
 make DESTDIR=${UB_INSTALLDIR} realdocdir="/usr/share/doc/vice" install -j1
-#ln -s /usr/share/doc/vice "${UB_INSTALLDIR}/usr/lib/vice/doc"
+rm -rf ${UB_INSTALLDIR}/usr/share/doc/vice
 desktops="x128 x64 x64dtv x64sc xcbm2 xcbm5x0 xpet xplus4 xscpu64 xvic"
 for i in `echo $desktops`;do
 desktopfile=${UB_INSTALLDIR}/usr/share/applications/$i.desktop
 echo -e "[Desktop Entry]\nType=Application\nName=$i\nComment=$i emulator" > $desktopfile
 echo -e "Comment[hu]=$i emulátor\nExec=$i\nIcon=VICE\nCategories=Game;Emulator;" >> $desktopfile
 done
+mkdir -p ${UB_INSTALLDIR}/usr/share/pixmaps
+cp data/common/Icon-128@2x.png ${UB_INSTALLDIR}/usr/share/pixmaps/VICE.png
