@@ -4,4 +4,6 @@ cp -a doublecmd ${UB_INSTALLDIR}/usr/lib/
 mkdir -p ${UB_INSTALLDIR}/usr/share/pixmaps
 cp doublecmd/doublecmd.png ${UB_INSTALLDIR}/usr/share/pixmaps/
 rm -rf ${UB_INSTALLDIR}/usr/lib/doublecmd/doc
-ln -sf /usr/lib/doublecmd/doublecmd ${UB_INSTALLDIR}/usr/bin
+
+# patchelf
+find "${UB_INSTALLDIR}"/usr/lib -type f -exec patchelf --set-interpreter /usr/lib/ld-linux-x86-64.so.2 &> /dev/null {} \;
