@@ -1,0 +1,12 @@
+diff -Naur a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2024-01-06 13:56:29.000000000 +0100
++++ b/Makefile.in	2024-04-23 17:47:39.100662955 +0200
+@@ -333,7 +333,7 @@
+ # What emacs should be called when installed.
+ EMACS_NAME = `echo emacs | sed '$(TRANSFORM)'`
+ EMACS = ${EMACS_NAME}${EXEEXT}
+-EMACSFULL = `echo emacs-${version} | sed '$(TRANSFORM)'`${EXEEXT}
++EMACSFULL = `echo emacs | sed '$(TRANSFORM)'`${EXEEXT}
+ EMACS_PDMP = `./src/emacs${EXEEXT} --fingerprint`.pdmp
+ 
+ # Subdirectories to make recursively.

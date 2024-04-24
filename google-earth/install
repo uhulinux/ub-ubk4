@@ -13,3 +13,6 @@ mv opt/google ${UB_INSTALLDIR}/usr/lib
 # rm broken link
 rm ${UB_INSTALLDIR}/usr/lib/google/earth/pro/google-earth-pro
 ln -s /usr/lib/google/earth/pro/googleearth ${UB_INSTALLDIR}/usr/bin/google-earth
+
+# patchelf
+find "${UB_INSTALLDIR}"/usr/lib -type f -exec patchelf --set-interpreter /usr/lib/ld-linux-x86-64.so.2 &> /dev/null {} \;

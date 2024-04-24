@@ -1,0 +1,26 @@
+diff -Naur a/src/Makefile.am b/src/Makefile.am
+--- a/src/Makefile.am	2022-01-26 21:50:10.000000000 +0100
++++ b/src/Makefile.am	2024-04-23 17:57:48.618994158 +0200
+@@ -770,9 +770,6 @@
+ install-exec-hook:
+ else
+ install-exec-hook:
+-	cd $(DESTDIR)$(bindir) && \
+-	mv -f gnumeric$(EXEEXT) gnumeric-$(VERSION)$(EXEEXT) && \
+-	$(LN_S) gnumeric-$(VERSION)$(EXEEXT) gnumeric$(EXEEXT)
+ endif
+ 
+ uninstall-hook:
+diff -Naur a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2023-09-09 18:15:55.000000000 +0200
++++ b/src/Makefile.in	2024-04-23 17:58:33.247169752 +0200
+@@ -4950,9 +4950,6 @@
+ @WITH_NATIVE_WIN32_TRUE@	$(WINDRES) -DVERSION=$(VERSION) -DVERSION_NUMBER=`echo $(VERSION).0.0.0 | sed 's/\([0-9]*\)[^.]*\.*\([0-9]*\)[^.]*\.*\([0-9]*\)[^.]*\.*\([0-9]*\).*/\1,\2,\3,\4/'` --include-dir $(srcdir) -i $< -o $@
+ @WITH_NATIVE_WIN32_TRUE@install-exec-hook:
+ @WITH_NATIVE_WIN32_FALSE@install-exec-hook:
+-@WITH_NATIVE_WIN32_FALSE@	cd $(DESTDIR)$(bindir) && \
+-@WITH_NATIVE_WIN32_FALSE@	mv -f gnumeric$(EXEEXT) gnumeric-$(VERSION)$(EXEEXT) && \
+-@WITH_NATIVE_WIN32_FALSE@	$(LN_S) gnumeric-$(VERSION)$(EXEEXT) gnumeric$(EXEEXT)
+ 
+ uninstall-hook:
+ 	-cd $(DESTDIR)$(bindir) && \
