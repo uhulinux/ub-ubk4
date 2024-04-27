@@ -1,6 +1,3 @@
 #!/bin/sh -eux
 
-pythonver=$(python3 -V | sed 's/Python /python/' | sed s/\..$//)
-sitedir=${UB_INSTALLDIR}/usr/lib/${pythonver}/site-packages
-mkdir -p $sitedir
-python3 bootstrap_install.py --installdir $sitedir dist/flit_core-*.whl
+ub_install
