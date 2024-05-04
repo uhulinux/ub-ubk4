@@ -1,13 +1,14 @@
 #!/bin/sh -eux
 
-sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
+#sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" libiberty/configure
 mkdir build
 cd build
 ../configure \
     --prefix=/usr \
     --disable-nls \
+    --enable-tui \
+    --enable-source-highlight \
     --with-system-readline \
     --with-python=/usr/bin/python3 \
-    --with-guile=guile-2.0 \
     --with-system-gdbinit=/etc/gdb/gdbinit
 ub_make
