@@ -1,18 +1,12 @@
 #!/bin/sh -eux
 
-touch __init__.py
-mkdir -vp tools
-cp -v waflib/extras/xcode*.py tools
-rm -rv waflib
-sed -e "s/load('xcode'/load('xcode', tooldir='tools'/g" \
-    -e "s/load('xcode6'/load('xcode6', tooldir='tools'/g" \
-    -i wscript
+#touch __init__.py
 
 pythonver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 export PYTHONPATH=`pwd`:/usr/lib/python$pythonver
-waf configure \
+./waf configure \
 		--prefix=/usr \
 		--dbus \
 		--classic \
-		--alsa
-waf build
+		--systemd-unit
+./waf build

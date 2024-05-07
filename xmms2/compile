@@ -7,8 +7,8 @@ else
 git submodule update --init --recursive
 fi
 
-waf configure \
+./waf configure \
 	--prefix=/usr \
 	--with-default-output-plugin=pulse \
 	--without-optionals=perl,python,ruby
-waf build
+./waf build
