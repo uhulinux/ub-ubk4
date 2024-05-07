@@ -1,1 +1,1 @@
-u2d https://github.com/thom311/libnl/tags libnl | tr "_" "."
+urllist  https://github.com/thom311/libnl/tags | grep tar | tr "_" "." | sed s/libnl//g | grep ^3 | sed s/\.tar.*//g | sort -V | tail -n 1
