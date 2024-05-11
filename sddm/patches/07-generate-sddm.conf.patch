@@ -13,4 +13,4 @@ diff -Nur sddm-0.18.0/src/daemon/CMakeLists.txt sddm-0.18.0.patched/src/daemon/C
 +    DEPENDS sddm
 +)
 +add_custom_target(generate_config_file ALL DEPENDS "${CMAKE_BINARY_DIR}/sddm.conf")
-+install(FILES "${CMAKE_BINARY_DIR}/sddm.conf" DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}/sddm.conf.d/")
++install(FILES "${CMAKE_BINARY_DIR}/sddm.conf" DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/sddm/sddm.conf.d")
