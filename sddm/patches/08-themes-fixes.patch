@@ -1,0 +1,968 @@
+diff -Naur a/components/2.0/Button.qml b/components/2.0/Button.qml
+--- a/components/2.0/Button.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/components/2.0/Button.qml	2024-05-11 13:28:52.573659178 +0200
+@@ -67,7 +67,9 @@
+         }
+     ]
+ 
+-    Behavior on color { NumberAnimation { duration: 200 } }
++    transitions: Transition {
++        ColorAnimation { duration: 200 }
++    }
+ 
+     clip: true
+     smooth: true
+@@ -109,7 +111,7 @@
+         onReleased: { container.focus = true; container.released() }
+     }
+ 
+-    Keys.onPressed: {
++    Keys.onPressed: function (event) {
+         if (event.key === Qt.Key_Space) {
+             container.spaceDown = true;
+             container.pressed()
+@@ -120,7 +122,7 @@
+         }
+     }
+ 
+-    Keys.onReleased: {
++    Keys.onReleased: function (event) {
+         if (event.key === Qt.Key_Space) {
+             container.spaceDown = false;
+             container.released()
+diff -Naur a/components/2.0/ComboBox.qml b/components/2.0/ComboBox.qml
+--- a/components/2.0/ComboBox.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/components/2.0/ComboBox.qml	2024-05-11 13:28:52.573659178 +0200
+@@ -70,8 +70,6 @@
+         border.color: container.borderColor
+         border.width: container.borderWidth
+ 
+-        Behavior on border.color { ColorAnimation { duration: 100 } }
+-
+         states: [
+             State {
+                 name: "hover"; when: mouseArea.containsMouse
+@@ -82,6 +80,10 @@
+                 PropertyChanges { target: main; border.width: container.borderWidth; border.color: container.focusColor }
+             }
+         ]
++
++        transitions: Transition {
++            ColorAnimation { property: "border.color"; duration: 100 }
++        }
+     }
+ 
+     Loader {
+@@ -132,7 +134,7 @@
+         }
+     }
+ 
+-    Keys.onPressed: {
++    Keys.onPressed: function (event) {
+         if (event.key === Qt.Key_Up) {
+             listView.decrementCurrentIndex()
+         } else if (event.key === Qt.Key_Down) {
+@@ -157,8 +159,6 @@
+ 
+         clip: true
+ 
+-        Behavior on height { NumberAnimation { duration: 100 } }
+-
+         Component {
+             id: myDelegate
+ 
+@@ -214,6 +214,10 @@
+                 PropertyChanges { target: dropDown; height: (container.height - 2*container.borderWidth) * listView.count + container.borderWidth}
+             }
+         ]
++
++        transitions: Transition {
++            NumberAnimation { property: "height"; duration: 100 }
++        }
+     }
+ 
+     function toggle() {
+diff -Naur a/components/2.0/ImageButton.qml b/components/2.0/ImageButton.qml
+--- a/components/2.0/ImageButton.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/components/2.0/ImageButton.qml	2024-05-11 13:28:52.573659178 +0200
+@@ -53,7 +53,9 @@
+         }
+     ]
+ 
+-    Behavior on opacity { NumberAnimation { duration: 200 } }
++    transitions: Transition {
++        NumberAnimation { property: "opacity"; duration: 200 }
++    }
+ 
+     clip: true
+     smooth: true
+@@ -75,7 +77,7 @@
+         onReleased: { container.focus = true; container.released() }
+     }
+ 
+-    Keys.onPressed: {
++    Keys.onPressed: function (event) {
+         if (event.key === Qt.Key_Space) {
+             container.spaceDown = true;
+             container.pressed()
+@@ -86,7 +88,7 @@
+         }
+     }
+ 
+-    Keys.onReleased: {
++    Keys.onReleased: function (event) {
+         if (event.key === Qt.Key_Space) {
+             container.spaceDown = false;
+             container.released()
+diff -Naur a/components/2.0/LayoutBox.qml b/components/2.0/LayoutBox.qml
+--- a/components/2.0/LayoutBox.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/components/2.0/LayoutBox.qml	2024-05-11 13:28:52.573659178 +0200
+@@ -30,12 +30,16 @@
+     model: keyboard.layouts
+     index: keyboard.currentLayout
+ 
+-    onValueChanged: keyboard.currentLayout = id
++    function onValueChanged(id) {
++        keyboard.currentLayout = id
++    }
+ 
+     Connections {
+         target: keyboard
+ 
+-        onCurrentLayoutChanged: combo.index = keyboard.currentLayout
++        function onCurrentLayoutChanged() {
++            combo.index = keyboard.currentLayout
++        }
+     }
+ 
+     rowDelegate: Rectangle {
+diff -Naur a/components/2.0/Menu.qml b/components/2.0/Menu.qml
+--- a/components/2.0/Menu.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/components/2.0/Menu.qml	2024-05-11 13:28:52.573659178 +0200
+@@ -34,8 +34,6 @@
+     property alias model: menuList.model
+     property alias index: menuList.currentIndex
+ 
+-    Behavior on height { NumberAnimation { duration: 100 } }
+-
+     states: [
+         State {
+             name: "visible";
+@@ -43,6 +41,10 @@
+         }
+     ]
+ 
++    transitions: Transition {
++        NumberAnimation { property: "height"; duration: 100 }
++    }
++
+     Component {
+         id: listViewItem
+ 
+diff -Naur a/components/2.0/PictureBox.qml b/components/2.0/PictureBox.qml
+--- a/components/2.0/PictureBox.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/components/2.0/PictureBox.qml	2024-05-11 13:28:52.573659178 +0200
+@@ -37,8 +37,6 @@
+ 
+     signal login()
+ 
+-    Behavior on height { NumberAnimation { duration: 100 } }
+-
+     states: [
+         State {
+             name: ""
+@@ -50,6 +48,10 @@
+         }
+     ]
+ 
++    transitions: Transition {
++        NumberAnimation { property: "height"; duration: 100 }
++    }
++
+     Rectangle {
+         id: shadow
+         anchors.fill: parent
+@@ -103,7 +105,7 @@
+             focus: true
+             visible: showPassword
+ 
+-            Keys.onPressed: {
++            Keys.onPressed: function (event) {
+                 if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                     container.login();
+                     event.accepted = true
+diff -Naur a/components/2.0/TextBox.qml b/components/2.0/TextBox.qml
+--- a/components/2.0/TextBox.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/components/2.0/TextBox.qml	2024-05-11 13:28:52.573659178 +0200
+@@ -47,8 +47,6 @@
+         border.color: container.borderColor
+         border.width: 1
+ 
+-        Behavior on border.color { ColorAnimation { duration: 100 } }
+-
+         states: [
+             State {
+                 name: "hover"; when: mouseArea.containsMouse
+@@ -59,6 +57,10 @@
+                 PropertyChanges { target: main; border.width: 1; border.color: container.focusColor }
+             }
+         ]
++
++        transitions: Transition {
++            ColorAnimation { duration: 100 }
++        }
+     }
+ 
+     MouseArea {
+diff -Naur a/data/themes/CMakeLists.txt b/data/themes/CMakeLists.txt
+--- a/data/themes/CMakeLists.txt	2024-02-26 11:23:03.000000000 +0100
++++ b/data/themes/CMakeLists.txt	2024-05-11 13:28:52.597659267 +0200
+@@ -10,9 +10,15 @@
+ 
+     qt_add_translation(QM_FILES "${TRANSLATION_SOURCES}")
+ 
+-    install(DIRECTORY "${THEME}" DESTINATION "${DATA_INSTALL_DIR}/themes" PATTERN "${THEME}/*.ts"
+-            EXCLUDE PATTERN "${THEME}/.gitattributes"
+-            EXCLUDE)
++    configure_file("${THEME}/metadata.desktop.in" "${THEME}/metadata.desktop" @ONLY)
++
++    install(DIRECTORY "${THEME}" DESTINATION "${DATA_INSTALL_DIR}/themes"
++            PATTERN "${THEME}/*.in" EXCLUDE
++            PATTERN "${THEME}/*.ts" EXCLUDE
++            PATTERN "${THEME}/.gitattributes" EXCLUDE)
++
++    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${THEME}/metadata.desktop"
++            DESTINATION "${DATA_INSTALL_DIR}/themes/${THEME}/")
+ 
+     list(APPEND THEMES_QM_FILES ${QM_FILES})
+ endforeach(THEME)
+diff -Naur a/data/themes/elarun/Main.qml b/data/themes/elarun/Main.qml
+--- a/data/themes/elarun/Main.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/data/themes/elarun/Main.qml	2024-05-11 13:28:52.597659267 +0200
+@@ -39,22 +39,23 @@
+ 
+     Connections {
+         target: sddm
+-        onLoginSucceeded: {
++        function onLoginSucceeded() {
+         }
+-        onInformationMessage: {
++        function onInformationMessage(message) {
+         }
+-        onLoginFailed: {
++        function onLoginFailed() {
+             pw_entry.text = ""
+         }
+     }
+ 
+     Background {
+         anchors.fill: parent
+-        source: config.background
++        source: Qt.resolvedUrl(config.background)
+         fillMode: Image.PreserveAspectCrop
+         onStatusChanged: {
+-            if (status == Image.Error && source != config.defaultBackground) {
+-                source = config.defaultBackground
++            var defaultBackground = Qt.resolvedUrl(config.defaultBackground)
++            if (status == Image.Error && source != defaultBackground) {
++                source = defaultBackground
+             }
+         }
+     }
+@@ -72,12 +73,12 @@
+ 
+             Image {
+                 anchors.fill: parent
+-                source: "images/rectangle.png"
++                source: Qt.resolvedUrl("images/rectangle.png")
+             }
+ 
+             Image {
+                 anchors.fill: parent
+-                source: "images/rectangle_overlay.png"
++                source: Qt.resolvedUrl("images/rectangle_overlay.png")
+                 opacity: 0.1
+             }
+ 
+@@ -103,7 +104,7 @@
+                     anchors.centerIn: parent
+ 
+                     Row {
+-                        Image { source: "images/user_icon.png" }
++                        Image { source: Qt.resolvedUrl("images/user_icon.png") }
+ 
+                         TextBox {
+                             id: user_entry
+@@ -121,7 +122,7 @@
+ 
+                     Row {
+ 
+-                        Image { source: "images/lock.png" }
++                        Image { source: Qt.resolvedUrl("images/lock.png") }
+ 
+                         PasswordBox {
+                             id: pw_entry
+@@ -134,7 +135,7 @@
+ 
+                             KeyNavigation.backtab: user_entry; KeyNavigation.tab: login_button
+ 
+-                            Keys.onPressed: {
++                            Keys.onPressed: function (event) {
+                                 if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                     sddm.login(user_entry.text, pw_entry.text, sessionIndex)
+                                     event.accepted = true
+@@ -150,7 +151,7 @@
+                     anchors.verticalCenter: parent.verticalCenter
+                     anchors.margins: 20
+ 
+-                    source: "images/login_normal.png"
++                    source: Qt.resolvedUrl("images/login_normal.png")
+ 
+                     onClicked: sddm.login(user_entry.text, pw_entry.text, sessionIndex)
+ 
+@@ -171,7 +172,7 @@
+ 
+                         ImageButton {
+                             id: system_button
+-                            source: "images/system_shutdown.png"
++                            source: Qt.resolvedUrl("images/system_shutdown.png")
+                             onClicked: sddm.powerOff()
+ 
+ 			    KeyNavigation.backtab: session; KeyNavigation.tab: reboot_button
+@@ -179,7 +180,7 @@
+ 
+                         ImageButton {
+                             id: reboot_button
+-                            source: "images/system_reboot.png"
++                            source: Qt.resolvedUrl("images/system_reboot.png")
+                             onClicked: sddm.reboot()
+ 
+                             KeyNavigation.backtab: system_button; KeyNavigation.tab: suspend_button
+@@ -187,7 +188,7 @@
+ 
+                         ImageButton {
+                             id: suspend_button
+-                            source: "images/system_suspend.png"
++                            source: Qt.resolvedUrl("images/system_suspend.png")
+                             visible: sddm.canSuspend
+                             onClicked: sddm.suspend()
+ 
+@@ -196,7 +197,7 @@
+ 
+                         ImageButton {
+                             id: hibernate_button
+-                            source: "images/system_hibernate.png"
++                            source: Qt.resolvedUrl("images/system_hibernate.png")
+                             visible: sddm.canHibernate
+                             onClicked: sddm.hibernate()
+ 
+@@ -256,7 +257,7 @@
+                 width: 245
+                 anchors.verticalCenter: parent.verticalCenter
+ 
+-                arrowIcon: "angle-down.png"
++                arrowIcon: Qt.resolvedUrl("angle-down.png")
+ 
+                 model: sessionModel
+                 index: sessionModel.lastIndex
+@@ -270,6 +271,8 @@
+                 height: parent.height
+                 anchors.verticalCenter: parent.verticalCenter
+ 
++                visible: layoutBox.visible
++
+                 text: textConstants.layout
+                 font.pixelSize: 14
+                 verticalAlignment: Text.AlignVCenter
+@@ -281,7 +284,9 @@
+                 anchors.verticalCenter: parent.verticalCenter
+                 font.pixelSize: 14
+ 
+-                arrowIcon: "angle-down.png"
++                visible: keyboard.enabled && keyboard.layouts.length > 0
++
++                arrowIcon: Qt.resolvedUrl("angle-down.png")
+ 
+                 KeyNavigation.backtab: session; KeyNavigation.tab: user_entry
+             }
+diff -Naur a/data/themes/elarun/metadata.desktop b/data/themes/elarun/metadata.desktop
+--- a/data/themes/elarun/metadata.desktop	2024-02-26 11:23:03.000000000 +0100
++++ b/data/themes/elarun/metadata.desktop	1970-01-01 01:00:00.000000000 +0100
+@@ -1,49 +0,0 @@
+-[SddmGreeterTheme]
+-Name=Elarun
+-Name[ca]=Elarun
+-Name[da]=Elarun
+-Name[de]=Elarun
+-Name[el]=Elarun
+-Name[es]=Elarun
+-Name[et]=Elarun
+-Name[fi]=Elarun
+-Name[ga]=Elarun
+-Name[gl]=Elarun
+-Name[hu]=Elarun
+-Name[ia]=Elarun
+-Name[kk]=Еларун
+-Name[ko]=Elarun
+-Name[mr]=एलारन
+-Name[nb]=Elarun
+-Name[nl]=Elarun
+-Name[pl]=Elarun
+-Name[pt]=Elarun
+-Name[pt_BR]=Elarun
+-Name[ro]=Elarun
+-Name[ru]=Эларан
+-Name[sk]=Elarun
+-Name[sl]=Elarun
+-Name[sr]=Еларун
+-Name[sr@ijekavian]=Еларун
+-Name[sr@ijekavianlatin]=Elarun
+-Name[sr@latin]=Elarun
+-Name[sv]=Elarun
+-Name[uk]=Еларан
+-Name[x-test]=xxElarunxx
+-Name[zh_CN]=Elarun
+-Name[zh_TW]=Elarun
+-
+-Description=Elarun KDM theme ported to SDDM. \nThe original theme is based on work of Roman Shtylman & Nuno Pinheiro
+-Type=sddm-theme
+-Author=Reza Fatahilah Shah
+-Copyright=(c) 2013, Reza Fatahilah Shah
+-Screenshot=elarun.jpg
+-License=GPL
+-Version=0.1
+-MainScript=Main.qml
+-ConfigFile=theme.conf
+-TranslationsDirectory=translations
+-Theme-Id=elarun
+-Theme-API=2.0
+-Website=https://github.com/sddm/sddm
+-
+diff -Naur a/data/themes/elarun/metadata.desktop.in b/data/themes/elarun/metadata.desktop.in
+--- a/data/themes/elarun/metadata.desktop.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/themes/elarun/metadata.desktop.in	2024-05-11 13:28:52.613659328 +0200
+@@ -0,0 +1,49 @@
++[SddmGreeterTheme]
++Name=Elarun
++Name[ca]=Elarun
++Name[da]=Elarun
++Name[de]=Elarun
++Name[el]=Elarun
++Name[es]=Elarun
++Name[et]=Elarun
++Name[fi]=Elarun
++Name[ga]=Elarun
++Name[gl]=Elarun
++Name[hu]=Elarun
++Name[ia]=Elarun
++Name[kk]=Еларун
++Name[ko]=Elarun
++Name[mr]=एलारन
++Name[nb]=Elarun
++Name[nl]=Elarun
++Name[pl]=Elarun
++Name[pt]=Elarun
++Name[pt_BR]=Elarun
++Name[ro]=Elarun
++Name[ru]=Эларан
++Name[sk]=Elarun
++Name[sl]=Elarun
++Name[sr]=Еларун
++Name[sr@ijekavian]=Еларун
++Name[sr@ijekavianlatin]=Elarun
++Name[sr@latin]=Elarun
++Name[sv]=Elarun
++Name[uk]=Еларан
++Name[x-test]=xxElarunxx
++Name[zh_CN]=Elarun
++Name[zh_TW]=Elarun
++
++Description=Elarun KDM theme ported to SDDM. \nThe original theme is based on work of Roman Shtylman & Nuno Pinheiro
++Type=sddm-theme
++Author=Reza Fatahilah Shah
++Copyright=(c) 2013, Reza Fatahilah Shah
++Screenshot=elarun.jpg
++License=GPL
++Version=0.1
++MainScript=Main.qml
++ConfigFile=theme.conf
++TranslationsDirectory=translations
++Theme-Id=elarun
++Theme-API=2.0
++Website=https://github.com/sddm/sddm
++QtVersion=@QT_MAJOR_VERSION@
+diff -Naur a/data/themes/maldives/Main.qml b/data/themes/maldives/Main.qml
+--- a/data/themes/maldives/Main.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/data/themes/maldives/Main.qml	2024-05-11 13:28:52.613659328 +0200
+@@ -40,17 +40,16 @@
+     Connections {
+         target: sddm
+ 
+-        onLoginSucceeded: {
++        function onLoginSucceeded() {
+             errorMessage.color = "steelblue"
+             errorMessage.text = textConstants.loginSucceeded
+         }
+-
+-        onLoginFailed: {
++        function onLoginFailed() {
+             password.text = ""
+             errorMessage.color = "red"
+             errorMessage.text = textConstants.loginFailed
+         }
+-        onInformationMessage: {
++        function onInformationMessage(message) {
+             errorMessage.color = "red"
+             errorMessage.text = message
+         }
+@@ -58,11 +57,12 @@
+ 
+     Background {
+         anchors.fill: parent
+-        source: config.background
++        source: Qt.resolvedUrl(config.background)
+         fillMode: Image.PreserveAspectCrop
+         onStatusChanged: {
+-            if (status == Image.Error && source != config.defaultBackground) {
+-                source = config.defaultBackground
++            var defaultBackground = Qt.resolvedUrl(config.defaultBackground)
++            if (status == Image.Error && source != defaultBackground) {
++                source = defaultBackground
+             }
+         }
+     }
+@@ -87,7 +87,7 @@
+             width: Math.max(320, mainColumn.implicitWidth + 50)
+             height: Math.max(320, mainColumn.implicitHeight + 50)
+ 
+-            source: "rectangle.png"
++            source: Qt.resolvedUrl("rectangle.png")
+ 
+             Column {
+                 id: mainColumn
+@@ -125,7 +125,7 @@
+ 
+                         KeyNavigation.backtab: rebootButton; KeyNavigation.tab: password
+ 
+-                        Keys.onPressed: {
++                        Keys.onPressed: function (event) {
+                             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                 sddm.login(name.text, password.text, sessionIndex)
+                                 event.accepted = true
+@@ -152,7 +152,7 @@
+ 
+                         KeyNavigation.backtab: name; KeyNavigation.tab: session
+ 
+-                        Keys.onPressed: {
++                        Keys.onPressed: function (event) {
+                             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                 sddm.login(name.text, password.text, sessionIndex)
+                                 event.accepted = true
+@@ -186,7 +186,7 @@
+                             width: parent.width; height: 30
+                             font.pixelSize: 14
+ 
+-                            arrowIcon: "angle-down.png"
++                            arrowIcon: Qt.resolvedUrl("angle-down.png")
+ 
+                             model: sessionModel
+                             index: sessionModel.lastIndex
+@@ -201,6 +201,8 @@
+                         spacing : 4
+                         anchors.bottom: parent.bottom
+ 
++                        visible: keyboard.enabled && keyboard.layouts.length > 0
++
+                         Text {
+                             id: lblLayout
+                             width: parent.width
+@@ -215,7 +217,7 @@
+                             width: parent.width; height: 30
+                             font.pixelSize: 14
+ 
+-                            arrowIcon: "angle-down.png"
++                            arrowIcon: Qt.resolvedUrl("angle-down.png")
+ 
+                             KeyNavigation.backtab: session; KeyNavigation.tab: loginButton
+                         }
+diff -Naur a/data/themes/maldives/metadata.desktop b/data/themes/maldives/metadata.desktop
+--- a/data/themes/maldives/metadata.desktop	2024-02-26 11:23:03.000000000 +0100
++++ b/data/themes/maldives/metadata.desktop	1970-01-01 01:00:00.000000000 +0100
+@@ -1,16 +0,0 @@
+-[SddmGreeterTheme]
+-Name=Maldives
+-Description=Maldives Theme
+-Author=Abdurrahman AVCI
+-Copyright=(c) 2013, Abdurrahman AVCI
+-License=CC-BY-SA
+-Type=sddm-theme
+-Version=0.1
+-Website=https://github.com/sddm/sddm
+-Screenshot=maldives.jpg
+-MainScript=Main.qml
+-ConfigFile=theme.conf
+-TranslationsDirectory=translations
+-Email=abdurrahmanavci@gmail.com
+-Theme-Id=maldives
+-Theme-API=2.0
+diff -Naur a/data/themes/maldives/metadata.desktop.in b/data/themes/maldives/metadata.desktop.in
+--- a/data/themes/maldives/metadata.desktop.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/themes/maldives/metadata.desktop.in	2024-05-11 13:28:52.629659386 +0200
+@@ -0,0 +1,17 @@
++[SddmGreeterTheme]
++Name=Maldives
++Description=Maldives Theme
++Author=Abdurrahman AVCI
++Copyright=(c) 2013, Abdurrahman AVCI
++License=CC-BY-SA
++Type=sddm-theme
++Version=0.1
++Website=https://github.com/sddm/sddm
++Screenshot=maldives.jpg
++MainScript=Main.qml
++ConfigFile=theme.conf
++TranslationsDirectory=translations
++Email=abdurrahmanavci@gmail.com
++Theme-Id=maldives
++Theme-API=2.0
++QtVersion=@QT_MAJOR_VERSION@
+diff -Naur a/data/themes/maya/Main.qml b/data/themes/maya/Main.qml
+--- a/data/themes/maya/Main.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/data/themes/maya/Main.qml	2024-05-11 13:28:52.629659386 +0200
+@@ -75,7 +75,7 @@
+   Connections {
+     target: sddm
+ 
+-    onLoginSucceeded: {
++    function onLoginSucceeded() {
+       prompt_bg.color = successText
+       prompt_txt.text = textConstants.loginSucceeded
+ 
+@@ -84,7 +84,7 @@
+ 
+       anim_success.start()
+     }
+-    onLoginFailed: {
++    function onLoginFailed() {
+       prompt_bg.color = failureText
+       prompt_txt.text = textConstants.loginFailed
+ 
+@@ -93,7 +93,7 @@
+ 
+       anim_failure.start()
+     }
+-    onInformationMessage: {
++    function onInformationMessage(message) {
+       prompt_bg.color = failureText
+       prompt_txt.text = message
+ 
+@@ -239,6 +239,8 @@
+         width   : spUnit * 2
+         height  : parent.height
+ 
++        visible : keyboard.enabled && keyboard.layouts.length > 0
++
+         color       : primaryHue1
+         borderColor : primaryHue3
+         focusColor  : accentLight
+@@ -249,7 +251,7 @@
+         font.family     : opensans_cond_light.name
+         font.pixelSize  : spFontNormal
+ 
+-        arrowIcon: "images/ic_arrow_drop_down_white_24px.svg"
++        arrowIcon: Qt.resolvedUrl("images/ic_arrow_drop_down_white_24px.svg")
+         arrowColor: primaryHue3
+ 
+         KeyNavigation.tab     : maya_username
+@@ -261,6 +263,8 @@
+ 
+         text    : textConstants.layout
+ 
++        visible : maya_layout.visible
++
+         color   : normalText
+ 
+         font.family     : opensans_cond_light.name
+@@ -292,7 +296,7 @@
+         font.family     : opensans_cond_light.name
+         font.pixelSize  : spFontNormal
+ 
+-        arrowIcon: "images/ic_arrow_drop_down_white_24px.svg"
++        arrowIcon: Qt.resolvedUrl("images/ic_arrow_drop_down_white_24px.svg")
+         arrowColor: primaryHue3
+ 
+         KeyNavigation.tab     : maya_layout
+@@ -351,7 +355,7 @@
+         label       : textConstants.shutdown
+         labelColor  : normalText
+ 
+-        icon        : "images/ic_power_settings_new_white_24px.svg"
++        icon        : Qt.resolvedUrl("images/ic_power_settings_new_white_24px.svg")
+         iconColor   : accentShade
+ 
+         hoverIconColor  : powerColor
+@@ -377,7 +381,7 @@
+         label       : textConstants.reboot
+         labelColor  : normalText
+ 
+-        icon        : "images/ic_refresh_white_24px.svg"
++        icon        : Qt.resolvedUrl("images/ic_refresh_white_24px.svg")
+         iconColor   : accentLight
+ 
+         hoverIconColor  : rebootColor
+@@ -488,7 +492,7 @@
+         hoverColor  : accentLight
+         textColor   : normalText
+ 
+-        image       : "images/ic_warning_white_24px.svg"
++        image       : Qt.resolvedUrl("images/ic_warning_white_24px.svg")
+ 
+         tooltipEnabled  : true
+         tooltipText     : textConstants.capslockWarning
+@@ -501,7 +505,7 @@
+         KeyNavigation.tab     : maya_login
+         KeyNavigation.backtab : maya_username
+ 
+-        Keys.onPressed: {
++        Keys.onPressed: function (event) {
+           if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
+             maya_root.tryLogin()
+ 
+@@ -542,7 +546,7 @@
+ 
+         onClicked: maya_root.tryLogin()
+ 
+-        Keys.onPressed: {
++        Keys.onPressed: function (event) {
+           if ((event.key === Qt.Key_Return) || (event.key === Qt.Key_Enter)) {
+             maya_root.tryLogin()
+ 
+diff -Naur a/data/themes/maya/metadata.desktop b/data/themes/maya/metadata.desktop
+--- a/data/themes/maya/metadata.desktop	2024-02-26 11:23:03.000000000 +0100
++++ b/data/themes/maya/metadata.desktop	1970-01-01 01:00:00.000000000 +0100
+@@ -1,16 +0,0 @@
+-[SddmGreeterTheme]
+-Name=maya
+-Description=Simple Material inspired theme
+-Author=Sanjeev Premi
+-Copyright=(c) 2016, Sanjeev Premi
+-License=CC-BY-SA
+-Type=sddm-theme
+-Version=0.1
+-Website=https://github.com/spremi
+-Screenshot=screenshots/hi_IN.png
+-MainScript=Main.qml
+-ConfigFile=theme.conf
+-TranslationsDirectory=translations
+-Email=spremi@ymail.com
+-Theme-Id=maya
+-Theme-API=2.0
+diff -Naur a/data/themes/maya/metadata.desktop.in b/data/themes/maya/metadata.desktop.in
+--- a/data/themes/maya/metadata.desktop.in	1970-01-01 01:00:00.000000000 +0100
++++ b/data/themes/maya/metadata.desktop.in	2024-05-11 13:28:52.637659416 +0200
+@@ -0,0 +1,17 @@
++[SddmGreeterTheme]
++Name=maya
++Description=Simple Material inspired theme
++Author=Sanjeev Premi
++Copyright=(c) 2016, Sanjeev Premi
++License=CC-BY-SA
++Type=sddm-theme
++Version=0.1
++Website=https://github.com/spremi
++Screenshot=screenshots/hi_IN.png
++MainScript=Main.qml
++ConfigFile=theme.conf
++TranslationsDirectory=translations
++Email=spremi@ymail.com
++Theme-Id=maya
++Theme-API=2.0
++QtVersion=@QT_MAJOR_VERSION@
+diff -Naur a/docs/THEMING.md b/docs/THEMING.md
+--- a/docs/THEMING.md	2024-02-26 11:23:03.000000000 +0100
++++ b/docs/THEMING.md	2024-05-11 13:28:52.645659446 +0200
+@@ -8,11 +8,13 @@
+ 
+     ComboBox {
+     	id: session
+-    	arrowIcon: "angle-down.png"
++    	arrowIcon: Qt.resolvedPath("angle-down.png")
+     	model: sessionModel
+     	index: sessionModel.lastIndex
+     }
+ 
++Themes are run by a Qt 5 built sddm-greeter, unless the `QtVersion` property in metadata.desktop specifies a different version, such as `QtVersion=6` for using `sddm-greeter-qt6`.
++
+ ## Proxy Object
+ 
+ We provide a proxy object, called as `sddm` to the themes as a context property. This object holds some useful properties about the host system. It also acts as a proxy between the greeter and the daemon. All of the methods called on this object will be transferred to the daemon through a local socket to be executed there.
+diff -Naur a/src/greeter/CMakeLists.txt b/src/greeter/CMakeLists.txt
+--- a/src/greeter/CMakeLists.txt	2024-02-26 11:23:03.000000000 +0100
++++ b/src/greeter/CMakeLists.txt	2024-05-11 13:28:52.661659506 +0200
+@@ -36,6 +36,7 @@
+ )
+ 
+ configure_file("theme.qrc" "theme.qrc")
++configure_file("theme/metadata.desktop.in" "theme/metadata.desktop" @ONLY)
+ 
+ qt_add_resources(RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/theme.qrc)
+ 
+diff -Naur a/src/greeter/theme/Main.qml b/src/greeter/theme/Main.qml
+--- a/src/greeter/theme/Main.qml	2024-02-26 11:23:03.000000000 +0100
++++ b/src/greeter/theme/Main.qml	2024-05-11 13:28:52.669659536 +0200
+@@ -40,22 +40,22 @@
+ 
+     Connections {
+         target: sddm
+-        onLoginSucceeded: {
++        function onLoginSucceeded() {
+         }
+ 
+-        onLoginFailed: {
++        function onLoginFailed() {
+             txtMessage.text = textConstants.loginFailed
+             listView.currentItem.password = ""
+         }
+ 
+-        onInformationMessage: {
++        function onInformationMessage(message) {
+             txtMessage.text = message
+         }
+     }
+ 
+     Background {
+         anchors.fill: parent
+-        source: "qrc:/theme/background.png"
++        source: "qrc:///theme/background.png"
+         fillMode: Image.PreserveAspectCrop
+         onStatusChanged: {
+             if (status == Image.Error && source != config.defaultBackground) {
+@@ -131,7 +131,7 @@
+                         anchors.left: parent.left
+                         anchors.verticalCenter: parent.verticalCenter
+                         anchors.margins: 10
+-                        source: "angle-left.png"
++                        source: "qrc:///theme/angle-left.png"
+                         onClicked: listView.decrementCurrentIndex()
+ 
+                         KeyNavigation.backtab: btnShutdown; KeyNavigation.tab: listView
+@@ -162,7 +162,7 @@
+                         anchors.right: parent.right
+                         anchors.verticalCenter: parent.verticalCenter
+                         anchors.margins: 10
+-                        source: "angle-right.png"
++                        source: "qrc:///theme/angle-right.png"
+                         onClicked: listView.incrementCurrentIndex()
+                         KeyNavigation.backtab: listView; KeyNavigation.tab: session
+                     }
+@@ -222,7 +222,7 @@
+                     width: 245
+                     anchors.verticalCenter: parent.verticalCenter
+ 
+-                    arrowIcon: "angle-down.png"
++                    arrowIcon: "qrc:///theme/angle-down.png"
+ 
+                     model: sessionModel
+                     index: sessionModel.lastIndex
+@@ -236,6 +236,8 @@
+                     height: parent.height
+                     anchors.verticalCenter: parent.verticalCenter
+ 
++                    visible: layoutBox.visible
++
+                     text: textConstants.layout
+                     font.pixelSize: 16
+                     verticalAlignment: Text.AlignVCenter
+@@ -247,7 +249,9 @@
+                     anchors.verticalCenter: parent.verticalCenter
+                     font.pixelSize: 14
+ 
+-                    arrowIcon: "angle-down.png"
++                    visible: keyboard.enabled && keyboard.layouts.length > 0
++
++                    arrowIcon: "qrc:///theme/angle-down.png"
+ 
+                     KeyNavigation.backtab: session; KeyNavigation.tab: btnShutdown
+                 }
+@@ -262,7 +266,7 @@
+                 ImageButton {
+                     id: btnReboot
+                     height: parent.height
+-                    source: "reboot.png"
++                    source: "qrc:///theme/reboot.png"
+ 
+                     visible: sddm.canReboot
+ 
+@@ -274,7 +278,7 @@
+                 ImageButton {
+                     id: btnShutdown
+                     height: parent.height
+-                    source: "shutdown.png"
++                    source: "qrc:///theme/shutdown.png"
+ 
+                     visible: sddm.canPowerOff
+ 
+diff -Naur a/src/greeter/theme/metadata.desktop b/src/greeter/theme/metadata.desktop
+--- a/src/greeter/theme/metadata.desktop	2024-02-26 11:23:03.000000000 +0100
++++ b/src/greeter/theme/metadata.desktop	1970-01-01 01:00:00.000000000 +0100
+@@ -1,16 +0,0 @@
+-[SddmGreeterTheme]
+-Name=Maui
+-Description=Maui Theme
+-Author=Abdurrahman AVCI
+-Copyright=(c) 2013, Abdurrahman AVCI
+-License=CC-BY-SA
+-Type=sddm-theme
+-Version=0.1
+-Website=https://github.com/sddm/sddm
+-Screenshot=maui.jpg
+-MainScript=Main.qml
+-ConfigFile=theme.conf
+-TranslationsDirectory=translations
+-Email=abdurrahmanavci@gmail.com
+-Theme-Id=maui
+-Theme-API=2.0
+diff -Naur a/src/greeter/theme/metadata.desktop.in b/src/greeter/theme/metadata.desktop.in
+--- a/src/greeter/theme/metadata.desktop.in	1970-01-01 01:00:00.000000000 +0100
++++ b/src/greeter/theme/metadata.desktop.in	2024-05-11 13:28:52.677659566 +0200
+@@ -0,0 +1,17 @@
++[SddmGreeterTheme]
++Name=Maui
++Description=Maui Theme
++Author=Abdurrahman AVCI
++Copyright=(c) 2013, Abdurrahman AVCI
++License=CC-BY-SA
++Type=sddm-theme
++Version=0.1
++Website=https://github.com/sddm/sddm
++Screenshot=maui.jpg
++MainScript=Main.qml
++ConfigFile=theme.conf
++TranslationsDirectory=translations
++Email=abdurrahmanavci@gmail.com
++Theme-Id=maui
++Theme-API=2.0
++QtVersion=@QT_MAJOR_VERSION@
+diff -Naur a/src/greeter/theme.qrc b/src/greeter/theme.qrc
+--- a/src/greeter/theme.qrc	2024-02-26 11:23:03.000000000 +0100
++++ b/src/greeter/theme.qrc	2024-05-11 13:28:52.669659536 +0200
+@@ -7,7 +7,7 @@
+     <file alias="Main.qml">${CMAKE_CURRENT_SOURCE_DIR}/theme/Main.qml</file>
+     <file alias="reboot.png">${CMAKE_CURRENT_SOURCE_DIR}/theme/reboot.png</file>
+     <file alias="shutdown.png">${CMAKE_CURRENT_SOURCE_DIR}/theme/shutdown.png</file>
+-    <file alias="metadata.desktop">${CMAKE_CURRENT_SOURCE_DIR}/theme/metadata.desktop</file>
++    <file alias="metadata.desktop">${CMAKE_CURRENT_BINARY_DIR}/theme/metadata.desktop</file>
+     <file alias="theme.conf">${CMAKE_CURRENT_SOURCE_DIR}/theme/theme.conf</file>
+ </qresource>
+ </RCC>
+diff -Naur a/src/greeter/waylandkeyboardbackend.cpp b/src/greeter/waylandkeyboardbackend.cpp
+--- a/src/greeter/waylandkeyboardbackend.cpp	2024-02-26 11:23:03.000000000 +0100
++++ b/src/greeter/waylandkeyboardbackend.cpp	2024-05-11 13:28:52.677659566 +0200
+@@ -95,6 +95,7 @@
+     // TODO: We can't actually switch keyboard layout yet, so don't populate a list of layouts
+     // so that themes can know to not show the option to change layout
+     // d->layouts = parseRules(QStringLiteral("/usr/share/X11/xkb/rules/evdev.xml"), d->layout_id);
++    d->enabled = false;
+ }
+ 
+ void WaylandKeyboardBackend::disconnect()
