@@ -1,0 +1,20 @@
+diff -Naur a/build/config/compiler/pgo/pgo.gni b/build/config/compiler/pgo/pgo.gni
+--- a/build/config/compiler/pgo/pgo.gni	2024-04-10 21:43:31.808662000 +0200
++++ b/build/config/compiler/pgo/pgo.gni	2024-04-11 22:58:44.245827488 +0200
+@@ -21,16 +21,6 @@
+   # to think some code is hotter than it actually is, potentially causing very
+   # bad compile times.
+   chrome_pgo_phase = 0
+-  if (!is_cronet_build && !dcheck_always_on && is_official_build &&
+-      # TODO(crbug.com/1336055): Update this now-outdated condition with regard
+-      # to chromecast and determine whether chromeos_is_browser_only is
+-      # obsolete.
+-      (is_high_end_android || is_win || is_mac || is_fuchsia ||
+-       (is_linux && !is_castos) ||
+-       (is_ios && use_blink && target_environment == "device") ||
+-       (is_chromeos_lacros && is_chromeos_device))) {
+-    chrome_pgo_phase = 2
+-  }
+ 
+   # When using chrome_pgo_phase = 2, read profile data from this path.
+   pgo_data_path = ""

@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-# patchset: https://gitlab.com/Matt.Jolly/chromium-patches
+# gcc patchset: https://gitlab.com/Matt.Jolly/chromium-patches
 
 freespace=$((`stat -f -c "%a" .`*`stat -f -c "%s" .`/(1024*1024*1024)))
 
@@ -20,12 +20,6 @@ fi
 procs=$(grep ^processor /proc/cpuinfo | wc -l)
 jobs=$(($procs / 2))
 
-# gcc-vel sokkal gyorsabb a build, mivel használja a ccache-t
-# linkelni viszont az lld-vel kell (use_lld=true), a többi elszáll
-# export CC=gcc
-# export CXX=g++
-# export AR=ar
-# export NM=nm
 export CC=clang
 export CXX=clang++
 export AR=llvm-ar
@@ -35,6 +29,10 @@ export NM=nm
 export CCACHE_CPP2=yes
 export CCACHE_SLOPPINESS=time_macros
 
+# clang version
+_clang_version=$(clang --version | grep -m1 version | sed 's/.* \([0-9]\+\).*/\1/')
+# enable rust nightly features
+export RUSTC_BOOTSTRAP=1
 # qt5, qt6 path
 export PATH="$PATH:/usr/lib/qt5/bin"
 export PATH="$PATH:/usr/lib/qt6/libexec"
@@ -42,13 +40,22 @@ export PATH="$PATH:/usr/lib/qt6/libexec"
 _flags=("
 custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 host_toolchain=\"//build/toolchain/linux/unbundle:default\"
+use_sysroot=false
 is_debug=false
+symbol_level=0
+enable_linux_installer=false
 cc_wrapper=\"ccache\"
 clang_base_path=\"/usr\"
+clang_use_chrome_plugins=false
+clang_version=\"$_clang_version\"
+rust_sysroot_absolute=\"/usr\"
+rustc_version=\"$(rustc --version)\"
+chrome_pgo_phase=0
+use_gold=false
+use_lld=true
 is_clang=true
 is_cfi=false
 is_official_build=true
-clang_use_chrome_plugins=false
 fatal_linker_warnings=false
 treat_warnings_as_errors=false
 disable_fieldtrial_testing_config=true
@@ -56,16 +63,10 @@ blink_enable_generated_code_formatting=false
 ffmpeg_branding=\"Chrome\"
 proprietary_codecs=true
 rtc_use_pipewire=true
-use_gold=false
-use_lld=true
 use_pulseaudio=true
-use_sysroot=false
-symbol_level=0
-enable_linux_installer=false
 enable_nacl=false
 enable_widevine=true
 enable_hangout_services_extension=false
-enable_rust=false
 use_custom_libcxx=true
 use_kerberos=false
 use_system_freetype=true
@@ -88,14 +89,14 @@ _syslibs=(
 	fontconfig
 	freetype
 	harfbuzz-ng
-	icu
+#	icu
 	libdrm
 	libevent
 	libjpeg
 	libpng
-	libwebp
-	libxml
-	libxslt
+#	libwebp
+#	libxml
+#	libxslt
 )
 for _lib in $_syslibs libjpeg_turbo; do
 	find . -type f -path "*third_party/$_lib/*" \

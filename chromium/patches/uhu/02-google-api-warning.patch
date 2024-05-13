@@ -1,6 +1,6 @@
 diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/startup/infobar_utils.cc
---- a/chrome/browser/ui/startup/infobar_utils.cc	2023-12-04 22:45:56.956730000 +0100
-+++ b/chrome/browser/ui/startup/infobar_utils.cc	2023-12-06 18:29:56.948154678 +0100
+--- a/chrome/browser/ui/startup/infobar_utils.cc	2024-04-15 22:33:49.529519800 +0200
++++ b/chrome/browser/ui/startup/infobar_utils.cc	2024-04-22 21:29:01.592384397 +0200
 @@ -17,7 +17,6 @@
  #include "chrome/browser/ui/startup/bad_flags_prompt.h"
  #include "chrome/browser/ui/startup/bidding_and_auction_consented_debugging_infobar_delegate.h"
@@ -17,12 +17,13 @@ diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/star
  #include "services/network/public/cpp/network_switches.h"
  
  #if BUILDFLAG(CHROME_FOR_TESTING)
-@@ -146,9 +144,6 @@
+@@ -151,10 +149,6 @@
      infobars::ContentInfoBarManager* infobar_manager =
          infobars::ContentInfoBarManager::FromWebContents(web_contents);
  
--    if (!google_apis::HasAPIKeyConfigured())
+-    if (!google_apis::HasAPIKeyConfigured()) {
 -      GoogleApiKeysInfoBarDelegate::Create(infobar_manager);
+-    }
 -
      if (ObsoleteSystem::IsObsoleteNowOrSoon()) {
        PrefService* local_state = g_browser_process->local_state();

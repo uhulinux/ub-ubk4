@@ -1,16 +1,17 @@
 diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/startup/infobar_utils.cc
---- a/chrome/browser/ui/startup/infobar_utils.cc	2023-02-10 23:42:23.262949183 +0100
-+++ b/chrome/browser/ui/startup/infobar_utils.cc	2023-02-10 23:44:40.107274377 +0100
-@@ -151,13 +151,5 @@
-         ObsoleteSystemInfoBarDelegate::Create(infobar_manager);
+--- a/chrome/browser/ui/startup/infobar_utils.cc	2024-04-22 21:31:46.372753304 +0200
++++ b/chrome/browser/ui/startup/infobar_utils.cc	2024-04-22 21:34:40.821151706 +0200
+@@ -157,14 +157,5 @@
+       }
      }
  
 -#if !BUILDFLAG(IS_CHROMEOS_ASH)
 -    if (!is_web_app &&
 -        !startup_command_line.HasSwitch(switches::kNoDefaultBrowserCheck)) {
 -      // The default browser prompt should only be shown after the first run.
--      if (is_first_run == chrome::startup::IsFirstRun::kNo)
+-      if (is_first_run == chrome::startup::IsFirstRun::kNo) {
 -        ShowDefaultBrowserPrompt(profile);
+-      }
 -    }
 -#endif
    }
