@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+shopt -s nullglob
+
+if [ "$1" == "kmod" -o "$1" == "+" ] || grep -q '^/usr/lib/modules/' /var/lib/dpkg/info/"$1".list; then
+	depmod -a
+fi
