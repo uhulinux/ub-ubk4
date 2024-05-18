@@ -1,0 +1,12 @@
+diff -Nur orig/SDL_gfx.pc.in mod/SDL_gfx.pc.in
+--- orig/SDL_gfx.pc.in	2009-12-22 04:00:31.000000000 +0100
++++ mod/SDL_gfx.pc.in	2024-05-09 17:23:16.497729339 +0200
+@@ -6,7 +6,7 @@
+ Name: SDL_gfx
+ Description: drawing and graphical effects extension for SDL
+ Version: @VERSION@
+-Requires: sdl >= @SDL_VERSION@
++Requires: sdl12_compat >= @SDL_VERSION@
+ Libs: -L${libdir} -lSDL_gfx
+ Cflags: -I${includedir}/SDL
+ 

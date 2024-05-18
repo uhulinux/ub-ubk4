@@ -1,0 +1,11 @@
+diff -Nur orig/SDL_net.pc.in mod/SDL_net.pc.in
+--- orig/SDL_net.pc.in	2012-01-15 17:20:10.000000000 +0100
++++ mod/SDL_net.pc.in	2024-05-09 17:27:35.241577506 +0200
+@@ -6,6 +6,6 @@
+ Name: SDL_net
+ Description: net library for Simple DirectMedia Layer
+ Version: @VERSION@
+-Requires: sdl >= @SDL_VERSION@
++Requires: sdl12_compat >= @SDL_VERSION@
+ Libs: -L${libdir} -lSDL_net
+ Cflags: -I${includedir}/SDL

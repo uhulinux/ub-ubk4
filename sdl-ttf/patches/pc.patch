@@ -1,0 +1,12 @@
+diff -Nur orig/SDL_ttf.pc.in mod/SDL_ttf.pc.in
+--- orig/SDL_ttf.pc.in	2012-01-15 05:44:08.000000000 +0100
++++ mod/SDL_ttf.pc.in	2024-05-09 17:32:26.953398009 +0200
+@@ -6,7 +6,7 @@
+ Name: SDL_ttf
+ Description: ttf library for Simple DirectMedia Layer with FreeType 2 support
+ Version: @VERSION@
+-Requires: sdl >= @SDL_VERSION@
++Requires: sdl12_compat >= @SDL_VERSION@
+ Libs: -L${libdir} -lSDL_ttf
+ Cflags: -I${includedir}/SDL
+ 
