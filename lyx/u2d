@@ -1,2 +1,2 @@
-dir=$(urllist http://ftp.lyx.org/pub/lyx/stable/ | grep -E '^([0-9.x]+)' | sort -V | tail -n 1)
-urllist http://ftp.lyx.org/pub/lyx/stable/$dir | grep "lyx-" | parsever | sort -V | tail -n 1
+dir=$(urllist https://ftp.lyx.org/pub/lyx/stable/ | grep -E '^([0-9.x]+)' | sort -V | tail -n 1)
+urllist https://ftp.lyx.org/pub/lyx/stable/$dir | grep "lyx-" | parsever | sort -V | tail -n 1
