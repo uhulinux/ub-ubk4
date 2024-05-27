@@ -1,21 +1,6 @@
 #!/bin/bash -eux
 
-case "$UB_VERSION" in
-	*.*.*)
-		VERSION_BASE="${UB_VERSION/\~/-}-${UB_RELEASE}"
-		;;
-	*.*~*)
-		VERSION_BASE="${UB_VERSION/\~/.0-}-${UB_RELEASE}"
-		;;
-	*.*)
-		VERSION_BASE="${UB_VERSION}.0-${UB_RELEASE}"
-		;;
-	*)
-		exit 1
-		;;
-esac
-
-VERSION="$VERSION_BASE"
+VERSION=$(<version)
 
 export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C LANG=C date)"
 
@@ -24,10 +9,10 @@ export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C LANG=C date)"
 cat >"$UB_INSTALLDIR"/usr/sbin/mkinitrd-installedkernel <<END
 #!/bin/sh
 
-dracut -f -H /boot/initrd-$VERSION.x86_64.img $UB_VERSION-$UB_RELEASE.x86_64
+dracut -f -N /boot/initrd-$VERSION.img $VERSION
 
 rm -f /boot/initrd.x86_64
-ln -s initrd-$VERSION.x86_64.img /boot/initrd.x86_64
+ln -s initrd-$VERSION.img /boot/initrd.x86_64
 
 rm -f /boot/initrd
 ln -s initrd.x86_64 /boot/initrd

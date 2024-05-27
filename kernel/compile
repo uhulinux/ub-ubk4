@@ -1,39 +1,22 @@
 #!/bin/bash -eux
 
-case "$UB_VERSION" in
-	*.*.*)
-		VERSION_BASE="${UB_VERSION/\~/-}-${UB_RELEASE}"
-		;;
-	*.*~*)
-		VERSION_BASE="${UB_VERSION/\~/.0-}-${UB_RELEASE}"
-		;;
-	*.*)
-		VERSION_BASE="${UB_VERSION}.0-${UB_RELEASE}"
-		;;
-	*)
-		exit 1
-		;;
-esac
-
+ARCH="x86_64"
 export KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C LANG=C date)"
 
 NUMCPUS="$(grep ^processor /proc/cpuinfo|wc -l)"
 
 rm -f localversion*
-
-ARCH="x86_64"
-
-VERSION="${VERSION_BASE}.$ARCH"
-ub_replace "^EXTRAVERSION =[\t ]*\(\.\([0-9]\+\)\)*.*" "EXTRAVERSION = \1-${VERSION#*-}" Makefile
+echo "-$UB_RELEASE" > localversion.10-release
+echo ".$ARCH" > localversion.20-arch
 
 cp "$UB_SRCDIR"/config/config."$ARCH" .config
 cp "$UB_SRCDIR"/config/config."$ARCH" arch/x86/configs/"$ARCH"_defconfig
 
 make olddefconfig
+make -s kernelrelease > version
+VERSION=$(<version)
 
-make ARCH="$ARCH" -j"$NUMCPUS" scripts
-make ARCH="$ARCH" -j"$NUMCPUS" bzImage
-make ARCH="$ARCH" -j"$NUMCPUS" modules
+make ARCH="$ARCH" -j"$NUMCPUS" all
 
 bzimage="kernel"
 
@@ -48,7 +31,17 @@ ln -s "$bzimage-$VERSION" "$UB_OBJECTDIR/boot/$bzimage.$ARCH"
 make \
 	INSTALL_PATH="$UB_OBJECTDIR/boot" \
 	INSTALL_MOD_PATH="$UB_OBJECTDIR/usr" \
+	DEPMOD=/doesnt/exists \
 	modules_install
+
+depmod -a -b "$UB_OBJECTDIR" "$VERSION"
+
+if [ -d "$UB_OBJECTDIR"/lib ]; then
+    mv -f "$UB_OBJECTDIR"/lib/modules/"$VERSION"/* "$UB_OBJECTDIR"/usr/lib/modules/"$VERSION"/
+    rm -Rf "$UB_OBJECTDIR"/lib
+fi
+
+cp version "$UB_OBJECTDIR"/usr/lib/modules/version
 
 # check module symbols
 if depmod -nea -b "$UB_OBJECTDIR" -F "$UB_OBJECTDIR"/boot/System.map "$VERSION" 2>&1 | grep "^WARNING:"; then
@@ -87,9 +80,13 @@ if [ -f arch/$ARCH/*lds ]; then
 	cp -a arch/$ARCH/*lds $UB_OBJECTDIR/usr/lib/modules/$VERSION/build/arch/$ARCH/ || :
 fi
 
-rm -f $UB_OBJECTDIR/usr/lib/modules/$VERSION/build
+if [ -d $UB_OBJECTDIR/usr/lib/modules/$VERSION/build ]; then
+    rm -f $UB_OBJECTDIR/usr/lib/modules/$VERSION/build
+fi
 ln -sf /usr/src/linux-$VERSION $UB_OBJECTDIR/usr/lib/modules/$VERSION/build
-rm $UB_OBJECTDIR/usr/lib/modules/$VERSION/source
+if [ -d $UB_OBJECTDIR/usr/lib/modules/$VERSION/source ]; then
+    rm $UB_OBJECTDIR/usr/lib/modules/$VERSION/source
+fi
 ln -sf /usr/src/linux-$VERSION $UB_OBJECTDIR//usr/lib/modules/$VERSION/source
 
 # add objtool for external module building and enabled VALIDATION_STACK option
@@ -103,6 +100,8 @@ done
 for _dtcs in arc arm arm64 c6x cris h8300 metag microblaze mips nios2 openrisc powerpc sh xtensa; do
     rm -f $UB_OBJECTDIR/usr/src/linux-$VERSION/scripts/dtc/include-prefixes/"$_dtcs"
 done
+# remove link to /usr/src/linux-$VERSION/arch/riscv/boot/dts
+rm -f $UB_OBJECTDIR/usr/src/linux-$VERSION/scripts/dtc/include-prefixes/riscv
 
 rm -rf $UB_OBJECTDIR/usr/src/linux-$VERSION/Documentation
 find "$UB_OBJECTDIR/usr/src/linux-$VERSION/" -name "*.o" -print0 | xargs -r0 rm -v
