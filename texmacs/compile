@@ -1,8 +1,4 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
-
-ub_replace "guile2.0-config" "guile-config2.0" configure
-
 ub_compile \
-    --enable-guile2
+    -Wno-dev
