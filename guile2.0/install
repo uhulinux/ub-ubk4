@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-ub_install
-rm -rf "$UB_INSTALLDIR"/usr/share/info
-sed -i '1s/guile/guile2.0/' -i "$UB_INSTALLDIR"/usr/bin/guile-config2.0
-mv "$UB_INSTALLDIR"/usr/share/aclocal/guile.m4 "$UB_INSTALLDIR"/usr/share/aclocal/guile20.m4
-rm -f "$UB_INSTALLDIR"/usr/lib/libguile-2.?.so.*-gdb.scm
