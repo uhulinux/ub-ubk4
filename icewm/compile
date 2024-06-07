@@ -1,11 +1,4 @@
 #!/bin/sh -eux
 
-mkdir build
-cd build
-cmake \
-   -DCMAKE_BUILD_TYPE=Release \
-   -DCMAKE_INSTALL_PREFIX=/usr \
-   -DCONFIG_LIBRSVG=ON \
-..
-
-ub_compile
+ub_compile \
+   -DCONFIG_LIBRSVG=ON
