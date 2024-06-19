@@ -7,10 +7,9 @@ ub_install
 
 cd plugins
 
-rm -f meson.build
-export AUDACIOUS_CFLAGS=-I$UB_INSTALLDIR/usr/include
-export AUDACIOUS_LIBS="-L$UB_INSTALLDIR/usr/lib -laudcore"
-sed -i -e "s#^plugindir=.*#plugindir=/usr/lib/audacious#" configure{,.ac}
+export PKG_CONFIG_PATH="$UB_INSTALLDIR/usr/lib/pkgconfig"
+export CPPFLAGS="-I$UB_INSTALLDIR/usr/include"
+export LIBRARY_PATH="$UB_INSTALLDIR/usr/lib"
 ub_compile \
-	--enable-aac \
-	--disable-gtk
+	-Daac=true \
+	-Dgtk=false
