@@ -1,1 +1,1 @@
-urllist https://pan.rebelbase.com/download/releases/| grep -E '^([0-9.]+)$' | sort -V | tail -n 1
+urllist https://gitlab.gnome.org/GNOME/pan/-/tags | grep -E '^v([0-9.]+)$' | sed 's/v//' | sort -V | tail -n 1
