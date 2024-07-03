@@ -1,16 +1,14 @@
 #!/bin/sh -eux
 
-# Remove check for sip from py2, it doesn't work since sip doesn't install __init__.py
-sed -e 's|from PyQt5 import sip|pass|g' -i configure.py
-
 pythonver=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
 
-python3 configure.py --confirm-license \
+sip-build \
+    --confirm-license \
 	--verbose \
-	--bindir /usr/bin \
-	--destdir /usr/lib/python$pythonver/site-packages \
-	--designer-plugindir /usr/lib/qt5/plugins/designer \
-	--qml-plugindir /usr/lib/qt5/plugins/PyQt5 \
-	--no-dist-info
+	--no-designer-plugin \
+	--target-dir /usr/lib/python$pythonver/site-packages \
+	--pep484-pyi \
+	--no-make
 
+cd build
 ub_make
