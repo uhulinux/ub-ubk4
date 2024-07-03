@@ -1,13 +1,13 @@
 diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
---- a/build/config/compiler/BUILD.gn	2024-04-15 22:33:42.985039200 +0200
-+++ b/build/config/compiler/BUILD.gn	2024-04-22 21:22:48.939578186 +0200
-@@ -613,24 +613,6 @@
+--- a/build/config/compiler/BUILD.gn	2024-06-14 01:28:43.726679800 +0200
++++ b/build/config/compiler/BUILD.gn	2024-06-16 10:52:07.197262295 +0200
+@@ -568,24 +568,6 @@
        }
      }
  
--    # TODO(crbug.com/1488374): This causes binary size growth and potentially
+-    # TODO(crbug.com/40283598): This causes binary size growth and potentially
 -    # other problems.
--    # TODO(crbug.com/1491036): This isn't supported by Cronet's mainline llvm version.
+-    # TODO(crbug.com/40284925): This isn't supported by Cronet's mainline llvm version.
 -    if (default_toolchain != "//build/toolchain/cros:target" &&
 -        !llvm_android_mainline) {
 -      cflags += [
@@ -23,10 +23,10 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
 -      }
 -    }
 -
-     # TODO(crbug.com/1235145): Investigate why/if this should be needed.
+     # TODO(crbug.com/40192287): Investigate why/if this should be needed.
      if (is_win) {
        cflags += [ "/clang:-ffp-contract=off" ]
-@@ -765,7 +747,6 @@
+@@ -743,7 +725,6 @@
        ldflags += [
          "/opt:lldltojobs=all",
          "-mllvm:-import-instr-limit=$import_instr_limit",
@@ -34,7 +34,7 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
        ]
      } else {
        ldflags += [ "-flto=thin" ]
-@@ -797,10 +778,6 @@
+@@ -777,10 +758,6 @@
        if (is_apple) {
          ldflags += [ "-Wcrl,object_path_lto" ]
        }
@@ -44,13 +44,13 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
 -      ldflags += [ "-Wl,-mllvm,-disable-auto-upgrade-debug-info" ]
      }
  
-     # TODO(https://crbug.com/1211155): investigate why this isn't effective on
-@@ -1890,22 +1867,12 @@
+     # TODO(crbug.com/335365324): Enable on other platforms.
+@@ -1889,22 +1866,12 @@
  
-         # TODO(crbug.com/1494809): Evaluate and possibly enable.
+         # TODO(crbug.com/40286317): Evaluate and possibly enable.
          "-Wno-vla-extension",
 -
--        # TODO(https://crbug.com/1490607): Fix and re-enable.
+-        # TODO(crbug.com/40284799): Fix and re-enable.
 -        "-Wno-thread-safety-reference-return",
        ]
  
@@ -61,7 +61,7 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
 -
 -      if (!is_nacl) {
 -        cflags_cc += [
--          # TODO(https://crbug.com/1513724): Fix and re-enable.
+-          # TODO(crbug.com/41486292): Fix and re-enable.
 -          "-Wno-c++11-narrowing-const-reference",
 -        ]
 -      }

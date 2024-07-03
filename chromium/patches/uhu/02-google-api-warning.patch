@@ -1,23 +1,23 @@
 diff -Naur a/chrome/browser/ui/startup/infobar_utils.cc b/chrome/browser/ui/startup/infobar_utils.cc
---- a/chrome/browser/ui/startup/infobar_utils.cc	2024-04-15 22:33:49.529519800 +0200
-+++ b/chrome/browser/ui/startup/infobar_utils.cc	2024-04-22 21:29:01.592384397 +0200
-@@ -17,7 +17,6 @@
+--- a/chrome/browser/ui/startup/infobar_utils.cc	2024-06-14 01:28:50.259266100 +0200
++++ b/chrome/browser/ui/startup/infobar_utils.cc	2024-06-16 11:27:02.324116885 +0200
+@@ -16,7 +16,6 @@
+ #include "chrome/browser/ui/startup/automation_infobar_delegate.h"
  #include "chrome/browser/ui/startup/bad_flags_prompt.h"
  #include "chrome/browser/ui/startup/bidding_and_auction_consented_debugging_infobar_delegate.h"
- #include "chrome/browser/ui/startup/default_browser_prompt.h"
 -#include "chrome/browser/ui/startup/google_api_keys_infobar_delegate.h"
  #include "chrome/browser/ui/startup/obsolete_system_infobar_delegate.h"
  #include "chrome/browser/ui/startup/startup_browser_creator.h"
  #include "chrome/browser/ui/startup/startup_types.h"
-@@ -27,7 +26,6 @@
+@@ -26,7 +25,6 @@
  #include "components/infobars/content/content_infobar_manager.h"
  #include "components/prefs/pref_service.h"
  #include "content/public/common/content_switches.h"
 -#include "google_apis/google_api_keys.h"
  #include "services/network/public/cpp/network_switches.h"
  
- #if BUILDFLAG(CHROME_FOR_TESTING)
-@@ -151,10 +149,6 @@
+ #if !BUILDFLAG(IS_CHROMEOS) && !BUILDFLAG(IS_ANDROID)
+@@ -154,10 +152,6 @@
      infobars::ContentInfoBarManager* infobar_manager =
          infobars::ContentInfoBarManager::FromWebContents(web_contents);
  
