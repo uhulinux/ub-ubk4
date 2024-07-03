@@ -5,8 +5,8 @@ cd src
 rm -f CMakeLists.txt
 
 ub_compile \
-    --disable-python-module \
-    --disable-python-chm \
-    --disable-python-aspell \
-    --disable-webkit \
-    --enable-webengine
+    -Dpython-module=false \
+    -Dpython-chm=false \
+    -Dpython-aspell=false \
+    -Dwebkit=false \
+    -Dwebengine=true
