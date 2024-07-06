@@ -1,3 +1,7 @@
 #!/bin/sh -eux
 
 ub_install
+
+if [ ! -f ${UB_INSTALLDIR}/etc/syslog-ng/scl.conf ]; then
+    cp ${UB_COMPILEDIR}/scl/scl.conf ${UB_INSTALLDIR}/etc/syslog-ng/scl.conf
+fi
