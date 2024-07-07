@@ -1,3 +1,8 @@
 #!/bin/sh -eux
 
+cp -a pinentry pinentry-qt
+cd pinentry
+ub_compile \
+    --disable-pinentry-qt5
+cd ../pinentry-qt
 ub_compile

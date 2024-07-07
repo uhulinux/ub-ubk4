@@ -1,3 +1,12 @@
 #!/bin/sh -eux
 
+cd pinentry-qt
+ub_install
+rm ${UB_INSTALLDIR}/usr/bin/{pinentry,pinentry-gnome3}
+docdir=${UB_INSTALLDIR}share/doc/Packages/pinentry-qt
+mkdir -p ${docdir}
+rm -rf ${UB_INSTALLDIR}share/info
+cp AUTHORS ChangeLog COPYING ${docdir}/
+cd ../pinentry
+mv AUTHORS COPYING NEWS README THANKS TODO ../
 ub_install
