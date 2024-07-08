@@ -1,15 +1,5 @@
 #!/bin/sh -eux
 
-make -j1 \
-    DESTDIR="$UB_INSTALLDIR" \
-    LIB_DIR=/usr/lib \
-    RULESDIR=/usr/lib/udev/rules.d \
-    SBINDIR=/usr/sbin \
-    install \
-    install_systemd
-
-mkdir -p ${UB_INSTALLDIR}/etc/iscsi
-cp etc/iscsid.conf ${UB_INSTALLDIR}/etc/iscsi/
-echo -n > ${UB_INSTALLDIR}/etc/iscsi/initiatorname.iscsi
+ub_install
 
 chmod -x ${UB_INSTALLDIR}/usr/lib/systemd/system/*.{service,socket}

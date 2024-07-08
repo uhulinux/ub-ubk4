@@ -1,7 +1,5 @@
 #!/bin/sh -eux
 
-make \
-    LIB_DIR=/usr/lib \
-    RULESDIR=/usr/lib/udev/rules.d \
-    SBINDIR=/usr/sbin \
-    user
+ub_compile \
+    -Drulesdir=/usr/lib/udev/rules.d \
+    -Discsi_sbindir=/usr/sbin \
