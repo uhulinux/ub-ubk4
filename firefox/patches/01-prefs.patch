@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2024-04-16 06:40:08.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2024-04-17 01:24:03.713956596 +0200
+--- a/browser/app/profile/firefox.js	2024-07-04 19:04:12.000000000 +0200
++++ b/browser/app/profile/firefox.js	2024-07-08 20:25:10.248626996 +0200
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -14,7 +14,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.hiddenWindowChromeURL", "chrome://browser/content/hiddenWindowMac.xhtml");
  
  // Set add-ons abuse report related prefs specific to Firefox Desktop.
-@@ -58,7 +64,8 @@
+@@ -56,7 +62,8 @@
  
  // Disable add-ons that are not installed by the user in all scopes by default.
  // See the SCOPE constants in AddonManager.sys.mjs for values to use here.
@@ -24,7 +24,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -271,7 +278,7 @@
+@@ -269,7 +276,7 @@
  pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -33,7 +33,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -374,7 +381,7 @@
+@@ -386,7 +393,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -42,7 +42,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -528,7 +535,7 @@
+@@ -538,7 +545,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -51,7 +51,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  #ifdef NIGHTLY_BUILD
  pref("browser.urlbar.trimHttps", true);
-@@ -1242,7 +1249,7 @@
+@@ -1247,7 +1254,7 @@
  // 2 and other values, nothing
  pref("browser.backspace_action", 2);
  
@@ -60,7 +60,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // this will automatically enable inline spellchecking (if it is available) for
  // editable elements in HTML
-@@ -2023,10 +2030,8 @@
+@@ -2083,10 +2090,8 @@
  
  pref("browser.contentblocking.database.enabled", true);
  

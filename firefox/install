@@ -8,11 +8,6 @@ DESTDIR="$UB_INSTALLDIR" "$UB_COMPILEDIR"/mach install
 
 rm -f "$UB_INSTALLDIR"/usr/lib/firefox/firefox
 rm -f "$UB_INSTALLDIR"/usr/bin/firefox
-ln -s /usr/lib/firefox/firefox "$UB_INSTALLDIR"/usr/bin/firefox
-
-if [ ! -f "$UB_INSTALLDIR"/usr/lib/firefox/run-mozilla.sh ]; then
-	cp "$UB_COMPILEDIR"/build/unix/run-mozilla.sh "$UB_INSTALLDIR"/usr/lib/firefox/run-mozilla.sh
-fi
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions
 mv "$UB_COMPILEDIR"/hu.xpi "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org.xpi
@@ -23,3 +18,7 @@ for i in 16 22 24 32 48 64 128 256; do
       "$UB_INSTALLDIR/usr/share/icons/hicolor/${i}x${i}/apps/firefox.png"
 done
 cp "$UB_COMPILEDIR"/browser/branding/official/default48.png "$UB_INSTALLDIR"/usr/share/pixmaps/firefox.png
+
+cd "$UB_INSTALLDIR"/usr/lib/firefox
+ln -s firefox-bin firefox
+cd -
