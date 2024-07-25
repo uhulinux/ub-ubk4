@@ -1,1 +1,1 @@
-urllist https://ftp.mozilla.org/pub/seamonkey/releases/ | grep -E '^[0-9.]+$' | sort -V | tail -n 1
+urllist https://www.seamonkey-project.org/releases/ | grep '\.source' | sed -e 's/seamonkey-//' -e 's/\.source.*//' | sort -V | tail -n 1
