@@ -1,1 +1,1 @@
-u2d https://download.filezilla-project.org/client/ FileZilla_ _src
+_geturl https://svn.filezilla-project.org/filezilla/FileZilla3/trunk/configure.ac?view=log | grep "Bump to " | sed 's/Bump to //' | grep -E '^[0-9].[0-9][0-9].[0-9]$' | sort -V | tail -n 1
