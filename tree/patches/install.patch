@@ -1,7 +1,7 @@
-diff -Naur a/Makefile b/Makefile
---- a/Makefile	2022-09-06 15:31:53.000000000 +0200
-+++ b/Makefile	2022-09-08 21:53:56.074450397 +0200
-@@ -16,17 +16,17 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2024-07-10 00:41:41.000000000 +0200
++++ mod/Makefile	2024-08-03 08:16:11.154946191 +0200
+@@ -16,17 +16,16 @@
  # along with this program; if not, write to the Free Software
  # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  
@@ -11,10 +11,9 @@ diff -Naur a/Makefile b/Makefile
  CC=gcc
  INSTALL=install
  
- VERSION=2.1.2
+ VERSION=2.1.3
  TREE_DEST=tree
 -DESTDIR=${PREFIX}/bin
-+DESTDIR=
  MAN=tree.1
  # Probably needs to be ${PREFIX}/share/man for most systems now
 -MANDIR=${PREFIX}/man
@@ -22,7 +21,7 @@ diff -Naur a/Makefile b/Makefile
  OBJS=tree.o list.o hash.o color.o file.o filter.o info.o unix.o xml.o json.o html.o strverscmp.o
  
  # Uncomment options below for your particular OS:
-@@ -105,8 +105,8 @@
+@@ -105,8 +104,8 @@
  install: tree
  	$(INSTALL) -d $(DESTDIR)
  	$(INSTALL) -d $(MANDIR)/man1
