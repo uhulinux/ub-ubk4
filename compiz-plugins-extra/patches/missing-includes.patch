@@ -1,0 +1,187 @@
+diff -Naur a/src/addhelper/addhelper.c b/src/addhelper/addhelper.c
+--- a/src/addhelper/addhelper.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/addhelper/addhelper.c	2024-08-14 22:42:39.580735081 +0200
+@@ -24,6 +24,7 @@
+  */
+ 
+ #include <compiz-core.h>
++#include <stdlib.h>
+ #include "addhelper_options.h"
+ 
+ #define GET_ADD_DISPLAY(d)                            \
+diff -Naur a/src/bell/bell.c b/src/bell/bell.c
+--- a/src/bell/bell.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/bell/bell.c	2024-08-14 22:43:23.485495442 +0200
+@@ -24,6 +24,7 @@
+  **/
+ 
+ #include <string.h>
++#include <stdlib.h>
+ #include <canberra.h>
+ #include <xsettings-client.h>
+ 
+diff -Naur a/src/bench/bench.c b/src/bench/bench.c
+--- a/src/bench/bench.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/bench/bench.c	2024-08-14 22:42:39.580735081 +0200
+@@ -21,6 +21,7 @@
+  **/
+ 
+ #include <compiz-core.h>
++#include <stdlib.h>
+ 
+ #include "bench_tex.h"
+ #include "bench_options.h"
+diff -Naur a/src/firepaint/firepaint.c b/src/firepaint/firepaint.c
+--- a/src/firepaint/firepaint.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/firepaint/firepaint.c	2024-08-14 22:42:39.580735081 +0200
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include <compiz-core.h>
++#include <stdlib.h>
+ 
+ #include "firepaint_options.h"
+ #include "firepaint_tex.h"
+diff -Naur a/src/grid/grid.c b/src/grid/grid.c
+--- a/src/grid/grid.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/grid/grid.c	2024-08-14 22:42:39.580735081 +0200
+@@ -23,6 +23,7 @@
+  */
+ 
+ #include <compiz-core.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include "grid_options.h"
+ 
+diff -Naur a/src/highlightcontent/highlightcontent.c b/src/highlightcontent/highlightcontent.c
+--- a/src/highlightcontent/highlightcontent.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/highlightcontent/highlightcontent.c	2024-08-14 22:42:39.580735081 +0200
+@@ -21,6 +21,7 @@
+  */
+ 
+ #include <math.h>
++#include <stdlib.h>
+ #include <string.h>
+ 
+ #include <compiz-core.h>
+diff -Naur a/src/loginout/loginout.c b/src/loginout/loginout.c
+--- a/src/loginout/loginout.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/loginout/loginout.c	2024-08-14 22:42:39.580735081 +0200
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include <compiz-core.h>
++#include <stdlib.h>
+ 
+ #include "loginout_options.h"
+ 
+diff -Naur a/src/mblur/mblur.c b/src/mblur/mblur.c
+--- a/src/mblur/mblur.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/mblur/mblur.c	2024-08-14 22:42:39.580735081 +0200
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include <math.h>
++#include <stdlib.h>
+ 
+ #include <compiz-core.h>
+ 
+diff -Naur a/src/reflex/reflex.c b/src/reflex/reflex.c
+--- a/src/reflex/reflex.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/reflex/reflex.c	2024-08-14 22:42:39.580735081 +0200
+@@ -19,6 +19,7 @@
+  *
+  */
+ #include <compiz-core.h>
++#include <stdlib.h>
+ 
+ #include "reflex_options.h"
+ 
+diff -Naur a/src/scalefilter/scalefilter.c b/src/scalefilter/scalefilter.c
+--- a/src/scalefilter/scalefilter.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/scalefilter/scalefilter.c	2024-08-14 22:42:39.580735081 +0200
+@@ -25,6 +25,7 @@
+ 
+ #define _GNU_SOURCE
+ #include <math.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <wchar.h>
+ #include <locale.h>
+diff -Naur a/src/shelf/shelf.c b/src/shelf/shelf.c
+--- a/src/shelf/shelf.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/shelf/shelf.c	2024-08-14 22:42:39.580735081 +0200
+@@ -33,6 +33,7 @@
+ #include <X11/extensions/shape.h>
+ #include <X11/cursorfont.h>
+ #include <math.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include "shelf_options.h"
+ 
+diff -Naur a/src/showmouse/showmouse.c b/src/showmouse/showmouse.c
+--- a/src/showmouse/showmouse.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/showmouse/showmouse.c	2024-08-14 22:42:39.580735081 +0200
+@@ -25,6 +25,7 @@
+  */
+ 
+ #include <math.h>
++#include <stdlib.h>
+ #include <string.h>
+ 
+ #include <compiz-core.h>
+diff -Naur a/src/splash/splash.c b/src/splash/splash.c
+--- a/src/splash/splash.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/splash/splash.c	2024-08-14 22:42:39.580735081 +0200
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include <math.h>
++#include <stdlib.h>
+ 
+ #include <compiz-core.h>
+ #include <X11/Xatom.h>
+diff -Naur a/src/trailfocus/trailfocus.c b/src/trailfocus/trailfocus.c
+--- a/src/trailfocus/trailfocus.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/trailfocus/trailfocus.c	2024-08-14 22:42:39.580735081 +0200
+@@ -25,6 +25,7 @@
+  *
+  */
+ 
++#include <stdlib.h>
+ #include <string.h>
+ #include <compiz-core.h>
+ #include "trailfocus_options.h"
+diff -Naur a/src/vidcap/vidcap.c b/src/vidcap/vidcap.c
+--- a/src/vidcap/vidcap.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/vidcap/vidcap.c	2024-08-14 22:42:39.580735081 +0200
+@@ -27,6 +27,7 @@
+ 
+ #define _GNU_SOURCE /* For asprintf */
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+diff -Naur a/src/wallpaper/wallpaper.c b/src/wallpaper/wallpaper.c
+--- a/src/wallpaper/wallpaper.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/wallpaper/wallpaper.c	2024-08-14 22:42:39.580735081 +0200
+@@ -23,6 +23,7 @@
+  */
+ 
+ #include <stdarg.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <math.h>
+ #include <dirent.h>
+diff -Naur a/src/widget/widget.c b/src/widget/widget.c
+--- a/src/widget/widget.c	2020-04-04 21:13:20.000000000 +0200
++++ b/src/widget/widget.c	2024-08-14 22:42:39.580735081 +0200
+@@ -26,6 +26,7 @@
+  *
+  */
+ 
++#include <stdlib.h>
+ #include <string.h>
+ #include <compiz-core.h>
+ #include <X11/Xatom.h>
