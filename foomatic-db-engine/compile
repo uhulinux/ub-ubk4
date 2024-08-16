@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
 ./make_configure
-FOOMATIC_RIP=/usr/lib/cups/filters/foomatic-rip \
-ub_compile
+
+ub_compile \
+	libdir=/usr/lib \
+	FOOMATIC_RIP=/usr/lib/cups/filters/foomatic-rip

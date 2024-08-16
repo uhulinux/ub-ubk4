@@ -6,8 +6,8 @@ export PYTHON=/usr/bin/python3
 export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 DESTDIR="$UB_INSTALLDIR" "$UB_COMPILEDIR"/mach install
 
-rm -f "$UB_INSTALLDIR"/usr/lib/thunderbird/thunderbird
 rm -f "$UB_INSTALLDIR"/usr/bin/thunderbird
+rm -f "$UB_INSTALLDIR"/usr/lib/thunderbird/thunderbird-bin
 
 mkdir -p "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions
 mv "$UB_COMPILEDIR"/hu.xpi "$UB_INSTALLDIR"/usr/lib/thunderbird/extensions/langpack-hu@thunderbird.mozilla.org.xpi
@@ -18,7 +18,3 @@ for i in 16 22 24 32 48 64 128 256; do
       "$UB_INSTALLDIR/usr/share/icons/hicolor/${i}x${i}/apps/thunderbird.png"
 done
 cp "$UB_COMPILEDIR"/comm/mail/branding/thunderbird/default48.png "$UB_INSTALLDIR"/usr/share/pixmaps/thunderbird.png
-
-cd "$UB_INSTALLDIR"/usr/lib/thunderbird
-ln -s thunderbird-bin thunderbird
-cd -
