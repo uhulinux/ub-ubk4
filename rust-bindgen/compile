@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+cargo build --release --frozen
