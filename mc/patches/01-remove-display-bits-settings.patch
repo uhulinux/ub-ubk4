@@ -1,6 +1,6 @@
 diff -Naur a/src/filemanager/boxes.c b/src/filemanager/boxes.c
---- a/src/filemanager/boxes.c	2023-08-06 15:26:05.000000000 +0200
-+++ b/src/filemanager/boxes.c	2023-08-18 17:24:49.092026443 +0200
+--- a/src/filemanager/boxes.c	2024-08-23 19:22:35.000000000 +0200
++++ b/src/filemanager/boxes.c	2024-08-28 15:51:52.047931036 +0200
 @@ -103,9 +103,11 @@
  static unsigned long panel_list_formats_id, panel_user_format_id, panel_brief_cols_id;
  static unsigned long user_mini_status_id, mini_user_format_id;
@@ -20,7 +20,7 @@ diff -Naur a/src/filemanager/boxes.c b/src/filemanager/boxes.c
 +#if 0
  #ifdef HAVE_CHARSET
  static int
- sel_charset_button (WButton * button, int action)
+ sel_charset_button (WButton *button, int action)
 @@ -393,6 +396,7 @@
      return 0;
  }
@@ -29,7 +29,7 @@ diff -Naur a/src/filemanager/boxes.c b/src/filemanager/boxes.c
  
  /* --------------------------------------------------------------------------------------------- */
  
-@@ -951,6 +955,7 @@
+@@ -950,6 +954,7 @@
  
  /* --------------------------------------------------------------------------------------------- */
  
@@ -37,7 +37,7 @@ diff -Naur a/src/filemanager/boxes.c b/src/filemanager/boxes.c
  #ifndef HAVE_CHARSET
  void
  display_bits_box (void)
-@@ -1069,6 +1074,7 @@
+@@ -1068,6 +1073,7 @@
      }
  }
  #endif /* HAVE_CHARSET */
@@ -46,8 +46,8 @@ diff -Naur a/src/filemanager/boxes.c b/src/filemanager/boxes.c
  /* --------------------------------------------------------------------------------------------- */
  /** Show tree in a box, not on a panel */
 diff -Naur a/src/filemanager/boxes.h b/src/filemanager/boxes.h
---- a/src/filemanager/boxes.h	2023-08-06 15:26:05.000000000 +0200
-+++ b/src/filemanager/boxes.h	2023-08-18 17:24:49.092026443 +0200
+--- a/src/filemanager/boxes.h	2024-08-23 19:22:35.000000000 +0200
++++ b/src/filemanager/boxes.h	2024-08-28 15:51:52.047931036 +0200
 @@ -25,7 +25,9 @@
                         int *brief_cols);
  const panel_field_t *sort_box (dir_sort_options_t * op, const panel_field_t * sort_field);
@@ -59,9 +59,9 @@ diff -Naur a/src/filemanager/boxes.h b/src/filemanager/boxes.h
  void jobs_box (void);
  char *cd_box (const WPanel * panel);
 diff -Naur a/src/filemanager/filemanager.c b/src/filemanager/filemanager.c
---- a/src/filemanager/filemanager.c	2023-08-06 15:26:05.000000000 +0200
-+++ b/src/filemanager/filemanager.c	2023-08-18 17:24:49.092026443 +0200
-@@ -1208,9 +1208,11 @@
+--- a/src/filemanager/filemanager.c	2024-08-23 19:22:35.000000000 +0200
++++ b/src/filemanager/filemanager.c	2024-08-28 15:51:52.047931036 +0200
+@@ -1200,9 +1200,11 @@
          diff_view_cmd ();
          break;
  #endif
@@ -74,8 +74,8 @@ diff -Naur a/src/filemanager/filemanager.c b/src/filemanager/filemanager.c
          edit_cmd (current_panel);
          break;
 diff -Naur a/src/setup.c b/src/setup.c
---- a/src/setup.c	2023-08-06 15:26:05.000000000 +0200
-+++ b/src/setup.c	2023-08-18 17:24:49.092026443 +0200
+--- a/src/setup.c	2024-08-23 19:22:35.000000000 +0200
++++ b/src/setup.c	2024-08-28 15:51:52.047931036 +0200
 @@ -304,11 +304,13 @@
      { "confirm_view_dir", &confirm_view_dir },
      { "safe_delete", &safe_delete },
