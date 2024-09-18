@@ -1,0 +1,14 @@
+diff -Naur orig/Makefile mod/Makefile
+--- orig/Makefile	2014-10-31 13:42:56.000000000 +0100
++++ mod/Makefile	2014-11-06 22:21:07.860696353 +0100
+@@ -7,8 +7,8 @@
+ 	for dir in `ls po-export`; do \
+ 		for file in `ls po-export/$$dir/*.po`; do \
+ 			lang=`echo $$file | sed 's/\.po$$//' | sed 's/.*\-//'`; \
+-			install -d usr/share/locale/$$lang/LC_MESSAGES/; \
+-			msgfmt -o usr/share/locale/$$lang/LC_MESSAGES/$$dir.mo $$file; \
++			install -d ${UB_INSTALLDIR}/usr/share/locale/$$lang/LC_MESSAGES/; \
++			msgfmt -o ${UB_INSTALLDIR}/usr/share/locale/$$lang/LC_MESSAGES/$$dir.mo $$file; \
+ 		done \
+ 	 done
+ 

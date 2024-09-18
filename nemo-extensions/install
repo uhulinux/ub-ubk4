@@ -1,0 +1,57 @@
+#!/bin/sh -eux
+
+extensions="
+nemo-python
+nemo-dropbox
+nemo-fileroller
+nemo-image-converter
+nemo-preview
+nemo-repairer
+nemo-share"
+
+for progs in ${extensions};do
+cd $progs
+ub_install
+cd ..
+done
+
+cd nemo-terminal
+python3 setup.py install --root="$UB_INSTALLDIR"
+cd ..
+
+cp nemo-image-converter/build/src/libnemo-image-converter.so ${UB_INSTALLDIR}/usr/lib/nemo/extensions-3.0/libnemo-image-converter.so
+pythonok="
+nemo-audio-tab
+nemo-compare
+nemo-emblems
+nemo-pastebin"
+
+# nemo-media-columns
+# elodázva, mert kellene neki:python3-pil,python3-mediainfo,python3-pypdf2,python3-stopit
+
+for progs in ${pythonok}; do
+cd $progs
+python3 setup.py install --root=${UB_INSTALLDIR}
+cd ..
+done
+
+doksimaps="
+nemo-fileroller
+nemo-share
+nemo-python
+nemo-preview
+nemo-terminal
+nemo-image-converter
+nemo-pastebin
+nemo-dropbox
+nemo-repairer"
+
+docdir=$UB_INSTALLDIR/usr/share/doc/Packages
+for doksimap in ${doksimaps};do
+mkdir -p $docdir/$doksimap
+cp  $doksimap/{COPYING,README} $docdir/$doksimap/
+done
+
+mkdir -p $docdir/{nemo-audio-tab,nemo-emblems}
+cp nemo-audio-tab/COPYING.GPL3 $docdir/nemo-audio-tab/
+cp nemo-emblems/COPYING.GPL3  $docdir/nemo-emblems/

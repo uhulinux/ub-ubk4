@@ -1,0 +1,27 @@
+#!/bin/sh -eux
+
+mesonok="
+python
+dropbox
+fileroller
+image-converter
+preview
+repairer
+share
+"
+pythonok="
+terminal
+emblems
+audio-tab
+compare
+"
+for progs in ${mesonok}; do
+cd nemo-$progs
+ub_compile
+cd ..
+done
+for progs in ${pythonok}; do
+cd nemo-$progs
+python3 setup.py build
+cd ..
+done

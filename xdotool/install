@@ -1,0 +1,4 @@
+#!/bin/sh -eux
+
+make PREFIX="$UB_INSTALLDIR/usr" INSTALLMAN="$UB_INSTALLDIR/usr/share/man" install
+rm -rf ${UB_INSTALLDIR}/usr/lib/pkgconfig
