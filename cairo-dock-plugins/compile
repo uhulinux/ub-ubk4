@@ -1,5 +1,4 @@
 #!/bin/sh -eux
 
-sed 's/gmcs/mcs/' -i CMakeLists.txt
-chmod -x LGPL-2 LICENSE copyright
-ub_compile
+ub_compile \
+    -DWITH_VALA_SRC='yes'
