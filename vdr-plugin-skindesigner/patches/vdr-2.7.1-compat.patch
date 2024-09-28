@@ -1,0 +1,52 @@
+Index: vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51/displaymenu.c
+===================================================================
+--- vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51.orig/displaymenu.c	2024-01-04 11:21:12.000000000 +0100
++++ vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51/displaymenu.c	2024-09-09 18:26:21.497378591 +0200
+@@ -169,7 +169,12 @@
+ }
+ 
+ void cSDDisplayMenu::SetCurrentRecording(void) {
++#if APIVERSNUM > 20402
++    cMutexLock ControlMutexLock;                                                                                                 
++    cControl *control = cControl::Control(ControlMutexLock);
++#else
+     cControl *control = cControl::Control();
++#endif 
+     if (!control) {
+         view->SetCurrentRecording(NULL);
+         return;
+Index: vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51/displayreplay.c
+===================================================================
+--- vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51.orig/displayreplay.c	2024-01-04 11:21:12.000000000 +0100
++++ vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51/displayreplay.c	2024-09-09 18:28:07.945656411 +0200
+@@ -28,7 +28,12 @@
+     if (!ok)
+         return;
+     if (!Play && Speed < 0) {
++#if APIVERSNUM > 20402
++	cMutexLock ControlMutex;
++        cControl *control = cControl::Control(ControlMutex);
++#else
+         cControl *control = cControl::Control();
++#endif
+         if (control) {
+             const cRecording *recording = control->GetRecording();
+             if (recording && recording->FileName()) {
+Index: vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51/coreengine/viewdisplayreplay.c
+===================================================================
+--- vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51.orig/coreengine/viewdisplayreplay.c	2024-01-04 11:21:12.000000000 +0100
++++ vdr-plugin-skindesigner-1.2.22+git20240104-3-71b3e51/coreengine/viewdisplayreplay.c	2024-09-09 18:30:28.715377706 +0200
+@@ -412,8 +412,12 @@
+         return;
+     } 
+     lastFlushModeOnly = now;
+-
++#if APIVERSNUM > 20402
++    cMutexLock ControlMutexLock;
++    cControl *control = cControl::Control(ControlMutexLock);
++#else
+     cControl *control = cControl::Control();
++#endif
+     if (!control)
+         return;
+     double fps = control->FramesPerSecond();

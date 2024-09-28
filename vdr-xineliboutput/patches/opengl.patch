@@ -1,0 +1,57 @@
+diff -Nur orig/configure mod/configure
+--- orig/configure	2023-11-05 16:04:06.000000000 +0100
++++ mod/configure	2024-09-27 08:56:21.127307166 +0200
+@@ -257,7 +257,7 @@
+   xrandr
+   xrender
+   xshape
+-  opengl
++  gl
+   glx
+   pthread
+   dlfcn
+@@ -303,7 +303,7 @@
+   echo "  --disable-xrandr       disable Xrandr support [no]"
+   echo "  --disable-xrender      disable Xrender support (HUD OSD) [no]"
+   echo "  --disable-xshape       disable Xshape support (non-transparent HUD OSD without composite manager) [no]"
+-  echo "  --disable-opengl       disable OpenGL support (transparent HUD OSD without composite manager) [no]"
++  echo "  --disable-gl       disable OpenGL support (transparent HUD OSD without composite manager) [no]"
+   echo "  --disable-i18n         disable i18n support [no]"
+   echo "  --disable-libcap       disable libcap support [no]"
+   echo "  --disable-avahi-client disable avahi support [no]"
+@@ -360,11 +360,11 @@
+ 
+ check_deps(){
+   disabled libxine && disable wayland x11 fb libavutil libjpeg libcec
+-  disabled x11     && disable dbus-glib-1 xshm xrandr xrender xshape opengl xdpms xinerama
++  disabled x11     && disable dbus-glib-1 xshm xrandr xrender xshape gl xdpms xinerama
+   disabled vdr     && disable libextractor libcap libbluray avahi-client
+-  disabled dlfcn   && disable opengl
+-  disabled pthread && disable opengl
+-  disabled glx     && disable opengl
++  disabled dlfcn   && disable gl
++  disabled pthread && disable gl
++  disabled glx     && disable gl
+   disabled xrender && disable xshape xshm
+   disabled wayland-client && disable wayland
+ }
+@@ -427,7 +427,7 @@
+     test_library X11  xshape       "X11/extensions/shape.h"    "-lXext"      "XShapeQueryExtension(0,0,0)"
+     test_library X11  xdpms        "X11/extensions/dpms.h"     "-lXext"      "DPMSDisable(0)"
+     test_library X11  xinerama     "X11/extensions/Xinerama.h" "-lXinerama"  "XineramaQueryScreens(0,0)"
+-    test_library X11  opengl       "GL/gl.h"                   "-lGL -lGLU"  "glTexCoord2f(0.0,0.0)"
++    test_library X11  gl       "GL/gl.h"                   "-lGL -lGLU"  "glTexCoord2f(0.0,0.0)"
+     test_library X11  glx          "GL/glx.h"                  "-lGLX"       "glXQueryVersion(0,0,0)"
+     test_library X11  dbus-glib-1  \
+       "dbus/dbus-glib.h" \
+@@ -442,8 +442,8 @@
+ 
+ # need -lm for ceil/floor in HUD OSD
+ enabled xrender && add_flags "LIBS_X11" "-lm"
+-# need -ldl and -lpthread with opengl
+-enabled opengl  && add_flags "LIBS_X11" $LIBS_DLFCN $LIBS_PTHREAD
++# need -ldl and -lpthread with gl
++enabled gl  && add_flags "LIBS_X11" $LIBS_DLFCN $LIBS_PTHREAD
+ # need -ldl for dlopen() in vdr plugin
+ enabled vdr     && add_flags "LIBS_VDR" $LIBS_DLFCN
+ 

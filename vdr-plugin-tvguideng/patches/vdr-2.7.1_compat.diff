@@ -1,0 +1,13 @@
+Index: vdr-plugin-tvguideng-0.3.4+git20231122-3-0f47b80/recmanager.c
+===================================================================
+--- vdr-plugin-tvguideng-0.3.4+git20231122-3-0f47b80.orig/recmanager.c	2023-11-22 15:11:14.000000000 +0100
++++ vdr-plugin-tvguideng-0.3.4+git20231122-3-0f47b80/recmanager.c	2024-09-14 18:17:16.087608918 +0200
+@@ -458,7 +458,7 @@
+                     if (channel) {
+                         const cSchedule *Schedule = NULL;
+                         Schedule = schedules->GetSchedule(channel);
+-                        event = Schedule->GetEvent(eventID);
++                        event = Schedule->GetEventById(eventID);
+                         if (event) {
+                             searchResults[index] = event;
+                         } else
