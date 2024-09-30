@@ -1,1 +1,1 @@
-urllist https://www.abisource.com/downloads/abiword/ | splitver '^([0-9.]+)' | sort -V | tail -n 1
+urllist https://gitlab.gnome.org/World/AbiWord/-/tags | grep release- | sed s/release-//  | sort -V | tail -n 1
