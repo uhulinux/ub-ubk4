@@ -1,7 +1,9 @@
 #!/bin/sh -eux
 
-echo "STDLIBS += -ldl -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss -ltiff -ljpeg ;" >> Jamtop
+# Use hwdb builtin, instead of the obsolete usb-db in the udev rules.
+    sed -i 's:^TEST=="/lib/udev/usb-db", IMPORT{program}="usb-db %p":IMPORT{builtin}="hwdb --subsystem=usb":' usb/55-Argyll.rules
+
 export CFLAGS="-DUNIX -D_THREAD_SAFE -m64"
 
-sed -e 's:CCFLAGS:CFLAGS:g' -i Jambase
-jam -dx -fJambase -j2
+CCOPTFLAG="$CFLAGS"
+jam -q -fJambase -sPREFIX=/usr -sDESTDIR="${UB_INSTALLDIR}" -sREFSUBDIR=share/argyllcms/ref all
