@@ -1,16 +1,5 @@
 #!/bin/sh -eux
 
-if [ -d .git ]; then
-git submodule update --init --recursive
-else
-git clone https://gitlab.gnome.org/GNOME/libglnx.git subprojects/libglnx
-git clone https://github.com/projectatomic/bubblewrap.git subprojects/bubblewrap
-git clone https://github.com/flatpak/xdg-dbus-proxy.git subprojects/dbus-proxy
-git clone https://gitlab.gnome.org/alexl/variant-schema-compiler.git subprojects/variant-schema-compiler
-fi
-
-# https://github.com/flatpak/flatpak/issues/267
-sed -i '/locale\/C\./d' tests/make-test-runtime.sh
-
 ub_compile \
-    -Dprivileged_group=root
+    -Dprivileged_group=root \
+    -Dtests=false
