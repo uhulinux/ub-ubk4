@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
 export DISPLAY=:0
-python3 setup.py install --prefix=/usr --root={UB_INSTALLDIR}
+python3 setup.py install --prefix=/usr --root=${UB_INSTALLDIR}
 # FS#59882
 find "$UB_INSTALLDIR" -wholename 'external/pexpect' -type d -delete
