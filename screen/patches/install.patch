@@ -1,16 +1,16 @@
 diff -Naur a/Makefile.in b/Makefile.in
---- a/Makefile.in	2022-03-19 23:39:50.628926297 +0100
-+++ b/Makefile.in	2022-03-19 23:45:23.345940318 +0100
+--- a/Makefile.in	2024-08-28 21:55:03.000000000 +0200
++++ b/Makefile.in	2024-09-13 14:39:30.645683830 +0200
 @@ -20,7 +20,7 @@
  bindir  = $(exec_prefix)/bin
  
- VERSION = @VERSION@
+ VERSION = @PACKAGE_VERSION@
 -SCREEN = screen-$(VERSION)
 +SCREEN = screen
  
- GIT_REV = 
- DEFS = @DEFS@ -DGIT_REV=\"$(GIT_REV)\"
-@@ -86,12 +86,9 @@
+ DATE_FMT = %Y-%m-%d %H:%m:%S
+ ifdef SOURCE_DATE_EPOCH
+@@ -80,12 +80,9 @@
  	-if [ -f $(DESTDIR)$(bindir)/$(SCREEN) ] && [ ! -f $(DESTDIR)$(bindir)/$(SCREEN).old ]; \
  		then mv $(DESTDIR)$(bindir)/$(SCREEN) $(DESTDIR)$(bindir)/$(SCREEN).old; fi
  	$(INSTALL_PROGRAM) screen $(DESTDIR)$(bindir)/$(SCREEN)
