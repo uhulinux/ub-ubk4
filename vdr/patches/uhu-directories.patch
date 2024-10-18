@@ -1,32 +1,28 @@
-diff -Naur orig/Make.config.template mod/Make.config.template
---- orig/Make.config.template	2015-02-09 10:58:45.000000000 +0100
-+++ mod/Make.config.template	2015-02-18 19:42:12.816800195 +0100
-@@ -26,7 +26,7 @@
+diff -Nur orig/Makefile mod/Makefile
+--- orig/Makefile	2024-10-17 08:49:45.256684518 +0200
++++ mod/Makefile	2024-10-17 09:31:11.545210402 +0200
+@@ -40,12 +40,12 @@
+ endif
  
- # Default directories (adjust as necessary or desired):
+ DESTDIR   ?=
+-VIDEODIR  ?= /srv/vdr/video
+-CONFDIR   ?= /var/lib/vdr
++VIDEODIR  ?= /var/vdr/video
++CONFDIR   ?= /etc/vdr
+ ARGSDIR   ?= /etc/vdr/conf.d
+ CACHEDIR  ?= /var/cache/vdr
  
--#PREFIX    = /usr/local
-+PREFIX    = /usr
- #BINDIR    = $(PREFIX)/bin
- #INCDIR    = $(PREFIX)/include
- #LIBDIR    = $(PREFIX)/lib/vdr
-@@ -36,8 +36,8 @@
- #RESDIR    = $(PREFIX)/share/vdr
- #DVBDIR    = /usr/src/v4l-dvb/linux/include/uapi
+-PREFIX    ?= /usr/local
++PREFIX    ?= /usr
+ VDRROOT   ?= $(PREFIX)
+ BINDIR    ?= $(VDRROOT)/bin
+ INCDIR    ?= $(VDRROOT)/include
+@@ -53,7 +53,7 @@
+ LOCDIR    ?= $(VDRROOT)/share/locale
+ MANDIR    ?= $(VDRROOT)/share/man
+ PCDIR     ?= $(VDRROOT)/lib/pkgconfig
+-RESDIR    ?= $(VDRROOT)/share/vdr
++RESDIR    ?= $(VDRROOT)/share
  
--#VIDEODIR  = /srv/vdr/video
--#CONFDIR   = /var/lib/vdr
-+VIDEODIR  = /var/vdr/video
-+CONFDIR   = /etc/vdr
- #ARGSDIR   = /etc/vdr/conf.d
- #CACHEDIR  = /var/cache/vdr
+ # Source documentation
  
-@@ -76,7 +76,7 @@
- #NO_KBD = 1
- 
- ### Define if you want vdr to not run as root:
--#VDR_USER = vdr
-+VDR_USER = vdr
- 
- ### Define if you want to compile in 'bidi' support:
- #BIDI = 1
