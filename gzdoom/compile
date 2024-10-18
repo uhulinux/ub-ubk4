@@ -1,3 +1,6 @@
 #!/bin/sh -eux
 
-ub_compile
+ub_compile \
+    -DSYSTEMINSTALL=ON \
+    -DINSTALL_SOUNDFONT_PATH=share/gzdoom \
+    -DINSTALL_RPATH=/usr/lib
