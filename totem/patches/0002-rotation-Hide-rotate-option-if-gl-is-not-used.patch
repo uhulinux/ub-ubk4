@@ -1,0 +1,126 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ball=C3=B3=20Gy=C3=B6rgy?= <ballogyor@gmail.com>
+Date: Sat, 22 Jun 2024 12:58:17 +0200
+Subject: [PATCH] rotation: Hide rotate option if gl is not used
+
+rotate-method is not supported by gtksink.
+---
+ src/backend/bacon-video-widget.c      | 35 ++++++++++++++++++++++-----
+ src/backend/bacon-video-widget.h      |  2 ++
+ src/plugins/rotation/totem-rotation.c |  5 ++++
+ 3 files changed, 36 insertions(+), 6 deletions(-)
+
+diff --git a/src/backend/bacon-video-widget.c b/src/backend/bacon-video-widget.c
+index f99dcdb4174c..88b36f5a4eb7 100644
+--- a/src/backend/bacon-video-widget.c
++++ b/src/backend/bacon-video-widget.c
+@@ -3889,9 +3889,12 @@ bvw_stop_play_pipeline (BaconVideoWidget * bvw)
+   bvw->buffering_left = -1;
+   bvw_reconfigure_fill_timeout (bvw, 0);
+   g_signal_emit (bvw, bvw_signals[SIGNAL_BUFFERING], 0, 100.0);
+-  g_object_set (bvw->video_sink,
+-                "rotate-method", GST_VIDEO_ORIENTATION_AUTO,
+-                NULL);
++
++  if (bvw->use_gl)
++    g_object_set (bvw->video_sink,
++                  "rotate-method", GST_VIDEO_ORIENTATION_AUTO,
++                  NULL);
++
+   GST_DEBUG ("stopped");
+ }
+ 
+@@ -4500,31 +4503,50 @@ bacon_video_widget_set_rotation (BaconVideoWidget *bvw,
+ {
+   g_return_if_fail (BACON_IS_VIDEO_WIDGET (bvw));
+ 
++  if (!bvw->use_gl)
++    return;
++
+   GST_DEBUG ("Rotating to %s (%f degrees) from %s",
+ 	     g_enum_to_string (BVW_TYPE_ROTATION, rotation),
+ 	     rotation * 90.0,
+ 	     g_enum_to_string (BVW_TYPE_ROTATION, bvw->rotation));
+ 
+   bvw->rotation = rotation;
+   g_object_set (bvw->video_sink, "rotate-method", rotation, NULL);
+ }
+ 
+ /**
+  * bacon_video_widget_get_rotation:
+  * @bvw: a #BaconVideoWidget
+  *
+  * Returns the angle of rotation of the video, in degrees.
+  *
+  * Return value: a #BvwRotation.
+  **/
+ BvwRotation
+ bacon_video_widget_get_rotation (BaconVideoWidget *bvw)
+ {
+   g_return_val_if_fail (BACON_IS_VIDEO_WIDGET (bvw), BVW_ROTATION_R_ZERO);
+ 
+   return bvw->rotation;
+ }
+ 
++/**
++ * bacon_video_widget_use_gl:
++ * @bvw: a #BaconVideoWidget
++ *
++ * Returns whether gl is used.
++ *
++ * Return value: %TRUE if gl is used, %FALSE otherwise
++ **/
++gboolean
++bacon_video_widget_use_gl (BaconVideoWidget *bvw)
++{
++  g_return_val_if_fail (BACON_IS_VIDEO_WIDGET (bvw), FALSE);
++
++  return bvw->use_gl;
++}
++
+ /* Search for the color balance channel corresponding to type and return it. */
+ static GstColorBalanceChannel *
+ bvw_get_color_balance_channel (GstColorBalance * color_balance,
+@@ -5681,9 +5703,10 @@ bvw_init_video_sink (BaconVideoWidget *bvw)
+   g_object_unref (bvw->video_widget);
+   gtk_stack_set_visible_child_name (GTK_STACK (bvw->stack), "video");
+ 
+-  g_object_set (bvw->video_sink,
+-                "rotate-method", GST_VIDEO_ORIENTATION_AUTO,
+-                NULL);
++  if (bvw->use_gl)
++    g_object_set (bvw->video_sink,
++                  "rotate-method", GST_VIDEO_ORIENTATION_AUTO,
++                  NULL);
+ 
+   /* And tell playbin */
+   if (bvw->use_gl)
+diff --git a/src/backend/bacon-video-widget.h b/src/backend/bacon-video-widget.h
+index 3964c611801d..080462b54044 100644
+--- a/src/backend/bacon-video-widget.h
++++ b/src/backend/bacon-video-widget.h
+@@ -282,6 +282,8 @@ BvwZoomMode bacon_video_widget_get_zoom		 (BaconVideoWidget *bvw);
+ void bacon_video_widget_set_rotation		 (BaconVideoWidget *bvw,
+ 						  BvwRotation       rotation);
+ BvwRotation bacon_video_widget_get_rotation	 (BaconVideoWidget *bvw);
++gboolean bacon_video_widget_use_gl	         (BaconVideoWidget *bvw);
++
+ 
+ int bacon_video_widget_get_video_property        (BaconVideoWidget *bvw,
+ 						  BvwVideoProperty type);
+diff --git a/src/plugins/rotation/totem-rotation.c b/src/plugins/rotation/totem-rotation.c
+index 086ff45a784f..ec37c061e648 100644
+--- a/src/plugins/rotation/totem-rotation.c
++++ b/src/plugins/rotation/totem-rotation.c
+@@ -219,6 +219,11 @@ impl_activate (PeasActivatable *plugin)
+ 
+ 	pi->totem = g_object_get_data (G_OBJECT (plugin), "object");
+ 	pi->bvw = totem_object_get_video_widget (pi->totem);
++
++	/* rotate-method is not supported by gtksink */
++	if (!bacon_video_widget_use_gl (BACON_VIDEO_WIDGET (pi->bvw)))
++		return;
++
+ 	pi->cancellable = g_cancellable_new ();
+ 
+ 	g_signal_connect (pi->totem,
