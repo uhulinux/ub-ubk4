@@ -1,5 +1,4 @@
 #!/bin/sh -eux
 
-sed '/AM_PATH_CPPUNIT/d' -i configure.ac
-./autogen.sh
-ub_compile
+ub_compile \
+    --disable-debug
