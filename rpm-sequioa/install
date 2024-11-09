@@ -1,0 +1,9 @@
+#!/bin/sh -eux
+
+install -Dm644 target/release/librpm_sequoia.so "${UB_INSTALLDIR}/usr/lib/librpm_sequoia.so.1"
+
+# unversioned symlink
+ln -s librpm_sequoia.so.1 "${UB_INSTALLDIR}/usr/lib/librpm_sequoia.so"
+
+# install pkg-config
+install -Dm644 target/release/rpm-sequoia.pc "${UB_INSTALLDIR}/usr/lib/pkgconfig/rpm-sequoia.pc"
