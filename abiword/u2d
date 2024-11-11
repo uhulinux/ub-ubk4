@@ -1,1 +1,1 @@
-urllist https://gitlab.gnome.org/World/AbiWord/-/tags | grep release- | sed s/release-//  | sort -V | tail -n 1
+urllist https://gitlab.gnome.org/World/AbiWord/-/tags | grep -E '^release-[0-9]+\.' | sed -e 's/release-//' | sort -V | tail -n 1
