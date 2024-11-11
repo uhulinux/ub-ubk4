@@ -1,16 +1,13 @@
 #!/bin/sh -eux
 
-cp -a bin ${UB_INSTALLDIR}/usr/
 mkdir -p ${UB_INSTALLDIR}/usr/share/{XaoS/catalogs,XaoS/tutorial,applications,pixmaps}
+
+cp build/XaoS ${UB_INSTALLDIR}/usr/bin/xaos
 
 cp xdg/io.github.xaos_project.XaoS.desktop ${UB_INSTALLDIR}/usr/share/applications/
 cp xdg/xaos.png ${UB_INSTALLDIR}/usr/share/pixmaps/
 
-mkdir -p ${UB_INSTALLDIR}/usr/lib/qt5/translations/
-cp i18n/*.qm ${UB_INSTALLDIR}/usr/lib/qt5/translations/
-
 cp catalogs/*.cat ${UB_INSTALLDIR}/usr/share/XaoS/catalogs/
-cp -a tutorial/*.xaf ${UB_INSTALLDIR}/usr/share/XaoS/tutorial/
-cp -a tutorial/*.xhf ${UB_INSTALLDIR}/usr/share/XaoS/tutorial/
+cp tutorial/*.xaf tutorial/*.xhf ${UB_INSTALLDIR}/usr/share/XaoS/tutorial/
 
 cp -a examples ${UB_INSTALLDIR}/usr/share/XaoS/
