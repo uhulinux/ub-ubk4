@@ -1,19 +1,19 @@
 diff -Naur a/lib/dpkg/dpkg.h b/lib/dpkg/dpkg.h
---- a/lib/dpkg/dpkg.h	2022-03-26 18:17:58.000000000 +0100
-+++ b/lib/dpkg/dpkg.h	2022-05-15 04:53:25.382600825 +0200
+--- a/lib/dpkg/dpkg.h	2023-10-30 04:22:04.000000000 +0100
++++ b/lib/dpkg/dpkg.h	2023-11-20 23:27:34.051239558 +0100
 @@ -52,7 +52,7 @@
  #define MAXCONFFILENAME     1000
  #define MAXDIVERTFILENAME   1024
  #define MAXCONTROLFILENAME  100
 -#define DEBEXT             ".deb"
-+#define DEBEXT             ".ubk.uhu"
++#define DEBEXT             ".uhu"
  #define REMOVECONFFEXTS    "~", ".bak", "%", \
                             DPKGTEMPEXT, DPKGNEWEXT, DPKGOLDEXT, DPKGDISTEXT
  
 diff -Naur a/po/hu.po b/po/hu.po
---- a/po/hu.po	2022-04-01 02:27:10.000000000 +0200
-+++ b/po/hu.po	2022-05-15 04:56:33.823200197 +0200
-@@ -4500,8 +4500,8 @@
+--- a/po/hu.po	2023-10-30 04:22:04.000000000 +0100
++++ b/po/hu.po	2023-11-20 23:28:09.215345565 +0100
+@@ -4506,8 +4506,8 @@
  msgstr "--%s --recursive legalább 1 ösvény argumentumot vár"
  
  #: src/main/archives.c
@@ -25,18 +25,9 @@ diff -Naur a/po/hu.po b/po/hu.po
  #: src/main/archives.c
  #, c-format
 diff -Naur a/src/main/archives.c b/src/main/archives.c
---- a/src/main/archives.c	2022-03-26 18:17:59.000000000 +0100
-+++ b/src/main/archives.c	2022-05-15 04:55:34.423010686 +0200
-@@ -1539,7 +1539,7 @@
- 
-         /* Check if it looks like a .deb file. */
-         nodename = treenode_get_pathname(node);
--        if (strcmp(nodename + strlen(nodename) - 4, ".deb") != 0)
-+        if (strcmp(nodename + strlen(nodename) - 4, ".uhu") != 0)
-           continue;
- 
-         arglist = m_realloc(arglist, sizeof(char *) * (nfiles + 2));
-@@ -1550,7 +1550,7 @@
+--- a/src/main/archives.c	2023-10-30 04:22:04.000000000 +0100
++++ b/src/main/archives.c	2023-11-20 23:30:44.335726334 +0100
+@@ -1556,7 +1556,7 @@
      }
  
      if (!nfiles)

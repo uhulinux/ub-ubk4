@@ -1,6 +1,6 @@
 diff -Naur a/lib/dpkg/dpkg.h b/lib/dpkg/dpkg.h
---- a/lib/dpkg/dpkg.h	2022-05-15 04:53:25.382600825 +0200
-+++ b/lib/dpkg/dpkg.h	2022-05-15 05:01:34.644167828 +0200
+--- a/lib/dpkg/dpkg.h	2023-11-20 23:27:34.051239558 +0100
++++ b/lib/dpkg/dpkg.h	2023-11-20 23:32:39.583933886 +0100
 @@ -71,6 +71,7 @@
  #define POSTINSTFILE       "postinst"
  #define PRERMFILE          "prerm"
@@ -10,8 +10,8 @@ diff -Naur a/lib/dpkg/dpkg.h b/lib/dpkg/dpkg.h
  #define MAINTSCRIPT_FILE_CONFIG		"config"
  #define TRIGGERSCIFILE     "triggers"
 diff -Naur a/src/main/remove.c b/src/main/remove.c
---- a/src/main/remove.c	2022-03-26 18:17:59.000000000 +0100
-+++ b/src/main/remove.c	2022-05-15 05:05:06.236855908 +0200
+--- a/src/main/remove.c	2023-10-30 04:22:04.000000000 +0100
++++ b/src/main/remove.c	2023-11-20 23:32:39.587933892 +0100
 @@ -225,7 +225,8 @@
  {
    /* We need the postrm and list files for --purge. */
@@ -22,7 +22,7 @@ diff -Naur a/src/main/remove.c b/src/main/remove.c
      return;
  
    debug(dbg_stupidlyverbose, "removal_bulk info not postrm or list");
-@@ -676,6 +677,12 @@
+@@ -670,6 +671,12 @@
            filename);
      if (unlink(filename) && errno != ENOENT)
        ohshite(_("can't remove old postrm script"));

@@ -8,8 +8,5 @@ mkdir -p "$UB_INSTALLDIR/var/lib/dpkg"
 # install
 ub_install
 
-# dselect config file
-touch "$UB_INSTALLDIR/etc/dpkg/dselect.cfg"
-
 # remove docs, they are installed via the "doc" file
 rm -r "$UB_INSTALLDIR/usr/share/doc/dpkg"
