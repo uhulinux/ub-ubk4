@@ -1,11 +1,32 @@
---- gsmartcontrol.orig/Makefile.in	2009-09-05 16:40:03.000000000 +0200
-+++ gsmartcontrol/Makefile.in	2009-09-06 12:04:55.000000000 +0200
-@@ -696,7 +696,7 @@
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2024-11-07 10:09:59.000000000 +0100
++++ b/CMakeLists.txt	2024-11-09 23:12:37.439933081 +0100
+@@ -41,28 +41,6 @@
+ option(APP_BUILD_TESTS "Build tests" OFF)
  
- info-am:
  
--install-data-am: install-dist_docDATA install-nobase_dist_docDATA
-+install-data-am: install-nobase_dist_docDATA
- 
- install-dvi: install-dvi-recursive
- 
+-# Install documentation
+-set(DOC_FILES
+-	LICENSE.LGPL3.txt
+-	LICENSE.txt
+-	NEWS.txt
+-	README.md
+-)
+-if (WIN32)
+-	install(FILES ${DOC_FILES} DESTINATION doc/)
+-	install(DIRECTORY docs DESTINATION doc/
+-		PATTERN "*.yml" EXCLUDE
+-		PATTERN "CNAME" EXCLUDE
+-	)
+-else()
+-	install(FILES ${DOC_FILES} TYPE DOC)
+-	install(DIRECTORY docs TYPE DOC
+-		PATTERN "*.yml" EXCLUDE
+-		PATTERN "CNAME" EXCLUDE
+-	)
+-endif()
+-
+-
+ # CTest support
+ include(CTest)
+ #include(${CMAKE_SOURCE_DIR}/dependencies/catch2/Catch2/extras/Catch.cmake)
