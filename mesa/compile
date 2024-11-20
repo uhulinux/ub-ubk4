@@ -5,22 +5,17 @@
 ub_compile \
 	-Dplatforms=x11,wayland \
 	-Ddri3=enabled \
-	-Dgallium-extra-hud=true \
-	-Dgallium-vdpau=enabled \
-	-Dgallium-va=enabled \
-	-Dgallium-xa=enabled \
-	-Dgallium-nine=true \
-	-Dgallium-opencl=icd \
-	-Dgallium-omx=bellagio \
-	-Dvulkan-drivers=amd,intel \
-	-Dvulkan-layers=device-select,intel-nullhw,overlay \
 	-Dgles1=disabled \
 	-Dgles2=enabled \
 	-Dgbm=enabled \
 	-Dglx=dri \
 	-Degl=enabled \
+	-Dgallium-drivers="kmsro,r300,r600,nouveau,freedreno,v3d,vc4,etnaviv,tegra,i915,svga,virgl,panfrost,iris,d3d12,asahi,crocus" \
+	-Dgallium-nine=false \
 	-Dglvnd=true \
-	-Dllvm=enabled \
+	-Dvulkan-drivers=amd,intel \
+	-Dvulkan-layers=device-select,intel-nullhw,overlay \
+	-Dllvm=disabled \
 	-Dlibunwind=enabled \
 	-Dlmsensors=enabled \
 	-Dtools=all \
