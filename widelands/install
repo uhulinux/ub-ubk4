@@ -1,10 +1,8 @@
 #!/bin/sh -eux
 
 ub_install
-mv ${UB_INSTALLDIR}/share/applications ${UB_INSTALLDIR}/usr/share
-mv ${UB_INSTALLDIR}/share/icons ${UB_INSTALLDIR}/usr/share
-mv ${UB_INSTALLDIR}/share/man/man6/* ${UB_INSTALLDIR}/usr/share/man/man6/
-mv ${UB_INSTALLDIR}/share/metainfo ${UB_INSTALLDIR}/usr/share/metainfo
-rm -rf ${UB_INSTALLDIR}/share
-mv ${UB_INSTALLDIR}/usr/widelands ${UB_INSTALLDIR}/usr/bin/
-rm ${UB_INSTALLDIR}/usr/{ChangeLog,COPYING,CREDITS,VERSION}
+# (upstream bug)
+rm ${UB_INSTALLDIR}/usr/VERSION
+rm ${UB_INSTALLDIR}/usr/CREDITS
+rm ${UB_INSTALLDIR}/usr/COPYING
+rm ${UB_INSTALLDIR}/usr/ChangeLog
