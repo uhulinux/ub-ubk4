@@ -1,0 +1,22 @@
+diff -Nur orig/cinnamon2d.session.in mod/cinnamon2d.session.in
+--- orig/cinnamon2d.session.in	2021-06-04 10:19:10.000000000 +0200
++++ mod/cinnamon2d.session.in	2021-06-04 10:23:09.984433116 +0200
+@@ -1,6 +1,6 @@
+ [Cinnamon Session]
+ Name=Cinnamon (Software Rendering)
+-RequiredComponents=cinnamon2d;org.cinnamon.ScreenSaver;nemo-autostart;@REQUIRED@cinnamon-killer-daemon;
++RequiredComponents=cinnamon2d;cinnamon-screensaver;nemo-autostart;@REQUIRED@cinnamon-killer-daemon;polkit-cinnamon-authentication-agent-1;
+ DesktopName=X-Cinnamon
+ 
+ 
+diff -Nur orig/cinnamon.session.in mod/cinnamon.session.in
+--- orig/cinnamon.session.in	2021-06-04 10:19:10.000000000 +0200
++++ mod/cinnamon.session.in	2021-06-04 10:22:31.284489900 +0200
+@@ -1,6 +1,6 @@
+ [Cinnamon Session]
+ Name=Cinnamon
+-RequiredComponents=cinnamon;org.cinnamon.ScreenSaver;nemo-autostart;@REQUIRED@cinnamon-killer-daemon;
++RequiredComponents=cinnamon;cinnamon-screensaver;nemo-autostart;@REQUIRED@cinnamon-killer-daemon;polkit-cinnamon-authentication-agent-1;
+ DesktopName=X-Cinnamon
+ 
+ 
