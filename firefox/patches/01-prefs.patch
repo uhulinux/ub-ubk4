@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2024-07-04 19:04:12.000000000 +0200
-+++ b/browser/app/profile/firefox.js	2024-07-08 20:25:10.248626996 +0200
+--- a/browser/app/profile/firefox.js	2024-11-21 19:21:04.000000000 +0100
++++ b/browser/app/profile/firefox.js	2024-11-26 14:17:55.593006249 +0100
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -24,7 +24,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -269,7 +276,7 @@
+@@ -276,7 +283,7 @@
  pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -33,7 +33,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -386,7 +393,7 @@
+@@ -393,7 +400,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -42,7 +42,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -538,7 +545,7 @@
+@@ -571,7 +578,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
@@ -51,7 +51,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  #ifdef NIGHTLY_BUILD
  pref("browser.urlbar.trimHttps", true);
-@@ -1247,7 +1254,7 @@
+@@ -1299,7 +1306,7 @@
  // 2 and other values, nothing
  pref("browser.backspace_action", 2);
  
@@ -60,15 +60,13 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // this will automatically enable inline spellchecking (if it is available) for
  // editable elements in HTML
-@@ -2083,10 +2090,8 @@
+@@ -2201,6 +2208,9 @@
  
  pref("browser.contentblocking.database.enabled", true);
  
--// Enable URL query stripping in Nightly.
--#ifdef NIGHTLY_BUILD
-+// Enable URL query stripping.
- pref("privacy.query_stripping.enabled", true);
--#endif
- 
++// Enable URL query stripping
++pref("privacy.query_stripping.enabled", true);
++
  // Enable Strip on Share by default on desktop
  pref("privacy.query_stripping.strip_on_share.enabled", true);
+ 
