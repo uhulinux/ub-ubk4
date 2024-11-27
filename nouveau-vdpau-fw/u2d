@@ -1,0 +1,1 @@
+curl -s -k https://raw.githubusercontent.com/envytools/firmware/master/extract_firmware.py | grep '"3' | sed 's/ *\"//g' | sed 's/,*//g' | sed 's/\:.*//g' | sort -V | tail -n 1
