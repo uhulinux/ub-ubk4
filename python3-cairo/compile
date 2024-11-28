@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+#ub_compile
+meson setup \
+    --prefix=/usr \
+    --backend=ninja \
+    --mandir=/usr/share/man \
+    --optimization=2 \
+    build
+meson compile -C build
