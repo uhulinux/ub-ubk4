@@ -1,1 +1,1 @@
-u2d http://archive.ubuntu.com/ubuntu/pool/multiverse/r/rar/ rar_ .orig
+urllist http://archive.ubuntu.com/ubuntu/pool/multiverse/r/rar/ | grep orig | sed s/~.*// | sort -V | tail -n 1 | sed s/rar_//
