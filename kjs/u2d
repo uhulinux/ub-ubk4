@@ -1,7 +1,0 @@
-for dir in $(urllist https://download.kde.org/stable/frameworks/ | grep -E '^[0-9.]+$' | sort -rV);do
-    ver=$(u2d https://download.kde.org/stable/frameworks/$dir/portingAids/ kjs-)
-    if [ $ver ];then
-        echo $ver
-        exit 0
-    fi
-done

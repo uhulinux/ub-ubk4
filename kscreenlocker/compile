@@ -1,8 +1,6 @@
 #!/bin/sh -eux
 
 ub_compile \
-	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
 	-DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
-	-DKDE4_COMMON_PAM_SERVICE=system-auth \
-	-DKDE4_KSCREENSAVER_PAM_SERVICE=system-auth \
+	-DKSCREENLOCKER_PAM_SERVICE=system-auth \
 	-DBUILD_TESTING=OFF

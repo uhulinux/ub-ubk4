@@ -1,4 +1,13 @@
 #!/bin/sh -eux
 
 ub_compile \
-	-Dudev=true
+	-Dintel=enabled \
+	-Dradeon=enabled \
+	-Damdgpu=enabled \
+	-Dnouveau=enabled \
+    -Detnaviv=disabled \
+    -Dfreedreno=disabled \
+    -Dvc4=disabled \
+    -Dvalgrind=disabled \
+    -Dinstall-test-programs=true \
+	-Dudev=false

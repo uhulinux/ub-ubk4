@@ -1,0 +1,19 @@
+diff -Naur a/src/runtime/kwalletd/CMakeLists.txt b/src/runtime/kwalletd/CMakeLists.txt
+--- a/src/runtime/kwalletd/CMakeLists.txt	2024-04-05 12:59:15.000000000 +0200
++++ b/src/runtime/kwalletd/CMakeLists.txt	2024-04-23 00:34:29.232155497 +0200
+@@ -123,15 +123,12 @@
+     configure_file(org.kde.kwalletd6.service.win.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/org.kde.kwalletd6.service)
+ else()
+-    configure_file(org.kde.kwalletd5.service.in
+-                   ${CMAKE_CURRENT_BINARY_DIR}/org.kde.kwalletd5.service)
+     configure_file(org.kde.kwalletd6.service.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/org.kde.kwalletd6.service)
+ endif()
+ 
+ install(
+     FILES
+-        ${CMAKE_CURRENT_BINARY_DIR}/org.kde.kwalletd5.service
+         ${CMAKE_CURRENT_BINARY_DIR}/org.kde.kwalletd6.service
+     DESTINATION ${KDE_INSTALL_DBUSSERVICEDIR}
+ )

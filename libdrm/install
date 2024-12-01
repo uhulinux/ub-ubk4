@@ -1,7 +1,3 @@
 #!/bin/sh -eux
 
 ub_install
-
-for i in "$UB_INSTALLDIR"/usr/include/libdrm/*; do
-	ln -s /usr/include/libdrm/"${i##*/}" "$UB_INSTALLDIR"/usr/include/
-done

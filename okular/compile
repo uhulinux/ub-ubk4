@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 
 ub_compile \
-	-DCMAKE_PREFIX_PATH=/usr/lib/qt5 \
 	-DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
-	-DFORCE_NOT_REQUIRED_DEPENDENCIES="KF5KExiv2;QMobipocket;Discount;" \
+	-DFORCE_NOT_REQUIRED_DEPENDENCIES="KExiv2Qt6;QMobipocket;Discount;" \
 	-DBUILD_TESTING=OFF

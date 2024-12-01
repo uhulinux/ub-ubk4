@@ -1,0 +1,33 @@
+diff -Naur a/libkonq/KonqConfig.cmake.in b/libkonq/KonqConfig.cmake.in
+--- a/libkonq/KonqConfig.cmake.in	2024-08-15 23:38:17.000000000 +0200
++++ b/libkonq/KonqConfig.cmake.in	2024-08-23 02:24:29.900617914 +0200
+@@ -1,11 +1,11 @@
+ @PACKAGE_INIT@
+ 
+ ​include(CMakeFindDependencyMacro)
+-find_dependency(KF${KF_MAJOR_VERSION}XmlGui)
+-find_dependency(KF${KF_MAJOR_VERSION}Config)
+-find_dependency(KF${KF_MAJOR_VERSION}KIO)
+-find_dependency(KF${KF_MAJOR_VERSION}CoreAddons)
+-find_dependency(KF${KF_MAJOR_VERSION}Service)
+-find_dependency(KF${KF_MAJOR_VERSION}Parts)
++find_dependency(KF6XmlGui)
++find_dependency(KF6Config)
++find_dependency(KF6KIO)
++find_dependency(KF6CoreAddons)
++find_dependency(KF6Service)
++find_dependency(KF6Parts)
+ 
+-include("${CMAKE_CURRENT_LIST_DIR}/KF${KF_MAJOR_VERSION}KonqTargets.cmake")
++include("${CMAKE_CURRENT_LIST_DIR}/KF6KonqTargets.cmake")
+diff -Naur a/libkonqsettings/KonqSettingsConfig.cmake.in b/libkonqsettings/KonqSettingsConfig.cmake.in
+--- a/libkonqsettings/KonqSettingsConfig.cmake.in	2024-08-15 23:38:17.000000000 +0200
++++ b/libkonqsettings/KonqSettingsConfig.cmake.in	2024-08-23 02:25:17.252786614 +0200
+@@ -1,6 +1,6 @@
+ @PACKAGE_INIT@
+ 
+ ​include(CMakeFindDependencyMacro)
+-find_dependency(KF${KF_MAJOR_VERSION}Config)
++find_dependency(KF6Config)
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/KF${KF_MAJOR_VERSION}KonqSettingsTargets.cmake")
