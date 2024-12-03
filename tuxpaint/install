@@ -1,11 +1,13 @@
 #!/bin/sh -eux
 
 export XDG_DATA_DIRS=$UB_INSTALLDIR/usr/share
-mkdir -p $UB_INSTALLDIR/usr/share/{icons/hicolor,applications,desktop-directories}
+mkdir -p $UB_INSTALLDIR/usr/share/applications
 
 make \
     PREFIX=/usr \
     GNOME_PREFIX=/usr \
+    X11_ICON_PREFIX=${UB_INSTALLDIR}/usr/share/pixmaps \
     DESTDIR=${UB_INSTALLDIR} \
+    PACKAGE_ONLY=yes \
     install
 rm -rf ${UB_INSTALLDIR}/usr/include
