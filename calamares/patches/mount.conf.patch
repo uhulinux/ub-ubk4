@@ -1,13 +1,13 @@
-diff -Naur orig/src/modules/mount/mount.conf patched/src/modules/mount/mount.conf
---- orig/src/modules/mount/mount.conf	2019-07-06 00:52:35.000000000 +0200
-+++ patched/src/modules/mount/mount.conf	2019-07-31 13:05:00.821582117 +0200
-@@ -35,6 +35,9 @@
+diff -Naur a/src/modules/mount/mount.conf b/src/modules/mount/mount.conf
+--- a/src/modules/mount/mount.conf	2023-12-12 00:04:06.000000000 +0100
++++ b/src/modules/mount/mount.conf	2023-12-17 00:07:51.192648225 +0100
+@@ -34,6 +34,9 @@
      - device: /run/udev
        mountPoint: /run/udev
-       options: bind
+       options: [ bind ]
 +    - device: /dev/pts
 +      fs: devpts
 +      mountPoint: /dev/pts
- 
- extraMountsEfi:
      - device: efivarfs
+       fs: efivarfs
+       mountPoint: /sys/firmware/efi/efivars

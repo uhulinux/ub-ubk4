@@ -1,0 +1,12 @@
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2024-12-07 16:12:27.000000000 +0100
++++ b/CMakeLists.txt	2024-12-13 05:27:16.691190685 +0100
+@@ -63,7 +63,7 @@
+ #
+ # 1.71 or later is required for safe_numerics to work on MSVC otherwise we get a link-time error.
+ # Change this to 1.84 when its more widely available
+-find_package(Boost 1.82 REQUIRED)
++find_package(Boost 1.80 REQUIRED)
+ #needed on craft and possiablely other custom setups.
+ include_directories(${Boost_INCLUDE_DIRS})
+ 

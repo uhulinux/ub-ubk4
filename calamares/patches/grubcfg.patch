@@ -1,0 +1,28 @@
+diff -Naur a/src/modules/grubcfg/grubcfg.conf b/src/modules/grubcfg/grubcfg.conf
+--- a/src/modules/grubcfg/grubcfg.conf	2023-12-12 00:04:06.000000000 +0100
++++ b/src/modules/grubcfg/grubcfg.conf	2023-12-17 00:04:28.896280760 +0100
+@@ -44,8 +44,12 @@
+     GRUB_TIMEOUT: 5
+     GRUB_DEFAULT: "saved"
+     GRUB_DISABLE_SUBMENU: true
++    GRUB_DISABLE_LINUX_UUID: "false"
++    GRUB_GFXMODE: "auto"
++    GRUB_GFXPAYLOAD_LINUX: "keep"
+     GRUB_TERMINAL_OUTPUT: "console"
+     GRUB_DISABLE_RECOVERY: true
++    GRUB_BACKGROUND: "/usr/share/backgrounds/UHU/uhu-grub-bg.png"
+ 
+ # Set to true to force defaults to be used even when not overwriting
+ always_use_defaults: false
+diff -Naur a/src/modules/grubcfg/main.py b/src/modules/grubcfg/main.py
+--- a/src/modules/grubcfg/main.py	2023-12-12 00:04:06.000000000 +0100
++++ b/src/modules/grubcfg/main.py	2023-12-17 00:05:37.196402397 +0100
+@@ -213,7 +213,7 @@
+             if partition["fs"] == "zfs" and partition["mountPoint"] == "/":
+                 zfs_root_path = get_zfs_root()
+ 
+-    kernel_params = libcalamares.job.configuration.get("kernel_params", ["quiet"])
++    kernel_params = libcalamares.job.configuration.get("kernel_params", [])
+ 
+     # Currently, grub doesn't detect this properly so it must be set manually
+     if zfs_root_path:

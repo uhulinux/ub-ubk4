@@ -1,7 +1,7 @@
 diff -Naur a/src/modules/users/users.conf b/src/modules/users/users.conf
---- a/src/modules/users/users.conf	2022-03-21 15:19:44.000000000 +0100
-+++ b/src/modules/users/users.conf	2022-03-21 20:25:35.351336919 +0100
-@@ -32,13 +32,6 @@
+--- a/src/modules/users/users.conf	2023-12-12 00:04:06.000000000 +0100
++++ b/src/modules/users/users.conf	2023-12-17 00:41:46.808588675 +0100
+@@ -38,13 +38,6 @@
      - name: users
        must_exist: true
        system: true
@@ -14,13 +14,13 @@ diff -Naur a/src/modules/users/users.conf b/src/modules/users/users.conf
 -      system: true
      - audio
  
- # Some Distributions require a 'autologin' group for the user.
-@@ -62,7 +55,7 @@
+ # When *sudoersGroup* is set to a non-empty string, Calamares creates a
+@@ -56,7 +49,7 @@
  # remove this setting (delete or comment out the line below). Otherwise,
  # the setting will be duplicated in the `/etc/sudoers.d/10-installer` file,
  # potentially confusing users.
 -sudoersGroup:    wheel
 +# sudoersGroup:    wheel
- # If set to `false` (the default), writes a sudoers file with `(ALL)`
- # so that the command can be run as any user. If set to `true`, writes
- # `(ALL:ALL)` so that any user and any group can be chosen.
+ 
+ # Some Distributions require a 'autologin' group for the user.
+ # Autologin causes a user to become automatically logged in to

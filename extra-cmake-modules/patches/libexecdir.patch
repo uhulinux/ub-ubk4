@@ -1,0 +1,44 @@
+diff -Naur a/kde-modules/KDEInstallDirs5.cmake b/kde-modules/KDEInstallDirs5.cmake
+--- a/kde-modules/KDEInstallDirs5.cmake	2024-10-04 17:05:08.000000000 +0200
++++ b/kde-modules/KDEInstallDirs5.cmake	2024-12-04 02:23:12.988192777 +0100
+@@ -43,7 +43,7 @@
+     ``EXECROOTDIR/lib/<multiarch-tuple`` on Debian) [``LIB_INSTALL_DIR``]
+ ``LIBEXECDIR``
+     executables for internal use by programs and libraries (``BINDIR`` on
+-    Windows, ``LIBDIR/libexec`` otherwise) [``LIBEXEC_INSTALL_DIR``]
++    Windows, ``EXECROOTDIR/libexec`` otherwise) [``LIBEXEC_INSTALL_DIR``]
+ ``CMAKEPACKAGEDIR``
+     CMake packages, including config files (``LIBDIR/cmake``)
+     [``CMAKECONFIG_INSTALL_PREFIX``]
+diff -Naur a/kde-modules/KDEInstallDirs6.cmake b/kde-modules/KDEInstallDirs6.cmake
+--- a/kde-modules/KDEInstallDirs6.cmake	2024-10-04 17:05:08.000000000 +0200
++++ b/kde-modules/KDEInstallDirs6.cmake	2024-12-04 02:23:29.068253166 +0100
+@@ -43,7 +43,7 @@
+     ``EXECROOTDIR/lib/<multiarch-tuple`` on Debian)
+ ``LIBEXECDIR``
+     executables for internal use by programs and libraries (``BINDIR`` on
+-    Windows, ``LIBDIR/libexec`` otherwise)
++    Windows, ``EXECROOTDIR/libexec`` otherwise)
+ ``CMAKEPACKAGEDIR``
+     CMake packages, including config files (``LIBDIR/cmake``)
+ ``QTPLUGINDIR``
+diff -Naur a/kde-modules/KDEInstallDirsCommon.cmake b/kde-modules/KDEInstallDirsCommon.cmake
+--- a/kde-modules/KDEInstallDirsCommon.cmake	2024-10-04 17:05:08.000000000 +0200
++++ b/kde-modules/KDEInstallDirsCommon.cmake	2024-12-04 02:25:28.100698382 +0100
+@@ -28,6 +28,7 @@
+ if((CMAKE_SYSTEM_NAME MATCHES "Linux|kFreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "GNU")
+    AND NOT CMAKE_CROSSCOMPILING
+    AND NOT EXISTS "/etc/arch-release"
++   AND NOT EXISTS "/etc/uhu-release"
+    AND NOT DEFINED ENV{FLATPAK_ID}
+    AND NOT EXISTS "/etc/NIXOS")
+   if (EXISTS "/etc/debian_version") # is this a debian system ?
+@@ -248,7 +249,7 @@
+         "executables for internal use by programs and libraries"
+         LIBEXEC_INSTALL_DIR)
+ else()
+-    _define_relative(LIBEXECDIR LIBDIR "libexec"
++    _define_relative(LIBEXECDIR EXECROOTDIR "libexec"
+         "executables for internal use by programs and libraries"
+         LIBEXEC_INSTALL_DIR)
+ endif()

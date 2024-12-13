@@ -1,8 +1,8 @@
-diff -Naur orig/src/modules/users/CreateUserJob.cpp patched/src/modules/users/CreateUserJob.cpp
---- orig/src/modules/users/CreateUserJob.cpp	2020-12-04 14:51:48.000000000 +0100
-+++ patched/src/modules/users/CreateUserJob.cpp	2020-12-06 19:16:05.777748938 +0100
-@@ -64,8 +64,7 @@
-     }
+diff -Naur a/src/modules/users/CreateUserJob.cpp b/src/modules/users/CreateUserJob.cpp
+--- a/src/modules/users/CreateUserJob.cpp	2024-10-22 21:24:23.000000000 +0200
++++ b/src/modules/users/CreateUserJob.cpp	2024-10-29 15:57:57.929515015 +0100
+@@ -61,8 +61,7 @@
+     Q_UNUSED( umask )
  #else
      useraddCommand << "useradd"
 -                   << "-m"
@@ -11,12 +11,12 @@ diff -Naur orig/src/modules/users/CreateUserJob.cpp patched/src/modules/users/Cr
      if ( !shell.isEmpty() )
      {
          useraddCommand << "-s" << shell;
-@@ -157,7 +156,7 @@
+@@ -158,7 +157,7 @@
  
-     m_status = tr( "Setting file permissions" );
+     m_status = tr( "Setting file permissions…", "@status" );
      emit progress( 0.9 );
 -    QString userGroup = QString( "%1:%2" ).arg( m_config->loginName() ).arg( m_config->loginName() );
 +    QString userGroup = QString( "%1:%2" ).arg( m_config->loginName() ).arg( "users" );
      QString homeDir = QString( "/home/%1" ).arg( m_config->loginName() );
-     auto commandResult = CalamaresUtils::System::instance()->targetEnvCommand( { "chown", "-R", userGroup, homeDir } );
+     auto commandResult = Calamares::System::instance()->targetEnvCommand( { "chown", "-R", userGroup, homeDir } );
      if ( commandResult.getExitCode() )

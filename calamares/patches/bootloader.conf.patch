@@ -1,16 +1,14 @@
-diff -Naur orig/src/modules/bootloader/bootloader.conf patched/src/modules/bootloader/bootloader.conf
---- orig/src/modules/bootloader/bootloader.conf	2019-07-06 00:52:35.000000000 +0200
-+++ patched/src/modules/bootloader/bootloader.conf	2019-07-31 13:40:58.392981882 +0200
-@@ -15,9 +15,9 @@
+diff -Naur a/src/modules/bootloader/bootloader.conf b/src/modules/bootloader/bootloader.conf
+--- a/src/modules/bootloader/bootloader.conf	2023-12-12 00:04:06.000000000 +0100
++++ b/src/modules/bootloader/bootloader.conf	2023-12-16 22:45:14.751242396 +0100
+@@ -20,8 +20,8 @@
  
- # systemd-boot configuration files settings, set kernel and initramfs file names
- # and amount of time before default selection boots
--kernel: "/vmlinuz-linux"
--img: "/initramfs-linux.img"
--fallback: "/initramfs-linux-fallback.img"
-+kernel: "/kernel"
-+img: "/initrd"
-+fallback: "/initrd-fallback.img"
- timeout: "10"
+ # kernelSearchPath is the path relative to the root of the install to search for kernels
+ # A kernel is identified by finding files which match regular expression, kernelPattern
+-kernelSearchPath: "/usr/lib/modules"
+-kernelPattern: "^vmlinuz.*"
++kernelSearchPath: "/lib/modules"
++kernelPattern: "^kernel.*"
  
- # Optionally set the menu entry name and kernel name to use in systemd-boot.
+ # loaderEntries is an array of options to add to loader.conf for systemd-boot
+ # please note that the "default" option is added programmatically
