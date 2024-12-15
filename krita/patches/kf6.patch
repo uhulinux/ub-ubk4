@@ -1,0 +1,327 @@
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2024-09-30 18:58:27.000000000 +0200
++++ b/CMakeLists.txt	2024-12-15 04:06:49.466297223 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
+ 
+ set(SUPPORTED_LANGUAGES CXX C)
+ 
+@@ -9,7 +9,7 @@
+ project(krita LANGUAGES ${SUPPORTED_LANGUAGES})
+ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
+ 
+-set(MIN_QT_VERSION 5.12.0)
++set(MIN_QT_VERSION 5.15.0)
+ set(MIN_FRAMEWORKS_VERSION 5.44.0)
+ 
+ set( CMAKE_CXX_STANDARD 17 )
+@@ -262,10 +262,14 @@
+ option(KRITA_ENABLE_PCH "Enable precompiled headers support" OFF)
+ add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
+ 
+-option(DISABLE_PO_INSTALLATION "Disable installation of po files" OFF)
+-
+ option(USE_EXTERNAL_RAQM "Fetch Raqm dependency online instead of the embedded one" OFF)
+ 
++if(ANDROID)
++option(ANDROID_ENABLE_STDIO_FORWARDING "Enable forwarding of qDebug() and stdio messages to logcat" OFF)
++configure_file(config-android-stdio-forwarding.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-android-stdio-forwarding.h)
++add_feature_info("Enable debug logging on Android" ANDROID_ENABLE_STDIO_FORWARDING "Enable forwarding of qDebug() and stdio messages to logcat")
++endif()
++
+ set(ADDRESS_SANITIZER_ENABLED FALSE)
+ if (ECM_ENABLE_SANITIZERS MATCHES address)
+     set(ADDRESS_SANITIZER_ENABLED TRUE)
+@@ -339,8 +343,25 @@
+ #########################
+ ########################
+ 
+-find_package(ECM 5.22 REQUIRED NOMODULE)
++# Select the Qt version we want to use
++# Qt5 is the default, set QT_MAJOR_VERSION to 6 to look for Qt6
++option(BUILD_WITH_QT6 "Build against Qt 6" OFF)
++if (BUILD_WITH_QT6)
++    set(QT_MAJOR_VERSION 6)
++else()
++    set(QT_MAJOR_VERSION 5)
++endif()
++
++# KDE Frameworks
++set(KF_MAJOR ${QT_MAJOR_VERSION})
++
++if (KF_MAJOR STREQUAL "6")
++    set(KF_DEP_VERSION "6.0.0")
++endif()
++
++find_package(ECM 5.22 REQUIRED CONFIG)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
++
+ include(ECMOptionalAddSubdirectory)
+ include(ECMAddAppIcon)
+ include(ECMSetupVersion)
+@@ -353,13 +374,13 @@
+ include(CMakePackageConfigHelpers)
+ include(WriteBasicConfigVersionFile)
+ include(CheckFunctionExists)
++include(ExternalProject)
+ 
+ include(KDEInstallDirs)
+-
+-if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
+-    # Block KDE's translation infrastructure, we'll use our own
+-    add_custom_target(fetch-translations)
++if (QT_MAJOR_VERSION STREQUAL "6")
++    set(ICON_INSTALL_DIR ${KDE_INSTALL_ICONDIR})
+ endif()
++
+ include(KDECMakeSettings)
+ include(KDECompilerSettings)
+ 
+@@ -398,18 +419,19 @@
+ 
+ # do not reorder to be alphabetical: this is the order in which the frameworks
+ # depend on each other.
+-find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
++find_package(KF${KF_MAJOR} ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
+         Config
+         WidgetsAddons
+         Completion
+         CoreAddons
+         GuiAddons
+         I18n
++        ItemModels
+         ItemViews
+         WindowSystem
+ )
+ 
+-find_package(Qt5 ${MIN_QT_VERSION}
++find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
+         REQUIRED COMPONENTS
+         Core
+         Gui
+@@ -424,12 +446,21 @@
+ )
+ 
+ if (ANDROID)
+-    find_package(Qt5 ${MIN_QT_VERSION}
++    find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
+         REQUIRED COMPONENTS
+         AndroidExtras
+     )
+ endif()
+ 
++if (QT_MAJOR_VERSION STREQUAL "6")
++    find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
++        REQUIRED COMPONENTS
++        Core5Compat
++        OpenGL
++    )
++endif()
++
++
+ if (WIN32)
+     set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS})
+     set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES})
+@@ -518,45 +549,53 @@
+ # Note: OPTIONAL_COMPONENTS does not seem to be reliable
+ # (as of ECM 5.15.0, CMake 3.2)
+ 
+-if (NOT APPLE)
+-find_package(Qt5Quick ${MIN_QT_VERSION})
+-set_package_properties(Qt5Quick PROPERTIES
++find_package(Qt${QT_MAJOR_VERSION}Quick ${MIN_QT_VERSION})
++set_package_properties(Qt${QT_MAJOR_VERSION}Quick PROPERTIES
+         DESCRIPTION "QtQuick"
+         URL "https://www.qt.io/"
+         TYPE OPTIONAL
+         PURPOSE "Optionally used for the touch gui for Krita")
+ 
+-macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
++macro_bool_to_01(Qt${QT_MAJOR_VERSION}Quick_FOUND HAVE_QT_QUICK)
+ 
+-find_package(Qt5QuickWidgets ${MIN_QT_VERSION})
+-set_package_properties(Qt5QuickWidgets PROPERTIES
++find_package(Qt${QT_MAJOR_VERSION}QuickWidgets ${MIN_QT_VERSION})
++set_package_properties(Qt${QT_MAJOR_VERSION}QuickWidgets PROPERTIES
+         DESCRIPTION "QtQuickWidgets"
+         URL "https://www.qt.io/"
+         TYPE OPTIONAL
+         PURPOSE "Optionally used for the touch gui for Krita")
+-endif()
+-if (Qt5QuickWidgets_FOUND)
++
++if (Qt${QT_MAJOR_VERSION}QuickWidgets_FOUND)
+     # This is needed because Qt dependencies aren't added by ECM but by androideployqt,
+     # so it doesn't benefit from our patch in ECM.
+-    list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::QuickWidgets>)
++    list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt${QT_MAJOR_VERSION}::QuickWidgets>)
++
++    find_package(Qt${QT_MAJOR_VERSION}QuickControls2 ${MIN_QT_VERSION})
++    set_package_properties(Qt${QT_MAJOR_VERSION}QuickControls2 PROPERTIES
++            DESCRIPTION "QtQuickControls"
++            URL "https://www.qt.io/"
++            TYPE OPTIONAL
++            PURPOSE "Optionally used for the touch gui for Krita")
++
+ endif()
+ 
+ 
+ if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
++    if (QT_MAJOR_VERSION STREQUAL "5")
++        find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION} REQUIRED X11Extras)
++    endif()
+ 
+-    find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
+-
+-    find_package(Qt5DBus ${MIN_QT_VERSION})
+-    set(HAVE_DBUS ${Qt5DBus_FOUND})
++    find_package(Qt${QT_MAJOR_VERSION}DBus ${MIN_QT_VERSION})
+     set_package_properties(Qt5DBus PROPERTIES
+         DESCRIPTION "Qt DBUS integration"
+         URL "https://www.qt.io/"
+         TYPE OPTIONAL
+         PURPOSE "Optionally used to provide a dbus api on Linux")
++    macro_bool_to_01(Qt${QT_MAJOR_VERSION}DBUS_FOUND HAVE_QT_DBUS)
+ 
+-    find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION})
++    find_package(KF${KF_MAJOR}Crash ${MIN_FRAMEWORKS_VERSION})
+     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
+-    set_package_properties(KF5Crash PROPERTIES
++    set_package_properties(KF${KF_MAJOR}Crash PROPERTIES
+         DESCRIPTION "KDE's Crash Handler"
+         URL "https://api.kde.org/frameworks-api/frameworks5-apidocs/kcrash/html/index.html"
+         TYPE OPTIONAL
+@@ -593,26 +632,14 @@
+ # Starting with Qt 5.13, it is impossible to use strict iterators
+ # wholesale because of:
+ # https://github.com/qt/qtbase/commit/972f8845a85d6a07140025e4257cb8a1a2699b5d
+-if (NOT (MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC") OR ${Qt5_VERSION} VERSION_LESS "5.13.0")
++if (NOT (MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+   add_definitions(-DQT_STRICT_ITERATORS)
+ endif()
+ 
+-#if (${Qt5_VERSION} VERSION_GREATER "5.14.0" )
+-#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
+-#elseif (${Qt5_VERSION} VERSION_GREATER "5.13.0" )
+-#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50E00)
+-#elseif (${Qt5_VERSION} VERSION_GREATER "5.12.0" )
+-#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50D00)
+-#elseif (${Qt5_VERSION} VERSION_GREATER "5.11.0" )
+-#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50C00)
+-#if(${Qt5_VERSION} VERSION_GREATER "5.10.0" )
+-#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50B00)
+-#if(${Qt5_VERSION} VERSION_GREATER "5.9.0" )
+-#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50A00)
+-#else()
+-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
+-#endif()
+-add_definitions(-DQT_DEPRECATED_WARNINGS)
++add_compile_definitions(
++    QT_DISABLE_DEPRECATED_BEFORE=0x050E00
++)
++
+ add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
+ 
+ #
+@@ -833,6 +860,7 @@
+ )
+ endif()
+ 
++add_subdirectory(3rdparty)
+ find_package(Immer REQUIRED)
+ find_package(Zug REQUIRED)
+ find_package(Lager REQUIRED)
+@@ -987,13 +1015,34 @@
+     PURPOSE "Required by the Krita PyQt plugin")
+ macro_bool_to_01(SIP_FOUND HAVE_SIP)
+ 
+-find_package(PyQt5 "5.6.0")
+-set_package_properties(PyQt5 PROPERTIES
+-    DESCRIPTION "Python bindings for Qt5."
+-    URL "https://www.riverbankcomputing.com/software/pyqt/download5"
+-    TYPE OPTIONAL
+-    PURPOSE "Required by the Krita PyQt plugin")
+-macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
++if (QT_MAJOR_VERSION STREQUAL "5")
++    find_package(PyQt5 "5.6.0")
++    set_package_properties(PyQt5 PROPERTIES
++        DESCRIPTION "Python bindings for Qt5."
++        URL "https://www.riverbankcomputing.com/software/pyqt/download"
++        TYPE OPTIONAL
++        PURPOSE "Required by the Krita PyQt plugin")
++    macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
++
++    set(PYQT_VERSION_TAG ${PYQT5_VERSION_TAG})
++    set(PYQT_SIP_NAME ${PYQT5_SIP_NAME})
++    set(PYQT_SIP_TAGS ${PYQT5_SIP_TAGS})
++    set(PYQT_SIP_DIR ${PYQT5_SIP_DIR})
++
++elseif (QT_MAJOR_VERSION STREQUAL "6")
++    find_package(PyQt6 "6.7.0")
++    set_package_properties(PyQt6 PROPERTIES
++        DESCRIPTION "Python bindings for Qt6."
++        URL "https://www.riverbankcomputing.com/software/pyqt/download"
++        TYPE OPTIONAL
++        PURPOSE "Required by the Krita PyQt plugin")
++    macro_bool_to_01(PYQT6_FOUND HAVE_PYQT6)
++
++    set(PYQT_VERSION_TAG ${PYQT6_VERSION_TAG})
++    set(PYQT_SIP_NAME ${PYQT6_SIP_NAME})
++    set(PYQT_SIP_TAGS ${PYQT6_SIP_TAGS})
++    set(PYQT_SIP_DIR ${PYQT6_SIP_DIR})
++endif()
+ 
+ find_package(Mlt7)
+ set_package_properties(Mlt7 PROPERTIES DESCRIPTION "Media Lovin' Toolkit (Multimedia Framework)"
+@@ -1028,10 +1077,12 @@
+ ## Look for OpenGL
+ ##
+ # TODO: see if there is a better check for QtGui being built with opengl support (and thus the QOpenGL* classes)
+-if(Qt5Gui_OPENGL_IMPLEMENTATION)
+-    message(STATUS "Found QtGui OpenGL support")
+-else()
+-    message(FATAL_ERROR  "Did NOT find QtGui OpenGL support. Check your Qt configuration. You cannot build Krita without Qt OpenGL support.")
++if (QT_MAJOR_VERSION STREQUAL "5")
++    if(Qt5Gui_OPENGL_IMPLEMENTATION)
++        message(STATUS "Found QtGui OpenGL support")
++    else()
++        message(FATAL_ERROR  "Did NOT find QtGui OpenGL support. Check your Qt configuration. You cannot build Krita without Qt OpenGL support.")
++    endif()
+ endif()
+ 
+ ##
+@@ -1170,7 +1221,11 @@
+ ##
+ ## Check for HarfBuzz
+ ##
+-find_package(HarfBuzz 4.0.0 REQUIRED)
++if (QT_MAJOR_VERSION STREQUAL "6")
++    find_package(HarfBuzz 2.7.4 REQUIRED)
++else()
++    find_package(HarfBuzz 4.0 REQUIRED)
++endif()
+ set_package_properties(HarfBuzz PROPERTIES
+     DESCRIPTION "OpenType text shaping engine"
+     URL "https://harfbuzz.github.io"
+@@ -1223,14 +1278,6 @@
+ 
+ add_subdirectory(3rdparty_vendor)
+ 
+-
+-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
+-    find_package(KF5I18n CONFIG REQUIRED)
+-    if (NOT DISABLE_PO_INSTALLATION)
+-        ki18n_install(po)
+-    endif()
+-endif()
+-
+ ##
+ ## Test for Atomics
+ ##
+@@ -1331,3 +1378,5 @@
+ elseif(ANDROID)
+     message(STATUS "You can export a target by specifying -DQTANDROID_EXPORTED_TARGET=<targetname> and -DANDROID_APK_DIR=<paths>")
+ endif()
++
++ki18n_install(po)
