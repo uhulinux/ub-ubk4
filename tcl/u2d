@@ -1,1 +1,3 @@
-urllist http://www.tcl.tk/software/tcltk/download.html | grep tcl | grep tar | sed s/tcl//g | grep -E '([0-9]\.[0-9]\.)' |sed s/-src.*//g | sort -V | tail -n 1 
+#urllist http://www.tcl.tk/software/tcltk/download.html | grep tcl | grep tar | sed s/tcl//g | grep -E '([0-9]\.[0-9]\.)' |sed s/-src.*//g | sort -V | tail -n 1
+dir=$(sflist tcl Tcl | grep ^[0-9] | sort -V | tail -n 1)
+sflist tcl Tcl/$dir | grep src.tar | grep tcl[0-9] | sed s/tcl// | sed s/-.*//
