@@ -1,1 +1,2 @@
-u2dpypi pycurl
+#u2dpypi pycurl
+urllist https://github.com/pycurl/pycurl/tags | grep REL_ | grep tar | sed s/REL_//g | sed s/\.tar.*//g | sort -V | tail -n 1 | sed s/_/\./g
