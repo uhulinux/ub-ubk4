@@ -1,1 +1,2 @@
-u2dpypi libsass
+#u2dpypi libsass
+urllist https://sass.github.io/libsass-python/ | grep -E '#version' | sed s/.*version-// | sort -V | tail -n 1 | sed s/-/\./g

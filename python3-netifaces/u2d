@@ -1,1 +1,2 @@
-u2dpypi netifaces
+#u2dpypi netifaces
+urllist https://github.com/al45tair/netifaces/tags | grep release_ | grep tar.gz | sed s/.*release_// | sed s/\.tar.*// | sed s/_/\./g | sort -V | tail -n 1
