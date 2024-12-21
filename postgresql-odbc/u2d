@@ -1,1 +1,1 @@
-u2d https://www.postgresql.org/ftp/odbc/versions/src/
+urllist https://github.com/postgresql-interfaces/psqlodbc/tags | grep -E '[0-9]\.tar' | sort -V | tail -n 1 |sed s/REL-// | sed s/\.tar.*// | sed s/_/\./g
