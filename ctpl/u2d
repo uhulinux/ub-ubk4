@@ -1,1 +1,2 @@
-u2d http://download.tuxfamily.org/ctpl/releases/
+#u2d http://download.tuxfamily.org/ctpl/releases/
+urllist https://ctpl.tuxfamily.org/ | grep -E '\.tar' | sed s/ctpl-// | sort -V | tail -n 1 | sed s/\.tar.*//
