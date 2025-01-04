@@ -1,2 +1,2 @@
 dir=$(sflist stuntrally | grep -E '^([0-9.]+)$' | sort -V | tail -n 1)
-sflist stuntrally $dir | grep tar | sed s/.*y-// | sed s/-.*//
+sflist stuntrally $dir  | grep Linux | sed s/.*y-// | sed s/-.*//
