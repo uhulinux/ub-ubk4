@@ -1,0 +1,25 @@
+#!/bin/sh -eux
+
+cd intl
+./gen-intl
+./synclang
+cd ..
+
+#mv configure.in configure.ac
+#autoreconf -vif
+
+ub_compile \
+	--with-ssl \
+	--enable-graphics \
+	--with-x \
+	--with-fb
+
+mv links xlinks.bin
+
+ub_configure \
+	--with-ssl \
+	--disable-graphics \
+	--without-x \
+	--without-fb
+
+ub_compile

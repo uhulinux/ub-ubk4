@@ -1,0 +1,14 @@
+#!/bin/sh -eux
+
+ub_install
+
+install -m755 xlinks.bin "$UB_INSTALLDIR"/usr/bin/xlinks.bin
+
+echo '#!/bin/sh --'             > "$UB_INSTALLDIR"/usr/bin/xlinks
+echo 'exec xlinks.bin -g "$@"' >> "$UB_INSTALLDIR"/usr/bin/xlinks
+chmod 755 "$UB_INSTALLDIR"/usr/bin/xlinks
+
+mkdir -p "$UB_INSTALLDIR"/usr/share/{applications,pixmaps,doc/links/calibration}
+cp links_16x16_1.xpm links_16x16_2.xpm links_32x32.xpm "${UB_INSTALLDIR}"/usr/share/pixmaps/
+cp doc/links_cal/* "$UB_INSTALLDIR"/usr/share/doc/links/calibration/
+ln -s links.1 "${UB_INSTALLDIR}/usr/share/man/man1/links-x11.1"
