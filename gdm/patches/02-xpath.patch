@@ -1,0 +1,12 @@
+diff -Naur a/meson.build b/meson.build
+--- a/meson.build	2024-09-16 15:28:26.000000000 +0200
++++ b/meson.build	2025-01-17 23:42:16.904713975 +0100
+@@ -82,7 +82,7 @@
+ 
+ # X11
+ # defaults
+-x_path = '/usr/bin/X11:/usr/X11R6/bin:/opt/X11R6/bin'
++x_path = '/usr/bin'
+ x_bin = '/usr/bin/X'
+ if have_x11_support
+   xcb_dep = dependency('xcb')

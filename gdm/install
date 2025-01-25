@@ -8,3 +8,16 @@ ln -sf graphic-login "$UB_INSTALLDIR"/etc/pam.d/gdm-welcome
 ln -s system-auth "$UB_INSTALLDIR"/etc/pam.d/gdm-password
 
 # cp -a data/gdm.service "$UB_INSTALLDIR"/usr/lib/systemd/system/
+
+mkdir -p "$UB_INSTALLDIR"/var/lib/gdm/.config/pulse
+cat > "$UB_INSTALLDIR"/var/lib/gdm/.config/pulse/default.pa << _EOF_
+load-module module-device-restore
+load-module module-card-restore
+load-module module-udev-detect
+load-module module-native-protocol-unix
+load-module module-default-device-restore
+load-module module-always-sink
+load-module module-intended-roles
+load-module module-suspend-on-idle
+load-module module-position-event-sounds
+_EOF_

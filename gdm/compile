@@ -1,14 +1,16 @@
 #!/bin/sh -eux
 
 ub_compile \
-	-Ddmconfdir=/usr/share/xsessions \
-	-Dgdm-xsession=true \
 	-Dgroup=gdm \
+	-Duser=gdm \
 	-Dinitial-vt=7 \
 	-Dipv6=true \
-	-Dplymouth=disabled \
-	-Dprofiling=true \
 	-Dselinux=disabled \
-	-Dtcp-wrappers=false \
-	-Duser=gdm \
-	-Dwayland-support=true
+	-Dlibaudit=disabled \
+	-Dgdm-xsession=true \
+	-Dwayland-support=true \
+	-Ddefault-path=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin \
+	-Ddmconfdir=/usr/share/xsessions \
+	-Ddbus-sys="/usr/share/dbus-1/system.d" \
+	-Drun-dir=/run/gdm \
+	-Dpam-prefix=/etc
