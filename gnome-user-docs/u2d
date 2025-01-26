@@ -1,7 +1,2 @@
-for dir in $(urllist https://download.gnome.org/core/44/ | grep -E '^[3-9]' | sort -Vr);do
-ver=$(u2d https://download.gnome.org/core/44/$dir/sources/ gnome-user-docs-)
-if [ $ver ];then
-    echo $ver
-    exit
-fi
-done
+u2dgnome gnome-user-docs 45
+noupdate Gnome 45 van
