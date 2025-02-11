@@ -1,3 +1,10 @@
 #!/bin/sh -eux
 
-ub_compile --enable-compile-warnings=minimum
+ub_compile \
+      --disable-compile-warnings \
+      --disable-vala \
+      --disable-plugin-devhelp \
+      --enable-introspection \
+      --enable-plugin-glade \
+      --enable-plugin-subversion \
+      --enable-glade-catalog
