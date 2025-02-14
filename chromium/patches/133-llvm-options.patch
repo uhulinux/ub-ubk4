@@ -1,7 +1,7 @@
 diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
---- a/build/config/compiler/BUILD.gn	2024-10-26 08:59:45.820987500 +0200
-+++ b/build/config/compiler/BUILD.gn	2024-10-29 20:21:28.682788784 +0100
-@@ -584,24 +584,6 @@
+--- a/build/config/compiler/BUILD.gn	2025-02-03 20:23:19.000000000 +0100
++++ b/build/config/compiler/BUILD.gn	2025-02-05 02:37:56.759262343 +0100
+@@ -601,24 +601,6 @@
        }
      }
  
@@ -26,7 +26,7 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
      # TODO(crbug.com/40192287): Investigate why/if this should be needed.
      if (is_win) {
        cflags += [ "/clang:-ffp-contract=off" ]
-@@ -765,7 +747,6 @@
+@@ -790,7 +772,6 @@
        ldflags += [
          "/opt:lldltojobs=all",
          "-mllvm:-import-instr-limit=$import_instr_limit",
@@ -34,7 +34,7 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
        ]
      } else {
        ldflags += [ "-flto=thin" ]
-@@ -797,10 +778,6 @@
+@@ -822,10 +803,6 @@
        if (is_apple) {
          ldflags += [ "-Wcrl,object_path_lto" ]
        }
@@ -45,20 +45,20 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
      }
  
      if (!optimize_for_size) {
-@@ -1955,9 +1932,6 @@
- 
-         # TODO(crbug.com/40286317): Evaluate and possibly enable.
-         "-Wno-vla-extension",
+@@ -1968,31 +1945,12 @@
+       cflags += [
+         # TODO(crbug.com/330524456): -Wcast-function-type is under -Wextra now.
+         "-Wno-cast-function-type",
 -
 -        # TODO(crbug.com/40284799): Fix and re-enable.
 -        "-Wno-thread-safety-reference-return",
        ]
  
        cflags_cc += [
-@@ -1965,18 +1939,6 @@
+         # TODO(crbug.com/328490295): Fix and re-enable for C flags.
          "-Wenum-compare-conditional",
        ]
- 
+-
 -      if (!is_nacl) {
 -        cflags_cc += [
 -          # TODO(crbug.com/41486292): Fix and re-enable.
@@ -70,6 +70,9 @@ diff -Naur a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
 -
 -        # TODO(crbug.com/356172342): Fix and re-enable.
 -        cflags_cc += [ "-Wno-dangling-assignment-gsl" ]
+-
+-        # TODO(crbug.com/376641662): Fix and re-enable.
+-        cflags += [ "-Wno-nontrivial-memcall" ]
 -      }
      }
  

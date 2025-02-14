@@ -1,7 +1,7 @@
 diff -Naur a/build/config/clang/BUILD.gn b/build/config/clang/BUILD.gn
---- a/build/config/clang/BUILD.gn	2024-08-22 00:46:04.997060300 +0200
-+++ b/build/config/clang/BUILD.gn	2024-08-27 03:07:23.006251561 +0200
-@@ -192,12 +192,15 @@
+--- a/build/config/clang/BUILD.gn	2025-01-27 18:37:37.000000000 +0100
++++ b/build/config/clang/BUILD.gn	2025-02-01 23:43:53.910096332 +0100
+@@ -168,12 +168,15 @@
        } else if (is_linux || is_chromeos) {
          if (current_cpu == "x64") {
            _dir = "x86_64-unknown-linux-gnu"
@@ -17,7 +17,7 @@ diff -Naur a/build/config/clang/BUILD.gn b/build/config/clang/BUILD.gn
          } else {
            assert(false)  # Unhandled cpu type
          }
-@@ -228,6 +231,11 @@
+@@ -204,6 +207,11 @@
          assert(false)  # Unhandled target platform
        }
  
