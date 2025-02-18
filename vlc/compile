@@ -1,16 +1,8 @@
-# export BUILDCC="/usr/bin/gcc -std=gnu99"
-./bootstrap
-export LUAC=luac5.2
+#!/bin/sh -eux
+
 ub_compile \
-	--enable-flac \
-	--enable-faad \
-	--enable-svg \
-	--enable-jack \
+    --enable-aa \
 	--enable-lirc \
-	--enable-xcb \
 	--enable-nls \
-	--enable-sftp \
-	--disable-dav1d \
-	--disable-opencv \
 	--disable-update-check \
-    --enable-qt=5
+    --enable-qt
