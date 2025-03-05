@@ -1,6 +1,6 @@
 diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
---- a/browser/app/profile/firefox.js	2024-11-21 19:21:04.000000000 +0100
-+++ b/browser/app/profile/firefox.js	2024-11-26 14:17:55.593006249 +0100
+--- a/browser/app/profile/firefox.js	2025-02-27 19:17:32.000000000 +0100
++++ b/browser/app/profile/firefox.js	2025-03-03 22:21:46.484264130 +0100
 @@ -19,6 +19,12 @@
    #endif
  #endif
@@ -24,7 +24,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  // Scopes to scan for changes at startup.
  pref("extensions.startupScanScopes", 0);
  
-@@ -276,7 +283,7 @@
+@@ -289,7 +296,7 @@
  pref("browser.compactmode.show", false);
  
  // At startup, check if we're the default browser and prompt user if not.
@@ -33,7 +33,7 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  pref("browser.shell.shortcutFavicons",true);
  pref("browser.shell.mostRecentDateSetAsDefault", "");
  pref("browser.shell.skipDefaultBrowserCheckOnFirstRun", true);
-@@ -393,7 +400,7 @@
+@@ -406,7 +413,7 @@
  pref("browser.urlbar.accessibility.tabToSearch.announceResults", true);
  
  // Control autoFill behavior
@@ -42,25 +42,25 @@ diff -Naur a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
  
  // Whether enabling adaptive history autofill.
  pref("browser.urlbar.autoFill.adaptiveHistory.enabled", false);
-@@ -571,7 +578,7 @@
+@@ -611,7 +618,7 @@
  // is longer than this.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 100);
  
 -pref("browser.urlbar.trimURLs", true);
 +pref("browser.urlbar.trimURLs", false);
+ pref("browser.urlbar.trimHttps", false);
+ pref("browser.urlbar.untrimOnUserInteraction.featureGate", false);
  
- #ifdef NIGHTLY_BUILD
- pref("browser.urlbar.trimHttps", true);
-@@ -1299,7 +1306,7 @@
+@@ -1352,7 +1359,7 @@
  // 2 and other values, nothing
  pref("browser.backspace_action", 2);
  
 -pref("intl.regional_prefs.use_os_locales", false);
 +pref("intl.regional_prefs.use_os_locales", true);
  
- // this will automatically enable inline spellchecking (if it is available) for
- // editable elements in HTML
-@@ -2201,6 +2208,9 @@
+ pref("browser.send_pings", false);
+ 
+@@ -2276,6 +2283,9 @@
  
  pref("browser.contentblocking.database.enabled", true);
  

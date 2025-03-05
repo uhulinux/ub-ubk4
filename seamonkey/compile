@@ -1,22 +1,11 @@
 #!/bin/sh -eux
 
-# Python 3.10 a mach buildhoz
-cd Python-3.10.14
-./configure --prefix=/usr \
-            --disable-optimizations \
-            --without-lto \
-            --without-ensurepip
-DESTDIR="$UB_COMPILEDIR"/Python-3.10 make install
-cd ..
-rm -Rf Python-3.10.14
-export PATH="$UB_COMPILEDIR/Python-3.10/usr/bin:$PATH"
-
 CC="ccache clang -march=k8 -m64"
 CXX="ccache clang++ -march=k8 -m64"
 
 export RUSTFLAGS="-Cdebuginfo=0"
 export LDFLAGS="-Wl,-rpath,/usr/lib/seamonkey/ -Wl,--no-keep-memory -Wl,-z,relro -Wl,-z,now"
-#export PYTHON=python3.10
+export PYTHON=python3.10
 export MACH_USE_SYSTEM_PYTHON=1
 
 : > .mozconfig
@@ -40,13 +29,13 @@ ac_add_options --disable-updater
 ac_add_options --disable-rust-simd
 ac_add_options --with-unsigned-addon-scopes=app,system
 ac_add_options --without-system-icu
+ac_add_options --without-system-libevent
+ac_add_options --without-system-png
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-libvpx
 ac_add_options --with-system-nss
 ac_add_options --with-system-nspr
-ac_add_options --with-system-png
 ac_add_options --with-system-zlib
-ac_add_options --without-system-libevent
 _EOF_
 
 "$UB_COMPILEDIR"/mach build
