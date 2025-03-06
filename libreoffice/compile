@@ -7,6 +7,8 @@ fi
 
 ccache --max-size=12G
 
+export CPPFLAGS=' -DU_USING_ICU_NAMESPACE=1'
+
 # ha van a distro-configs alatt megfelelő tartalmú .conf fájl, ekkor az
 # ./autogen.sh --with-distro=<conffile> is használható
 # a LibreOfficeUHU.conf fájlhoz
