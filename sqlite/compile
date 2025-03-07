@@ -1,8 +1,10 @@
 #!/bin/sh -eux
 
-UB_MAKE_PROCS=1
-
 CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_TOKENIZER" \
 ub_compile \
-    --enable-fts5
+    --disable-static \
+    --fts4 \
+    --fts5 \
+    --rtree \
+    --soname=legacy
