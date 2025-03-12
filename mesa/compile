@@ -1,7 +1,5 @@
 #!/bin/sh -eux
 
-# vulkan-overlay-layer: https://github.com/KhronosGroup/glslang
-
 ub_compile \
 	-Dplatforms=x11,wayland \
 	-Ddri3=enabled \
@@ -11,7 +9,6 @@ ub_compile \
 	-Dglx=dri \
 	-Degl=enabled \
 	-Dgallium-drivers="kmsro,r300,r600,nouveau,freedreno,v3d,vc4,etnaviv,tegra,i915,svga,virgl,panfrost,iris,d3d12,asahi,crocus" \
-	-Dgallium-nine=false \
 	-Dglvnd=true \
 	-Dvulkan-drivers=amd,intel \
 	-Dvulkan-layers=device-select,intel-nullhw,overlay \
@@ -21,4 +18,5 @@ ub_compile \
 	-Dtools=all \
 	-Db_ndebug=true \
 	-Db_lto=true \
-	-Dvideo-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc
+	-Dvideo-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc \
+	-Dgallium-vdpau=true
