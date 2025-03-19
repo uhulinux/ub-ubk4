@@ -1,0 +1,49 @@
+diff -Nur orig/docs/autostart mod/docs/autostart
+--- orig/docs/autostart	2023-11-25 22:14:12.000000000 +0100
++++ mod/docs/autostart	2025-03-19 13:32:04.341668520 +0100
+@@ -1,7 +1,11 @@
+ # Example autostart file
+ 
+-# Set background color.
+-swaybg -c '#113344' >/dev/null 2>&1 &
++# Launch a panel such as yambar or waybar.
++sfwbar >/dev/null 2>&1 &
++#polkit agent
++lxqt-policykit-agent >/dev/null 2>&1 &
++# Set background image
++swaybg -i /usr/share/backgrounds/UHU/ubk4.png
+ 
+ # Configure output directives such as mode, position, scale and transform.
+ # Use wlr-randr to get your output names
+@@ -12,8 +16,6 @@
+ #   }
+ kanshi >/dev/null 2>&1 &
+ 
+-# Launch a panel such as yambar or waybar.
+-waybar >/dev/null 2>&1 &
+ 
+ # Enable notifications. Typically GNOME/KDE application notifications go
+ # through the org.freedesktop.Notifications D-Bus API and require a client such
+diff -Nur orig/docs/environment mod/docs/environment
+--- orig/docs/environment	2023-11-25 22:14:12.000000000 +0100
++++ mod/docs/environment	2025-03-19 12:57:36.996053296 +0100
+@@ -16,8 +16,8 @@
+ ##
+ ## For further details, see xkeyboard-config(7)
+ ##
+-
+-# XKB_DEFAULT_LAYOUT=se
++# magyarok vagyunk
++XKB_DEFAULT_LAYOUT=hu
+ # XKB_DEFAULT_LAYOUT=se,us(intl)
+ # XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle
+ # XKB_DEFAULT_OPTIONS=grp:shift_caps_toggle
+@@ -26,7 +26,7 @@
+ ## Force firefox to use wayland backend.
+ ##
+ 
+-# MOZ_ENABLE_WAYLAND=1
++MOZ_ENABLE_WAYLAND=1
+ 
+ ##
+ ## Set cursor theme and size. Find system icons themes with:
