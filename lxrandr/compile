@@ -1,7 +1,5 @@
 #!/bin/sh -eux
 
-ub_configure \
-    --enable-gtk3
-touch -r po/Makefile po/stamp-it
+autoreconf -vif
 ub_compile \
     --enable-gtk3
