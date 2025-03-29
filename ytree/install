@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
 make DESTDIR=$UB_INSTALLDIR BINDIR=$UB_INSTALLDIR/usr/bin install
-cp -a ytree.1 "$UB_INSTALLDIR"/usr/share/man/man1/
+rm -rf "$UB_INSTALLDIR"/share
+cp ytree.1 "$UB_INSTALLDIR"/usr/share/man/man1/
