@@ -1,7 +1,8 @@
 #!/bin/sh -eux
 
-cd fuse
 ub_install
-mv "$UB_INSTALLDIR"/usr/bin/fuse "$UB_INSTALLDIR"/usr/bin/fuse-sdl
-cd ../fuse-gtk
-ub_install
+for resolution in 16x16 32x32 48x48 64x64 128x128 256x256
+do
+	install -D -m 644 "data/icons/$resolution/fuse.png" "$UB_INSTALLDIR/usr/share/icons/hicolor/$resolution/apps/fuse-emulator.png"
+	install -D -m 644 "data/icons/$resolution/application-x-spectrum.png" "$UB_INSTALLDIR/usr/share/icons/hicolor/$resolution/mimetypes/application-x-spectrum.png"
+done
