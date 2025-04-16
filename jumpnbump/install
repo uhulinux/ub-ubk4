@@ -1,4 +1,6 @@
 #!/bin/sh -eux
 
 make PREFIX="$UB_INSTALLDIR"/usr install
-mv levels/*.dat "$UB_INSTALLDIR"/usr/share/jumpnbump/
+cd levels
+bzip2 -dk *.dat.bz2
+mv *.dat "$UB_INSTALLDIR"/usr/share/jumpnbump/
