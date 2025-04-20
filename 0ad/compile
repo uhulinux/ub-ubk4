@@ -1,12 +1,16 @@
 #!/bin/sh -eux
 
+cd libraries
+  ./build-source-libs.sh
+cd -
+
 cd build/workspaces
 ./update-workspaces.sh \
 	--bindir=/usr/bin \
     --libdir=/usr/lib/0ad \
     --datadir=/usr/share/0ad/data \
     --without-pch \
-    --without-tests \
-
-cd gcc
+    --without-tests
+cd -
+cd build/workspaces/gcc
 ub_make
