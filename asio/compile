@@ -1,4 +1,12 @@
 #!/bin/sh -eux
 
 autoreconf -vif
+cat > src/Makefile.in <<-EOF
+	all:
+
+	install:
+
+	clean:
+EOF
+
 ub_compile
