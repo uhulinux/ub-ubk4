@@ -1,5 +1,7 @@
 #!/bin/sh -eux
 
-cp Makefile Makefile.rdy
-
-make
+export PROJECT_NAME=dumb
+ub_compile  \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_ALLEGRO4=OFF \
+    -DBUILD_EXAMPLES=OFF \

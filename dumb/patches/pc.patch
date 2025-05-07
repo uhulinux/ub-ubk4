@@ -1,0 +1,11 @@
+diff -Nur orig/pkg-config.pc.in mod/pkg-config.pc.in
+--- orig/pkg-config.pc.in	2018-01-30 04:36:51.000000000 +0100
++++ mod/pkg-config.pc.in	2024-04-07 08:52:54.491310315 +0200
+@@ -7,6 +7,6 @@
+ Description: DUMB is a module audio renderer library. 
+ Version: @DUMB_VERSION@
+ URL: https://github.com/kode54/dumb/
+-Libs: -L${libdir} -l@PROJECT_NAME@
++Libs: -L${libdir} -ldumb
+ Libs.private: -lm
+ Cflags: -I${includedir} 
