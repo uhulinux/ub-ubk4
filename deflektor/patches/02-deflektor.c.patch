@@ -1,0 +1,27 @@
+diff -Naur orig/deflektor.c mod/deflektor.c
+--- orig/deflektor.c	2008-06-09 00:16:38.000000000 +0200
++++ mod/deflektor.c	2009-01-15 09:21:56.000000000 +0100
+@@ -1051,12 +1051,12 @@
+  if(juego_pausado)
+   {
+    juego_pausado=0;
+-   dlg_cambiar_texto_boton(1,0,idioma==0?"Pausa":"Pause");
++   dlg_cambiar_texto_boton(1,0,"Pause");
+    return 0;
+   }
+ 
+  juego_pausado=1;
+- dlg_cambiar_texto_boton(1,0,idioma==0?"Seguir":"Go on");
++ dlg_cambiar_texto_boton(1,0,"Go on");
+ 
+  do
+   {
+@@ -1076,7 +1076,7 @@
+  else
+   {// Se sale del juego
+    juego_pausado=0;
+-   dlg_cambiar_texto_boton(1,0,idioma==0?"Pausa":"Pause");
++   dlg_cambiar_texto_boton(1,0,"Pause");
+   }
+ 
+  return salir;
