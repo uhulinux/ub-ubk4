@@ -1,7 +1,5 @@
 #!/bin/sh -eux
 
-cp -a modules/pam_envfeed/Makefile{,.in}
-
 export UB_MAKE_PROCS=1
 CFLAGS="-fPIC -O2" \
 ub_compile \
@@ -9,5 +7,3 @@ ub_compile \
 	--libdir=/usr/lib \
 	--disable-doc \
 	--disable-nis
-
-ub_make -C modules/pam_envfeed
