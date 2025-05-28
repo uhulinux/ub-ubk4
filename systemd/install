@@ -2,18 +2,6 @@
 
 ub_install
 
-# udev symlinks
-for i in udev{monitor,trigger,settle,control,info,test}; do
-	ln -s udevadm "$UB_INSTALLDIR"/usr/bin/"$i"
-done
-
-ln -s /usr/lib/systemd/systemd-udevd "$UB_INSTALLDIR"/usr/sbin/udevd
-
-find "$UB_INSTALLDIR"/usr/lib/udev/ -type f -maxdepth 1 | while read n; do
-	name="$(basename $n)"
-	ln -s /usr/lib/udev/"$name" "$UB_INSTALLDIR"/usr/sbin/"$name"
-done
-
 # hiányzó csoportok helyettesítése
 for file in "$UB_INSTALLDIR"/usr/lib/udev/rules.d/*.rules; do
 	for group in cdrom dialout disk floppy input kmem render tape utmp uucp; do
@@ -21,14 +9,6 @@ for file in "$UB_INSTALLDIR"/usr/lib/udev/rules.d/*.rules; do
 	done
 	sed -e "s/GROUP=\"kvm\"/GROUP=\"users\"/g" -i "$file"
 done
-
-# halt poweroff reboot shutdown symlinks
-for i in halt poweroff reboot shutdown; do
-	ln -s systemctl "$UB_INSTALLDIR"/usr/bin/$i
-done
-
-# /sbin/init
-#ln -s /usr/lib/systemd/systemd "$UB_INSTALLDIR"/usr/sbin/init
 
 # /etc/initrd-release
 touch "$UB_INSTALLDIR"/etc/initrd-release

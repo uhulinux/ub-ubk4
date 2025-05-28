@@ -6,11 +6,16 @@
 # -Ddefault-dnssec=no: a dnssec experimental
 
 ub_compile \
+    --optimization=2 \
     -Dmode=release \
    	-Dsplit-usr=false \
+   	-Dinitrd=true \
+   	-Dstandalone-binaries=true \
+   	-Ddefault-kill-user-processes=false \
 	-Dpamlibdir=/usr/lib/security \
 	-Ddefault-dnssec=no \
 	-Dlink-udev-shared=true \
+	-Daudit=false \
 	-Dlibcurl=false \
 	-Dmicrohttpd=false \
 	-Dcoredump=true \
