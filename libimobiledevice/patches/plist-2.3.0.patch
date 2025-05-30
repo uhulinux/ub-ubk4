@@ -1,0 +1,562 @@
+diff -Naur a/common/utils.c b/common/utils.c
+--- a/common/utils.c	2020-06-15 20:20:55.000000000 +0200
++++ b/common/utils.c	2023-04-27 00:08:58.940999529 +0200
+@@ -289,53 +289,6 @@
+ 	}
+ }
+ 
+-int plist_read_from_filename(plist_t *plist, const char *filename)
+-{
+-	char *buffer = NULL;
+-	uint64_t length;
+-
+-	if (!filename)
+-		return 0;
+-
+-	buffer_read_from_filename(filename, &buffer, &length);
+-
+-	if (!buffer) {
+-		return 0;
+-	}
+-
+-	if ((length > 8) && (memcmp(buffer, "bplist00", 8) == 0)) {
+-		plist_from_bin(buffer, length, plist);
+-	} else {
+-		plist_from_xml(buffer, length, plist);
+-	}
+-
+-	free(buffer);
+-
+-	return 1;
+-}
+-
+-int plist_write_to_filename(plist_t plist, const char *filename, enum plist_format_t format)
+-{
+-	char *buffer = NULL;
+-	uint32_t length;
+-
+-	if (!plist || !filename)
+-		return 0;
+-
+-	if (format == PLIST_FORMAT_XML)
+-		plist_to_xml(plist, &buffer, &length);
+-	else if (format == PLIST_FORMAT_BINARY)
+-		plist_to_bin(plist, &buffer, &length);
+-	else
+-		return 0;
+-
+-	buffer_write_to_filename(filename, buffer, length);
+-
+-	free(buffer);
+-
+-	return 1;
+-}
+-
+ static const char base64_str[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+ static const char base64_pad = '=';
+ 
+@@ -365,166 +318,3 @@
+ 	outbuf[m] = 0; // 0-termination!
+ 	return outbuf;
+ }
+-
+-static void plist_node_print_to_stream(plist_t node, int* indent_level, FILE* stream);
+-
+-static void plist_array_print_to_stream(plist_t node, int* indent_level, FILE* stream)
+-{
+-	/* iterate over items */
+-	int i, count;
+-	plist_t subnode = NULL;
+-
+-	count = plist_array_get_size(node);
+-
+-	for (i = 0; i < count; i++) {
+-		subnode = plist_array_get_item(node, i);
+-		fprintf(stream, "%*s", *indent_level, "");
+-		fprintf(stream, "%d: ", i);
+-		plist_node_print_to_stream(subnode, indent_level, stream);
+-	}
+-}
+-
+-static void plist_dict_print_to_stream(plist_t node, int* indent_level, FILE* stream)
+-{
+-	/* iterate over key/value pairs */
+-	plist_dict_iter it = NULL;
+-
+-	char* key = NULL;
+-	plist_t subnode = NULL;
+-	plist_dict_new_iter(node, &it);
+-	plist_dict_next_item(node, it, &key, &subnode);
+-	while (subnode)
+-	{
+-		fprintf(stream, "%*s", *indent_level, "");
+-		fprintf(stream, "%s", key);
+-		if (plist_get_node_type(subnode) == PLIST_ARRAY)
+-			fprintf(stream, "[%d]: ", plist_array_get_size(subnode));
+-		else
+-			fprintf(stream, ": ");
+-		free(key);
+-		key = NULL;
+-		plist_node_print_to_stream(subnode, indent_level, stream);
+-		plist_dict_next_item(node, it, &key, &subnode);
+-	}
+-	free(it);
+-}
+-
+-static void plist_node_print_to_stream(plist_t node, int* indent_level, FILE* stream)
+-{
+-	char *s = NULL;
+-	char *data = NULL;
+-	double d;
+-	uint8_t b;
+-	uint64_t u = 0;
+-	struct timeval tv = { 0, 0 };
+-
+-	plist_type t;
+-
+-	if (!node)
+-		return;
+-
+-	t = plist_get_node_type(node);
+-
+-	switch (t) {
+-	case PLIST_BOOLEAN:
+-		plist_get_bool_val(node, &b);
+-		fprintf(stream, "%s\n", (b ? "true" : "false"));
+-		break;
+-
+-	case PLIST_UINT:
+-		plist_get_uint_val(node, &u);
+-		fprintf(stream, "%"PRIu64"\n", u);
+-		break;
+-
+-	case PLIST_REAL:
+-		plist_get_real_val(node, &d);
+-		fprintf(stream, "%f\n", d);
+-		break;
+-
+-	case PLIST_STRING:
+-		plist_get_string_val(node, &s);
+-		fprintf(stream, "%s\n", s);
+-		free(s);
+-		break;
+-
+-	case PLIST_KEY:
+-		plist_get_key_val(node, &s);
+-		fprintf(stream, "%s: ", s);
+-		free(s);
+-		break;
+-
+-	case PLIST_DATA:
+-		plist_get_data_val(node, &data, &u);
+-		if (u > 0) {
+-			s = base64encode((unsigned char*)data, u);
+-			free(data);
+-			if (s) {
+-				fprintf(stream, "%s\n", s);
+-				free(s);
+-			} else {
+-				fprintf(stream, "\n");
+-			}
+-		} else {
+-			fprintf(stream, "\n");
+-		}
+-		break;
+-
+-	case PLIST_DATE:
+-		plist_get_date_val(node, (int32_t*)&tv.tv_sec, (int32_t*)&tv.tv_usec);
+-		{
+-			time_t ti = (time_t)tv.tv_sec;
+-			struct tm *btime = localtime(&ti);
+-			if (btime) {
+-				s = (char*)malloc(24);
+- 				memset(s, 0, 24);
+-				if (strftime(s, 24, "%Y-%m-%dT%H:%M:%SZ", btime) <= 0) {
+-					free (s);
+-					s = NULL;
+-				}
+-			}
+-		}
+-		if (s) {
+-			fprintf(stream, "%s\n", s);
+-			free(s);
+-		} else {
+-			fprintf(stream, "\n");
+-		}
+-		break;
+-
+-	case PLIST_ARRAY:
+-		fprintf(stream, "\n");
+-		(*indent_level)++;
+-		plist_array_print_to_stream(node, indent_level, stream);
+-		(*indent_level)--;
+-		break;
+-
+-	case PLIST_DICT:
+-		fprintf(stream, "\n");
+-		(*indent_level)++;
+-		plist_dict_print_to_stream(node, indent_level, stream);
+-		(*indent_level)--;
+-		break;
+-
+-	default:
+-		break;
+-	}
+-}
+-
+-void plist_print_to_stream(plist_t plist, FILE* stream)
+-{
+-	int indent = 0;
+-
+-	if (!plist || !stream)
+-		return;
+-
+-	switch (plist_get_node_type(plist)) {
+-	case PLIST_DICT:
+-		plist_dict_print_to_stream(plist, &indent, stream);
+-		break;
+-	case PLIST_ARRAY:
+-		plist_array_print_to_stream(plist, &indent, stream);
+-		break;
+-	default:
+-		plist_node_print_to_stream(plist, &indent, stream);
+-	}
+-}
+diff -Naur a/common/utils.h b/common/utils.h
+--- a/common/utils.h	2020-06-15 20:20:55.000000000 +0200
++++ b/common/utils.h	2023-04-27 00:11:28.545663150 +0200
+@@ -34,7 +34,7 @@
+ #endif
+ 
+ #include <stdio.h>
+-#include <plist/plist.h>
++#include <stdint.h>
+ 
+ #define MAC_EPOCH 978307200
+ 
+@@ -51,14 +51,4 @@
+ void buffer_read_from_filename(const char *filename, char **buffer, uint64_t *length);
+ void buffer_write_to_filename(const char *filename, const char *buffer, uint64_t length);
+ 
+-enum plist_format_t {
+-	PLIST_FORMAT_XML,
+-	PLIST_FORMAT_BINARY
+-};
+-
+-int plist_read_from_filename(plist_t *plist, const char *filename);
+-int plist_write_to_filename(plist_t plist, const char *filename, enum plist_format_t format);
+-
+-void plist_print_to_stream(plist_t plist, FILE* stream);
+-
+ #endif
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2020-06-15 20:20:55.000000000 +0200
++++ b/configure.ac	2023-04-27 00:22:56.108688905 +0200
+@@ -19,7 +19,7 @@
+ 
+ dnl Minimum package versions
+ LIBUSBMUXD_VERSION=2.0.2
+-LIBPLIST_VERSION=2.2.0
++LIBPLIST_VERSION=2.3.0
+ 
+ AC_SUBST(LIBIMOBILEDEVICE_SO_VERSION)
+ AC_SUBST(LIBUSBMUXD_VERSION)
+diff -Naur a/tools/idevicebackup2.c b/tools/idevicebackup2.c
+--- a/tools/idevicebackup2.c	2020-06-15 20:20:55.000000000 +0200
++++ b/tools/idevicebackup2.c	2023-04-27 00:18:11.311440199 +0200
+@@ -45,6 +45,7 @@
+ #include <libimobiledevice/installation_proxy.h>
+ #include <libimobiledevice/sbservices.h>
+ #include <libimobiledevice/diagnostics_relay.h>
++#include <plist/plist.h>
+ #include "common/utils.h"
+ 
+ #include <endianness.h>
+@@ -601,7 +602,7 @@
+ 	plist_t status_plist = NULL;
+ 	char *file_path = string_build_path(path, udid, "Status.plist", NULL);
+ 
+-	plist_read_from_filename(&status_plist, file_path);
++	plist_read_from_file(file_path, &status_plist, NULL);
+ 	free(file_path);
+ 	if (!status_plist) {
+ 		printf("Could not read Status.plist!\n");
+@@ -1716,7 +1717,7 @@
+ 				free(info_path);
+ 			}
+ 			plist_t manifest_plist = NULL;
+-			plist_read_from_filename(&manifest_plist, manifest_path);
++			plist_read_from_file(manifest_path, &manifest_plist, NULL);
+ 			if (!manifest_plist) {
+ 				idevice_free(device);
+ 				free(info_path);
+@@ -1862,7 +1863,7 @@
+ 		/* verify existing Info.plist */
+ 		if (info_path && (stat(info_path, &st) == 0) && cmd != CMD_CLOUD) {
+ 			PRINT_VERBOSE(1, "Reading Info.plist from backup.\n");
+-			plist_read_from_filename(&info_plist, info_path);
++			plist_read_from_file(info_path, &info_plist, NULL);
+ 
+ 			if (!info_plist) {
+ 				printf("Could not read Info.plist\n");
+@@ -1956,7 +1957,7 @@
+ 				cmd = CMD_LEAVE;
+ 			}
+ 			remove_file(info_path);
+-			plist_write_to_filename(info_plist, info_path, PLIST_FORMAT_XML);
++			plist_write_to_file(info_plist, info_path, PLIST_FORMAT_XML, 0);
+ 			free(info_path);
+ 
+ 			plist_free(info_plist);
+diff -Naur a/tools/idevicebackup.c b/tools/idevicebackup.c
+--- a/tools/idevicebackup.c	2020-06-15 20:20:55.000000000 +0200
++++ b/tools/idevicebackup.c	2023-04-27 00:17:32.299268657 +0200
+@@ -45,6 +45,7 @@
+ #include <libimobiledevice/mobilebackup.h>
+ #include <libimobiledevice/notification_proxy.h>
+ #include <libimobiledevice/afc.h>
++#include <plist/plist.h>
+ #include "common/utils.h"
+ 
+ #define MOBILEBACKUP_SERVICE_NAME "com.apple.mobilebackup"
+@@ -331,7 +332,7 @@
+ 	if (stat(file_path, &st) == 0)
+ 		remove(file_path);
+ 
+-	plist_write_to_filename(status_plist, file_path, PLIST_FORMAT_XML);
++	plist_write_to_file(status_plist, file_path, PLIST_FORMAT_XML, 0);
+ 
+ 	plist_free(status_plist);
+ 	status_plist = NULL;
+@@ -345,7 +346,7 @@
+ 	plist_t status_plist = NULL;
+ 	char *file_path = mobilebackup_build_path(path, "Status", ".plist");
+ 
+-	plist_read_from_filename(&status_plist, file_path);
++	plist_read_from_file(file_path, &status_plist, NULL);
+ 	free(file_path);
+ 	if (!status_plist) {
+ 		printf("Could not read Status.plist!\n");
+@@ -468,7 +469,7 @@
+ 	}
+ 
+ 	infopath = mobilebackup_build_path(backup_directory, hash, ".mdinfo");
+-	plist_read_from_filename(&mdinfo, infopath);
++	plist_read_from_file(infopath, &mdinfo, NULL);
+ 	free(infopath);
+ 	if (!mdinfo) {
+ 		printf("\r\n");
+@@ -880,7 +881,7 @@
+ 		/* verify existing Info.plist */
+ 		if (stat(info_path, &st) == 0) {
+ 			printf("Reading Info.plist from backup.\n");
+-			plist_read_from_filename(&info_plist, info_path);
++			plist_read_from_file(info_path, &info_plist, NULL);
+ 
+ 			if (!info_plist) {
+ 				printf("Could not read Info.plist\n");
+@@ -891,7 +892,7 @@
+ 					/* update the last backup time within Info.plist */
+ 					mobilebackup_info_update_last_backup_date(info_plist);
+ 					remove(info_path);
+-					plist_write_to_filename(info_plist, info_path, PLIST_FORMAT_XML);
++					plist_write_to_file(info_plist, info_path, PLIST_FORMAT_XML, 0);
+ 				} else {
+ 					printf("Aborting backup. Backup is not compatible with the current device.\n");
+ 					cmd = CMD_LEAVE;
+@@ -956,7 +957,7 @@
+ 			/* read the last Manifest.plist */
+ 			if (!is_full_backup) {
+ 				printf("Reading existing Manifest.\n");
+-				plist_read_from_filename(&manifest_plist, manifest_path);
++				plist_read_from_file(manifest_path, &manifest_plist, NULL);
+ 				if (!manifest_plist) {
+ 					printf("Could not read Manifest.plist, switching to full backup mode.\n");
+ 					is_full_backup = 1;
+@@ -974,7 +975,7 @@
+ 				remove(info_path);
+ 				printf("Creating Info.plist for new backup.\n");
+ 				info_plist = mobilebackup_factory_info_plist_new(udid);
+-				plist_write_to_filename(info_plist, info_path, PLIST_FORMAT_XML);
++				plist_write_to_file(info_plist, info_path, PLIST_FORMAT_XML, 0);
+ 			}
+ 			free(info_path);
+ 
+@@ -1112,7 +1113,7 @@
+ 							remove(filename_mdinfo);
+ 
+ 						node = plist_dict_get_item(node_tmp, "BackupFileInfo");
+-						plist_write_to_filename(node, filename_mdinfo, PLIST_FORMAT_BINARY);
++						plist_write_to_file(node, filename_mdinfo, PLIST_FORMAT_BINARY, 0);
+ 
+ 						free(filename_mdinfo);
+ 					}
+@@ -1225,7 +1226,7 @@
+ 					if (manifest_plist) {
+ 						remove(manifest_path);
+ 						printf("Storing Manifest.plist...\n");
+-						plist_write_to_filename(manifest_plist, manifest_path, PLIST_FORMAT_XML);
++						plist_write_to_file(manifest_plist, manifest_path, PLIST_FORMAT_XML, 0);
+ 					}
+ 
+ 					backup_ok = 1;
+@@ -1256,7 +1257,7 @@
+ 			}
+ 			/* now make sure backup integrity is ok! verify all files */
+ 			printf("Reading existing Manifest.\n");
+-			plist_read_from_filename(&manifest_plist, manifest_path);
++			plist_read_from_file(manifest_path, &manifest_plist, NULL);
+ 			if (!manifest_plist) {
+ 				printf("Could not read Manifest.plist. Aborting.\n");
+ 				break;
+@@ -1383,7 +1384,7 @@
+ 					while (node) {
+ 						/* TODO: read mddata/mdinfo files and send to device using DLSendFile */
+ 						file_info_path = mobilebackup_build_path(backup_directory, hash, ".mdinfo");
+-						plist_read_from_filename(&file_info, file_info_path);
++						plist_read_from_file(file_info_path, &file_info, NULL);
+ 
+ 						/* get encryption state */
+ 						tmp_node = plist_dict_get_item(file_info, "IsEncrypted");
+diff -Naur a/tools/idevicecrashreport.c b/tools/idevicecrashreport.c
+--- a/tools/idevicecrashreport.c	2020-06-15 20:20:55.000000000 +0200
++++ b/tools/idevicecrashreport.c	2023-04-27 00:16:03.446877503 +0200
+@@ -77,7 +77,7 @@
+ 	strcpy(p, ".crash");
+ 
+ 	/* read plist crash report */
+-	if (plist_read_from_filename(&report, filename)) {
++	if (plist_read_from_file(filename, &report, NULL)) {
+ 		plist_t description_node = plist_dict_get_item(report, "description");
+ 		if (description_node && plist_get_node_type(description_node) == PLIST_STRING) {
+ 			plist_get_string_val(description_node, &raw);
+diff -Naur a/tools/ideviceimagemounter.c b/tools/ideviceimagemounter.c
+--- a/tools/ideviceimagemounter.c	2020-06-15 20:20:55.000000000 +0200
++++ b/tools/ideviceimagemounter.c	2023-04-27 00:18:47.191597862 +0200
+@@ -45,6 +45,7 @@
+ #include <libimobiledevice/afc.h>
+ #include <libimobiledevice/notification_proxy.h>
+ #include <libimobiledevice/mobile_image_mounter.h>
++#include <plist/plist.h>
+ #include <asprintf.h>
+ #include "common/utils.h"
+ 
+@@ -143,15 +144,6 @@
+ 	}
+ }
+ 
+-static void print_xml(plist_t node)
+-{
+-	char *xml = NULL;
+-	uint32_t len = 0;
+-	plist_to_xml(node, &xml, &len);
+-	if (xml)
+-		puts(xml);
+-}
+-
+ static ssize_t mim_upload_cb(void* buf, size_t size, void* userdata)
+ {
+ 	return fread(buf, 1, size, (FILE*)userdata);
+@@ -283,11 +275,7 @@
+ 		err = mobile_image_mounter_lookup_image(mim, imagetype, &result);
+ 		if (err == MOBILE_IMAGE_MOUNTER_E_SUCCESS) {
+ 			res = 0;
+-			if (xml_mode) {
+-				print_xml(result);
+-			} else {
+-				plist_print_to_stream(result, stdout);
+-			}
++			plist_write_to_stream(result, stdout, (xml_mode) ? PLIST_FORMAT_XML : PLIST_FORMAT_LIMD, 0);
+ 		} else {
+ 			printf("Error: lookup_image returned %d\n", err);
+ 		}
+@@ -415,20 +403,12 @@
+ 							res = 0;
+ 						} else {
+ 							printf("unexpected status value:\n");
+-							if (xml_mode) {
+-								print_xml(result);
+-							} else {
+-								plist_print_to_stream(result, stdout);
+-							}
++							plist_write_to_stream(result, stdout, (xml_mode) ? PLIST_FORMAT_XML : PLIST_FORMAT_LIMD, 0);
+ 						}
+ 						free(status);
+ 					} else {
+ 						printf("unexpected result:\n");
+-						if (xml_mode) {
+-							print_xml(result);
+-						} else {
+-							plist_print_to_stream(result, stdout);
+-						}
++						plist_write_to_stream(result, stdout, (xml_mode) ? PLIST_FORMAT_XML : PLIST_FORMAT_LIMD, 0);
+ 					}
+ 				}
+ 				node = plist_dict_get_item(result, "Error");
+@@ -440,19 +420,11 @@
+ 						free(error);
+ 					} else {
+ 						printf("unexpected result:\n");
+-						if (xml_mode) {
+-							print_xml(result);
+-						} else {
+-							plist_print_to_stream(result, stdout);
+-						}
++						plist_write_to_stream(result, stdout, (xml_mode) ? PLIST_FORMAT_XML : PLIST_FORMAT_LIMD, 0);
+ 					}
+ 
+ 				} else {
+-					if (xml_mode) {
+-						print_xml(result);
+-					} else {
+-						plist_print_to_stream(result, stdout);
+-					}
++					plist_write_to_stream(result, stdout, (xml_mode) ? PLIST_FORMAT_XML : PLIST_FORMAT_LIMD, 0);
+ 				}
+ 			}
+ 		} else {
+diff -Naur a/tools/ideviceinfo.c b/tools/ideviceinfo.c
+--- a/tools/ideviceinfo.c	2020-06-15 20:20:55.000000000 +0200
++++ b/tools/ideviceinfo.c	2023-04-27 00:19:26.559770737 +0200
+@@ -37,6 +37,7 @@
+ 
+ #include <libimobiledevice/libimobiledevice.h>
+ #include <libimobiledevice/lockdown.h>
++#include <plist/plist.h>
+ #include "common/utils.h"
+ 
+ #define FORMAT_KEY_VALUE 1
+@@ -240,11 +241,11 @@
+ 				free(xml_doc);
+ 				break;
+ 			case FORMAT_KEY_VALUE:
+-				plist_print_to_stream(node, stdout);
++				plist_write_to_stream(node, stdout, PLIST_FORMAT_LIMD, 0);
+ 				break;
+ 			default:
+ 				if (key != NULL)
+-					plist_print_to_stream(node, stdout);
++					plist_write_to_stream(node, stdout, PLIST_FORMAT_LIMD, 0);
+ 			break;
+ 			}
+ 			plist_free(node);
+diff -Naur a/tools/ideviceprovision.c b/tools/ideviceprovision.c
+--- a/tools/ideviceprovision.c	2020-06-15 20:20:55.000000000 +0200
++++ b/tools/ideviceprovision.c	2023-04-27 00:22:12.796499398 +0200
+@@ -44,6 +44,7 @@
+ #include <libimobiledevice/libimobiledevice.h>
+ #include <libimobiledevice/lockdown.h>
+ #include <libimobiledevice/misagent.h>
++#include <plist/plist.h>
+ #include "common/utils.h"
+ 
+ static void print_usage(int argc, char **argv)
+@@ -422,7 +423,7 @@
+ 				}
+ 			} else {
+ 				if (pl && (plist_get_node_type(pl) == PLIST_DICT)) {
+-					plist_print_to_stream(pl, stdout);
++					plist_write_to_stream(pl, stdout, PLIST_FORMAT_LIMD, 0);
+ 				} else {
+ 					fprintf(stderr, "ERROR: unexpected node type in profile plist (not PLIST_DICT)\n");
+ 					res = -1;

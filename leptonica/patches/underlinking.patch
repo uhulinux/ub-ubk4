@@ -1,0 +1,12 @@
+diff -Naur a/prog/CMakeLists.txt b/prog/CMakeLists.txt
+--- a/prog/CMakeLists.txt	2024-10-16 21:32:44.000000000 +0200
++++ b/prog/CMakeLists.txt	2024-12-28 11:23:06.732611639 +0100
+@@ -18,7 +18,7 @@
+     if(FREEBSD AND HAVE_LIBM AND ${target} MATCHES ${math_progs})
+       target_link_libraries         (${target} leptonica m)
+     else()
+-      target_link_libraries         (${target} leptonica)
++      target_link_libraries         (${target} leptonica m)
+     endif()
+     set_target_properties           (${target} PROPERTIES FOLDER prog)
+ endfunction(add_prog_target)

@@ -1,5 +1,5 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
-
-ub_compile
+ub_compile \
+    -DBUILD_PROG=ON \
+    -DBUILD_SHARED_LIBS=ON
