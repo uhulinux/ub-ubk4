@@ -1,7 +1,16 @@
 #!/bin/sh -eux
 
-make -C po all adduser.pot
+# generate man pages
+cd doc/po4a && po4a --keep 95 --previous po4a.conf
+cd -
+
+cd doc/po4a && po4a --keep 95 --previous --rm-translations po4a.conf
+rm -f po/*.mo
+
+cd -
 
 sed -i "s/VERSION/$UB_VERSION/g" adduser
 sed -i "s/VERSION/$UB_VERSION/g" deluser
 sed -i "s/VERSION/$UB_VERSION/g" AdduserCommon.pm
+sed -i "s/VERSION/$UB_VERSION/g" AdduserLogging.pm
+sed -i "s/VERSION/$UB_VERSION/g" AdduserRetvalues.pm

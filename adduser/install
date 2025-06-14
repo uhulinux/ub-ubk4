@@ -8,6 +8,8 @@ install -o root -g root -m755 deluser "$UB_INSTALLDIR"/usr/sbin/deluser
 vendorlibdir=`perl -V:installvendorlib | sed -e "s/installvendorlib='//" | sed -e "s/';//"`
 mkdir -p "$UB_INSTALLDIR$vendorlibdir"/Debian
 install -o root -g root -m644 AdduserCommon.pm "$UB_INSTALLDIR$vendorlibdir"/Debian/AdduserCommon.pm
+install -o root -g root -m644 AdduserCommon.pm "$UB_INSTALLDIR$vendorlibdir"/Debian/AdduserLogging.pm
+install -o root -g root -m644 AdduserCommon.pm "$UB_INSTALLDIR$vendorlibdir"/Debian/AdduserRetvalues.pm
 
 install -o root -g root -m644 doc/adduser.conf.5 "$UB_INSTALLDIR"/usr/share/man/man5/
 install -o root -g root -m644 doc/deluser.conf.5 "$UB_INSTALLDIR"/usr/share/man/man5/
