@@ -1,34 +1,45 @@
 diff -Naur a/desktop/deb-gview.desktop.in.in b/desktop/deb-gview.desktop.in.in
---- a/desktop/deb-gview.desktop.in.in	2023-01-11 15:38:50.000000000 +0100
-+++ b/desktop/deb-gview.desktop.in.in	2023-02-04 01:03:39.251804759 +0100
-@@ -1,9 +1,11 @@
- [Desktop Entry]
+--- a/desktop/deb-gview.desktop.in.in	2024-10-17 17:44:01.000000000 +0200
++++ b/desktop/deb-gview.desktop.in.in	2025-02-28 12:16:07.340070866 +0100
+@@ -2,8 +2,10 @@
  _Name=Debian Package Viewer
  _Comment=Debian package file viewer
+ _Keywords=deb;debian;view;open;
 +Name[hu]=deb-gview
 +Comment[hu]=Debian csomag megjelenítő
- _Keywords=deb;debian;view;open;
  Exec=deb-gview
--Icon=deb-gview.xpm
+-Icon=deb-gview.png
 +Icon=deb-gview
  Terminal=false
  Categories=Development;Building;GNOME;
  Type=Application
 diff -Naur a/Makefile.am b/Makefile.am
---- a/Makefile.am	2023-01-11 15:38:50.000000000 +0100
-+++ b/Makefile.am	2023-02-04 01:04:33.968018898 +0100
-@@ -5,7 +5,7 @@
+--- a/Makefile.am	2024-10-17 17:44:01.000000000 +0200
++++ b/Makefile.am	2025-02-28 12:17:22.000173103 +0100
+@@ -1,20 +1,5 @@
+ SUBDIRS = src . po desktop
  
- man_MANS=$(PACKAGE).1
- 
+-$(PACKAGE).1: $(PACKAGE).1.xml
+-	$(XP) $(DB2MAN) $<
+-
+-man_MANS=$(PACKAGE).1
+-
 -DB2MAN = /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
-+DB2MAN = /usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl
- XP = xsltproc -''-nonet -''-param man.charmap.use.subset "0"
- 
- deb_gviewdocdir = ${prefix}/share/doc/deb-gview
+-XP = xsltproc -''-nonet -''-param man.charmap.use.subset "0"
+-
+-deb_gviewdocdir = ${prefix}/share/doc/deb-gview
+-deb_gviewdoc_DATA = \
+- ChangeLog \
+- README \
+- NEWS \
+- TODO
+-
+ deb-gview.pot: Makefile
+ 	${RM} -f po/deb-gview.pot
+ 	${MAKE} -C po deb-gview.pot
 diff -Naur a/src/callbacks.c b/src/callbacks.c
---- a/src/callbacks.c	2023-01-11 15:38:50.000000000 +0100
-+++ b/src/callbacks.c	2023-02-04 01:05:34.708259574 +0100
+--- a/src/callbacks.c	2024-10-17 17:44:01.000000000 +0200
++++ b/src/callbacks.c	2025-02-28 12:16:07.340070866 +0100
 @@ -64,6 +64,11 @@
  			"/var/cache/apt/archives");
  	}
@@ -42,9 +53,9 @@ diff -Naur a/src/callbacks.c b/src/callbacks.c
  	gtk_file_filter_add_pattern (filter, 
  		"*.deb");
 diff -Naur a/src/dvarchive.c b/src/dvarchive.c
---- a/src/dvarchive.c	2023-01-11 15:38:50.000000000 +0100
-+++ b/src/dvarchive.c	2023-02-04 01:05:34.708259574 +0100
-@@ -185,6 +185,23 @@
+--- a/src/dvarchive.c	2024-10-17 17:44:01.000000000 +0200
++++ b/src/dvarchive.c	2025-02-28 12:16:07.340070866 +0100
+@@ -188,6 +188,23 @@
  				dv_new_window (debfile);
  			}
  		}
@@ -68,7 +79,7 @@ diff -Naur a/src/dvarchive.c b/src/dvarchive.c
  	}
  }
  
-@@ -327,6 +344,7 @@
+@@ -335,6 +352,7 @@
  	filename = g_file_get_uri (deb->ghandle);
  	if ((!g_str_has_suffix(filename, ".deb")) &&
  		(!g_str_has_suffix(filename, ".udeb")) &&
