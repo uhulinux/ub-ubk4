@@ -2,3 +2,7 @@
 
 make PREFIX=/usr DESTDIR=${UB_INSTALLDIR} install
 rm "$UB_INSTALLDIR"/usr/bin/unrar
+
+# patchelf
+patchelf --set-interpreter /usr/lib/ld-linux-x86-64.so.2 &> /dev/null "$UB_INSTALLDIR"/usr/bin/rar
+patchelf --set-interpreter /usr/lib/ld-linux-x86-64.so.2 &> /dev/null "$UB_INSTALLDIR"/usr/lib/default.sfx
