@@ -1,1 +1,1 @@
-urllist https://gitlab.com/graphviz/graphviz/-/tags?page=2/ | grep stable_release_ | sed s/.*_// | sort -V | tail -n 1
+urllist https://gitlab.com/graphviz/graphviz/-/tags/ | grep -E '^[0-9]+\.' | sort -V | tail -n 1
