@@ -1,0 +1,22 @@
+diff -Naur a/src/common/common.h b/src/common/common.h
+--- a/src/common/common.h	2024-07-13 18:11:11.000000000 +0200
++++ b/src/common/common.h	2025-01-09 00:14:26.299401802 +0100
+@@ -35,6 +35,7 @@
+ 
+ #include <fmt/format.h>
+ #include <fmt/ostream.h>
++#include <fmt/ranges.h>
+ 
+ #include <boost/algorithm/string.hpp>
+ #include <boost/multiprecision/cpp_int.hpp>
+diff -Naur a/src/mkvtoolnix-gui/util/media_player.cpp b/src/mkvtoolnix-gui/util/media_player.cpp
+--- a/src/mkvtoolnix-gui/util/media_player.cpp	2024-07-13 18:11:11.000000000 +0200
++++ b/src/mkvtoolnix-gui/util/media_player.cpp	2025-01-09 00:55:56.996846715 +0100
+@@ -3,6 +3,7 @@
+ #include <Qt>
+ #include <QAudioOutput>
+ #include <QMediaPlayer>
++#include <QDebug>
+ 
+ #include "mkvtoolnix-gui/util/media_player.h"
+ 
