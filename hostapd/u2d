@@ -1,1 +1,1 @@
-urllist https://w1.fi/cgit/hostap/ | grep tar | grep hostap  | sed s/hostap_/hostap-/ | sed s/_/\./ | parsever | sort -V | tail -n 1
+urllist https://w1.fi/cgit/hostap/ | grep =hostap | sed s/.*hostap_// | sed s/_/\./g | sort -V | tail -n 1
