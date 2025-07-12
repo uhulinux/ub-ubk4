@@ -1,43 +1,13 @@
 #!/bin/sh -eux
-
-mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium
-
-outdir="../object"
-
-mv $outdir/chrome "$UB_INSTALLDIR"/usr/lib/chromium/
-mv $outdir/chromedriver.unstripped "$UB_INSTALLDIR"/usr/lib/chromium/chromedriver
-mv $outdir/chrome_sandbox "$UB_INSTALLDIR"/usr/lib/chromium/chrome-sandbox
-mv $outdir/chrome_crashpad_handler "$UB_INSTALLDIR"/usr/lib/chromium/chrome_crashpad_handler
-# mv $outdir/chrome.1 "$UB_INSTALLDIR"/usr/share/man/man1/chrome.1
-
-mv $outdir/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/
-mv $outdir/*.bin "$UB_INSTALLDIR"/usr/lib/chromium/
-
-# ANGLE
-mv $outdir/libEGL.so "$UB_INSTALLDIR"/usr/lib/chromium/
-mv $outdir/libGLESv2.so "$UB_INSTALLDIR"/usr/lib/chromium/
-# SwiftShader ICD
-mv $outdir/libvk_swiftshader.so "$UB_INSTALLDIR"/usr/lib/chromium/
-mv $outdir/vk_swiftshader_icd.json "$UB_INSTALLDIR"/usr/lib/chromium/
-# libvulkan
-mv $outdir/libvulkan.so.1 "$UB_INSTALLDIR"/usr/lib/chromium/
-# qt6
-mv $outdir/libqt6_shim.so "$UB_INSTALLDIR"/usr/lib/chromium/
-
-if [ -f $outdir/icudtl.dat ]; then
-mv $outdir/icudtl.dat "$UB_INSTALLDIR"/usr/lib/chromium/
-fi
-
-mkdir -p "$UB_INSTALLDIR"/usr/lib/chromium/locales
-mv $outdir/locales/*.pak "$UB_INSTALLDIR"/usr/lib/chromium/locales/
-
+mv opt usr/lib
+cp -r etc ${UB_INSTALLDIR}/
+cp -r usr/lib ${UB_INSTALLDIR}/usr/
+cp -r usr/share ${UB_INSTALLDIR}/usr/
+ln -s ${UB_INSTALLDIR}/usr/lib/google/chrome/google-chrome ${UB_INSTALLDIR}/usr/bin/google-chrome-stable
 for size in 16 24 32 48 64 128 256; do
 	mkdir -p ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/
 	case ${size} in
-	    16|32) iconpath="chrome/app/theme/default_100_percent/chromium" ;;
-	    *) iconpath="chrome/app/theme/chromium" ;;
+	    16|32) iconpath=${UB_INSTALLDIR}/usr/lib/google/chrome ;;
 	esac
-	cp ${iconpath}/product_logo_$size.png ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png
+	cp ${iconpath}/product_logo_$size.png ${UB_INSTALLDIR}/usr/share/icons/hicolor/${size}x${size}/apps/google-chrome.png
 done
-
-ln -s /usr/lib/chromium/chromedriver "$UB_INSTALLDIR"/usr/bin/chromedriver
