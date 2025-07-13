@@ -1,1 +1,1 @@
-urllist https://www.seamonkey-project.org/releases/ | grep '\.source' | sed -e 's/seamonkey-//' -e 's/\.source.*//' | sort -V | tail -n 1
+urllist https://www.seamonkey-project.org/releases/ | grep seamonkey- | grep linux | grep hu | grep x86_64 | sed s/\.hu.*//g | sed s/seamonkey-//

@@ -1,30 +1,26 @@
 #!/bin/sh -eux
 
-cd "$UB_OBJECTDIR"
+install -d "$UB_INSTALLDIR/usr/lib/seamonkey"
+    cp -r * "$UB_INSTALLDIR/usr/lib/seamonkey/"
+    install -d "$UB_INSTALLDIR/usr/bin"
+    ln -s /opt/seamonkey/seamonkey "$UB_INSTALLDIR/usr/bin/seamonkey"
+    install -d "$UB_INSTALLDIR/usr/share/applications"
+    cat <<EOF > "$UB_INSTALLDIR/usr/share/applications/seamonkey.desktop"
+[Desktop Entry]
+Name=SeaMonkey
+GenericName=Internet Suite
+Comment=Web browser, advanced email, newsgroup and feed client, IRC chat, and web development tools
+Exec=/usr/lib/seamonkey/seamonkey %u
+Icon=seamonkey
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;Email;News;Chat;
+MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;application/rss+xml;application/rdf+xml;
+EOF
 
-export PYTHON=python3.10
-export MACH_USE_SYSTEM_PYTHON=1
-DESTDIR="$UB_INSTALLDIR" "$UB_COMPILEDIR"/mach install
+    for size in 16 22 24 32 48 64 128 256; do
+        install -d "$UB_INSTALLDIR/usr/share/icons/hicolor/${size}x${size}/apps"
+        install -m644 "chrome/icons/default/default${size}.png" "$UB_INSTALLDIR/usr/share/icons/hicolor/${size}x${size}/apps/seamonkey.png"
+    done
 
-rm -f "$UB_INSTALLDIR"/usr/lib/seamonkey/seamonkey
-rm -f "$UB_INSTALLDIR"/usr/bin/seamonkey
-ln -s /usr/lib/seamonkey/seamonkey "$UB_INSTALLDIR"/usr/bin/seamonkey
-
-if [ ! -f "$UB_INSTALLDIR"/usr/lib/seamonkey/run-mozilla.sh ]; then
-	cp "$UB_COMPILEDIR"/build/unix/run-mozilla.sh "$UB_INSTALLDIR"/usr/lib/seamonkey/run-mozilla.sh
-fi
-
-# install icons
-for i in 16 22 24 32 48 64 128 256; do
-    install -Dm644 "$UB_COMPILEDIR"/comm/suite/branding/seamonkey/default${i}.png \
-      "$UB_INSTALLDIR/usr/share/icons/hicolor/${i}x${i}/apps/seamonkey.png"
-done
-install -Dm644 "$UB_COMPILEDIR"/comm/suite/branding/seamonkey/icons/gtk/messengerWindow16.png \
-    "$UB_INSTALLDIR/usr/share/icons/hicolor/16x16/apps/seamonkey.png"
-install -Dm644 "$UB_COMPILEDIR"/comm/suite/branding/seamonkey/icons/gtk/messengerWindow.png \
-    "$UB_INSTALLDIR/usr/share/icons/hicolor/32x32/apps/seamonkey-mail.png"
-install -Dm644 "$UB_COMPILEDIR"/comm/suite/branding/seamonkey/icons/gtk/messengerWindow48.png \
-    "$UB_INSTALLDIR/usr/share/icons/hicolor/48x48}/apps/seamonkey-mail.png"
-
-mkdir -p "$UB_INSTALLDIR"/usr/lib/seamonkey/extensions/langpack-hu@seamonkey.mozilla.org
-cp -aR "$UB_COMPILEDIR"/langpack-hu/. "$UB_INSTALLDIR"/usr/lib/seamonkey/extensions/langpack-hu@seamonkey.mozilla.org/
+ln -sf ${UB_INSTALLDIR}/usr/lib/seamonkey/seamonkey ${UB_INSTALLDIR}/usr/bin/seamonkey

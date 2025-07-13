@@ -1,20 +1,21 @@
 #!/bin/sh -eux
 
-cd "$UB_OBJECTDIR"
+mkdir -p $UB_INSTALLDIR/usr/lib/firefox
+cp -a * $UB_INSTALLDIR/usr/lib/firefox/
 
-export PYTHON=/usr/bin/python3
-export MACH_USE_SYSTEM_PYTHON=1
-DESTDIR="$UB_INSTALLDIR" "$UB_COMPILEDIR"/mach install
+# Launchers
+#ln -s firefox $UB_INSTALLDIR/usr/bin/firefox/firefox
 
-rm -f "$UB_INSTALLDIR"/usr/bin/firefox
-rm -f "$UB_INSTALLDIR"/usr/lib/firefox/firefox-bin
-
-mkdir -p "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions
-mv "$UB_COMPILEDIR"/hu.xpi "$UB_INSTALLDIR"/usr/lib/firefox/browser/extensions/langpack-hu@firefox.mozilla.org.xpi
-
-# install icons
-for i in 16 22 24 32 48 64 128 256; do
-    install -Dm644 "$UB_COMPILEDIR"/browser/branding/official/default$i.png \
-      "$UB_INSTALLDIR/usr/share/icons/hicolor/${i}x${i}/apps/firefox.png"
+# icons
+for i in 16x16 32x32 48x48 64x64 128x128; do
+    install -d "$UB_INSTALLDIR"/usr/share/icons/hicolor/${i}/apps/
+    ln -s /usr/lib/firefox/browser/chrome/icons/default/default${i/x*}.png \
+          "$UB_INSTALLDIR"/usr/share/icons/hicolor/${i}/apps/firefox.png
 done
-cp "$UB_COMPILEDIR"/browser/branding/official/default48.png "$UB_INSTALLDIR"/usr/share/pixmaps/firefox.png
+
+  # Use system-provided dictionaries
+  ln -Ts /usr/share/hunspell "$UB_INSTALLDIR"/usr/lib/firefox/dictionaries
+  ln -Ts /usr/share/hyphen "$UB_INSTALLDIR"/usr/lib/firefox/hyphenation
+
+# Use system certificates
+  ln -sf /usr/lib/libnssckbi.so "$UB_INSTALLDIR"/usr/lib/firefox/libnssckbi.so
