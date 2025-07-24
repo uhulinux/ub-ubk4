@@ -1,8 +1,0 @@
-#!/bin/sh -eux
-mkdir -p "$UB_INSTALLDIR"/usr/share/games/wolf3d
-
-forraslista=`ls wolf12/ | grep WL1| tr '\n' ' '`
-for nagybetus in $forraslista ; do
-	kisbetus=`echo $nagybetus | tr [:upper:] [:lower:]`
-	install -m 644 wolf12/"$nagybetus" "$UB_INSTALLDIR"/usr/share/games/wolf3d/"$kisbetus"
-	done

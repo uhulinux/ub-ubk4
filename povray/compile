@@ -1,8 +1,0 @@
-#!/bin/sh -eux
-
-cd unix
-./prebuild.sh
-cd ..
-ub_replace -O3 -O2 configure
-ub_compile \
-	COMPILED_BY='UBK <ubk@ubk.hu>'

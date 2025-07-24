@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-mkdir -p ${UB_INSTALLDIR}/usr/share/opendungeons
-rm -rf scripts/win32
-#patchelf
-patchelf --set-interpreter /usr/lib/ld-linux-x86-64.so.2  opendungeons.x86_64
-cp -r * ${UB_INSTALLDIR}/usr/share/opendungeons/

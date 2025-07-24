@@ -1,8 +1,0 @@
-#!/bin/sh -eux
-
-cd src
-mkdir -p ${UB_INSTALLDIR}/usr/share/games/sauerbraten/bin
-install -Dm 755 sauer_client sauer_server ${UB_INSTALLDIR}/usr/share/games/sauerbraten/bin/
-cd ..
-rm -rf src
-cp -r * ${UB_INSTALLDIR}/usr/share/games/sauerbraten/
