@@ -1,7 +1,0 @@
-#!/bin/sh -eux
-
-ub_install
-install -D -m644 Ticon.png "$UB_INSTALLDIR"/usr/share/pixmaps/torcs.png
-install -D -m644 torcs.desktop "$UB_INSTALLDIR"/usr/share/applications/torcs.desktop
-make DESTDIR="$UB_INSTALLDIR" datainstall
-find "$UB_INSTALLDIR" -type d -exec chmod 755 {} \;
