@@ -1,9 +1,0 @@
-#!/bin/sh -eux
-
-zenefile=dreamchess-music-${UB_VERSION}
-chmod +x $zenefile.run
-./$zenefile.run --noexec --keep --target $zenefile
-cd $zenefile
-mkdir -p $UB_INSTALLDIR/usr/share/{dreamchess,doc/PACKAGES/dreamchess-music}
-cp -r data/music $UB_INSTALLDIR/usr/share/dreamchess/
-cp LICENSE $UB_INSTALLDIR/usr/share/doc/PACKAGES/dreamchess-music/
