@@ -1,6 +1,0 @@
-lista=$(sflist openmortal openmortal/ | grep -E '^([0-9.]+)$')
-for i in $lista; do
-gy=`sflist openmortal openmortal/"$i" | splitver '^openmortal-([0-9.]+).tar.bz2$'`
-gyi="$gyi"x"$gy"
-done
-echo $gyi | sed s/x/\\n/g | sort -V | tail -n1
