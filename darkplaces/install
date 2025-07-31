@@ -1,8 +1,0 @@
-#!/bin/sh -eux
-
-mkdir -p "$UB_INSTALLDIR"/usr/share/games/darkplaces/id1
-install -m755 darkplaces-{dedicated,glx,sdl} "$UB_INSTALLDIR"/usr/bin/
-
-for i in 16 24 32 48 64 72 ; do
-	install -D -m644 darkplaces${i}x$i.png "$UB_INSTALLDIR"/usr/share/icons/hicolor/${i}x$i/apps/darkplaces.png
-done
