@@ -1,6 +1,0 @@
-#!/bin/sh -eux
-
-#ub_install
-./Build install destdir=/var/uhubuild/work/install
-
-find "$UB_INSTALLDIR"/usr/share/doc -name "*.pl" -type f -print0 | xargs -r0 chmod 755
