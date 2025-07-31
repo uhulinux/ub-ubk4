@@ -1,1 +1,0 @@
-urllist https://gitlab.com/inkscape/inkscape/-/tags | grep INKSCAPE_ | sed -e 's/INKSCAPE_//g' | tr '_' '.' | grep -E '([0-9.]+)$' | grep -v [A-Z] | sort -V | tail -n 1
