@@ -1,0 +1,7 @@
+#!/bin/sh -eux
+
+cd src
+prefix="/usr" exec_prefix="/usr" make DESTDIR=$UB_INSTALLDIR install
+mv ../data/icon/trigger-64.png ${UB_INSTALLDIR}/usr/share/pixmaps/trigger.png
+rm -rf ${UB_INSTALLDIR}/usr/share/games/trigger-rally/icon
+ln -s /usr/games/trigger-rally ${UB_INSTALLDIR}/usr/bin/trigger-rally
