@@ -4,9 +4,12 @@ if [ ! -f gnucash/gnome/gnucash.appdata.xml.in ]; then
     cp gnucash/gnome/gnucash.appdata.xml.in.in gnucash/gnome/gnucash.appdata.xml.in
 fi
 
+export CFLAGS='-Wno-error=cpp'
+export CXXFLAGS='-Wno-error=cpp'
 ub_compile \
     -DCMAKE_INSTALL_LIBDIR=/usr/lib \
     -DCMAKE_INSTALL_FULL_SYSCONFDIR=/etc \
     -DWITH_AQBANKING=OFF \
-	-DWITH_PYTHON=ON \
+	-DWITH_PYTHON=OFF \
+    -DCOMPILE_GSCHEMAS=OFF \
     -DGTEST_ROOT=gtest
