@@ -1,8 +1,4 @@
 #!/bin/sh -eux
 
-# make html from html-src
-# requires python3, python3-random2, python3-six, python3-tkinter, python3-attrs, pysol-cards
-make rules
-
-python3 ./setup.py install --root="$UB_INSTALLDIR"
+python3 -m installer --destdir="$UB_INSTALLDIR" dist/*.whl
 mv "${UB_INSTALLDIR}/usr/bin/pysol.py" "${UB_INSTALLDIR}/usr/bin/pysol"
