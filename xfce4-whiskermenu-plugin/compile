@@ -1,6 +1,7 @@
 #!/bin/sh -eux
 
+rm -f CMakeLists.txt
+
 ub_compile \
-    -DCMAKE_INSTALL_LIBDIR=lib \
-    -DENABLE_ACCOUNTS_SERVICE=OFF \
-    -DENABLE_STRIP=OFF
+    -Daccountsservice=disabled \
+    -Dgtk-layer-shell=enabled

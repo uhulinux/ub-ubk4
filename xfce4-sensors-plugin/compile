@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
 ub_compile \
-	--disable-netcat \
-	--enable-procacpi \
-	--enable-sysfsacpi
+	-Dnetcat=disabled \
+	-Dprocacpi=enabled \
+	-Dsysfsacpi=enabled
