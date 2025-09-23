@@ -1,4 +1,5 @@
 #!/bin/sh -eux
 
+python3 -m installer --destdir="${UB_INSTALLDIR}" dist/*.whl
 # FS#59882
 find "$UB_INSTALLDIR" -wholename 'external/pexpect' -type d -delete
