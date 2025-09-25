@@ -1,5 +1,8 @@
 #!/bin/sh -eux
 
 gamesdir="$UB_INSTALLDIR"/usr/share/games/heretic
-mkdir -p "$gamesdir"
+#gzdoom kompat
+doomdir="$UB_INSTALLDIR"/usr/share/games/doom
+mkdir -p "$gamesdir" $doomdir
 cp heretic1.wad "$gamesdir"/
+cp heretic1.wad "$doomdir"/
