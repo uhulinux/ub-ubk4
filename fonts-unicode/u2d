@@ -1,5 +1,5 @@
-for dir in `urllist https://ftp.gnu.org/gnu/unifont | grep ^unifont | sort -Vr`;do
-ver=$(u2d https://ftp.gnu.org/gnu/unifont/$dir unifont-)
+for dir in `urllist https://quantum-mirror.hu/mirrors/pub/gnu/unifont | grep ^unifont | sort -Vr`;do
+ver=$(u2d https://quantum-mirror.hu/mirrors/pub/gnu/unifont/$dir unifont-)
 if [ "$ver" ];then
 echo $ver
 exit 0
