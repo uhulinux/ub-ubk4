@@ -1,3 +1,4 @@
 #!/bin/sh -eux
 
+sed -e 's|-Werror||' -i src/CMakeLists.txt
 ub_compile
