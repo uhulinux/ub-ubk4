@@ -1,3 +1,5 @@
 #!/bin/sh -eux
 
-ub_compile
+ub_compile \
+    -Denable-desktop-manager=True \
+    -Denable-systemd-service=True

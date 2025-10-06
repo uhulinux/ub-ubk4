@@ -2,3 +2,4 @@
 
 ub_install
 #mv "${UB_INSTALLDIR}"/usr/lib/{cli,mono}
+sed 's%libdir =%libdir = /usr/lib%' -i ${UB_INSTALLDIR}/usr/lib/pkgconfig/CDApplet.pc
