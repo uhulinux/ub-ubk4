@@ -1,0 +1,60 @@
+diff -Nur orig/configure.ac mod/configure.ac
+--- orig/configure.ac	2025-02-18 18:04:08.000000000 +0100
++++ mod/configure.ac	2025-10-09 12:48:11.592087525 +0200
+@@ -229,9 +229,6 @@
+ $EXIF_PKG_ERRORS
+ ])])])])
+ 
+-#check for gtk-doc
+-GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+-
+ AC_ARG_ENABLE(demo,
+     [AC_HELP_STRING([--enable-demo],
+         [build libfm-demo file manager @<:@default=no@:>@])],
+@@ -326,10 +323,6 @@
+     data/lxshortcut.1
+     data/ui/Makefile
+     po/Makefile.in
+-    docs/Makefile
+-    docs/reference/Makefile
+-    docs/reference/libfm/Makefile
+-    docs/reference/libfm/version.xml
+     libfm.pc
+     libfm-gtk.pc
+     libfm-gtk3.pc
+diff -Nur orig/Makefile.am mod/Makefile.am
+--- orig/Makefile.am	2025-02-18 18:04:08.000000000 +0100
++++ mod/Makefile.am	2025-10-09 12:38:16.008581940 +0200
+@@ -5,19 +5,6 @@
+ DIST_SUBDIRS = src po data
+ 
+ # a little trick against gtk-doc is here
+-SUBDIRS_DOCS = docs
+-
+-EXTRA_DIST_DOCS = \
+-	gtk-doc.make \
+-	docs/Makefile.am \
+-	docs/Makefile.in \
+-	docs/reference/Makefile.am \
+-	docs/reference/Makefile.in \
+-	docs/reference/libfm/Makefile.am \
+-	docs/reference/libfm/Makefile.in \
+-	docs/reference/libfm/libfm-docs.xml \
+-	docs/reference/libfm/libfm-sections.txt \
+-	docs/reference/libfm/version.xml.in
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libfm-extra.pc
+@@ -35,12 +22,7 @@
+ 	po/libfm.pot \
+ 	$(NULL)
+ 
+-if ENABLE_GTK_DOC
+-DIST_SUBDIRS += $(SUBDIRS_DOCS)
+-SUBDIRS += $(SUBDIRS_DOCS)
+-else
+ EXTRA_DIST += $(EXTRA_DIST_DOCS)
+-endif
+ 
+ pkgconfig_DATA += \
+ 	libfm.pc \

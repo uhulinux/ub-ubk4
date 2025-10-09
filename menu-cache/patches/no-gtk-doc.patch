@@ -1,6 +1,6 @@
 diff -Nur orig/autogen.sh mod/autogen.sh
---- orig/autogen.sh	2017-11-02 19:55:27.000000000 +0100
-+++ mod/autogen.sh	2018-01-02 17:53:01.163948116 +0100
+--- orig/autogen.sh	2025-02-14 11:36:41.000000000 +0100
++++ mod/autogen.sh	2025-10-09 13:43:46.461353458 +0200
 @@ -29,14 +29,6 @@
  
  test -d m4 || mkdir m4
@@ -17,8 +17,8 @@ diff -Nur orig/autogen.sh mod/autogen.sh
  
  ${ACLOCAL:-aclocal$AM_VERSION} ${ACLOCAL_ARG}
 diff -Nur orig/configure.ac mod/configure.ac
---- orig/configure.ac	2017-11-02 19:55:27.000000000 +0100
-+++ mod/configure.ac	2018-01-02 17:53:19.019915068 +0100
+--- orig/configure.ac	2025-02-14 11:36:41.000000000 +0100
++++ mod/configure.ac	2025-10-09 13:44:34.837314495 +0200
 @@ -89,7 +89,4 @@
  libmenu-cache/menu-cache.h
  menu-cache-gen/Makefile
@@ -28,14 +28,14 @@ diff -Nur orig/configure.ac mod/configure.ac
 -docs/reference/libmenu-cache/Makefile
  ])
 diff -Nur orig/Makefile.am mod/Makefile.am
---- orig/Makefile.am	2017-11-02 19:55:27.000000000 +0100
-+++ mod/Makefile.am	2018-01-02 17:54:01.419836591 +0100
-@@ -4,7 +4,7 @@
+--- orig/Makefile.am	2025-02-14 11:36:41.000000000 +0100
++++ mod/Makefile.am	2025-10-09 13:45:23.405275368 +0200
+@@ -4,8 +4,6 @@
  
  NULL =
  
 -SUBDIRS_DOCS = docs
-+SUBDIRS_DOCS =
- 
+-
  EXTRA_DIST_DOCS = \
  	gtk-doc.make \
+ 	docs/Makefile.am \

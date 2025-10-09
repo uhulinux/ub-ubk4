@@ -1,10 +1,11 @@
 #!/bin/sh -eux
 
+sed -i 's/create=xarchiver --add-to %F/create=xarchiver --compress %F/' data/archivers.list
+
 # ha még nincs menu-cache
 export BOOTSTRAP=0
-
+autoreconf -vif
 if [ $BOOTSTRAP = "1" ]; then
-
 ub_configure \
 	--with-extra-only
 
