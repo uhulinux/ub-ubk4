@@ -1,0 +1,17 @@
+diff -Nur orig/pyproject.toml mod/pyproject.toml
+--- orig/pyproject.toml	2025-07-03 17:37:36.000000000 +0200
++++ mod/pyproject.toml	2025-10-15 09:17:05.522255119 +0200
+@@ -6,13 +6,6 @@
+ name = "SCons"
+ description = "Open Source next-generation build tool."
+ requires-python = ">=3.7"
+-license = "MIT"  # PEP 639 form (new - setuptools >= 77.0)
+-# Should include docbook license, but this fails:
+-# license = "MIT AND DocBook-stylesheet"
+-license-files = [
+-    "LICENSE",
+-    "SCons/Tool/docbook/docbook-xsl-1.76.1/COPYING",
+-]
+ readme = { file = "README-package.rst", content-type = "text/x-rst" }
+ authors = [{ name = "William Deegan", email = "bill@baddogconsulting.com" }]
+ dynamic = ["version"]
