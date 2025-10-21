@@ -1,0 +1,14 @@
+desktops='
+base
+calc
+draw
+impress
+math
+qstart
+startcenter
+writer
+xsltfilter'
+for desktop in $desktops;do
+mv /usr/share/applications/$desktop.desktop /usr/share/applications/valami
+mv /usr/share/applications/valami /usr/share/applications/$desktop.desktop
+done

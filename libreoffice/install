@@ -1,15 +1,34 @@
 #!/bin/sh -eux
 
-# a make install kevés, az nem telepíti a wrapper scripteket,
-# a .desktop fájlokat, az ikonokat, a man-t és a mime adatokat.
-# ehhez a /bin/distro-install-desktop-integration script kell.
-# ezt a make distro-pack-install hívja meg.
+mkdir -p $UB_INSTALLDIR/usr/share/{applications,icons,metainfo,mime,desktop-directories}
+mv opt lib
+mv lib/libreoffice* lib/libreoffice
+mv usr/share/{icons,metainfo,mime} ${UB_INSTALLDIR}/usr/share/
 
-# a /bin/distro-install-desktop-integration
-# és a /sysui/desktop/share/create_tree.sh-nak szükséges értékeket
-# exportáljuk
+# nem kell java
+rm lib/libreoffice/program/libofficebean.so
 
-export DESTDIR="$UB_INSTALLDIR"
-export SRC_ROOT="$UB_COMPILEDIR"
+# desktopok
 
-make distro-pack-install
+sed /Categories/d -i lib/libreoffice/share/xdg/*.desktop
+cp lib/libreoffice/share/xdg/*.desktop $UB_INSTALLDIR/usr/share/applications/
+
+#menü
+
+cat >"$UB_INSTALLDIR"/usr/share/desktop-directories/Libreoffice.directory <<EOF
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=Libreoffice
+Icon=libreoffice${UB_VERSION_HEAD2}-startcenter
+EOF
+
+mv lib/* $UB_INSTALLDIR/usr/lib/
+ln -s /usr/lib/libreoffice/program/soffice ${UB_INSTALLDIR}/usr/bin/libreoffice
+ln -s /usr/lib/libreoffice/program/soffice ${UB_INSTALLDIR}/usr/bin/libreoffice${UB_VERSION_HEAD2}
+#KF5 cuccok törlése
+KF5dir=${UB_INSTALLDIR}//usr/lib/libreoffice/program/
+rm $KF5dir/lo_kde5filepicker*
+rm $KF5dir/libkf5be1lo.so
+rm $KF5dir/libvclplug_kf5lo.so
+rm $KF5dir/libvclplug_gtk3_kde5lo.so
