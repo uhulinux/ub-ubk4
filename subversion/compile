@@ -1,15 +1,15 @@
 #!/bin/sh -eux
 
-# use system libs
-rm -rf apr
-rm -rf apr-util
-rm -rf neon
-
 ./get-deps.sh py3c
-
+rm subversion/bindings/swig/proxy/*.swg
 export PYTHON=python3
+export site_packages=/usr/lib/python3.10/site-packages
 ./autogen.sh
 ub_compile \
 	--with-apache-libexecdir=/usr/lib/apache \
 	--with-utf8proc=internal \
-	--with-py3c=py3c
+	--with-py3c=py3c \
+	--with-ruby-sitedir=/usr/lib/ruby/site_ruby/
+
+make swig_pydir=$site_packages/libsvn \
+     swig_pydir_extra=$site_packages/svn \

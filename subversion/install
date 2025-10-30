@@ -1,3 +1,13 @@
 #!/bin/sh -eux
 
 ub_install
+export LD_LIBRARY_PATH="${UB_INSTALLDIR}"/usr/lib
+export site_packages=/usr/lib/python3.10/site-packages
+make DESTDIR="${UB_INSTALLDIR}" INSTALLDIRS=vendor \
+swig_pydir=$site_packages/libsvn \
+swig_pydir_extra=$site_packages/svn \
+install install-swig-py install-swig-pl install-swig-rb
+install -dm755 "${UB_INSTALLDIR}"/usr/share/subversion
+cp -a tools/hook-scripts "${UB_INSTALLDIR}"/usr/share/subversion/
+rm "${UB_INSTALLDIR}"/usr/share/subversion/hook-scripts/*.in
+rm "${UB_INSTALLDIR}"/usr/share/subversion/hook-scripts/CVE*
