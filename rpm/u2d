@@ -1,2 +1,3 @@
 main=$(urllist https://ftp.osuosl.org/pub/rpm/releases/ | grep 'rpm-' | sort -V | tail -n 1)
 u2d https://ftp.osuosl.org/pub/rpm/releases/$main/
+noupdate gcc
