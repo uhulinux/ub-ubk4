@@ -1,12 +1,6 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
-NOCONFIGURE=1 ./autogen.sh
-
-export LIBPOSTFIX=/
-export PERL=perl5
-./configure \
-    --prefix=/usr \
-	--enable-ocaml=no \
-	--enable-perl=yes
-ub_make
+#rm -f CMakeLists.txt
+ub_compile \
+	-DENABLE_GO=OFF \
+	-DWITH_GHOSTSCRIPT=ON
