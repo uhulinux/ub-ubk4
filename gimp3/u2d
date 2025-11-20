@@ -1,3 +1,1 @@
-dir=$(urllist https://download.gimp.org/pub/gimp/ | grep -v video | grep ^v | sort -V | tail -n1 | sed -e "s/v//")
-urllist https://download.gimp.org/pub/gimp/v$dir | grep tar | sed s/gimp-// | sed s/\.tar.*// | sort -V | tail -n 1 | sed s/-/~/
-
+urllist https://gitlab.gnome.org/GNOME/gimp/-/tags | grep 'GIMP' | grep 'GIMP_3_[0-9]_[0-9]$' | sed -e 's/GIMP_//' -e 's/_/./g' | sort -V | tail -n1
