@@ -1,0 +1,14 @@
+diff -Nur orig/data/menu mod/data/menu
+--- orig/data/menu	2025-11-20 09:54:29.966085737 +0100
++++ mod/data/menu	2025-11-20 09:57:46.397800405 +0100
+@@ -21,6 +21,10 @@
+ 	Entry = "Take _Screenshot" { Actions = "Exec pekwm_screenshot" }
+ 
+ 	Separator {}
++    Submenu = "Alkalmazások" {
++    Entry = "" { Actions = "Dynamic /usr/bin/xdgmenumaker -n -i -f pekwm --pekwm-dynamic" }
++    }
++	Separator {}
+ 
+ 	Submenu = "_Go to" {
+ 		SubMenu = "_Workspace" {
