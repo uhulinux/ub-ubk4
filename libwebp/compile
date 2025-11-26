@@ -1,8 +1,4 @@
 #!/bin/sh -eux
 
-rm -f CMakeLists.txt
-
 ub_compile \
-	--enable-libwebpmux \
-	--enable-libwebpdemux \
-	--enable-libwebpdecoder
+	-DBUILD_SHARED_LIBS=ON
