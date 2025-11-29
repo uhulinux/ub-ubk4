@@ -2,5 +2,4 @@
 
 ub_install
 
-cd python
-python3 setup.py install --root="$UB_INSTALLDIR"
+sed -i "/Threads/d" $UB_INSTALLDIR/usr/lib/cmake/absl/abslConfig.cmake
