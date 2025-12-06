@@ -1,0 +1,109 @@
+From beaebe1cf6fda6c5a53412b10b6ac417076a67ac Mon Sep 17 00:00:00 2001
+From: fuzzard <fuzzard@kodi.tv>
+Date: Fri, 4 Apr 2025 20:28:08 +1000
+Subject: [PATCH 1/4] [tools/depends][target] Bump freetype 2.13.3
+
+---
+ .../target/freetype2-noharfbuzz/FREETYPE2-NOHARFBUZZ-VERSION  | 4 ++--
+ tools/depends/target/freetype2/FREETYPE2-VERSION              | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/depends/target/freetype2-noharfbuzz/FREETYPE2-NOHARFBUZZ-VERSION b/tools/depends/target/freetype2-noharfbuzz/FREETYPE2-NOHARFBUZZ-VERSION
+index 56ad5f74568d1..7eb1379618f2b 100644
+--- a/tools/depends/target/freetype2-noharfbuzz/FREETYPE2-NOHARFBUZZ-VERSION
++++ b/tools/depends/target/freetype2-noharfbuzz/FREETYPE2-NOHARFBUZZ-VERSION
+@@ -1,5 +1,5 @@
+ LIBNAME=freetype
+-VERSION=2.13.2
++VERSION=2.13.3
+ ARCHIVE=$(LIBNAME)-$(VERSION).tar.xz
+-SHA512=a5917edaa45cb9f75786f8a4f9d12fdf07529247e09dfdb6c0cf7feb08f7588bb24f7b5b11425fb47f8fd62fcb426e731c944658f6d5a59ce4458ad5b0a50194
++SHA512=600828d7756c8cfa974448ef34ee0db573fb8cfdb2dc1e0358b63c44a03bfd7e3d4384424b9cc5e4749034f60231a550c4b7fcb46694fcacea218787ce305504
+ BYPRODUCT=libfreetype.a
+diff --git a/tools/depends/target/freetype2/FREETYPE2-VERSION b/tools/depends/target/freetype2/FREETYPE2-VERSION
+index 56ad5f74568d1..7eb1379618f2b 100644
+--- a/tools/depends/target/freetype2/FREETYPE2-VERSION
++++ b/tools/depends/target/freetype2/FREETYPE2-VERSION
+@@ -1,5 +1,5 @@
+ LIBNAME=freetype
+-VERSION=2.13.2
++VERSION=2.13.3
+ ARCHIVE=$(LIBNAME)-$(VERSION).tar.xz
+-SHA512=a5917edaa45cb9f75786f8a4f9d12fdf07529247e09dfdb6c0cf7feb08f7588bb24f7b5b11425fb47f8fd62fcb426e731c944658f6d5a59ce4458ad5b0a50194
++SHA512=600828d7756c8cfa974448ef34ee0db573fb8cfdb2dc1e0358b63c44a03bfd7e3d4384424b9cc5e4749034f60231a550c4b7fcb46694fcacea218787ce305504
+ BYPRODUCT=libfreetype.a
+
+From 5a664bfd634c680c75a257808a67a2fa67d28159 Mon Sep 17 00:00:00 2001
+From: fuzzard <fuzzard@kodi.tv>
+Date: Sat, 5 Apr 2025 10:02:19 +1000
+Subject: [PATCH 2/4] [cmake] FindP8Platform support cmake 4.0
+
+---
+ cmake/modules/FindP8Platform.cmake | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/cmake/modules/FindP8Platform.cmake b/cmake/modules/FindP8Platform.cmake
+index 4477235053445..f91e658a1ef85 100644
+--- a/cmake/modules/FindP8Platform.cmake
++++ b/cmake/modules/FindP8Platform.cmake
+@@ -21,6 +21,11 @@ if(NOT TARGET ${APP_NAME_LC}::${CMAKE_FIND_PACKAGE_NAME} OR P8Platform_FIND_REQU
+ 
+     set(CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF)
+ 
++    # p8-platform hasnt tagged a release since 2016. Force this for cmake 4.0
++    # p8-platform master has updated cmake minimum to 3.12, so if they ever tag a new release
++    # this can be dropped.
++    list(APPEND CMAKE_ARGS -DCMAKE_POLICY_VERSION_MINIMUM=3.10)
++
+     # CMAKE_INSTALL_LIBDIR in p8-platform prepends project prefix, so disable sending any
+     # install_libdir to generator
+     set(${${CMAKE_FIND_PACKAGE_NAME}_MODULE}_INSTALL_LIBDIR "/lib")
+
+From a6d623e235447fcb0d148296fcbcda53fd4af617 Mon Sep 17 00:00:00 2001
+From: fuzzard <fuzzard@kodi.tv>
+Date: Sat, 5 Apr 2025 10:02:37 +1000
+Subject: [PATCH 3/4] [cmake] FindRapidJSON support cmake 4.0
+
+---
+ cmake/modules/FindRapidJSON.cmake | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/cmake/modules/FindRapidJSON.cmake b/cmake/modules/FindRapidJSON.cmake
+index 3e4f3e8f8dcd0..796cb9f00909b 100644
+--- a/cmake/modules/FindRapidJSON.cmake
++++ b/cmake/modules/FindRapidJSON.cmake
+@@ -26,6 +26,9 @@ if(NOT TARGET ${APP_NAME_LC}::${CMAKE_FIND_PACKAGE_NAME})
+                    -DRAPIDJSON_BUILD_TESTS=OFF
+                    -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF)
+ 
++    # rapidjson hasnt tagged a release since 2016. Force this for cmake 4.0
++    list(APPEND CMAKE_ARGS -DCMAKE_POLICY_VERSION_MINIMUM=3.10)
++
+     set(BUILD_BYPRODUCTS ${DEPENDS_PATH}/include/rapidjson/rapidjson.h)
+ 
+     BUILD_DEP_TARGET()
+
+From e89a71dc2daefd982544d8f4a2df316fe1815587 Mon Sep 17 00:00:00 2001
+From: fuzzard <fuzzard@kodi.tv>
+Date: Sat, 5 Apr 2025 10:14:41 +1000
+Subject: [PATCH 4/4] [tools/depends][target] liblzo2 support cmake 4.0
+
+---
+ tools/depends/target/liblzo2/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/depends/target/liblzo2/Makefile b/tools/depends/target/liblzo2/Makefile
+index 65b56f93cfe8b..43e116d60978a 100644
+--- a/tools/depends/target/liblzo2/Makefile
++++ b/tools/depends/target/liblzo2/Makefile
+@@ -7,6 +7,9 @@ CMAKE_OPTIONS=-DCMAKE_BUILD_TYPE=Release \
+               -DENABLE_SHARED=OFF \
+               -DCMAKE_INSTALL_PREFIX=$(PREFIX)
+ 
++# lzo hasnt been updated since 2017. Force this for cmake 4.0
++CMAKE_OPTIONS+= -DCMAKE_POLICY_VERSION_MINIMUM=3.10
++
+ LIBDYLIB=$(PLATFORM)/build/$(BYPRODUCT)
+ 
+ all: .installed-$(PLATFORM)
+
