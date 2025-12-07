@@ -1,21 +1,20 @@
 diff -Nur orig/Makefile mod/Makefile
---- orig/Makefile	2019-12-05 15:17:36.000000000 +0100
-+++ mod/Makefile	2020-01-04 18:57:55.202007024 +0100
-@@ -44,7 +44,7 @@
- 	@echo 'Example for a local installation (usable in this directory):'
- 	@echo '  make local && ./hg version'
+--- orig/Makefile	2025-12-07 08:01:23.556402713 +0100
++++ mod/Makefile	2025-12-07 08:08:20.328206371 +0100
+@@ -84,7 +84,6 @@
+ 	$(PYTHON) -m build --config-setting=--global-option="$(PURE)"
+ .PHONY: doc
+ doc:
+-	$(MAKE) -C doc
  
--all: build doc
-+all: build
- 
- local:
- 	$(PYTHON) setup.py $(PURE) \
-@@ -80,7 +80,7 @@
- clean: cleanbutpackages
+ .PHONY: cleanbutpackages
+ cleanbutpackages:
+@@ -106,7 +105,7 @@
  	rm -rf packages
  
+ .PHONY: install
 -install: install-bin install-doc
 +install: install-bin
  
- install-bin: build
- 	$(PYTHON) setup.py $(PURE) install --root="$(DESTDIR)/" --prefix="$(PREFIX)" --force
+ .PHONY: install-bin
+ install-bin:
