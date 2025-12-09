@@ -1,7 +1,12 @@
 #!/bin/sh -eux
 
+rm -rf liblua libpcap libpcre macosx mwin32 libssh2 libz
 ub_compile \
-    --enable-static=no \
+    --with-libpcap=/usr \
+    --with-libpcre=/usr \
+    --with-zlib=/usr \
+    --with-libssh2=/usr \
+    --with-liblua=/usr \
     --without-zenmap \
     --without-ndiff \
     --enable-dbus
