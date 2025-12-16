@@ -1,0 +1,3 @@
+main=$(urllist https://download.gnome.org/sources/libxml++ | grep -E '^2' | sed -e 's/2\.9.//' | sort -V | tail -n1)
+u2d https://download.gnome.org/sources/libxml++/$main/
+# u2dgnome libxml++
