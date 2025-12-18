@@ -1,0 +1,49 @@
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2024-08-13 12:49:48.000000000 +0200
++++ b/CMakeLists.txt	2025-02-26 13:04:21.343898779 +0100
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 3.6)
+ 
+ ## use ccache if found
+-find_program(CCACHE_EXECUTABLE "ccache" HINTS /usr/local/bin /opt/local/bin)
++find_program(CCACHE_EXECUTABLE "ccache" HINTS /usr/bin /opt/local/bin)
+ if(CCACHE_EXECUTABLE AND NOT CMAKE_TOOLCHAIN_FILE)
+     message(STATUS "use ccache")
+     set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_EXECUTABLE}" CACHE PATH "ccache" FORCE)
+@@ -185,14 +185,9 @@
+ # install the bin
+ install(TARGETS multitail DESTINATION bin)
+ # install the config file
+-install(FILES multitail.conf DESTINATION etc RENAME multitail.conf.new)
++install(FILES multitail.conf DESTINATION etc)
+ # install the manual files
+ install(FILES multitail.1 DESTINATION share/man/man1)
+-# install doc files
+-install(FILES manual.html DESTINATION share/doc/multitail-${VERSION})
+-install(FILES LICENSE DESTINATION share/doc/multitail-${VERSION})
+-install(FILES README.md DESTINATION share/doc/multitail-${VERSION})
+-install(FILES thanks.txt DESTINATION share/doc/multitail-${VERSION})
+ # cp conversion-scripts/* etc/multitail/
+ install(DIRECTORY conversion-scripts DESTINATION etc/multitail)
+ 
+diff -Naur a/Makefile b/Makefile
+--- a/Makefile	2024-08-13 12:49:48.000000000 +0200
++++ b/Makefile	2025-02-26 13:05:45.151994177 +0100
+@@ -9,7 +9,7 @@
+ 
+ UTF8_SUPPORT:=yes
+ DESTDIR=
+-PREFIX=/usr/local
++PREFIX=/usr
+ BINDIR=$(PREFIX)/bin
+ SHAREDIR=$(PREFIX)/share
+ MANDIR=$(SHAREDIR)/man
+@@ -74,7 +74,7 @@
+ 	### YOURSELF WITH THE NEW FILE
+ 	#
+ 	$(INSTALL_DIR) $(DESTDIR)$(CONFIG_DIR)
+-	$(INSTALL_DATA) multitail.conf $(DESTDIR)$(CONFIG_FILE).new
++	$(INSTALL_DATA) multitail.conf $(DESTDIR)$(CONFIG_FILE)
+ 	$(INSTALL_EXEC) conversion-scripts/* $(DESTDIR)$(CONFIG_DIR)
+ #rm -f $(DESTDIR)$(MAN1DIR)/multitail.1.gz
+ #gzip -9 $(DESTDIR)$(MAN1DIR)/multitail.1
